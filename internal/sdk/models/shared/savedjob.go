@@ -17,9 +17,9 @@ const (
 )
 
 type SavedJob struct {
-	SavedJobCollection      *SavedJobCollection      `queryParam:"inline,name=SavedJob"`
-	SavedJobExecutor        *SavedJobExecutor        `queryParam:"inline,name=SavedJob"`
-	SavedJobScheduledSearch *SavedJobScheduledSearch `queryParam:"inline,name=SavedJob"`
+	SavedJobCollection      *SavedJobCollection      `queryParam:"inline" union:"member"`
+	SavedJobExecutor        *SavedJobExecutor        `queryParam:"inline" union:"member"`
+	SavedJobScheduledSearch *SavedJobScheduledSearch `queryParam:"inline" union:"member"`
 
 	Type SavedJobType
 }
@@ -85,7 +85,7 @@ func (u *SavedJob) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SavedJob", string(data))
 	}

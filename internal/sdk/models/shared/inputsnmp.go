@@ -44,7 +44,7 @@ func (v V3User) MarshalJSON() ([]byte, error) {
 }
 
 func (v *V3User) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &v, "", false, []string{"name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -85,6 +85,9 @@ func (v *V3User) GetPrivKey() *string {
 	return v.PrivKey
 }
 
+// #region class-body-v3user
+// #endregion class-body-v3user
+
 // SNMPv3Authentication - Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues.
 type SNMPv3Authentication struct {
 	V3AuthEnabled bool `json:"v3AuthEnabled"`
@@ -99,7 +102,7 @@ func (s SNMPv3Authentication) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SNMPv3Authentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"v3AuthEnabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -125,6 +128,9 @@ func (s *SNMPv3Authentication) GetV3Users() []V3User {
 	}
 	return s.V3Users
 }
+
+// #region class-body-snmpv3authentication
+// #endregion class-body-snmpv3authentication
 
 type InputSnmp struct {
 	// Unique ID for this input
@@ -174,7 +180,7 @@ func (i InputSnmp) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSnmp) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

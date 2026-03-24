@@ -177,7 +177,7 @@ func (o OutputDlS3) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDlS3) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "bucket", "stagePath"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -679,3 +679,6 @@ func (o *OutputDlS3) GetTemplateAwsAPIKey() *string {
 	}
 	return o.TemplateAwsAPIKey
 }
+
+// #region class-body-outputdls3
+// #endregion class-body-outputdls3

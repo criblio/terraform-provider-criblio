@@ -76,68 +76,68 @@ const (
 )
 
 type InputUnion2 struct {
-	InputCollection           *InputCollection           `queryParam:"inline,name=Input"`
-	InputKafka                *InputKafka                `queryParam:"inline,name=Input"`
-	InputMsk                  *InputMsk                  `queryParam:"inline,name=Input"`
-	InputHTTP                 *InputHTTP                 `queryParam:"inline,name=Input"`
-	InputSplunk               *InputSplunk               `queryParam:"inline,name=Input"`
-	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline,name=Input"`
-	InputSplunkHec            *InputSplunkHec            `queryParam:"inline,name=Input"`
-	InputAzureBlob            *InputAzureBlob            `queryParam:"inline,name=Input"`
-	InputElastic              *InputElastic              `queryParam:"inline,name=Input"`
-	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline,name=Input"`
-	InputGrafana              *InputGrafana              `queryParam:"inline,name=Input"`
-	InputLoki                 *InputLoki                 `queryParam:"inline,name=Input"`
-	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline,name=Input"`
-	InputPrometheus           *InputPrometheus           `queryParam:"inline,name=Input"`
-	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline,name=Input"`
-	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline,name=Input"`
-	InputOffice365Service     *InputOffice365Service     `queryParam:"inline,name=Input"`
-	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline,name=Input"`
-	InputMicrosoftGraph       *InputMicrosoftGraph       `queryParam:"inline,name=Input"`
-	InputEventhub             *InputEventhub             `queryParam:"inline,name=Input"`
-	InputExec                 *InputExec                 `queryParam:"inline,name=Input"`
-	InputFirehose             *InputFirehose             `queryParam:"inline,name=Input"`
-	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline,name=Input"`
-	InputCribl                *InputCribl                `queryParam:"inline,name=Input"`
-	InputCriblTCP             *InputCriblTCP             `queryParam:"inline,name=Input"`
-	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline,name=Input"`
-	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline,name=Input"`
-	InputTcpjson              *InputTcpjson              `queryParam:"inline,name=Input"`
-	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline,name=Input"`
-	InputSystemState          *InputSystemState          `queryParam:"inline,name=Input"`
-	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline,name=Input"`
-	InputKubeLogs             *InputKubeLogs             `queryParam:"inline,name=Input"`
-	InputKubeEvents           *InputKubeEvents           `queryParam:"inline,name=Input"`
-	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline,name=Input"`
-	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline,name=Input"`
-	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline,name=Input"`
-	InputDatagen              *InputDatagen              `queryParam:"inline,name=Input"`
-	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline,name=Input"`
-	InputKinesis              *InputKinesis              `queryParam:"inline,name=Input"`
-	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline,name=Input"`
-	InputMetrics              *InputMetrics              `queryParam:"inline,name=Input"`
-	InputS3                   *InputS3                   `queryParam:"inline,name=Input"`
-	InputS3Inventory          *InputS3Inventory          `queryParam:"inline,name=Input"`
-	InputSnmp                 *InputSnmp                 `queryParam:"inline,name=Input"`
-	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline,name=Input"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline,name=Input"`
-	InputSqs                  *InputSqs                  `queryParam:"inline,name=Input"`
-	InputSyslog               *InputSyslog               `queryParam:"inline,name=Input"`
-	InputFile                 *InputFile                 `queryParam:"inline,name=Input"`
-	InputTCP                  *InputTCP                  `queryParam:"inline,name=Input"`
-	InputAppscope             *InputAppscope             `queryParam:"inline,name=Input"`
-	InputWef                  *InputWef                  `queryParam:"inline,name=Input"`
-	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline,name=Input"`
-	InputRawUDP               *InputRawUDP               `queryParam:"inline,name=Input"`
-	InputJournalFiles         *InputJournalFiles         `queryParam:"inline,name=Input"`
-	InputWiz                  *InputWiz                  `queryParam:"inline,name=Input"`
-	InputOpenaiInput          *InputOpenaiInput          `queryParam:"inline,name=Input"`
-	InputWizWebhook           *InputWizWebhook           `queryParam:"inline,name=Input"`
-	InputNetflow              *InputNetflow              `queryParam:"inline,name=Input"`
-	InputSecurityLake         *InputSecurityLake         `queryParam:"inline,name=Input"`
-	InputZscalerHec           *InputZscalerHec           `queryParam:"inline,name=Input"`
-	InputCloudflareHec        *InputCloudflareHec        `queryParam:"inline,name=Input"`
+	InputCollection           *InputCollection           `queryParam:"inline" union:"member"`
+	InputKafka                *InputKafka                `queryParam:"inline" union:"member"`
+	InputMsk                  *InputMsk                  `queryParam:"inline" union:"member"`
+	InputHTTP                 *InputHTTP                 `queryParam:"inline" union:"member"`
+	InputSplunk               *InputSplunk               `queryParam:"inline" union:"member"`
+	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline" union:"member"`
+	InputSplunkHec            *InputSplunkHec            `queryParam:"inline" union:"member"`
+	InputAzureBlob            *InputAzureBlob            `queryParam:"inline" union:"member"`
+	InputElastic              *InputElastic              `queryParam:"inline" union:"member"`
+	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline" union:"member"`
+	InputGrafana              *InputGrafana              `queryParam:"inline" union:"member"`
+	InputLoki                 *InputLoki                 `queryParam:"inline" union:"member"`
+	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline" union:"member"`
+	InputPrometheus           *InputPrometheus           `queryParam:"inline" union:"member"`
+	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline" union:"member"`
+	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline" union:"member"`
+	InputOffice365Service     *InputOffice365Service     `queryParam:"inline" union:"member"`
+	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline" union:"member"`
+	InputMicrosoftGraph       *InputMicrosoftGraph       `queryParam:"inline" union:"member"`
+	InputEventhub             *InputEventhub             `queryParam:"inline" union:"member"`
+	InputExec                 *InputExec                 `queryParam:"inline" union:"member"`
+	InputFirehose             *InputFirehose             `queryParam:"inline" union:"member"`
+	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline" union:"member"`
+	InputCribl                *InputCribl                `queryParam:"inline" union:"member"`
+	InputCriblTCP             *InputCriblTCP             `queryParam:"inline" union:"member"`
+	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline" union:"member"`
+	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline" union:"member"`
+	InputTcpjson              *InputTcpjson              `queryParam:"inline" union:"member"`
+	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline" union:"member"`
+	InputSystemState          *InputSystemState          `queryParam:"inline" union:"member"`
+	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline" union:"member"`
+	InputKubeLogs             *InputKubeLogs             `queryParam:"inline" union:"member"`
+	InputKubeEvents           *InputKubeEvents           `queryParam:"inline" union:"member"`
+	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline" union:"member"`
+	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline" union:"member"`
+	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline" union:"member"`
+	InputDatagen              *InputDatagen              `queryParam:"inline" union:"member"`
+	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline" union:"member"`
+	InputKinesis              *InputKinesis              `queryParam:"inline" union:"member"`
+	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline" union:"member"`
+	InputMetrics              *InputMetrics              `queryParam:"inline" union:"member"`
+	InputS3                   *InputS3                   `queryParam:"inline" union:"member"`
+	InputS3Inventory          *InputS3Inventory          `queryParam:"inline" union:"member"`
+	InputSnmp                 *InputSnmp                 `queryParam:"inline" union:"member"`
+	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline" union:"member"`
+	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline" union:"member"`
+	InputSqs                  *InputSqs                  `queryParam:"inline" union:"member"`
+	InputSyslog               *InputSyslog               `queryParam:"inline" union:"member"`
+	InputFile                 *InputFile                 `queryParam:"inline" union:"member"`
+	InputTCP                  *InputTCP                  `queryParam:"inline" union:"member"`
+	InputAppscope             *InputAppscope             `queryParam:"inline" union:"member"`
+	InputWef                  *InputWef                  `queryParam:"inline" union:"member"`
+	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline" union:"member"`
+	InputRawUDP               *InputRawUDP               `queryParam:"inline" union:"member"`
+	InputJournalFiles         *InputJournalFiles         `queryParam:"inline" union:"member"`
+	InputWiz                  *InputWiz                  `queryParam:"inline" union:"member"`
+	InputOpenaiInput          *InputOpenaiInput          `queryParam:"inline" union:"member"`
+	InputWizWebhook           *InputWizWebhook           `queryParam:"inline" union:"member"`
+	InputNetflow              *InputNetflow              `queryParam:"inline" union:"member"`
+	InputSecurityLake         *InputSecurityLake         `queryParam:"inline" union:"member"`
+	InputZscalerHec           *InputZscalerHec           `queryParam:"inline" union:"member"`
+	InputCloudflareHec        *InputCloudflareHec        `queryParam:"inline" union:"member"`
 
 	Type InputUnion2Type
 }
@@ -705,91 +705,11 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var inputSplunkSearch InputSplunkSearch = InputSplunkSearch{}
-	if err := utils.UnmarshalJSON(data, &inputSplunkSearch, "", true, nil); err == nil {
+	var inputCollection InputCollection = InputCollection{}
+	if err := utils.UnmarshalJSON(data, &inputCollection, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputSplunkSearch,
-			Value: &inputSplunkSearch,
-		})
-	}
-
-	var inputMsk InputMsk = InputMsk{}
-	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputMsk,
-			Value: &inputMsk,
-		})
-	}
-
-	var inputWiz InputWiz = InputWiz{}
-	if err := utils.UnmarshalJSON(data, &inputWiz, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputWiz,
-			Value: &inputWiz,
-		})
-	}
-
-	var inputSplunkHec InputSplunkHec = InputSplunkHec{}
-	if err := utils.UnmarshalJSON(data, &inputSplunkHec, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputSplunkHec,
-			Value: &inputSplunkHec,
-		})
-	}
-
-	var inputElastic InputElastic = InputElastic{}
-	if err := utils.UnmarshalJSON(data, &inputElastic, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputElastic,
-			Value: &inputElastic,
-		})
-	}
-
-	var inputLoki InputLoki = InputLoki{}
-	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputLoki,
-			Value: &inputLoki,
-		})
-	}
-
-	var inputPrometheusRw InputPrometheusRw = InputPrometheusRw{}
-	if err := utils.UnmarshalJSON(data, &inputPrometheusRw, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputPrometheusRw,
-			Value: &inputPrometheusRw,
-		})
-	}
-
-	var inputOffice365Mgmt InputOffice365Mgmt = InputOffice365Mgmt{}
-	if err := utils.UnmarshalJSON(data, &inputOffice365Mgmt, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputOffice365Mgmt,
-			Value: &inputOffice365Mgmt,
-		})
-	}
-
-	var inputWef InputWef = InputWef{}
-	if err := utils.UnmarshalJSON(data, &inputWef, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputWef,
-			Value: &inputWef,
-		})
-	}
-
-	var inputZscalerHec InputZscalerHec = InputZscalerHec{}
-	if err := utils.UnmarshalJSON(data, &inputZscalerHec, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputZscalerHec,
-			Value: &inputZscalerHec,
-		})
-	}
-
-	var inputCloudflareHec InputCloudflareHec = InputCloudflareHec{}
-	if err := utils.UnmarshalJSON(data, &inputCloudflareHec, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputCloudflareHec,
-			Value: &inputCloudflareHec,
+			Type:  InputUnion2TypeInputCollection,
+			Value: &inputCollection,
 		})
 	}
 
@@ -798,6 +718,14 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputUnion2TypeInputKafka,
 			Value: &inputKafka,
+		})
+	}
+
+	var inputMsk InputMsk = InputMsk{}
+	if err := utils.UnmarshalJSON(data, &inputMsk, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputMsk,
+			Value: &inputMsk,
 		})
 	}
 
@@ -817,11 +745,67 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputSplunkSearch InputSplunkSearch = InputSplunkSearch{}
+	if err := utils.UnmarshalJSON(data, &inputSplunkSearch, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputSplunkSearch,
+			Value: &inputSplunkSearch,
+		})
+	}
+
+	var inputSplunkHec InputSplunkHec = InputSplunkHec{}
+	if err := utils.UnmarshalJSON(data, &inputSplunkHec, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputSplunkHec,
+			Value: &inputSplunkHec,
+		})
+	}
+
+	var inputAzureBlob InputAzureBlob = InputAzureBlob{}
+	if err := utils.UnmarshalJSON(data, &inputAzureBlob, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputAzureBlob,
+			Value: &inputAzureBlob,
+		})
+	}
+
+	var inputElastic InputElastic = InputElastic{}
+	if err := utils.UnmarshalJSON(data, &inputElastic, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputElastic,
+			Value: &inputElastic,
+		})
+	}
+
 	var inputConfluentCloud InputConfluentCloud = InputConfluentCloud{}
 	if err := utils.UnmarshalJSON(data, &inputConfluentCloud, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputUnion2TypeInputConfluentCloud,
 			Value: &inputConfluentCloud,
+		})
+	}
+
+	var inputGrafana InputGrafana = InputGrafana{}
+	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputGrafana,
+			Value: &inputGrafana,
+		})
+	}
+
+	var inputLoki InputLoki = InputLoki{}
+	if err := utils.UnmarshalJSON(data, &inputLoki, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputLoki,
+			Value: &inputLoki,
+		})
+	}
+
+	var inputPrometheusRw InputPrometheusRw = InputPrometheusRw{}
+	if err := utils.UnmarshalJSON(data, &inputPrometheusRw, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputPrometheusRw,
+			Value: &inputPrometheusRw,
 		})
 	}
 
@@ -838,6 +822,14 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputUnion2TypeInputEdgePrometheus,
 			Value: &inputEdgePrometheus,
+		})
+	}
+
+	var inputOffice365Mgmt InputOffice365Mgmt = InputOffice365Mgmt{}
+	if err := utils.UnmarshalJSON(data, &inputOffice365Mgmt, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputOffice365Mgmt,
+			Value: &inputOffice365Mgmt,
 		})
 	}
 
@@ -873,6 +865,14 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputExec InputExec = InputExec{}
+	if err := utils.UnmarshalJSON(data, &inputExec, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputExec,
+			Value: &inputExec,
+		})
+	}
+
 	var inputFirehose InputFirehose = InputFirehose{}
 	if err := utils.UnmarshalJSON(data, &inputFirehose, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -886,6 +886,14 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputUnion2TypeInputGooglePubsub,
 			Value: &inputGooglePubsub,
+		})
+	}
+
+	var inputCribl InputCribl = InputCribl{}
+	if err := utils.UnmarshalJSON(data, &inputCribl, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputCribl,
+			Value: &inputCribl,
 		})
 	}
 
@@ -918,198 +926,6 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		candidates = append(candidates, utils.UnionCandidate{
 			Type:  InputUnion2TypeInputTcpjson,
 			Value: &inputTcpjson,
-		})
-	}
-
-	var inputDatadogAgent InputDatadogAgent = InputDatadogAgent{}
-	if err := utils.UnmarshalJSON(data, &inputDatadogAgent, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputDatadogAgent,
-			Value: &inputDatadogAgent,
-		})
-	}
-
-	var inputHTTPRaw InputHTTPRaw = InputHTTPRaw{}
-	if err := utils.UnmarshalJSON(data, &inputHTTPRaw, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputHTTPRaw,
-			Value: &inputHTTPRaw,
-		})
-	}
-
-	var inputKinesis InputKinesis = InputKinesis{}
-	if err := utils.UnmarshalJSON(data, &inputKinesis, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputKinesis,
-			Value: &inputKinesis,
-		})
-	}
-
-	var inputSnmp InputSnmp = InputSnmp{}
-	if err := utils.UnmarshalJSON(data, &inputSnmp, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputSnmp,
-			Value: &inputSnmp,
-		})
-	}
-
-	var inputOpenTelemetry InputOpenTelemetry = InputOpenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &inputOpenTelemetry, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputOpenTelemetry,
-			Value: &inputOpenTelemetry,
-		})
-	}
-
-	var inputModelDrivenTelemetry InputModelDrivenTelemetry = InputModelDrivenTelemetry{}
-	if err := utils.UnmarshalJSON(data, &inputModelDrivenTelemetry, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputModelDrivenTelemetry,
-			Value: &inputModelDrivenTelemetry,
-		})
-	}
-
-	var inputSqs InputSqs = InputSqs{}
-	if err := utils.UnmarshalJSON(data, &inputSqs, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputSqs,
-			Value: &inputSqs,
-		})
-	}
-
-	var inputTCP InputTCP = InputTCP{}
-	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputTCP,
-			Value: &inputTCP,
-		})
-	}
-
-	var inputRawUDP InputRawUDP = InputRawUDP{}
-	if err := utils.UnmarshalJSON(data, &inputRawUDP, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputRawUDP,
-			Value: &inputRawUDP,
-		})
-	}
-
-	var inputJournalFiles InputJournalFiles = InputJournalFiles{}
-	if err := utils.UnmarshalJSON(data, &inputJournalFiles, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputJournalFiles,
-			Value: &inputJournalFiles,
-		})
-	}
-
-	var inputOpenaiInput InputOpenaiInput = InputOpenaiInput{}
-	if err := utils.UnmarshalJSON(data, &inputOpenaiInput, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputOpenaiInput,
-			Value: &inputOpenaiInput,
-		})
-	}
-
-	var inputWizWebhook InputWizWebhook = InputWizWebhook{}
-	if err := utils.UnmarshalJSON(data, &inputWizWebhook, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputWizWebhook,
-			Value: &inputWizWebhook,
-		})
-	}
-
-	var inputNetflow InputNetflow = InputNetflow{}
-	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputNetflow,
-			Value: &inputNetflow,
-		})
-	}
-
-	var inputAzureBlob InputAzureBlob = InputAzureBlob{}
-	if err := utils.UnmarshalJSON(data, &inputAzureBlob, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputAzureBlob,
-			Value: &inputAzureBlob,
-		})
-	}
-
-	var inputExec InputExec = InputExec{}
-	if err := utils.UnmarshalJSON(data, &inputExec, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputExec,
-			Value: &inputExec,
-		})
-	}
-
-	var inputCrowdstrike InputCrowdstrike = InputCrowdstrike{}
-	if err := utils.UnmarshalJSON(data, &inputCrowdstrike, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputCrowdstrike,
-			Value: &inputCrowdstrike,
-		})
-	}
-
-	var inputDatagen InputDatagen = InputDatagen{}
-	if err := utils.UnmarshalJSON(data, &inputDatagen, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputDatagen,
-			Value: &inputDatagen,
-		})
-	}
-
-	var inputMetrics InputMetrics = InputMetrics{}
-	if err := utils.UnmarshalJSON(data, &inputMetrics, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputMetrics,
-			Value: &inputMetrics,
-		})
-	}
-
-	var inputS3 InputS3 = InputS3{}
-	if err := utils.UnmarshalJSON(data, &inputS3, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputS3,
-			Value: &inputS3,
-		})
-	}
-
-	var inputS3Inventory InputS3Inventory = InputS3Inventory{}
-	if err := utils.UnmarshalJSON(data, &inputS3Inventory, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputS3Inventory,
-			Value: &inputS3Inventory,
-		})
-	}
-
-	var inputWinEventLogs InputWinEventLogs = InputWinEventLogs{}
-	if err := utils.UnmarshalJSON(data, &inputWinEventLogs, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputWinEventLogs,
-			Value: &inputWinEventLogs,
-		})
-	}
-
-	var inputSecurityLake InputSecurityLake = InputSecurityLake{}
-	if err := utils.UnmarshalJSON(data, &inputSecurityLake, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputSecurityLake,
-			Value: &inputSecurityLake,
-		})
-	}
-
-	var inputCollection InputCollection = InputCollection{}
-	if err := utils.UnmarshalJSON(data, &inputCollection, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputCollection,
-			Value: &inputCollection,
-		})
-	}
-
-	var inputCribl InputCribl = InputCribl{}
-	if err := utils.UnmarshalJSON(data, &inputCribl, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputCribl,
-			Value: &inputCribl,
 		})
 	}
 
@@ -1161,6 +977,46 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputCrowdstrike InputCrowdstrike = InputCrowdstrike{}
+	if err := utils.UnmarshalJSON(data, &inputCrowdstrike, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputCrowdstrike,
+			Value: &inputCrowdstrike,
+		})
+	}
+
+	var inputDatadogAgent InputDatadogAgent = InputDatadogAgent{}
+	if err := utils.UnmarshalJSON(data, &inputDatadogAgent, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputDatadogAgent,
+			Value: &inputDatadogAgent,
+		})
+	}
+
+	var inputDatagen InputDatagen = InputDatagen{}
+	if err := utils.UnmarshalJSON(data, &inputDatagen, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputDatagen,
+			Value: &inputDatagen,
+		})
+	}
+
+	var inputHTTPRaw InputHTTPRaw = InputHTTPRaw{}
+	if err := utils.UnmarshalJSON(data, &inputHTTPRaw, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputHTTPRaw,
+			Value: &inputHTTPRaw,
+		})
+	}
+
+	var inputKinesis InputKinesis = InputKinesis{}
+	if err := utils.UnmarshalJSON(data, &inputKinesis, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputKinesis,
+			Value: &inputKinesis,
+		})
+	}
+
 	var inputCriblmetrics InputCriblmetrics = InputCriblmetrics{}
 	if err := utils.UnmarshalJSON(data, &inputCriblmetrics, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1169,27 +1025,59 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		})
 	}
 
-	var inputFile InputFile = InputFile{}
-	if err := utils.UnmarshalJSON(data, &inputFile, "", true, nil); err == nil {
+	var inputMetrics InputMetrics = InputMetrics{}
+	if err := utils.UnmarshalJSON(data, &inputMetrics, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputFile,
-			Value: &inputFile,
+			Type:  InputUnion2TypeInputMetrics,
+			Value: &inputMetrics,
 		})
 	}
 
-	var inputAppscope InputAppscope = InputAppscope{}
-	if err := utils.UnmarshalJSON(data, &inputAppscope, "", true, nil); err == nil {
+	var inputS3 InputS3 = InputS3{}
+	if err := utils.UnmarshalJSON(data, &inputS3, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputAppscope,
-			Value: &inputAppscope,
+			Type:  InputUnion2TypeInputS3,
+			Value: &inputS3,
 		})
 	}
 
-	var inputGrafana InputGrafana = InputGrafana{}
-	if err := utils.UnmarshalJSON(data, &inputGrafana, "", true, nil); err == nil {
+	var inputS3Inventory InputS3Inventory = InputS3Inventory{}
+	if err := utils.UnmarshalJSON(data, &inputS3Inventory, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputUnion2TypeInputGrafana,
-			Value: &inputGrafana,
+			Type:  InputUnion2TypeInputS3Inventory,
+			Value: &inputS3Inventory,
+		})
+	}
+
+	var inputSnmp InputSnmp = InputSnmp{}
+	if err := utils.UnmarshalJSON(data, &inputSnmp, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputSnmp,
+			Value: &inputSnmp,
+		})
+	}
+
+	var inputOpenTelemetry InputOpenTelemetry = InputOpenTelemetry{}
+	if err := utils.UnmarshalJSON(data, &inputOpenTelemetry, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputOpenTelemetry,
+			Value: &inputOpenTelemetry,
+		})
+	}
+
+	var inputModelDrivenTelemetry InputModelDrivenTelemetry = InputModelDrivenTelemetry{}
+	if err := utils.UnmarshalJSON(data, &inputModelDrivenTelemetry, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputModelDrivenTelemetry,
+			Value: &inputModelDrivenTelemetry,
+		})
+	}
+
+	var inputSqs InputSqs = InputSqs{}
+	if err := utils.UnmarshalJSON(data, &inputSqs, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputSqs,
+			Value: &inputSqs,
 		})
 	}
 
@@ -1201,12 +1089,124 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var inputFile InputFile = InputFile{}
+	if err := utils.UnmarshalJSON(data, &inputFile, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputFile,
+			Value: &inputFile,
+		})
+	}
+
+	var inputTCP InputTCP = InputTCP{}
+	if err := utils.UnmarshalJSON(data, &inputTCP, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputTCP,
+			Value: &inputTCP,
+		})
+	}
+
+	var inputAppscope InputAppscope = InputAppscope{}
+	if err := utils.UnmarshalJSON(data, &inputAppscope, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputAppscope,
+			Value: &inputAppscope,
+		})
+	}
+
+	var inputWef InputWef = InputWef{}
+	if err := utils.UnmarshalJSON(data, &inputWef, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputWef,
+			Value: &inputWef,
+		})
+	}
+
+	var inputWinEventLogs InputWinEventLogs = InputWinEventLogs{}
+	if err := utils.UnmarshalJSON(data, &inputWinEventLogs, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputWinEventLogs,
+			Value: &inputWinEventLogs,
+		})
+	}
+
+	var inputRawUDP InputRawUDP = InputRawUDP{}
+	if err := utils.UnmarshalJSON(data, &inputRawUDP, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputRawUDP,
+			Value: &inputRawUDP,
+		})
+	}
+
+	var inputJournalFiles InputJournalFiles = InputJournalFiles{}
+	if err := utils.UnmarshalJSON(data, &inputJournalFiles, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputJournalFiles,
+			Value: &inputJournalFiles,
+		})
+	}
+
+	var inputWiz InputWiz = InputWiz{}
+	if err := utils.UnmarshalJSON(data, &inputWiz, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputWiz,
+			Value: &inputWiz,
+		})
+	}
+
+	var inputOpenaiInput InputOpenaiInput = InputOpenaiInput{}
+	if err := utils.UnmarshalJSON(data, &inputOpenaiInput, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputOpenaiInput,
+			Value: &inputOpenaiInput,
+		})
+	}
+
+	var inputWizWebhook InputWizWebhook = InputWizWebhook{}
+	if err := utils.UnmarshalJSON(data, &inputWizWebhook, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputWizWebhook,
+			Value: &inputWizWebhook,
+		})
+	}
+
+	var inputNetflow InputNetflow = InputNetflow{}
+	if err := utils.UnmarshalJSON(data, &inputNetflow, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputNetflow,
+			Value: &inputNetflow,
+		})
+	}
+
+	var inputSecurityLake InputSecurityLake = InputSecurityLake{}
+	if err := utils.UnmarshalJSON(data, &inputSecurityLake, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputSecurityLake,
+			Value: &inputSecurityLake,
+		})
+	}
+
+	var inputZscalerHec InputZscalerHec = InputZscalerHec{}
+	if err := utils.UnmarshalJSON(data, &inputZscalerHec, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputZscalerHec,
+			Value: &inputZscalerHec,
+		})
+	}
+
+	var inputCloudflareHec InputCloudflareHec = InputCloudflareHec{}
+	if err := utils.UnmarshalJSON(data, &inputCloudflareHec, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  InputUnion2TypeInputCloudflareHec,
+			Value: &inputCloudflareHec,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputUnion2", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputUnion2", string(data))
 	}
@@ -1214,41 +1214,14 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(InputUnion2Type)
 	switch best.Type {
-	case InputUnion2TypeInputSplunkSearch:
-		u.InputSplunkSearch = best.Value.(*InputSplunkSearch)
-		return nil
-	case InputUnion2TypeInputMsk:
-		u.InputMsk = best.Value.(*InputMsk)
-		return nil
-	case InputUnion2TypeInputWiz:
-		u.InputWiz = best.Value.(*InputWiz)
-		return nil
-	case InputUnion2TypeInputSplunkHec:
-		u.InputSplunkHec = best.Value.(*InputSplunkHec)
-		return nil
-	case InputUnion2TypeInputElastic:
-		u.InputElastic = best.Value.(*InputElastic)
-		return nil
-	case InputUnion2TypeInputLoki:
-		u.InputLoki = best.Value.(*InputLoki)
-		return nil
-	case InputUnion2TypeInputPrometheusRw:
-		u.InputPrometheusRw = best.Value.(*InputPrometheusRw)
-		return nil
-	case InputUnion2TypeInputOffice365Mgmt:
-		u.InputOffice365Mgmt = best.Value.(*InputOffice365Mgmt)
-		return nil
-	case InputUnion2TypeInputWef:
-		u.InputWef = best.Value.(*InputWef)
-		return nil
-	case InputUnion2TypeInputZscalerHec:
-		u.InputZscalerHec = best.Value.(*InputZscalerHec)
-		return nil
-	case InputUnion2TypeInputCloudflareHec:
-		u.InputCloudflareHec = best.Value.(*InputCloudflareHec)
+	case InputUnion2TypeInputCollection:
+		u.InputCollection = best.Value.(*InputCollection)
 		return nil
 	case InputUnion2TypeInputKafka:
 		u.InputKafka = best.Value.(*InputKafka)
+		return nil
+	case InputUnion2TypeInputMsk:
+		u.InputMsk = best.Value.(*InputMsk)
 		return nil
 	case InputUnion2TypeInputHTTP:
 		u.InputHTTP = best.Value.(*InputHTTP)
@@ -1256,14 +1229,38 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 	case InputUnion2TypeInputSplunk:
 		u.InputSplunk = best.Value.(*InputSplunk)
 		return nil
+	case InputUnion2TypeInputSplunkSearch:
+		u.InputSplunkSearch = best.Value.(*InputSplunkSearch)
+		return nil
+	case InputUnion2TypeInputSplunkHec:
+		u.InputSplunkHec = best.Value.(*InputSplunkHec)
+		return nil
+	case InputUnion2TypeInputAzureBlob:
+		u.InputAzureBlob = best.Value.(*InputAzureBlob)
+		return nil
+	case InputUnion2TypeInputElastic:
+		u.InputElastic = best.Value.(*InputElastic)
+		return nil
 	case InputUnion2TypeInputConfluentCloud:
 		u.InputConfluentCloud = best.Value.(*InputConfluentCloud)
+		return nil
+	case InputUnion2TypeInputGrafana:
+		u.InputGrafana = best.Value.(*InputGrafana)
+		return nil
+	case InputUnion2TypeInputLoki:
+		u.InputLoki = best.Value.(*InputLoki)
+		return nil
+	case InputUnion2TypeInputPrometheusRw:
+		u.InputPrometheusRw = best.Value.(*InputPrometheusRw)
 		return nil
 	case InputUnion2TypeInputPrometheus:
 		u.InputPrometheus = best.Value.(*InputPrometheus)
 		return nil
 	case InputUnion2TypeInputEdgePrometheus:
 		u.InputEdgePrometheus = best.Value.(*InputEdgePrometheus)
+		return nil
+	case InputUnion2TypeInputOffice365Mgmt:
+		u.InputOffice365Mgmt = best.Value.(*InputOffice365Mgmt)
 		return nil
 	case InputUnion2TypeInputOffice365Service:
 		u.InputOffice365Service = best.Value.(*InputOffice365Service)
@@ -1277,11 +1274,17 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 	case InputUnion2TypeInputEventhub:
 		u.InputEventhub = best.Value.(*InputEventhub)
 		return nil
+	case InputUnion2TypeInputExec:
+		u.InputExec = best.Value.(*InputExec)
+		return nil
 	case InputUnion2TypeInputFirehose:
 		u.InputFirehose = best.Value.(*InputFirehose)
 		return nil
 	case InputUnion2TypeInputGooglePubsub:
 		u.InputGooglePubsub = best.Value.(*InputGooglePubsub)
+		return nil
+	case InputUnion2TypeInputCribl:
+		u.InputCribl = best.Value.(*InputCribl)
 		return nil
 	case InputUnion2TypeInputCriblTCP:
 		u.InputCriblTCP = best.Value.(*InputCriblTCP)
@@ -1294,78 +1297,6 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 		return nil
 	case InputUnion2TypeInputTcpjson:
 		u.InputTcpjson = best.Value.(*InputTcpjson)
-		return nil
-	case InputUnion2TypeInputDatadogAgent:
-		u.InputDatadogAgent = best.Value.(*InputDatadogAgent)
-		return nil
-	case InputUnion2TypeInputHTTPRaw:
-		u.InputHTTPRaw = best.Value.(*InputHTTPRaw)
-		return nil
-	case InputUnion2TypeInputKinesis:
-		u.InputKinesis = best.Value.(*InputKinesis)
-		return nil
-	case InputUnion2TypeInputSnmp:
-		u.InputSnmp = best.Value.(*InputSnmp)
-		return nil
-	case InputUnion2TypeInputOpenTelemetry:
-		u.InputOpenTelemetry = best.Value.(*InputOpenTelemetry)
-		return nil
-	case InputUnion2TypeInputModelDrivenTelemetry:
-		u.InputModelDrivenTelemetry = best.Value.(*InputModelDrivenTelemetry)
-		return nil
-	case InputUnion2TypeInputSqs:
-		u.InputSqs = best.Value.(*InputSqs)
-		return nil
-	case InputUnion2TypeInputTCP:
-		u.InputTCP = best.Value.(*InputTCP)
-		return nil
-	case InputUnion2TypeInputRawUDP:
-		u.InputRawUDP = best.Value.(*InputRawUDP)
-		return nil
-	case InputUnion2TypeInputJournalFiles:
-		u.InputJournalFiles = best.Value.(*InputJournalFiles)
-		return nil
-	case InputUnion2TypeInputOpenaiInput:
-		u.InputOpenaiInput = best.Value.(*InputOpenaiInput)
-		return nil
-	case InputUnion2TypeInputWizWebhook:
-		u.InputWizWebhook = best.Value.(*InputWizWebhook)
-		return nil
-	case InputUnion2TypeInputNetflow:
-		u.InputNetflow = best.Value.(*InputNetflow)
-		return nil
-	case InputUnion2TypeInputAzureBlob:
-		u.InputAzureBlob = best.Value.(*InputAzureBlob)
-		return nil
-	case InputUnion2TypeInputExec:
-		u.InputExec = best.Value.(*InputExec)
-		return nil
-	case InputUnion2TypeInputCrowdstrike:
-		u.InputCrowdstrike = best.Value.(*InputCrowdstrike)
-		return nil
-	case InputUnion2TypeInputDatagen:
-		u.InputDatagen = best.Value.(*InputDatagen)
-		return nil
-	case InputUnion2TypeInputMetrics:
-		u.InputMetrics = best.Value.(*InputMetrics)
-		return nil
-	case InputUnion2TypeInputS3:
-		u.InputS3 = best.Value.(*InputS3)
-		return nil
-	case InputUnion2TypeInputS3Inventory:
-		u.InputS3Inventory = best.Value.(*InputS3Inventory)
-		return nil
-	case InputUnion2TypeInputWinEventLogs:
-		u.InputWinEventLogs = best.Value.(*InputWinEventLogs)
-		return nil
-	case InputUnion2TypeInputSecurityLake:
-		u.InputSecurityLake = best.Value.(*InputSecurityLake)
-		return nil
-	case InputUnion2TypeInputCollection:
-		u.InputCollection = best.Value.(*InputCollection)
-		return nil
-	case InputUnion2TypeInputCribl:
-		u.InputCribl = best.Value.(*InputCribl)
 		return nil
 	case InputUnion2TypeInputSystemMetrics:
 		u.InputSystemMetrics = best.Value.(*InputSystemMetrics)
@@ -1385,20 +1316,89 @@ func (u *InputUnion2) UnmarshalJSON(data []byte) error {
 	case InputUnion2TypeInputWindowsMetrics:
 		u.InputWindowsMetrics = best.Value.(*InputWindowsMetrics)
 		return nil
+	case InputUnion2TypeInputCrowdstrike:
+		u.InputCrowdstrike = best.Value.(*InputCrowdstrike)
+		return nil
+	case InputUnion2TypeInputDatadogAgent:
+		u.InputDatadogAgent = best.Value.(*InputDatadogAgent)
+		return nil
+	case InputUnion2TypeInputDatagen:
+		u.InputDatagen = best.Value.(*InputDatagen)
+		return nil
+	case InputUnion2TypeInputHTTPRaw:
+		u.InputHTTPRaw = best.Value.(*InputHTTPRaw)
+		return nil
+	case InputUnion2TypeInputKinesis:
+		u.InputKinesis = best.Value.(*InputKinesis)
+		return nil
 	case InputUnion2TypeInputCriblmetrics:
 		u.InputCriblmetrics = best.Value.(*InputCriblmetrics)
+		return nil
+	case InputUnion2TypeInputMetrics:
+		u.InputMetrics = best.Value.(*InputMetrics)
+		return nil
+	case InputUnion2TypeInputS3:
+		u.InputS3 = best.Value.(*InputS3)
+		return nil
+	case InputUnion2TypeInputS3Inventory:
+		u.InputS3Inventory = best.Value.(*InputS3Inventory)
+		return nil
+	case InputUnion2TypeInputSnmp:
+		u.InputSnmp = best.Value.(*InputSnmp)
+		return nil
+	case InputUnion2TypeInputOpenTelemetry:
+		u.InputOpenTelemetry = best.Value.(*InputOpenTelemetry)
+		return nil
+	case InputUnion2TypeInputModelDrivenTelemetry:
+		u.InputModelDrivenTelemetry = best.Value.(*InputModelDrivenTelemetry)
+		return nil
+	case InputUnion2TypeInputSqs:
+		u.InputSqs = best.Value.(*InputSqs)
+		return nil
+	case InputUnion2TypeInputSyslog:
+		u.InputSyslog = best.Value.(*InputSyslog)
 		return nil
 	case InputUnion2TypeInputFile:
 		u.InputFile = best.Value.(*InputFile)
 		return nil
+	case InputUnion2TypeInputTCP:
+		u.InputTCP = best.Value.(*InputTCP)
+		return nil
 	case InputUnion2TypeInputAppscope:
 		u.InputAppscope = best.Value.(*InputAppscope)
 		return nil
-	case InputUnion2TypeInputGrafana:
-		u.InputGrafana = best.Value.(*InputGrafana)
+	case InputUnion2TypeInputWef:
+		u.InputWef = best.Value.(*InputWef)
 		return nil
-	case InputUnion2TypeInputSyslog:
-		u.InputSyslog = best.Value.(*InputSyslog)
+	case InputUnion2TypeInputWinEventLogs:
+		u.InputWinEventLogs = best.Value.(*InputWinEventLogs)
+		return nil
+	case InputUnion2TypeInputRawUDP:
+		u.InputRawUDP = best.Value.(*InputRawUDP)
+		return nil
+	case InputUnion2TypeInputJournalFiles:
+		u.InputJournalFiles = best.Value.(*InputJournalFiles)
+		return nil
+	case InputUnion2TypeInputWiz:
+		u.InputWiz = best.Value.(*InputWiz)
+		return nil
+	case InputUnion2TypeInputOpenaiInput:
+		u.InputOpenaiInput = best.Value.(*InputOpenaiInput)
+		return nil
+	case InputUnion2TypeInputWizWebhook:
+		u.InputWizWebhook = best.Value.(*InputWizWebhook)
+		return nil
+	case InputUnion2TypeInputNetflow:
+		u.InputNetflow = best.Value.(*InputNetflow)
+		return nil
+	case InputUnion2TypeInputSecurityLake:
+		u.InputSecurityLake = best.Value.(*InputSecurityLake)
+		return nil
+	case InputUnion2TypeInputZscalerHec:
+		u.InputZscalerHec = best.Value.(*InputZscalerHec)
+		return nil
+	case InputUnion2TypeInputCloudflareHec:
+		u.InputCloudflareHec = best.Value.(*InputCloudflareHec)
 		return nil
 	}
 

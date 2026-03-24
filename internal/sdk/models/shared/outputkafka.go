@@ -132,7 +132,7 @@ func (o OutputKafka) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKafka) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "brokers", "topic"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

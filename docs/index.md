@@ -22,13 +22,16 @@ terraform {
   required_providers {
     criblio = {
       source  = "criblio/criblio"
-      version = "1.21.1"
+      version = "1.22.0"
     }
   }
 }
 
 provider "criblio" {
-  # Configuration options
+  cloud_domain    = "..." # Optional - can use CRIBL_CLOUD_DOMAIN environment variable
+  organization_id = "..." # Optional - can use CRIBL_ORGANIZATION_ID environment variable
+  server_url      = "..." # Optional
+  workspace_id    = "..." # Optional - can use CRIBL_WORKSPACE_ID environment variable
 }
 ```
 
@@ -37,6 +40,7 @@ provider "criblio" {
 
 ### Optional
 
+- `bearer_auth` (String, Sensitive) HTTP Bearer.
 - `client_id` (String, Sensitive) OAuth2 Client Credentials Flow client identifier. Configurable via environment variable `CRIBL_CLIENT_ID`.
 - `client_secret` (String, Sensitive) OAuth2 Client Credentials Flow client secret. Configurable via environment variable `CRIBL_CLIENT_SECRET`.
 - `cloud_domain` (String) Cribl Cloud domain name (defaults to cribl.cloud)

@@ -197,7 +197,7 @@ func (o OutputAzureBlob) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureBlob) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "containerName", "stagePath"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

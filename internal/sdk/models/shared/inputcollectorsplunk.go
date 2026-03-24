@@ -464,7 +464,7 @@ func (i InputCollectorSplunkMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorSplunkMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -847,7 +847,7 @@ func (i InputCollectorSplunkCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorSplunkCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -892,7 +892,7 @@ func (i InputCollectorSplunk) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorSplunk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

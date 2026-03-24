@@ -42,7 +42,7 @@ func (s Sample) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Sample) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"sample", "eventsPerSec"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -91,7 +91,7 @@ func (i InputDatagen) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputDatagen) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "samples"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

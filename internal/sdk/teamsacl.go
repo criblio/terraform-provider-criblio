@@ -221,6 +221,7 @@ func (s *TeamsACL) GetDatasetACLTeamsByID(ctx context.Context, request operation
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -430,7 +431,9 @@ func (s *TeamsACL) CreateDatasetACLTeamsApplyByID(ctx context.Context, request o
 
 	switch {
 	case httpRes.StatusCode == 200:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -654,6 +657,7 @@ func (s *TeamsACL) GetSearchDashboardACLTeamsByID(ctx context.Context, request o
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -863,7 +867,9 @@ func (s *TeamsACL) CreateSearchDashboardACLTeamsApplyByID(ctx context.Context, r
 
 	switch {
 	case httpRes.StatusCode == 200:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1087,6 +1093,7 @@ func (s *TeamsACL) GetProjectACLTeamsByID(ctx context.Context, request operation
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1296,7 +1303,9 @@ func (s *TeamsACL) CreateProjectACLTeamsApplyByID(ctx context.Context, request o
 
 	switch {
 	case httpRes.StatusCode == 200:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):

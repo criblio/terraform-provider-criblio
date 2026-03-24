@@ -55,7 +55,7 @@ func (p ParserKvp) MarshalJSON() ([]byte, error) {
 }
 
 func (p *ParserKvp) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -206,7 +206,7 @@ func (p ParserJSON) MarshalJSON() ([]byte, error) {
 }
 
 func (p *ParserJSON) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -284,7 +284,7 @@ func (p PatternList) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PatternList) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"pattern"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -335,7 +335,7 @@ func (p ParserGrok) MarshalJSON() ([]byte, error) {
 }
 
 func (p *ParserGrok) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -445,7 +445,7 @@ func (p Parser) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Parser) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"mode", "srcField", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -566,10 +566,10 @@ const (
 )
 
 type ParserUnion struct {
-	Parser     *Parser     `queryParam:"inline,name=parser"`
-	ParserGrok *ParserGrok `queryParam:"inline,name=parser"`
-	ParserJSON *ParserJSON `queryParam:"inline,name=parser"`
-	ParserKvp  *ParserKvp  `queryParam:"inline,name=parser"`
+	Parser     *Parser     `queryParam:"inline" union:"member"`
+	ParserGrok *ParserGrok `queryParam:"inline" union:"member"`
+	ParserJSON *ParserJSON `queryParam:"inline" union:"member"`
+	ParserKvp  *ParserKvp  `queryParam:"inline" union:"member"`
 
 	Type ParserUnionType
 }
@@ -652,7 +652,7 @@ func (u *ParserUnion) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ParserUnion", string(data))
 	}
@@ -764,7 +764,7 @@ func (t TimestampTimezone) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimestampTimezone) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "offsets", "untils"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -799,8 +799,8 @@ const (
 )
 
 type TimestampTimezoneUnion struct {
-	Str               *string            `queryParam:"inline,name=timestampTimezone"`
-	TimestampTimezone *TimestampTimezone `queryParam:"inline,name=timestampTimezone"`
+	Str               *string            `queryParam:"inline" union:"member"`
+	TimestampTimezone *TimestampTimezone `queryParam:"inline" union:"member"`
 
 	Type TimestampTimezoneUnionType
 }
@@ -828,14 +828,6 @@ func (u *TimestampTimezoneUnion) UnmarshalJSON(data []byte) error {
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var timestampTimezone TimestampTimezone = TimestampTimezone{}
-	if err := utils.UnmarshalJSON(data, &timestampTimezone, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  TimestampTimezoneUnionTypeTimestampTimezone,
-			Value: &timestampTimezone,
-		})
-	}
-
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -844,12 +836,20 @@ func (u *TimestampTimezoneUnion) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var timestampTimezone TimestampTimezone = TimestampTimezone{}
+	if err := utils.UnmarshalJSON(data, &timestampTimezone, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  TimestampTimezoneUnionTypeTimestampTimezone,
+			Value: &timestampTimezone,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for TimestampTimezoneUnion", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for TimestampTimezoneUnion", string(data))
 	}
@@ -857,11 +857,11 @@ func (u *TimestampTimezoneUnion) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(TimestampTimezoneUnionType)
 	switch best.Type {
-	case TimestampTimezoneUnionTypeTimestampTimezone:
-		u.TimestampTimezone = best.Value.(*TimestampTimezone)
-		return nil
 	case TimestampTimezoneUnionTypeStr:
 		u.Str = best.Value.(*string)
+		return nil
+	case TimestampTimezoneUnionTypeTimestampTimezone:
+		u.TimestampTimezone = best.Value.(*TimestampTimezone)
 		return nil
 	}
 
@@ -960,7 +960,7 @@ func (e EventBreakerRule) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventBreakerRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"condition", "maxEventBytes", "name", "timestamp", "timestampAnchorRegex", "timestampTimezone"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil

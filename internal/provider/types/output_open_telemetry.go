@@ -65,6 +65,6 @@ type OutputOpenTelemetry struct {
 	TokenAttributeName            jsontypes.Normalized               `tfsdk:"token_attribute_name"`
 	TokenTimeoutSecs              jsontypes.Normalized               `tfsdk:"token_timeout_secs"`
 	Type                          types.String                       `tfsdk:"type"`
-	Username                      types.String                       `tfsdk:"username"`
 	UseRoundRobinDNS              types.Bool                         `tfsdk:"use_round_robin_dns"`
+	Username                      types.String                       `tfsdk:"username"`
 }

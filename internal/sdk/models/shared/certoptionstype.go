@@ -22,7 +22,7 @@ func (c CertOptionsType) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CertOptionsType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"privKeyPath", "certPath"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

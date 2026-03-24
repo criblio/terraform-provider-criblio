@@ -69,7 +69,7 @@ func (c CustomLabel) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomLabel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"key", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -213,7 +213,7 @@ func (o OutputChronicle) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputChronicle) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "region", "logType", "gcpProjectId", "gcpInstance"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -156,7 +156,7 @@ func (i InputElasticProxyMode) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElasticProxyMode) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"enabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -307,7 +307,7 @@ func (i InputElastic) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputElastic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port", "elasticAPI"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

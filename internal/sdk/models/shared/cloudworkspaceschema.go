@@ -39,7 +39,7 @@ func (c CloudWorkspaceSchemaTLS) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CloudWorkspaceSchemaTLS) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"disabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -150,7 +150,7 @@ func (c CloudWorkspaceSchema) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CloudWorkspaceSchema) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"disabled", "host", "port", "subscriptionAgreement"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

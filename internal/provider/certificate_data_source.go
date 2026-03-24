@@ -83,7 +83,7 @@ func (r *CertificateDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique identifier for the certificate.`,
 			},
 			"passphrase": schema.StringAttribute{
 				Computed:    true,

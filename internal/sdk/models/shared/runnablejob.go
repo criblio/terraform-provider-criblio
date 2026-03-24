@@ -17,9 +17,9 @@ const (
 )
 
 type RunnableJob struct {
-	RunnableJobCollection      *RunnableJobCollection      `queryParam:"inline,name=RunnableJob"`
-	RunnableJobExecutor        *RunnableJobExecutor        `queryParam:"inline,name=RunnableJob"`
-	RunnableJobScheduledSearch *RunnableJobScheduledSearch `queryParam:"inline,name=RunnableJob"`
+	RunnableJobCollection      *RunnableJobCollection      `queryParam:"inline" union:"member"`
+	RunnableJobExecutor        *RunnableJobExecutor        `queryParam:"inline" union:"member"`
+	RunnableJobScheduledSearch *RunnableJobScheduledSearch `queryParam:"inline" union:"member"`
 
 	Type RunnableJobType
 }
@@ -85,7 +85,7 @@ func (u *RunnableJob) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for RunnableJob", string(data))
 	}

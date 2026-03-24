@@ -238,7 +238,7 @@ func (i InputPrometheus) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputPrometheus) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "interval", "logLevel"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

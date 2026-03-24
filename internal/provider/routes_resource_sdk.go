@@ -211,7 +211,7 @@ func (r *RoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*shared.
 		} else {
 			final = nil
 		}
-		var additionalProperties interface{}
+		var additionalProperties map[string]any
 		if !r.Routes[routesIndex].AdditionalProperties.IsUnknown() && !r.Routes[routesIndex].AdditionalProperties.IsNull() {
 			_ = json.Unmarshal([]byte(r.Routes[routesIndex].AdditionalProperties.ValueString()), &additionalProperties)
 		}
@@ -260,7 +260,7 @@ func (r *RoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*shared.
 		} else {
 			comment = nil
 		}
-		var additionalProperties1 interface{}
+		var additionalProperties1 map[string]any
 		if !r.Comments[commentsIndex].AdditionalProperties.IsUnknown() && !r.Comments[commentsIndex].AdditionalProperties.IsNull() {
 			_ = json.Unmarshal([]byte(r.Comments[commentsIndex].AdditionalProperties.ValueString()), &additionalProperties1)
 		}

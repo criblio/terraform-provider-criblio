@@ -18,7 +18,7 @@ func (i ItemsTypeLogLabels) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeLogLabels) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"label", "valueExpression"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

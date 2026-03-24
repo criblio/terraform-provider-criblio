@@ -8,8 +8,8 @@ import (
 
 type AuthenticationTypeUse struct {
 	AuthType             types.String `tfsdk:"auth_type"`
-	CertificateName      types.String `tfsdk:"certificate_name"`
 	CertPath             types.String `tfsdk:"cert_path"`
+	CertificateName      types.String `tfsdk:"certificate_name"`
 	ClientID             types.String `tfsdk:"client_id"`
 	ClientSecret         types.String `tfsdk:"client_secret"`
 	ClientSecretAuthType types.String `tfsdk:"client_secret_auth_type"`

@@ -116,7 +116,7 @@ func (k KeyMetadataEntity) MarshalJSON() ([]byte, error) {
 }
 
 func (k *KeyMetadataEntity) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"keyId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil

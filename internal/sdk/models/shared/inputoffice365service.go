@@ -88,6 +88,9 @@ func (i *InputOffice365ServiceContentConfig) GetEnabled() *bool {
 	return i.Enabled
 }
 
+// #region class-body-inputoffice365servicecontentconfig
+// #endregion class-body-inputoffice365servicecontentconfig
+
 type InputOffice365Service struct {
 	// Unique ID for this input
 	ID       *string                   `json:"id,omitempty"`
@@ -149,7 +152,7 @@ func (i InputOffice365Service) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365Service) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "tenantId", "appId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -357,3 +360,6 @@ func (i *InputOffice365Service) GetTemplateClientSecret() *string {
 	}
 	return i.TemplateClientSecret
 }
+
+// #region class-body-inputoffice365service
+// #endregion class-body-inputoffice365service

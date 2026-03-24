@@ -117,7 +117,7 @@ func (i InputOffice365MsgTrace) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MsgTrace) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "url", "interval"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -416,3 +416,6 @@ func (i *InputOffice365MsgTrace) GetTemplateResource() *string {
 	}
 	return i.TemplateResource
 }
+
+// #region class-body-inputoffice365msgtrace
+// #endregion class-body-inputoffice365msgtrace

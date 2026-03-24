@@ -9,8 +9,8 @@ import (
 
 type CloudWorkspaceSchemaTLS struct {
 	CaPath              types.String                             `tfsdk:"ca_path"`
-	CertificateName     types.String                             `tfsdk:"certificate_name"`
 	CertPath            types.String                             `tfsdk:"cert_path"`
+	CertificateName     types.String                             `tfsdk:"certificate_name"`
 	CheckServerIdentity *CloudWorkspaceSchemaCheckServerIdentity `tfsdk:"check_server_identity"`
 	CommonNameRegex     map[string]jsontypes.Normalized          `tfsdk:"common_name_regex"`
 	Disabled            types.Bool                               `tfsdk:"disabled"`

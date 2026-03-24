@@ -464,7 +464,7 @@ func (i InputCollectorRestMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -941,7 +941,7 @@ func (d DiscoveryConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DiscoveryConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"discoverType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1230,7 +1230,7 @@ func (i InputCollectorRestConf) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestConf) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"discovery"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1449,7 +1449,7 @@ func (i InputCollectorRestCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1494,7 +1494,7 @@ func (i InputCollectorRest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

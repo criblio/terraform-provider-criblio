@@ -1,14 +1,14 @@
 resource "criblio_search_dashboard" "my_searchdashboard" {
-  cache_ttl_seconds = 6.24
+  cache_ttl_seconds = 0
   category          = "...my_category..."
-  description       = "...my_description..."
+  description       = ""
   elements = [
     {
       dashboard_element = {
         config = {
           markdown = "...my_markdown..."
         }
-        hide_panel       = true
+        hide_panel       = false
         horizontal_chart = false
         id               = "...my_id..."
         layout = {
@@ -48,7 +48,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   }
   id           = "dash-overview"
   name         = "...my_name..."
-  refresh_rate = 2.1
+  refresh_rate = 0
   schedule = {
     cron_schedule = "0 * * * *"
     enabled       = true

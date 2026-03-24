@@ -25,7 +25,7 @@ data "criblio_certificate" "my_certificate" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to GET
+- `id` (String) Unique identifier for the certificate.
 
 ### Read-Only
 

@@ -160,7 +160,7 @@ func (o OutputSumoLogic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSumoLogic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

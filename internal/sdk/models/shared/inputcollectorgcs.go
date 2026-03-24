@@ -464,7 +464,7 @@ func (i InputCollectorGCSMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorGCSMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -755,7 +755,7 @@ func (i InputCollectorGCSCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorGCSCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -800,7 +800,7 @@ func (i InputCollectorGCS) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorGCS) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

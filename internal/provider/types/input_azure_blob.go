@@ -17,8 +17,8 @@ type InputAzureBlob struct {
 	Certificate                 *CertificateTypeAzureBlobAuthTypeClientCert `tfsdk:"certificate"`
 	ClientID                    types.String                                `tfsdk:"client_id"`
 	ClientTextSecret            types.String                                `tfsdk:"client_text_secret"`
-	Connections                 []ItemsTypeConnectionsOptional              `tfsdk:"connections"`
 	ConnectionString            types.String                                `tfsdk:"connection_string"`
+	Connections                 []ItemsTypeConnectionsOptional              `tfsdk:"connections"`
 	Description                 types.String                                `tfsdk:"description"`
 	Disabled                    types.Bool                                  `tfsdk:"disabled"`
 	EndpointSuffix              types.String                                `tfsdk:"endpoint_suffix"`

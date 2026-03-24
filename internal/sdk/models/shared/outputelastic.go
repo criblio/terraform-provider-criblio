@@ -107,7 +107,7 @@ func (o OutputElasticURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -251,7 +251,7 @@ func (o OutputElastic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElastic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "index"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

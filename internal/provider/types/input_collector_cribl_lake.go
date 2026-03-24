@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorCriblLake struct {
-	Collector            InputCollectorCriblLakeCollector   `tfsdk:"collector"`
+	Collector            *InputCollectorCriblLakeCollector  `tfsdk:"collector"`
 	Environment          types.String                       `tfsdk:"environment"`
 	ID                   types.String                       `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                         `tfsdk:"ignore_group_jobs_limit"`

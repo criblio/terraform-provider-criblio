@@ -22,6 +22,6 @@ type InputCollectorSplunkConf struct {
 	Timeout            types.Int64  `tfsdk:"timeout"`
 	Token              types.String `tfsdk:"token"`
 	TokenSecret        types.String `tfsdk:"token_secret"`
-	Username           types.String `tfsdk:"username"`
 	UseRoundRobinDNS   types.Bool   `tfsdk:"use_round_robin_dns"`
+	Username           types.String `tfsdk:"username"`
 }

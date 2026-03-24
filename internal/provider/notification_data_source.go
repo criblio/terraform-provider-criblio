@@ -92,7 +92,7 @@ func (r *NotificationDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique identifier for the notification`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),

@@ -19,7 +19,7 @@ type SystemSettingsAPI struct {
 	Protocol           types.String           `tfsdk:"protocol"`
 	Scripts            types.Bool             `tfsdk:"scripts"`
 	SensitiveFields    []types.String         `tfsdk:"sensitive_fields"`
-	Ssl                SystemSettingsSsl      `tfsdk:"ssl"`
+	Ssl                *SystemSettingsSsl     `tfsdk:"ssl"`
 	SsoRateLimit       types.String           `tfsdk:"sso_rate_limit"`
 	WorkerRemoteAccess types.Bool             `tfsdk:"worker_remote_access"`
 }

@@ -9,8 +9,8 @@ import (
 
 type MTLSSettings struct {
 	CaPath             types.String         `tfsdk:"ca_path"`
-	CertificateName    types.String         `tfsdk:"certificate_name"`
 	CertPath           types.String         `tfsdk:"cert_path"`
+	CertificateName    types.String         `tfsdk:"certificate_name"`
 	CommonNameRegex    types.String         `tfsdk:"common_name_regex"`
 	Disabled           types.Bool           `tfsdk:"disabled"`
 	Keytab             jsontypes.Normalized `tfsdk:"keytab"`

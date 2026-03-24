@@ -141,7 +141,7 @@ func (o OutputWizHec) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWizHec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "wiz_connector_id", "wiz_environment", "data_center", "wiz_sourcetype"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

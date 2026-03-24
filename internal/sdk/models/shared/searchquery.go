@@ -42,7 +42,7 @@ func (s SearchQueryValues) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchQueryValues) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "values"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -70,8 +70,8 @@ const (
 )
 
 type SearchQueryEarliest struct {
-	Str    *string  `queryParam:"inline,name=earliest"`
-	Number *float64 `queryParam:"inline,name=earliest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type SearchQueryEarliestType
 }
@@ -120,7 +120,7 @@ func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
 	}
@@ -159,8 +159,8 @@ const (
 )
 
 type SearchQueryLatest struct {
-	Str    *string  `queryParam:"inline,name=latest"`
-	Number *float64 `queryParam:"inline,name=latest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type SearchQueryLatestType
 }
@@ -209,7 +209,7 @@ func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
 	}
@@ -280,7 +280,7 @@ func (s SearchQueryInline) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"query", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -370,7 +370,7 @@ func (s SearchQuerySaved) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchQuerySaved) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"queryId", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -413,9 +413,9 @@ const (
 )
 
 type SearchQuery struct {
-	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline,name=SearchQuery"`
-	SearchQueryInline *SearchQueryInline `queryParam:"inline,name=SearchQuery"`
-	SearchQueryValues *SearchQueryValues `queryParam:"inline,name=SearchQuery"`
+	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" union:"member"`
+	SearchQueryInline *SearchQueryInline `queryParam:"inline" union:"member"`
+	SearchQueryValues *SearchQueryValues `queryParam:"inline" union:"member"`
 
 	Type SearchQueryType
 }
@@ -481,7 +481,7 @@ func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQuery", string(data))
 	}

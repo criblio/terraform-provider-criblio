@@ -31,6 +31,9 @@ func (v *V1WorkspacesCreateWorkspaceRequest) GetWorkspaceCreateRequestDTO() shar
 	return v.WorkspaceCreateRequestDTO
 }
 
+// #region class-body-v1workspacescreateworkspacerequest
+// #endregion class-body-v1workspacescreateworkspacerequest
+
 type V1WorkspacesCreateWorkspaceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -78,3 +81,6 @@ func (v *V1WorkspacesCreateWorkspaceResponse) GetDefaultErrorDTO() *shared.Defau
 	}
 	return v.DefaultErrorDTO
 }
+
+// #region class-body-v1workspacescreateworkspaceresponse
+// #endregion class-body-v1workspacescreateworkspaceresponse

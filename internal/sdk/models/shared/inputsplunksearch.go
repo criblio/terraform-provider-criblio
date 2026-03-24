@@ -42,7 +42,7 @@ func (e EndpointParam) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EndpointParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -73,7 +73,7 @@ func (e EndpointHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EndpointHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -316,7 +316,7 @@ func (i InputSplunkSearch) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSplunkSearch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "searchHead", "search", "cronSchedule", "endpoint", "outputMode"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

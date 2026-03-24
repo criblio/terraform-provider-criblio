@@ -19,6 +19,7 @@ func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSetti
 		for _, itemsItem := range resp.Items {
 			var items tfTypes.SystemSettingsConf
 
+			items.API = &tfTypes.SystemSettingsConfAPI{}
 			items.API.BaseURL = types.StringPointerValue(itemsItem.API.BaseURL)
 			items.API.DisableAPICache = types.BoolPointerValue(itemsItem.API.DisableAPICache)
 			items.API.Disabled = types.BoolValue(itemsItem.API.Disabled)
@@ -38,6 +39,7 @@ func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSetti
 			for _, v := range itemsItem.API.SensitiveFields {
 				items.API.SensitiveFields = append(items.API.SensitiveFields, types.StringValue(v))
 			}
+			items.API.Ssl = &tfTypes.SystemSettingsConfSsl{}
 			items.API.Ssl.CaPath = types.StringPointerValue(itemsItem.API.Ssl.CaPath)
 			items.API.Ssl.CertPath = types.StringValue(itemsItem.API.Ssl.CertPath)
 			items.API.Ssl.Disabled = types.BoolValue(itemsItem.API.Ssl.Disabled)
@@ -45,17 +47,24 @@ func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSetti
 			items.API.Ssl.PrivKeyPath = types.StringValue(itemsItem.API.Ssl.PrivKeyPath)
 			items.API.SsoRateLimit = types.StringPointerValue(itemsItem.API.SsoRateLimit)
 			items.API.WorkerRemoteAccess = types.BoolValue(itemsItem.API.WorkerRemoteAccess)
+			items.Backups = &tfTypes.SystemSettingsConfBackups{}
 			items.Backups.BackupPersistence = types.StringValue(itemsItem.Backups.BackupPersistence)
 			items.Backups.BackupsDirectory = types.StringValue(itemsItem.Backups.BackupsDirectory)
+			items.CustomLogo = &tfTypes.SystemSettingsConfCustomLogo{}
 			items.CustomLogo.Enabled = types.BoolValue(itemsItem.CustomLogo.Enabled)
 			items.CustomLogo.LogoDescription = types.StringValue(itemsItem.CustomLogo.LogoDescription)
 			items.CustomLogo.LogoImage = types.StringValue(itemsItem.CustomLogo.LogoImage)
+			items.Pii = &tfTypes.SystemSettingsConfPii{}
 			items.Pii.EnablePiiDetection = types.BoolValue(itemsItem.Pii.EnablePiiDetection)
+			items.Proxy = &tfTypes.SystemSettingsConfProxy{}
 			items.Proxy.UseEnvVars = types.BoolValue(itemsItem.Proxy.UseEnvVars)
+			items.Rollback = &tfTypes.SystemSettingsConfRollback{}
 			items.Rollback.RollbackEnabled = types.BoolValue(itemsItem.Rollback.RollbackEnabled)
 			items.Rollback.RollbackRetries = types.Float64PointerValue(itemsItem.Rollback.RollbackRetries)
 			items.Rollback.RollbackTimeout = types.Float64PointerValue(itemsItem.Rollback.RollbackTimeout)
+			items.Shutdown = &tfTypes.SystemSettingsConfShutdown{}
 			items.Shutdown.DrainTimeout = types.Float64Value(itemsItem.Shutdown.DrainTimeout)
+			items.Sni = &tfTypes.SystemSettingsConfSni{}
 			items.Sni.DisableSNIRouting = types.BoolValue(itemsItem.Sni.DisableSNIRouting)
 			if itemsItem.Sockets == nil {
 				items.Sockets = nil
@@ -63,17 +72,21 @@ func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSetti
 				items.Sockets = &tfTypes.SystemSettingsConfSockets{}
 				items.Sockets.Directory = types.StringPointerValue(itemsItem.Sockets.Directory)
 			}
+			items.System = &tfTypes.SystemSettingsConfSystem{}
 			items.System.Intercom = types.BoolValue(itemsItem.System.Intercom)
 			items.System.Upgrade = types.StringValue(string(itemsItem.System.Upgrade))
+			items.TLS = &tfTypes.SystemSettingsConfTLS{}
 			items.TLS.DefaultCipherList = types.StringValue(itemsItem.TLS.DefaultCipherList)
 			items.TLS.DefaultEcdhCurve = types.StringValue(itemsItem.TLS.DefaultEcdhCurve)
 			items.TLS.MaxVersion = types.StringValue(itemsItem.TLS.MaxVersion)
 			items.TLS.MinVersion = types.StringValue(itemsItem.TLS.MinVersion)
 			items.TLS.RejectUnauthorized = types.BoolValue(itemsItem.TLS.RejectUnauthorized)
+			items.UpgradeGroupSettings = &tfTypes.UpgradeGroupSettings{}
 			items.UpgradeGroupSettings.IsRolling = types.BoolPointerValue(itemsItem.UpgradeGroupSettings.IsRolling)
 			items.UpgradeGroupSettings.Quantity = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.Quantity)
 			items.UpgradeGroupSettings.RetryCount = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.RetryCount)
 			items.UpgradeGroupSettings.RetryDelay = types.Float64PointerValue(itemsItem.UpgradeGroupSettings.RetryDelay)
+			items.UpgradeSettings = &tfTypes.UpgradeSettings{}
 			items.UpgradeSettings.AutomaticUpgradeCheckPeriod = types.StringPointerValue(itemsItem.UpgradeSettings.AutomaticUpgradeCheckPeriod)
 			items.UpgradeSettings.DisableAutomaticUpgrade = types.BoolValue(itemsItem.UpgradeSettings.DisableAutomaticUpgrade)
 			items.UpgradeSettings.EnableLegacyEdgeUpgrade = types.BoolValue(itemsItem.UpgradeSettings.EnableLegacyEdgeUpgrade)
@@ -88,6 +101,7 @@ func (r *GroupSystemSettingsDataSourceModel) RefreshFromOperationsGetSystemSetti
 				items.UpgradeSettings.PackageUrls = append(items.UpgradeSettings.PackageUrls, packageUrls)
 			}
 			items.UpgradeSettings.UpgradeSource = types.StringValue(itemsItem.UpgradeSettings.UpgradeSource)
+			items.Workers = &tfTypes.SystemSettingsConfWorkers{}
 			items.Workers.Count = types.Float64Value(itemsItem.Workers.Count)
 			items.Workers.EnableHeapSnapshots = types.BoolPointerValue(itemsItem.Workers.EnableHeapSnapshots)
 			items.Workers.LoadThrottlePerc = types.Float64PointerValue(itemsItem.Workers.LoadThrottlePerc)

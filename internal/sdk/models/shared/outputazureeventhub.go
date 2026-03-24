@@ -125,7 +125,7 @@ func (o OutputAzureEventhub) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureEventhub) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "brokers", "topic"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

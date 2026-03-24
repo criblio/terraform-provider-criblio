@@ -3,6 +3,6 @@
 package types
 
 type InputGrafana struct {
-	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline" tfsdk:"input_grafana_grafana1" tfPlanOnly:"true"`
-	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline" tfsdk:"input_grafana_grafana2" tfPlanOnly:"true"`
+	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline" tfsdk:"input_grafana_grafana1"`
+	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline" tfsdk:"input_grafana_grafana2"`
 }

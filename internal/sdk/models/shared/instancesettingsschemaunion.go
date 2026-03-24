@@ -38,6 +38,9 @@ func (i *InstanceSettingsSchema2) GetID() *string {
 	return i.ID
 }
 
+// #region class-body-instancesettingsschema2
+// #endregion class-body-instancesettingsschema2
+
 type InstanceSettingsSchema1 struct {
 	CloudWorkspace       *CloudWorkspaceSchema `json:"cloudWorkspace,omitempty"`
 	EnvRegex             *string               `json:"envRegex,omitempty"`
@@ -54,7 +57,7 @@ func (i InstanceSettingsSchema1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InstanceSettingsSchema1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "mode"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -116,6 +119,9 @@ func (i *InstanceSettingsSchema1) GetTags() []string {
 	return i.Tags
 }
 
+// #region class-body-instancesettingsschema1
+// #endregion class-body-instancesettingsschema1
+
 type InstanceSettingsSchemaUnionType string
 
 const (
@@ -124,8 +130,8 @@ const (
 )
 
 type InstanceSettingsSchemaUnion struct {
-	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline,name=InstanceSettingsSchema"`
-	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline,name=InstanceSettingsSchema"`
+	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline" union:"member"`
+	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline" union:"member"`
 
 	Type InstanceSettingsSchemaUnionType
 }
@@ -174,7 +180,7 @@ func (u *InstanceSettingsSchemaUnion) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InstanceSettingsSchemaUnion", string(data))
 	}

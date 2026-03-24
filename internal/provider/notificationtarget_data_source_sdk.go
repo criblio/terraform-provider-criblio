@@ -52,6 +52,7 @@ func (r *NotificationTargetDataSourceModel) RefreshFromSharedNotificationTarget(
 			r.PagerDutyTarget.SystemFields = append(r.PagerDutyTarget.SystemFields, types.StringValue(v))
 		}
 		r.PagerDutyTarget.Type = types.StringValue(string(resp.PagerDutyTarget.Type))
+		r.Type = r.PagerDutyTarget.Type
 	}
 	if resp.SlackTarget != nil {
 		r.SlackTarget = &tfTypes.SlackTarget{}
@@ -62,6 +63,7 @@ func (r *NotificationTargetDataSourceModel) RefreshFromSharedNotificationTarget(
 			r.SlackTarget.SystemFields = append(r.SlackTarget.SystemFields, types.StringValue(v))
 		}
 		r.SlackTarget.Type = types.StringValue(string(resp.SlackTarget.Type))
+		r.Type = r.SlackTarget.Type
 		r.SlackTarget.URL = types.StringValue(resp.SlackTarget.URL)
 	}
 	if resp.SMTPTarget != nil {
@@ -98,6 +100,7 @@ func (r *NotificationTargetDataSourceModel) RefreshFromSharedNotificationTarget(
 			r.SMTPTarget.TLS.RejectUnauthorized = types.BoolPointerValue(resp.SMTPTarget.TLS.RejectUnauthorized)
 		}
 		r.SMTPTarget.Type = types.StringValue(string(resp.SMTPTarget.Type))
+		r.Type = r.SMTPTarget.Type
 		r.SMTPTarget.Username = types.StringPointerValue(resp.SMTPTarget.Username)
 	}
 	if resp.SnsTarget != nil {
@@ -137,6 +140,7 @@ func (r *NotificationTargetDataSourceModel) RefreshFromSharedNotificationTarget(
 			r.SnsTarget.TopicType = types.StringNull()
 		}
 		r.SnsTarget.Type = types.StringValue(string(resp.SnsTarget.Type))
+		r.Type = r.SnsTarget.Type
 	}
 	if resp.WebhookTarget != nil {
 		r.WebhookTarget = &tfTypes.WebhookTarget{}
@@ -156,6 +160,7 @@ func (r *NotificationTargetDataSourceModel) RefreshFromSharedNotificationTarget(
 		}
 		r.WebhookTarget.Token = types.StringPointerValue(resp.WebhookTarget.Token)
 		r.WebhookTarget.Type = types.StringValue(string(resp.WebhookTarget.Type))
+		r.Type = r.WebhookTarget.Type
 		r.WebhookTarget.URL = types.StringValue(resp.WebhookTarget.URL)
 		r.WebhookTarget.Username = types.StringPointerValue(resp.WebhookTarget.Username)
 	}

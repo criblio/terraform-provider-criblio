@@ -42,7 +42,7 @@ func (a AuthenticationType) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AuthenticationType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"disabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

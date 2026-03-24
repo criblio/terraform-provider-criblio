@@ -8,19 +8,19 @@ import (
 )
 
 type SystemInfo struct {
-	APIPort         types.Float64                   `tfsdk:"api_port"`
 	Build           map[string]jsontypes.Normalized `tfsdk:"build"`
-	Conf            SystemInfoConf                  `tfsdk:"conf"`
+	APIPort         types.Float64                   `tfsdk:"api_port"`
+	Conf            *SystemInfoConf                 `tfsdk:"conf"`
 	ConfigPath      types.String                    `tfsdk:"config_path"`
 	DistMode        types.String                    `tfsdk:"dist_mode"`
-	Env             Env                             `tfsdk:"env"`
+	Env             *Env                            `tfsdk:"env"`
 	GUID            types.String                    `tfsdk:"guid"`
 	Hostname        types.String                    `tfsdk:"hostname"`
 	InstallPath     types.String                    `tfsdk:"install_path"`
-	License         LicenseInfo                     `tfsdk:"license"`
-	Limits          SystemInfoLimits                `tfsdk:"limits"`
-	Os              SystemInfoOs                    `tfsdk:"os"`
-	SystemConf      SystemConf                      `tfsdk:"system_conf"`
+	License         *LicenseInfo                    `tfsdk:"license"`
+	Limits          *SystemInfoLimits               `tfsdk:"limits"`
+	Os              *SystemInfoOs                   `tfsdk:"os"`
+	SystemConf      *SystemConf                     `tfsdk:"system_conf"`
 	Version         types.String                    `tfsdk:"version"`
 	WorkerProcesses types.Float64                   `tfsdk:"worker_processes"`
 }

@@ -177,19 +177,15 @@ resource "criblio_source" "my_source" {
   }
   input_cloudflare_hec = {
     access_control_allow_headers = [
-      "..."
     ]
     access_control_allow_origin = [
-      "..."
     ]
     activity_log_sample_rate = 1.27
     allowed_indexes = [
-      "..."
     ]
     auth_tokens = [
       {
         allowed_indexes_at_token = [
-          "..."
         ]
         auth_type   = "secret"
         description = "...my_description..."
@@ -586,7 +582,6 @@ resource "criblio_source" "my_source" {
         ]
         splunk_hec_metadata = {
           allowed_indexes_at_token = [
-            "..."
           ]
           default_dataset = "...my_default_dataset..."
           enabled         = true
@@ -1062,7 +1057,6 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
-          "..."
         ]
       }
     ]
@@ -3194,7 +3188,6 @@ resource "criblio_source" "my_source" {
       {
         name = "...my_name..."
         values = [
-          "..."
         ]
       }
     ]

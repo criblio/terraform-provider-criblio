@@ -84,6 +84,7 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
+			functions.Conf = &tfTypes.FunctionSpecificConfigs{}
 			functions.Conf.Add = []tfTypes.Add{}
 
 			for _, addItem := range functionsItem.Conf.Add {

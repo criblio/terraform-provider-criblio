@@ -40,8 +40,8 @@ const (
 )
 
 type WarmPoolSize struct {
-	Number           *float64          `queryParam:"inline,name=warmPoolSize"`
-	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline,name=warmPoolSize"`
+	Number           *float64          `queryParam:"inline" union:"member"`
+	WarmPoolSizeEnum *WarmPoolSizeEnum `queryParam:"inline" union:"member"`
 
 	Type WarmPoolSizeType
 }
@@ -90,7 +90,7 @@ func (u *WarmPoolSize) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for WarmPoolSize", string(data))
 	}

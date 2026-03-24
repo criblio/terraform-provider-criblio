@@ -197,7 +197,7 @@ func (s SMTPTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SMTPTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "host", "port", "from"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -419,7 +419,7 @@ func (s SnsTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SnsTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -575,7 +575,7 @@ func (s SlackTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SlackTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -688,7 +688,7 @@ func (p PagerDutyTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PagerDutyTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id", "type", "routingKey"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -890,7 +890,7 @@ func (w WebhookTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WebhookTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"id", "type", "url", "format", "method"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -977,11 +977,11 @@ const (
 )
 
 type NotificationTarget struct {
-	WebhookTarget   *WebhookTarget   `queryParam:"inline,name=NotificationTarget"`
-	PagerDutyTarget *PagerDutyTarget `queryParam:"inline,name=NotificationTarget"`
-	SlackTarget     *SlackTarget     `queryParam:"inline,name=NotificationTarget"`
-	SnsTarget       *SnsTarget       `queryParam:"inline,name=NotificationTarget"`
-	SMTPTarget      *SMTPTarget      `queryParam:"inline,name=NotificationTarget"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline" union:"member"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" union:"member"`
+	SlackTarget     *SlackTarget     `queryParam:"inline" union:"member"`
+	SnsTarget       *SnsTarget       `queryParam:"inline" union:"member"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline" union:"member"`
 
 	Type NotificationTargetType
 }
@@ -1044,14 +1044,6 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		})
 	}
 
-	var smtpTarget SMTPTarget = SMTPTarget{}
-	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  NotificationTargetTypeSMTPTarget,
-			Value: &smtpTarget,
-		})
-	}
-
 	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
 	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1076,12 +1068,20 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var smtpTarget SMTPTarget = SMTPTarget{}
+	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeSMTPTarget,
+			Value: &smtpTarget,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
 	}
@@ -1092,9 +1092,6 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 	case NotificationTargetTypeWebhookTarget:
 		u.WebhookTarget = best.Value.(*WebhookTarget)
 		return nil
-	case NotificationTargetTypeSMTPTarget:
-		u.SMTPTarget = best.Value.(*SMTPTarget)
-		return nil
 	case NotificationTargetTypePagerDutyTarget:
 		u.PagerDutyTarget = best.Value.(*PagerDutyTarget)
 		return nil
@@ -1103,6 +1100,9 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		return nil
 	case NotificationTargetTypeSnsTarget:
 		u.SnsTarget = best.Value.(*SnsTarget)
+		return nil
+	case NotificationTargetTypeSMTPTarget:
+		u.SMTPTarget = best.Value.(*SMTPTarget)
 		return nil
 	}
 

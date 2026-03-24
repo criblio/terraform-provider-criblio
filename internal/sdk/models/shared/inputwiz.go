@@ -114,7 +114,7 @@ func (i InputWizContentConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWizContentConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"contentType", "contentQuery", "cronSchedule", "earliest", "latest"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -278,7 +278,7 @@ func (i InputWiz) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWiz) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "endpoint", "authUrl", "clientId", "contentConfig"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -500,7 +500,7 @@ func (i InputSystemState) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSystemState) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

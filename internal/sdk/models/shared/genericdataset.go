@@ -42,6 +42,9 @@ func (s *S3Bucket) GetRegion() *string {
 	return s.Region
 }
 
+// #region class-body-s3bucket
+// #endregion class-body-s3bucket
+
 type AwsSecurityLakeDataset struct {
 	// Unique identifier for the dataset
 	ID string `json:"id"`
@@ -53,7 +56,7 @@ type AwsSecurityLakeDataset struct {
 	Type     string           `json:"type"`
 	Metadata *DatasetMetadata `json:"metadata,omitempty"`
 	// The templated path under which to look for data, in each folder
-	Path *string `default:"\\${vendor}/\\${sourceLocation}/\\${pathVersion}/region=\\${region}/accountId=\\${accountId}/eventDay=\\${_time:%Y%m%d}/" json:"path"`
+	Path *string `default:"${vendor}/${sourceLocation}/${pathVersion}/region=${region}/accountId=${accountId}/eventDay=${_time:%Y%m%d}/" json:"path"`
 	// A JavaScript filter expression to be evaluated against the provided path
 	Filter *string `default:"true" json:"filter"`
 	// A list of the buckets that should be searched by this dataset
@@ -65,7 +68,7 @@ func (a AwsSecurityLakeDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AwsSecurityLakeDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "selectedBuckets"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -141,7 +144,7 @@ func (g GcsDatasetExtraPath) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GcsDatasetExtraPath) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"bucket"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -197,7 +200,7 @@ func (g GcsDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GcsDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"id", "provider", "type", "bucket"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -294,7 +297,7 @@ func (a AzureBlobDatasetExtraPath) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureBlobDatasetExtraPath) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"containerName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -350,7 +353,7 @@ func (a AzureBlobDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureBlobDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "containerName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -456,7 +459,7 @@ func (e EdgeDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EdgeDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id", "provider", "type", "path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -537,7 +540,7 @@ func (m MetaDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MetaDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"id", "provider", "type", "datasets"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -597,7 +600,7 @@ func (c CriblLeaderDatasetExtraPath) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CriblLeaderDatasetExtraPath) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -640,7 +643,7 @@ func (c CriblLeaderDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CriblLeaderDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"id", "provider", "type", "path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -720,7 +723,7 @@ func (s S3DatasetExtraPath) MarshalJSON() ([]byte, error) {
 }
 
 func (s *S3DatasetExtraPath) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"bucket"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -761,6 +764,9 @@ func (s *S3DatasetExtraPath) GetAutoDetectRegion() *bool {
 	return s.AutoDetectRegion
 }
 
+// #region class-body-s3datasetextrapath
+// #endregion class-body-s3datasetextrapath
+
 type S3Dataset struct {
 	// Unique identifier for the dataset
 	ID string `json:"id"`
@@ -794,7 +800,7 @@ func (s S3Dataset) MarshalJSON() ([]byte, error) {
 }
 
 func (s *S3Dataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "provider", "type", "bucket"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -891,6 +897,9 @@ func (s *S3Dataset) GetSkipEventTimeFilter() *bool {
 	return s.SkipEventTimeFilter
 }
 
+// #region class-body-s3dataset
+// #endregion class-body-s3dataset
+
 type APIElasticSearchDataset struct {
 	// Unique identifier for the dataset
 	ID string `json:"id"`
@@ -912,7 +921,7 @@ func (a APIElasticSearchDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIElasticSearchDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "index", "timestampField"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -988,7 +997,7 @@ func (a APIOpenSearchDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIOpenSearchDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "index"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1093,7 +1102,7 @@ func (p PrometheusDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PrometheusDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id", "provider", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1177,7 +1186,7 @@ func (c ClickHouseDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ClickHouseDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"id", "provider", "type", "table"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1267,7 +1276,7 @@ func (s SnowflakeDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SnowflakeDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "provider", "type", "table"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1379,7 +1388,7 @@ func (a APIAzureDataExplorerDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIAzureDataExplorerDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "cluster", "location", "database", "table"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1481,7 +1490,7 @@ func (a APIZoomDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIZoomDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1548,7 +1557,7 @@ func (a APITailscaleDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APITailscaleDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1615,7 +1624,7 @@ func (a APIOktaDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIOktaDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1682,7 +1691,7 @@ func (a APIMsGraphDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIMsGraphDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1749,7 +1758,7 @@ func (a APIGoogleWorkspaceDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIGoogleWorkspaceDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1816,7 +1825,7 @@ func (a APIGcpDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIGcpDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "endpointConfigs"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1885,7 +1894,7 @@ func (a APIAzureDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIAzureDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints", "subscriptionIds"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1961,7 +1970,7 @@ func (a APIAwsDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIAwsDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints", "regions"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -2035,7 +2044,7 @@ func (a APIHTTPDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIHTTPDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "provider", "type", "enabledEndpoints"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -2111,28 +2120,28 @@ const (
 )
 
 type GenericDataset struct {
-	APIHTTPDataset              *APIHTTPDataset              `queryParam:"inline,name=GenericDataset"`
-	APIAwsDataset               *APIAwsDataset               `queryParam:"inline,name=GenericDataset"`
-	APIAzureDataset             *APIAzureDataset             `queryParam:"inline,name=GenericDataset"`
-	APIGcpDataset               *APIGcpDataset               `queryParam:"inline,name=GenericDataset"`
-	APIGoogleWorkspaceDataset   *APIGoogleWorkspaceDataset   `queryParam:"inline,name=GenericDataset"`
-	APIMsGraphDataset           *APIMsGraphDataset           `queryParam:"inline,name=GenericDataset"`
-	APIOktaDataset              *APIOktaDataset              `queryParam:"inline,name=GenericDataset"`
-	APITailscaleDataset         *APITailscaleDataset         `queryParam:"inline,name=GenericDataset"`
-	APIZoomDataset              *APIZoomDataset              `queryParam:"inline,name=GenericDataset"`
-	APIAzureDataExplorerDataset *APIAzureDataExplorerDataset `queryParam:"inline,name=GenericDataset"`
-	SnowflakeDataset            *SnowflakeDataset            `queryParam:"inline,name=GenericDataset"`
-	ClickHouseDataset           *ClickHouseDataset           `queryParam:"inline,name=GenericDataset"`
-	PrometheusDataset           *PrometheusDataset           `queryParam:"inline,name=GenericDataset"`
-	APIOpenSearchDataset        *APIOpenSearchDataset        `queryParam:"inline,name=GenericDataset"`
-	APIElasticSearchDataset     *APIElasticSearchDataset     `queryParam:"inline,name=GenericDataset"`
-	S3Dataset                   *S3Dataset                   `queryParam:"inline,name=GenericDataset"`
-	CriblLeaderDataset          *CriblLeaderDataset          `queryParam:"inline,name=GenericDataset"`
-	MetaDataset                 *MetaDataset                 `queryParam:"inline,name=GenericDataset"`
-	EdgeDataset                 *EdgeDataset                 `queryParam:"inline,name=GenericDataset"`
-	AzureBlobDataset            *AzureBlobDataset            `queryParam:"inline,name=GenericDataset"`
-	GcsDataset                  *GcsDataset                  `queryParam:"inline,name=GenericDataset"`
-	AwsSecurityLakeDataset      *AwsSecurityLakeDataset      `queryParam:"inline,name=GenericDataset"`
+	APIHTTPDataset              *APIHTTPDataset              `queryParam:"inline" union:"member"`
+	APIAwsDataset               *APIAwsDataset               `queryParam:"inline" union:"member"`
+	APIAzureDataset             *APIAzureDataset             `queryParam:"inline" union:"member"`
+	APIGcpDataset               *APIGcpDataset               `queryParam:"inline" union:"member"`
+	APIGoogleWorkspaceDataset   *APIGoogleWorkspaceDataset   `queryParam:"inline" union:"member"`
+	APIMsGraphDataset           *APIMsGraphDataset           `queryParam:"inline" union:"member"`
+	APIOktaDataset              *APIOktaDataset              `queryParam:"inline" union:"member"`
+	APITailscaleDataset         *APITailscaleDataset         `queryParam:"inline" union:"member"`
+	APIZoomDataset              *APIZoomDataset              `queryParam:"inline" union:"member"`
+	APIAzureDataExplorerDataset *APIAzureDataExplorerDataset `queryParam:"inline" union:"member"`
+	SnowflakeDataset            *SnowflakeDataset            `queryParam:"inline" union:"member"`
+	ClickHouseDataset           *ClickHouseDataset           `queryParam:"inline" union:"member"`
+	PrometheusDataset           *PrometheusDataset           `queryParam:"inline" union:"member"`
+	APIOpenSearchDataset        *APIOpenSearchDataset        `queryParam:"inline" union:"member"`
+	APIElasticSearchDataset     *APIElasticSearchDataset     `queryParam:"inline" union:"member"`
+	S3Dataset                   *S3Dataset                   `queryParam:"inline" union:"member"`
+	CriblLeaderDataset          *CriblLeaderDataset          `queryParam:"inline" union:"member"`
+	MetaDataset                 *MetaDataset                 `queryParam:"inline" union:"member"`
+	EdgeDataset                 *EdgeDataset                 `queryParam:"inline" union:"member"`
+	AzureBlobDataset            *AzureBlobDataset            `queryParam:"inline" union:"member"`
+	GcsDataset                  *GcsDataset                  `queryParam:"inline" union:"member"`
+	AwsSecurityLakeDataset      *AwsSecurityLakeDataset      `queryParam:"inline" union:"member"`
 
 	Type GenericDatasetType
 }

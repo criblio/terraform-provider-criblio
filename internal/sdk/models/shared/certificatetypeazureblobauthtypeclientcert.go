@@ -16,7 +16,7 @@ func (c CertificateTypeAzureBlobAuthTypeClientCert) MarshalJSON() ([]byte, error
 }
 
 func (c *CertificateTypeAzureBlobAuthTypeClientCert) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"certificateName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

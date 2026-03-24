@@ -60,7 +60,7 @@ func (i InputCribl) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCribl) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

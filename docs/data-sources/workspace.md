@@ -25,7 +25,7 @@ data "criblio_workspace" "my_workspace" {
 ### Required
 
 - `organization_id` (String) The <code>id</code> of the Organization that contains the Workspace.
-- `workspace_id` (String) The <code>id</code> of the Workspace to get.
+- `workspace_id` (String) Unique identifier for the workspace
 
 ### Read-Only
 

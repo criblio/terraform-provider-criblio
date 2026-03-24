@@ -7,8 +7,8 @@ import (
 )
 
 type CertOptionsType struct {
-	CertificateName types.String `tfsdk:"certificate_name"`
 	CertPath        types.String `tfsdk:"cert_path"`
+	CertificateName types.String `tfsdk:"certificate_name"`
 	Passphrase      types.String `tfsdk:"passphrase"`
 	PrivKeyPath     types.String `tfsdk:"priv_key_path"`
 }

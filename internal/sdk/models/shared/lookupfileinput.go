@@ -49,7 +49,7 @@ func (l LookupFileInput) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LookupFileInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -165,7 +165,7 @@ func (l LookupFile) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LookupFile) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

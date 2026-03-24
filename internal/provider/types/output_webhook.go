@@ -33,8 +33,8 @@ type OutputWebhook struct {
 	FormatPayloadCode             types.String                                     `tfsdk:"format_payload_code"`
 	ID                            types.String                                     `tfsdk:"id"`
 	KeepAlive                     types.Bool                                       `tfsdk:"keep_alive"`
-	LoadBalanced                  types.Bool                                       `tfsdk:"load_balanced"`
 	LoadBalanceStatsPeriodSec     types.Float64                                    `tfsdk:"load_balance_stats_period_sec"`
+	LoadBalanced                  types.Bool                                       `tfsdk:"load_balanced"`
 	LoginURL                      types.String                                     `tfsdk:"login_url"`
 	MaxPayloadEvents              types.Float64                                    `tfsdk:"max_payload_events"`
 	MaxPayloadSizeKB              types.Float64                                    `tfsdk:"max_payload_size_kb"`
@@ -75,6 +75,6 @@ type OutputWebhook struct {
 	Type                          types.String                                     `tfsdk:"type"`
 	URL                           types.String                                     `tfsdk:"url"`
 	Urls                          []OutputWebhookURL                               `tfsdk:"urls"`
-	Username                      types.String                                     `tfsdk:"username"`
 	UseRoundRobinDNS              types.Bool                                       `tfsdk:"use_round_robin_dns"`
+	Username                      types.String                                     `tfsdk:"username"`
 }

@@ -143,7 +143,7 @@ func (o OutputServiceNow) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputServiceNow) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "endpoint", "tokenSecret", "otlpVersion", "protocol"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

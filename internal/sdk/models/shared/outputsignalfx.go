@@ -127,7 +127,7 @@ func (o OutputSignalfx) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSignalfx) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "realm"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

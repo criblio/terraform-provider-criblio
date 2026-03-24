@@ -3,18 +3,18 @@
 package types
 
 type SystemSettingsConf struct {
-	API                  SystemSettingsConfAPI        `tfsdk:"api"`
-	Backups              SystemSettingsConfBackups    `tfsdk:"backups"`
-	CustomLogo           SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
-	Pii                  SystemSettingsConfPii        `tfsdk:"pii"`
-	Proxy                SystemSettingsConfProxy      `tfsdk:"proxy"`
-	Rollback             SystemSettingsConfRollback   `tfsdk:"rollback"`
-	Shutdown             SystemSettingsConfShutdown   `tfsdk:"shutdown"`
-	Sni                  SystemSettingsConfSni        `tfsdk:"sni"`
-	Sockets              *SystemSettingsConfSockets   `tfsdk:"sockets"`
-	System               SystemSettingsConfSystem     `tfsdk:"system"`
-	TLS                  SystemSettingsConfTLS        `tfsdk:"tls"`
-	UpgradeGroupSettings UpgradeGroupSettings         `tfsdk:"upgrade_group_settings"`
-	UpgradeSettings      UpgradeSettings              `tfsdk:"upgrade_settings"`
-	Workers              SystemSettingsConfWorkers    `tfsdk:"workers"`
+	API                  *SystemSettingsConfAPI        `tfsdk:"api"`
+	Backups              *SystemSettingsConfBackups    `tfsdk:"backups"`
+	CustomLogo           *SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
+	Pii                  *SystemSettingsConfPii        `tfsdk:"pii"`
+	Proxy                *SystemSettingsConfProxy      `tfsdk:"proxy"`
+	Rollback             *SystemSettingsConfRollback   `tfsdk:"rollback"`
+	Shutdown             *SystemSettingsConfShutdown   `tfsdk:"shutdown"`
+	Sni                  *SystemSettingsConfSni        `tfsdk:"sni"`
+	Sockets              *SystemSettingsConfSockets    `tfsdk:"sockets"`
+	System               *SystemSettingsConfSystem     `tfsdk:"system"`
+	TLS                  *SystemSettingsConfTLS        `tfsdk:"tls"`
+	UpgradeGroupSettings *UpgradeGroupSettings         `tfsdk:"upgrade_group_settings"`
+	UpgradeSettings      *UpgradeSettings              `tfsdk:"upgrade_settings"`
+	Workers              *SystemSettingsConfWorkers    `tfsdk:"workers"`
 }

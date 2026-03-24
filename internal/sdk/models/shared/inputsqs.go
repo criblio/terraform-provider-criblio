@@ -142,7 +142,7 @@ func (i InputSqs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSqs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "queueName", "queueType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

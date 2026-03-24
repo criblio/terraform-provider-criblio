@@ -29,31 +29,31 @@ type SearchDatasetProviderDataSource struct {
 
 // SearchDatasetProviderDataSourceModel describes the data model.
 type SearchDatasetProviderDataSourceModel struct {
-	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider" tfPlanOnly:"true"`
-	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider" tfPlanOnly:"true"`
-	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider" tfPlanOnly:"true"`
-	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider" tfPlanOnly:"true"`
-	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider" tfPlanOnly:"true"`
-	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider" tfPlanOnly:"true"`
-	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider" tfPlanOnly:"true"`
-	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider" tfPlanOnly:"true"`
-	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider" tfPlanOnly:"true"`
-	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider" tfPlanOnly:"true"`
-	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider" tfPlanOnly:"true"`
-	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider" tfPlanOnly:"true"`
-	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider" tfPlanOnly:"true"`
-	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider" tfPlanOnly:"true"`
-	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider" tfPlanOnly:"true"`
-	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider" tfPlanOnly:"true"`
-	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider" tfPlanOnly:"true"`
+	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider"`
+	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider"`
+	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider"`
+	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider"`
+	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider"`
+	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider"`
+	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider"`
+	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider"`
+	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider"`
+	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider"`
+	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider"`
+	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider"`
+	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider"`
+	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider"`
+	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider"`
+	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider"`
+	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider"`
 	Description                  types.String                          `tfsdk:"description"`
-	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
-	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
+	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider"`
+	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider"`
 	ID                           types.String                          `tfsdk:"id"`
-	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider" tfPlanOnly:"true"`
-	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider" tfPlanOnly:"true"`
-	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider" tfPlanOnly:"true"`
-	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider" tfPlanOnly:"true"`
+	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider"`
+	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider"`
+	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider"`
+	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider"`
 	Type                         types.String                          `tfsdk:"type"`
 }
 
@@ -712,7 +712,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique identifier for the provider`,
 			},
 			"meta_provider": schema.SingleNestedAttribute{
 				Computed: true,

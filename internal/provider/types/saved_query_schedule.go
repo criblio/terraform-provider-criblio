@@ -7,9 +7,9 @@ import (
 )
 
 type SavedQuerySchedule struct {
-	CronSchedule  types.String  `tfsdk:"cron_schedule"`
-	Enabled       types.Bool    `tfsdk:"enabled"`
-	KeepLastN     types.Float64 `tfsdk:"keep_last_n"`
-	Notifications Notifications `tfsdk:"notifications"`
-	Tz            types.String  `tfsdk:"tz"`
+	CronSchedule  types.String   `tfsdk:"cron_schedule"`
+	Enabled       types.Bool     `tfsdk:"enabled"`
+	KeepLastN     types.Float64  `tfsdk:"keep_last_n"`
+	Notifications *Notifications `tfsdk:"notifications"`
+	Tz            types.String   `tfsdk:"tz"`
 }

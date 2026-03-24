@@ -62,6 +62,9 @@ func (p *PrometheusAuthOauthParam2) GetValue() any {
 	return p.Value
 }
 
+// #region class-body-prometheusauthoauthparam2
+// #endregion class-body-prometheusauthoauthparam2
+
 type PrometheusAuthOauthHeader2 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -91,6 +94,9 @@ func (p *PrometheusAuthOauthHeader2) GetValue() any {
 	}
 	return p.Value
 }
+
+// #region class-body-prometheusauthoauthheader2
+// #endregion class-body-prometheusauthoauthheader2
 
 type PrometheusAuth2 struct {
 	// Remote Write authentication type
@@ -222,6 +228,9 @@ func (p *PrometheusAuth2) GetOauthHeaders() []PrometheusAuthOauthHeader2 {
 	return p.OauthHeaders
 }
 
+// #region class-body-prometheusauth2
+// #endregion class-body-prometheusauth2
+
 type LokiAuthOauthParam2 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -252,6 +261,9 @@ func (l *LokiAuthOauthParam2) GetValue() any {
 	return l.Value
 }
 
+// #region class-body-lokiauthoauthparam2
+// #endregion class-body-lokiauthoauthparam2
+
 type LokiAuthOauthHeader2 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -281,6 +293,9 @@ func (l *LokiAuthOauthHeader2) GetValue() any {
 	}
 	return l.Value
 }
+
+// #region class-body-lokiauthoauthheader2
+// #endregion class-body-lokiauthoauthheader2
 
 type LokiAuth2 struct {
 	// Loki logs authentication type
@@ -412,6 +427,9 @@ func (l *LokiAuth2) GetOauthHeaders() []LokiAuthOauthHeader2 {
 	return l.OauthHeaders
 }
 
+// #region class-body-lokiauth2
+// #endregion class-body-lokiauth2
+
 type InputGrafanaGrafana2 struct {
 	// Unique ID for this input
 	ID       *string           `json:"id,omitempty"`
@@ -477,7 +495,7 @@ func (i InputGrafanaGrafana2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaGrafana2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port", "lokiAPI"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -707,6 +725,9 @@ func (i *InputGrafanaGrafana2) GetTemplatePort() *string {
 	return i.TemplatePort
 }
 
+// #region class-body-inputgrafanagrafana2
+// #endregion class-body-inputgrafanagrafana2
+
 type InputGrafanaType1 string
 
 const (
@@ -760,6 +781,9 @@ func (p *PrometheusAuthOauthParam1) GetValue() any {
 	return p.Value
 }
 
+// #region class-body-prometheusauthoauthparam1
+// #endregion class-body-prometheusauthoauthparam1
+
 type PrometheusAuthOauthHeader1 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -789,6 +813,9 @@ func (p *PrometheusAuthOauthHeader1) GetValue() any {
 	}
 	return p.Value
 }
+
+// #region class-body-prometheusauthoauthheader1
+// #endregion class-body-prometheusauthoauthheader1
 
 type PrometheusAuth1 struct {
 	// Remote Write authentication type
@@ -920,6 +947,9 @@ func (p *PrometheusAuth1) GetOauthHeaders() []PrometheusAuthOauthHeader1 {
 	return p.OauthHeaders
 }
 
+// #region class-body-prometheusauth1
+// #endregion class-body-prometheusauth1
+
 type LokiAuthOauthParam1 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -950,6 +980,9 @@ func (l *LokiAuthOauthParam1) GetValue() any {
 	return l.Value
 }
 
+// #region class-body-lokiauthoauthparam1
+// #endregion class-body-lokiauthoauthparam1
+
 type LokiAuthOauthHeader1 struct {
 	Name  any `json:"name,omitempty"`
 	Value any `json:"value,omitempty"`
@@ -979,6 +1012,9 @@ func (l *LokiAuthOauthHeader1) GetValue() any {
 	}
 	return l.Value
 }
+
+// #region class-body-lokiauthoauthheader1
+// #endregion class-body-lokiauthoauthheader1
 
 type LokiAuth1 struct {
 	// Loki logs authentication type
@@ -1110,6 +1146,9 @@ func (l *LokiAuth1) GetOauthHeaders() []LokiAuthOauthHeader1 {
 	return l.OauthHeaders
 }
 
+// #region class-body-lokiauth1
+// #endregion class-body-lokiauth1
+
 type InputGrafanaGrafana1 struct {
 	// Unique ID for this input
 	ID       *string           `json:"id,omitempty"`
@@ -1175,7 +1214,7 @@ func (i InputGrafanaGrafana1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafanaGrafana1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port", "prometheusAPI"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1405,6 +1444,9 @@ func (i *InputGrafanaGrafana1) GetTemplatePort() *string {
 	return i.TemplatePort
 }
 
+// #region class-body-inputgrafanagrafana1
+// #endregion class-body-inputgrafanagrafana1
+
 type InputGrafanaType string
 
 const (
@@ -1413,8 +1455,8 @@ const (
 )
 
 type InputGrafana struct {
-	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline,name=InputGrafana"`
-	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline,name=InputGrafana"`
+	InputGrafanaGrafana1 *InputGrafanaGrafana1 `queryParam:"inline" union:"member"`
+	InputGrafanaGrafana2 *InputGrafanaGrafana2 `queryParam:"inline" union:"member"`
 
 	Type InputGrafanaType
 }
@@ -1463,7 +1505,7 @@ func (u *InputGrafana) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputGrafana", string(data))
 	}

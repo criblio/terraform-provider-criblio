@@ -30,7 +30,7 @@ func (r RetryRulesTypeCodesEnableHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetryRulesTypeCodesEnableHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

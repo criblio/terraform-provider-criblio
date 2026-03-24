@@ -46,6 +46,9 @@ func (o *OutputGrafanaCloudPqControls2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// #region class-body-outputgrafanacloudpqcontrols2
+// #endregion class-body-outputgrafanacloudpqcontrols2
+
 type OutputGrafanaCloudGrafanaCloud2 struct {
 	// Unique ID for this output
 	ID   *string                 `json:"id,omitempty"`
@@ -138,7 +141,7 @@ func (o OutputGrafanaCloudGrafanaCloud2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudGrafanaCloud2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "prometheusUrl"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -452,6 +455,9 @@ func (o *OutputGrafanaCloudGrafanaCloud2) GetTemplatePrometheusURL() *string {
 	return o.TemplatePrometheusURL
 }
 
+// #region class-body-outputgrafanacloudgrafanacloud2
+// #endregion class-body-outputgrafanacloudgrafanacloud2
+
 type OutputGrafanaCloudType1 string
 
 const (
@@ -488,6 +494,9 @@ func (o *OutputGrafanaCloudPqControls1) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
+
+// #region class-body-outputgrafanacloudpqcontrols1
+// #endregion class-body-outputgrafanacloudpqcontrols1
 
 type OutputGrafanaCloudGrafanaCloud1 struct {
 	// Unique ID for this output
@@ -581,7 +590,7 @@ func (o OutputGrafanaCloudGrafanaCloud1) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGrafanaCloudGrafanaCloud1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "lokiUrl"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -895,6 +904,9 @@ func (o *OutputGrafanaCloudGrafanaCloud1) GetTemplatePrometheusURL() *string {
 	return o.TemplatePrometheusURL
 }
 
+// #region class-body-outputgrafanacloudgrafanacloud1
+// #endregion class-body-outputgrafanacloudgrafanacloud1
+
 type OutputGrafanaCloudType string
 
 const (
@@ -903,8 +915,8 @@ const (
 )
 
 type OutputGrafanaCloud struct {
-	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline,name=OutputGrafanaCloud"`
-	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline,name=OutputGrafanaCloud"`
+	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline" union:"member"`
+	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline" union:"member"`
 
 	Type OutputGrafanaCloudType
 }
@@ -953,7 +965,7 @@ func (u *OutputGrafanaCloud) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for OutputGrafanaCloud", string(data))
 	}

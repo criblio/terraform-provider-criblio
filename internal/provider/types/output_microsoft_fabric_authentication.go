@@ -7,8 +7,8 @@ import (
 )
 
 type OutputMicrosoftFabricAuthentication struct {
-	CertificateName      types.String `tfsdk:"certificate_name"`
 	CertPath             types.String `tfsdk:"cert_path"`
+	CertificateName      types.String `tfsdk:"certificate_name"`
 	ClientID             types.String `tfsdk:"client_id"`
 	ClientSecretAuthType types.String `tfsdk:"client_secret_auth_type"`
 	ClientTextSecret     types.String `tfsdk:"client_text_secret"`

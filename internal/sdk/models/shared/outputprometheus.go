@@ -205,7 +205,7 @@ func (o OutputPrometheus) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputPrometheus) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

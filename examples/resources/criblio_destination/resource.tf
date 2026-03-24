@@ -594,7 +594,7 @@ resource "criblio_destination" "my_destination" {
     enable_write_page_index   = true
     endpoint                  = "...my_endpoint..."
     environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
+    file_name_suffix          = ".json.gz"
     force_close_on_shutdown   = false
     format                    = "raw"
     header_line               = "...my_header_line..."
@@ -1253,7 +1253,7 @@ resource "criblio_destination" "my_destination" {
     enable_write_page_index = true
     environment             = "...my_environment..."
     events_volume_name      = "...my_events_volume_name..."
-    file_name_suffix        = "...my_file_name_suffix..."
+    file_name_suffix        = ".json.gz"
     force_close_on_shutdown = true
     format                  = "raw"
     header_line             = "...my_header_line..."
@@ -2913,7 +2913,6 @@ resource "criblio_destination" "my_destination" {
     dump_format_errors_to_disk = false
     environment                = "...my_environment..."
     exclude_mapping_fields = [
-      "..."
     ]
     extra_http_headers = [
       {

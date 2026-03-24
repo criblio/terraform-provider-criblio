@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	speakeasy_planmodifierutils "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/utils"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
@@ -41,31 +42,31 @@ type SearchDatasetProviderResource struct {
 
 // SearchDatasetProviderResourceModel describes the resource data model.
 type SearchDatasetProviderResourceModel struct {
-	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider" tfPlanOnly:"true"`
-	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider" tfPlanOnly:"true"`
-	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider" tfPlanOnly:"true"`
-	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider" tfPlanOnly:"true"`
-	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider" tfPlanOnly:"true"`
-	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider" tfPlanOnly:"true"`
-	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider" tfPlanOnly:"true"`
-	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider" tfPlanOnly:"true"`
-	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider" tfPlanOnly:"true"`
-	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider" tfPlanOnly:"true"`
-	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider" tfPlanOnly:"true"`
-	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider" tfPlanOnly:"true"`
-	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider" tfPlanOnly:"true"`
-	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider" tfPlanOnly:"true"`
-	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider" tfPlanOnly:"true"`
-	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider" tfPlanOnly:"true"`
-	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider" tfPlanOnly:"true"`
+	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider"`
+	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider"`
+	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider"`
+	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider"`
+	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider"`
+	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider"`
+	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider"`
+	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider"`
+	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider"`
+	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider"`
+	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider"`
+	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider"`
+	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider"`
+	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider"`
+	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider"`
+	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider"`
+	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider"`
 	Description                  types.String                          `tfsdk:"description"`
-	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider" tfPlanOnly:"true"`
-	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider" tfPlanOnly:"true"`
+	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider"`
+	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider"`
 	ID                           types.String                          `tfsdk:"id"`
-	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider" tfPlanOnly:"true"`
-	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider" tfPlanOnly:"true"`
-	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider" tfPlanOnly:"true"`
-	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider" tfPlanOnly:"true"`
+	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider"`
+	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider"`
+	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider"`
+	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider"`
 	Type                         types.String                          `tfsdk:"type"`
 }
 
@@ -1628,7 +1629,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 			"description": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_provider"), FieldPath: path.Root("api_http_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_provider"), FieldPath: path.Root("api_aws_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_provider"), FieldPath: path.Root("api_azure_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_provider"), FieldPath: path.Root("api_gcp_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_provider"), FieldPath: path.Root("api_google_workspace_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_provider"), FieldPath: path.Root("api_ms_graph_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_provider"), FieldPath: path.Root("api_okta_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_provider"), FieldPath: path.Root("api_tailscale_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_provider"), FieldPath: path.Root("api_zoom_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_provider"), FieldPath: path.Root("api_azure_data_explorer_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_provider"), FieldPath: path.Root("snowflake_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_provider"), FieldPath: path.Root("click_house_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_provider"), FieldPath: path.Root("prometheus_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_provider"), FieldPath: path.Root("api_open_search_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_provider"), FieldPath: path.Root("api_elastic_search_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_provider"), FieldPath: path.Root("aws_security_lake_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_provider"), FieldPath: path.Root("s3_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_provider"), FieldPath: path.Root("cribl_leader_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_search_provider"), FieldPath: path.Root("cribl_search_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_provider"), FieldPath: path.Root("meta_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_provider"), FieldPath: path.Root("edge_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_provider"), FieldPath: path.Root("azure_blob_provider").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_provider"), FieldPath: path.Root("gcs_provider").AtName("description")}}),
 				},
 				Description: `Description of the provider`,
 			},
@@ -1757,8 +1758,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the provider`,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_provider"), FieldPath: path.Root("api_http_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_provider"), FieldPath: path.Root("api_aws_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_provider"), FieldPath: path.Root("api_azure_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_provider"), FieldPath: path.Root("api_gcp_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_provider"), FieldPath: path.Root("api_google_workspace_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_provider"), FieldPath: path.Root("api_ms_graph_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_provider"), FieldPath: path.Root("api_okta_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_provider"), FieldPath: path.Root("api_tailscale_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_provider"), FieldPath: path.Root("api_zoom_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_provider"), FieldPath: path.Root("api_azure_data_explorer_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_provider"), FieldPath: path.Root("snowflake_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_provider"), FieldPath: path.Root("click_house_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_provider"), FieldPath: path.Root("prometheus_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_provider"), FieldPath: path.Root("api_open_search_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_provider"), FieldPath: path.Root("api_elastic_search_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_provider"), FieldPath: path.Root("aws_security_lake_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_provider"), FieldPath: path.Root("s3_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_provider"), FieldPath: path.Root("cribl_leader_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_search_provider"), FieldPath: path.Root("cribl_search_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_provider"), FieldPath: path.Root("meta_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_provider"), FieldPath: path.Root("edge_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_provider"), FieldPath: path.Root("azure_blob_provider").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_provider"), FieldPath: path.Root("gcs_provider").AtName("id")}}),
+				},
+				Description: `Unique ID to PATCH`,
 			},
 			"meta_provider": schema.SingleNestedAttribute{
 				Optional: true,
@@ -2151,7 +2155,10 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"type": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_provider"), FieldPath: path.Root("api_http_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_provider"), FieldPath: path.Root("api_aws_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_provider"), FieldPath: path.Root("api_azure_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_provider"), FieldPath: path.Root("api_gcp_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_provider"), FieldPath: path.Root("api_google_workspace_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_provider"), FieldPath: path.Root("api_ms_graph_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_provider"), FieldPath: path.Root("api_okta_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_provider"), FieldPath: path.Root("api_tailscale_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_provider"), FieldPath: path.Root("api_zoom_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_provider"), FieldPath: path.Root("api_azure_data_explorer_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_provider"), FieldPath: path.Root("snowflake_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_provider"), FieldPath: path.Root("click_house_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_provider"), FieldPath: path.Root("prometheus_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_provider"), FieldPath: path.Root("api_open_search_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_provider"), FieldPath: path.Root("api_elastic_search_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_provider"), FieldPath: path.Root("aws_security_lake_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_provider"), FieldPath: path.Root("s3_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_provider"), FieldPath: path.Root("cribl_leader_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_search_provider"), FieldPath: path.Root("cribl_search_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_provider"), FieldPath: path.Root("meta_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_provider"), FieldPath: path.Root("edge_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_provider"), FieldPath: path.Root("azure_blob_provider").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_provider"), FieldPath: path.Root("gcs_provider").AtName("type")}}),
+				},
 				Description: `Type of the provider`,
 			},
 		},
@@ -2388,7 +2395,10 @@ func (r *SearchDatasetProviderResource) Delete(ctx context.Context, req resource
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

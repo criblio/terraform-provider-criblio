@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorAzureBlob struct {
-	Collector            InputCollectorAzureBlobCollector   `tfsdk:"collector"`
+	Collector            *InputCollectorAzureBlobCollector  `tfsdk:"collector"`
 	Environment          types.String                       `tfsdk:"environment"`
 	ID                   types.String                       `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                         `tfsdk:"ignore_group_jobs_limit"`

@@ -17,7 +17,7 @@ func (t TLSSettingsClientSideType) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TLSSettingsClientSideType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"disabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

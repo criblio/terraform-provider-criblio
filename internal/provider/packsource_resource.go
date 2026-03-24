@@ -46,68 +46,68 @@ type PackSourceResource struct {
 type PackSourceResourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
 	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
-	InputAppscope             *tfTypes.InputAppscope             `queryParam:"inline" tfsdk:"input_appscope" tfPlanOnly:"true"`
-	InputAzureBlob            *tfTypes.InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob" tfPlanOnly:"true"`
-	InputCloudflareHec        *tfTypes.InputCloudflareHec        `queryParam:"inline" tfsdk:"input_cloudflare_hec" tfPlanOnly:"true"`
-	InputCollection           *tfTypes.InputCollection           `queryParam:"inline" tfsdk:"input_collection" tfPlanOnly:"true"`
-	InputConfluentCloud       *tfTypes.InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud" tfPlanOnly:"true"`
-	InputCribl                *tfTypes.InputCribl                `queryParam:"inline" tfsdk:"input_cribl" tfPlanOnly:"true"`
-	InputCriblHTTP            *tfTypes.InputCriblHTTP            `queryParam:"inline" tfsdk:"input_cribl_http" tfPlanOnly:"true"`
-	InputCriblLakeHTTP        *tfTypes.InputCriblLakeHTTP        `queryParam:"inline" tfsdk:"input_cribl_lake_http" tfPlanOnly:"true"`
-	InputCriblmetrics         *tfTypes.InputCriblmetrics         `queryParam:"inline" tfsdk:"input_criblmetrics" tfPlanOnly:"true"`
-	InputCriblTCP             *tfTypes.InputCriblTCP             `queryParam:"inline" tfsdk:"input_cribl_tcp" tfPlanOnly:"true"`
-	InputCrowdstrike          *tfTypes.InputCrowdstrike          `queryParam:"inline" tfsdk:"input_crowdstrike" tfPlanOnly:"true"`
-	InputDatadogAgent         *tfTypes.InputDatadogAgent         `queryParam:"inline" tfsdk:"input_datadog_agent" tfPlanOnly:"true"`
-	InputDatagen              *tfTypes.InputDatagen              `queryParam:"inline" tfsdk:"input_datagen" tfPlanOnly:"true"`
-	InputEdgePrometheus       *tfTypes.InputEdgePrometheus       `queryParam:"inline" tfsdk:"input_edge_prometheus" tfPlanOnly:"true"`
-	InputElastic              *tfTypes.InputElastic              `queryParam:"inline" tfsdk:"input_elastic" tfPlanOnly:"true"`
-	InputEventhub             *tfTypes.InputEventhub             `queryParam:"inline" tfsdk:"input_eventhub" tfPlanOnly:"true"`
-	InputExec                 *tfTypes.InputExec                 `queryParam:"inline" tfsdk:"input_exec" tfPlanOnly:"true"`
-	InputFile                 *tfTypes.InputFile                 `queryParam:"inline" tfsdk:"input_file" tfPlanOnly:"true"`
-	InputFirehose             *tfTypes.InputFirehose             `queryParam:"inline" tfsdk:"input_firehose" tfPlanOnly:"true"`
-	InputGooglePubsub         *tfTypes.InputGooglePubsub         `queryParam:"inline" tfsdk:"input_google_pubsub" tfPlanOnly:"true"`
-	InputGrafana              *tfTypes.InputGrafana              `queryParam:"inline" tfsdk:"input_grafana" tfPlanOnly:"true"`
-	InputHTTP                 *tfTypes.InputHTTP                 `queryParam:"inline" tfsdk:"input_http" tfPlanOnly:"true"`
-	InputHTTPRaw              *tfTypes.InputHTTPRaw              `queryParam:"inline" tfsdk:"input_http_raw" tfPlanOnly:"true"`
-	InputJournalFiles         *tfTypes.InputJournalFiles         `queryParam:"inline" tfsdk:"input_journal_files" tfPlanOnly:"true"`
-	InputKafka                *tfTypes.InputKafka                `queryParam:"inline" tfsdk:"input_kafka" tfPlanOnly:"true"`
-	InputKinesis              *tfTypes.InputKinesis              `queryParam:"inline" tfsdk:"input_kinesis" tfPlanOnly:"true"`
-	InputKubeEvents           *tfTypes.InputKubeEvents           `queryParam:"inline" tfsdk:"input_kube_events" tfPlanOnly:"true"`
-	InputKubeLogs             *tfTypes.InputKubeLogs             `queryParam:"inline" tfsdk:"input_kube_logs" tfPlanOnly:"true"`
-	InputKubeMetrics          *tfTypes.InputKubeMetrics          `queryParam:"inline" tfsdk:"input_kube_metrics" tfPlanOnly:"true"`
-	InputLoki                 *tfTypes.InputLoki                 `queryParam:"inline" tfsdk:"input_loki" tfPlanOnly:"true"`
-	InputMetrics              *tfTypes.InputMetrics              `queryParam:"inline" tfsdk:"input_metrics" tfPlanOnly:"true"`
-	InputMicrosoftGraph       *tfTypes.InputMicrosoftGraph       `queryParam:"inline" tfsdk:"input_microsoft_graph" tfPlanOnly:"true"`
-	InputModelDrivenTelemetry *tfTypes.InputModelDrivenTelemetry `queryParam:"inline" tfsdk:"input_model_driven_telemetry" tfPlanOnly:"true"`
-	InputMsk                  *tfTypes.InputMsk                  `queryParam:"inline" tfsdk:"input_msk" tfPlanOnly:"true"`
-	InputNetflow              *tfTypes.InputNetflow              `queryParam:"inline" tfsdk:"input_netflow" tfPlanOnly:"true"`
-	InputOffice365Mgmt        *tfTypes.InputOffice365Mgmt        `queryParam:"inline" tfsdk:"input_office365_mgmt" tfPlanOnly:"true"`
-	InputOffice365MsgTrace    *tfTypes.InputOffice365MsgTrace    `queryParam:"inline" tfsdk:"input_office365_msg_trace" tfPlanOnly:"true"`
-	InputOffice365Service     *tfTypes.InputOffice365Service     `queryParam:"inline" tfsdk:"input_office365_service" tfPlanOnly:"true"`
-	InputOpenai               *tfTypes.InputOpenai               `queryParam:"inline" tfsdk:"input_openai" tfPlanOnly:"true"`
-	InputOpenTelemetry        *tfTypes.InputOpenTelemetry        `queryParam:"inline" tfsdk:"input_open_telemetry" tfPlanOnly:"true"`
-	InputPrometheus           *tfTypes.InputPrometheus           `queryParam:"inline" tfsdk:"input_prometheus" tfPlanOnly:"true"`
-	InputPrometheusRw         *tfTypes.InputPrometheusRw         `queryParam:"inline" tfsdk:"input_prometheus_rw" tfPlanOnly:"true"`
-	InputRawUDP               *tfTypes.InputRawUDP               `queryParam:"inline" tfsdk:"input_raw_udp" tfPlanOnly:"true"`
-	InputS3                   *tfTypes.InputS3                   `queryParam:"inline" tfsdk:"input_s3" tfPlanOnly:"true"`
-	InputS3Inventory          *tfTypes.InputS3Inventory          `queryParam:"inline" tfsdk:"input_s3_inventory" tfPlanOnly:"true"`
-	InputSecurityLake         *tfTypes.InputSecurityLake         `queryParam:"inline" tfsdk:"input_security_lake" tfPlanOnly:"true"`
-	InputSnmp                 *tfTypes.InputSnmp                 `queryParam:"inline" tfsdk:"input_snmp" tfPlanOnly:"true"`
-	InputSplunk               *tfTypes.InputSplunk               `queryParam:"inline" tfsdk:"input_splunk" tfPlanOnly:"true"`
-	InputSplunkHec            *tfTypes.InputSplunkHec            `queryParam:"inline" tfsdk:"input_splunk_hec" tfPlanOnly:"true"`
-	InputSplunkSearch         *tfTypes.InputSplunkSearch         `queryParam:"inline" tfsdk:"input_splunk_search" tfPlanOnly:"true"`
-	InputSqs                  *tfTypes.InputSqs                  `queryParam:"inline" tfsdk:"input_sqs" tfPlanOnly:"true"`
-	InputSyslog               *tfTypes.InputSyslog               `queryParam:"inline" tfsdk:"input_syslog" tfPlanOnly:"true"`
-	InputSystemMetrics        *tfTypes.InputSystemMetrics        `queryParam:"inline" tfsdk:"input_system_metrics" tfPlanOnly:"true"`
-	InputSystemState          *tfTypes.InputSystemState          `queryParam:"inline" tfsdk:"input_system_state" tfPlanOnly:"true"`
-	InputTCP                  *tfTypes.InputTCP                  `queryParam:"inline" tfsdk:"input_tcp" tfPlanOnly:"true"`
-	InputTcpjson              *tfTypes.InputTcpjson              `queryParam:"inline" tfsdk:"input_tcpjson" tfPlanOnly:"true"`
-	InputWef                  *tfTypes.InputWef                  `queryParam:"inline" tfsdk:"input_wef" tfPlanOnly:"true"`
-	InputWindowsMetrics       *tfTypes.InputWindowsMetrics       `queryParam:"inline" tfsdk:"input_windows_metrics" tfPlanOnly:"true"`
-	InputWinEventLogs         *tfTypes.InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs" tfPlanOnly:"true"`
-	InputWiz                  *tfTypes.InputWiz                  `queryParam:"inline" tfsdk:"input_wiz" tfPlanOnly:"true"`
-	InputWizWebhook           *tfTypes.InputWizWebhook           `queryParam:"inline" tfsdk:"input_wiz_webhook" tfPlanOnly:"true"`
-	InputZscalerHec           *tfTypes.InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec" tfPlanOnly:"true"`
+	InputAppscope             *tfTypes.InputAppscope             `queryParam:"inline" tfsdk:"input_appscope"`
+	InputAzureBlob            *tfTypes.InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob"`
+	InputCloudflareHec        *tfTypes.InputCloudflareHec        `queryParam:"inline" tfsdk:"input_cloudflare_hec"`
+	InputCollection           *tfTypes.InputCollection           `queryParam:"inline" tfsdk:"input_collection"`
+	InputConfluentCloud       *tfTypes.InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud"`
+	InputCribl                *tfTypes.InputCribl                `queryParam:"inline" tfsdk:"input_cribl"`
+	InputCriblHTTP            *tfTypes.InputCriblHTTP            `queryParam:"inline" tfsdk:"input_cribl_http"`
+	InputCriblLakeHTTP        *tfTypes.InputCriblLakeHTTP        `queryParam:"inline" tfsdk:"input_cribl_lake_http"`
+	InputCriblmetrics         *tfTypes.InputCriblmetrics         `queryParam:"inline" tfsdk:"input_criblmetrics"`
+	InputCriblTCP             *tfTypes.InputCriblTCP             `queryParam:"inline" tfsdk:"input_cribl_tcp"`
+	InputCrowdstrike          *tfTypes.InputCrowdstrike          `queryParam:"inline" tfsdk:"input_crowdstrike"`
+	InputDatadogAgent         *tfTypes.InputDatadogAgent         `queryParam:"inline" tfsdk:"input_datadog_agent"`
+	InputDatagen              *tfTypes.InputDatagen              `queryParam:"inline" tfsdk:"input_datagen"`
+	InputEdgePrometheus       *tfTypes.InputEdgePrometheus       `queryParam:"inline" tfsdk:"input_edge_prometheus"`
+	InputElastic              *tfTypes.InputElastic              `queryParam:"inline" tfsdk:"input_elastic"`
+	InputEventhub             *tfTypes.InputEventhub             `queryParam:"inline" tfsdk:"input_eventhub"`
+	InputExec                 *tfTypes.InputExec                 `queryParam:"inline" tfsdk:"input_exec"`
+	InputFile                 *tfTypes.InputFile                 `queryParam:"inline" tfsdk:"input_file"`
+	InputFirehose             *tfTypes.InputFirehose             `queryParam:"inline" tfsdk:"input_firehose"`
+	InputGooglePubsub         *tfTypes.InputGooglePubsub         `queryParam:"inline" tfsdk:"input_google_pubsub"`
+	InputGrafana              *tfTypes.InputGrafana              `queryParam:"inline" tfsdk:"input_grafana"`
+	InputHTTP                 *tfTypes.InputHTTP                 `queryParam:"inline" tfsdk:"input_http"`
+	InputHTTPRaw              *tfTypes.InputHTTPRaw              `queryParam:"inline" tfsdk:"input_http_raw"`
+	InputJournalFiles         *tfTypes.InputJournalFiles         `queryParam:"inline" tfsdk:"input_journal_files"`
+	InputKafka                *tfTypes.InputKafka                `queryParam:"inline" tfsdk:"input_kafka"`
+	InputKinesis              *tfTypes.InputKinesis              `queryParam:"inline" tfsdk:"input_kinesis"`
+	InputKubeEvents           *tfTypes.InputKubeEvents           `queryParam:"inline" tfsdk:"input_kube_events"`
+	InputKubeLogs             *tfTypes.InputKubeLogs             `queryParam:"inline" tfsdk:"input_kube_logs"`
+	InputKubeMetrics          *tfTypes.InputKubeMetrics          `queryParam:"inline" tfsdk:"input_kube_metrics"`
+	InputLoki                 *tfTypes.InputLoki                 `queryParam:"inline" tfsdk:"input_loki"`
+	InputMetrics              *tfTypes.InputMetrics              `queryParam:"inline" tfsdk:"input_metrics"`
+	InputMicrosoftGraph       *tfTypes.InputMicrosoftGraph       `queryParam:"inline" tfsdk:"input_microsoft_graph"`
+	InputModelDrivenTelemetry *tfTypes.InputModelDrivenTelemetry `queryParam:"inline" tfsdk:"input_model_driven_telemetry"`
+	InputMsk                  *tfTypes.InputMsk                  `queryParam:"inline" tfsdk:"input_msk"`
+	InputNetflow              *tfTypes.InputNetflow              `queryParam:"inline" tfsdk:"input_netflow"`
+	InputOffice365Mgmt        *tfTypes.InputOffice365Mgmt        `queryParam:"inline" tfsdk:"input_office365_mgmt"`
+	InputOffice365MsgTrace    *tfTypes.InputOffice365MsgTrace    `queryParam:"inline" tfsdk:"input_office365_msg_trace"`
+	InputOffice365Service     *tfTypes.InputOffice365Service     `queryParam:"inline" tfsdk:"input_office365_service"`
+	InputOpenai               *tfTypes.InputOpenai               `queryParam:"inline" tfsdk:"input_openai"`
+	InputOpenTelemetry        *tfTypes.InputOpenTelemetry        `queryParam:"inline" tfsdk:"input_open_telemetry"`
+	InputPrometheus           *tfTypes.InputPrometheus           `queryParam:"inline" tfsdk:"input_prometheus"`
+	InputPrometheusRw         *tfTypes.InputPrometheusRw         `queryParam:"inline" tfsdk:"input_prometheus_rw"`
+	InputRawUDP               *tfTypes.InputRawUDP               `queryParam:"inline" tfsdk:"input_raw_udp"`
+	InputS3                   *tfTypes.InputS3                   `queryParam:"inline" tfsdk:"input_s3"`
+	InputS3Inventory          *tfTypes.InputS3Inventory          `queryParam:"inline" tfsdk:"input_s3_inventory"`
+	InputSecurityLake         *tfTypes.InputSecurityLake         `queryParam:"inline" tfsdk:"input_security_lake"`
+	InputSnmp                 *tfTypes.InputSnmp                 `queryParam:"inline" tfsdk:"input_snmp"`
+	InputSplunk               *tfTypes.InputSplunk               `queryParam:"inline" tfsdk:"input_splunk"`
+	InputSplunkHec            *tfTypes.InputSplunkHec            `queryParam:"inline" tfsdk:"input_splunk_hec"`
+	InputSplunkSearch         *tfTypes.InputSplunkSearch         `queryParam:"inline" tfsdk:"input_splunk_search"`
+	InputSqs                  *tfTypes.InputSqs                  `queryParam:"inline" tfsdk:"input_sqs"`
+	InputSyslog               *tfTypes.InputSyslog               `queryParam:"inline" tfsdk:"input_syslog"`
+	InputSystemMetrics        *tfTypes.InputSystemMetrics        `queryParam:"inline" tfsdk:"input_system_metrics"`
+	InputSystemState          *tfTypes.InputSystemState          `queryParam:"inline" tfsdk:"input_system_state"`
+	InputTCP                  *tfTypes.InputTCP                  `queryParam:"inline" tfsdk:"input_tcp"`
+	InputTcpjson              *tfTypes.InputTcpjson              `queryParam:"inline" tfsdk:"input_tcpjson"`
+	InputWef                  *tfTypes.InputWef                  `queryParam:"inline" tfsdk:"input_wef"`
+	InputWindowsMetrics       *tfTypes.InputWindowsMetrics       `queryParam:"inline" tfsdk:"input_windows_metrics"`
+	InputWinEventLogs         *tfTypes.InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs"`
+	InputWiz                  *tfTypes.InputWiz                  `queryParam:"inline" tfsdk:"input_wiz"`
+	InputWizWebhook           *tfTypes.InputWizWebhook           `queryParam:"inline" tfsdk:"input_wiz_webhook"`
+	InputZscalerHec           *tfTypes.InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec"`
 	Items                     []tfTypes.InputUnion1              `tfsdk:"items"`
 	Pack                      types.String                       `tfsdk:"pack"`
 }
@@ -506,8 +506,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -536,8 +536,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -555,8 +555,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -847,8 +847,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -877,8 +877,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -896,8 +896,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -911,11 +911,17 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Optional:    true,
@@ -928,6 +934,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Optional: true,
@@ -937,6 +946,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Optional:    true,
@@ -1065,6 +1077,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -1285,8 +1300,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -1315,8 +1330,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -1334,8 +1349,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -1528,8 +1543,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -1558,8 +1573,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -1577,8 +1592,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -2146,8 +2161,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -2176,8 +2191,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -2195,8 +2210,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -2353,8 +2368,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -2383,8 +2398,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -2402,8 +2417,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -2508,6 +2523,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -2720,8 +2738,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -2750,8 +2768,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -2769,8 +2787,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -2831,6 +2849,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 										"allowed_indexes_at_token": schema.ListAttribute{
 											Optional:    true,
 											ElementType: types.StringType,
+											Validators: []validator.List{
+												listvalidator.SizeAtLeast(0),
+											},
 										},
 										"default_dataset": schema.StringAttribute{
 											Optional: true,
@@ -2929,6 +2950,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -3155,8 +3179,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_confluent_cloud"),
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -3185,8 +3209,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -3204,8 +3228,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -3529,8 +3553,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -3548,8 +3572,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -3743,8 +3767,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -3762,8 +3786,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -4141,8 +4165,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
 						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
@@ -4170,8 +4194,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -4189,8 +4213,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -4280,6 +4304,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -4506,8 +4533,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
 						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
@@ -4535,8 +4562,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -4554,8 +4581,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -4730,8 +4757,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_edge_prometheus"),
@@ -4759,8 +4786,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -4778,8 +4805,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -4858,6 +4885,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Other dimensions to include in events`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Optional: true,
@@ -5133,6 +5163,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Required:    true,
 									ElementType: types.StringType,
 									Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+									},
 								},
 							},
 						},
@@ -5247,8 +5280,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -5276,8 +5309,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -5295,8 +5328,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -5439,6 +5472,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -5573,6 +5609,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `List of headers to remove from the request to proxy`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"template_url": schema.StringAttribute{
 								Optional:    true,
@@ -5710,8 +5749,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -5739,8 +5778,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -5758,8 +5797,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -6169,8 +6208,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -6198,8 +6237,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -6217,8 +6256,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -6421,8 +6460,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -6450,8 +6489,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -6469,8 +6508,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -6723,8 +6762,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -6752,8 +6791,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -6771,8 +6810,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -6863,6 +6902,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -7074,8 +7116,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -7103,8 +7145,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -7122,8 +7164,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -7360,8 +7402,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -7389,8 +7431,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -7408,8 +7450,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -7605,6 +7647,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"max_requests_per_socket": schema.Int64Attribute{
 								Optional:    true,
 								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								Validators: []validator.Int64{
+									int64validator.AtLeast(0),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Optional: true,
@@ -8105,6 +8150,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"max_requests_per_socket": schema.Int64Attribute{
 								Optional:    true,
 								Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+								Validators: []validator.Int64{
+									int64validator.AtLeast(0),
+								},
 							},
 							"metadata": schema.ListNestedAttribute{
 								Optional: true,
@@ -8430,8 +8478,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -8459,8 +8507,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -8478,8 +8526,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -8614,6 +8662,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -8839,8 +8890,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -8868,8 +8919,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -8887,8 +8938,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -9024,6 +9075,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -9242,8 +9296,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -9271,8 +9325,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -9290,8 +9344,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -9488,8 +9542,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -9517,8 +9571,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -9536,8 +9590,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -10104,8 +10158,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -10133,8 +10187,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -10152,8 +10206,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -10468,8 +10522,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -10497,8 +10551,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -10516,8 +10570,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -10690,8 +10744,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -10719,8 +10773,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -10738,8 +10792,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -10976,8 +11030,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -11005,8 +11059,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -11024,8 +11078,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -11246,8 +11300,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -11275,8 +11329,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -11294,8 +11348,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -11415,6 +11469,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -11694,8 +11751,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -11723,8 +11780,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -11742,8 +11799,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -12014,8 +12071,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -12043,8 +12100,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -12062,8 +12119,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -12457,8 +12514,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -12486,8 +12543,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -12505,8 +12562,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -12760,8 +12817,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -12789,8 +12846,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -12808,8 +12865,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -13363,8 +13420,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -13392,8 +13449,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -13411,8 +13468,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -13624,8 +13681,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -13653,8 +13710,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -13672,8 +13729,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -14028,8 +14085,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -14057,8 +14114,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_netflow"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -14076,8 +14133,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -14471,8 +14528,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -14500,8 +14557,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_netflow"),
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -14519,8 +14576,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -14860,8 +14917,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -14889,8 +14946,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_netflow"),
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -14908,8 +14965,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -15041,6 +15098,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -15342,8 +15402,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -15390,8 +15450,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -15778,8 +15838,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -15826,8 +15886,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -15905,6 +15965,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Other dimensions to include in events`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"disabled": schema.BoolAttribute{
 						Optional: true,
@@ -16148,6 +16211,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Required:    true,
 									ElementType: types.StringType,
 									Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+									},
 								},
 							},
 						},
@@ -16255,8 +16321,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -16285,8 +16351,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
 						path.MatchRelative().AtParent().AtName("input_s3"),
@@ -16303,8 +16369,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -16417,6 +16483,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -16713,8 +16782,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -16743,8 +16812,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
 						path.MatchRelative().AtParent().AtName("input_s3"),
@@ -16761,8 +16830,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -16962,8 +17031,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -16992,8 +17061,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_s3"),
@@ -17010,8 +17079,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -17395,8 +17464,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -17425,8 +17494,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -17443,8 +17512,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -17847,8 +17916,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -17877,8 +17946,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -17895,8 +17964,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -18288,8 +18357,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -18318,8 +18387,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -18336,8 +18405,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -18601,8 +18670,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -18631,8 +18700,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -18649,8 +18718,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -18981,8 +19050,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -19011,8 +19080,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -19029,8 +19098,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -19044,11 +19113,17 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Optional:    true,
@@ -19061,6 +19136,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Optional: true,
@@ -19070,6 +19148,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Optional:    true,
@@ -19202,6 +19283,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -19441,8 +19525,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -19471,8 +19555,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -19489,8 +19573,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -19938,8 +20022,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -19968,8 +20052,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -19986,8 +20070,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -20287,8 +20371,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -20317,8 +20401,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -20335,8 +20419,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -20409,6 +20493,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"max_active_cxn": schema.Float64Attribute{
 								Optional:    true,
@@ -20734,6 +20821,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:    true,
 								ElementType: types.StringType,
 								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"max_active_cxn": schema.Float64Attribute{
 								Optional:    true,
@@ -21007,8 +21097,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -21037,8 +21127,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -21055,8 +21145,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -21506,8 +21596,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -21536,8 +21626,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -21554,8 +21644,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -21872,8 +21962,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -21902,8 +21992,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -21920,8 +22010,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -22246,8 +22336,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -22276,8 +22366,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -22294,8 +22384,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_system_state"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -22591,8 +22681,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -22621,8 +22711,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -22639,8 +22729,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_system_state"),
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -22745,6 +22835,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -23081,8 +23174,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -23111,8 +23204,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -23129,8 +23222,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_system_state"),
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
@@ -23349,8 +23442,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -23379,8 +23472,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -23786,8 +23879,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -23816,8 +23909,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -24203,8 +24296,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -24233,8 +24326,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -24252,8 +24345,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
@@ -24388,6 +24481,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -24608,8 +24704,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -24638,8 +24734,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -24657,8 +24753,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_zscaler_hec"),
 					}...),
@@ -24671,11 +24767,17 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"access_control_allow_origin": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"activity_log_sample_rate": schema.Float64Attribute{
 						Optional:    true,
@@ -24688,6 +24790,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"auth_tokens": schema.ListNestedAttribute{
 						Optional: true,
@@ -24697,6 +24802,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.`,
+									Validators: []validator.List{
+										listvalidator.SizeAtLeast(0),
+									},
 								},
 								"auth_type": schema.StringAttribute{
 									Optional:    true,
@@ -24826,6 +24934,9 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"max_requests_per_socket": schema.Int64Attribute{
 						Optional:    true,
 						Description: `Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).`,
+						Validators: []validator.Int64{
+							int64validator.AtLeast(0),
+						},
 					},
 					"metadata": schema.ListNestedAttribute{
 						Optional: true,
@@ -25043,8 +25154,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_cribl"),
 						path.MatchRelative().AtParent().AtName("input_cribl_http"),
 						path.MatchRelative().AtParent().AtName("input_cribl_lake_http"),
-						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_cribl_tcp"),
+						path.MatchRelative().AtParent().AtName("input_criblmetrics"),
 						path.MatchRelative().AtParent().AtName("input_crowdstrike"),
 						path.MatchRelative().AtParent().AtName("input_datadog_agent"),
 						path.MatchRelative().AtParent().AtName("input_datagen"),
@@ -25073,8 +25184,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_office365_mgmt"),
 						path.MatchRelative().AtParent().AtName("input_office365_msg_trace"),
 						path.MatchRelative().AtParent().AtName("input_office365_service"),
-						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_open_telemetry"),
+						path.MatchRelative().AtParent().AtName("input_openai"),
 						path.MatchRelative().AtParent().AtName("input_prometheus"),
 						path.MatchRelative().AtParent().AtName("input_prometheus_rw"),
 						path.MatchRelative().AtParent().AtName("input_raw_udp"),
@@ -25092,8 +25203,8 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						path.MatchRelative().AtParent().AtName("input_tcp"),
 						path.MatchRelative().AtParent().AtName("input_tcpjson"),
 						path.MatchRelative().AtParent().AtName("input_wef"),
-						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_win_event_logs"),
+						path.MatchRelative().AtParent().AtName("input_windows_metrics"),
 						path.MatchRelative().AtParent().AtName("input_wiz"),
 						path.MatchRelative().AtParent().AtName("input_wiz_webhook"),
 					}...),
@@ -41372,43 +41483,6 @@ func (r *PackSourceResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetSystemInputsByPackAndIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Routes.GetSystemInputsByPackAndID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemInputsByPackAndIDResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -41450,7 +41524,10 @@ func (r *PackSourceResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -41472,17 +41549,17 @@ func (r *PackSourceResource) ImportState(ctx context.Context, req resource.Impor
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"pack-input-hec"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"pack-input-hec"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"observability-pack"`)
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"observability-pack"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)

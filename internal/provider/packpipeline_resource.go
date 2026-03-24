@@ -16,12 +16,10 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -78,7 +76,7 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
 						Validators: []validator.Int64{
-							int64validator.AtMost(10000),
+							int64validator.Between(0, 10000),
 						},
 					},
 					"description": schema.StringAttribute{
@@ -102,17 +100,18 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.MapAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Map{
-										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+								"conf": schema.StringAttribute{
+									Computed:   true,
+									Optional:   true,
+									CustomType: jsontypes.NormalizedType{},
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										speakeasy_stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
 									},
-									ElementType: jsontypes.NormalizedType{},
-									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
-									Validators: []validator.Map{
-										speakeasy_mapvalidators.NotNull(),
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									Description: `Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+										validators.IsValidJSON(),
 									},
 								},
 								"description": schema.StringAttribute{
@@ -312,6 +311,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 			body, _ := io.ReadAll(res.RawResponse.Body)
 			bodyStr := string(body)
 			if strings.Contains(bodyStr, "pipeline already exists") || strings.Contains(bodyStr, "already exists") {
+				// Pipeline was created between check and create, use UPDATE instead
 				updateRequest, updateDiags := data.ToOperationsUpdatePipelineByPackAndIDRequest(ctx)
 				resp.Diagnostics.Append(updateDiags...)
 				if resp.Diagnostics.HasError() {
@@ -346,6 +346,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 				if resp.Diagnostics.HasError() {
 					return
 				}
+				// Continue with GET request below
 				goto skipCreate
 			}
 		}
@@ -601,17 +602,17 @@ func (r *PackPipelineResource) ImportState(ctx context.Context, req resource.Imp
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myUniquePipelineIdToCRUD"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myUniquePipelineIdToCRUD"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingPackId"`)
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingPackId"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)

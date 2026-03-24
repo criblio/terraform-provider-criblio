@@ -7,11 +7,11 @@ import (
 )
 
 type AppscopeCustom struct {
-	Ancestor types.String   `tfsdk:"ancestor"`
-	Arg      types.String   `tfsdk:"arg"`
-	Config   AppscopeConfig `tfsdk:"config"`
-	Env      types.String   `tfsdk:"env"`
-	Hostname types.String   `tfsdk:"hostname"`
-	Procname types.String   `tfsdk:"procname"`
-	Username types.String   `tfsdk:"username"`
+	Ancestor types.String    `tfsdk:"ancestor"`
+	Arg      types.String    `tfsdk:"arg"`
+	Config   *AppscopeConfig `tfsdk:"config"`
+	Env      types.String    `tfsdk:"env"`
+	Hostname types.String    `tfsdk:"hostname"`
+	Procname types.String    `tfsdk:"procname"`
+	Username types.String    `tfsdk:"username"`
 }

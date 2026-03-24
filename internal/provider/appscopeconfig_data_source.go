@@ -29,12 +29,12 @@ type AppscopeConfigDataSource struct {
 
 // AppscopeConfigDataSourceModel describes the data model.
 type AppscopeConfigDataSourceModel struct {
-	Config      tfTypes.AppscopeConfigWithCustom `tfsdk:"config"`
-	Description types.String                     `tfsdk:"description"`
-	GroupID     types.String                     `tfsdk:"group_id"`
-	ID          types.String                     `tfsdk:"id"`
-	Lib         types.String                     `tfsdk:"lib"`
-	Tags        types.String                     `tfsdk:"tags"`
+	Config      *tfTypes.AppscopeConfigWithCustom `tfsdk:"config"`
+	Description types.String                      `tfsdk:"description"`
+	GroupID     types.String                      `tfsdk:"group_id"`
+	ID          types.String                      `tfsdk:"id"`
+	Lib         types.String                      `tfsdk:"lib"`
+	Tags        types.String                      `tfsdk:"tags"`
 }
 
 // Metadata returns the data source type name.
@@ -698,7 +698,7 @@ func (r *AppscopeConfigDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique ID for this Appscope config`,
 			},
 			"lib": schema.StringAttribute{
 				Computed: true,

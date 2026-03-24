@@ -3,6 +3,6 @@
 package types
 
 type OutputGrafanaCloud struct {
-	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline" tfsdk:"output_grafana_cloud_grafana_cloud1" tfPlanOnly:"true"`
-	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline" tfsdk:"output_grafana_cloud_grafana_cloud2" tfPlanOnly:"true"`
+	OutputGrafanaCloudGrafanaCloud1 *OutputGrafanaCloudGrafanaCloud1 `queryParam:"inline" tfsdk:"output_grafana_cloud_grafana_cloud1"`
+	OutputGrafanaCloudGrafanaCloud2 *OutputGrafanaCloudGrafanaCloud2 `queryParam:"inline" tfsdk:"output_grafana_cloud_grafana_cloud2"`
 }

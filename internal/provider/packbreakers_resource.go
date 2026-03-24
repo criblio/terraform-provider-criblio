@@ -457,6 +457,7 @@ func (r *PackBreakersResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.CreateBreakersByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -517,6 +518,7 @@ func (r *PackBreakersResource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -571,6 +573,7 @@ func (r *PackBreakersResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.UpdateBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -631,6 +634,7 @@ func (r *PackBreakersResource) Delete(ctx context.Context, req resource.DeleteRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Pipelines.DeleteBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -643,7 +647,10 @@ func (r *PackBreakersResource) Delete(ctx context.Context, req resource.DeleteRe
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -665,17 +672,17 @@ func (r *PackBreakersResource) ImportState(ctx context.Context, req resource.Imp
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myUniquePackBreakersIdToCRUD"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myUniquePackBreakersIdToCRUD"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Pack) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingPackId"`)
+		resp.Diagnostics.AddError("Missing required field", `The field pack is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingPackId"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pack"), data.Pack)...)

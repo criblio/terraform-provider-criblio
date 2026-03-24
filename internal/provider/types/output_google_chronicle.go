@@ -16,8 +16,8 @@ type OutputGoogleChronicle struct {
 	AuthenticationMethod            types.String                     `tfsdk:"authentication_method"`
 	Compress                        types.Bool                       `tfsdk:"compress"`
 	Concurrency                     types.Float64                    `tfsdk:"concurrency"`
-	CustomerID                      types.String                     `tfsdk:"customer_id"`
 	CustomLabels                    []ItemsTypeKeyValueMetadata      `tfsdk:"custom_labels"`
+	CustomerID                      types.String                     `tfsdk:"customer_id"`
 	Description                     types.String                     `tfsdk:"description"`
 	Environment                     types.String                     `tfsdk:"environment"`
 	ExtraHTTPHeaders                []ItemsTypeExtraHTTPHeaders      `tfsdk:"extra_http_headers"`

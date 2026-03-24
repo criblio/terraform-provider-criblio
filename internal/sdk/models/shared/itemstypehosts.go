@@ -28,7 +28,7 @@ func (i ItemsTypeHosts) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeHosts) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

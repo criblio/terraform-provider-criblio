@@ -140,7 +140,7 @@ func (o OutputNewrelicEvents) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicEvents) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "accountId", "eventType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -51,6 +51,6 @@ type OutputLoki struct {
 	TotalMemoryLimitKB            types.Float64                              `tfsdk:"total_memory_limit_kb"`
 	Type                          types.String                               `tfsdk:"type"`
 	URL                           types.String                               `tfsdk:"url"`
-	Username                      types.String                               `tfsdk:"username"`
 	UseRoundRobinDNS              types.Bool                                 `tfsdk:"use_round_robin_dns"`
+	Username                      types.String                               `tfsdk:"username"`
 }

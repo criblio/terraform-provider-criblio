@@ -43,7 +43,7 @@ func (i InputJournalFilesRule) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputJournalFilesRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -103,7 +103,7 @@ func (i InputJournalFiles) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputJournalFiles) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "path", "journals"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

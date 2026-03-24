@@ -253,7 +253,7 @@ func (o OutputGoogleCloudLogging) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleCloudLogging) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "logLocationType", "logNameExpression", "logLocationExpression"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

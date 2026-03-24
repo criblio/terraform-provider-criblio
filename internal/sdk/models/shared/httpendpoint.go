@@ -52,7 +52,7 @@ func (h HTTPEndpoint) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPEndpoint) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"name", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
 		return err
 	}
 	return nil

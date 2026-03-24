@@ -83,13 +83,13 @@ func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, r
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
+		confJSON := "{}"
 		if len(functionsItem.Conf) > 0 {
-			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
-			for key, value := range functionsItem.Conf {
-				result, _ := json.Marshal(value)
-				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+			if b, err := json.Marshal(functionsItem.Conf); err == nil {
+				confJSON = string(b)
 			}
 		}
+		functions.Conf = jsontypes.NewNormalizedValue(confJSON)
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)
@@ -258,10 +258,15 @@ func (r *PipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shared.P
 			final = nil
 		}
 		conf1 := make(map[string]interface{})
-		for confKey := range r.Conf.Functions[functionsIndex].Conf {
-			var confInst interface{}
-			_ = json.Unmarshal([]byte(r.Conf.Functions[functionsIndex].Conf[confKey].ValueString()), &confInst)
-			conf1[confKey] = confInst
+		fnConf := r.Conf.Functions[functionsIndex].Conf
+		if !fnConf.IsNull() && !fnConf.IsUnknown() {
+			raw := fnConf.ValueString()
+			if raw != "" {
+				_ = json.Unmarshal([]byte(raw), &conf1)
+			}
+		}
+		if conf1 == nil {
+			conf1 = make(map[string]interface{})
 		}
 		groupID := new(string)
 		if !r.Conf.Functions[functionsIndex].GroupID.IsUnknown() && !r.Conf.Functions[functionsIndex].GroupID.IsNull() {

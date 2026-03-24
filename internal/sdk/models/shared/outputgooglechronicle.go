@@ -133,7 +133,7 @@ func (e ExtraLogType) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ExtraLogType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"logType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -303,7 +303,7 @@ func (o OutputGoogleChronicle) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleChronicle) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "logFormatType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -161,7 +161,7 @@ func (i InputOpenaiContentConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOpenaiContentConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"contentType", "collectPath", "requestParams", "paginationType", "cronSchedule", "earliest", "latest"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -372,7 +372,7 @@ func (i InputOpenai) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOpenai) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "contentConfig", "textSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -592,7 +592,7 @@ func (c ContentConfigInput) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ContentConfigInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"requestParams", "paginationType", "cronSchedule", "earliest", "latest"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -775,7 +775,7 @@ func (i InputOpenaiInput) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOpenaiInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "contentConfig", "textSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -15,6 +15,6 @@ type SearchSettings struct {
 	MaxResultsPerSearch          types.Float64 `tfsdk:"max_results_per_search"`
 	SearchHistoryMaxJobs         types.Float64 `tfsdk:"search_history_max_jobs"`
 	SearchQueueLength            types.Float64 `tfsdk:"search_queue_length"`
-	WarmPoolSize                 WarmPoolSize  `tfsdk:"warm_pool_size"`
+	WarmPoolSize                 *WarmPoolSize `tfsdk:"warm_pool_size"`
 	WriteOnlyProviderSecrets     types.Bool    `tfsdk:"write_only_provider_secrets"`
 }

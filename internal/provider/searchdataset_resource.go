@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	speakeasy_planmodifierutils "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/utils"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
@@ -22,6 +24,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -45,31 +48,31 @@ type SearchDatasetResource struct {
 
 // SearchDatasetResourceModel describes the resource data model.
 type SearchDatasetResourceModel struct {
-	APIAwsDataset               *tfTypes.APIAwsDataset               `queryParam:"inline" tfsdk:"api_aws_dataset" tfPlanOnly:"true"`
-	APIAzureDataExplorerDataset *tfTypes.APIAzureDataExplorerDataset `queryParam:"inline" tfsdk:"api_azure_data_explorer_dataset" tfPlanOnly:"true"`
-	APIAzureDataset             *tfTypes.APIAzureDataset             `queryParam:"inline" tfsdk:"api_azure_dataset" tfPlanOnly:"true"`
-	APIElasticSearchDataset     *tfTypes.APIElasticSearchDataset     `queryParam:"inline" tfsdk:"api_elastic_search_dataset" tfPlanOnly:"true"`
-	APIGcpDataset               *tfTypes.APIGcpDataset               `queryParam:"inline" tfsdk:"api_gcp_dataset" tfPlanOnly:"true"`
-	APIGoogleWorkspaceDataset   *tfTypes.APIGoogleWorkspaceDataset   `queryParam:"inline" tfsdk:"api_google_workspace_dataset" tfPlanOnly:"true"`
-	APIHTTPDataset              *tfTypes.APIHTTPDataset              `queryParam:"inline" tfsdk:"apihttp_dataset" tfPlanOnly:"true"`
-	APIMsGraphDataset           *tfTypes.APIMsGraphDataset           `queryParam:"inline" tfsdk:"api_ms_graph_dataset" tfPlanOnly:"true"`
-	APIOktaDataset              *tfTypes.APIOktaDataset              `queryParam:"inline" tfsdk:"api_okta_dataset" tfPlanOnly:"true"`
-	APIOpenSearchDataset        *tfTypes.APIOpenSearchDataset        `queryParam:"inline" tfsdk:"api_open_search_dataset" tfPlanOnly:"true"`
-	APITailscaleDataset         *tfTypes.APITailscaleDataset         `queryParam:"inline" tfsdk:"api_tailscale_dataset" tfPlanOnly:"true"`
-	APIZoomDataset              *tfTypes.APIZoomDataset              `queryParam:"inline" tfsdk:"api_zoom_dataset" tfPlanOnly:"true"`
-	AwsSecurityLakeDataset      *tfTypes.AwsSecurityLakeDataset      `queryParam:"inline" tfsdk:"aws_security_lake_dataset" tfPlanOnly:"true"`
-	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset" tfPlanOnly:"true"`
-	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset" tfPlanOnly:"true"`
-	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset" tfPlanOnly:"true"`
+	APIAwsDataset               *tfTypes.APIAwsDataset               `queryParam:"inline" tfsdk:"api_aws_dataset"`
+	APIAzureDataExplorerDataset *tfTypes.APIAzureDataExplorerDataset `queryParam:"inline" tfsdk:"api_azure_data_explorer_dataset"`
+	APIAzureDataset             *tfTypes.APIAzureDataset             `queryParam:"inline" tfsdk:"api_azure_dataset"`
+	APIElasticSearchDataset     *tfTypes.APIElasticSearchDataset     `queryParam:"inline" tfsdk:"api_elastic_search_dataset"`
+	APIGcpDataset               *tfTypes.APIGcpDataset               `queryParam:"inline" tfsdk:"api_gcp_dataset"`
+	APIGoogleWorkspaceDataset   *tfTypes.APIGoogleWorkspaceDataset   `queryParam:"inline" tfsdk:"api_google_workspace_dataset"`
+	APIHTTPDataset              *tfTypes.APIHTTPDataset              `queryParam:"inline" tfsdk:"apihttp_dataset"`
+	APIMsGraphDataset           *tfTypes.APIMsGraphDataset           `queryParam:"inline" tfsdk:"api_ms_graph_dataset"`
+	APIOktaDataset              *tfTypes.APIOktaDataset              `queryParam:"inline" tfsdk:"api_okta_dataset"`
+	APIOpenSearchDataset        *tfTypes.APIOpenSearchDataset        `queryParam:"inline" tfsdk:"api_open_search_dataset"`
+	APITailscaleDataset         *tfTypes.APITailscaleDataset         `queryParam:"inline" tfsdk:"api_tailscale_dataset"`
+	APIZoomDataset              *tfTypes.APIZoomDataset              `queryParam:"inline" tfsdk:"api_zoom_dataset"`
+	AwsSecurityLakeDataset      *tfTypes.AwsSecurityLakeDataset      `queryParam:"inline" tfsdk:"aws_security_lake_dataset"`
+	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset"`
+	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset"`
+	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset"`
 	Description                 types.String                         `tfsdk:"description"`
-	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset" tfPlanOnly:"true"`
-	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset" tfPlanOnly:"true"`
+	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset"`
+	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset"`
 	ID                          types.String                         `tfsdk:"id"`
-	MetaDataset                 *tfTypes.MetaDataset                 `queryParam:"inline" tfsdk:"meta_dataset" tfPlanOnly:"true"`
-	PrometheusDataset           *tfTypes.PrometheusDataset           `queryParam:"inline" tfsdk:"prometheus_dataset" tfPlanOnly:"true"`
+	MetaDataset                 *tfTypes.MetaDataset                 `queryParam:"inline" tfsdk:"meta_dataset"`
+	PrometheusDataset           *tfTypes.PrometheusDataset           `queryParam:"inline" tfsdk:"prometheus_dataset"`
 	ProviderID                  types.String                         `tfsdk:"provider_id"`
-	S3Dataset                   *tfTypes.S3Dataset                   `queryParam:"inline" tfsdk:"s3_dataset" tfPlanOnly:"true"`
-	SnowflakeDataset            *tfTypes.SnowflakeDataset            `queryParam:"inline" tfsdk:"snowflake_dataset" tfPlanOnly:"true"`
+	S3Dataset                   *tfTypes.S3Dataset                   `queryParam:"inline" tfsdk:"s3_dataset"`
+	SnowflakeDataset            *tfTypes.SnowflakeDataset            `queryParam:"inline" tfsdk:"snowflake_dataset"`
 	Type                        types.String                         `tfsdk:"type"`
 }
 
@@ -2016,7 +2019,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_dataset"), FieldPath: path.Root("api_http_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_dataset"), FieldPath: path.Root("api_aws_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_dataset"), FieldPath: path.Root("api_azure_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_dataset"), FieldPath: path.Root("api_gcp_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_dataset"), FieldPath: path.Root("api_google_workspace_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_dataset"), FieldPath: path.Root("api_ms_graph_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_dataset"), FieldPath: path.Root("api_okta_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_dataset"), FieldPath: path.Root("api_tailscale_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_dataset"), FieldPath: path.Root("api_zoom_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_dataset"), FieldPath: path.Root("api_azure_data_explorer_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_dataset"), FieldPath: path.Root("snowflake_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_dataset"), FieldPath: path.Root("click_house_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_dataset"), FieldPath: path.Root("prometheus_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_dataset"), FieldPath: path.Root("api_open_search_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_dataset"), FieldPath: path.Root("api_elastic_search_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_dataset"), FieldPath: path.Root("s3_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_dataset"), FieldPath: path.Root("cribl_leader_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_dataset"), FieldPath: path.Root("meta_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_dataset"), FieldPath: path.Root("edge_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_dataset"), FieldPath: path.Root("azure_blob_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_dataset"), FieldPath: path.Root("gcs_dataset").AtName("description")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_dataset"), FieldPath: path.Root("aws_security_lake_dataset").AtName("description")}}),
+				},
 				Description: `Description of the dataset`,
 			},
 			"edge_dataset": schema.SingleNestedAttribute{
@@ -2311,8 +2317,11 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the dataset`,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_dataset"), FieldPath: path.Root("api_http_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_dataset"), FieldPath: path.Root("api_aws_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_dataset"), FieldPath: path.Root("api_azure_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_dataset"), FieldPath: path.Root("api_gcp_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_dataset"), FieldPath: path.Root("api_google_workspace_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_dataset"), FieldPath: path.Root("api_ms_graph_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_dataset"), FieldPath: path.Root("api_okta_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_dataset"), FieldPath: path.Root("api_tailscale_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_dataset"), FieldPath: path.Root("api_zoom_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_dataset"), FieldPath: path.Root("api_azure_data_explorer_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_dataset"), FieldPath: path.Root("snowflake_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_dataset"), FieldPath: path.Root("click_house_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_dataset"), FieldPath: path.Root("prometheus_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_dataset"), FieldPath: path.Root("api_open_search_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_dataset"), FieldPath: path.Root("api_elastic_search_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_dataset"), FieldPath: path.Root("s3_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_dataset"), FieldPath: path.Root("cribl_leader_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_dataset"), FieldPath: path.Root("meta_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_dataset"), FieldPath: path.Root("edge_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_dataset"), FieldPath: path.Root("azure_blob_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_dataset"), FieldPath: path.Root("gcs_dataset").AtName("id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_dataset"), FieldPath: path.Root("aws_security_lake_dataset").AtName("id")}}),
+				},
+				Description: `Unique ID to PATCH`,
 			},
 			"meta_dataset": schema.SingleNestedAttribute{
 				Optional: true,
@@ -2540,7 +2549,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"provider_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_dataset"), FieldPath: path.Root("api_http_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_dataset"), FieldPath: path.Root("api_aws_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_dataset"), FieldPath: path.Root("api_azure_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_dataset"), FieldPath: path.Root("api_gcp_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_dataset"), FieldPath: path.Root("api_google_workspace_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_dataset"), FieldPath: path.Root("api_ms_graph_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_dataset"), FieldPath: path.Root("api_okta_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_dataset"), FieldPath: path.Root("api_tailscale_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_dataset"), FieldPath: path.Root("api_zoom_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_dataset"), FieldPath: path.Root("api_azure_data_explorer_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_dataset"), FieldPath: path.Root("snowflake_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_dataset"), FieldPath: path.Root("click_house_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_dataset"), FieldPath: path.Root("prometheus_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_dataset"), FieldPath: path.Root("api_open_search_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_dataset"), FieldPath: path.Root("api_elastic_search_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_dataset"), FieldPath: path.Root("s3_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_dataset"), FieldPath: path.Root("cribl_leader_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_dataset"), FieldPath: path.Root("meta_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_dataset"), FieldPath: path.Root("edge_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_dataset"), FieldPath: path.Root("azure_blob_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_dataset"), FieldPath: path.Root("gcs_dataset").AtName("provider_id")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_dataset"), FieldPath: path.Root("aws_security_lake_dataset").AtName("provider_id")}}),
+				},
 				Description: `Dataset provider ID`,
 			},
 			"s3_dataset": schema.SingleNestedAttribute{
@@ -2881,7 +2893,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"type": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_http_dataset"), FieldPath: path.Root("api_http_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_aws_dataset"), FieldPath: path.Root("api_aws_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_dataset"), FieldPath: path.Root("api_azure_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_gcp_dataset"), FieldPath: path.Root("api_gcp_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_google_workspace_dataset"), FieldPath: path.Root("api_google_workspace_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_ms_graph_dataset"), FieldPath: path.Root("api_ms_graph_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_okta_dataset"), FieldPath: path.Root("api_okta_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_tailscale_dataset"), FieldPath: path.Root("api_tailscale_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_zoom_dataset"), FieldPath: path.Root("api_zoom_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_azure_data_explorer_dataset"), FieldPath: path.Root("api_azure_data_explorer_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("snowflake_dataset"), FieldPath: path.Root("snowflake_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("click_house_dataset"), FieldPath: path.Root("click_house_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("prometheus_dataset"), FieldPath: path.Root("prometheus_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_open_search_dataset"), FieldPath: path.Root("api_open_search_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("api_elastic_search_dataset"), FieldPath: path.Root("api_elastic_search_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("s3_dataset"), FieldPath: path.Root("s3_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("cribl_leader_dataset"), FieldPath: path.Root("cribl_leader_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("meta_dataset"), FieldPath: path.Root("meta_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("edge_dataset"), FieldPath: path.Root("edge_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("azure_blob_dataset"), FieldPath: path.Root("azure_blob_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("gcs_dataset"), FieldPath: path.Root("gcs_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("aws_security_lake_dataset"), FieldPath: path.Root("aws_security_lake_dataset").AtName("type")}}),
+				},
 				Description: `Dataset provider type, set automatically from the dataset provider`,
 			},
 		},
@@ -3118,7 +3133,10 @@ func (r *SearchDatasetResource) Delete(ctx context.Context, req resource.DeleteR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

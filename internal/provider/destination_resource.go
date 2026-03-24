@@ -47,77 +47,77 @@ type DestinationResource struct {
 type DestinationResourceModel struct {
 	GroupID                      types.String                          `tfsdk:"group_id"`
 	ID                           types.String                          `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
-	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob" tfPlanOnly:"true"`
-	OutputAzureDataExplorer      *tfTypes.OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer" tfPlanOnly:"true"`
-	OutputAzureEventhub          *tfTypes.OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub" tfPlanOnly:"true"`
-	OutputAzureLogs              *tfTypes.OutputAzureLogs              `queryParam:"inline" tfsdk:"output_azure_logs" tfPlanOnly:"true"`
-	OutputChronicle              *tfTypes.OutputChronicle              `queryParam:"inline" tfsdk:"output_chronicle" tfPlanOnly:"true"`
-	OutputClickHouse             *tfTypes.OutputClickHouse             `queryParam:"inline" tfsdk:"output_click_house" tfPlanOnly:"true"`
-	OutputCloudflareR2           *tfTypes.OutputCloudflareR2           `queryParam:"inline" tfsdk:"output_cloudflare_r2" tfPlanOnly:"true"`
-	OutputCloudwatch             *tfTypes.OutputCloudwatch             `queryParam:"inline" tfsdk:"output_cloudwatch" tfPlanOnly:"true"`
-	OutputConfluentCloud         *tfTypes.OutputConfluentCloud         `queryParam:"inline" tfsdk:"output_confluent_cloud" tfPlanOnly:"true"`
-	OutputCriblHTTP              *tfTypes.OutputCriblHTTP              `queryParam:"inline" tfsdk:"output_cribl_http" tfPlanOnly:"true"`
-	OutputCriblLake              *tfTypes.OutputCriblLake              `queryParam:"inline" tfsdk:"output_cribl_lake" tfPlanOnly:"true"`
-	OutputCriblSearchEngine      *tfTypes.OutputCriblSearchEngine      `queryParam:"inline" tfsdk:"output_cribl_search_engine" tfPlanOnly:"true"`
-	OutputCriblTCP               *tfTypes.OutputCriblTCP               `queryParam:"inline" tfsdk:"output_cribl_tcp" tfPlanOnly:"true"`
-	OutputCrowdstrikeNextGenSiem *tfTypes.OutputCrowdstrikeNextGenSiem `queryParam:"inline" tfsdk:"output_crowdstrike_next_gen_siem" tfPlanOnly:"true"`
-	OutputDatabricks             *tfTypes.OutputDatabricks             `queryParam:"inline" tfsdk:"output_databricks" tfPlanOnly:"true"`
-	OutputDatadog                *tfTypes.OutputDatadog                `queryParam:"inline" tfsdk:"output_datadog" tfPlanOnly:"true"`
-	OutputDataset                *tfTypes.OutputDataset                `queryParam:"inline" tfsdk:"output_dataset" tfPlanOnly:"true"`
-	OutputDefault                *tfTypes.OutputDefault                `queryParam:"inline" tfsdk:"output_default" tfPlanOnly:"true"`
-	OutputDevnull                *tfTypes.OutputDevnull                `queryParam:"inline" tfsdk:"output_devnull" tfPlanOnly:"true"`
-	OutputDiskSpool              *tfTypes.OutputDiskSpool              `queryParam:"inline" tfsdk:"output_disk_spool" tfPlanOnly:"true"`
-	OutputDlS3                   *tfTypes.OutputDlS3                   `queryParam:"inline" tfsdk:"output_dl_s3" tfPlanOnly:"true"`
-	OutputDynatraceHTTP          *tfTypes.OutputDynatraceHTTP          `queryParam:"inline" tfsdk:"output_dynatrace_http" tfPlanOnly:"true"`
-	OutputDynatraceOtlp          *tfTypes.OutputDynatraceOtlp          `queryParam:"inline" tfsdk:"output_dynatrace_otlp" tfPlanOnly:"true"`
-	OutputElastic                *tfTypes.OutputElastic                `queryParam:"inline" tfsdk:"output_elastic" tfPlanOnly:"true"`
-	OutputElasticCloud           *tfTypes.OutputElasticCloud           `queryParam:"inline" tfsdk:"output_elastic_cloud" tfPlanOnly:"true"`
-	OutputExabeam                *tfTypes.OutputExabeam                `queryParam:"inline" tfsdk:"output_exabeam" tfPlanOnly:"true"`
-	OutputFilesystem             *tfTypes.OutputFilesystem             `queryParam:"inline" tfsdk:"output_filesystem" tfPlanOnly:"true"`
-	OutputGoogleChronicle        *tfTypes.OutputGoogleChronicle        `queryParam:"inline" tfsdk:"output_google_chronicle" tfPlanOnly:"true"`
-	OutputGoogleCloudLogging     *tfTypes.OutputGoogleCloudLogging     `queryParam:"inline" tfsdk:"output_google_cloud_logging" tfPlanOnly:"true"`
-	OutputGoogleCloudStorage     *tfTypes.OutputGoogleCloudStorage     `queryParam:"inline" tfsdk:"output_google_cloud_storage" tfPlanOnly:"true"`
-	OutputGooglePubsub           *tfTypes.OutputGooglePubsub           `queryParam:"inline" tfsdk:"output_google_pubsub" tfPlanOnly:"true"`
-	OutputGrafanaCloud           *tfTypes.OutputGrafanaCloud           `queryParam:"inline" tfsdk:"output_grafana_cloud" tfPlanOnly:"true"`
-	OutputGraphite               *tfTypes.OutputGraphite               `queryParam:"inline" tfsdk:"output_graphite" tfPlanOnly:"true"`
-	OutputHoneycomb              *tfTypes.OutputHoneycomb              `queryParam:"inline" tfsdk:"output_honeycomb" tfPlanOnly:"true"`
-	OutputHumioHec               *tfTypes.OutputHumioHec               `queryParam:"inline" tfsdk:"output_humio_hec" tfPlanOnly:"true"`
-	OutputInfluxdb               *tfTypes.OutputInfluxdb               `queryParam:"inline" tfsdk:"output_influxdb" tfPlanOnly:"true"`
-	OutputKafka                  *tfTypes.OutputKafka                  `queryParam:"inline" tfsdk:"output_kafka" tfPlanOnly:"true"`
-	OutputKinesis                *tfTypes.OutputKinesis                `queryParam:"inline" tfsdk:"output_kinesis" tfPlanOnly:"true"`
-	OutputLocalSearchStorage     *tfTypes.OutputLocalSearchStorage     `queryParam:"inline" tfsdk:"output_local_search_storage" tfPlanOnly:"true"`
-	OutputLoki                   *tfTypes.OutputLoki                   `queryParam:"inline" tfsdk:"output_loki" tfPlanOnly:"true"`
-	OutputMicrosoftFabric        *tfTypes.OutputMicrosoftFabric        `queryParam:"inline" tfsdk:"output_microsoft_fabric" tfPlanOnly:"true"`
-	OutputMinio                  *tfTypes.OutputMinio                  `queryParam:"inline" tfsdk:"output_minio" tfPlanOnly:"true"`
-	OutputMsk                    *tfTypes.OutputMsk                    `queryParam:"inline" tfsdk:"output_msk" tfPlanOnly:"true"`
-	OutputNetflow                *tfTypes.OutputNetflow                `queryParam:"inline" tfsdk:"output_netflow" tfPlanOnly:"true"`
-	OutputNewrelic               *tfTypes.OutputNewrelic               `queryParam:"inline" tfsdk:"output_newrelic" tfPlanOnly:"true"`
-	OutputNewrelicEvents         *tfTypes.OutputNewrelicEvents         `queryParam:"inline" tfsdk:"output_newrelic_events" tfPlanOnly:"true"`
-	OutputOpenTelemetry          *tfTypes.OutputOpenTelemetry          `queryParam:"inline" tfsdk:"output_open_telemetry" tfPlanOnly:"true"`
-	OutputPrometheus             *tfTypes.OutputPrometheus             `queryParam:"inline" tfsdk:"output_prometheus" tfPlanOnly:"true"`
-	OutputRing                   *tfTypes.OutputRing                   `queryParam:"inline" tfsdk:"output_ring" tfPlanOnly:"true"`
-	OutputRouter                 *tfTypes.OutputRouter                 `queryParam:"inline" tfsdk:"output_router" tfPlanOnly:"true"`
-	OutputS3                     *tfTypes.OutputS3                     `queryParam:"inline" tfsdk:"output_s3" tfPlanOnly:"true"`
-	OutputSecurityLake           *tfTypes.OutputSecurityLake           `queryParam:"inline" tfsdk:"output_security_lake" tfPlanOnly:"true"`
-	OutputSentinel               *tfTypes.OutputSentinel               `queryParam:"inline" tfsdk:"output_sentinel" tfPlanOnly:"true"`
-	OutputSentinelOneAiSiem      *tfTypes.OutputSentinelOneAiSiem      `queryParam:"inline" tfsdk:"output_sentinel_one_ai_siem" tfPlanOnly:"true"`
-	OutputServiceNow             *tfTypes.OutputServiceNow             `queryParam:"inline" tfsdk:"output_service_now" tfPlanOnly:"true"`
-	OutputSignalfx               *tfTypes.OutputSignalfx               `queryParam:"inline" tfsdk:"output_signalfx" tfPlanOnly:"true"`
-	OutputSnmp                   *tfTypes.OutputSnmp                   `queryParam:"inline" tfsdk:"output_snmp" tfPlanOnly:"true"`
-	OutputSns                    *tfTypes.OutputSns                    `queryParam:"inline" tfsdk:"output_sns" tfPlanOnly:"true"`
-	OutputSplunk                 *tfTypes.OutputSplunk                 `queryParam:"inline" tfsdk:"output_splunk" tfPlanOnly:"true"`
-	OutputSplunkHec              *tfTypes.OutputSplunkHec              `queryParam:"inline" tfsdk:"output_splunk_hec" tfPlanOnly:"true"`
-	OutputSplunkLb               *tfTypes.OutputSplunkLb               `queryParam:"inline" tfsdk:"output_splunk_lb" tfPlanOnly:"true"`
-	OutputSqs                    *tfTypes.OutputSqs                    `queryParam:"inline" tfsdk:"output_sqs" tfPlanOnly:"true"`
-	OutputStatsd                 *tfTypes.OutputStatsd                 `queryParam:"inline" tfsdk:"output_statsd" tfPlanOnly:"true"`
-	OutputStatsdExt              *tfTypes.OutputStatsdExt              `queryParam:"inline" tfsdk:"output_statsd_ext" tfPlanOnly:"true"`
-	OutputSumoLogic              *tfTypes.OutputSumoLogic              `queryParam:"inline" tfsdk:"output_sumo_logic" tfPlanOnly:"true"`
-	OutputSyslog                 *tfTypes.OutputSyslog                 `queryParam:"inline" tfsdk:"output_syslog" tfPlanOnly:"true"`
-	OutputTcpjson                *tfTypes.OutputTcpjson                `queryParam:"inline" tfsdk:"output_tcpjson" tfPlanOnly:"true"`
-	OutputWavefront              *tfTypes.OutputWavefront              `queryParam:"inline" tfsdk:"output_wavefront" tfPlanOnly:"true"`
-	OutputWebhook                *tfTypes.OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook" tfPlanOnly:"true"`
-	OutputWizHec                 *tfTypes.OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec" tfPlanOnly:"true"`
-	OutputXsiam                  *tfTypes.OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam" tfPlanOnly:"true"`
+	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob"`
+	OutputAzureDataExplorer      *tfTypes.OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer"`
+	OutputAzureEventhub          *tfTypes.OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub"`
+	OutputAzureLogs              *tfTypes.OutputAzureLogs              `queryParam:"inline" tfsdk:"output_azure_logs"`
+	OutputChronicle              *tfTypes.OutputChronicle              `queryParam:"inline" tfsdk:"output_chronicle"`
+	OutputClickHouse             *tfTypes.OutputClickHouse             `queryParam:"inline" tfsdk:"output_click_house"`
+	OutputCloudflareR2           *tfTypes.OutputCloudflareR2           `queryParam:"inline" tfsdk:"output_cloudflare_r2"`
+	OutputCloudwatch             *tfTypes.OutputCloudwatch             `queryParam:"inline" tfsdk:"output_cloudwatch"`
+	OutputConfluentCloud         *tfTypes.OutputConfluentCloud         `queryParam:"inline" tfsdk:"output_confluent_cloud"`
+	OutputCriblHTTP              *tfTypes.OutputCriblHTTP              `queryParam:"inline" tfsdk:"output_cribl_http"`
+	OutputCriblLake              *tfTypes.OutputCriblLake              `queryParam:"inline" tfsdk:"output_cribl_lake"`
+	OutputCriblSearchEngine      *tfTypes.OutputCriblSearchEngine      `queryParam:"inline" tfsdk:"output_cribl_search_engine"`
+	OutputCriblTCP               *tfTypes.OutputCriblTCP               `queryParam:"inline" tfsdk:"output_cribl_tcp"`
+	OutputCrowdstrikeNextGenSiem *tfTypes.OutputCrowdstrikeNextGenSiem `queryParam:"inline" tfsdk:"output_crowdstrike_next_gen_siem"`
+	OutputDatabricks             *tfTypes.OutputDatabricks             `queryParam:"inline" tfsdk:"output_databricks"`
+	OutputDatadog                *tfTypes.OutputDatadog                `queryParam:"inline" tfsdk:"output_datadog"`
+	OutputDataset                *tfTypes.OutputDataset                `queryParam:"inline" tfsdk:"output_dataset"`
+	OutputDefault                *tfTypes.OutputDefault                `queryParam:"inline" tfsdk:"output_default"`
+	OutputDevnull                *tfTypes.OutputDevnull                `queryParam:"inline" tfsdk:"output_devnull"`
+	OutputDiskSpool              *tfTypes.OutputDiskSpool              `queryParam:"inline" tfsdk:"output_disk_spool"`
+	OutputDlS3                   *tfTypes.OutputDlS3                   `queryParam:"inline" tfsdk:"output_dl_s3"`
+	OutputDynatraceHTTP          *tfTypes.OutputDynatraceHTTP          `queryParam:"inline" tfsdk:"output_dynatrace_http"`
+	OutputDynatraceOtlp          *tfTypes.OutputDynatraceOtlp          `queryParam:"inline" tfsdk:"output_dynatrace_otlp"`
+	OutputElastic                *tfTypes.OutputElastic                `queryParam:"inline" tfsdk:"output_elastic"`
+	OutputElasticCloud           *tfTypes.OutputElasticCloud           `queryParam:"inline" tfsdk:"output_elastic_cloud"`
+	OutputExabeam                *tfTypes.OutputExabeam                `queryParam:"inline" tfsdk:"output_exabeam"`
+	OutputFilesystem             *tfTypes.OutputFilesystem             `queryParam:"inline" tfsdk:"output_filesystem"`
+	OutputGoogleChronicle        *tfTypes.OutputGoogleChronicle        `queryParam:"inline" tfsdk:"output_google_chronicle"`
+	OutputGoogleCloudLogging     *tfTypes.OutputGoogleCloudLogging     `queryParam:"inline" tfsdk:"output_google_cloud_logging"`
+	OutputGoogleCloudStorage     *tfTypes.OutputGoogleCloudStorage     `queryParam:"inline" tfsdk:"output_google_cloud_storage"`
+	OutputGooglePubsub           *tfTypes.OutputGooglePubsub           `queryParam:"inline" tfsdk:"output_google_pubsub"`
+	OutputGrafanaCloud           *tfTypes.OutputGrafanaCloud           `queryParam:"inline" tfsdk:"output_grafana_cloud"`
+	OutputGraphite               *tfTypes.OutputGraphite               `queryParam:"inline" tfsdk:"output_graphite"`
+	OutputHoneycomb              *tfTypes.OutputHoneycomb              `queryParam:"inline" tfsdk:"output_honeycomb"`
+	OutputHumioHec               *tfTypes.OutputHumioHec               `queryParam:"inline" tfsdk:"output_humio_hec"`
+	OutputInfluxdb               *tfTypes.OutputInfluxdb               `queryParam:"inline" tfsdk:"output_influxdb"`
+	OutputKafka                  *tfTypes.OutputKafka                  `queryParam:"inline" tfsdk:"output_kafka"`
+	OutputKinesis                *tfTypes.OutputKinesis                `queryParam:"inline" tfsdk:"output_kinesis"`
+	OutputLocalSearchStorage     *tfTypes.OutputLocalSearchStorage     `queryParam:"inline" tfsdk:"output_local_search_storage"`
+	OutputLoki                   *tfTypes.OutputLoki                   `queryParam:"inline" tfsdk:"output_loki"`
+	OutputMicrosoftFabric        *tfTypes.OutputMicrosoftFabric        `queryParam:"inline" tfsdk:"output_microsoft_fabric"`
+	OutputMinio                  *tfTypes.OutputMinio                  `queryParam:"inline" tfsdk:"output_minio"`
+	OutputMsk                    *tfTypes.OutputMsk                    `queryParam:"inline" tfsdk:"output_msk"`
+	OutputNetflow                *tfTypes.OutputNetflow                `queryParam:"inline" tfsdk:"output_netflow"`
+	OutputNewrelic               *tfTypes.OutputNewrelic               `queryParam:"inline" tfsdk:"output_newrelic"`
+	OutputNewrelicEvents         *tfTypes.OutputNewrelicEvents         `queryParam:"inline" tfsdk:"output_newrelic_events"`
+	OutputOpenTelemetry          *tfTypes.OutputOpenTelemetry          `queryParam:"inline" tfsdk:"output_open_telemetry"`
+	OutputPrometheus             *tfTypes.OutputPrometheus             `queryParam:"inline" tfsdk:"output_prometheus"`
+	OutputRing                   *tfTypes.OutputRing                   `queryParam:"inline" tfsdk:"output_ring"`
+	OutputRouter                 *tfTypes.OutputRouter                 `queryParam:"inline" tfsdk:"output_router"`
+	OutputS3                     *tfTypes.OutputS3                     `queryParam:"inline" tfsdk:"output_s3"`
+	OutputSecurityLake           *tfTypes.OutputSecurityLake           `queryParam:"inline" tfsdk:"output_security_lake"`
+	OutputSentinel               *tfTypes.OutputSentinel               `queryParam:"inline" tfsdk:"output_sentinel"`
+	OutputSentinelOneAiSiem      *tfTypes.OutputSentinelOneAiSiem      `queryParam:"inline" tfsdk:"output_sentinel_one_ai_siem"`
+	OutputServiceNow             *tfTypes.OutputServiceNow             `queryParam:"inline" tfsdk:"output_service_now"`
+	OutputSignalfx               *tfTypes.OutputSignalfx               `queryParam:"inline" tfsdk:"output_signalfx"`
+	OutputSnmp                   *tfTypes.OutputSnmp                   `queryParam:"inline" tfsdk:"output_snmp"`
+	OutputSns                    *tfTypes.OutputSns                    `queryParam:"inline" tfsdk:"output_sns"`
+	OutputSplunk                 *tfTypes.OutputSplunk                 `queryParam:"inline" tfsdk:"output_splunk"`
+	OutputSplunkHec              *tfTypes.OutputSplunkHec              `queryParam:"inline" tfsdk:"output_splunk_hec"`
+	OutputSplunkLb               *tfTypes.OutputSplunkLb               `queryParam:"inline" tfsdk:"output_splunk_lb"`
+	OutputSqs                    *tfTypes.OutputSqs                    `queryParam:"inline" tfsdk:"output_sqs"`
+	OutputStatsd                 *tfTypes.OutputStatsd                 `queryParam:"inline" tfsdk:"output_statsd"`
+	OutputStatsdExt              *tfTypes.OutputStatsdExt              `queryParam:"inline" tfsdk:"output_statsd_ext"`
+	OutputSumoLogic              *tfTypes.OutputSumoLogic              `queryParam:"inline" tfsdk:"output_sumo_logic"`
+	OutputSyslog                 *tfTypes.OutputSyslog                 `queryParam:"inline" tfsdk:"output_syslog"`
+	OutputTcpjson                *tfTypes.OutputTcpjson                `queryParam:"inline" tfsdk:"output_tcpjson"`
+	OutputWavefront              *tfTypes.OutputWavefront              `queryParam:"inline" tfsdk:"output_wavefront"`
+	OutputWebhook                *tfTypes.OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook"`
+	OutputWizHec                 *tfTypes.OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec"`
+	OutputXsiam                  *tfTypes.OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam"`
 }
 
 func (r *DestinationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -353,6 +353,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
 						Computed:    true,
@@ -994,6 +997,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"mapping_obj": schema.StringAttribute{
 						Computed:    true,
@@ -1354,6 +1360,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"retain_blob_on_success": schema.BoolAttribute{
 						Computed:    true,
@@ -1638,7 +1647,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"ack": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Control the number of required acknowledgments. must be one of ["1", "0", "-1"]`,
+						Description: `Control the number of required acknowledgments. must be one of [1, 0, -1]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(1, 0, -1),
 						},
@@ -2418,6 +2427,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -2953,6 +2965,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -3247,6 +3262,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to exclude from sending to ClickHouse`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Computed: true,
@@ -3557,6 +3575,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -4058,6 +4079,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
 						Computed:    true,
@@ -4778,7 +4802,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"ack": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Control the number of required acknowledgments. must be one of ["1", "0", "-1"]`,
+						Description: `Control the number of required acknowledgments. must be one of [1, 0, -1]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(1, 0, -1),
 						},
@@ -5839,6 +5863,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -6929,6 +6956,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -8003,6 +8033,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -8369,6 +8402,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -8986,6 +9022,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -9514,6 +9553,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -10321,6 +10363,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -11043,6 +11088,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -11424,6 +11472,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -11612,6 +11663,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -12171,6 +12225,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"retry_partial_errors": schema.BoolAttribute{
 						Computed:    true,
@@ -12739,6 +12796,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -13419,6 +13479,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -14074,6 +14137,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -15040,6 +15106,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_file_idle_time_sec": schema.Float64Attribute{
 						Computed:    true,
@@ -15826,6 +15895,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									},
 								},
 								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"loki_auth": schema.SingleNestedAttribute{
 								Computed: true,
@@ -16140,6 +16212,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									},
 								},
 								Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"safe_headers": schema.ListAttribute{
 								Computed:    true,
@@ -16336,6 +16411,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									},
 								},
 								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"loki_auth": schema.SingleNestedAttribute{
 								Computed: true,
@@ -16650,6 +16728,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									},
 								},
 								Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+								Validators: []validator.List{
+									listvalidator.SizeAtLeast(0),
+								},
 							},
 							"safe_headers": schema.ListAttribute{
 								Computed:    true,
@@ -17394,6 +17475,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -17840,6 +17924,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -18378,6 +18465,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -18626,7 +18716,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"ack": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Control the number of required acknowledgments. must be one of ["1", "0", "-1"]`,
+						Description: `Control the number of required acknowledgments. must be one of [1, 0, -1]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(1, 0, -1),
 						},
@@ -19864,6 +19954,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to exclude from sending`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Computed: true,
@@ -20122,6 +20215,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -20547,6 +20643,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
@@ -20754,6 +20853,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -20947,7 +21049,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"ack": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Control the number of required acknowledgments. must be one of ["1", "0", "-1"]`,
+						Description: `Control the number of required acknowledgments. must be one of [1, 0, -1]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(1, 0, -1),
 						},
@@ -21611,6 +21713,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"max_concurrent_file_parts": schema.Float64Attribute{
 						Computed:    true,
@@ -21982,7 +22087,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"ack": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Control the number of required acknowledgments. must be one of ["1", "0", "-1"]`,
+						Description: `Control the number of required acknowledgments. must be one of [1, 0, -1]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(1, 0, -1),
 						},
@@ -23202,6 +23307,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -23692,6 +23800,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -24070,6 +24181,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"oauth_headers": schema.ListNestedAttribute{
 						Computed: true,
@@ -24312,6 +24426,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -24916,6 +25033,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -25688,6 +25808,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -26280,6 +26403,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"kms_key_id": schema.StringAttribute{
 						Computed:    true,
@@ -27041,6 +27167,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -27624,6 +27753,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -27975,6 +28107,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -28166,6 +28301,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -28673,6 +28811,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -30083,6 +30224,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -32241,6 +32385,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -32463,7 +32610,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"facility": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user. must be one of ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"]`,
+						Description: `Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user. must be one of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(
 								0,
@@ -32752,7 +32899,7 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"severity": schema.Int64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice. must be one of ["0", "1", "2", "3", "4", "5", "6", "7"]`,
+						Description: `Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice. must be one of [0, 1, 2, 3, 4, 5, 6, 7]`,
 						Validators: []validator.Int64{
 							int64validator.OneOf(
 								0,
@@ -33742,6 +33889,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -34354,6 +34504,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -34959,6 +35112,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -35517,6 +35673,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
+						},
 					},
 					"safe_headers": schema.ListAttribute{
 						Computed:    true,
@@ -35973,7 +36132,10 @@ func (r *DestinationResource) Delete(ctx context.Context, req resource.DeleteReq
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -35994,12 +36156,12 @@ func (r *DestinationResource) ImportState(ctx context.Context, req resource.Impo
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"default"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"out-s3-main"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"out-s3-main"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

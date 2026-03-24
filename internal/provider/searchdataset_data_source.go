@@ -32,31 +32,31 @@ type SearchDatasetDataSource struct {
 
 // SearchDatasetDataSourceModel describes the data model.
 type SearchDatasetDataSourceModel struct {
-	APIAwsDataset               *tfTypes.APIAwsDataset               `queryParam:"inline" tfsdk:"api_aws_dataset" tfPlanOnly:"true"`
-	APIAzureDataExplorerDataset *tfTypes.APIAzureDataExplorerDataset `queryParam:"inline" tfsdk:"api_azure_data_explorer_dataset" tfPlanOnly:"true"`
-	APIAzureDataset             *tfTypes.APIAzureDataset             `queryParam:"inline" tfsdk:"api_azure_dataset" tfPlanOnly:"true"`
-	APIElasticSearchDataset     *tfTypes.APIElasticSearchDataset     `queryParam:"inline" tfsdk:"api_elastic_search_dataset" tfPlanOnly:"true"`
-	APIGcpDataset               *tfTypes.APIGcpDataset               `queryParam:"inline" tfsdk:"api_gcp_dataset" tfPlanOnly:"true"`
-	APIGoogleWorkspaceDataset   *tfTypes.APIGoogleWorkspaceDataset   `queryParam:"inline" tfsdk:"api_google_workspace_dataset" tfPlanOnly:"true"`
-	APIHTTPDataset              *tfTypes.APIHTTPDataset              `queryParam:"inline" tfsdk:"apihttp_dataset" tfPlanOnly:"true"`
-	APIMsGraphDataset           *tfTypes.APIMsGraphDataset           `queryParam:"inline" tfsdk:"api_ms_graph_dataset" tfPlanOnly:"true"`
-	APIOktaDataset              *tfTypes.APIOktaDataset              `queryParam:"inline" tfsdk:"api_okta_dataset" tfPlanOnly:"true"`
-	APIOpenSearchDataset        *tfTypes.APIOpenSearchDataset        `queryParam:"inline" tfsdk:"api_open_search_dataset" tfPlanOnly:"true"`
-	APITailscaleDataset         *tfTypes.APITailscaleDataset         `queryParam:"inline" tfsdk:"api_tailscale_dataset" tfPlanOnly:"true"`
-	APIZoomDataset              *tfTypes.APIZoomDataset              `queryParam:"inline" tfsdk:"api_zoom_dataset" tfPlanOnly:"true"`
-	AwsSecurityLakeDataset      *tfTypes.AwsSecurityLakeDataset      `queryParam:"inline" tfsdk:"aws_security_lake_dataset" tfPlanOnly:"true"`
-	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset" tfPlanOnly:"true"`
-	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset" tfPlanOnly:"true"`
-	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset" tfPlanOnly:"true"`
+	APIAwsDataset               *tfTypes.APIAwsDataset               `queryParam:"inline" tfsdk:"api_aws_dataset"`
+	APIAzureDataExplorerDataset *tfTypes.APIAzureDataExplorerDataset `queryParam:"inline" tfsdk:"api_azure_data_explorer_dataset"`
+	APIAzureDataset             *tfTypes.APIAzureDataset             `queryParam:"inline" tfsdk:"api_azure_dataset"`
+	APIElasticSearchDataset     *tfTypes.APIElasticSearchDataset     `queryParam:"inline" tfsdk:"api_elastic_search_dataset"`
+	APIGcpDataset               *tfTypes.APIGcpDataset               `queryParam:"inline" tfsdk:"api_gcp_dataset"`
+	APIGoogleWorkspaceDataset   *tfTypes.APIGoogleWorkspaceDataset   `queryParam:"inline" tfsdk:"api_google_workspace_dataset"`
+	APIHTTPDataset              *tfTypes.APIHTTPDataset              `queryParam:"inline" tfsdk:"apihttp_dataset"`
+	APIMsGraphDataset           *tfTypes.APIMsGraphDataset           `queryParam:"inline" tfsdk:"api_ms_graph_dataset"`
+	APIOktaDataset              *tfTypes.APIOktaDataset              `queryParam:"inline" tfsdk:"api_okta_dataset"`
+	APIOpenSearchDataset        *tfTypes.APIOpenSearchDataset        `queryParam:"inline" tfsdk:"api_open_search_dataset"`
+	APITailscaleDataset         *tfTypes.APITailscaleDataset         `queryParam:"inline" tfsdk:"api_tailscale_dataset"`
+	APIZoomDataset              *tfTypes.APIZoomDataset              `queryParam:"inline" tfsdk:"api_zoom_dataset"`
+	AwsSecurityLakeDataset      *tfTypes.AwsSecurityLakeDataset      `queryParam:"inline" tfsdk:"aws_security_lake_dataset"`
+	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset"`
+	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset"`
+	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset"`
 	Description                 types.String                         `tfsdk:"description"`
-	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset" tfPlanOnly:"true"`
-	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset" tfPlanOnly:"true"`
+	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset"`
+	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset"`
 	ID                          types.String                         `tfsdk:"id"`
-	MetaDataset                 *tfTypes.MetaDataset                 `queryParam:"inline" tfsdk:"meta_dataset" tfPlanOnly:"true"`
-	PrometheusDataset           *tfTypes.PrometheusDataset           `queryParam:"inline" tfsdk:"prometheus_dataset" tfPlanOnly:"true"`
+	MetaDataset                 *tfTypes.MetaDataset                 `queryParam:"inline" tfsdk:"meta_dataset"`
+	PrometheusDataset           *tfTypes.PrometheusDataset           `queryParam:"inline" tfsdk:"prometheus_dataset"`
 	ProviderID                  types.String                         `tfsdk:"provider_id"`
-	S3Dataset                   *tfTypes.S3Dataset                   `queryParam:"inline" tfsdk:"s3_dataset" tfPlanOnly:"true"`
-	SnowflakeDataset            *tfTypes.SnowflakeDataset            `queryParam:"inline" tfsdk:"snowflake_dataset" tfPlanOnly:"true"`
+	S3Dataset                   *tfTypes.S3Dataset                   `queryParam:"inline" tfsdk:"s3_dataset"`
+	SnowflakeDataset            *tfTypes.SnowflakeDataset            `queryParam:"inline" tfsdk:"snowflake_dataset"`
 	Type                        types.String                         `tfsdk:"type"`
 }
 
@@ -1111,7 +1111,7 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique identifier for the dataset`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),

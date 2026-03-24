@@ -284,7 +284,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
-### Resources
+### Managed Resources
 
 * [criblio_appscope_config](docs/resources/appscope_config.md)
 * [criblio_certificate](docs/resources/certificate.md)
@@ -333,6 +333,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_source](docs/resources/source.md)
 * [criblio_subscription](docs/resources/subscription.md)
 * [criblio_workspace](docs/resources/workspace.md)
+
 ### Data Sources
 
 * [criblio_appscope_config](docs/data-sources/appscope_config.md)

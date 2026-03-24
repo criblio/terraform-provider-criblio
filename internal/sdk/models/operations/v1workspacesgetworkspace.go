@@ -32,6 +32,9 @@ func (v *V1WorkspacesGetWorkspaceRequest) GetWorkspaceID() string {
 	return v.WorkspaceID
 }
 
+// #region class-body-v1workspacesgetworkspacerequest
+// #endregion class-body-v1workspacesgetworkspacerequest
+
 type V1WorkspacesGetWorkspaceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -79,3 +82,6 @@ func (v *V1WorkspacesGetWorkspaceResponse) GetDefaultErrorDTO() *shared.DefaultE
 	}
 	return v.DefaultErrorDTO
 }
+
+// #region class-body-v1workspacesgetworkspaceresponse
+// #endregion class-body-v1workspacesgetworkspaceresponse

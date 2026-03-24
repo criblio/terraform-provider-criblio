@@ -16,7 +16,7 @@ func (i ItemsTypeKeyValueMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeKeyValueMetadata) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"key", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

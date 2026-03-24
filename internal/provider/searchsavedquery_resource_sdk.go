@@ -88,6 +88,7 @@ func (r *SearchSavedQueryResourceModel) RefreshFromSharedSavedQuery(ctx context.
 		r.Schedule.CronSchedule = types.StringValue(resp.Schedule.CronSchedule)
 		r.Schedule.Enabled = types.BoolValue(resp.Schedule.Enabled)
 		r.Schedule.KeepLastN = types.Float64Value(resp.Schedule.KeepLastN)
+		r.Schedule.Notifications = &tfTypes.Notifications{}
 		r.Schedule.Notifications.Disabled = types.BoolValue(resp.Schedule.Notifications.Disabled)
 		r.Schedule.Tz = types.StringValue(resp.Schedule.Tz)
 	}

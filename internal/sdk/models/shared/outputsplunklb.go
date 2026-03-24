@@ -97,7 +97,7 @@ func (i IndexerDiscoveryConfigs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IndexerDiscoveryConfigs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"site", "masterUri", "refreshIntervalSec"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -261,7 +261,7 @@ func (o OutputSplunkLb) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunkLb) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "hosts"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -170,7 +170,7 @@ func (i InputLoki) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputLoki) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port", "lokiAPI"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

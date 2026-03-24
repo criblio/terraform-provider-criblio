@@ -3,66 +3,66 @@
 package types
 
 type InputUnion1 struct {
-	InputAppscope             *InputAppscope             `queryParam:"inline" tfsdk:"input_appscope" tfPlanOnly:"true"`
-	InputAzureBlob            *InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob" tfPlanOnly:"true"`
-	InputCloudflareHec        *InputCloudflareHec        `queryParam:"inline" tfsdk:"input_cloudflare_hec" tfPlanOnly:"true"`
-	InputCollection           *InputCollection           `queryParam:"inline" tfsdk:"input_collection" tfPlanOnly:"true"`
-	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud" tfPlanOnly:"true"`
-	InputCribl                *InputCribl                `queryParam:"inline" tfsdk:"input_cribl" tfPlanOnly:"true"`
-	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline" tfsdk:"input_cribl_http" tfPlanOnly:"true"`
-	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline" tfsdk:"input_cribl_lake_http" tfPlanOnly:"true"`
-	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline" tfsdk:"input_criblmetrics" tfPlanOnly:"true"`
-	InputCriblTCP             *InputCriblTCP             `queryParam:"inline" tfsdk:"input_cribl_tcp" tfPlanOnly:"true"`
-	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline" tfsdk:"input_crowdstrike" tfPlanOnly:"true"`
-	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline" tfsdk:"input_datadog_agent" tfPlanOnly:"true"`
-	InputDatagen              *InputDatagen              `queryParam:"inline" tfsdk:"input_datagen" tfPlanOnly:"true"`
-	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline" tfsdk:"input_edge_prometheus" tfPlanOnly:"true"`
-	InputElastic              *InputElastic              `queryParam:"inline" tfsdk:"input_elastic" tfPlanOnly:"true"`
-	InputEventhub             *InputEventhub             `queryParam:"inline" tfsdk:"input_eventhub" tfPlanOnly:"true"`
-	InputExec                 *InputExec                 `queryParam:"inline" tfsdk:"input_exec" tfPlanOnly:"true"`
-	InputFile                 *InputFile                 `queryParam:"inline" tfsdk:"input_file" tfPlanOnly:"true"`
-	InputFirehose             *InputFirehose             `queryParam:"inline" tfsdk:"input_firehose" tfPlanOnly:"true"`
-	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline" tfsdk:"input_google_pubsub" tfPlanOnly:"true"`
-	InputGrafana              *InputGrafana              `queryParam:"inline" tfsdk:"input_grafana" tfPlanOnly:"true"`
-	InputHTTP                 *InputHTTP                 `queryParam:"inline" tfsdk:"input_http" tfPlanOnly:"true"`
-	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline" tfsdk:"input_http_raw" tfPlanOnly:"true"`
-	InputJournalFiles         *InputJournalFiles         `queryParam:"inline" tfsdk:"input_journal_files" tfPlanOnly:"true"`
-	InputKafka                *InputKafka                `queryParam:"inline" tfsdk:"input_kafka" tfPlanOnly:"true"`
-	InputKinesis              *InputKinesis              `queryParam:"inline" tfsdk:"input_kinesis" tfPlanOnly:"true"`
-	InputKubeEvents           *InputKubeEvents           `queryParam:"inline" tfsdk:"input_kube_events" tfPlanOnly:"true"`
-	InputKubeLogs             *InputKubeLogs             `queryParam:"inline" tfsdk:"input_kube_logs" tfPlanOnly:"true"`
-	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline" tfsdk:"input_kube_metrics" tfPlanOnly:"true"`
-	InputLoki                 *InputLoki                 `queryParam:"inline" tfsdk:"input_loki" tfPlanOnly:"true"`
-	InputMetrics              *InputMetrics              `queryParam:"inline" tfsdk:"input_metrics" tfPlanOnly:"true"`
-	InputMicrosoftGraph       *InputMicrosoftGraph       `queryParam:"inline" tfsdk:"input_microsoft_graph" tfPlanOnly:"true"`
-	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline" tfsdk:"input_model_driven_telemetry" tfPlanOnly:"true"`
-	InputMsk                  *InputMsk                  `queryParam:"inline" tfsdk:"input_msk" tfPlanOnly:"true"`
-	InputNetflow              *InputNetflow              `queryParam:"inline" tfsdk:"input_netflow" tfPlanOnly:"true"`
-	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline" tfsdk:"input_office365_mgmt" tfPlanOnly:"true"`
-	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline" tfsdk:"input_office365_msg_trace" tfPlanOnly:"true"`
-	InputOffice365Service     *InputOffice365Service     `queryParam:"inline" tfsdk:"input_office365_service" tfPlanOnly:"true"`
-	InputOpenai               *InputOpenai1              `queryParam:"inline" tfsdk:"input_openai" tfPlanOnly:"true"`
-	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline" tfsdk:"input_open_telemetry" tfPlanOnly:"true"`
-	InputPrometheus           *InputPrometheus           `queryParam:"inline" tfsdk:"input_prometheus" tfPlanOnly:"true"`
-	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline" tfsdk:"input_prometheus_rw" tfPlanOnly:"true"`
-	InputRawUDP               *InputRawUDP               `queryParam:"inline" tfsdk:"input_raw_udp" tfPlanOnly:"true"`
-	InputS3                   *InputS3                   `queryParam:"inline" tfsdk:"input_s3" tfPlanOnly:"true"`
-	InputS3Inventory          *InputS3Inventory          `queryParam:"inline" tfsdk:"input_s3_inventory" tfPlanOnly:"true"`
-	InputSecurityLake         *InputSecurityLake         `queryParam:"inline" tfsdk:"input_security_lake" tfPlanOnly:"true"`
-	InputSnmp                 *InputSnmp                 `queryParam:"inline" tfsdk:"input_snmp" tfPlanOnly:"true"`
-	InputSplunk               *InputSplunk               `queryParam:"inline" tfsdk:"input_splunk" tfPlanOnly:"true"`
-	InputSplunkHec            *InputSplunkHec            `queryParam:"inline" tfsdk:"input_splunk_hec" tfPlanOnly:"true"`
-	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline" tfsdk:"input_splunk_search" tfPlanOnly:"true"`
-	InputSqs                  *InputSqs                  `queryParam:"inline" tfsdk:"input_sqs" tfPlanOnly:"true"`
-	InputSyslog               *InputSyslog               `queryParam:"inline" tfsdk:"input_syslog" tfPlanOnly:"true"`
-	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline" tfsdk:"input_system_metrics" tfPlanOnly:"true"`
-	InputSystemState          *InputSystemState          `queryParam:"inline" tfsdk:"input_system_state" tfPlanOnly:"true"`
-	InputTCP                  *InputTCP                  `queryParam:"inline" tfsdk:"input_tcp" tfPlanOnly:"true"`
-	InputTcpjson              *InputTcpjson              `queryParam:"inline" tfsdk:"input_tcpjson" tfPlanOnly:"true"`
-	InputWef                  *InputWef                  `queryParam:"inline" tfsdk:"input_wef" tfPlanOnly:"true"`
-	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline" tfsdk:"input_windows_metrics" tfPlanOnly:"true"`
-	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs" tfPlanOnly:"true"`
-	InputWiz                  *InputWiz                  `queryParam:"inline" tfsdk:"input_wiz" tfPlanOnly:"true"`
-	InputWizWebhook           *InputWizWebhook           `queryParam:"inline" tfsdk:"input_wiz_webhook" tfPlanOnly:"true"`
-	InputZscalerHec           *InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec" tfPlanOnly:"true"`
+	InputAppscope             *InputAppscope             `queryParam:"inline" tfsdk:"input_appscope"`
+	InputAzureBlob            *InputAzureBlob            `queryParam:"inline" tfsdk:"input_azure_blob"`
+	InputCloudflareHec        *InputCloudflareHec        `queryParam:"inline" tfsdk:"input_cloudflare_hec"`
+	InputCollection           *InputCollection           `queryParam:"inline" tfsdk:"input_collection"`
+	InputConfluentCloud       *InputConfluentCloud       `queryParam:"inline" tfsdk:"input_confluent_cloud"`
+	InputCribl                *InputCribl                `queryParam:"inline" tfsdk:"input_cribl"`
+	InputCriblHTTP            *InputCriblHTTP            `queryParam:"inline" tfsdk:"input_cribl_http"`
+	InputCriblLakeHTTP        *InputCriblLakeHTTP        `queryParam:"inline" tfsdk:"input_cribl_lake_http"`
+	InputCriblTCP             *InputCriblTCP             `queryParam:"inline" tfsdk:"input_cribl_tcp"`
+	InputCriblmetrics         *InputCriblmetrics         `queryParam:"inline" tfsdk:"input_criblmetrics"`
+	InputCrowdstrike          *InputCrowdstrike          `queryParam:"inline" tfsdk:"input_crowdstrike"`
+	InputDatadogAgent         *InputDatadogAgent         `queryParam:"inline" tfsdk:"input_datadog_agent"`
+	InputDatagen              *InputDatagen              `queryParam:"inline" tfsdk:"input_datagen"`
+	InputEdgePrometheus       *InputEdgePrometheus       `queryParam:"inline" tfsdk:"input_edge_prometheus"`
+	InputElastic              *InputElastic              `queryParam:"inline" tfsdk:"input_elastic"`
+	InputEventhub             *InputEventhub             `queryParam:"inline" tfsdk:"input_eventhub"`
+	InputExec                 *InputExec                 `queryParam:"inline" tfsdk:"input_exec"`
+	InputFile                 *InputFile                 `queryParam:"inline" tfsdk:"input_file"`
+	InputFirehose             *InputFirehose             `queryParam:"inline" tfsdk:"input_firehose"`
+	InputGooglePubsub         *InputGooglePubsub         `queryParam:"inline" tfsdk:"input_google_pubsub"`
+	InputGrafana              *InputGrafana              `queryParam:"inline" tfsdk:"input_grafana"`
+	InputHTTP                 *InputHTTP                 `queryParam:"inline" tfsdk:"input_http"`
+	InputHTTPRaw              *InputHTTPRaw              `queryParam:"inline" tfsdk:"input_http_raw"`
+	InputJournalFiles         *InputJournalFiles         `queryParam:"inline" tfsdk:"input_journal_files"`
+	InputKafka                *InputKafka                `queryParam:"inline" tfsdk:"input_kafka"`
+	InputKinesis              *InputKinesis              `queryParam:"inline" tfsdk:"input_kinesis"`
+	InputKubeEvents           *InputKubeEvents           `queryParam:"inline" tfsdk:"input_kube_events"`
+	InputKubeLogs             *InputKubeLogs             `queryParam:"inline" tfsdk:"input_kube_logs"`
+	InputKubeMetrics          *InputKubeMetrics          `queryParam:"inline" tfsdk:"input_kube_metrics"`
+	InputLoki                 *InputLoki                 `queryParam:"inline" tfsdk:"input_loki"`
+	InputMetrics              *InputMetrics              `queryParam:"inline" tfsdk:"input_metrics"`
+	InputMicrosoftGraph       *InputMicrosoftGraph       `queryParam:"inline" tfsdk:"input_microsoft_graph"`
+	InputModelDrivenTelemetry *InputModelDrivenTelemetry `queryParam:"inline" tfsdk:"input_model_driven_telemetry"`
+	InputMsk                  *InputMsk                  `queryParam:"inline" tfsdk:"input_msk"`
+	InputNetflow              *InputNetflow              `queryParam:"inline" tfsdk:"input_netflow"`
+	InputOffice365Mgmt        *InputOffice365Mgmt        `queryParam:"inline" tfsdk:"input_office365_mgmt"`
+	InputOffice365MsgTrace    *InputOffice365MsgTrace    `queryParam:"inline" tfsdk:"input_office365_msg_trace"`
+	InputOffice365Service     *InputOffice365Service     `queryParam:"inline" tfsdk:"input_office365_service"`
+	InputOpenTelemetry        *InputOpenTelemetry        `queryParam:"inline" tfsdk:"input_open_telemetry"`
+	InputOpenai               *InputOpenai1              `queryParam:"inline" tfsdk:"input_openai"`
+	InputPrometheus           *InputPrometheus           `queryParam:"inline" tfsdk:"input_prometheus"`
+	InputPrometheusRw         *InputPrometheusRw         `queryParam:"inline" tfsdk:"input_prometheus_rw"`
+	InputRawUDP               *InputRawUDP               `queryParam:"inline" tfsdk:"input_raw_udp"`
+	InputS3                   *InputS3                   `queryParam:"inline" tfsdk:"input_s3"`
+	InputS3Inventory          *InputS3Inventory          `queryParam:"inline" tfsdk:"input_s3_inventory"`
+	InputSecurityLake         *InputSecurityLake         `queryParam:"inline" tfsdk:"input_security_lake"`
+	InputSnmp                 *InputSnmp                 `queryParam:"inline" tfsdk:"input_snmp"`
+	InputSplunk               *InputSplunk               `queryParam:"inline" tfsdk:"input_splunk"`
+	InputSplunkHec            *InputSplunkHec            `queryParam:"inline" tfsdk:"input_splunk_hec"`
+	InputSplunkSearch         *InputSplunkSearch         `queryParam:"inline" tfsdk:"input_splunk_search"`
+	InputSqs                  *InputSqs                  `queryParam:"inline" tfsdk:"input_sqs"`
+	InputSyslog               *InputSyslog               `queryParam:"inline" tfsdk:"input_syslog"`
+	InputSystemMetrics        *InputSystemMetrics        `queryParam:"inline" tfsdk:"input_system_metrics"`
+	InputSystemState          *InputSystemState          `queryParam:"inline" tfsdk:"input_system_state"`
+	InputTCP                  *InputTCP                  `queryParam:"inline" tfsdk:"input_tcp"`
+	InputTcpjson              *InputTcpjson              `queryParam:"inline" tfsdk:"input_tcpjson"`
+	InputWef                  *InputWef                  `queryParam:"inline" tfsdk:"input_wef"`
+	InputWinEventLogs         *InputWinEventLogs         `queryParam:"inline" tfsdk:"input_win_event_logs"`
+	InputWindowsMetrics       *InputWindowsMetrics       `queryParam:"inline" tfsdk:"input_windows_metrics"`
+	InputWiz                  *InputWiz                  `queryParam:"inline" tfsdk:"input_wiz"`
+	InputWizWebhook           *InputWizWebhook           `queryParam:"inline" tfsdk:"input_wiz_webhook"`
+	InputZscalerHec           *InputZscalerHec           `queryParam:"inline" tfsdk:"input_zscaler_hec"`
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorHealthCheck struct {
-	Collector            InputCollectorHealthCheckCollector   `tfsdk:"collector"`
+	Collector            *InputCollectorHealthCheckCollector  `tfsdk:"collector"`
 	Environment          types.String                         `tfsdk:"environment"`
 	ID                   types.String                         `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                           `tfsdk:"ignore_group_jobs_limit"`

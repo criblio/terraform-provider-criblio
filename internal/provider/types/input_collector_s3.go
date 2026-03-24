@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorS3 struct {
-	Collector            InputCollectorS3Collector   `tfsdk:"collector"`
+	Collector            *InputCollectorS3Collector  `tfsdk:"collector"`
 	Environment          types.String                `tfsdk:"environment"`
 	ID                   types.String                `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                  `tfsdk:"ignore_group_jobs_limit"`

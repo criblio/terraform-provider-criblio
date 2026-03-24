@@ -17,8 +17,8 @@ const (
 )
 
 type SearchJobStageConfigEarliest struct {
-	Str    *string  `queryParam:"inline,name=earliest"`
-	Number *float64 `queryParam:"inline,name=earliest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type SearchJobStageConfigEarliestType
 }
@@ -67,7 +67,7 @@ func (u *SearchJobStageConfigEarliest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigEarliest", string(data))
 	}
@@ -106,8 +106,8 @@ const (
 )
 
 type SearchJobStageConfigLatest struct {
-	Str    *string  `queryParam:"inline,name=latest"`
-	Number *float64 `queryParam:"inline,name=latest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type SearchJobStageConfigLatestType
 }
@@ -156,7 +156,7 @@ func (u *SearchJobStageConfigLatest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchJobStageConfigLatest", string(data))
 	}

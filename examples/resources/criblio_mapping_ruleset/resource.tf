@@ -13,7 +13,7 @@ resource "criblio_mapping_ruleset" "my_mappingruleset" {
         }
         description = "...my_description..."
         disabled    = true
-        filter      = "...my_filter..."
+        filter      = "true"
         final       = false
         group_id    = "...my_group_id..."
         id          = "...my_id..."

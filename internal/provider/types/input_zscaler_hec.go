@@ -24,8 +24,8 @@ type InputZscalerHec struct {
 	EnableHealthCheck         jsontypes.Normalized           `tfsdk:"enable_health_check"`
 	EnableProxyHeader         types.Bool                     `tfsdk:"enable_proxy_header"`
 	Environment               types.String                   `tfsdk:"environment"`
-	HecAcks                   types.Bool                     `tfsdk:"hec_acks"`
 	HecAPI                    types.String                   `tfsdk:"hec_api"`
+	HecAcks                   types.Bool                     `tfsdk:"hec_acks"`
 	Host                      types.String                   `tfsdk:"host"`
 	ID                        types.String                   `tfsdk:"id"`
 	IPAllowlistRegex          types.String                   `tfsdk:"ip_allowlist_regex"`

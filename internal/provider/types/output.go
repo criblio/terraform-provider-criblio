@@ -3,75 +3,75 @@
 package types
 
 type Output struct {
-	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob" tfPlanOnly:"true"`
-	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer" tfPlanOnly:"true"`
-	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub" tfPlanOnly:"true"`
-	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline" tfsdk:"output_azure_logs" tfPlanOnly:"true"`
-	OutputChronicle              *OutputChronicle              `queryParam:"inline" tfsdk:"output_chronicle" tfPlanOnly:"true"`
-	OutputClickHouse             *OutputClickHouse             `queryParam:"inline" tfsdk:"output_click_house" tfPlanOnly:"true"`
-	OutputCloudflareR2           *OutputCloudflareR2           `queryParam:"inline" tfsdk:"output_cloudflare_r2" tfPlanOnly:"true"`
-	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline" tfsdk:"output_cloudwatch" tfPlanOnly:"true"`
-	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline" tfsdk:"output_confluent_cloud" tfPlanOnly:"true"`
-	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline" tfsdk:"output_cribl_http" tfPlanOnly:"true"`
-	OutputCriblLake              *OutputCriblLake              `queryParam:"inline" tfsdk:"output_cribl_lake" tfPlanOnly:"true"`
-	OutputCriblSearchEngine      *OutputCriblSearchEngine      `queryParam:"inline" tfsdk:"output_cribl_search_engine" tfPlanOnly:"true"`
-	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline" tfsdk:"output_cribl_tcp" tfPlanOnly:"true"`
-	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline" tfsdk:"output_crowdstrike_next_gen_siem" tfPlanOnly:"true"`
-	OutputDatabricks             *OutputDatabricks             `queryParam:"inline" tfsdk:"output_databricks" tfPlanOnly:"true"`
-	OutputDatadog                *OutputDatadog                `queryParam:"inline" tfsdk:"output_datadog" tfPlanOnly:"true"`
-	OutputDataset                *OutputDataset                `queryParam:"inline" tfsdk:"output_dataset" tfPlanOnly:"true"`
-	OutputDefault                *OutputDefault                `queryParam:"inline" tfsdk:"output_default" tfPlanOnly:"true"`
-	OutputDevnull                *OutputDevnull                `queryParam:"inline" tfsdk:"output_devnull" tfPlanOnly:"true"`
-	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline" tfsdk:"output_disk_spool" tfPlanOnly:"true"`
-	OutputDlS3                   *OutputDlS3                   `queryParam:"inline" tfsdk:"output_dl_s3" tfPlanOnly:"true"`
-	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline" tfsdk:"output_dynatrace_http" tfPlanOnly:"true"`
-	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline" tfsdk:"output_dynatrace_otlp" tfPlanOnly:"true"`
-	OutputElastic                *OutputElastic                `queryParam:"inline" tfsdk:"output_elastic" tfPlanOnly:"true"`
-	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline" tfsdk:"output_elastic_cloud" tfPlanOnly:"true"`
-	OutputExabeam                *OutputExabeam                `queryParam:"inline" tfsdk:"output_exabeam" tfPlanOnly:"true"`
-	OutputFilesystem             *OutputFilesystem             `queryParam:"inline" tfsdk:"output_filesystem" tfPlanOnly:"true"`
-	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline" tfsdk:"output_google_chronicle" tfPlanOnly:"true"`
-	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline" tfsdk:"output_google_cloud_logging" tfPlanOnly:"true"`
-	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline" tfsdk:"output_google_cloud_storage" tfPlanOnly:"true"`
-	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline" tfsdk:"output_google_pubsub" tfPlanOnly:"true"`
-	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline" tfsdk:"output_grafana_cloud" tfPlanOnly:"true"`
-	OutputGraphite               *OutputGraphite               `queryParam:"inline" tfsdk:"output_graphite" tfPlanOnly:"true"`
-	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline" tfsdk:"output_honeycomb" tfPlanOnly:"true"`
-	OutputHumioHec               *OutputHumioHec               `queryParam:"inline" tfsdk:"output_humio_hec" tfPlanOnly:"true"`
-	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline" tfsdk:"output_influxdb" tfPlanOnly:"true"`
-	OutputKafka                  *OutputKafka                  `queryParam:"inline" tfsdk:"output_kafka" tfPlanOnly:"true"`
-	OutputKinesis                *OutputKinesis                `queryParam:"inline" tfsdk:"output_kinesis" tfPlanOnly:"true"`
-	OutputLocalSearchStorage     *OutputLocalSearchStorage     `queryParam:"inline" tfsdk:"output_local_search_storage" tfPlanOnly:"true"`
-	OutputLoki                   *OutputLoki                   `queryParam:"inline" tfsdk:"output_loki" tfPlanOnly:"true"`
-	OutputMicrosoftFabric        *OutputMicrosoftFabric        `queryParam:"inline" tfsdk:"output_microsoft_fabric" tfPlanOnly:"true"`
-	OutputMinio                  *OutputMinio                  `queryParam:"inline" tfsdk:"output_minio" tfPlanOnly:"true"`
-	OutputMsk                    *OutputMsk                    `queryParam:"inline" tfsdk:"output_msk" tfPlanOnly:"true"`
-	OutputNetflow                *OutputNetflow                `queryParam:"inline" tfsdk:"output_netflow" tfPlanOnly:"true"`
-	OutputNewrelic               *OutputNewrelic               `queryParam:"inline" tfsdk:"output_newrelic" tfPlanOnly:"true"`
-	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline" tfsdk:"output_newrelic_events" tfPlanOnly:"true"`
-	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline" tfsdk:"output_open_telemetry" tfPlanOnly:"true"`
-	OutputPrometheus             *OutputPrometheus             `queryParam:"inline" tfsdk:"output_prometheus" tfPlanOnly:"true"`
-	OutputRing                   *OutputRing                   `queryParam:"inline" tfsdk:"output_ring" tfPlanOnly:"true"`
-	OutputRouter                 *OutputRouter                 `queryParam:"inline" tfsdk:"output_router" tfPlanOnly:"true"`
-	OutputS3                     *OutputS3                     `queryParam:"inline" tfsdk:"output_s3" tfPlanOnly:"true"`
-	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline" tfsdk:"output_security_lake" tfPlanOnly:"true"`
-	OutputSentinel               *OutputSentinel               `queryParam:"inline" tfsdk:"output_sentinel" tfPlanOnly:"true"`
-	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiem      `queryParam:"inline" tfsdk:"output_sentinel_one_ai_siem" tfPlanOnly:"true"`
-	OutputServiceNow             *OutputServiceNow             `queryParam:"inline" tfsdk:"output_service_now" tfPlanOnly:"true"`
-	OutputSignalfx               *OutputSignalfx               `queryParam:"inline" tfsdk:"output_signalfx" tfPlanOnly:"true"`
-	OutputSnmp                   *OutputSnmp                   `queryParam:"inline" tfsdk:"output_snmp" tfPlanOnly:"true"`
-	OutputSns                    *OutputSns                    `queryParam:"inline" tfsdk:"output_sns" tfPlanOnly:"true"`
-	OutputSplunk                 *OutputSplunk                 `queryParam:"inline" tfsdk:"output_splunk" tfPlanOnly:"true"`
-	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline" tfsdk:"output_splunk_hec" tfPlanOnly:"true"`
-	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline" tfsdk:"output_splunk_lb" tfPlanOnly:"true"`
-	OutputSqs                    *OutputSqs                    `queryParam:"inline" tfsdk:"output_sqs" tfPlanOnly:"true"`
-	OutputStatsd                 *OutputStatsd                 `queryParam:"inline" tfsdk:"output_statsd" tfPlanOnly:"true"`
-	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline" tfsdk:"output_statsd_ext" tfPlanOnly:"true"`
-	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline" tfsdk:"output_sumo_logic" tfPlanOnly:"true"`
-	OutputSyslog                 *OutputSyslog                 `queryParam:"inline" tfsdk:"output_syslog" tfPlanOnly:"true"`
-	OutputTcpjson                *OutputTcpjson                `queryParam:"inline" tfsdk:"output_tcpjson" tfPlanOnly:"true"`
-	OutputWavefront              *OutputWavefront              `queryParam:"inline" tfsdk:"output_wavefront" tfPlanOnly:"true"`
-	OutputWebhook                *OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook" tfPlanOnly:"true"`
-	OutputWizHec                 *OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec" tfPlanOnly:"true"`
-	OutputXsiam                  *OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam" tfPlanOnly:"true"`
+	OutputAzureBlob              *OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob"`
+	OutputAzureDataExplorer      *OutputAzureDataExplorer      `queryParam:"inline" tfsdk:"output_azure_data_explorer"`
+	OutputAzureEventhub          *OutputAzureEventhub          `queryParam:"inline" tfsdk:"output_azure_eventhub"`
+	OutputAzureLogs              *OutputAzureLogs              `queryParam:"inline" tfsdk:"output_azure_logs"`
+	OutputChronicle              *OutputChronicle              `queryParam:"inline" tfsdk:"output_chronicle"`
+	OutputClickHouse             *OutputClickHouse             `queryParam:"inline" tfsdk:"output_click_house"`
+	OutputCloudflareR2           *OutputCloudflareR2           `queryParam:"inline" tfsdk:"output_cloudflare_r2"`
+	OutputCloudwatch             *OutputCloudwatch             `queryParam:"inline" tfsdk:"output_cloudwatch"`
+	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline" tfsdk:"output_confluent_cloud"`
+	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline" tfsdk:"output_cribl_http"`
+	OutputCriblLake              *OutputCriblLake              `queryParam:"inline" tfsdk:"output_cribl_lake"`
+	OutputCriblSearchEngine      *OutputCriblSearchEngine      `queryParam:"inline" tfsdk:"output_cribl_search_engine"`
+	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline" tfsdk:"output_cribl_tcp"`
+	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline" tfsdk:"output_crowdstrike_next_gen_siem"`
+	OutputDatabricks             *OutputDatabricks             `queryParam:"inline" tfsdk:"output_databricks"`
+	OutputDatadog                *OutputDatadog                `queryParam:"inline" tfsdk:"output_datadog"`
+	OutputDataset                *OutputDataset                `queryParam:"inline" tfsdk:"output_dataset"`
+	OutputDefault                *OutputDefault                `queryParam:"inline" tfsdk:"output_default"`
+	OutputDevnull                *OutputDevnull                `queryParam:"inline" tfsdk:"output_devnull"`
+	OutputDiskSpool              *OutputDiskSpool              `queryParam:"inline" tfsdk:"output_disk_spool"`
+	OutputDlS3                   *OutputDlS3                   `queryParam:"inline" tfsdk:"output_dl_s3"`
+	OutputDynatraceHTTP          *OutputDynatraceHTTP          `queryParam:"inline" tfsdk:"output_dynatrace_http"`
+	OutputDynatraceOtlp          *OutputDynatraceOtlp          `queryParam:"inline" tfsdk:"output_dynatrace_otlp"`
+	OutputElastic                *OutputElastic                `queryParam:"inline" tfsdk:"output_elastic"`
+	OutputElasticCloud           *OutputElasticCloud           `queryParam:"inline" tfsdk:"output_elastic_cloud"`
+	OutputExabeam                *OutputExabeam                `queryParam:"inline" tfsdk:"output_exabeam"`
+	OutputFilesystem             *OutputFilesystem             `queryParam:"inline" tfsdk:"output_filesystem"`
+	OutputGoogleChronicle        *OutputGoogleChronicle        `queryParam:"inline" tfsdk:"output_google_chronicle"`
+	OutputGoogleCloudLogging     *OutputGoogleCloudLogging     `queryParam:"inline" tfsdk:"output_google_cloud_logging"`
+	OutputGoogleCloudStorage     *OutputGoogleCloudStorage     `queryParam:"inline" tfsdk:"output_google_cloud_storage"`
+	OutputGooglePubsub           *OutputGooglePubsub           `queryParam:"inline" tfsdk:"output_google_pubsub"`
+	OutputGrafanaCloud           *OutputGrafanaCloud           `queryParam:"inline" tfsdk:"output_grafana_cloud"`
+	OutputGraphite               *OutputGraphite               `queryParam:"inline" tfsdk:"output_graphite"`
+	OutputHoneycomb              *OutputHoneycomb              `queryParam:"inline" tfsdk:"output_honeycomb"`
+	OutputHumioHec               *OutputHumioHec               `queryParam:"inline" tfsdk:"output_humio_hec"`
+	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline" tfsdk:"output_influxdb"`
+	OutputKafka                  *OutputKafka                  `queryParam:"inline" tfsdk:"output_kafka"`
+	OutputKinesis                *OutputKinesis                `queryParam:"inline" tfsdk:"output_kinesis"`
+	OutputLocalSearchStorage     *OutputLocalSearchStorage     `queryParam:"inline" tfsdk:"output_local_search_storage"`
+	OutputLoki                   *OutputLoki                   `queryParam:"inline" tfsdk:"output_loki"`
+	OutputMicrosoftFabric        *OutputMicrosoftFabric        `queryParam:"inline" tfsdk:"output_microsoft_fabric"`
+	OutputMinio                  *OutputMinio                  `queryParam:"inline" tfsdk:"output_minio"`
+	OutputMsk                    *OutputMsk                    `queryParam:"inline" tfsdk:"output_msk"`
+	OutputNetflow                *OutputNetflow                `queryParam:"inline" tfsdk:"output_netflow"`
+	OutputNewrelic               *OutputNewrelic               `queryParam:"inline" tfsdk:"output_newrelic"`
+	OutputNewrelicEvents         *OutputNewrelicEvents         `queryParam:"inline" tfsdk:"output_newrelic_events"`
+	OutputOpenTelemetry          *OutputOpenTelemetry          `queryParam:"inline" tfsdk:"output_open_telemetry"`
+	OutputPrometheus             *OutputPrometheus             `queryParam:"inline" tfsdk:"output_prometheus"`
+	OutputRing                   *OutputRing                   `queryParam:"inline" tfsdk:"output_ring"`
+	OutputRouter                 *OutputRouter                 `queryParam:"inline" tfsdk:"output_router"`
+	OutputS3                     *OutputS3                     `queryParam:"inline" tfsdk:"output_s3"`
+	OutputSecurityLake           *OutputSecurityLake           `queryParam:"inline" tfsdk:"output_security_lake"`
+	OutputSentinel               *OutputSentinel               `queryParam:"inline" tfsdk:"output_sentinel"`
+	OutputSentinelOneAiSiem      *OutputSentinelOneAiSiem      `queryParam:"inline" tfsdk:"output_sentinel_one_ai_siem"`
+	OutputServiceNow             *OutputServiceNow             `queryParam:"inline" tfsdk:"output_service_now"`
+	OutputSignalfx               *OutputSignalfx               `queryParam:"inline" tfsdk:"output_signalfx"`
+	OutputSnmp                   *OutputSnmp                   `queryParam:"inline" tfsdk:"output_snmp"`
+	OutputSns                    *OutputSns                    `queryParam:"inline" tfsdk:"output_sns"`
+	OutputSplunk                 *OutputSplunk                 `queryParam:"inline" tfsdk:"output_splunk"`
+	OutputSplunkHec              *OutputSplunkHec              `queryParam:"inline" tfsdk:"output_splunk_hec"`
+	OutputSplunkLb               *OutputSplunkLb               `queryParam:"inline" tfsdk:"output_splunk_lb"`
+	OutputSqs                    *OutputSqs                    `queryParam:"inline" tfsdk:"output_sqs"`
+	OutputStatsd                 *OutputStatsd                 `queryParam:"inline" tfsdk:"output_statsd"`
+	OutputStatsdExt              *OutputStatsdExt              `queryParam:"inline" tfsdk:"output_statsd_ext"`
+	OutputSumoLogic              *OutputSumoLogic              `queryParam:"inline" tfsdk:"output_sumo_logic"`
+	OutputSyslog                 *OutputSyslog                 `queryParam:"inline" tfsdk:"output_syslog"`
+	OutputTcpjson                *OutputTcpjson                `queryParam:"inline" tfsdk:"output_tcpjson"`
+	OutputWavefront              *OutputWavefront              `queryParam:"inline" tfsdk:"output_wavefront"`
+	OutputWebhook                *OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook"`
+	OutputWizHec                 *OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec"`
+	OutputXsiam                  *OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam"`
 }

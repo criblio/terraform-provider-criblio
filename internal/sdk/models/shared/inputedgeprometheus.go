@@ -118,7 +118,7 @@ func (t Target) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Target) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -164,7 +164,7 @@ func (p PodFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PodFilter) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"filter"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -289,7 +289,7 @@ func (i InputEdgePrometheus) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputEdgePrometheus) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "discoveryType", "interval"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

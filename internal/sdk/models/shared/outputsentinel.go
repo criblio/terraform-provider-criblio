@@ -259,7 +259,7 @@ func (o OutputSentinel) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "loginUrl", "secret", "client_id", "endpointURLConfiguration"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

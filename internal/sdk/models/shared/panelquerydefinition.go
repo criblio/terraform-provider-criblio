@@ -17,7 +17,7 @@ func (p PanelQueryDefinition) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PanelQueryDefinition) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"localId", "query"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

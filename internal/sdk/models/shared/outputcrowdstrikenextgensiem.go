@@ -131,7 +131,7 @@ func (o OutputCrowdstrikeNextGenSiem) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCrowdstrikeNextGenSiem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url", "format"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

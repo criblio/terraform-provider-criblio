@@ -80,7 +80,7 @@ func (r *PackVarsDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET for pack`,
+				Description: `Global variable name.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},

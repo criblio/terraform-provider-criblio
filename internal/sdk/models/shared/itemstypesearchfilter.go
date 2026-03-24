@@ -18,7 +18,7 @@ func (i ItemsTypeSearchFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeSearchFilter) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"Name", "Values"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

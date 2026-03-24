@@ -43,7 +43,7 @@ func (i InputKubeLogsRule) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeLogsRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -104,7 +104,7 @@ func (i InputKubeLogs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeLogs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

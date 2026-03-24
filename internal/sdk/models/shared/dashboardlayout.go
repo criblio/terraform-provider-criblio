@@ -18,7 +18,7 @@ func (d DashboardLayout) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DashboardLayout) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"h", "w", "x", "y"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil

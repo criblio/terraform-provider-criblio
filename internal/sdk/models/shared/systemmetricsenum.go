@@ -16,8 +16,8 @@ const (
 )
 
 type DimKeyFilter struct {
-	Str        *string  `queryParam:"inline,name=dimKeyFilter"`
-	ArrayOfStr []string `queryParam:"inline,name=dimKeyFilter"`
+	Str        *string  `queryParam:"inline" union:"member"`
+	ArrayOfStr []string `queryParam:"inline" union:"member"`
 
 	Type DimKeyFilterType
 }
@@ -66,7 +66,7 @@ func (u *DimKeyFilter) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimKeyFilter", string(data))
 	}
@@ -105,8 +105,8 @@ const (
 )
 
 type DimValueFilter struct {
-	Str        *string  `queryParam:"inline,name=dimValueFilter"`
-	ArrayOfStr []string `queryParam:"inline,name=dimValueFilter"`
+	Str        *string  `queryParam:"inline" union:"member"`
+	ArrayOfStr []string `queryParam:"inline" union:"member"`
 
 	Type DimValueFilterType
 }
@@ -155,7 +155,7 @@ func (u *DimValueFilter) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DimValueFilter", string(data))
 	}
@@ -194,8 +194,8 @@ const (
 )
 
 type MetricNameFilter struct {
-	Str        *string  `queryParam:"inline,name=metricNameFilter"`
-	ArrayOfStr []string `queryParam:"inline,name=metricNameFilter"`
+	Str        *string  `queryParam:"inline" union:"member"`
+	ArrayOfStr []string `queryParam:"inline" union:"member"`
 
 	Type MetricNameFilterType
 }
@@ -244,7 +244,7 @@ func (u *MetricNameFilter) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricNameFilter", string(data))
 	}

@@ -3,9 +3,9 @@
 package types
 
 type NotificationTarget struct {
-	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
-	SlackTarget     *SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
-	SMTPTarget      *SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
-	SnsTarget       *SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
-	WebhookTarget   *WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target"`
+	SlackTarget     *SlackTarget     `queryParam:"inline" tfsdk:"slack_target"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target"`
+	SnsTarget       *SnsTarget       `queryParam:"inline" tfsdk:"sns_target"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target"`
 }

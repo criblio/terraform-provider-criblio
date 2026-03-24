@@ -19,7 +19,7 @@ func (m MsGraphAccountConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MsGraphAccountConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"name", "tenantId", "clientId", "clientSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -609,7 +609,7 @@ resource "criblio_destination" "my_destination" {
     enable_write_page_index   = true
     endpoint                  = "...my_endpoint..."
     environment               = "...my_environment..."
-    file_name_suffix          = "...my_file_name_suffix..."
+    file_name_suffix          = ".json.gz"
     force_close_on_shutdown   = false
     format                    = "raw"
     header_line               = "...my_header_line..."
@@ -1268,7 +1268,7 @@ resource "criblio_destination" "my_destination" {
     enable_write_page_index = true
     environment             = "...my_environment..."
     events_volume_name      = "...my_events_volume_name..."
-    file_name_suffix        = "...my_file_name_suffix..."
+    file_name_suffix        = ".json.gz"
     force_close_on_shutdown = true
     format                  = "raw"
     header_line             = "...my_header_line..."
@@ -2928,7 +2928,6 @@ resource "criblio_destination" "my_destination" {
     dump_format_errors_to_disk = false
     environment                = "...my_environment..."
     exclude_mapping_fields = [
-      "..."
     ]
     extra_http_headers = [
       {
@@ -5674,7 +5673,7 @@ Optional:
 
 Optional:
 
-- `ack` (Number) Control the number of required acknowledgments. must be one of ["1", "0", "-1"]
+- `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null
@@ -6240,7 +6239,7 @@ Optional:
 
 Optional:
 
-- `ack` (Number) Control the number of required acknowledgments. must be one of ["1", "0", "-1"]
+- `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092. Not Null
@@ -8794,7 +8793,7 @@ Optional:
 
 Optional:
 
-- `ack` (Number) Control the number of required acknowledgments. must be one of ["1", "0", "-1"]
+- `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092. Not Null
@@ -9245,7 +9244,7 @@ Optional:
 
 Optional:
 
-- `ack` (Number) Control the number of required acknowledgments. must be one of ["1", "0", "-1"]
+- `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `bootstrap_server` (String) Bootstrap server from Fabric Eventstream's endpoint. Not Null
@@ -9415,7 +9414,7 @@ Optional:
 
 Optional:
 
-- `ack` (Number) Control the number of required acknowledgments. must be one of ["1", "0", "-1"]
+- `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
@@ -11272,7 +11271,7 @@ Optional:
 - `enable_ip_spoofing` (Boolean) Send Syslog traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `facility` (Number) Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user. must be one of ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"]
+- `facility` (Number) Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user. must be one of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 - `host` (String) The hostname of the receiver
 - `hosts` (Attributes List) Set of hosts to load-balance data to (see [below for nested schema](#nestedatt--output_syslog--hosts))
 - `id` (String) Unique ID for this output
@@ -11299,7 +11298,7 @@ Optional:
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
 - `protocol` (String) The network protocol to use for sending out syslog messages. must be one of ["tcp", "udp"]
-- `severity` (Number) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice. must be one of ["0", "1", "2", "3", "4", "5", "6", "7"]
+- `severity` (Number) Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice. must be one of [0, 1, 2, 3, 4, 5, 6, 7]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.

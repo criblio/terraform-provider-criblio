@@ -259,7 +259,7 @@ func (o OutputDynatraceHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "format", "endpoint", "telemetryType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

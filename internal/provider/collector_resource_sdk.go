@@ -76,6 +76,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 
 	if resp.InputCollectorAzureBlob != nil {
 		r.InputCollectorAzureBlob = &tfTypes.InputCollectorAzureBlob{}
+		r.InputCollectorAzureBlob.Collector = &tfTypes.InputCollectorAzureBlobCollector{}
 		if resp.InputCollectorAzureBlob.Collector.Conf == nil {
 			r.InputCollectorAzureBlob.Collector.Conf = nil
 		} else {
@@ -223,6 +224,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorCriblLake != nil {
 		r.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
+		r.InputCollectorCriblLake.Collector = &tfTypes.InputCollectorCriblLakeCollector{}
 		if resp.InputCollectorCriblLake.Collector.Conf == nil {
 			r.InputCollectorCriblLake.Collector.Conf = nil
 		} else {
@@ -349,6 +351,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorDatabase != nil {
 		r.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
+		r.InputCollectorDatabase.Collector = &tfTypes.InputCollectorDatabaseCollector{}
 		if resp.InputCollectorDatabase.Collector.Conf == nil {
 			r.InputCollectorDatabase.Collector.Conf = nil
 		} else {
@@ -477,6 +480,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorGCS != nil {
 		r.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
+		r.InputCollectorGCS.Collector = &tfTypes.InputCollectorGCSCollector{}
 		if resp.InputCollectorGCS.Collector.Conf == nil {
 			r.InputCollectorGCS.Collector.Conf = nil
 		} else {
@@ -623,6 +627,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorHealthCheck != nil {
 		r.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
+		r.InputCollectorHealthCheck.Collector = &tfTypes.InputCollectorHealthCheckCollector{}
 		if resp.InputCollectorHealthCheck.Collector.Conf == nil {
 			r.InputCollectorHealthCheck.Collector.Conf = nil
 		} else {
@@ -764,6 +769,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorRest != nil {
 		r.InputCollectorRest = &tfTypes.InputCollectorRest{}
+		r.InputCollectorRest.Collector = &tfTypes.InputCollectorRestCollector{}
 		if resp.InputCollectorRest.Collector.Conf == nil {
 			r.InputCollectorRest.Collector.Conf = nil
 		} else {
@@ -836,6 +842,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorRest.Collector.Conf.CredentialsSecret = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.CredentialsSecret)
 			r.InputCollectorRest.Collector.Conf.DecodeURL = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.DecodeURL)
 			r.InputCollectorRest.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.DisableTimeFilter)
+			r.InputCollectorRest.Collector.Conf.Discovery = &tfTypes.DiscoveryConfiguration{}
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody)
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField)
 			if resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod != nil {
@@ -1069,6 +1076,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorS3 != nil {
 		r.InputCollectorS3 = &tfTypes.InputCollectorS3{}
+		r.InputCollectorS3.Collector = &tfTypes.InputCollectorS3Collector{}
 		if resp.InputCollectorS3.Collector.Conf == nil {
 			r.InputCollectorS3.Collector.Conf = nil
 		} else {
@@ -1218,6 +1226,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorScript != nil {
 		r.InputCollectorScript = &tfTypes.InputCollectorScript{}
+		r.InputCollectorScript.Collector = &tfTypes.InputCollectorScriptCollector{}
 		if resp.InputCollectorScript.Collector.Conf == nil {
 			r.InputCollectorScript.Collector.Conf = nil
 		} else {
@@ -1346,6 +1355,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	}
 	if resp.InputCollectorSplunk != nil {
 		r.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
+		r.InputCollectorSplunk.Collector = &tfTypes.InputCollectorSplunkCollector{}
 		if resp.InputCollectorSplunk.Collector.Conf == nil {
 			r.InputCollectorSplunk.Collector.Conf = nil
 		} else {

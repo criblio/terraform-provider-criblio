@@ -141,7 +141,7 @@ func (o OutputCriblHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

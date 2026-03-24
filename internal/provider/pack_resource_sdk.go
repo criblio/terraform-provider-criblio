@@ -234,6 +234,20 @@ func (r *PackResourceModel) ToOperationsCreatePacksRequest(ctx context.Context) 
 	return &out, diags
 }
 
+// ToOperationsUpdatePacksRequest builds operations.UpdatePacksRequest for the "Upload Pack" PUT endpoint.
+// Used when creating a pack from a local file (filename attribute set).
+func (r *PackResourceModel) ToOperationsUpdatePacksRequest(ctx context.Context) (*operations.UpdatePacksRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	out := operations.UpdatePacksRequest{
+		GroupID: r.GroupID.ValueString(),
+	}
+	if !r.Filename.IsUnknown() && !r.Filename.IsNull() && r.Filename.ValueString() != "" {
+		s := r.Filename.ValueString()
+		out.Filename = &s
+	}
+	return &out, diags
+}
+
 func (r *PackResourceModel) ToOperationsDeletePacksByIDRequest(ctx context.Context) (*operations.DeletePacksByIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

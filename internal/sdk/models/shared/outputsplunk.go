@@ -125,7 +125,7 @@ func (o OutputSplunk) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSplunk) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

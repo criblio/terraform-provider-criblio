@@ -16,7 +16,7 @@ func (i ItemsTypeSaslSaslExtensions) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeSaslSaslExtensions) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

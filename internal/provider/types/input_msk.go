@@ -23,8 +23,8 @@ type InputMsk struct {
 	AwsSecretKey                 types.String                             `tfsdk:"aws_secret_key"`
 	BackoffRate                  types.Float64                            `tfsdk:"backoff_rate"`
 	Brokers                      []types.String                           `tfsdk:"brokers"`
-	Connections                  []ItemsTypeConnectionsOptional           `tfsdk:"connections"`
 	ConnectionTimeout            types.Float64                            `tfsdk:"connection_timeout"`
+	Connections                  []ItemsTypeConnectionsOptional           `tfsdk:"connections"`
 	Description                  types.String                             `tfsdk:"description"`
 	Disabled                     types.Bool                               `tfsdk:"disabled"`
 	DurationSeconds              types.Float64                            `tfsdk:"duration_seconds"`

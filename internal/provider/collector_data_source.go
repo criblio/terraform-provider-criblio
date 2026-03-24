@@ -33,15 +33,15 @@ type CollectorDataSourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
 	ID                        types.String                       `tfsdk:"id"`
 	IgnoreGroupJobsLimit      types.Bool                         `tfsdk:"ignore_group_jobs_limit"`
-	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
-	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
-	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
-	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs" tfPlanOnly:"true"`
-	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
-	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
-	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
-	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
-	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
+	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob"`
+	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake"`
+	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database"`
+	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs"`
+	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check"`
+	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest"`
+	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3"`
+	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script"`
+	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk"`
 	ResumeOnBoot              types.Bool                         `tfsdk:"resume_on_boot"`
 	TTL                       types.String                       `tfsdk:"ttl"`
 	WorkerAffinity            types.Bool                         `tfsdk:"worker_affinity"`

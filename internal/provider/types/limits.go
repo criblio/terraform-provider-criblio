@@ -26,5 +26,5 @@ type Limits struct {
 	MetricsNeverDropList        []types.String `tfsdk:"metrics_never_drop_list"`
 	MetricsWorkerIDBlacklist    []types.String `tfsdk:"metrics_worker_id_blacklist"`
 	MinFreeSpace                types.String   `tfsdk:"min_free_space"`
-	Samples                     LimitsSamples  `tfsdk:"samples"`
+	Samples                     *LimitsSamples `tfsdk:"samples"`
 }

@@ -22,12 +22,12 @@ resource "criblio_search_dataset" "my_searchdataset" {
       {
         auto_detect_region = true
         bucket             = "...my_bucket..."
-        filter             = "...my_filter..."
+        filter             = "true"
         path               = "...my_path..."
         region             = "...my_region..."
       }
     ]
-    filter = "...my_filter..."
+    filter = "true"
     id     = "myGenericDatasetId"
     metadata = {
       created             = "2025-10-06T12:00:00Z"
@@ -81,7 +81,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
 ### Read-Only
 
 - `description` (String) Description of the dataset
-- `id` (String) Unique identifier for the dataset
+- `id` (String) Unique ID to PATCH
 - `provider_id` (String) Dataset provider ID
 - `type` (String) Dataset provider type, set automatically from the dataset provider
 

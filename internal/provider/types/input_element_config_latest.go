@@ -7,6 +7,6 @@ import (
 )
 
 type InputElementConfigLatest struct {
-	Str    types.String  `queryParam:"inline" tfsdk:"str" tfPlanOnly:"true"`
-	Number types.Float64 `queryParam:"inline" tfsdk:"number" tfPlanOnly:"true"`
+	Str    types.String  `queryParam:"inline" tfsdk:"str"`
+	Number types.Float64 `queryParam:"inline" tfsdk:"number"`
 }

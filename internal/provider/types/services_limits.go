@@ -3,7 +3,7 @@
 package types
 
 type ServicesLimits struct {
-	Connections   CommonServiceLimitConfigs `tfsdk:"connections"`
-	Metrics       CommonServiceLimitConfigs `tfsdk:"metrics"`
-	Notifications CommonServiceLimitConfigs `tfsdk:"notifications"`
+	Connections   *CommonServiceLimitConfigs `tfsdk:"connections"`
+	Metrics       *CommonServiceLimitConfigs `tfsdk:"metrics"`
+	Notifications *CommonServiceLimitConfigs `tfsdk:"notifications"`
 }

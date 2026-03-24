@@ -27,8 +27,8 @@ type InputSplunkSearch struct {
 	JobTimeout           types.String                   `tfsdk:"job_timeout"`
 	KeepAliveTime        types.Float64                  `tfsdk:"keep_alive_time"`
 	Latest               types.String                   `tfsdk:"latest"`
-	LoginURL             jsontypes.Normalized           `tfsdk:"login_url"`
 	LogLevel             types.String                   `tfsdk:"log_level"`
+	LoginURL             jsontypes.Normalized           `tfsdk:"login_url"`
 	MaxMissedKeepAlives  types.Float64                  `tfsdk:"max_missed_keep_alives"`
 	Metadata             []ItemsTypeMetadata            `tfsdk:"metadata"`
 	OauthHeaders         []InputSplunkSearchOauthHeader `tfsdk:"oauth_headers"`
@@ -54,6 +54,6 @@ type InputSplunkSearch struct {
 	TokenTimeoutSecs     jsontypes.Normalized           `tfsdk:"token_timeout_secs"`
 	TTL                  types.String                   `tfsdk:"ttl"`
 	Type                 types.String                   `tfsdk:"type"`
-	Username             types.String                   `tfsdk:"username"`
 	UseRoundRobinDNS     types.Bool                     `tfsdk:"use_round_robin_dns"`
+	Username             types.String                   `tfsdk:"username"`
 }

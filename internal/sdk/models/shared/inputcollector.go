@@ -23,15 +23,15 @@ const (
 )
 
 type InputCollector struct {
-	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline,name=InputCollector"`
-	InputCollectorRest        *InputCollectorRest        `queryParam:"inline,name=InputCollector"`
-	InputCollectorS3          *InputCollectorS3          `queryParam:"inline,name=InputCollector"`
-	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline,name=InputCollector"`
-	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline,name=InputCollector"`
-	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline,name=InputCollector"`
-	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline,name=InputCollector"`
-	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline,name=InputCollector"`
-	InputCollectorScript      *InputCollectorScript      `queryParam:"inline,name=InputCollector"`
+	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline" union:"member"`
+	InputCollectorRest        *InputCollectorRest        `queryParam:"inline" union:"member"`
+	InputCollectorS3          *InputCollectorS3          `queryParam:"inline" union:"member"`
+	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline" union:"member"`
+	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline" union:"member"`
+	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline" union:"member"`
+	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline" union:"member"`
+	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline" union:"member"`
+	InputCollectorScript      *InputCollectorScript      `queryParam:"inline" union:"member"`
 
 	Type InputCollectorType
 }
@@ -199,7 +199,7 @@ func (u *InputCollector) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputCollector", string(data))
 	}

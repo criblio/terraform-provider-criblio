@@ -7,6 +7,6 @@ import (
 )
 
 type WarmPoolSize struct {
-	Number           types.Float64 `queryParam:"inline" tfsdk:"number" tfPlanOnly:"true"`
-	WarmPoolSizeEnum types.String  `queryParam:"inline" tfsdk:"warm_pool_size_enum" tfPlanOnly:"true"`
+	Number           types.Float64 `queryParam:"inline" tfsdk:"number"`
+	WarmPoolSizeEnum types.String  `queryParam:"inline" tfsdk:"warm_pool_size_enum"`
 }

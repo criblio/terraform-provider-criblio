@@ -182,7 +182,7 @@ func (o OutputCloudflareR2) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCloudflareR2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "endpoint", "bucket", "stagePath"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -607,3 +607,6 @@ func (o *OutputCloudflareR2) GetAwsAPIKey() any {
 	}
 	return o.AwsAPIKey
 }
+
+// #region class-body-outputcloudflarer2
+// #endregion class-body-outputcloudflarer2

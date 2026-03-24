@@ -54,7 +54,7 @@ func (d DashboardElement) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DashboardElement) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "layout", "type", "variant"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -206,7 +206,7 @@ func (d DashboardElementInput) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DashboardElementInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "inputId", "layout", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -371,7 +371,7 @@ func (d DashboardElementVisualization) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DashboardElementVisualization) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "layout", "search", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -484,9 +484,9 @@ const (
 )
 
 type DashboardElementUnion struct {
-	DashboardElementVisualization *DashboardElementVisualization `queryParam:"inline,name=DashboardElement"`
-	DashboardElementInput         *DashboardElementInput         `queryParam:"inline,name=DashboardElement"`
-	DashboardElement              *DashboardElement              `queryParam:"inline,name=DashboardElement"`
+	DashboardElementVisualization *DashboardElementVisualization `queryParam:"inline" union:"member"`
+	DashboardElementInput         *DashboardElementInput         `queryParam:"inline" union:"member"`
+	DashboardElement              *DashboardElement              `queryParam:"inline" union:"member"`
 
 	Type DashboardElementUnionType
 }
@@ -552,7 +552,7 @@ func (u *DashboardElementUnion) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DashboardElementUnion", string(data))
 	}

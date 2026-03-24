@@ -21,7 +21,7 @@ func (t TimeoutRetrySettingsType) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimeoutRetrySettingsType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"timeoutRetry"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

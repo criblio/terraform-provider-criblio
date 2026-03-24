@@ -88,6 +88,9 @@ func (i *InputOffice365MgmtContentConfig) GetEnabled() *bool {
 	return i.Enabled
 }
 
+// #region class-body-inputoffice365mgmtcontentconfig
+// #endregion class-body-inputoffice365mgmtcontentconfig
+
 type InputOffice365Mgmt struct {
 	// Unique ID for this input
 	ID       *string                `json:"id,omitempty"`
@@ -155,7 +158,7 @@ func (i InputOffice365Mgmt) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365Mgmt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "planType", "tenantId", "appId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -384,3 +387,6 @@ func (i *InputOffice365Mgmt) GetTemplateClientSecret() *string {
 	}
 	return i.TemplateClientSecret
 }
+
+// #region class-body-inputoffice365mgmt
+// #endregion class-body-inputoffice365mgmt

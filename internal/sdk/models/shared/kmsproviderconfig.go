@@ -70,6 +70,9 @@ func (a *Auth2) GetEnableAssumeRole() *bool {
 	return a.EnableAssumeRole
 }
 
+// #region class-body-auth2
+// #endregion class-body-auth2
+
 type Auth1 struct {
 	AssumeRoleArn           *string      `json:"assumeRoleArn,omitempty"`
 	AssumeRoleExternalID    *string      `json:"assumeRoleExternalId,omitempty"`
@@ -88,7 +91,7 @@ func (a Auth1) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Auth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"provider", "vaultAWSIAMServerID"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -164,6 +167,9 @@ func (a *Auth1) GetVaultRole() *string {
 	return a.VaultRole
 }
 
+// #region class-body-auth1
+// #endregion class-body-auth1
+
 type AuthUnionType string
 
 const (
@@ -172,8 +178,8 @@ const (
 )
 
 type AuthUnion struct {
-	Auth1 *Auth1 `queryParam:"inline,name=auth"`
-	Auth2 *Auth2 `queryParam:"inline,name=auth"`
+	Auth1 *Auth1 `queryParam:"inline" union:"member"`
+	Auth2 *Auth2 `queryParam:"inline" union:"member"`
 
 	Type AuthUnionType
 }
@@ -222,7 +228,7 @@ func (u *AuthUnion) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for AuthUnion", string(data))
 	}

@@ -103,7 +103,7 @@ func (i InputHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

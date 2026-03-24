@@ -3,13 +3,13 @@
 package types
 
 type InputCollector struct {
-	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
-	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
-	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
-	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs" tfPlanOnly:"true"`
-	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
-	InputCollectorRest        *InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
-	InputCollectorS3          *InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
-	InputCollectorScript      *InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
-	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
+	InputCollectorAzureBlob   *InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob"`
+	InputCollectorCriblLake   *InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake"`
+	InputCollectorDatabase    *InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database"`
+	InputCollectorGCS         *InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs"`
+	InputCollectorHealthCheck *InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check"`
+	InputCollectorRest        *InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest"`
+	InputCollectorS3          *InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3"`
+	InputCollectorScript      *InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script"`
+	InputCollectorSplunk      *InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk"`
 }

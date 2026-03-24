@@ -17,7 +17,7 @@ func (i ItemsTypeProcessSets) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeProcessSets) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "filter"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

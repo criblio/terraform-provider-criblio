@@ -25,7 +25,7 @@ data "criblio_global_var" "my_globalvar" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to GET
+- `id` (String) Global variable name.
 
 ### Read-Only
 

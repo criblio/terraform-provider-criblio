@@ -137,7 +137,7 @@ func (i InputS3) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputS3) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "queueName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -513,3 +513,6 @@ func (i *InputS3) GetTemplateAwsAPIKey() *string {
 	}
 	return i.TemplateAwsAPIKey
 }
+
+// #region class-body-inputs3
+// #endregion class-body-inputs3

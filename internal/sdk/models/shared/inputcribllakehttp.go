@@ -113,7 +113,7 @@ func (a AuthTokensExt) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AuthTokensExt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"token"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -225,7 +225,7 @@ func (i InputCriblLakeHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCriblLakeHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

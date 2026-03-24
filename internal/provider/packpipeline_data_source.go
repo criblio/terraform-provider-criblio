@@ -30,10 +30,10 @@ type PackPipelineDataSource struct {
 
 // PackPipelineDataSourceModel describes the data model.
 type PackPipelineDataSourceModel struct {
-	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
-	GroupID types.String         `tfsdk:"group_id"`
-	ID      types.String         `tfsdk:"id"`
-	Pack    types.String         `tfsdk:"pack"`
+	Conf    *tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String          `tfsdk:"group_id"`
+	ID      types.String          `tfsdk:"id"`
+	Pack    types.String          `tfsdk:"pack"`
 }
 
 // Metadata returns the data source type name.

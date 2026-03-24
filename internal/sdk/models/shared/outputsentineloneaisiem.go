@@ -226,7 +226,7 @@ func (o OutputSentinelOneAiSiem) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinelOneAiSiem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "region", "endpoint"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -8,11 +8,12 @@ import (
 )
 
 type PipelineFunctionConf struct {
-	Conf        map[string]jsontypes.Normalized `tfsdk:"conf"`
-	Description types.String                    `tfsdk:"description"`
-	Disabled    types.Bool                      `tfsdk:"disabled"`
-	Filter      types.String                    `tfsdk:"filter"`
-	Final       types.Bool                      `tfsdk:"final"`
-	GroupID     types.String                    `tfsdk:"group_id"`
-	ID          types.String                    `tfsdk:"id"`
+	// Whole function config as one JSON value; use jsonencode({ ... }) in HCL.
+	Conf        jsontypes.Normalized `tfsdk:"conf"`
+	Description types.String         `tfsdk:"description"`
+	Disabled    types.Bool           `tfsdk:"disabled"`
+	Filter      types.String         `tfsdk:"filter"`
+	Final       types.Bool           `tfsdk:"final"`
+	GroupID     types.String         `tfsdk:"group_id"`
+	ID          types.String         `tfsdk:"id"`
 }

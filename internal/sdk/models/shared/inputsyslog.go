@@ -107,7 +107,7 @@ func (i InputSyslogSyslog2) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSyslogSyslog2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "tcpPort"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -365,6 +365,9 @@ func (i *InputSyslogSyslog2) GetTemplateTCPPort() *string {
 	return i.TemplateTCPPort
 }
 
+// #region class-body-inputsyslogsyslog2
+// #endregion class-body-inputsyslogsyslog2
+
 type InputSyslogType1 string
 
 const (
@@ -463,7 +466,7 @@ func (i InputSyslogSyslog1) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSyslogSyslog1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "udpPort"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -721,6 +724,9 @@ func (i *InputSyslogSyslog1) GetTemplateTCPPort() *string {
 	return i.TemplateTCPPort
 }
 
+// #region class-body-inputsyslogsyslog1
+// #endregion class-body-inputsyslogsyslog1
+
 type InputSyslogType string
 
 const (
@@ -729,8 +735,8 @@ const (
 )
 
 type InputSyslog struct {
-	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline,name=InputSyslog"`
-	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline,name=InputSyslog"`
+	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline" union:"member"`
+	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline" union:"member"`
 
 	Type InputSyslogType
 }
@@ -779,7 +785,7 @@ func (u *InputSyslog) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputSyslog", string(data))
 	}

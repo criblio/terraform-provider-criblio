@@ -140,7 +140,7 @@ func (o OutputDatabricks) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatabricks) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "workspaceId", "scope", "clientId", "catalog", "schema", "eventsVolumeName", "clientTextSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

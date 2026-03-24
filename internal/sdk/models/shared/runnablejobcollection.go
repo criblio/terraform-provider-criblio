@@ -313,7 +313,7 @@ func (r RunnableJobCollectionCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobCollectionCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"type", "conf"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -421,7 +421,7 @@ func (r RunnableJobCollectionMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobCollectionMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -891,7 +891,7 @@ func (r RunnableJobCollection) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobCollection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"collector", "run"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

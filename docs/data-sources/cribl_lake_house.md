@@ -23,7 +23,7 @@ data "criblio_cribl_lake_house" "my_cribllakehouse" {
 
 ### Required
 
-- `id` (String) The ID of the lakehouse to retrieve
+- `id` (String) Unique identifier for the lakehouse
 
 ### Read-Only
 

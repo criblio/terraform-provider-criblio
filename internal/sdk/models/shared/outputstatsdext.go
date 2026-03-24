@@ -108,7 +108,7 @@ func (o OutputStatsdExt) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputStatsdExt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "protocol", "host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

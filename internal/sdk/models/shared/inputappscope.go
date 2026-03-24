@@ -45,7 +45,7 @@ func (a Allow) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Allow) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"procname", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -238,7 +238,7 @@ func (i InputAppscope) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscope) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

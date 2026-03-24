@@ -63,8 +63,8 @@ type OutputInfluxdb struct {
 	TokenTimeoutSecs              jsontypes.Normalized             `tfsdk:"token_timeout_secs"`
 	Type                          types.String                     `tfsdk:"type"`
 	URL                           types.String                     `tfsdk:"url"`
-	Username                      types.String                     `tfsdk:"username"`
 	UseRoundRobinDNS              types.Bool                       `tfsdk:"use_round_robin_dns"`
 	UseV2API                      types.Bool                       `tfsdk:"use_v2_api"`
+	Username                      types.String                     `tfsdk:"username"`
 	ValueFieldName                types.String                     `tfsdk:"value_field_name"`
 }

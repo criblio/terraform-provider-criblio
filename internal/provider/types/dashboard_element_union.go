@@ -3,7 +3,7 @@
 package types
 
 type DashboardElementUnion struct {
-	DashboardElementVisualization *DashboardElementVisualization `queryParam:"inline" tfsdk:"dashboard_element_visualization" tfPlanOnly:"true"`
-	DashboardElementInput         *DashboardElementInput         `queryParam:"inline" tfsdk:"dashboard_element_input" tfPlanOnly:"true"`
-	DashboardElement              *DashboardElement              `queryParam:"inline" tfsdk:"dashboard_element" tfPlanOnly:"true"`
+	DashboardElementVisualization *DashboardElementVisualization `queryParam:"inline" tfsdk:"dashboard_element_visualization"`
+	DashboardElementInput         *DashboardElementInput         `queryParam:"inline" tfsdk:"dashboard_element_input"`
+	DashboardElement              *DashboardElement              `queryParam:"inline" tfsdk:"dashboard_element"`
 }

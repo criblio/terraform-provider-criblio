@@ -18,7 +18,7 @@ func (i ItemsTypeRules) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeRules) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

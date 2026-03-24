@@ -74,6 +74,7 @@ func (r *AppscopeConfigResourceModel) RefreshFromOperationsUpdateAppscopeLibEntr
 func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx context.Context, resp *shared.AppscopeLibEntry) diag.Diagnostics {
 	var diags diag.Diagnostics
 
+	r.Config = &tfTypes.AppscopeConfigWithCustom{}
 	if resp.Config.Cribl == nil {
 		r.Config.Cribl = nil
 	} else {
@@ -111,6 +112,7 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 
 		custom.Ancestor = types.StringPointerValue(customItem.Ancestor)
 		custom.Arg = types.StringPointerValue(customItem.Arg)
+		custom.Config = &tfTypes.AppscopeConfig{}
 		if customItem.Config.Cribl == nil {
 			custom.Config.Cribl = nil
 		} else {
@@ -146,8 +148,10 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 		} else {
 			custom.Config.Event = &tfTypes.AppscopeConfigEvent{}
 			custom.Config.Event.Enable = types.BoolValue(customItem.Config.Event.Enable)
+			custom.Config.Event.Format = &tfTypes.AppscopeConfigFormatNdjson{}
 			custom.Config.Event.Format.Enhancefs = types.BoolValue(customItem.Config.Event.Format.Enhancefs)
 			custom.Config.Event.Format.Maxeventpersec = types.Float64Value(customItem.Config.Event.Format.Maxeventpersec)
+			custom.Config.Event.Transport = &tfTypes.AppscopeTransport{}
 			if customItem.Config.Event.Transport.Buffer != nil {
 				custom.Config.Event.Transport.Buffer = types.StringValue(string(*customItem.Config.Event.Transport.Buffer))
 			} else {
@@ -230,10 +234,12 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 		} else {
 			custom.Config.Metric = &tfTypes.AppscopeConfigMetric{}
 			custom.Config.Metric.Enable = types.BoolValue(customItem.Config.Metric.Enable)
+			custom.Config.Metric.Format = &tfTypes.AppscopeConfigMetricFormat{}
 			custom.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(customItem.Config.Metric.Format.Statsdmaxlen)
 			custom.Config.Metric.Format.Statsdprefix = types.StringPointerValue(customItem.Config.Metric.Format.Statsdprefix)
 			custom.Config.Metric.Format.Type = types.StringPointerValue(customItem.Config.Metric.Format.Type)
 			custom.Config.Metric.Format.Verbosity = types.Float64PointerValue(customItem.Config.Metric.Format.Verbosity)
+			custom.Config.Metric.Transport = &tfTypes.AppscopeTransport{}
 			if customItem.Config.Metric.Transport.Buffer != nil {
 				custom.Config.Metric.Transport.Buffer = types.StringValue(string(*customItem.Config.Metric.Transport.Buffer))
 			} else {
@@ -295,8 +301,10 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 	} else {
 		r.Config.Event = &tfTypes.AppscopeConfigWithCustomEvent{}
 		r.Config.Event.Enable = types.BoolValue(resp.Config.Event.Enable)
+		r.Config.Event.Format = &tfTypes.AppscopeConfigWithCustomFormatNdjson{}
 		r.Config.Event.Format.Enhancefs = types.BoolValue(resp.Config.Event.Format.Enhancefs)
 		r.Config.Event.Format.Maxeventpersec = types.Float64Value(resp.Config.Event.Format.Maxeventpersec)
+		r.Config.Event.Transport = &tfTypes.AppscopeTransport{}
 		if resp.Config.Event.Transport.Buffer != nil {
 			r.Config.Event.Transport.Buffer = types.StringValue(string(*resp.Config.Event.Transport.Buffer))
 		} else {
@@ -379,10 +387,12 @@ func (r *AppscopeConfigResourceModel) RefreshFromSharedAppscopeLibEntry(ctx cont
 	} else {
 		r.Config.Metric = &tfTypes.AppscopeConfigWithCustomMetric{}
 		r.Config.Metric.Enable = types.BoolValue(resp.Config.Metric.Enable)
+		r.Config.Metric.Format = &tfTypes.AppscopeConfigWithCustomMetricFormat{}
 		r.Config.Metric.Format.Statsdmaxlen = types.Float64PointerValue(resp.Config.Metric.Format.Statsdmaxlen)
 		r.Config.Metric.Format.Statsdprefix = types.StringPointerValue(resp.Config.Metric.Format.Statsdprefix)
 		r.Config.Metric.Format.Type = types.StringPointerValue(resp.Config.Metric.Format.Type)
 		r.Config.Metric.Format.Verbosity = types.Float64PointerValue(resp.Config.Metric.Format.Verbosity)
+		r.Config.Metric.Transport = &tfTypes.AppscopeTransport{}
 		if resp.Config.Metric.Transport.Buffer != nil {
 			r.Config.Metric.Transport.Buffer = types.StringValue(string(*resp.Config.Metric.Transport.Buffer))
 		} else {

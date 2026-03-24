@@ -22,7 +22,7 @@ func (i ItemsTypeResponseRetrySettings) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeResponseRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"httpStatus"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

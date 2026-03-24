@@ -18,7 +18,7 @@ func (g GcpEndpointConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GcpEndpointConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"endpointName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

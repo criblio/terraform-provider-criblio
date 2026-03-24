@@ -16,8 +16,8 @@ const (
 )
 
 type Remote struct {
-	Str     *string `queryParam:"inline,name=remote"`
-	Boolean *bool   `queryParam:"inline,name=remote"`
+	Str     *string `queryParam:"inline" union:"member"`
+	Boolean *bool   `queryParam:"inline" union:"member"`
 
 	Type RemoteType
 }
@@ -66,7 +66,7 @@ func (u *Remote) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Remote", string(data))
 	}

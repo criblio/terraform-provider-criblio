@@ -3828,7 +3828,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGooglePubsub.Type = types.StringValue(string(resp.OutputGooglePubsub.Type))
 	}
 	if resp.OutputGrafanaCloud != nil {
-		r.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+		if r.OutputGrafanaCloud == nil {
+			r.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+		}
 		if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 != nil {
 			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 = &tfTypes.OutputGrafanaCloudGrafanaCloud1{}
 			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL)

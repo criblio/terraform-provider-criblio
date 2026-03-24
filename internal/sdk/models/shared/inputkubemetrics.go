@@ -131,7 +131,7 @@ func (i InputKubeMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

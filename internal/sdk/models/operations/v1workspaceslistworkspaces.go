@@ -23,6 +23,9 @@ func (v *V1WorkspacesListWorkspacesRequest) GetOrganizationID() string {
 	return v.OrganizationID
 }
 
+// #region class-body-v1workspaceslistworkspacesrequest
+// #endregion class-body-v1workspaceslistworkspacesrequest
+
 type V1WorkspacesListWorkspacesResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -70,3 +73,6 @@ func (v *V1WorkspacesListWorkspacesResponse) GetDefaultErrorDTO() *shared.Defaul
 	}
 	return v.DefaultErrorDTO
 }
+
+// #region class-body-v1workspaceslistworkspacesresponse
+// #endregion class-body-v1workspaceslistworkspacesresponse

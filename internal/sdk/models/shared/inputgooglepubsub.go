@@ -91,7 +91,7 @@ func (i InputGooglePubsub) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGooglePubsub) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "topicName", "subscriptionName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

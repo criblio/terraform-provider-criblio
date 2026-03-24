@@ -210,7 +210,7 @@ func (i InputKinesis) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKinesis) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "streamName", "region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

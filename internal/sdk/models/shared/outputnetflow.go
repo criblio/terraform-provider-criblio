@@ -47,7 +47,7 @@ func (o OutputNetflowHost) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNetflowHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -109,7 +109,7 @@ func (o OutputNetflow) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNetflow) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "hosts"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

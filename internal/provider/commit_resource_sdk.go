@@ -20,10 +20,12 @@ func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBo
 		for _, itemsItem := range resp.Items {
 			var items tfTypes.GitCommitSummary
 
+			items.Author = &tfTypes.Author{}
 			items.Author.Email = types.StringValue(itemsItem.Author.Email)
 			items.Author.Name = types.StringValue(itemsItem.Author.Name)
 			items.Branch = types.StringValue(itemsItem.Branch)
 			items.Commit = types.StringValue(itemsItem.Commit)
+			items.Files = &tfTypes.GitCommitSummaryFiles{}
 			items.Files.Created = make([]types.String, 0, len(itemsItem.Files.Created))
 			for _, v := range itemsItem.Files.Created {
 				items.Files.Created = append(items.Files.Created, types.StringValue(v))
@@ -40,6 +42,7 @@ func (r *CommitResourceModel) RefreshFromOperationsCreateVersionCommitResponseBo
 			for _, v := range itemsItem.Files.Renamed {
 				items.Files.Renamed = append(items.Files.Renamed, types.StringValue(v))
 			}
+			items.Summary = &tfTypes.Summary{}
 			items.Summary.Changes = types.Float64Value(itemsItem.Summary.Changes)
 			items.Summary.Deletions = types.Float64Value(itemsItem.Summary.Deletions)
 			items.Summary.Insertions = types.Float64Value(itemsItem.Summary.Insertions)

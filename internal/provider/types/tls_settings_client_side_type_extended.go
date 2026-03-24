@@ -8,8 +8,8 @@ import (
 
 type TLSSettingsClientSideTypeExtended struct {
 	CaPath             types.String `tfsdk:"ca_path"`
-	CertificateName    types.String `tfsdk:"certificate_name"`
 	CertPath           types.String `tfsdk:"cert_path"`
+	CertificateName    types.String `tfsdk:"certificate_name"`
 	Disabled           types.Bool   `tfsdk:"disabled"`
 	MaxVersion         types.String `tfsdk:"max_version"`
 	MinVersion         types.String `tfsdk:"min_version"`

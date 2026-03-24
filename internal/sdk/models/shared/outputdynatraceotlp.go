@@ -198,7 +198,7 @@ func (o OutputDynatraceOtlp) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceOtlp) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "protocol", "endpoint", "otlpVersion", "endpointType", "tokenSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

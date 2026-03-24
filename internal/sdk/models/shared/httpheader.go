@@ -18,7 +18,7 @@ func (h HTTPHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
 		return err
 	}
 	return nil

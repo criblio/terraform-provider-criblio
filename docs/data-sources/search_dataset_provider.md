@@ -23,7 +23,7 @@ data "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 
 ### Required
 
-- `id` (String) Unique ID to GET
+- `id` (String) Unique identifier for the provider
 
 ### Read-Only
 

@@ -60,10 +60,10 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.MapAttribute{
+								"conf": schema.StringAttribute{
 									Computed:    true,
-									ElementType: jsontypes.NormalizedType{},
-									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.`,
+									CustomType:  jsontypes.NormalizedType{},
+									Description: `Function configuration as JSON (same shape as jsonencode in the resource).`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,

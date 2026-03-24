@@ -80,7 +80,7 @@ func (i InputMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

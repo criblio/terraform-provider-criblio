@@ -60,7 +60,7 @@ resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
 ### Read-Only
 
 - `description` (String) Description of the provider
-- `id` (String) Unique identifier for the provider
+- `id` (String) Unique ID to PATCH
 - `type` (String) Type of the provider
 
 <a id="nestedatt--api_aws_provider"></a>

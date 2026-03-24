@@ -25,8 +25,8 @@ type OutputElastic struct {
 	ID                            types.String                       `tfsdk:"id"`
 	IncludeDocID                  types.Bool                         `tfsdk:"include_doc_id"`
 	Index                         types.String                       `tfsdk:"index"`
-	LoadBalanced                  types.Bool                         `tfsdk:"load_balanced"`
 	LoadBalanceStatsPeriodSec     types.Float64                      `tfsdk:"load_balance_stats_period_sec"`
+	LoadBalanced                  types.Bool                         `tfsdk:"load_balanced"`
 	MaxPayloadEvents              types.Float64                      `tfsdk:"max_payload_events"`
 	MaxPayloadSizeKB              types.Float64                      `tfsdk:"max_payload_size_kb"`
 	OnBackpressure                types.String                       `tfsdk:"on_backpressure"`

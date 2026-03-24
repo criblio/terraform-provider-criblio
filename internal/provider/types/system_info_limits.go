@@ -3,5 +3,5 @@
 package types
 
 type SystemInfoLimits struct {
-	Samples SystemInfoSamples `tfsdk:"samples"`
+	Samples *SystemInfoSamples `tfsdk:"samples"`
 }

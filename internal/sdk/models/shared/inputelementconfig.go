@@ -43,8 +43,8 @@ const (
 )
 
 type InputElementConfigEarliest struct {
-	Str    *string  `queryParam:"inline,name=earliest"`
-	Number *float64 `queryParam:"inline,name=earliest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type InputElementConfigEarliestType
 }
@@ -93,7 +93,7 @@ func (u *InputElementConfigEarliest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigEarliest", string(data))
 	}
@@ -132,8 +132,8 @@ const (
 )
 
 type InputElementConfigLatest struct {
-	Str    *string  `queryParam:"inline,name=latest"`
-	Number *float64 `queryParam:"inline,name=latest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type InputElementConfigLatestType
 }
@@ -182,7 +182,7 @@ func (u *InputElementConfigLatest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigLatest", string(data))
 	}
@@ -224,7 +224,7 @@ func (d DefaultValue) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DefaultValue) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"earliest", "latest"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -260,9 +260,9 @@ const (
 )
 
 type DefaultValueUnion struct {
-	Str          *string       `queryParam:"inline,name=defaultValue"`
-	Number       *float64      `queryParam:"inline,name=defaultValue"`
-	DefaultValue *DefaultValue `queryParam:"inline,name=defaultValue"`
+	Str          *string       `queryParam:"inline" union:"member"`
+	Number       *float64      `queryParam:"inline" union:"member"`
+	DefaultValue *DefaultValue `queryParam:"inline" union:"member"`
 
 	Type DefaultValueUnionType
 }
@@ -299,14 +299,6 @@ func (u *DefaultValueUnion) UnmarshalJSON(data []byte) error {
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var defaultValue DefaultValue = DefaultValue{}
-	if err := utils.UnmarshalJSON(data, &defaultValue, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  DefaultValueUnionTypeDefaultValue,
-			Value: &defaultValue,
-		})
-	}
-
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -323,12 +315,20 @@ func (u *DefaultValueUnion) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var defaultValue DefaultValue = DefaultValue{}
+	if err := utils.UnmarshalJSON(data, &defaultValue, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DefaultValueUnionTypeDefaultValue,
+			Value: &defaultValue,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DefaultValueUnion", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DefaultValueUnion", string(data))
 	}
@@ -336,14 +336,14 @@ func (u *DefaultValueUnion) UnmarshalJSON(data []byte) error {
 	// Set the union type and value based on the best candidate
 	u.Type = best.Type.(DefaultValueUnionType)
 	switch best.Type {
-	case DefaultValueUnionTypeDefaultValue:
-		u.DefaultValue = best.Value.(*DefaultValue)
-		return nil
 	case DefaultValueUnionTypeStr:
 		u.Str = best.Value.(*string)
 		return nil
 	case DefaultValueUnionTypeNumber:
 		u.Number = best.Value.(*float64)
+		return nil
+	case DefaultValueUnionTypeDefaultValue:
+		u.DefaultValue = best.Value.(*DefaultValue)
 		return nil
 	}
 

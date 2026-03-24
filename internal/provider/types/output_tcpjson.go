@@ -20,8 +20,8 @@ type OutputTcpjson struct {
 	Host                      types.String                             `tfsdk:"host"`
 	Hosts                     []ItemsTypeHosts                         `tfsdk:"hosts"`
 	ID                        types.String                             `tfsdk:"id"`
-	LoadBalanced              types.Bool                               `tfsdk:"load_balanced"`
 	LoadBalanceStatsPeriodSec types.Float64                            `tfsdk:"load_balance_stats_period_sec"`
+	LoadBalanced              types.Bool                               `tfsdk:"load_balanced"`
 	LogFailedRequests         types.Bool                               `tfsdk:"log_failed_requests"`
 	MaxConcurrentSenders      types.Float64                            `tfsdk:"max_concurrent_senders"`
 	OnBackpressure            types.String                             `tfsdk:"on_backpressure"`

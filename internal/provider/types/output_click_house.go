@@ -69,7 +69,7 @@ type OutputClickHouse struct {
 	TokenTimeoutSecs              jsontypes.Normalized                             `tfsdk:"token_timeout_secs"`
 	Type                          types.String                                     `tfsdk:"type"`
 	URL                           types.String                                     `tfsdk:"url"`
-	Username                      types.String                                     `tfsdk:"username"`
 	UseRoundRobinDNS              types.Bool                                       `tfsdk:"use_round_robin_dns"`
+	Username                      types.String                                     `tfsdk:"username"`
 	WaitForAsyncInserts           types.Bool                                       `tfsdk:"wait_for_async_inserts"`
 }

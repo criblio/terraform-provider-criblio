@@ -16,12 +16,10 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -74,7 +72,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
 						Validators: []validator.Int64{
-							int64validator.AtMost(10000),
+							int64validator.Between(0, 10000),
 						},
 					},
 					"description": schema.StringAttribute{
@@ -98,17 +96,18 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.MapAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Map{
-										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+								"conf": schema.StringAttribute{
+									Computed:   true,
+									Optional:   true,
+									CustomType: jsontypes.NormalizedType{},
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										speakeasy_stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
 									},
-									ElementType: jsontypes.NormalizedType{},
-									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
-									Validators: []validator.Map{
-										speakeasy_mapvalidators.NotNull(),
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									Description: `Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+										validators.IsValidJSON(),
 									},
 								},
 								"description": schema.StringAttribute{
@@ -468,7 +467,10 @@ func (r *PipelineResource) Delete(ctx context.Context, req resource.DeleteReques
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -489,12 +491,12 @@ func (r *PipelineResource) ImportState(ctx context.Context, req resource.ImportS
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"main"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"main"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

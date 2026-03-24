@@ -74,7 +74,7 @@ func (o OutputNewrelicMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -205,7 +205,7 @@ func (o OutputNewrelic) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelic) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -125,7 +125,7 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFile) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

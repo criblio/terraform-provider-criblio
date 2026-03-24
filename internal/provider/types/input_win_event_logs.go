@@ -10,10 +10,10 @@ type InputWinEventLogs struct {
 	BatchSize            types.Float64                  `tfsdk:"batch_size"`
 	Connections          []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description          types.String                   `tfsdk:"description"`
-	Disabled             types.Bool                     `tfsdk:"disabled"`
 	DisableJSONRendering types.Bool                     `tfsdk:"disable_json_rendering"`
 	DisableNativeModule  types.Bool                     `tfsdk:"disable_native_module"`
 	DisableXMLRendering  types.Bool                     `tfsdk:"disable_xml_rendering"`
+	Disabled             types.Bool                     `tfsdk:"disabled"`
 	Environment          types.String                   `tfsdk:"environment"`
 	EventFormat          types.String                   `tfsdk:"event_format"`
 	ID                   types.String                   `tfsdk:"id"`

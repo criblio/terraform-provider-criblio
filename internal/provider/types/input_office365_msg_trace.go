@@ -18,8 +18,8 @@ type InputOffice365MsgTrace struct {
 	Connections            []ItemsTypeConnectionsOptional   `tfsdk:"connections"`
 	CredentialsSecret      types.String                     `tfsdk:"credentials_secret"`
 	Description            types.String                     `tfsdk:"description"`
-	Disabled               types.Bool                       `tfsdk:"disabled"`
 	DisableTimeFilter      types.Bool                       `tfsdk:"disable_time_filter"`
+	Disabled               types.Bool                       `tfsdk:"disabled"`
 	EndDate                types.String                     `tfsdk:"end_date"`
 	Environment            types.String                     `tfsdk:"environment"`
 	ID                     types.String                     `tfsdk:"id"`

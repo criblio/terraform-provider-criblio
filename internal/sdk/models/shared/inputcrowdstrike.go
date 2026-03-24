@@ -132,7 +132,7 @@ func (i InputCrowdstrike) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCrowdstrike) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "queueName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

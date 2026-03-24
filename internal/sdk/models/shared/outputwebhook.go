@@ -139,7 +139,7 @@ func (o OutputWebhookOauthParam) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookOauthParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -171,7 +171,7 @@ func (o OutputWebhookOauthHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookOauthHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -205,7 +205,7 @@ func (o OutputWebhookURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhookURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -374,7 +374,7 @@ func (o OutputWebhook) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWebhook) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

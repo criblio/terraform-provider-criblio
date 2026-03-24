@@ -10,9 +10,9 @@ type InputSystemState struct {
 	Collectors                 *Collectors                    `tfsdk:"collectors"`
 	Connections                []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description                types.String                   `tfsdk:"description"`
-	Disabled                   types.Bool                     `tfsdk:"disabled"`
 	DisableNativeLastLogModule types.Bool                     `tfsdk:"disable_native_last_log_module"`
 	DisableNativeModule        types.Bool                     `tfsdk:"disable_native_module"`
+	Disabled                   types.Bool                     `tfsdk:"disabled"`
 	Environment                types.String                   `tfsdk:"environment"`
 	ID                         types.String                   `tfsdk:"id"`
 	Interval                   types.Float64                  `tfsdk:"interval"`

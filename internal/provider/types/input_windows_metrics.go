@@ -9,8 +9,8 @@ import (
 type InputWindowsMetrics struct {
 	Connections         []ItemsTypeConnectionsOptional  `tfsdk:"connections"`
 	Description         types.String                    `tfsdk:"description"`
-	Disabled            types.Bool                      `tfsdk:"disabled"`
 	DisableNativeModule types.Bool                      `tfsdk:"disable_native_module"`
+	Disabled            types.Bool                      `tfsdk:"disabled"`
 	Environment         types.String                    `tfsdk:"environment"`
 	Host                *InputWindowsMetricsHost        `tfsdk:"host"`
 	ID                  types.String                    `tfsdk:"id"`

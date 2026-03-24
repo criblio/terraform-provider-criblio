@@ -29,6 +29,7 @@ func (r *SystemInfoDataSourceModel) RefreshFromSharedCountedSystemInfo(ctx conte
 					items.Build[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
+			items.Conf = &tfTypes.SystemInfoConf{}
 			items.Conf.ConfVersion = types.StringPointerValue(itemsItem.Conf.ConfVersion)
 			items.Conf.Inputs = types.Float64Value(itemsItem.Conf.Inputs)
 			items.Conf.Name = types.StringPointerValue(itemsItem.Conf.Name)
@@ -38,12 +39,15 @@ func (r *SystemInfoDataSourceModel) RefreshFromSharedCountedSystemInfo(ctx conte
 			items.Conf.Rules = types.Float64Value(itemsItem.Conf.Rules)
 			items.ConfigPath = types.StringValue(itemsItem.ConfigPath)
 			items.DistMode = types.StringValue(string(itemsItem.DistMode))
+			items.Env = &tfTypes.Env{}
 			items.GUID = types.StringValue(itemsItem.GUID)
 			items.Hostname = types.StringValue(itemsItem.Hostname)
 			items.InstallPath = types.StringValue(itemsItem.InstallPath)
+			items.License = &tfTypes.LicenseInfo{}
 			items.License.Email = types.StringPointerValue(itemsItem.License.Email)
 			items.License.IsRegistered = types.BoolValue(itemsItem.License.IsRegistered)
 			items.License.IsSplunkApp = types.BoolPointerValue(itemsItem.License.IsSplunkApp)
+			items.License.Limits = &tfTypes.LicenseLimits{}
 			items.License.Limits.EdgeGroups = types.Float64PointerValue(itemsItem.License.Limits.EdgeGroups)
 			items.License.Limits.EdgeProcs = types.Float64PointerValue(itemsItem.License.Limits.EdgeProcs)
 			items.License.Limits.Kms = types.Float64PointerValue(itemsItem.License.Limits.Kms)
@@ -64,12 +68,16 @@ func (r *SystemInfoDataSourceModel) RefreshFromSharedCountedSystemInfo(ctx conte
 			items.License.Limits.WorkerGroups = types.Float64Value(itemsItem.License.Limits.WorkerGroups)
 			items.License.Limits.WorkerProcs = types.Float64Value(itemsItem.License.Limits.WorkerProcs)
 			items.License.Type = types.StringValue(string(itemsItem.License.Type))
+			items.Limits = &tfTypes.SystemInfoLimits{}
+			items.Limits.Samples = &tfTypes.SystemInfoSamples{}
 			items.Limits.Samples.MaxSize = types.StringValue(itemsItem.Limits.Samples.MaxSize)
+			items.Os = &tfTypes.SystemInfoOs{}
 			items.Os.Arch = types.StringValue(itemsItem.Os.Arch)
 			items.Os.Endianness = types.StringValue(itemsItem.Os.Endianness)
 			items.Os.Platform = types.StringValue(itemsItem.Os.Platform)
 			items.Os.Release = types.StringValue(itemsItem.Os.Release)
 			items.Os.Type = types.StringValue(itemsItem.Os.Type)
+			items.SystemConf = &tfTypes.SystemConf{}
 			items.SystemConf.InstallType = types.StringValue(itemsItem.SystemConf.InstallType)
 			items.SystemConf.Restart = types.StringValue(itemsItem.SystemConf.Restart)
 			items.SystemConf.Upgrade = types.StringValue(itemsItem.SystemConf.Upgrade)

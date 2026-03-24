@@ -19,7 +19,7 @@ func (i ItemsTypeAuthTokensExt) MarshalJSON() ([]byte, error) {
 }
 
 func (i *ItemsTypeAuthTokensExt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"token"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

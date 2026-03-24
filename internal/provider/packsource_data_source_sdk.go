@@ -5,8 +5,6 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -1018,69 +1016,6 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputCriblLakeHTTP.Type = types.StringValue(string(itemsItem.InputCriblLakeHTTP.Type))
 			}
-			if itemsItem.InputCriblmetrics != nil {
-				items.InputCriblmetrics = &tfTypes.InputCriblmetrics{}
-				items.InputCriblmetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
-
-				for _, connectionsItem8 := range itemsItem.InputCriblmetrics.Connections {
-					var connections8 tfTypes.ItemsTypeConnectionsOptional
-
-					connections8.Output = types.StringPointerValue(connectionsItem8.Output)
-					connections8.Pipeline = types.StringPointerValue(connectionsItem8.Pipeline)
-
-					items.InputCriblmetrics.Connections = append(items.InputCriblmetrics.Connections, connections8)
-				}
-				items.InputCriblmetrics.Description = types.StringPointerValue(itemsItem.InputCriblmetrics.Description)
-				items.InputCriblmetrics.Disabled = types.BoolPointerValue(itemsItem.InputCriblmetrics.Disabled)
-				items.InputCriblmetrics.Environment = types.StringPointerValue(itemsItem.InputCriblmetrics.Environment)
-				items.InputCriblmetrics.FullFidelity = types.BoolPointerValue(itemsItem.InputCriblmetrics.FullFidelity)
-				items.InputCriblmetrics.ID = types.StringPointerValue(itemsItem.InputCriblmetrics.ID)
-				items.InputCriblmetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-				for _, metadataItem10 := range itemsItem.InputCriblmetrics.Metadata {
-					var metadata10 tfTypes.ItemsTypeMetadata
-
-					metadata10.Name = types.StringValue(metadataItem10.Name)
-					metadata10.Value = types.StringValue(metadataItem10.Value)
-
-					items.InputCriblmetrics.Metadata = append(items.InputCriblmetrics.Metadata, metadata10)
-				}
-				items.InputCriblmetrics.Pipeline = types.StringPointerValue(itemsItem.InputCriblmetrics.Pipeline)
-				if itemsItem.InputCriblmetrics.Pq == nil {
-					items.InputCriblmetrics.Pq = nil
-				} else {
-					items.InputCriblmetrics.Pq = &tfTypes.PqType{}
-					items.InputCriblmetrics.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputCriblmetrics.Pq.CommitFrequency)
-					if itemsItem.InputCriblmetrics.Pq.Compress != nil {
-						items.InputCriblmetrics.Pq.Compress = types.StringValue(string(*itemsItem.InputCriblmetrics.Pq.Compress))
-					} else {
-						items.InputCriblmetrics.Pq.Compress = types.StringNull()
-					}
-					items.InputCriblmetrics.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputCriblmetrics.Pq.MaxBufferSize)
-					items.InputCriblmetrics.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxBufferSizeBytes)
-					items.InputCriblmetrics.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxFileSize)
-					items.InputCriblmetrics.Pq.MaxSize = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxSize)
-					if itemsItem.InputCriblmetrics.Pq.Mode != nil {
-						items.InputCriblmetrics.Pq.Mode = types.StringValue(string(*itemsItem.InputCriblmetrics.Pq.Mode))
-					} else {
-						items.InputCriblmetrics.Pq.Mode = types.StringNull()
-					}
-					items.InputCriblmetrics.Pq.Path = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.Path)
-					if itemsItem.InputCriblmetrics.Pq.PqControls == nil {
-						items.InputCriblmetrics.Pq.PqControls = nil
-					} else {
-						items.InputCriblmetrics.Pq.PqControls = &tfTypes.PqTypePqControls{}
-					}
-				}
-				items.InputCriblmetrics.PqEnabled = types.BoolPointerValue(itemsItem.InputCriblmetrics.PqEnabled)
-				items.InputCriblmetrics.Prefix = types.StringPointerValue(itemsItem.InputCriblmetrics.Prefix)
-				items.InputCriblmetrics.SendToRoutes = types.BoolPointerValue(itemsItem.InputCriblmetrics.SendToRoutes)
-				items.InputCriblmetrics.Streamtags = make([]types.String, 0, len(itemsItem.InputCriblmetrics.Streamtags))
-				for _, v := range itemsItem.InputCriblmetrics.Streamtags {
-					items.InputCriblmetrics.Streamtags = append(items.InputCriblmetrics.Streamtags, types.StringValue(v))
-				}
-				items.InputCriblmetrics.Type = types.StringValue(string(itemsItem.InputCriblmetrics.Type))
-			}
 			if itemsItem.InputCriblTCP != nil {
 				items.InputCriblTCP = &tfTypes.InputCriblTCP{}
 				items.InputCriblTCP.TemplateHost = types.StringPointerValue(itemsItem.InputCriblTCP.TemplateHost)
@@ -1098,13 +1033,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputCriblTCP.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem9 := range itemsItem.InputCriblTCP.Connections {
-					var connections9 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem8 := range itemsItem.InputCriblTCP.Connections {
+					var connections8 tfTypes.ItemsTypeConnectionsOptional
 
-					connections9.Output = types.StringPointerValue(connectionsItem9.Output)
-					connections9.Pipeline = types.StringPointerValue(connectionsItem9.Pipeline)
+					connections8.Output = types.StringPointerValue(connectionsItem8.Output)
+					connections8.Pipeline = types.StringPointerValue(connectionsItem8.Pipeline)
 
-					items.InputCriblTCP.Connections = append(items.InputCriblTCP.Connections, connections9)
+					items.InputCriblTCP.Connections = append(items.InputCriblTCP.Connections, connections8)
 				}
 				items.InputCriblTCP.Description = types.StringPointerValue(itemsItem.InputCriblTCP.Description)
 				items.InputCriblTCP.Disabled = types.BoolPointerValue(itemsItem.InputCriblTCP.Disabled)
@@ -1116,13 +1051,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputCriblTCP.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputCriblTCP.MaxActiveCxn)
 				items.InputCriblTCP.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem11 := range itemsItem.InputCriblTCP.Metadata {
-					var metadata11 tfTypes.ItemsTypeMetadata
+				for _, metadataItem10 := range itemsItem.InputCriblTCP.Metadata {
+					var metadata10 tfTypes.ItemsTypeMetadata
 
-					metadata11.Name = types.StringValue(metadataItem11.Name)
-					metadata11.Value = types.StringValue(metadataItem11.Value)
+					metadata10.Name = types.StringValue(metadataItem10.Name)
+					metadata10.Value = types.StringValue(metadataItem10.Value)
 
-					items.InputCriblTCP.Metadata = append(items.InputCriblTCP.Metadata, metadata11)
+					items.InputCriblTCP.Metadata = append(items.InputCriblTCP.Metadata, metadata10)
 				}
 				items.InputCriblTCP.Pipeline = types.StringPointerValue(itemsItem.InputCriblTCP.Pipeline)
 				items.InputCriblTCP.Port = types.Float64Value(itemsItem.InputCriblTCP.Port)
@@ -1186,6 +1121,69 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					items.InputCriblTCP.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputCriblTCP.TLS.RequestCert)
 				}
 				items.InputCriblTCP.Type = types.StringValue(string(itemsItem.InputCriblTCP.Type))
+			}
+			if itemsItem.InputCriblmetrics != nil {
+				items.InputCriblmetrics = &tfTypes.InputCriblmetrics{}
+				items.InputCriblmetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+
+				for _, connectionsItem9 := range itemsItem.InputCriblmetrics.Connections {
+					var connections9 tfTypes.ItemsTypeConnectionsOptional
+
+					connections9.Output = types.StringPointerValue(connectionsItem9.Output)
+					connections9.Pipeline = types.StringPointerValue(connectionsItem9.Pipeline)
+
+					items.InputCriblmetrics.Connections = append(items.InputCriblmetrics.Connections, connections9)
+				}
+				items.InputCriblmetrics.Description = types.StringPointerValue(itemsItem.InputCriblmetrics.Description)
+				items.InputCriblmetrics.Disabled = types.BoolPointerValue(itemsItem.InputCriblmetrics.Disabled)
+				items.InputCriblmetrics.Environment = types.StringPointerValue(itemsItem.InputCriblmetrics.Environment)
+				items.InputCriblmetrics.FullFidelity = types.BoolPointerValue(itemsItem.InputCriblmetrics.FullFidelity)
+				items.InputCriblmetrics.ID = types.StringPointerValue(itemsItem.InputCriblmetrics.ID)
+				items.InputCriblmetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
+
+				for _, metadataItem11 := range itemsItem.InputCriblmetrics.Metadata {
+					var metadata11 tfTypes.ItemsTypeMetadata
+
+					metadata11.Name = types.StringValue(metadataItem11.Name)
+					metadata11.Value = types.StringValue(metadataItem11.Value)
+
+					items.InputCriblmetrics.Metadata = append(items.InputCriblmetrics.Metadata, metadata11)
+				}
+				items.InputCriblmetrics.Pipeline = types.StringPointerValue(itemsItem.InputCriblmetrics.Pipeline)
+				if itemsItem.InputCriblmetrics.Pq == nil {
+					items.InputCriblmetrics.Pq = nil
+				} else {
+					items.InputCriblmetrics.Pq = &tfTypes.PqType{}
+					items.InputCriblmetrics.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputCriblmetrics.Pq.CommitFrequency)
+					if itemsItem.InputCriblmetrics.Pq.Compress != nil {
+						items.InputCriblmetrics.Pq.Compress = types.StringValue(string(*itemsItem.InputCriblmetrics.Pq.Compress))
+					} else {
+						items.InputCriblmetrics.Pq.Compress = types.StringNull()
+					}
+					items.InputCriblmetrics.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputCriblmetrics.Pq.MaxBufferSize)
+					items.InputCriblmetrics.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxBufferSizeBytes)
+					items.InputCriblmetrics.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxFileSize)
+					items.InputCriblmetrics.Pq.MaxSize = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.MaxSize)
+					if itemsItem.InputCriblmetrics.Pq.Mode != nil {
+						items.InputCriblmetrics.Pq.Mode = types.StringValue(string(*itemsItem.InputCriblmetrics.Pq.Mode))
+					} else {
+						items.InputCriblmetrics.Pq.Mode = types.StringNull()
+					}
+					items.InputCriblmetrics.Pq.Path = types.StringPointerValue(itemsItem.InputCriblmetrics.Pq.Path)
+					if itemsItem.InputCriblmetrics.Pq.PqControls == nil {
+						items.InputCriblmetrics.Pq.PqControls = nil
+					} else {
+						items.InputCriblmetrics.Pq.PqControls = &tfTypes.PqTypePqControls{}
+					}
+				}
+				items.InputCriblmetrics.PqEnabled = types.BoolPointerValue(itemsItem.InputCriblmetrics.PqEnabled)
+				items.InputCriblmetrics.Prefix = types.StringPointerValue(itemsItem.InputCriblmetrics.Prefix)
+				items.InputCriblmetrics.SendToRoutes = types.BoolPointerValue(itemsItem.InputCriblmetrics.SendToRoutes)
+				items.InputCriblmetrics.Streamtags = make([]types.String, 0, len(itemsItem.InputCriblmetrics.Streamtags))
+				for _, v := range itemsItem.InputCriblmetrics.Streamtags {
+					items.InputCriblmetrics.Streamtags = append(items.InputCriblmetrics.Streamtags, types.StringValue(v))
+				}
+				items.InputCriblmetrics.Type = types.StringValue(string(itemsItem.InputCriblmetrics.Type))
 			}
 			if itemsItem.InputCrowdstrike != nil {
 				items.InputCrowdstrike = &tfTypes.InputCrowdstrike{}
@@ -2309,6 +2307,9 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 			}
 			if itemsItem.InputGrafana != nil {
 				items.InputGrafana = &tfTypes.InputGrafana{}
+				if items.InputGrafana == nil {
+					items.InputGrafana = &tfTypes.InputGrafana{}
+				}
 				if itemsItem.InputGrafana.InputGrafanaGrafana1 != nil {
 					items.InputGrafana.InputGrafanaGrafana1 = &tfTypes.InputGrafanaGrafana1{}
 					items.InputGrafana.InputGrafanaGrafana1.TemplateHost = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TemplateHost)
@@ -4884,153 +4885,6 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365Service.TTL = types.StringPointerValue(itemsItem.InputOffice365Service.TTL)
 				items.InputOffice365Service.Type = types.StringValue(string(itemsItem.InputOffice365Service.Type))
 			}
-			if itemsItem.InputOpenai != nil {
-				items.InputOpenai = &tfTypes.InputOpenai1{}
-				items.InputOpenai.TemplateOpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiOrganization)
-				items.InputOpenai.TemplateOpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiProject)
-				items.InputOpenai.APIKey = types.StringPointerValue(itemsItem.InputOpenai.APIKey)
-				items.InputOpenai.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
-
-				for _, connectionsItem39 := range itemsItem.InputOpenai.Connections {
-					var connections39 tfTypes.ItemsTypeConnectionsOptional
-
-					connections39.Output = types.StringPointerValue(connectionsItem39.Output)
-					connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
-
-					items.InputOpenai.Connections = append(items.InputOpenai.Connections, connections39)
-				}
-				items.InputOpenai.ContentConfig = []tfTypes.InputOpenaiContentConfig{}
-
-				for _, contentConfigItem2 := range itemsItem.InputOpenai.ContentConfig {
-					var contentConfig2 tfTypes.InputOpenaiContentConfig
-
-					contentConfig2.CollectPath = types.StringValue(contentConfigItem2.CollectPath)
-					contentConfig2.ContentDescription = types.StringPointerValue(contentConfigItem2.ContentDescription)
-					contentConfig2.ContentType = types.StringValue(contentConfigItem2.ContentType)
-					contentConfig2.CronSchedule = types.StringValue(contentConfigItem2.CronSchedule)
-					contentConfig2.Disabled = types.BoolPointerValue(contentConfigItem2.Disabled)
-					contentConfig2.DocsURL = types.StringPointerValue(contentConfigItem2.DocsURL)
-					contentConfig2.Earliest = types.StringValue(contentConfigItem2.Earliest)
-					contentConfig2.EndpointMetadata = []tfTypes.ItemsTypeMetadata{}
-
-					for _, endpointMetadataItem := range contentConfigItem2.EndpointMetadata {
-						var endpointMetadata tfTypes.ItemsTypeMetadata
-
-						endpointMetadata.Name = types.StringValue(endpointMetadataItem.Name)
-						endpointMetadata.Value = types.StringValue(endpointMetadataItem.Value)
-
-						contentConfig2.EndpointMetadata = append(contentConfig2.EndpointMetadata, endpointMetadata)
-					}
-					contentConfig2.JobTimeout = types.StringPointerValue(contentConfigItem2.JobTimeout)
-					contentConfig2.Latest = types.StringValue(contentConfigItem2.Latest)
-					if contentConfigItem2.LogLevel != nil {
-						contentConfig2.LogLevel = types.StringValue(string(*contentConfigItem2.LogLevel))
-					} else {
-						contentConfig2.LogLevel = types.StringNull()
-					}
-					if contentConfigItem2.ManageState == nil {
-						contentConfig2.ManageState = nil
-					} else {
-						contentConfig2.ManageState = &tfTypes.InputOpenaiManageState{}
-					}
-					contentConfig2.MaxPages = types.Float64PointerValue(contentConfigItem2.MaxPages)
-					contentConfig2.PaginationAttribute = make([]types.String, 0, len(contentConfigItem2.PaginationAttribute))
-					for _, v := range contentConfigItem2.PaginationAttribute {
-						contentConfig2.PaginationAttribute = append(contentConfig2.PaginationAttribute, types.StringValue(v))
-					}
-					contentConfig2.PaginationCurRelationAttribute = types.StringPointerValue(contentConfigItem2.PaginationCurRelationAttribute)
-					contentConfig2.PaginationLastPageExpr = types.StringPointerValue(contentConfigItem2.PaginationLastPageExpr)
-					contentConfig2.PaginationNextRelationAttribute = types.StringPointerValue(contentConfigItem2.PaginationNextRelationAttribute)
-					contentConfig2.PaginationType = types.StringValue(string(contentConfigItem2.PaginationType))
-					contentConfig2.RequestParams = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
-
-					for _, requestParamsItem := range contentConfigItem2.RequestParams {
-						var requestParams tfTypes.ItemsTypeContentConfigItemsRequestParams
-
-						requestParams.Name = types.StringValue(requestParamsItem.Name)
-						requestParams.Value = types.StringValue(requestParamsItem.Value)
-
-						contentConfig2.RequestParams = append(contentConfig2.RequestParams, requestParams)
-					}
-					contentConfig2.StateMergeExpression = types.StringPointerValue(contentConfigItem2.StateMergeExpression)
-					contentConfig2.StateTracking = types.BoolPointerValue(contentConfigItem2.StateTracking)
-					contentConfig2.StateUpdateExpression = types.StringPointerValue(contentConfigItem2.StateUpdateExpression)
-
-					items.InputOpenai.ContentConfig = append(items.InputOpenai.ContentConfig, contentConfig2)
-				}
-				items.InputOpenai.Description = types.StringPointerValue(itemsItem.InputOpenai.Description)
-				items.InputOpenai.Disabled = types.BoolPointerValue(itemsItem.InputOpenai.Disabled)
-				items.InputOpenai.Environment = types.StringPointerValue(itemsItem.InputOpenai.Environment)
-				items.InputOpenai.ID = types.StringPointerValue(itemsItem.InputOpenai.ID)
-				items.InputOpenai.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputOpenai.IgnoreGroupJobsLimit)
-				items.InputOpenai.KeepAliveTime = types.Float64PointerValue(itemsItem.InputOpenai.KeepAliveTime)
-				items.InputOpenai.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputOpenai.MaxMissedKeepAlives)
-				items.InputOpenai.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-				for _, metadataItem43 := range itemsItem.InputOpenai.Metadata {
-					var metadata43 tfTypes.ItemsTypeMetadata
-
-					metadata43.Name = types.StringValue(metadataItem43.Name)
-					metadata43.Value = types.StringValue(metadataItem43.Value)
-
-					items.InputOpenai.Metadata = append(items.InputOpenai.Metadata, metadata43)
-				}
-				items.InputOpenai.OpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.OpenaiOrganization)
-				items.InputOpenai.OpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.OpenaiProject)
-				items.InputOpenai.Pipeline = types.StringPointerValue(itemsItem.InputOpenai.Pipeline)
-				if itemsItem.InputOpenai.Pq == nil {
-					items.InputOpenai.Pq = nil
-				} else {
-					items.InputOpenai.Pq = &tfTypes.PqType{}
-					items.InputOpenai.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputOpenai.Pq.CommitFrequency)
-					if itemsItem.InputOpenai.Pq.Compress != nil {
-						items.InputOpenai.Pq.Compress = types.StringValue(string(*itemsItem.InputOpenai.Pq.Compress))
-					} else {
-						items.InputOpenai.Pq.Compress = types.StringNull()
-					}
-					items.InputOpenai.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputOpenai.Pq.MaxBufferSize)
-					items.InputOpenai.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxBufferSizeBytes)
-					items.InputOpenai.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxFileSize)
-					items.InputOpenai.Pq.MaxSize = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxSize)
-					if itemsItem.InputOpenai.Pq.Mode != nil {
-						items.InputOpenai.Pq.Mode = types.StringValue(string(*itemsItem.InputOpenai.Pq.Mode))
-					} else {
-						items.InputOpenai.Pq.Mode = types.StringNull()
-					}
-					items.InputOpenai.Pq.Path = types.StringPointerValue(itemsItem.InputOpenai.Pq.Path)
-					if itemsItem.InputOpenai.Pq.PqControls == nil {
-						items.InputOpenai.Pq.PqControls = nil
-					} else {
-						items.InputOpenai.Pq.PqControls = &tfTypes.PqTypePqControls{}
-					}
-				}
-				items.InputOpenai.PqEnabled = types.BoolPointerValue(itemsItem.InputOpenai.PqEnabled)
-				items.InputOpenai.RequestTimeout = types.Float64PointerValue(itemsItem.InputOpenai.RequestTimeout)
-				if itemsItem.InputOpenai.RetryRules == nil {
-					items.InputOpenai.RetryRules = nil
-				} else {
-					items.InputOpenai.RetryRules = &tfTypes.RetryRulesType{}
-					items.InputOpenai.RetryRules.Codes = make([]types.Float64, 0, len(itemsItem.InputOpenai.RetryRules.Codes))
-					for _, v := range itemsItem.InputOpenai.RetryRules.Codes {
-						items.InputOpenai.RetryRules.Codes = append(items.InputOpenai.RetryRules.Codes, types.Float64Value(v))
-					}
-					items.InputOpenai.RetryRules.EnableHeader = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.EnableHeader)
-					items.InputOpenai.RetryRules.Interval = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Interval)
-					items.InputOpenai.RetryRules.Limit = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Limit)
-					items.InputOpenai.RetryRules.Multiplier = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Multiplier)
-					items.InputOpenai.RetryRules.RetryConnectReset = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.RetryConnectReset)
-					items.InputOpenai.RetryRules.RetryConnectTimeout = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.RetryConnectTimeout)
-					items.InputOpenai.RetryRules.Type = types.StringValue(string(itemsItem.InputOpenai.RetryRules.Type))
-				}
-				items.InputOpenai.SendToRoutes = types.BoolPointerValue(itemsItem.InputOpenai.SendToRoutes)
-				items.InputOpenai.Streamtags = make([]types.String, 0, len(itemsItem.InputOpenai.Streamtags))
-				for _, v := range itemsItem.InputOpenai.Streamtags {
-					items.InputOpenai.Streamtags = append(items.InputOpenai.Streamtags, types.StringValue(v))
-				}
-				items.InputOpenai.TextSecret = types.StringValue(itemsItem.InputOpenai.TextSecret)
-				items.InputOpenai.TTL = types.StringPointerValue(itemsItem.InputOpenai.TTL)
-				items.InputOpenai.Type = types.StringValue(string(itemsItem.InputOpenai.Type))
-			}
 			if itemsItem.InputOpenTelemetry != nil {
 				items.InputOpenTelemetry = &tfTypes.InputOpenTelemetry{}
 				items.InputOpenTelemetry.TemplateHost = types.StringPointerValue(itemsItem.InputOpenTelemetry.TemplateHost)
@@ -5060,13 +4914,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputOpenTelemetry.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem40 := range itemsItem.InputOpenTelemetry.Connections {
-					var connections40 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem39 := range itemsItem.InputOpenTelemetry.Connections {
+					var connections39 tfTypes.ItemsTypeConnectionsOptional
 
-					connections40.Output = types.StringPointerValue(connectionsItem40.Output)
-					connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
+					connections39.Output = types.StringPointerValue(connectionsItem39.Output)
+					connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
 
-					items.InputOpenTelemetry.Connections = append(items.InputOpenTelemetry.Connections, connections40)
+					items.InputOpenTelemetry.Connections = append(items.InputOpenTelemetry.Connections, connections39)
 				}
 				items.InputOpenTelemetry.CredentialsSecret = types.StringPointerValue(itemsItem.InputOpenTelemetry.CredentialsSecret)
 				items.InputOpenTelemetry.Description = types.StringPointerValue(itemsItem.InputOpenTelemetry.Description)
@@ -5098,13 +4952,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOpenTelemetry.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputOpenTelemetry.MaxRequestsPerSocket)
 				items.InputOpenTelemetry.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem44 := range itemsItem.InputOpenTelemetry.Metadata {
-					var metadata44 tfTypes.ItemsTypeMetadata
+				for _, metadataItem43 := range itemsItem.InputOpenTelemetry.Metadata {
+					var metadata43 tfTypes.ItemsTypeMetadata
 
-					metadata44.Name = types.StringValue(metadataItem44.Name)
-					metadata44.Value = types.StringValue(metadataItem44.Value)
+					metadata43.Name = types.StringValue(metadataItem43.Name)
+					metadata43.Value = types.StringValue(metadataItem43.Value)
 
-					items.InputOpenTelemetry.Metadata = append(items.InputOpenTelemetry.Metadata, metadata44)
+					items.InputOpenTelemetry.Metadata = append(items.InputOpenTelemetry.Metadata, metadata43)
 				}
 				items.InputOpenTelemetry.OauthHeaders = []tfTypes.InputOpenTelemetryOauthHeader{}
 
@@ -5245,6 +5099,153 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputOpenTelemetry.Type = types.StringValue(string(itemsItem.InputOpenTelemetry.Type))
 				items.InputOpenTelemetry.Username = types.StringPointerValue(itemsItem.InputOpenTelemetry.Username)
+			}
+			if itemsItem.InputOpenai != nil {
+				items.InputOpenai = &tfTypes.InputOpenai1{}
+				items.InputOpenai.TemplateOpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiOrganization)
+				items.InputOpenai.TemplateOpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiProject)
+				items.InputOpenai.APIKey = types.StringPointerValue(itemsItem.InputOpenai.APIKey)
+				items.InputOpenai.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+
+				for _, connectionsItem40 := range itemsItem.InputOpenai.Connections {
+					var connections40 tfTypes.ItemsTypeConnectionsOptional
+
+					connections40.Output = types.StringPointerValue(connectionsItem40.Output)
+					connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
+
+					items.InputOpenai.Connections = append(items.InputOpenai.Connections, connections40)
+				}
+				items.InputOpenai.ContentConfig = []tfTypes.InputOpenaiContentConfig{}
+
+				for _, contentConfigItem2 := range itemsItem.InputOpenai.ContentConfig {
+					var contentConfig2 tfTypes.InputOpenaiContentConfig
+
+					contentConfig2.CollectPath = types.StringValue(contentConfigItem2.CollectPath)
+					contentConfig2.ContentDescription = types.StringPointerValue(contentConfigItem2.ContentDescription)
+					contentConfig2.ContentType = types.StringValue(contentConfigItem2.ContentType)
+					contentConfig2.CronSchedule = types.StringValue(contentConfigItem2.CronSchedule)
+					contentConfig2.Disabled = types.BoolPointerValue(contentConfigItem2.Disabled)
+					contentConfig2.DocsURL = types.StringPointerValue(contentConfigItem2.DocsURL)
+					contentConfig2.Earliest = types.StringValue(contentConfigItem2.Earliest)
+					contentConfig2.EndpointMetadata = []tfTypes.ItemsTypeMetadata{}
+
+					for _, endpointMetadataItem := range contentConfigItem2.EndpointMetadata {
+						var endpointMetadata tfTypes.ItemsTypeMetadata
+
+						endpointMetadata.Name = types.StringValue(endpointMetadataItem.Name)
+						endpointMetadata.Value = types.StringValue(endpointMetadataItem.Value)
+
+						contentConfig2.EndpointMetadata = append(contentConfig2.EndpointMetadata, endpointMetadata)
+					}
+					contentConfig2.JobTimeout = types.StringPointerValue(contentConfigItem2.JobTimeout)
+					contentConfig2.Latest = types.StringValue(contentConfigItem2.Latest)
+					if contentConfigItem2.LogLevel != nil {
+						contentConfig2.LogLevel = types.StringValue(string(*contentConfigItem2.LogLevel))
+					} else {
+						contentConfig2.LogLevel = types.StringNull()
+					}
+					if contentConfigItem2.ManageState == nil {
+						contentConfig2.ManageState = nil
+					} else {
+						contentConfig2.ManageState = &tfTypes.InputOpenaiManageState{}
+					}
+					contentConfig2.MaxPages = types.Float64PointerValue(contentConfigItem2.MaxPages)
+					contentConfig2.PaginationAttribute = make([]types.String, 0, len(contentConfigItem2.PaginationAttribute))
+					for _, v := range contentConfigItem2.PaginationAttribute {
+						contentConfig2.PaginationAttribute = append(contentConfig2.PaginationAttribute, types.StringValue(v))
+					}
+					contentConfig2.PaginationCurRelationAttribute = types.StringPointerValue(contentConfigItem2.PaginationCurRelationAttribute)
+					contentConfig2.PaginationLastPageExpr = types.StringPointerValue(contentConfigItem2.PaginationLastPageExpr)
+					contentConfig2.PaginationNextRelationAttribute = types.StringPointerValue(contentConfigItem2.PaginationNextRelationAttribute)
+					contentConfig2.PaginationType = types.StringValue(string(contentConfigItem2.PaginationType))
+					contentConfig2.RequestParams = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
+
+					for _, requestParamsItem := range contentConfigItem2.RequestParams {
+						var requestParams tfTypes.ItemsTypeContentConfigItemsRequestParams
+
+						requestParams.Name = types.StringValue(requestParamsItem.Name)
+						requestParams.Value = types.StringValue(requestParamsItem.Value)
+
+						contentConfig2.RequestParams = append(contentConfig2.RequestParams, requestParams)
+					}
+					contentConfig2.StateMergeExpression = types.StringPointerValue(contentConfigItem2.StateMergeExpression)
+					contentConfig2.StateTracking = types.BoolPointerValue(contentConfigItem2.StateTracking)
+					contentConfig2.StateUpdateExpression = types.StringPointerValue(contentConfigItem2.StateUpdateExpression)
+
+					items.InputOpenai.ContentConfig = append(items.InputOpenai.ContentConfig, contentConfig2)
+				}
+				items.InputOpenai.Description = types.StringPointerValue(itemsItem.InputOpenai.Description)
+				items.InputOpenai.Disabled = types.BoolPointerValue(itemsItem.InputOpenai.Disabled)
+				items.InputOpenai.Environment = types.StringPointerValue(itemsItem.InputOpenai.Environment)
+				items.InputOpenai.ID = types.StringPointerValue(itemsItem.InputOpenai.ID)
+				items.InputOpenai.IgnoreGroupJobsLimit = types.BoolPointerValue(itemsItem.InputOpenai.IgnoreGroupJobsLimit)
+				items.InputOpenai.KeepAliveTime = types.Float64PointerValue(itemsItem.InputOpenai.KeepAliveTime)
+				items.InputOpenai.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputOpenai.MaxMissedKeepAlives)
+				items.InputOpenai.Metadata = []tfTypes.ItemsTypeMetadata{}
+
+				for _, metadataItem44 := range itemsItem.InputOpenai.Metadata {
+					var metadata44 tfTypes.ItemsTypeMetadata
+
+					metadata44.Name = types.StringValue(metadataItem44.Name)
+					metadata44.Value = types.StringValue(metadataItem44.Value)
+
+					items.InputOpenai.Metadata = append(items.InputOpenai.Metadata, metadata44)
+				}
+				items.InputOpenai.OpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.OpenaiOrganization)
+				items.InputOpenai.OpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.OpenaiProject)
+				items.InputOpenai.Pipeline = types.StringPointerValue(itemsItem.InputOpenai.Pipeline)
+				if itemsItem.InputOpenai.Pq == nil {
+					items.InputOpenai.Pq = nil
+				} else {
+					items.InputOpenai.Pq = &tfTypes.PqType{}
+					items.InputOpenai.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputOpenai.Pq.CommitFrequency)
+					if itemsItem.InputOpenai.Pq.Compress != nil {
+						items.InputOpenai.Pq.Compress = types.StringValue(string(*itemsItem.InputOpenai.Pq.Compress))
+					} else {
+						items.InputOpenai.Pq.Compress = types.StringNull()
+					}
+					items.InputOpenai.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputOpenai.Pq.MaxBufferSize)
+					items.InputOpenai.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxBufferSizeBytes)
+					items.InputOpenai.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxFileSize)
+					items.InputOpenai.Pq.MaxSize = types.StringPointerValue(itemsItem.InputOpenai.Pq.MaxSize)
+					if itemsItem.InputOpenai.Pq.Mode != nil {
+						items.InputOpenai.Pq.Mode = types.StringValue(string(*itemsItem.InputOpenai.Pq.Mode))
+					} else {
+						items.InputOpenai.Pq.Mode = types.StringNull()
+					}
+					items.InputOpenai.Pq.Path = types.StringPointerValue(itemsItem.InputOpenai.Pq.Path)
+					if itemsItem.InputOpenai.Pq.PqControls == nil {
+						items.InputOpenai.Pq.PqControls = nil
+					} else {
+						items.InputOpenai.Pq.PqControls = &tfTypes.PqTypePqControls{}
+					}
+				}
+				items.InputOpenai.PqEnabled = types.BoolPointerValue(itemsItem.InputOpenai.PqEnabled)
+				items.InputOpenai.RequestTimeout = types.Float64PointerValue(itemsItem.InputOpenai.RequestTimeout)
+				if itemsItem.InputOpenai.RetryRules == nil {
+					items.InputOpenai.RetryRules = nil
+				} else {
+					items.InputOpenai.RetryRules = &tfTypes.RetryRulesType{}
+					items.InputOpenai.RetryRules.Codes = make([]types.Float64, 0, len(itemsItem.InputOpenai.RetryRules.Codes))
+					for _, v := range itemsItem.InputOpenai.RetryRules.Codes {
+						items.InputOpenai.RetryRules.Codes = append(items.InputOpenai.RetryRules.Codes, types.Float64Value(v))
+					}
+					items.InputOpenai.RetryRules.EnableHeader = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.EnableHeader)
+					items.InputOpenai.RetryRules.Interval = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Interval)
+					items.InputOpenai.RetryRules.Limit = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Limit)
+					items.InputOpenai.RetryRules.Multiplier = types.Float64PointerValue(itemsItem.InputOpenai.RetryRules.Multiplier)
+					items.InputOpenai.RetryRules.RetryConnectReset = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.RetryConnectReset)
+					items.InputOpenai.RetryRules.RetryConnectTimeout = types.BoolPointerValue(itemsItem.InputOpenai.RetryRules.RetryConnectTimeout)
+					items.InputOpenai.RetryRules.Type = types.StringValue(string(itemsItem.InputOpenai.RetryRules.Type))
+				}
+				items.InputOpenai.SendToRoutes = types.BoolPointerValue(itemsItem.InputOpenai.SendToRoutes)
+				items.InputOpenai.Streamtags = make([]types.String, 0, len(itemsItem.InputOpenai.Streamtags))
+				for _, v := range itemsItem.InputOpenai.Streamtags {
+					items.InputOpenai.Streamtags = append(items.InputOpenai.Streamtags, types.StringValue(v))
+				}
+				items.InputOpenai.TextSecret = types.StringValue(itemsItem.InputOpenai.TextSecret)
+				items.InputOpenai.TTL = types.StringPointerValue(itemsItem.InputOpenai.TTL)
+				items.InputOpenai.Type = types.StringValue(string(itemsItem.InputOpenai.Type))
 			}
 			if itemsItem.InputPrometheus != nil {
 				items.InputPrometheus = &tfTypes.InputPrometheus{}
@@ -6741,6 +6742,9 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 			}
 			if itemsItem.InputSyslog != nil {
 				items.InputSyslog = &tfTypes.InputSyslog{}
+				if items.InputSyslog == nil {
+					items.InputSyslog = &tfTypes.InputSyslog{}
+				}
 				if itemsItem.InputSyslog.InputSyslogSyslog1 != nil {
 					items.InputSyslog.InputSyslogSyslog1 = &tfTypes.InputSyslogSyslog1{}
 					items.InputSyslog.InputSyslogSyslog1.TemplateHost = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TemplateHost)
@@ -7723,17 +7727,98 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputWef.Type = types.StringValue(string(itemsItem.InputWef.Type))
 			}
-			if itemsItem.InputWindowsMetrics != nil {
-				items.InputWindowsMetrics = &tfTypes.InputWindowsMetrics{}
-				items.InputWindowsMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+			if itemsItem.InputWinEventLogs != nil {
+				items.InputWinEventLogs = &tfTypes.InputWinEventLogs{}
+				items.InputWinEventLogs.BatchSize = types.Float64PointerValue(itemsItem.InputWinEventLogs.BatchSize)
+				items.InputWinEventLogs.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem59 := range itemsItem.InputWindowsMetrics.Connections {
+				for _, connectionsItem59 := range itemsItem.InputWinEventLogs.Connections {
 					var connections59 tfTypes.ItemsTypeConnectionsOptional
 
 					connections59.Output = types.StringPointerValue(connectionsItem59.Output)
 					connections59.Pipeline = types.StringPointerValue(connectionsItem59.Pipeline)
 
-					items.InputWindowsMetrics.Connections = append(items.InputWindowsMetrics.Connections, connections59)
+					items.InputWinEventLogs.Connections = append(items.InputWinEventLogs.Connections, connections59)
+				}
+				items.InputWinEventLogs.Description = types.StringPointerValue(itemsItem.InputWinEventLogs.Description)
+				items.InputWinEventLogs.Disabled = types.BoolPointerValue(itemsItem.InputWinEventLogs.Disabled)
+				items.InputWinEventLogs.DisableJSONRendering = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableJSONRendering)
+				items.InputWinEventLogs.DisableNativeModule = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableNativeModule)
+				items.InputWinEventLogs.DisableXMLRendering = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableXMLRendering)
+				items.InputWinEventLogs.Environment = types.StringPointerValue(itemsItem.InputWinEventLogs.Environment)
+				if itemsItem.InputWinEventLogs.EventFormat != nil {
+					items.InputWinEventLogs.EventFormat = types.StringValue(string(*itemsItem.InputWinEventLogs.EventFormat))
+				} else {
+					items.InputWinEventLogs.EventFormat = types.StringNull()
+				}
+				items.InputWinEventLogs.ID = types.StringPointerValue(itemsItem.InputWinEventLogs.ID)
+				items.InputWinEventLogs.Interval = types.Float64PointerValue(itemsItem.InputWinEventLogs.Interval)
+				items.InputWinEventLogs.LogNames = make([]types.String, 0, len(itemsItem.InputWinEventLogs.LogNames))
+				for _, v := range itemsItem.InputWinEventLogs.LogNames {
+					items.InputWinEventLogs.LogNames = append(items.InputWinEventLogs.LogNames, types.StringValue(v))
+				}
+				items.InputWinEventLogs.MaxEventBytes = types.Float64PointerValue(itemsItem.InputWinEventLogs.MaxEventBytes)
+				items.InputWinEventLogs.Metadata = []tfTypes.ItemsTypeMetadata{}
+
+				for _, metadataItem65 := range itemsItem.InputWinEventLogs.Metadata {
+					var metadata65 tfTypes.ItemsTypeMetadata
+
+					metadata65.Name = types.StringValue(metadataItem65.Name)
+					metadata65.Value = types.StringValue(metadataItem65.Value)
+
+					items.InputWinEventLogs.Metadata = append(items.InputWinEventLogs.Metadata, metadata65)
+				}
+				items.InputWinEventLogs.Pipeline = types.StringPointerValue(itemsItem.InputWinEventLogs.Pipeline)
+				if itemsItem.InputWinEventLogs.Pq == nil {
+					items.InputWinEventLogs.Pq = nil
+				} else {
+					items.InputWinEventLogs.Pq = &tfTypes.PqType{}
+					items.InputWinEventLogs.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputWinEventLogs.Pq.CommitFrequency)
+					if itemsItem.InputWinEventLogs.Pq.Compress != nil {
+						items.InputWinEventLogs.Pq.Compress = types.StringValue(string(*itemsItem.InputWinEventLogs.Pq.Compress))
+					} else {
+						items.InputWinEventLogs.Pq.Compress = types.StringNull()
+					}
+					items.InputWinEventLogs.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputWinEventLogs.Pq.MaxBufferSize)
+					items.InputWinEventLogs.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxBufferSizeBytes)
+					items.InputWinEventLogs.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxFileSize)
+					items.InputWinEventLogs.Pq.MaxSize = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxSize)
+					if itemsItem.InputWinEventLogs.Pq.Mode != nil {
+						items.InputWinEventLogs.Pq.Mode = types.StringValue(string(*itemsItem.InputWinEventLogs.Pq.Mode))
+					} else {
+						items.InputWinEventLogs.Pq.Mode = types.StringNull()
+					}
+					items.InputWinEventLogs.Pq.Path = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.Path)
+					if itemsItem.InputWinEventLogs.Pq.PqControls == nil {
+						items.InputWinEventLogs.Pq.PqControls = nil
+					} else {
+						items.InputWinEventLogs.Pq.PqControls = &tfTypes.PqTypePqControls{}
+					}
+				}
+				items.InputWinEventLogs.PqEnabled = types.BoolPointerValue(itemsItem.InputWinEventLogs.PqEnabled)
+				if itemsItem.InputWinEventLogs.ReadMode != nil {
+					items.InputWinEventLogs.ReadMode = types.StringValue(string(*itemsItem.InputWinEventLogs.ReadMode))
+				} else {
+					items.InputWinEventLogs.ReadMode = types.StringNull()
+				}
+				items.InputWinEventLogs.SendToRoutes = types.BoolPointerValue(itemsItem.InputWinEventLogs.SendToRoutes)
+				items.InputWinEventLogs.Streamtags = make([]types.String, 0, len(itemsItem.InputWinEventLogs.Streamtags))
+				for _, v := range itemsItem.InputWinEventLogs.Streamtags {
+					items.InputWinEventLogs.Streamtags = append(items.InputWinEventLogs.Streamtags, types.StringValue(v))
+				}
+				items.InputWinEventLogs.Type = types.StringValue(string(itemsItem.InputWinEventLogs.Type))
+			}
+			if itemsItem.InputWindowsMetrics != nil {
+				items.InputWindowsMetrics = &tfTypes.InputWindowsMetrics{}
+				items.InputWindowsMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+
+				for _, connectionsItem60 := range itemsItem.InputWindowsMetrics.Connections {
+					var connections60 tfTypes.ItemsTypeConnectionsOptional
+
+					connections60.Output = types.StringPointerValue(connectionsItem60.Output)
+					connections60.Pipeline = types.StringPointerValue(connectionsItem60.Pipeline)
+
+					items.InputWindowsMetrics.Connections = append(items.InputWindowsMetrics.Connections, connections60)
 				}
 				items.InputWindowsMetrics.Description = types.StringPointerValue(itemsItem.InputWindowsMetrics.Description)
 				items.InputWindowsMetrics.Disabled = types.BoolPointerValue(itemsItem.InputWindowsMetrics.Disabled)
@@ -7826,13 +7911,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWindowsMetrics.Interval = types.Float64PointerValue(itemsItem.InputWindowsMetrics.Interval)
 				items.InputWindowsMetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem65 := range itemsItem.InputWindowsMetrics.Metadata {
-					var metadata65 tfTypes.ItemsTypeMetadata
+				for _, metadataItem66 := range itemsItem.InputWindowsMetrics.Metadata {
+					var metadata66 tfTypes.ItemsTypeMetadata
 
-					metadata65.Name = types.StringValue(metadataItem65.Name)
-					metadata65.Value = types.StringValue(metadataItem65.Value)
+					metadata66.Name = types.StringValue(metadataItem66.Name)
+					metadata66.Value = types.StringValue(metadataItem66.Value)
 
-					items.InputWindowsMetrics.Metadata = append(items.InputWindowsMetrics.Metadata, metadata65)
+					items.InputWindowsMetrics.Metadata = append(items.InputWindowsMetrics.Metadata, metadata66)
 				}
 				if itemsItem.InputWindowsMetrics.Persistence == nil {
 					items.InputWindowsMetrics.Persistence = nil
@@ -7899,87 +7984,6 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					items.InputWindowsMetrics.Streamtags = append(items.InputWindowsMetrics.Streamtags, types.StringValue(v))
 				}
 				items.InputWindowsMetrics.Type = types.StringValue(string(itemsItem.InputWindowsMetrics.Type))
-			}
-			if itemsItem.InputWinEventLogs != nil {
-				items.InputWinEventLogs = &tfTypes.InputWinEventLogs{}
-				items.InputWinEventLogs.BatchSize = types.Float64PointerValue(itemsItem.InputWinEventLogs.BatchSize)
-				items.InputWinEventLogs.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
-
-				for _, connectionsItem60 := range itemsItem.InputWinEventLogs.Connections {
-					var connections60 tfTypes.ItemsTypeConnectionsOptional
-
-					connections60.Output = types.StringPointerValue(connectionsItem60.Output)
-					connections60.Pipeline = types.StringPointerValue(connectionsItem60.Pipeline)
-
-					items.InputWinEventLogs.Connections = append(items.InputWinEventLogs.Connections, connections60)
-				}
-				items.InputWinEventLogs.Description = types.StringPointerValue(itemsItem.InputWinEventLogs.Description)
-				items.InputWinEventLogs.Disabled = types.BoolPointerValue(itemsItem.InputWinEventLogs.Disabled)
-				items.InputWinEventLogs.DisableJSONRendering = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableJSONRendering)
-				items.InputWinEventLogs.DisableNativeModule = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableNativeModule)
-				items.InputWinEventLogs.DisableXMLRendering = types.BoolPointerValue(itemsItem.InputWinEventLogs.DisableXMLRendering)
-				items.InputWinEventLogs.Environment = types.StringPointerValue(itemsItem.InputWinEventLogs.Environment)
-				if itemsItem.InputWinEventLogs.EventFormat != nil {
-					items.InputWinEventLogs.EventFormat = types.StringValue(string(*itemsItem.InputWinEventLogs.EventFormat))
-				} else {
-					items.InputWinEventLogs.EventFormat = types.StringNull()
-				}
-				items.InputWinEventLogs.ID = types.StringPointerValue(itemsItem.InputWinEventLogs.ID)
-				items.InputWinEventLogs.Interval = types.Float64PointerValue(itemsItem.InputWinEventLogs.Interval)
-				items.InputWinEventLogs.LogNames = make([]types.String, 0, len(itemsItem.InputWinEventLogs.LogNames))
-				for _, v := range itemsItem.InputWinEventLogs.LogNames {
-					items.InputWinEventLogs.LogNames = append(items.InputWinEventLogs.LogNames, types.StringValue(v))
-				}
-				items.InputWinEventLogs.MaxEventBytes = types.Float64PointerValue(itemsItem.InputWinEventLogs.MaxEventBytes)
-				items.InputWinEventLogs.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-				for _, metadataItem66 := range itemsItem.InputWinEventLogs.Metadata {
-					var metadata66 tfTypes.ItemsTypeMetadata
-
-					metadata66.Name = types.StringValue(metadataItem66.Name)
-					metadata66.Value = types.StringValue(metadataItem66.Value)
-
-					items.InputWinEventLogs.Metadata = append(items.InputWinEventLogs.Metadata, metadata66)
-				}
-				items.InputWinEventLogs.Pipeline = types.StringPointerValue(itemsItem.InputWinEventLogs.Pipeline)
-				if itemsItem.InputWinEventLogs.Pq == nil {
-					items.InputWinEventLogs.Pq = nil
-				} else {
-					items.InputWinEventLogs.Pq = &tfTypes.PqType{}
-					items.InputWinEventLogs.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputWinEventLogs.Pq.CommitFrequency)
-					if itemsItem.InputWinEventLogs.Pq.Compress != nil {
-						items.InputWinEventLogs.Pq.Compress = types.StringValue(string(*itemsItem.InputWinEventLogs.Pq.Compress))
-					} else {
-						items.InputWinEventLogs.Pq.Compress = types.StringNull()
-					}
-					items.InputWinEventLogs.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputWinEventLogs.Pq.MaxBufferSize)
-					items.InputWinEventLogs.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxBufferSizeBytes)
-					items.InputWinEventLogs.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxFileSize)
-					items.InputWinEventLogs.Pq.MaxSize = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.MaxSize)
-					if itemsItem.InputWinEventLogs.Pq.Mode != nil {
-						items.InputWinEventLogs.Pq.Mode = types.StringValue(string(*itemsItem.InputWinEventLogs.Pq.Mode))
-					} else {
-						items.InputWinEventLogs.Pq.Mode = types.StringNull()
-					}
-					items.InputWinEventLogs.Pq.Path = types.StringPointerValue(itemsItem.InputWinEventLogs.Pq.Path)
-					if itemsItem.InputWinEventLogs.Pq.PqControls == nil {
-						items.InputWinEventLogs.Pq.PqControls = nil
-					} else {
-						items.InputWinEventLogs.Pq.PqControls = &tfTypes.PqTypePqControls{}
-					}
-				}
-				items.InputWinEventLogs.PqEnabled = types.BoolPointerValue(itemsItem.InputWinEventLogs.PqEnabled)
-				if itemsItem.InputWinEventLogs.ReadMode != nil {
-					items.InputWinEventLogs.ReadMode = types.StringValue(string(*itemsItem.InputWinEventLogs.ReadMode))
-				} else {
-					items.InputWinEventLogs.ReadMode = types.StringNull()
-				}
-				items.InputWinEventLogs.SendToRoutes = types.BoolPointerValue(itemsItem.InputWinEventLogs.SendToRoutes)
-				items.InputWinEventLogs.Streamtags = make([]types.String, 0, len(itemsItem.InputWinEventLogs.Streamtags))
-				for _, v := range itemsItem.InputWinEventLogs.Streamtags {
-					items.InputWinEventLogs.Streamtags = append(items.InputWinEventLogs.Streamtags, types.StringValue(v))
-				}
-				items.InputWinEventLogs.Type = types.StringValue(string(itemsItem.InputWinEventLogs.Type))
 			}
 			if itemsItem.InputWiz != nil {
 				items.InputWiz = &tfTypes.InputWiz{}
@@ -8411,7 +8415,7 @@ func (r *PackSourceDataSourceModel) ToOperationsGetSystemInputsByPackAndIDReques
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

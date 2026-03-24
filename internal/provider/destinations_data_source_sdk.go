@@ -3814,6 +3814,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputGrafanaCloud != nil {
 				items.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+				if items.OutputGrafanaCloud == nil {
+					items.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+				}
 				if itemsItem.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 != nil {
 					items.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 = &tfTypes.OutputGrafanaCloudGrafanaCloud1{}
 					items.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL = types.StringPointerValue(itemsItem.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL)

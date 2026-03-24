@@ -25,7 +25,7 @@ data "criblio_appscope_config" "my_appscopeconfig" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to GET
+- `id` (String) Unique ID for this Appscope config
 
 ### Read-Only
 

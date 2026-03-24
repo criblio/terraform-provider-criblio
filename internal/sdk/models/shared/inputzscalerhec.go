@@ -51,7 +51,7 @@ func (i InputZscalerHecAuthToken) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputZscalerHecAuthToken) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"token"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -180,7 +180,7 @@ func (i InputZscalerHec) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputZscalerHec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "host", "port", "hecAPI"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

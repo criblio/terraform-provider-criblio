@@ -312,7 +312,7 @@ func (r RunnableJobScheduledSearch) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RunnableJobScheduledSearch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"type", "savedQueryId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

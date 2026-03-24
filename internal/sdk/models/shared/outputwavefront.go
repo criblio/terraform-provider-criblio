@@ -127,7 +127,7 @@ func (o OutputWavefront) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputWavefront) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "domain"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
