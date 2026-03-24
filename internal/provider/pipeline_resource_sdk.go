@@ -83,52 +83,32 @@ func (r *PipelineResourceModel) RefreshFromSharedPipeline(ctx context.Context, r
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		// Convert conf to JSON
-		confBytes, err := json.Marshal(functionsItem.Conf)
-		if err != nil {
-			diags.AddError("Failed to marshal function conf", err.Error())
-			return diags
+		if len(functionsItem.Conf) > 0 {
+			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
+			for key, value := range functionsItem.Conf {
+				result, _ := json.Marshal(value)
+				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+			}
 		}
-		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
-		// Use schema default values when API returns nil so plan doesn't show perpetual diff for optional+computed attributes
-		if functionsItem.Description != nil {
-			functions.Description = types.StringValue(*functionsItem.Description)
-		} else {
-			functions.Description = types.StringValue("")
-		}
-		if functionsItem.Disabled != nil {
-			functions.Disabled = types.BoolValue(*functionsItem.Disabled)
-		} else {
-			functions.Disabled = types.BoolValue(false)
-		}
-		if functionsItem.Filter != nil {
-			functions.Filter = types.StringValue(*functionsItem.Filter)
-		} else {
-			functions.Filter = types.StringValue("true")
-		}
-		if functionsItem.Final != nil {
-			functions.Final = types.BoolValue(*functionsItem.Final)
-		} else {
-			functions.Final = types.BoolValue(false)
-		}
-		if functionsItem.GroupID != nil {
-			functions.GroupID = types.StringValue(*functionsItem.GroupID)
-		} else {
-			functions.GroupID = types.StringValue("")
-		}
+		functions.Description = types.StringPointerValue(functionsItem.Description)
+		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+		functions.Filter = types.StringPointerValue(functionsItem.Filter)
+		functions.Final = types.BoolPointerValue(functionsItem.Final)
+		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 		functions.ID = types.StringValue(functionsItem.ID)
 
 		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
-	// Always set Groups so state has a concrete value (empty map when API returns none), avoiding "(known after apply)" diff
-	r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-	for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-		var pipelineGroupsResult tfTypes.PipelineGroups
-		pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-		pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-		pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+	if len(resp.Conf.Groups) > 0 {
+		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+			var pipelineGroupsResult tfTypes.PipelineGroups
+			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
 
-		r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+		}
 	}
 	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
 	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
@@ -277,16 +257,11 @@ func (r *PipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shared.P
 		} else {
 			final = nil
 		}
-		// Parse the JSON conf to a map for flexible function configuration
-		var conf1 map[string]interface{}
-		if !r.Conf.Functions[functionsIndex].Conf.IsUnknown() && !r.Conf.Functions[functionsIndex].Conf.IsNull() {
-			confJSON := r.Conf.Functions[functionsIndex].Conf.ValueString()
-			if err := json.Unmarshal([]byte(confJSON), &conf1); err != nil {
-				diags.AddError("Failed to parse function conf", err.Error())
-				return nil, diags
-			}
-		} else {
-			conf1 = make(map[string]interface{})
+		conf1 := make(map[string]interface{})
+		for confKey := range r.Conf.Functions[functionsIndex].Conf {
+			var confInst interface{}
+			_ = json.Unmarshal([]byte(r.Conf.Functions[functionsIndex].Conf[confKey].ValueString()), &confInst)
+			conf1[confKey] = confInst
 		}
 		groupID := new(string)
 		if !r.Conf.Functions[functionsIndex].GroupID.IsUnknown() && !r.Conf.Functions[functionsIndex].GroupID.IsNull() {

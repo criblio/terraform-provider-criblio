@@ -13,8 +13,8 @@ type CreateSystemInputsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to create pack source
-	ID    string       `queryParam:"style=form,explode=true,name=id"`
-	Input shared.Input `request:"mediaType=application/json"`
+	ID    string             `queryParam:"style=form,explode=true,name=id"`
+	Input shared.InputUnion2 `request:"mediaType=application/json"`
 }
 
 func (c *CreateSystemInputsByPackRequest) GetPack() string {
@@ -38,19 +38,19 @@ func (c *CreateSystemInputsByPackRequest) GetID() string {
 	return c.ID
 }
 
-func (c *CreateSystemInputsByPackRequest) GetInput() shared.Input {
+func (c *CreateSystemInputsByPackRequest) GetInput() shared.InputUnion2 {
 	if c == nil {
-		return shared.Input{}
+		return shared.InputUnion2{}
 	}
 	return c.Input
 }
 
 // CreateSystemInputsByPackResponseBody - a list of Input objects
 type CreateSystemInputsByPackResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (c *CreateSystemInputsByPackResponseBody) GetItems() []shared.Input {
+func (c *CreateSystemInputsByPackResponseBody) GetItems() []shared.InputUnion1 {
 	if c == nil {
 		return nil
 	}

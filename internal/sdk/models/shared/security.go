@@ -3,18 +3,10 @@
 package shared
 
 type Security struct {
-	BearerAuth     *string            `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 	ClientOauth    *SchemeClientOauth `security:"scheme,type=oauth2,subtype=client_credentials"`
 	OrganizationID *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 	WorkspaceID    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
 	CloudDomain    *string            `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
-}
-
-func (s *Security) GetBearerAuth() *string {
-	if s == nil {
-		return nil
-	}
-	return s.BearerAuth
 }
 
 func (s *Security) GetClientOauth() *SchemeClientOauth {

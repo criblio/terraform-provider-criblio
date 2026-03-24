@@ -7,7 +7,7 @@ import (
 )
 
 type InputSystemMetrics struct {
-	Connections  []InputSystemMetricsConnection `tfsdk:"connections"`
+	Connections  []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Container    *InputSystemMetricsContainer   `tfsdk:"container"`
 	Description  types.String                   `tfsdk:"description"`
 	Disabled     types.Bool                     `tfsdk:"disabled"`
@@ -15,12 +15,12 @@ type InputSystemMetrics struct {
 	Host         *InputSystemMetricsHost        `tfsdk:"host"`
 	ID           types.String                   `tfsdk:"id"`
 	Interval     types.Float64                  `tfsdk:"interval"`
-	Metadata     []InputSystemMetricsMetadatum  `tfsdk:"metadata"`
+	Metadata     []ItemsTypeMetadata            `tfsdk:"metadata"`
 	Persistence  *InputSystemMetricsPersistence `tfsdk:"persistence"`
 	Pipeline     types.String                   `tfsdk:"pipeline"`
-	Pq           *InputSystemMetricsPq          `tfsdk:"pq"`
+	Pq           *PqType                        `tfsdk:"pq"`
 	PqEnabled    types.Bool                     `tfsdk:"pq_enabled"`
-	Process      *InputSystemMetricsProcess     `tfsdk:"process"`
+	Process      *ProcessType                   `tfsdk:"process"`
 	SendToRoutes types.Bool                     `tfsdk:"send_to_routes"`
 	Streamtags   []types.String                 `tfsdk:"streamtags"`
 	Type         types.String                   `tfsdk:"type"`

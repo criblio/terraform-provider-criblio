@@ -31,504 +31,6 @@ func (e *OutputCriblHTTPType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputCriblHTTPMinimumTLSVersion string
-
-const (
-	OutputCriblHTTPMinimumTLSVersionTlSv1  OutputCriblHTTPMinimumTLSVersion = "TLSv1"
-	OutputCriblHTTPMinimumTLSVersionTlSv11 OutputCriblHTTPMinimumTLSVersion = "TLSv1.1"
-	OutputCriblHTTPMinimumTLSVersionTlSv12 OutputCriblHTTPMinimumTLSVersion = "TLSv1.2"
-	OutputCriblHTTPMinimumTLSVersionTlSv13 OutputCriblHTTPMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e OutputCriblHTTPMinimumTLSVersion) ToPointer() *OutputCriblHTTPMinimumTLSVersion {
-	return &e
-}
-func (e *OutputCriblHTTPMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = OutputCriblHTTPMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPMinimumTLSVersion: %v", v)
-	}
-}
-
-type OutputCriblHTTPMaximumTLSVersion string
-
-const (
-	OutputCriblHTTPMaximumTLSVersionTlSv1  OutputCriblHTTPMaximumTLSVersion = "TLSv1"
-	OutputCriblHTTPMaximumTLSVersionTlSv11 OutputCriblHTTPMaximumTLSVersion = "TLSv1.1"
-	OutputCriblHTTPMaximumTLSVersionTlSv12 OutputCriblHTTPMaximumTLSVersion = "TLSv1.2"
-	OutputCriblHTTPMaximumTLSVersionTlSv13 OutputCriblHTTPMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e OutputCriblHTTPMaximumTLSVersion) ToPointer() *OutputCriblHTTPMaximumTLSVersion {
-	return &e
-}
-func (e *OutputCriblHTTPMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = OutputCriblHTTPMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPMaximumTLSVersion: %v", v)
-	}
-}
-
-type OutputCriblHTTPTLSSettingsClientSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another
-	//                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
-	// Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
-	Servername *string `json:"servername,omitempty"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string                           `json:"passphrase,omitempty"`
-	MinVersion *OutputCriblHTTPMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion *OutputCriblHTTPMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (o OutputCriblHTTPTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RejectUnauthorized
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Servername
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CertificateName
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CaPath
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.PrivKeyPath
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CertPath
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Passphrase
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetMinVersion() *OutputCriblHTTPMinimumTLSVersion {
-	if o == nil {
-		return nil
-	}
-	return o.MinVersion
-}
-
-func (o *OutputCriblHTTPTLSSettingsClientSide) GetMaxVersion() *OutputCriblHTTPMaximumTLSVersion {
-	if o == nil {
-		return nil
-	}
-	return o.MaxVersion
-}
-
-// OutputCriblHTTPCompression - Codec to use to compress the data before sending
-type OutputCriblHTTPCompression string
-
-const (
-	OutputCriblHTTPCompressionNone OutputCriblHTTPCompression = "none"
-	OutputCriblHTTPCompressionGzip OutputCriblHTTPCompression = "gzip"
-)
-
-func (e OutputCriblHTTPCompression) ToPointer() *OutputCriblHTTPCompression {
-	return &e
-}
-func (e *OutputCriblHTTPCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputCriblHTTPCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPCompression: %v", v)
-	}
-}
-
-type OutputCriblHTTPExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputCriblHTTPExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCriblHTTPExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCriblHTTPExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputCriblHTTPExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputCriblHTTPFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputCriblHTTPFailedRequestLoggingMode string
-
-const (
-	OutputCriblHTTPFailedRequestLoggingModePayload           OutputCriblHTTPFailedRequestLoggingMode = "payload"
-	OutputCriblHTTPFailedRequestLoggingModePayloadAndHeaders OutputCriblHTTPFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputCriblHTTPFailedRequestLoggingModeNone              OutputCriblHTTPFailedRequestLoggingMode = "none"
-)
-
-func (e OutputCriblHTTPFailedRequestLoggingMode) ToPointer() *OutputCriblHTTPFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputCriblHTTPFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputCriblHTTPFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPFailedRequestLoggingMode: %v", v)
-	}
-}
-
-type OutputCriblHTTPResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputCriblHTTPResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCriblHTTPResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCriblHTTPResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputCriblHTTPResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputCriblHTTPResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputCriblHTTPResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputCriblHTTPTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputCriblHTTPTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCriblHTTPTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCriblHTTPTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputCriblHTTPTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputCriblHTTPTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputCriblHTTPTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputCriblHTTPBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputCriblHTTPBackpressureBehavior string
-
-const (
-	OutputCriblHTTPBackpressureBehaviorBlock OutputCriblHTTPBackpressureBehavior = "block"
-	OutputCriblHTTPBackpressureBehaviorDrop  OutputCriblHTTPBackpressureBehavior = "drop"
-	OutputCriblHTTPBackpressureBehaviorQueue OutputCriblHTTPBackpressureBehavior = "queue"
-)
-
-func (e OutputCriblHTTPBackpressureBehavior) ToPointer() *OutputCriblHTTPBackpressureBehavior {
-	return &e
-}
-func (e *OutputCriblHTTPBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputCriblHTTPBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPBackpressureBehavior: %v", v)
-	}
-}
-
-type OutputCriblHTTPURL struct {
-	// URL of a Cribl Worker to send events to, such as http://localhost:10200
-	URL string `json:"url"`
-	// Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
-	Weight *float64 `default:"1" json:"weight"`
-}
-
-func (o OutputCriblHTTPURL) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCriblHTTPURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCriblHTTPURL) GetURL() string {
-	if o == nil {
-		return ""
-	}
-	return o.URL
-}
-
-func (o *OutputCriblHTTPURL) GetWeight() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Weight
-}
-
-// OutputCriblHTTPPqCompressCompression - Codec to use to compress the persisted data
-type OutputCriblHTTPPqCompressCompression string
-
-const (
-	OutputCriblHTTPPqCompressCompressionNone OutputCriblHTTPPqCompressCompression = "none"
-	OutputCriblHTTPPqCompressCompressionGzip OutputCriblHTTPPqCompressCompression = "gzip"
-)
-
-func (e OutputCriblHTTPPqCompressCompression) ToPointer() *OutputCriblHTTPPqCompressCompression {
-	return &e
-}
-func (e *OutputCriblHTTPPqCompressCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputCriblHTTPPqCompressCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPPqCompressCompression: %v", v)
-	}
-}
-
-// OutputCriblHTTPQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputCriblHTTPQueueFullBehavior string
-
-const (
-	OutputCriblHTTPQueueFullBehaviorBlock OutputCriblHTTPQueueFullBehavior = "block"
-	OutputCriblHTTPQueueFullBehaviorDrop  OutputCriblHTTPQueueFullBehavior = "drop"
-)
-
-func (e OutputCriblHTTPQueueFullBehavior) ToPointer() *OutputCriblHTTPQueueFullBehavior {
-	return &e
-}
-func (e *OutputCriblHTTPQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputCriblHTTPQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputCriblHTTPMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputCriblHTTPMode string
-
-const (
-	OutputCriblHTTPModeError        OutputCriblHTTPMode = "error"
-	OutputCriblHTTPModeBackpressure OutputCriblHTTPMode = "backpressure"
-	OutputCriblHTTPModeAlways       OutputCriblHTTPMode = "always"
-)
-
-func (e OutputCriblHTTPMode) ToPointer() *OutputCriblHTTPMode {
-	return &e
-}
-func (e *OutputCriblHTTPMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputCriblHTTPMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCriblHTTPMode: %v", v)
-	}
-}
-
 type OutputCriblHTTPPqControls struct {
 }
 
@@ -545,7 +47,7 @@ func (o *OutputCriblHTTPPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputCriblHTTP struct {
 	// Unique ID for this output
-	ID   string              `json:"id"`
+	ID   *string             `json:"id,omitempty"`
 	Type OutputCriblHTTPType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -556,66 +58,82 @@ type OutputCriblHTTP struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// For optimal performance, enable load balancing even if you have one hostname, as it can expand to multiple IPs. If this setting is disabled, consider enabling round-robin DNS.
-	LoadBalanced *bool                                 `default:"true" json:"loadBalanced"`
-	TLS          *OutputCriblHTTPTLSSettingsClientSide `json:"tls,omitempty"`
+	LoadBalanced *bool                                    `json:"loadBalanced,omitempty"`
+	TLS          *TLSSettingsClientSideTypeCaPathCertPath `json:"tls,omitempty"`
 	// The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
-	TokenTTLMinutes *float64 `default:"60" json:"tokenTTLMinutes"`
+	TokenTTLMinutes *float64 `json:"tokenTTLMinutes,omitempty"`
 	// Fields to exclude from the event. By default, all internal fields except `__output` are sent. Example: `cribl_pipe`, `c*`. Wildcards supported.
 	ExcludeFields []string `json:"excludeFields,omitempty"`
 	// Codec to use to compress the data before sending
-	Compression *OutputCriblHTTPCompression `default:"gzip" json:"compression"`
+	Compression *CompressionOptionsGzipNone `json:"compression,omitempty"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputCriblHTTPExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputCriblHTTPFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
+	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+	ThrottleRatePerSec *string `json:"throttleRatePerSec,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputCriblHTTPResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputCriblHTTPTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
+	// Shared secrets to be used by connected environments to authorize connections. These tokens should also be installed in Cribl HTTP Source in Cribl.Cloud.
+	AuthTokens []ItemsTypeAuthTokensTokenSecret `json:"authTokens,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputCriblHTTPBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                              `json:"description,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
 	// URL of a Cribl Worker to send events to, such as http://localhost:10200
 	URL *string `json:"url,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Exclude all IPs of the current host from the list of any resolved hostnames
-	ExcludeSelf *bool                `default:"false" json:"excludeSelf"`
-	Urls        []OutputCriblHTTPURL `json:"urls,omitempty"`
+	ExcludeSelf *bool           `json:"excludeSelf,omitempty"`
+	Urls        []ItemsTypeUrls `json:"urls,omitempty"`
 	// The interval in which to re-resolve any hostnames and pick up destinations from A records
-	DNSResolvePeriodSec *float64 `default:"600" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	// How far back in time to keep traffic stats for load balancing purposes
-	LoadBalanceStatsPeriodSec *float64 `default:"300" json:"loadBalanceStatsPeriodSec"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputCriblHTTPPqCompressCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputCriblHTTPQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	LoadBalanceStatsPeriodSec *float64 `json:"loadBalanceStatsPeriodSec,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputCriblHTTPMode       `default:"error" json:"pqMode"`
-	PqControls *OutputCriblHTTPPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                    `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputCriblHTTPPqControls `json:"pqControls,omitempty"`
+	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputCriblHTTP) MarshalJSON() ([]byte, error) {
@@ -623,15 +141,15 @@ func (o OutputCriblHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCriblHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputCriblHTTP) GetID() string {
+func (o *OutputCriblHTTP) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
@@ -678,7 +196,7 @@ func (o *OutputCriblHTTP) GetLoadBalanced() *bool {
 	return o.LoadBalanced
 }
 
-func (o *OutputCriblHTTP) GetTLS() *OutputCriblHTTPTLSSettingsClientSide {
+func (o *OutputCriblHTTP) GetTLS() *TLSSettingsClientSideTypeCaPathCertPath {
 	if o == nil {
 		return nil
 	}
@@ -699,7 +217,7 @@ func (o *OutputCriblHTTP) GetExcludeFields() []string {
 	return o.ExcludeFields
 }
 
-func (o *OutputCriblHTTP) GetCompression() *OutputCriblHTTPCompression {
+func (o *OutputCriblHTTP) GetCompression() *CompressionOptionsGzipNone {
 	if o == nil {
 		return nil
 	}
@@ -748,14 +266,14 @@ func (o *OutputCriblHTTP) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputCriblHTTP) GetExtraHTTPHeaders() []OutputCriblHTTPExtraHTTPHeader {
+func (o *OutputCriblHTTP) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
 	return o.ExtraHTTPHeaders
 }
 
-func (o *OutputCriblHTTP) GetFailedRequestLoggingMode() *OutputCriblHTTPFailedRequestLoggingMode {
+func (o *OutputCriblHTTP) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -769,14 +287,21 @@ func (o *OutputCriblHTTP) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputCriblHTTP) GetResponseRetrySettings() []OutputCriblHTTPResponseRetrySetting {
+func (o *OutputCriblHTTP) GetThrottleRatePerSec() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ThrottleRatePerSec
+}
+
+func (o *OutputCriblHTTP) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputCriblHTTP) GetTimeoutRetrySettings() *OutputCriblHTTPTimeoutRetrySettings {
+func (o *OutputCriblHTTP) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -790,7 +315,14 @@ func (o *OutputCriblHTTP) GetResponseHonorRetryAfterHeader() *bool {
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputCriblHTTP) GetOnBackpressure() *OutputCriblHTTPBackpressureBehavior {
+func (o *OutputCriblHTTP) GetAuthTokens() []ItemsTypeAuthTokensTokenSecret {
+	if o == nil {
+		return nil
+	}
+	return o.AuthTokens
+}
+
+func (o *OutputCriblHTTP) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -825,7 +357,7 @@ func (o *OutputCriblHTTP) GetExcludeSelf() *bool {
 	return o.ExcludeSelf
 }
 
-func (o *OutputCriblHTTP) GetUrls() []OutputCriblHTTPURL {
+func (o *OutputCriblHTTP) GetUrls() []ItemsTypeUrls {
 	if o == nil {
 		return nil
 	}
@@ -844,6 +376,41 @@ func (o *OutputCriblHTTP) GetLoadBalanceStatsPeriodSec() *float64 {
 		return nil
 	}
 	return o.LoadBalanceStatsPeriodSec
+}
+
+func (o *OutputCriblHTTP) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputCriblHTTP) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputCriblHTTP) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputCriblHTTP) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputCriblHTTP) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputCriblHTTP) GetPqMaxFileSize() *string {
@@ -867,25 +434,25 @@ func (o *OutputCriblHTTP) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputCriblHTTP) GetPqCompress() *OutputCriblHTTPPqCompressCompression {
+func (o *OutputCriblHTTP) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputCriblHTTP) GetPqOnBackpressure() *OutputCriblHTTPQueueFullBehavior {
+func (o *OutputCriblHTTP) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputCriblHTTP) GetPqMode() *OutputCriblHTTPMode {
+func (o *OutputCriblHTTP) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputCriblHTTP) GetPqControls() *OutputCriblHTTPPqControls {
@@ -893,4 +460,11 @@ func (o *OutputCriblHTTP) GetPqControls() *OutputCriblHTTPPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputCriblHTTP) GetTemplateURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateURL
 }

@@ -31,167 +31,6 @@ func (e *InputJournalFilesType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputJournalFilesConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputJournalFilesConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputJournalFilesConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputJournalFilesConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputJournalFilesConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputJournalFilesMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputJournalFilesMode string
-
-const (
-	InputJournalFilesModeSmart  InputJournalFilesMode = "smart"
-	InputJournalFilesModeAlways InputJournalFilesMode = "always"
-)
-
-func (e InputJournalFilesMode) ToPointer() *InputJournalFilesMode {
-	return &e
-}
-func (e *InputJournalFilesMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputJournalFilesMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputJournalFilesMode: %v", v)
-	}
-}
-
-// InputJournalFilesCompression - Codec to use to compress the persisted data
-type InputJournalFilesCompression string
-
-const (
-	InputJournalFilesCompressionNone InputJournalFilesCompression = "none"
-	InputJournalFilesCompressionGzip InputJournalFilesCompression = "gzip"
-)
-
-func (e InputJournalFilesCompression) ToPointer() *InputJournalFilesCompression {
-	return &e
-}
-func (e *InputJournalFilesCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputJournalFilesCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputJournalFilesCompression: %v", v)
-	}
-}
-
-type InputJournalFilesPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputJournalFilesMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputJournalFilesCompression `default:"none" json:"compress"`
-}
-
-func (i InputJournalFilesPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputJournalFilesPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputJournalFilesPq) GetMode() *InputJournalFilesMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputJournalFilesPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputJournalFilesPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputJournalFilesPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputJournalFilesPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputJournalFilesPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputJournalFilesPq) GetCompress() *InputJournalFilesCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
 type InputJournalFilesRule struct {
 	// JavaScript expression applied to Journal objects. Return 'true' to include it.
 	Filter string `json:"filter"`
@@ -224,70 +63,39 @@ func (i *InputJournalFilesRule) GetDescription() *string {
 	return i.Description
 }
 
-type InputJournalFilesMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputJournalFilesMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputJournalFilesMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputJournalFilesMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputJournalFilesMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputJournalFiles struct {
 	// Unique ID for this input
-	ID       *string                `json:"id,omitempty"`
-	Type     *InputJournalFilesType `json:"type,omitempty"`
-	Disabled *bool                  `default:"false" json:"disabled"`
+	ID       *string               `json:"id,omitempty"`
+	Type     InputJournalFilesType `json:"type"`
+	Disabled *bool                 `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputJournalFilesConnection `json:"connections,omitempty"`
-	Pq          *InputJournalFilesPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID.
 	Path string `json:"path"`
 	// Time, in seconds, between scanning for journals.
-	Interval *float64 `default:"10" json:"interval"`
+	Interval *float64 `json:"interval,omitempty"`
 	// The full path of discovered journals are matched against this wildcard list.
-	Journals []string `json:"journals,omitempty"`
+	Journals []string `json:"journals"`
 	// Add rules to decide which journal objects to allow. Events are generated if no rules are given or if all the rules' expressions evaluate to true.
 	Rules []InputJournalFilesRule `json:"rules,omitempty"`
 	// Skip log messages that are not part of the current boot session.
-	CurrentBoot *bool `default:"false" json:"currentBoot"`
+	CurrentBoot *bool `json:"currentBoot,omitempty"`
 	// The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.
 	MaxAgeDur *string `json:"maxAgeDur,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputJournalFilesMetadatum `json:"metadata,omitempty"`
-	Description *string                      `json:"description,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
 }
 
 func (i InputJournalFiles) MarshalJSON() ([]byte, error) {
@@ -295,7 +103,7 @@ func (i InputJournalFiles) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputJournalFiles) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "path", "journals"}); err != nil {
 		return err
 	}
 	return nil
@@ -308,9 +116,9 @@ func (i *InputJournalFiles) GetID() *string {
 	return i.ID
 }
 
-func (i *InputJournalFiles) GetType() *InputJournalFilesType {
+func (i *InputJournalFiles) GetType() InputJournalFilesType {
 	if i == nil {
-		return nil
+		return InputJournalFilesType("")
 	}
 	return i.Type
 }
@@ -357,14 +165,14 @@ func (i *InputJournalFiles) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputJournalFiles) GetConnections() []InputJournalFilesConnection {
+func (i *InputJournalFiles) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputJournalFiles) GetPq() *InputJournalFilesPq {
+func (i *InputJournalFiles) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -387,7 +195,7 @@ func (i *InputJournalFiles) GetInterval() *float64 {
 
 func (i *InputJournalFiles) GetJournals() []string {
 	if i == nil {
-		return nil
+		return []string{}
 	}
 	return i.Journals
 }
@@ -413,7 +221,7 @@ func (i *InputJournalFiles) GetMaxAgeDur() *string {
 	return i.MaxAgeDur
 }
 
-func (i *InputJournalFiles) GetMetadata() []InputJournalFilesMetadatum {
+func (i *InputJournalFiles) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}

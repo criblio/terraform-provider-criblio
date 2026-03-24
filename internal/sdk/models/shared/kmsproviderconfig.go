@@ -8,7 +8,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type KMSProviderConfigAuth2 struct {
+type Auth2 struct {
 	AssumeRoleArn           *string `json:"assumeRoleArn,omitempty"`
 	AssumeRoleExternalID    *string `json:"assumeRoleExternalId,omitempty"`
 	AwsAPIKey               *string `json:"awsApiKey,omitempty"`
@@ -17,60 +17,60 @@ type KMSProviderConfigAuth2 struct {
 	EnableAssumeRole        *bool   `json:"enableAssumeRole,omitempty"`
 }
 
-func (k KMSProviderConfigAuth2) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
+func (a Auth2) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
 }
 
-func (k *KMSProviderConfigAuth2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+func (a *Auth2) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (k *KMSProviderConfigAuth2) GetAssumeRoleArn() *string {
-	if k == nil {
+func (a *Auth2) GetAssumeRoleArn() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AssumeRoleArn
+	return a.AssumeRoleArn
 }
 
-func (k *KMSProviderConfigAuth2) GetAssumeRoleExternalID() *string {
-	if k == nil {
+func (a *Auth2) GetAssumeRoleExternalID() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AssumeRoleExternalID
+	return a.AssumeRoleExternalID
 }
 
-func (k *KMSProviderConfigAuth2) GetAwsAPIKey() *string {
-	if k == nil {
+func (a *Auth2) GetAwsAPIKey() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsAPIKey
+	return a.AwsAPIKey
 }
 
-func (k *KMSProviderConfigAuth2) GetAwsAuthenticationMethod() *string {
-	if k == nil {
+func (a *Auth2) GetAwsAuthenticationMethod() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsAuthenticationMethod
+	return a.AwsAuthenticationMethod
 }
 
-func (k *KMSProviderConfigAuth2) GetAwsSecretKey() *string {
-	if k == nil {
+func (a *Auth2) GetAwsSecretKey() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsSecretKey
+	return a.AwsSecretKey
 }
 
-func (k *KMSProviderConfigAuth2) GetEnableAssumeRole() *bool {
-	if k == nil {
+func (a *Auth2) GetEnableAssumeRole() *bool {
+	if a == nil {
 		return nil
 	}
-	return k.EnableAssumeRole
+	return a.EnableAssumeRole
 }
 
-type KMSProviderConfigAuth1 struct {
+type Auth1 struct {
 	AssumeRoleArn           *string      `json:"assumeRoleArn,omitempty"`
 	AssumeRoleExternalID    *string      `json:"assumeRoleExternalId,omitempty"`
 	AwsAPIKey               *string      `json:"awsApiKey,omitempty"`
@@ -83,178 +83,178 @@ type KMSProviderConfigAuth1 struct {
 	VaultRole               *string      `json:"vaultRole,omitempty"`
 }
 
-func (k KMSProviderConfigAuth1) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
+func (a Auth1) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
 }
 
-func (k *KMSProviderConfigAuth1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"provider", "vaultAWSIAMServerID"}); err != nil {
+func (a *Auth1) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"provider", "vaultAWSIAMServerID"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (k *KMSProviderConfigAuth1) GetAssumeRoleArn() *string {
-	if k == nil {
+func (a *Auth1) GetAssumeRoleArn() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AssumeRoleArn
+	return a.AssumeRoleArn
 }
 
-func (k *KMSProviderConfigAuth1) GetAssumeRoleExternalID() *string {
-	if k == nil {
+func (a *Auth1) GetAssumeRoleExternalID() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AssumeRoleExternalID
+	return a.AssumeRoleExternalID
 }
 
-func (k *KMSProviderConfigAuth1) GetAwsAPIKey() *string {
-	if k == nil {
+func (a *Auth1) GetAwsAPIKey() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsAPIKey
+	return a.AwsAPIKey
 }
 
-func (k *KMSProviderConfigAuth1) GetAwsAuthenticationMethod() *string {
-	if k == nil {
+func (a *Auth1) GetAwsAuthenticationMethod() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsAuthenticationMethod
+	return a.AwsAuthenticationMethod
 }
 
-func (k *KMSProviderConfigAuth1) GetAwsSecretKey() *string {
-	if k == nil {
+func (a *Auth1) GetAwsSecretKey() *string {
+	if a == nil {
 		return nil
 	}
-	return k.AwsSecretKey
+	return a.AwsSecretKey
 }
 
-func (k *KMSProviderConfigAuth1) GetEnableAssumeRole() *bool {
-	if k == nil {
+func (a *Auth1) GetEnableAssumeRole() *bool {
+	if a == nil {
 		return nil
 	}
-	return k.EnableAssumeRole
+	return a.EnableAssumeRole
 }
 
-func (k *KMSProviderConfigAuth1) GetProvider() AuthProvider {
-	if k == nil {
+func (a *Auth1) GetProvider() AuthProvider {
+	if a == nil {
 		return AuthProvider("")
 	}
-	return k.Provider
+	return a.Provider
 }
 
-func (k *KMSProviderConfigAuth1) GetToken() *string {
-	if k == nil {
+func (a *Auth1) GetToken() *string {
+	if a == nil {
 		return nil
 	}
-	return k.Token
+	return a.Token
 }
 
-func (k *KMSProviderConfigAuth1) GetVaultAWSIAMServerID() string {
-	if k == nil {
+func (a *Auth1) GetVaultAWSIAMServerID() string {
+	if a == nil {
 		return ""
 	}
-	return k.VaultAWSIAMServerID
+	return a.VaultAWSIAMServerID
 }
 
-func (k *KMSProviderConfigAuth1) GetVaultRole() *string {
-	if k == nil {
+func (a *Auth1) GetVaultRole() *string {
+	if a == nil {
 		return nil
 	}
-	return k.VaultRole
+	return a.VaultRole
 }
 
-type AuthType string
+type AuthUnionType string
 
 const (
-	AuthTypeKMSProviderConfigAuth1 AuthType = "KMSProviderConfig_auth_1"
-	AuthTypeKMSProviderConfigAuth2 AuthType = "KMSProviderConfig_auth_2"
+	AuthUnionTypeAuth1 AuthUnionType = "auth_1"
+	AuthUnionTypeAuth2 AuthUnionType = "auth_2"
 )
 
-type Auth struct {
-	KMSProviderConfigAuth1 *KMSProviderConfigAuth1 `queryParam:"inline,name=auth"`
-	KMSProviderConfigAuth2 *KMSProviderConfigAuth2 `queryParam:"inline,name=auth"`
+type AuthUnion struct {
+	Auth1 *Auth1 `queryParam:"inline,name=auth"`
+	Auth2 *Auth2 `queryParam:"inline,name=auth"`
 
-	Type AuthType
+	Type AuthUnionType
 }
 
-func CreateAuthKMSProviderConfigAuth1(kmsProviderConfigAuth1 KMSProviderConfigAuth1) Auth {
-	typ := AuthTypeKMSProviderConfigAuth1
+func CreateAuthUnionAuth1(auth1 Auth1) AuthUnion {
+	typ := AuthUnionTypeAuth1
 
-	return Auth{
-		KMSProviderConfigAuth1: &kmsProviderConfigAuth1,
-		Type:                   typ,
+	return AuthUnion{
+		Auth1: &auth1,
+		Type:  typ,
 	}
 }
 
-func CreateAuthKMSProviderConfigAuth2(kmsProviderConfigAuth2 KMSProviderConfigAuth2) Auth {
-	typ := AuthTypeKMSProviderConfigAuth2
+func CreateAuthUnionAuth2(auth2 Auth2) AuthUnion {
+	typ := AuthUnionTypeAuth2
 
-	return Auth{
-		KMSProviderConfigAuth2: &kmsProviderConfigAuth2,
-		Type:                   typ,
+	return AuthUnion{
+		Auth2: &auth2,
+		Type:  typ,
 	}
 }
 
-func (u *Auth) UnmarshalJSON(data []byte) error {
+func (u *AuthUnion) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
 
 	// Collect all valid candidates
-	var kmsProviderConfigAuth1 KMSProviderConfigAuth1 = KMSProviderConfigAuth1{}
-	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth1, "", true, nil); err == nil {
+	var auth1 Auth1 = Auth1{}
+	if err := utils.UnmarshalJSON(data, &auth1, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  AuthTypeKMSProviderConfigAuth1,
-			Value: &kmsProviderConfigAuth1,
+			Type:  AuthUnionTypeAuth1,
+			Value: &auth1,
 		})
 	}
 
-	var kmsProviderConfigAuth2 KMSProviderConfigAuth2 = KMSProviderConfigAuth2{}
-	if err := utils.UnmarshalJSON(data, &kmsProviderConfigAuth2, "", true, nil); err == nil {
+	var auth2 Auth2 = Auth2{}
+	if err := utils.UnmarshalJSON(data, &auth2, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  AuthTypeKMSProviderConfigAuth2,
-			Value: &kmsProviderConfigAuth2,
+			Type:  AuthUnionTypeAuth2,
+			Value: &auth2,
 		})
 	}
 
 	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Auth", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for AuthUnion", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
 	best := utils.PickBestCandidate(candidates)
 	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Auth", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for AuthUnion", string(data))
 	}
 
 	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(AuthType)
+	u.Type = best.Type.(AuthUnionType)
 	switch best.Type {
-	case AuthTypeKMSProviderConfigAuth1:
-		u.KMSProviderConfigAuth1 = best.Value.(*KMSProviderConfigAuth1)
+	case AuthUnionTypeAuth1:
+		u.Auth1 = best.Value.(*Auth1)
 		return nil
-	case AuthTypeKMSProviderConfigAuth2:
-		u.KMSProviderConfigAuth2 = best.Value.(*KMSProviderConfigAuth2)
+	case AuthUnionTypeAuth2:
+		u.Auth2 = best.Value.(*Auth2)
 		return nil
 	}
 
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for Auth", string(data))
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for AuthUnion", string(data))
 }
 
-func (u Auth) MarshalJSON() ([]byte, error) {
-	if u.KMSProviderConfigAuth1 != nil {
-		return utils.MarshalJSON(u.KMSProviderConfigAuth1, "", true)
+func (u AuthUnion) MarshalJSON() ([]byte, error) {
+	if u.Auth1 != nil {
+		return utils.MarshalJSON(u.Auth1, "", true)
 	}
 
-	if u.KMSProviderConfigAuth2 != nil {
-		return utils.MarshalJSON(u.KMSProviderConfigAuth2, "", true)
+	if u.Auth2 != nil {
+		return utils.MarshalJSON(u.Auth2, "", true)
 	}
 
-	return nil, errors.New("could not marshal union type Auth: all fields are null")
+	return nil, errors.New("could not marshal union type AuthUnion: all fields are null")
 }
 
 type KMSProviderConfig struct {
-	Auth                *Auth                    `json:"auth,omitempty"`
+	Auth                *AuthUnion               `json:"auth,omitempty"`
 	EnableHealthCheck   bool                     `json:"enableHealthCheck"`
 	HealthCheckEndpoint *string                  `json:"healthCheckEndpoint,omitempty"`
 	Namespace           *string                  `json:"namespace,omitempty"`
@@ -265,7 +265,7 @@ type KMSProviderConfig struct {
 	URL                 *string                  `json:"url,omitempty"`
 }
 
-func (k *KMSProviderConfig) GetAuth() *Auth {
+func (k *KMSProviderConfig) GetAuth() *AuthUnion {
 	if k == nil {
 		return nil
 	}

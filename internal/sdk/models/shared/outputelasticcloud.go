@@ -31,373 +31,6 @@ func (e *OutputElasticCloudType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputElasticCloudExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputElasticCloudExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputElasticCloudExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputElasticCloudExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputElasticCloudExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputElasticCloudFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputElasticCloudFailedRequestLoggingMode string
-
-const (
-	OutputElasticCloudFailedRequestLoggingModePayload           OutputElasticCloudFailedRequestLoggingMode = "payload"
-	OutputElasticCloudFailedRequestLoggingModePayloadAndHeaders OutputElasticCloudFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputElasticCloudFailedRequestLoggingModeNone              OutputElasticCloudFailedRequestLoggingMode = "none"
-)
-
-func (e OutputElasticCloudFailedRequestLoggingMode) ToPointer() *OutputElasticCloudFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputElasticCloudFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputElasticCloudFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudFailedRequestLoggingMode: %v", v)
-	}
-}
-
-type OutputElasticCloudExtraParam struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
-func (o OutputElasticCloudExtraParam) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputElasticCloudExtraParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputElasticCloudExtraParam) GetName() string {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *OutputElasticCloudExtraParam) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputElasticCloudAuthenticationMethod - Enter credentials directly, or select a stored secret
-type OutputElasticCloudAuthenticationMethod string
-
-const (
-	OutputElasticCloudAuthenticationMethodManual       OutputElasticCloudAuthenticationMethod = "manual"
-	OutputElasticCloudAuthenticationMethodSecret       OutputElasticCloudAuthenticationMethod = "secret"
-	OutputElasticCloudAuthenticationMethodManualAPIKey OutputElasticCloudAuthenticationMethod = "manualAPIKey"
-	OutputElasticCloudAuthenticationMethodTextSecret   OutputElasticCloudAuthenticationMethod = "textSecret"
-)
-
-func (e OutputElasticCloudAuthenticationMethod) ToPointer() *OutputElasticCloudAuthenticationMethod {
-	return &e
-}
-func (e *OutputElasticCloudAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "manualAPIKey":
-		fallthrough
-	case "textSecret":
-		*e = OutputElasticCloudAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudAuthenticationMethod: %v", v)
-	}
-}
-
-type OutputElasticCloudAuth struct {
-	Disabled *bool `default:"false" json:"disabled"`
-	// Enter credentials directly, or select a stored secret
-	AuthType *OutputElasticCloudAuthenticationMethod `default:"manual" json:"authType"`
-}
-
-func (o OutputElasticCloudAuth) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputElasticCloudAuth) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputElasticCloudAuth) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *OutputElasticCloudAuth) GetAuthType() *OutputElasticCloudAuthenticationMethod {
-	if o == nil {
-		return nil
-	}
-	return o.AuthType
-}
-
-type OutputElasticCloudResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputElasticCloudResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputElasticCloudResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputElasticCloudResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputElasticCloudResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputElasticCloudResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputElasticCloudResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputElasticCloudTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputElasticCloudTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputElasticCloudTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputElasticCloudTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputElasticCloudTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputElasticCloudTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputElasticCloudTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputElasticCloudBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputElasticCloudBackpressureBehavior string
-
-const (
-	OutputElasticCloudBackpressureBehaviorBlock OutputElasticCloudBackpressureBehavior = "block"
-	OutputElasticCloudBackpressureBehaviorDrop  OutputElasticCloudBackpressureBehavior = "drop"
-	OutputElasticCloudBackpressureBehaviorQueue OutputElasticCloudBackpressureBehavior = "queue"
-)
-
-func (e OutputElasticCloudBackpressureBehavior) ToPointer() *OutputElasticCloudBackpressureBehavior {
-	return &e
-}
-func (e *OutputElasticCloudBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputElasticCloudBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputElasticCloudCompression - Codec to use to compress the persisted data
-type OutputElasticCloudCompression string
-
-const (
-	OutputElasticCloudCompressionNone OutputElasticCloudCompression = "none"
-	OutputElasticCloudCompressionGzip OutputElasticCloudCompression = "gzip"
-)
-
-func (e OutputElasticCloudCompression) ToPointer() *OutputElasticCloudCompression {
-	return &e
-}
-func (e *OutputElasticCloudCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputElasticCloudCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudCompression: %v", v)
-	}
-}
-
-// OutputElasticCloudQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputElasticCloudQueueFullBehavior string
-
-const (
-	OutputElasticCloudQueueFullBehaviorBlock OutputElasticCloudQueueFullBehavior = "block"
-	OutputElasticCloudQueueFullBehaviorDrop  OutputElasticCloudQueueFullBehavior = "drop"
-)
-
-func (e OutputElasticCloudQueueFullBehavior) ToPointer() *OutputElasticCloudQueueFullBehavior {
-	return &e
-}
-func (e *OutputElasticCloudQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputElasticCloudQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputElasticCloudMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputElasticCloudMode string
-
-const (
-	OutputElasticCloudModeError        OutputElasticCloudMode = "error"
-	OutputElasticCloudModeBackpressure OutputElasticCloudMode = "backpressure"
-	OutputElasticCloudModeAlways       OutputElasticCloudMode = "always"
-)
-
-func (e OutputElasticCloudMode) ToPointer() *OutputElasticCloudMode {
-	return &e
-}
-func (e *OutputElasticCloudMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputElasticCloudMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputElasticCloudMode: %v", v)
-	}
-}
-
 type OutputElasticCloudPqControls struct {
 }
 
@@ -414,8 +47,8 @@ func (o *OutputElasticCloudPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputElasticCloud struct {
 	// Unique ID for this output
-	ID   *string                 `json:"id,omitempty"`
-	Type *OutputElasticCloudType `json:"type,omitempty"`
+	ID   *string                `json:"id,omitempty"`
+	Type OutputElasticCloudType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -429,55 +62,65 @@ type OutputElasticCloud struct {
 	// Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
 	Index string `json:"index"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputElasticCloudExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputElasticCloudFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Extra parameters to use in HTTP requests
-	ExtraParams []OutputElasticCloudExtraParam `json:"extraParams,omitempty"`
-	Auth        *OutputElasticCloudAuth        `json:"auth,omitempty"`
+	ExtraParams []ItemsTypeSaslSaslExtensions      `json:"extraParams,omitempty"`
+	Auth        *AuthTypeAuthTypeCredentialsSecret `json:"auth,omitempty"`
 	// Optional Elastic Cloud Destination pipeline
 	ElasticPipeline *string `json:"elasticPipeline,omitempty"`
 	// Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
-	IncludeDocID *bool `default:"true" json:"includeDocId"`
+	IncludeDocID *bool `json:"includeDocId,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputElasticCloudResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputElasticCloudTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputElasticCloudBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                                 `json:"description,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputElasticCloudCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputElasticCloudQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputElasticCloudMode       `default:"error" json:"pqMode"`
-	PqControls *OutputElasticCloudPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                       `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputElasticCloudPqControls `json:"pqControls,omitempty"`
 }
 
 func (o OutputElasticCloud) MarshalJSON() ([]byte, error) {
@@ -485,7 +128,7 @@ func (o OutputElasticCloud) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputElasticCloud) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url", "index"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "url", "index"}); err != nil {
 		return err
 	}
 	return nil
@@ -498,9 +141,9 @@ func (o *OutputElasticCloud) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputElasticCloud) GetType() *OutputElasticCloudType {
+func (o *OutputElasticCloud) GetType() OutputElasticCloudType {
 	if o == nil {
-		return nil
+		return OutputElasticCloudType("")
 	}
 	return o.Type
 }
@@ -596,14 +239,14 @@ func (o *OutputElasticCloud) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputElasticCloud) GetExtraHTTPHeaders() []OutputElasticCloudExtraHTTPHeader {
+func (o *OutputElasticCloud) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
 	return o.ExtraHTTPHeaders
 }
 
-func (o *OutputElasticCloud) GetFailedRequestLoggingMode() *OutputElasticCloudFailedRequestLoggingMode {
+func (o *OutputElasticCloud) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -617,14 +260,14 @@ func (o *OutputElasticCloud) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputElasticCloud) GetExtraParams() []OutputElasticCloudExtraParam {
+func (o *OutputElasticCloud) GetExtraParams() []ItemsTypeSaslSaslExtensions {
 	if o == nil {
 		return nil
 	}
 	return o.ExtraParams
 }
 
-func (o *OutputElasticCloud) GetAuth() *OutputElasticCloudAuth {
+func (o *OutputElasticCloud) GetAuth() *AuthTypeAuthTypeCredentialsSecret {
 	if o == nil {
 		return nil
 	}
@@ -645,14 +288,14 @@ func (o *OutputElasticCloud) GetIncludeDocID() *bool {
 	return o.IncludeDocID
 }
 
-func (o *OutputElasticCloud) GetResponseRetrySettings() []OutputElasticCloudResponseRetrySetting {
+func (o *OutputElasticCloud) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputElasticCloud) GetTimeoutRetrySettings() *OutputElasticCloudTimeoutRetrySettings {
+func (o *OutputElasticCloud) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -666,7 +309,7 @@ func (o *OutputElasticCloud) GetResponseHonorRetryAfterHeader() *bool {
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputElasticCloud) GetOnBackpressure() *OutputElasticCloudBackpressureBehavior {
+func (o *OutputElasticCloud) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -678,6 +321,41 @@ func (o *OutputElasticCloud) GetDescription() *string {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *OutputElasticCloud) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputElasticCloud) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputElasticCloud) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputElasticCloud) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputElasticCloud) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputElasticCloud) GetPqMaxFileSize() *string {
@@ -701,25 +379,25 @@ func (o *OutputElasticCloud) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputElasticCloud) GetPqCompress() *OutputElasticCloudCompression {
+func (o *OutputElasticCloud) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputElasticCloud) GetPqOnBackpressure() *OutputElasticCloudQueueFullBehavior {
+func (o *OutputElasticCloud) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputElasticCloud) GetPqMode() *OutputElasticCloudMode {
+func (o *OutputElasticCloud) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputElasticCloud) GetPqControls() *OutputElasticCloudPqControls {

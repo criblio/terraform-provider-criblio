@@ -322,9 +322,40 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 						"dashboard_element_visualization": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.MapAttribute{
-									Computed:    true,
-									ElementType: jsontypes.NormalizedType{},
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"additional_properties": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
+											Computed:    true,
+											Description: `Parsed as JSON.`,
+										},
+										"columns": schema.StringAttribute{
+											Computed:    true,
+											Description: `Column configuration (e.g. auto)`,
+										},
+										"group_by": schema.StringAttribute{
+											Computed:    true,
+											Description: `Group-by field`,
+										},
+										"max_rows": schema.StringAttribute{
+											Computed:    true,
+											Description: `Max rows for tables`,
+										},
+										"series": schema.StringAttribute{
+											Computed:    true,
+											Description: `Series configuration`,
+										},
+										"x_axis": schema.StringAttribute{
+											Computed:    true,
+											Description: `X-axis field for charts`,
+										},
+										"y_axis": schema.StringAttribute{
+											Computed:    true,
+											Description: `Y-axis field for charts`,
+										},
+									},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, columns).`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,

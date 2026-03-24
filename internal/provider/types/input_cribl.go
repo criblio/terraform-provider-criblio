@@ -7,17 +7,17 @@ import (
 )
 
 type InputCribl struct {
-	Connections  []InputCriblConnection `tfsdk:"connections"`
-	Description  types.String           `tfsdk:"description"`
-	Disabled     types.Bool             `tfsdk:"disabled"`
-	Environment  types.String           `tfsdk:"environment"`
-	Filter       types.String           `tfsdk:"filter"`
-	ID           types.String           `tfsdk:"id"`
-	Metadata     []InputCriblMetadatum  `tfsdk:"metadata"`
-	Pipeline     types.String           `tfsdk:"pipeline"`
-	Pq           *InputCriblPq          `tfsdk:"pq"`
-	PqEnabled    types.Bool             `tfsdk:"pq_enabled"`
-	SendToRoutes types.Bool             `tfsdk:"send_to_routes"`
-	Streamtags   []types.String         `tfsdk:"streamtags"`
-	Type         types.String           `tfsdk:"type"`
+	Connections  []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description  types.String                   `tfsdk:"description"`
+	Disabled     types.Bool                     `tfsdk:"disabled"`
+	Environment  types.String                   `tfsdk:"environment"`
+	Filter       types.String                   `tfsdk:"filter"`
+	ID           types.String                   `tfsdk:"id"`
+	Metadata     []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Pipeline     types.String                   `tfsdk:"pipeline"`
+	Pq           *PqType                        `tfsdk:"pq"`
+	PqEnabled    types.Bool                     `tfsdk:"pq_enabled"`
+	SendToRoutes types.Bool                     `tfsdk:"send_to_routes"`
+	Streamtags   []types.String                 `tfsdk:"streamtags"`
+	Type         types.String                   `tfsdk:"type"`
 }

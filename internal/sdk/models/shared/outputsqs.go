@@ -35,8 +35,10 @@ func (e *OutputSqsType) UnmarshalJSON(data []byte) error {
 type OutputSqsQueueType string
 
 const (
+	// OutputSqsQueueTypeStandard Standard
 	OutputSqsQueueTypeStandard OutputSqsQueueType = "standard"
-	OutputSqsQueueTypeFifo     OutputSqsQueueType = "fifo"
+	// OutputSqsQueueTypeFifo FIFO
+	OutputSqsQueueTypeFifo OutputSqsQueueType = "fifo"
 )
 
 func (e OutputSqsQueueType) ToPointer() *OutputSqsQueueType {
@@ -58,177 +60,6 @@ func (e *OutputSqsQueueType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputSqsAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
-type OutputSqsAuthenticationMethod string
-
-const (
-	OutputSqsAuthenticationMethodAuto   OutputSqsAuthenticationMethod = "auto"
-	OutputSqsAuthenticationMethodManual OutputSqsAuthenticationMethod = "manual"
-	OutputSqsAuthenticationMethodSecret OutputSqsAuthenticationMethod = "secret"
-)
-
-func (e OutputSqsAuthenticationMethod) ToPointer() *OutputSqsAuthenticationMethod {
-	return &e
-}
-func (e *OutputSqsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputSqsAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputSqsSignatureVersion - Signature version to use for signing SQS requests
-type OutputSqsSignatureVersion string
-
-const (
-	OutputSqsSignatureVersionV2 OutputSqsSignatureVersion = "v2"
-	OutputSqsSignatureVersionV4 OutputSqsSignatureVersion = "v4"
-)
-
-func (e OutputSqsSignatureVersion) ToPointer() *OutputSqsSignatureVersion {
-	return &e
-}
-func (e *OutputSqsSignatureVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = OutputSqsSignatureVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsSignatureVersion: %v", v)
-	}
-}
-
-// OutputSqsBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputSqsBackpressureBehavior string
-
-const (
-	OutputSqsBackpressureBehaviorBlock OutputSqsBackpressureBehavior = "block"
-	OutputSqsBackpressureBehaviorDrop  OutputSqsBackpressureBehavior = "drop"
-	OutputSqsBackpressureBehaviorQueue OutputSqsBackpressureBehavior = "queue"
-)
-
-func (e OutputSqsBackpressureBehavior) ToPointer() *OutputSqsBackpressureBehavior {
-	return &e
-}
-func (e *OutputSqsBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputSqsBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputSqsCompression - Codec to use to compress the persisted data
-type OutputSqsCompression string
-
-const (
-	OutputSqsCompressionNone OutputSqsCompression = "none"
-	OutputSqsCompressionGzip OutputSqsCompression = "gzip"
-)
-
-func (e OutputSqsCompression) ToPointer() *OutputSqsCompression {
-	return &e
-}
-func (e *OutputSqsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputSqsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsCompression: %v", v)
-	}
-}
-
-// OutputSqsQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputSqsQueueFullBehavior string
-
-const (
-	OutputSqsQueueFullBehaviorBlock OutputSqsQueueFullBehavior = "block"
-	OutputSqsQueueFullBehaviorDrop  OutputSqsQueueFullBehavior = "drop"
-)
-
-func (e OutputSqsQueueFullBehavior) ToPointer() *OutputSqsQueueFullBehavior {
-	return &e
-}
-func (e *OutputSqsQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputSqsQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputSqsMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputSqsMode string
-
-const (
-	OutputSqsModeError        OutputSqsMode = "error"
-	OutputSqsModeBackpressure OutputSqsMode = "backpressure"
-	OutputSqsModeAlways       OutputSqsMode = "always"
-)
-
-func (e OutputSqsMode) ToPointer() *OutputSqsMode {
-	return &e
-}
-func (e *OutputSqsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputSqsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSqsMode: %v", v)
-	}
-}
-
 type OutputSqsPqControls struct {
 }
 
@@ -245,8 +76,8 @@ func (o *OutputSqsPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputSqs struct {
 	// Unique ID for this output
-	ID   *string        `json:"id,omitempty"`
-	Type *OutputSqsType `json:"type,omitempty"`
+	ID   *string       `json:"id,omitempty"`
+	Type OutputSqsType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -258,61 +89,85 @@ type OutputSqs struct {
 	// The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 	QueueName string `json:"queueName"`
 	// The queue type used (or created). Defaults to Standard.
-	QueueType *OutputSqsQueueType `default:"standard" json:"queueType"`
+	QueueType OutputSqsQueueType `json:"queueType"`
 	// SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.
 	AwsAccountID *string `json:"awsAccountId,omitempty"`
 	// This parameter applies only to FIFO queues. The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner. Use event field __messageGroupId to override this value.
-	MessageGroupID *string `default:"cribl" json:"messageGroupId"`
+	MessageGroupID *string `json:"messageGroupId,omitempty"`
 	// Create queue if it does not exist.
-	CreateQueue *bool `default:"true" json:"createQueue"`
+	CreateQueue *bool `json:"createQueue,omitempty"`
 	// AWS authentication method. Choose Auto to use IAM roles.
-	AwsAuthenticationMethod *OutputSqsAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
-	AwsSecretKey            *string                        `json:"awsSecretKey,omitempty"`
+	AwsAuthenticationMethod *AuthenticationMethodOptionsS3CollectorConf `json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey            *string                                     `json:"awsSecretKey,omitempty"`
 	// AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 	Region *string `json:"region,omitempty"`
 	// SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Signature version to use for signing SQS requests
-	SignatureVersion *OutputSqsSignatureVersion `default:"v4" json:"signatureVersion"`
+	SignatureVersion *SignatureVersionOptionsSqs `json:"signatureVersion,omitempty"`
 	// Reuse connections between requests, which can improve performance
-	ReuseConnections *bool `default:"true" json:"reuseConnections"`
+	ReuseConnections *bool `json:"reuseConnections,omitempty"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Use Assume Role credentials to access SQS
-	EnableAssumeRole *bool `default:"false" json:"enableAssumeRole"`
+	EnableAssumeRole *bool `json:"enableAssumeRole,omitempty"`
 	// Amazon Resource Name (ARN) of the role to assume
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 	// External ID to use when assuming role
 	AssumeRoleExternalID *string `json:"assumeRoleExternalId,omitempty"`
 	// Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-	DurationSeconds *float64 `default:"3600" json:"durationSeconds"`
+	DurationSeconds *float64 `json:"durationSeconds,omitempty"`
 	// Maximum number of queued batches before blocking.
-	MaxQueueSize *float64 `default:"100" json:"maxQueueSize"`
+	MaxQueueSize *float64 `json:"maxQueueSize,omitempty"`
 	// Maximum size (KB) of batches to send. Per the SQS spec, the max allowed value is 256 KB.
-	MaxRecordSizeKB *float64 `default:"256" json:"maxRecordSizeKB"`
+	MaxRecordSizeKB *float64 `json:"maxRecordSizeKB,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// The maximum number of in-progress API requests before backpressure is applied.
-	MaxInProgress *float64 `default:"10" json:"maxInProgress"`
+	MaxInProgress *float64 `json:"maxInProgress,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputSqsBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                        `json:"description,omitempty"`
-	AwsAPIKey      *string                        `json:"awsApiKey,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	AwsAPIKey      *string                      `json:"awsApiKey,omitempty"`
 	// Select or create a stored secret that references your access key and secret key
 	AwsSecret *string `json:"awsSecret,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputSqsCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputSqsQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputSqsMode       `default:"error" json:"pqMode"`
-	PqControls *OutputSqsPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string              `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputSqsPqControls `json:"pqControls,omitempty"`
+	// Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+	TemplateQueueName *string `json:"__template_queueName,omitempty"`
+	// Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+	TemplateAwsAccountID *string `json:"__template_awsAccountId,omitempty"`
+	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
+	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
+	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
+	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (o OutputSqs) MarshalJSON() ([]byte, error) {
@@ -320,7 +175,7 @@ func (o OutputSqs) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSqs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"queueName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "queueName", "queueType"}); err != nil {
 		return err
 	}
 	return nil
@@ -333,9 +188,9 @@ func (o *OutputSqs) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputSqs) GetType() *OutputSqsType {
+func (o *OutputSqs) GetType() OutputSqsType {
 	if o == nil {
-		return nil
+		return OutputSqsType("")
 	}
 	return o.Type
 }
@@ -375,9 +230,9 @@ func (o *OutputSqs) GetQueueName() string {
 	return o.QueueName
 }
 
-func (o *OutputSqs) GetQueueType() *OutputSqsQueueType {
+func (o *OutputSqs) GetQueueType() OutputSqsQueueType {
 	if o == nil {
-		return nil
+		return OutputSqsQueueType("")
 	}
 	return o.QueueType
 }
@@ -403,7 +258,7 @@ func (o *OutputSqs) GetCreateQueue() *bool {
 	return o.CreateQueue
 }
 
-func (o *OutputSqs) GetAwsAuthenticationMethod() *OutputSqsAuthenticationMethod {
+func (o *OutputSqs) GetAwsAuthenticationMethod() *AuthenticationMethodOptionsS3CollectorConf {
 	if o == nil {
 		return nil
 	}
@@ -431,7 +286,7 @@ func (o *OutputSqs) GetEndpoint() *string {
 	return o.Endpoint
 }
 
-func (o *OutputSqs) GetSignatureVersion() *OutputSqsSignatureVersion {
+func (o *OutputSqs) GetSignatureVersion() *SignatureVersionOptionsSqs {
 	if o == nil {
 		return nil
 	}
@@ -508,7 +363,7 @@ func (o *OutputSqs) GetMaxInProgress() *float64 {
 	return o.MaxInProgress
 }
 
-func (o *OutputSqs) GetOnBackpressure() *OutputSqsBackpressureBehavior {
+func (o *OutputSqs) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -536,6 +391,41 @@ func (o *OutputSqs) GetAwsSecret() *string {
 	return o.AwsSecret
 }
 
+func (o *OutputSqs) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputSqs) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputSqs) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputSqs) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputSqs) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputSqs) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -557,25 +447,25 @@ func (o *OutputSqs) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputSqs) GetPqCompress() *OutputSqsCompression {
+func (o *OutputSqs) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputSqs) GetPqOnBackpressure() *OutputSqsQueueFullBehavior {
+func (o *OutputSqs) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputSqs) GetPqMode() *OutputSqsMode {
+func (o *OutputSqs) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputSqs) GetPqControls() *OutputSqsPqControls {
@@ -583,4 +473,53 @@ func (o *OutputSqs) GetPqControls() *OutputSqsPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputSqs) GetTemplateQueueName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateQueueName
+}
+
+func (o *OutputSqs) GetTemplateAwsAccountID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsAccountID
+}
+
+func (o *OutputSqs) GetTemplateAwsSecretKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsSecretKey
+}
+
+func (o *OutputSqs) GetTemplateRegion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateRegion
+}
+
+func (o *OutputSqs) GetTemplateAssumeRoleArn() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleArn
+}
+
+func (o *OutputSqs) GetTemplateAssumeRoleExternalID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleExternalID
+}
+
+func (o *OutputSqs) GetTemplateAwsAPIKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsAPIKey
 }

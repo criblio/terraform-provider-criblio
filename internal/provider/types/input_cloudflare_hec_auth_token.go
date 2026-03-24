@@ -3,15 +3,16 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputCloudflareHecAuthToken struct {
-	AllowedIndexesAtToken []types.String                         `tfsdk:"allowed_indexes_at_token"`
-	AuthType              types.String                           `tfsdk:"auth_type"`
-	Description           types.String                           `tfsdk:"description"`
-	Enabled               types.Bool                             `tfsdk:"enabled"`
-	Metadata              []InputCloudflareHecAuthTokenMetadatum `tfsdk:"metadata"`
-	Token                 types.String                           `tfsdk:"token"`
-	TokenSecret           types.String                           `tfsdk:"token_secret"`
+	AllowedIndexesAtToken []types.String       `tfsdk:"allowed_indexes_at_token"`
+	AuthType              types.String         `tfsdk:"auth_type"`
+	Description           types.String         `tfsdk:"description"`
+	Enabled               types.Bool           `tfsdk:"enabled"`
+	Metadata              []ItemsTypeMetadata  `tfsdk:"metadata"`
+	Token                 jsontypes.Normalized `tfsdk:"token"`
+	TokenSecret           types.String         `tfsdk:"token_secret"`
 }

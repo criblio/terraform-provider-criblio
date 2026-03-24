@@ -18,8 +18,18 @@ import (
 func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackResponseBody(ctx context.Context, resp *operations.CreatePipelineByPackResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
 		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -28,8 +38,18 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsCreatePipelineByPackRes
 func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx context.Context, resp *operations.GetPipelinesByPackWithIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
 		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -38,8 +58,18 @@ func (r *PackPipelineResourceModel) RefreshFromOperationsGetPipelinesByPackWithI
 func (r *PackPipelineResourceModel) RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx context.Context, resp *operations.UpdatePipelineByPackAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
+	if resp != nil {
+		if len(resp.Items) == 0 {
+			diags.AddError("Unexpected response from API", "Missing response body array data.")
+			return diags
+		}
+
 		diags.Append(r.RefreshFromSharedPipeline(ctx, &resp.Items[0])...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -55,52 +85,32 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		// Convert conf to JSON
-		confBytes, err := json.Marshal(functionsItem.Conf)
-		if err != nil {
-			diags.AddError("Failed to marshal function conf", err.Error())
-			return diags
+		if len(functionsItem.Conf) > 0 {
+			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
+			for key, value := range functionsItem.Conf {
+				result, _ := json.Marshal(value)
+				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+			}
 		}
-		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
-		// Use schema default values when API returns nil so plan doesn't show perpetual diff for optional+computed attributes
-		if functionsItem.Description != nil {
-			functions.Description = types.StringValue(*functionsItem.Description)
-		} else {
-			functions.Description = types.StringValue("")
-		}
-		if functionsItem.Disabled != nil {
-			functions.Disabled = types.BoolValue(*functionsItem.Disabled)
-		} else {
-			functions.Disabled = types.BoolValue(false)
-		}
-		if functionsItem.Filter != nil {
-			functions.Filter = types.StringValue(*functionsItem.Filter)
-		} else {
-			functions.Filter = types.StringValue("true")
-		}
-		if functionsItem.Final != nil {
-			functions.Final = types.BoolValue(*functionsItem.Final)
-		} else {
-			functions.Final = types.BoolValue(false)
-		}
-		if functionsItem.GroupID != nil {
-			functions.GroupID = types.StringValue(*functionsItem.GroupID)
-		} else {
-			functions.GroupID = types.StringValue("")
-		}
+		functions.Description = types.StringPointerValue(functionsItem.Description)
+		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
+		functions.Filter = types.StringPointerValue(functionsItem.Filter)
+		functions.Final = types.BoolPointerValue(functionsItem.Final)
+		functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
 		functions.ID = types.StringValue(functionsItem.ID)
 
 		r.Conf.Functions = append(r.Conf.Functions, functions)
 	}
-	// Always set Groups so state has a concrete value (empty map when API returns none), avoiding "(known after apply)" diff
-	r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
-	for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
-		var pipelineGroupsResult tfTypes.PipelineGroups
-		pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
-		pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
-		pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
+	if len(resp.Conf.Groups) > 0 {
+		r.Conf.Groups = make(map[string]tfTypes.PipelineGroups, len(resp.Conf.Groups))
+		for pipelineGroupsKey, pipelineGroupsValue := range resp.Conf.Groups {
+			var pipelineGroupsResult tfTypes.PipelineGroups
+			pipelineGroupsResult.Description = types.StringPointerValue(pipelineGroupsValue.Description)
+			pipelineGroupsResult.Disabled = types.BoolPointerValue(pipelineGroupsValue.Disabled)
+			pipelineGroupsResult.Name = types.StringValue(pipelineGroupsValue.Name)
 
-		r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+			r.Conf.Groups[pipelineGroupsKey] = pipelineGroupsResult
+		}
 	}
 	r.Conf.Output = types.StringPointerValue(resp.Conf.Output)
 	r.Conf.Streamtags = make([]types.String, 0, len(resp.Conf.Streamtags))
@@ -115,8 +125,8 @@ func (r *PackPipelineResourceModel) RefreshFromSharedPipeline(ctx context.Contex
 func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx context.Context) (*operations.CreatePipelineByPackRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
-	pack := strings.ToLower(r.Pack.ValueString())
+	var pack string
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -140,8 +150,8 @@ func (r *PackPipelineResourceModel) ToOperationsCreatePipelineByPackRequest(ctx 
 func (r *PackPipelineResourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
-	pack := strings.ToLower(r.Pack.ValueString())
+	var pack string
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var id string
 	id = r.ID.ValueString()
@@ -164,8 +174,8 @@ func (r *PackPipelineResourceModel) ToOperationsUpdatePipelineByPackAndIDRequest
 	var id string
 	id = r.ID.ValueString()
 
-	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
-	pack := strings.ToLower(r.Pack.ValueString())
+	var pack string
+	pack = strings.ToLower(r.Pack.ValueString())
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -244,16 +254,11 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 		} else {
 			final = nil
 		}
-		// Parse the JSON conf to a map for flexible function configuration
-		var conf1 map[string]interface{}
-		if !r.Conf.Functions[functionsIndex].Conf.IsUnknown() && !r.Conf.Functions[functionsIndex].Conf.IsNull() {
-			confJSON := r.Conf.Functions[functionsIndex].Conf.ValueString()
-			if err := json.Unmarshal([]byte(confJSON), &conf1); err != nil {
-				diags.AddError("Failed to parse function conf", err.Error())
-				return nil, diags
-			}
-		} else {
-			conf1 = make(map[string]interface{})
+		conf1 := make(map[string]interface{})
+		for confKey := range r.Conf.Functions[functionsIndex].Conf {
+			var confInst interface{}
+			_ = json.Unmarshal([]byte(r.Conf.Functions[functionsIndex].Conf[confKey].ValueString()), &confInst)
+			conf1[confKey] = confInst
 		}
 		groupID := new(string)
 		if !r.Conf.Functions[functionsIndex].GroupID.IsUnknown() && !r.Conf.Functions[functionsIndex].GroupID.IsNull() {
@@ -271,32 +276,29 @@ func (r *PackPipelineResourceModel) ToSharedPipeline(ctx context.Context) (*shar
 			GroupID:     groupID,
 		})
 	}
-	var groups map[string]shared.PipelineGroups
-	if len(r.Conf.Groups) > 0 {
-		groups = make(map[string]shared.PipelineGroups)
-		for groupsKey := range r.Conf.Groups {
-			var name string
-			name = r.Conf.Groups[groupsKey].Name.ValueString()
+	groups := make(map[string]shared.PipelineGroups)
+	for groupsKey := range r.Conf.Groups {
+		var name string
+		name = r.Conf.Groups[groupsKey].Name.ValueString()
 
-			description2 := new(string)
-			if !r.Conf.Groups[groupsKey].Description.IsUnknown() && !r.Conf.Groups[groupsKey].Description.IsNull() {
-				*description2 = r.Conf.Groups[groupsKey].Description.ValueString()
-			} else {
-				description2 = nil
-			}
-			disabled1 := new(bool)
-			if !r.Conf.Groups[groupsKey].Disabled.IsUnknown() && !r.Conf.Groups[groupsKey].Disabled.IsNull() {
-				*disabled1 = r.Conf.Groups[groupsKey].Disabled.ValueBool()
-			} else {
-				disabled1 = nil
-			}
-			groupsInst := shared.PipelineGroups{
-				Name:        name,
-				Description: description2,
-				Disabled:    disabled1,
-			}
-			groups[groupsKey] = groupsInst
+		description2 := new(string)
+		if !r.Conf.Groups[groupsKey].Description.IsUnknown() && !r.Conf.Groups[groupsKey].Description.IsNull() {
+			*description2 = r.Conf.Groups[groupsKey].Description.ValueString()
+		} else {
+			description2 = nil
 		}
+		disabled1 := new(bool)
+		if !r.Conf.Groups[groupsKey].Disabled.IsUnknown() && !r.Conf.Groups[groupsKey].Disabled.IsNull() {
+			*disabled1 = r.Conf.Groups[groupsKey].Disabled.ValueBool()
+		} else {
+			disabled1 = nil
+		}
+		groupsInst := shared.PipelineGroups{
+			Name:        name,
+			Description: description2,
+			Disabled:    disabled1,
+		}
+		groups[groupsKey] = groupsInst
 	}
 	conf := shared.PipelineConf{
 		AsyncFuncTimeout: asyncFuncTimeout,

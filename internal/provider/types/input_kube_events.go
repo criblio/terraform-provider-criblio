@@ -7,17 +7,17 @@ import (
 )
 
 type InputKubeEvents struct {
-	Connections  []InputKubeEventsConnection `tfsdk:"connections"`
-	Description  types.String                `tfsdk:"description"`
-	Disabled     types.Bool                  `tfsdk:"disabled"`
-	Environment  types.String                `tfsdk:"environment"`
-	ID           types.String                `tfsdk:"id"`
-	Metadata     []InputKubeEventsMetadatum  `tfsdk:"metadata"`
-	Pipeline     types.String                `tfsdk:"pipeline"`
-	Pq           *InputKubeEventsPq          `tfsdk:"pq"`
-	PqEnabled    types.Bool                  `tfsdk:"pq_enabled"`
-	Rules        []InputKubeEventsRule       `tfsdk:"rules"`
-	SendToRoutes types.Bool                  `tfsdk:"send_to_routes"`
-	Streamtags   []types.String              `tfsdk:"streamtags"`
-	Type         types.String                `tfsdk:"type"`
+	Connections  []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description  types.String                   `tfsdk:"description"`
+	Disabled     types.Bool                     `tfsdk:"disabled"`
+	Environment  types.String                   `tfsdk:"environment"`
+	ID           types.String                   `tfsdk:"id"`
+	Metadata     []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Pipeline     types.String                   `tfsdk:"pipeline"`
+	Pq           *PqType                        `tfsdk:"pq"`
+	PqEnabled    types.Bool                     `tfsdk:"pq_enabled"`
+	Rules        []ItemsTypeRules               `tfsdk:"rules"`
+	SendToRoutes types.Bool                     `tfsdk:"send_to_routes"`
+	Streamtags   []types.String                 `tfsdk:"streamtags"`
+	Type         types.String                   `tfsdk:"type"`
 }

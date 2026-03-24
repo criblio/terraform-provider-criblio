@@ -31,198 +31,6 @@ func (e *InputAppscopeType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputAppscopeConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputAppscopeConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputAppscopeConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputAppscopeConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputAppscopeConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputAppscopeMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputAppscopeMode string
-
-const (
-	InputAppscopeModeSmart  InputAppscopeMode = "smart"
-	InputAppscopeModeAlways InputAppscopeMode = "always"
-)
-
-func (e InputAppscopeMode) ToPointer() *InputAppscopeMode {
-	return &e
-}
-func (e *InputAppscopeMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputAppscopeMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeMode: %v", v)
-	}
-}
-
-// InputAppscopeCompression - Codec to use to compress the persisted data
-type InputAppscopeCompression string
-
-const (
-	InputAppscopeCompressionNone InputAppscopeCompression = "none"
-	InputAppscopeCompressionGzip InputAppscopeCompression = "gzip"
-)
-
-func (e InputAppscopeCompression) ToPointer() *InputAppscopeCompression {
-	return &e
-}
-func (e *InputAppscopeCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputAppscopeCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeCompression: %v", v)
-	}
-}
-
-type InputAppscopePq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputAppscopeMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputAppscopeCompression `default:"none" json:"compress"`
-}
-
-func (i InputAppscopePq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputAppscopePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputAppscopePq) GetMode() *InputAppscopeMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputAppscopePq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputAppscopePq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputAppscopePq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputAppscopePq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputAppscopePq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputAppscopePq) GetCompress() *InputAppscopeCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputAppscopeMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputAppscopeMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputAppscopeMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputAppscopeMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputAppscopeMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type Allow struct {
 	// Specify the name of a process or family of processes.
 	Procname string `json:"procname"`
@@ -296,44 +104,18 @@ func (i *InputAppscopeFilter) GetTransportURL() *string {
 	return i.TransportURL
 }
 
-type InputAppscopeDataCompressionFormat string
-
-const (
-	InputAppscopeDataCompressionFormatNone InputAppscopeDataCompressionFormat = "none"
-	InputAppscopeDataCompressionFormatGzip InputAppscopeDataCompressionFormat = "gzip"
-)
-
-func (e InputAppscopeDataCompressionFormat) ToPointer() *InputAppscopeDataCompressionFormat {
-	return &e
-}
-func (e *InputAppscopeDataCompressionFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputAppscopeDataCompressionFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeDataCompressionFormat: %v", v)
-	}
-}
-
 type InputAppscopePersistence struct {
 	// Spool events and metrics on disk for Cribl Edge and Search
-	Enable *bool `default:"false" json:"enable"`
+	Enable *bool `json:"enable,omitempty"`
 	// Time span for each file bucket
-	TimeWindow *string `default:"10m" json:"timeWindow"`
+	TimeWindow *string `json:"timeWindow,omitempty"`
 	// Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
-	MaxDataSize *string `default:"1GB" json:"maxDataSize"`
+	MaxDataSize *string `json:"maxDataSize,omitempty"`
 	// Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.
-	MaxDataTime *string                             `default:"24h" json:"maxDataTime"`
-	Compress    *InputAppscopeDataCompressionFormat `default:"gzip" json:"compress"`
+	MaxDataTime *string                                  `json:"maxDataTime,omitempty"`
+	Compress    *DataCompressionFormatOptionsPersistence `json:"compress,omitempty"`
 	// Path to use to write metrics. Defaults to $CRIBL_HOME/state/appscope
-	DestPath *string `default:"$CRIBL_HOME/state/appscope" json:"destPath"`
+	DestPath *string `json:"destPath,omitempty"`
 }
 
 func (i InputAppscopePersistence) MarshalJSON() ([]byte, error) {
@@ -375,7 +157,7 @@ func (i *InputAppscopePersistence) GetMaxDataTime() *string {
 	return i.MaxDataTime
 }
 
-func (i *InputAppscopePersistence) GetCompress() *InputAppscopeDataCompressionFormat {
+func (i *InputAppscopePersistence) GetCompress() *DataCompressionFormatOptionsPersistence {
 	if i == nil {
 		return nil
 	}
@@ -389,261 +171,66 @@ func (i *InputAppscopePersistence) GetDestPath() *string {
 	return i.DestPath
 }
 
-// InputAppscopeAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-type InputAppscopeAuthenticationMethod string
-
-const (
-	InputAppscopeAuthenticationMethodManual InputAppscopeAuthenticationMethod = "manual"
-	InputAppscopeAuthenticationMethodSecret InputAppscopeAuthenticationMethod = "secret"
-)
-
-func (e InputAppscopeAuthenticationMethod) ToPointer() *InputAppscopeAuthenticationMethod {
-	return &e
-}
-func (e *InputAppscopeAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputAppscopeAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeAuthenticationMethod: %v", v)
-	}
-}
-
-type InputAppscopeMinimumTLSVersion string
-
-const (
-	InputAppscopeMinimumTLSVersionTlSv1  InputAppscopeMinimumTLSVersion = "TLSv1"
-	InputAppscopeMinimumTLSVersionTlSv11 InputAppscopeMinimumTLSVersion = "TLSv1.1"
-	InputAppscopeMinimumTLSVersionTlSv12 InputAppscopeMinimumTLSVersion = "TLSv1.2"
-	InputAppscopeMinimumTLSVersionTlSv13 InputAppscopeMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e InputAppscopeMinimumTLSVersion) ToPointer() *InputAppscopeMinimumTLSVersion {
-	return &e
-}
-func (e *InputAppscopeMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputAppscopeMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeMinimumTLSVersion: %v", v)
-	}
-}
-
-type InputAppscopeMaximumTLSVersion string
-
-const (
-	InputAppscopeMaximumTLSVersionTlSv1  InputAppscopeMaximumTLSVersion = "TLSv1"
-	InputAppscopeMaximumTLSVersionTlSv11 InputAppscopeMaximumTLSVersion = "TLSv1.1"
-	InputAppscopeMaximumTLSVersionTlSv12 InputAppscopeMaximumTLSVersion = "TLSv1.2"
-	InputAppscopeMaximumTLSVersionTlSv13 InputAppscopeMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e InputAppscopeMaximumTLSVersion) ToPointer() *InputAppscopeMaximumTLSVersion {
-	return &e
-}
-func (e *InputAppscopeMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputAppscopeMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputAppscopeMaximumTLSVersion: %v", v)
-	}
-}
-
-type InputAppscopeTLSSettingsServerSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string `json:"passphrase,omitempty"`
-	// Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Require clients to present their certificates. Used to perform client authentication using SSL certs.
-	RequestCert        *bool                           `default:"false" json:"requestCert"`
-	RejectUnauthorized any                             `json:"rejectUnauthorized,omitempty"`
-	CommonNameRegex    any                             `json:"commonNameRegex,omitempty"`
-	MinVersion         *InputAppscopeMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion         *InputAppscopeMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (i InputAppscopeTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetDisabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.Disabled
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetCertificateName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertificateName
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.PrivKeyPath
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetPassphrase() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Passphrase
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetCertPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertPath
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetCaPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CaPath
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetRequestCert() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RequestCert
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if i == nil {
-		return nil
-	}
-	return i.RejectUnauthorized
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetCommonNameRegex() any {
-	if i == nil {
-		return nil
-	}
-	return i.CommonNameRegex
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetMinVersion() *InputAppscopeMinimumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MinVersion
-}
-
-func (i *InputAppscopeTLSSettingsServerSide) GetMaxVersion() *InputAppscopeMaximumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MaxVersion
-}
-
 type InputAppscope struct {
 	// Unique ID for this input
-	ID       string            `json:"id"`
+	ID       *string           `json:"id,omitempty"`
 	Type     InputAppscopeType `json:"type"`
-	Disabled *bool             `default:"false" json:"disabled"`
+	Disabled *bool             `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputAppscopeConnection `json:"connections,omitempty"`
-	Pq          *InputAppscopePq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Regex matching IP addresses that are allowed to establish a connection
-	IPWhitelistRegex *string `default:"/.*/" json:"ipWhitelistRegex"`
+	IPWhitelistRegex *string `json:"ipWhitelistRegex,omitempty"`
 	// Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-	MaxActiveCxn *float64 `default:"1000" json:"maxActiveCxn"`
+	MaxActiveCxn *float64 `json:"maxActiveCxn,omitempty"`
 	// How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
-	SocketIdleTimeout *float64 `default:"0" json:"socketIdleTimeout"`
+	SocketIdleTimeout *float64 `json:"socketIdleTimeout,omitempty"`
 	// How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
-	SocketEndingMaxWait *float64 `default:"30" json:"socketEndingMaxWait"`
+	SocketEndingMaxWait *float64 `json:"socketEndingMaxWait,omitempty"`
 	// The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-	SocketMaxLifespan *float64 `default:"0" json:"socketMaxLifespan"`
+	SocketMaxLifespan *float64 `json:"socketMaxLifespan,omitempty"`
 	// Enable if the connection is proxied by a device that supports proxy protocol v1 or v2
-	EnableProxyHeader *bool `default:"false" json:"enableProxyHeader"`
+	EnableProxyHeader *bool `json:"enableProxyHeader,omitempty"`
 	// Fields to add to events from this input
-	Metadata []InputAppscopeMetadatum `json:"metadata,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
 	// A list of event-breaking rulesets that will be applied, in order, to the input data stream
 	BreakerRulesets []string `json:"breakerRulesets,omitempty"`
 	// How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-	StaleChannelFlushMs *float64 `default:"10000" json:"staleChannelFlushMs"`
+	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
 	// Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.
-	EnableUnixPath *bool                     `default:"false" json:"enableUnixPath"`
+	EnableUnixPath *bool                     `json:"enableUnixPath,omitempty"`
 	Filter         *InputAppscopeFilter      `json:"filter,omitempty"`
 	Persistence    *InputAppscopePersistence `json:"persistence,omitempty"`
 	// Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-	AuthType    *InputAppscopeAuthenticationMethod `default:"manual" json:"authType"`
-	Description *string                            `json:"description,omitempty"`
+	AuthType    *AuthenticationMethodOptionsAuthTokensItems `json:"authType,omitempty"`
+	Description *string                                     `json:"description,omitempty"`
 	// Address to bind on. Defaults to 0.0.0.0 (all addresses).
 	Host *string `json:"host,omitempty"`
 	// Port to listen on
-	Port *float64                            `json:"port,omitempty"`
-	TLS  *InputAppscopeTLSSettingsServerSide `json:"tls,omitempty"`
+	Port *float64                   `json:"port,omitempty"`
+	TLS  *TLSSettingsServerSideType `json:"tls,omitempty"`
 	// Path to the UNIX domain socket to listen on.
-	UnixSocketPath *string `default:"$CRIBL_HOME/state/appscope.sock" json:"unixSocketPath"`
+	UnixSocketPath *string `json:"unixSocketPath,omitempty"`
 	// Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.
 	UnixSocketPerms *string `json:"unixSocketPerms,omitempty"`
 	// Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
-	AuthToken *string `default:"" json:"authToken"`
+	AuthToken *string `json:"authToken,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (i InputAppscope) MarshalJSON() ([]byte, error) {
@@ -651,15 +238,15 @@ func (i InputAppscope) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputAppscope) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputAppscope) GetID() string {
+func (i *InputAppscope) GetID() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ID
 }
@@ -713,14 +300,14 @@ func (i *InputAppscope) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputAppscope) GetConnections() []InputAppscopeConnection {
+func (i *InputAppscope) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputAppscope) GetPq() *InputAppscopePq {
+func (i *InputAppscope) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -769,7 +356,7 @@ func (i *InputAppscope) GetEnableProxyHeader() *bool {
 	return i.EnableProxyHeader
 }
 
-func (i *InputAppscope) GetMetadata() []InputAppscopeMetadatum {
+func (i *InputAppscope) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -811,7 +398,7 @@ func (i *InputAppscope) GetPersistence() *InputAppscopePersistence {
 	return i.Persistence
 }
 
-func (i *InputAppscope) GetAuthType() *InputAppscopeAuthenticationMethod {
+func (i *InputAppscope) GetAuthType() *AuthenticationMethodOptionsAuthTokensItems {
 	if i == nil {
 		return nil
 	}
@@ -839,7 +426,7 @@ func (i *InputAppscope) GetPort() *float64 {
 	return i.Port
 }
 
-func (i *InputAppscope) GetTLS() *InputAppscopeTLSSettingsServerSide {
+func (i *InputAppscope) GetTLS() *TLSSettingsServerSideType {
 	if i == nil {
 		return nil
 	}
@@ -872,4 +459,18 @@ func (i *InputAppscope) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
+}
+
+func (i *InputAppscope) GetTemplateHost() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateHost
+}
+
+func (i *InputAppscope) GetTemplatePort() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplatePort
 }

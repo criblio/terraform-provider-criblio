@@ -10,10 +10,10 @@ import (
 type CreateInputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// The id of this source instance
+	// Unique identifier for this source instance. Must match the `id` property within the Input object in the request body.
 	ID string `queryParam:"style=form,explode=true,name=id"`
 	// New Input object
-	Input shared.Input `request:"mediaType=application/json"`
+	Input shared.InputUnion2 `request:"mediaType=application/json"`
 }
 
 func (c *CreateInputRequest) GetGroupID() string {
@@ -30,19 +30,19 @@ func (c *CreateInputRequest) GetID() string {
 	return c.ID
 }
 
-func (c *CreateInputRequest) GetInput() shared.Input {
+func (c *CreateInputRequest) GetInput() shared.InputUnion2 {
 	if c == nil {
-		return shared.Input{}
+		return shared.InputUnion2{}
 	}
 	return c.Input
 }
 
 // CreateInputResponseBody - a list of Input objects
 type CreateInputResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (c *CreateInputResponseBody) GetItems() []shared.Input {
+func (c *CreateInputResponseBody) GetItems() []shared.InputUnion1 {
 	if c == nil {
 		return nil
 	}

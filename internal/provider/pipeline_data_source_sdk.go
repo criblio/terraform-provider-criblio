@@ -43,13 +43,13 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Context,
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		// Convert conf to JSON
-		confBytes, err := json.Marshal(functionsItem.Conf)
-		if err != nil {
-			diags.AddError("Failed to marshal function conf", err.Error())
-			return diags
+		if len(functionsItem.Conf) > 0 {
+			functions.Conf = make(map[string]jsontypes.Normalized, len(functionsItem.Conf))
+			for key, value := range functionsItem.Conf {
+				result, _ := json.Marshal(value)
+				functions.Conf[key] = jsontypes.NewNormalizedValue(string(result))
+			}
 		}
-		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)

@@ -7,24 +7,26 @@ import (
 )
 
 type InputSnmp struct {
-	BestEffortParsing  types.Bool            `tfsdk:"best_effort_parsing"`
-	Connections        []InputSnmpConnection `tfsdk:"connections"`
-	Description        types.String          `tfsdk:"description"`
-	Disabled           types.Bool            `tfsdk:"disabled"`
-	Environment        types.String          `tfsdk:"environment"`
-	Host               types.String          `tfsdk:"host"`
-	ID                 types.String          `tfsdk:"id"`
-	IPWhitelistRegex   types.String          `tfsdk:"ip_whitelist_regex"`
-	MaxBufferSize      types.Float64         `tfsdk:"max_buffer_size"`
-	Metadata           []InputSnmpMetadatum  `tfsdk:"metadata"`
-	Pipeline           types.String          `tfsdk:"pipeline"`
-	Port               types.Float64         `tfsdk:"port"`
-	Pq                 *InputSnmpPq          `tfsdk:"pq"`
-	PqEnabled          types.Bool            `tfsdk:"pq_enabled"`
-	SendToRoutes       types.Bool            `tfsdk:"send_to_routes"`
-	SnmpV3Auth         *SNMPv3Authentication `tfsdk:"snmp_v3_auth"`
-	Streamtags         []types.String        `tfsdk:"streamtags"`
-	Type               types.String          `tfsdk:"type"`
-	UDPSocketRxBufSize types.Float64         `tfsdk:"udp_socket_rx_buf_size"`
-	VarbindsWithTypes  types.Bool            `tfsdk:"varbinds_with_types"`
+	TemplateHost       types.String                   `tfsdk:"template_host"`
+	TemplatePort       types.String                   `tfsdk:"template_port"`
+	BestEffortParsing  types.Bool                     `tfsdk:"best_effort_parsing"`
+	Connections        []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description        types.String                   `tfsdk:"description"`
+	Disabled           types.Bool                     `tfsdk:"disabled"`
+	Environment        types.String                   `tfsdk:"environment"`
+	Host               types.String                   `tfsdk:"host"`
+	ID                 types.String                   `tfsdk:"id"`
+	IPWhitelistRegex   types.String                   `tfsdk:"ip_whitelist_regex"`
+	MaxBufferSize      types.Float64                  `tfsdk:"max_buffer_size"`
+	Metadata           []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Pipeline           types.String                   `tfsdk:"pipeline"`
+	Port               types.Float64                  `tfsdk:"port"`
+	Pq                 *PqType                        `tfsdk:"pq"`
+	PqEnabled          types.Bool                     `tfsdk:"pq_enabled"`
+	SendToRoutes       types.Bool                     `tfsdk:"send_to_routes"`
+	SnmpV3Auth         *SNMPv3Authentication          `tfsdk:"snmp_v3_auth"`
+	Streamtags         []types.String                 `tfsdk:"streamtags"`
+	Type               types.String                   `tfsdk:"type"`
+	UDPSocketRxBufSize types.Float64                  `tfsdk:"udp_socket_rx_buf_size"`
+	VarbindsWithTypes  types.Bool                     `tfsdk:"varbinds_with_types"`
 }

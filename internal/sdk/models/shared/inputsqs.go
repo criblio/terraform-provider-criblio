@@ -31,173 +31,14 @@ func (e *InputSqsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputSqsConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputSqsConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputSqsConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputSqsConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputSqsConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputSqsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputSqsMode string
-
-const (
-	InputSqsModeSmart  InputSqsMode = "smart"
-	InputSqsModeAlways InputSqsMode = "always"
-)
-
-func (e InputSqsMode) ToPointer() *InputSqsMode {
-	return &e
-}
-func (e *InputSqsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputSqsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSqsMode: %v", v)
-	}
-}
-
-// InputSqsCompression - Codec to use to compress the persisted data
-type InputSqsCompression string
-
-const (
-	InputSqsCompressionNone InputSqsCompression = "none"
-	InputSqsCompressionGzip InputSqsCompression = "gzip"
-)
-
-func (e InputSqsCompression) ToPointer() *InputSqsCompression {
-	return &e
-}
-func (e *InputSqsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputSqsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSqsCompression: %v", v)
-	}
-}
-
-type InputSqsPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputSqsMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputSqsCompression `default:"none" json:"compress"`
-}
-
-func (i InputSqsPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputSqsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputSqsPq) GetMode() *InputSqsMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputSqsPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputSqsPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputSqsPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputSqsPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputSqsPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputSqsPq) GetCompress() *InputSqsCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
 // InputSqsQueueType - The queue type used (or created)
 type InputSqsQueueType string
 
 const (
+	// InputSqsQueueTypeStandard Standard
 	InputSqsQueueTypeStandard InputSqsQueueType = "standard"
-	InputSqsQueueTypeFifo     InputSqsQueueType = "fifo"
+	// InputSqsQueueTypeFifo FIFO
+	InputSqsQueueTypeFifo InputSqsQueueType = "fifo"
 )
 
 func (e InputSqsQueueType) ToPointer() *InputSqsQueueType {
@@ -219,155 +60,81 @@ func (e *InputSqsQueueType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// InputSqsAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
-type InputSqsAuthenticationMethod string
-
-const (
-	InputSqsAuthenticationMethodAuto   InputSqsAuthenticationMethod = "auto"
-	InputSqsAuthenticationMethodManual InputSqsAuthenticationMethod = "manual"
-	InputSqsAuthenticationMethodSecret InputSqsAuthenticationMethod = "secret"
-)
-
-func (e InputSqsAuthenticationMethod) ToPointer() *InputSqsAuthenticationMethod {
-	return &e
-}
-func (e *InputSqsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputSqsAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSqsAuthenticationMethod: %v", v)
-	}
-}
-
-// InputSqsSignatureVersion - Signature version to use for signing SQS requests
-type InputSqsSignatureVersion string
-
-const (
-	InputSqsSignatureVersionV2 InputSqsSignatureVersion = "v2"
-	InputSqsSignatureVersionV4 InputSqsSignatureVersion = "v4"
-)
-
-func (e InputSqsSignatureVersion) ToPointer() *InputSqsSignatureVersion {
-	return &e
-}
-func (e *InputSqsSignatureVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = InputSqsSignatureVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSqsSignatureVersion: %v", v)
-	}
-}
-
-type InputSqsMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputSqsMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputSqsMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputSqsMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputSqsMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputSqs struct {
 	// Unique ID for this input
-	ID       *string       `json:"id,omitempty"`
-	Type     *InputSqsType `json:"type,omitempty"`
-	Disabled *bool         `default:"false" json:"disabled"`
+	ID       *string      `json:"id,omitempty"`
+	Type     InputSqsType `json:"type"`
+	Disabled *bool        `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputSqsConnection `json:"connections,omitempty"`
-	Pq          *InputSqsPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 	QueueName string `json:"queueName"`
 	// The queue type used (or created)
-	QueueType *InputSqsQueueType `default:"standard" json:"queueType"`
+	QueueType InputSqsQueueType `json:"queueType"`
 	// SQS queue owner's AWS account ID. Leave empty if SQS queue is in same AWS account.
 	AwsAccountID *string `json:"awsAccountId,omitempty"`
 	// Create queue if it does not exist
-	CreateQueue *bool `default:"false" json:"createQueue"`
+	CreateQueue *bool `json:"createQueue,omitempty"`
 	// AWS authentication method. Choose Auto to use IAM roles.
-	AwsAuthenticationMethod *InputSqsAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
-	AwsSecretKey            *string                       `json:"awsSecretKey,omitempty"`
+	AwsAuthenticationMethod *AuthenticationMethodOptionsS3CollectorConf `json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey            *string                                     `json:"awsSecretKey,omitempty"`
 	// AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 	Region *string `json:"region,omitempty"`
 	// SQS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SQS-compatible endpoint.
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Signature version to use for signing SQS requests
-	SignatureVersion *InputSqsSignatureVersion `default:"v4" json:"signatureVersion"`
+	SignatureVersion *SignatureVersionOptionsSqs `json:"signatureVersion,omitempty"`
 	// Reuse connections between requests, which can improve performance
-	ReuseConnections *bool `default:"true" json:"reuseConnections"`
+	ReuseConnections *bool `json:"reuseConnections,omitempty"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Use Assume Role credentials to access SQS
-	EnableAssumeRole *bool `default:"false" json:"enableAssumeRole"`
+	EnableAssumeRole *bool `json:"enableAssumeRole,omitempty"`
 	// Amazon Resource Name (ARN) of the role to assume
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 	// External ID to use when assuming role
 	AssumeRoleExternalID *string `json:"assumeRoleExternalId,omitempty"`
 	// Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-	DurationSeconds *float64 `default:"3600" json:"durationSeconds"`
+	DurationSeconds *float64 `json:"durationSeconds,omitempty"`
 	// The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-	MaxMessages *float64 `default:"10" json:"maxMessages"`
+	MaxMessages *float64 `json:"maxMessages,omitempty"`
 	// After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
-	VisibilityTimeout *float64 `default:"600" json:"visibilityTimeout"`
+	VisibilityTimeout *float64 `json:"visibilityTimeout,omitempty"`
 	// Fields to add to events from this input
-	Metadata []InputSqsMetadatum `json:"metadata,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
 	// How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-	PollTimeout *float64 `default:"10" json:"pollTimeout"`
+	PollTimeout *float64 `json:"pollTimeout,omitempty"`
 	Description *string  `json:"description,omitempty"`
 	AwsAPIKey   *string  `json:"awsApiKey,omitempty"`
 	// Select or create a stored secret that references your access key and secret key
 	AwsSecret *string `json:"awsSecret,omitempty"`
 	// How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
-	NumReceivers *float64 `default:"3" json:"numReceivers"`
+	NumReceivers *float64 `json:"numReceivers,omitempty"`
+	// Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+	TemplateQueueName *string `json:"__template_queueName,omitempty"`
+	// Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+	TemplateAwsAccountID *string `json:"__template_awsAccountId,omitempty"`
+	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
+	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
+	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
+	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (i InputSqs) MarshalJSON() ([]byte, error) {
@@ -375,7 +142,7 @@ func (i InputSqs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputSqs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"queueName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "queueName", "queueType"}); err != nil {
 		return err
 	}
 	return nil
@@ -388,9 +155,9 @@ func (i *InputSqs) GetID() *string {
 	return i.ID
 }
 
-func (i *InputSqs) GetType() *InputSqsType {
+func (i *InputSqs) GetType() InputSqsType {
 	if i == nil {
-		return nil
+		return InputSqsType("")
 	}
 	return i.Type
 }
@@ -437,14 +204,14 @@ func (i *InputSqs) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputSqs) GetConnections() []InputSqsConnection {
+func (i *InputSqs) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputSqs) GetPq() *InputSqsPq {
+func (i *InputSqs) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -458,9 +225,9 @@ func (i *InputSqs) GetQueueName() string {
 	return i.QueueName
 }
 
-func (i *InputSqs) GetQueueType() *InputSqsQueueType {
+func (i *InputSqs) GetQueueType() InputSqsQueueType {
 	if i == nil {
-		return nil
+		return InputSqsQueueType("")
 	}
 	return i.QueueType
 }
@@ -479,7 +246,7 @@ func (i *InputSqs) GetCreateQueue() *bool {
 	return i.CreateQueue
 }
 
-func (i *InputSqs) GetAwsAuthenticationMethod() *InputSqsAuthenticationMethod {
+func (i *InputSqs) GetAwsAuthenticationMethod() *AuthenticationMethodOptionsS3CollectorConf {
 	if i == nil {
 		return nil
 	}
@@ -507,7 +274,7 @@ func (i *InputSqs) GetEndpoint() *string {
 	return i.Endpoint
 }
 
-func (i *InputSqs) GetSignatureVersion() *InputSqsSignatureVersion {
+func (i *InputSqs) GetSignatureVersion() *SignatureVersionOptionsSqs {
 	if i == nil {
 		return nil
 	}
@@ -570,7 +337,7 @@ func (i *InputSqs) GetVisibilityTimeout() *float64 {
 	return i.VisibilityTimeout
 }
 
-func (i *InputSqs) GetMetadata() []InputSqsMetadatum {
+func (i *InputSqs) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -610,4 +377,53 @@ func (i *InputSqs) GetNumReceivers() *float64 {
 		return nil
 	}
 	return i.NumReceivers
+}
+
+func (i *InputSqs) GetTemplateQueueName() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateQueueName
+}
+
+func (i *InputSqs) GetTemplateAwsAccountID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAwsAccountID
+}
+
+func (i *InputSqs) GetTemplateAwsSecretKey() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAwsSecretKey
+}
+
+func (i *InputSqs) GetTemplateRegion() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateRegion
+}
+
+func (i *InputSqs) GetTemplateAssumeRoleArn() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAssumeRoleArn
+}
+
+func (i *InputSqs) GetTemplateAssumeRoleExternalID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAssumeRoleExternalID
+}
+
+func (i *InputSqs) GetTemplateAwsAPIKey() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAwsAPIKey
 }

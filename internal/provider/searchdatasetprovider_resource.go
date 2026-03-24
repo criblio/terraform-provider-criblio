@@ -5,7 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
-	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
@@ -19,7 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -125,8 +124,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -195,8 +197,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -306,8 +311,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -358,8 +366,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -379,19 +390,15 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 							speakeasy_stringvalidators.NotNull(),
 						},
 					},
-				"password": schema.StringAttribute{
-					Computed:    true,
-					Optional:    true,
-					Sensitive:   true,
-					Description: `Elasticsearch password for authentication. Not Null`,
-					PlanModifiers: []planmodifier.String{
-						stringplanmodifier.UseStateForUnknown(),
+					"password": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Elasticsearch password for authentication. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.UTF8LengthAtLeast(1),
+						},
 					},
-					Validators: []validator.String{
-						speakeasy_stringvalidators.NotNull(),
-						stringvalidator.UTF8LengthAtLeast(1),
-					},
-				},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -472,8 +479,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -564,8 +574,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -663,8 +676,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -754,8 +770,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -806,8 +825,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -924,8 +946,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1023,8 +1048,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1165,8 +1193,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1217,8 +1248,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1303,8 +1337,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1401,8 +1438,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -1479,8 +1519,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1517,6 +1560,7 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
 						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
 						path.MatchRelative().AtParent().AtName("edge_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
@@ -1527,15 +1571,76 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				},
 			},
 			"cribl_search_provider": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					custom_objectplanmodifier.PreferState(),
-				},
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
+						Description: `Unique identifier for the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Type of the provider. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Validators: []validator.Object{
+					objectvalidator.ConflictsWith(path.Expressions{
+						path.MatchRelative().AtParent().AtName("api_aws_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
+						path.MatchRelative().AtParent().AtName("api_azure_provider"),
+						path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_gcp_provider"),
+						path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
+						path.MatchRelative().AtParent().AtName("apihttp_provider"),
+						path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
+						path.MatchRelative().AtParent().AtName("api_okta_provider"),
+						path.MatchRelative().AtParent().AtName("api_open_search_provider"),
+						path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
+						path.MatchRelative().AtParent().AtName("api_zoom_provider"),
+						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
+						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
+						path.MatchRelative().AtParent().AtName("click_house_provider"),
+						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
+						path.MatchRelative().AtParent().AtName("edge_provider"),
+						path.MatchRelative().AtParent().AtName("gcs_provider"),
+						path.MatchRelative().AtParent().AtName("meta_provider"),
+						path.MatchRelative().AtParent().AtName("prometheus_provider"),
+						path.MatchRelative().AtParent().AtName("s3_provider"),
+						path.MatchRelative().AtParent().AtName("snowflake_provider"),
+					}...),
+				},
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Description of the provider`,
+			},
+			"edge_provider": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1574,65 +1679,6 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						path.MatchRelative().AtParent().AtName("click_house_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
 						path.MatchRelative().AtParent().AtName("cribl_search_provider"),
-						path.MatchRelative().AtParent().AtName("edge_provider"),
-						path.MatchRelative().AtParent().AtName("gcs_provider"),
-						path.MatchRelative().AtParent().AtName("meta_provider"),
-						path.MatchRelative().AtParent().AtName("prometheus_provider"),
-						path.MatchRelative().AtParent().AtName("s3_provider"),
-						path.MatchRelative().AtParent().AtName("snowflake_provider"),
-					}...),
-				},
-			},
-		"description": schema.StringAttribute{
-			Computed:    true,
-			Description: `Description of the provider`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
-			},
-		},
-			"edge_provider": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Unique identifier for the provider. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Type of the provider. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
-					},
-				},
-				Validators: []validator.Object{
-					objectvalidator.ConflictsWith(path.Expressions{
-						path.MatchRelative().AtParent().AtName("api_aws_provider"),
-						path.MatchRelative().AtParent().AtName("api_azure_data_explorer_provider"),
-						path.MatchRelative().AtParent().AtName("api_azure_provider"),
-						path.MatchRelative().AtParent().AtName("api_elastic_search_provider"),
-						path.MatchRelative().AtParent().AtName("api_gcp_provider"),
-						path.MatchRelative().AtParent().AtName("api_google_workspace_provider"),
-						path.MatchRelative().AtParent().AtName("apihttp_provider"),
-						path.MatchRelative().AtParent().AtName("api_ms_graph_provider"),
-						path.MatchRelative().AtParent().AtName("api_okta_provider"),
-						path.MatchRelative().AtParent().AtName("api_open_search_provider"),
-						path.MatchRelative().AtParent().AtName("api_tailscale_provider"),
-						path.MatchRelative().AtParent().AtName("api_zoom_provider"),
-						path.MatchRelative().AtParent().AtName("aws_security_lake_provider"),
-						path.MatchRelative().AtParent().AtName("azure_blob_provider"),
-						path.MatchRelative().AtParent().AtName("click_house_provider"),
-						path.MatchRelative().AtParent().AtName("cribl_leader_provider"),
 						path.MatchRelative().AtParent().AtName("gcs_provider"),
 						path.MatchRelative().AtParent().AtName("meta_provider"),
 						path.MatchRelative().AtParent().AtName("prometheus_provider"),
@@ -1645,8 +1691,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -1707,19 +1756,19 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-		"id": schema.StringAttribute{
-			Computed:    true,
-			Description: `Unique identifier for the provider`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the provider`,
 			},
-		},
 			"meta_provider": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"id": schema.StringAttribute{
@@ -1783,8 +1832,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -1879,27 +1931,23 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						Optional:    true,
 						Description: `AWS access key`,
 					},
-				"aws_authentication_method": schema.StringAttribute{
-					Computed:    true,
-					Optional:    true,
-					Description: `AWS authentication method. must be one of ["auto", "manual"]`,
-					Validators: []validator.String{
-						stringvalidator.OneOf(
-							"auto",
-							"manual",
-						),
+					"aws_authentication_method": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `AWS authentication method. must be one of ["auto", "manual"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"auto",
+								"manual",
+							),
+						},
 					},
-				},
-				"aws_secret_key": schema.StringAttribute{
-					Computed:    true,
-					Optional:    true,
-					Sensitive:   true,
-					Description: `AWS secret key`,
-					PlanModifiers: []planmodifier.String{
-						stringplanmodifier.UseStateForUnknown(),
+					"aws_secret_key": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `AWS secret key`,
 					},
-				},
-				"bucket": schema.StringAttribute{
+					"bucket": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
 						Description: `S3 bucket name`,
@@ -1910,8 +1958,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						Description: `Suggested bucket path`,
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"enable_abac_tagging": schema.BoolAttribute{
@@ -2015,8 +2066,11 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 						},
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Description of the provider`,
 					},
 					"endpoint": schema.StringAttribute{
@@ -2096,13 +2150,10 @@ func (r *SearchDatasetProviderResource) Schema(ctx context.Context, req resource
 					}...),
 				},
 			},
-		"type": schema.StringAttribute{
-			Computed:    true,
-			Description: `Type of the provider`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Type of the provider`,
 			},
-		},
 		},
 	}
 }
@@ -2248,7 +2299,6 @@ func (r *SearchDatasetProviderResource) Read(ctx context.Context, req resource.R
 func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *SearchDatasetProviderResourceModel
 	var plan types.Object
-	var stateItem types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -2258,24 +2308,6 @@ func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource
 	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-
-	// cribl_search providers (e.g. lakehouse) are read-only; skip API call to avoid marshal error
-	resp.Diagnostics.Append(req.State.Get(ctx, &stateItem)...)
-	if !resp.Diagnostics.HasError() {
-		var state SearchDatasetProviderResourceModel
-		resp.Diagnostics.Append(stateItem.As(ctx, &state, basetypes.ObjectAsOptions{
-			UnhandledNullAsEmpty:    true,
-			UnhandledUnknownAsEmpty: true,
-		})...)
-		if !resp.Diagnostics.HasError() &&
-			(state.CriblSearchProvider != nil || state.Type.ValueString() == "cribl_search") {
-			resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-			if !resp.Diagnostics.HasError() {
-				resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
-			}
-			return
-		}
 	}
 
 	request, requestDiags := data.ToOperationsUpdateDatasetProviderByIDRequest(ctx)

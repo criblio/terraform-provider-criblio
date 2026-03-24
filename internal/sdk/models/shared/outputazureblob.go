@@ -31,130 +31,19 @@ func (e *OutputAzureBlobType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputAzureBlobDataFormat - Format of the output data
-type OutputAzureBlobDataFormat string
-
-const (
-	OutputAzureBlobDataFormatJSON    OutputAzureBlobDataFormat = "json"
-	OutputAzureBlobDataFormatRaw     OutputAzureBlobDataFormat = "raw"
-	OutputAzureBlobDataFormatParquet OutputAzureBlobDataFormat = "parquet"
-)
-
-func (e OutputAzureBlobDataFormat) ToPointer() *OutputAzureBlobDataFormat {
-	return &e
-}
-func (e *OutputAzureBlobDataFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "json":
-		fallthrough
-	case "raw":
-		fallthrough
-	case "parquet":
-		*e = OutputAzureBlobDataFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobDataFormat: %v", v)
-	}
-}
-
-// OutputAzureBlobBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputAzureBlobBackpressureBehavior string
-
-const (
-	OutputAzureBlobBackpressureBehaviorBlock OutputAzureBlobBackpressureBehavior = "block"
-	OutputAzureBlobBackpressureBehaviorDrop  OutputAzureBlobBackpressureBehavior = "drop"
-)
-
-func (e OutputAzureBlobBackpressureBehavior) ToPointer() *OutputAzureBlobBackpressureBehavior {
-	return &e
-}
-func (e *OutputAzureBlobBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputAzureBlobBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputAzureBlobDiskSpaceProtection - How to handle events when disk space is below the global 'Min free disk space' limit
-type OutputAzureBlobDiskSpaceProtection string
-
-const (
-	OutputAzureBlobDiskSpaceProtectionBlock OutputAzureBlobDiskSpaceProtection = "block"
-	OutputAzureBlobDiskSpaceProtectionDrop  OutputAzureBlobDiskSpaceProtection = "drop"
-)
-
-func (e OutputAzureBlobDiskSpaceProtection) ToPointer() *OutputAzureBlobDiskSpaceProtection {
-	return &e
-}
-func (e *OutputAzureBlobDiskSpaceProtection) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputAzureBlobDiskSpaceProtection(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobDiskSpaceProtection: %v", v)
-	}
-}
-
-type OutputAzureBlobAuthenticationMethod string
-
-const (
-	OutputAzureBlobAuthenticationMethodManual       OutputAzureBlobAuthenticationMethod = "manual"
-	OutputAzureBlobAuthenticationMethodSecret       OutputAzureBlobAuthenticationMethod = "secret"
-	OutputAzureBlobAuthenticationMethodClientSecret OutputAzureBlobAuthenticationMethod = "clientSecret"
-	OutputAzureBlobAuthenticationMethodClientCert   OutputAzureBlobAuthenticationMethod = "clientCert"
-)
-
-func (e OutputAzureBlobAuthenticationMethod) ToPointer() *OutputAzureBlobAuthenticationMethod {
-	return &e
-}
-func (e *OutputAzureBlobAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "clientSecret":
-		fallthrough
-	case "clientCert":
-		*e = OutputAzureBlobAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobAuthenticationMethod: %v", v)
-	}
-}
-
 type BlobAccessTier string
 
 const (
+	// BlobAccessTierInferred Default account access tier
 	BlobAccessTierInferred BlobAccessTier = "Inferred"
-	BlobAccessTierHot      BlobAccessTier = "Hot"
-	BlobAccessTierCool     BlobAccessTier = "Cool"
-	BlobAccessTierCold     BlobAccessTier = "Cold"
-	BlobAccessTierArchive  BlobAccessTier = "Archive"
+	// BlobAccessTierHot Hot tier
+	BlobAccessTierHot BlobAccessTier = "Hot"
+	// BlobAccessTierCool Cool tier
+	BlobAccessTierCool BlobAccessTier = "Cool"
+	// BlobAccessTierCold Cold tier
+	BlobAccessTierCold BlobAccessTier = "Cold"
+	// BlobAccessTierArchive Archive tier
+	BlobAccessTierArchive BlobAccessTier = "Archive"
 )
 
 func (e BlobAccessTier) ToPointer() *BlobAccessTier {
@@ -182,177 +71,10 @@ func (e *BlobAccessTier) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputAzureBlobCompression - Data compression format to apply to HTTP content before it is delivered
-type OutputAzureBlobCompression string
-
-const (
-	OutputAzureBlobCompressionNone OutputAzureBlobCompression = "none"
-	OutputAzureBlobCompressionGzip OutputAzureBlobCompression = "gzip"
-)
-
-func (e OutputAzureBlobCompression) ToPointer() *OutputAzureBlobCompression {
-	return &e
-}
-func (e *OutputAzureBlobCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputAzureBlobCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobCompression: %v", v)
-	}
-}
-
-// OutputAzureBlobCompressionLevel - Compression level to apply before moving files to final destination
-type OutputAzureBlobCompressionLevel string
-
-const (
-	OutputAzureBlobCompressionLevelBestSpeed       OutputAzureBlobCompressionLevel = "best_speed"
-	OutputAzureBlobCompressionLevelNormal          OutputAzureBlobCompressionLevel = "normal"
-	OutputAzureBlobCompressionLevelBestCompression OutputAzureBlobCompressionLevel = "best_compression"
-)
-
-func (e OutputAzureBlobCompressionLevel) ToPointer() *OutputAzureBlobCompressionLevel {
-	return &e
-}
-func (e *OutputAzureBlobCompressionLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "best_speed":
-		fallthrough
-	case "normal":
-		fallthrough
-	case "best_compression":
-		*e = OutputAzureBlobCompressionLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobCompressionLevel: %v", v)
-	}
-}
-
-// OutputAzureBlobParquetVersion - Determines which data types are supported and how they are represented
-type OutputAzureBlobParquetVersion string
-
-const (
-	OutputAzureBlobParquetVersionParquet10 OutputAzureBlobParquetVersion = "PARQUET_1_0"
-	OutputAzureBlobParquetVersionParquet24 OutputAzureBlobParquetVersion = "PARQUET_2_4"
-	OutputAzureBlobParquetVersionParquet26 OutputAzureBlobParquetVersion = "PARQUET_2_6"
-)
-
-func (e OutputAzureBlobParquetVersion) ToPointer() *OutputAzureBlobParquetVersion {
-	return &e
-}
-func (e *OutputAzureBlobParquetVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "PARQUET_1_0":
-		fallthrough
-	case "PARQUET_2_4":
-		fallthrough
-	case "PARQUET_2_6":
-		*e = OutputAzureBlobParquetVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobParquetVersion: %v", v)
-	}
-}
-
-// OutputAzureBlobDataPageVersion - Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
-type OutputAzureBlobDataPageVersion string
-
-const (
-	OutputAzureBlobDataPageVersionDataPageV1 OutputAzureBlobDataPageVersion = "DATA_PAGE_V1"
-	OutputAzureBlobDataPageVersionDataPageV2 OutputAzureBlobDataPageVersion = "DATA_PAGE_V2"
-)
-
-func (e OutputAzureBlobDataPageVersion) ToPointer() *OutputAzureBlobDataPageVersion {
-	return &e
-}
-func (e *OutputAzureBlobDataPageVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "DATA_PAGE_V1":
-		fallthrough
-	case "DATA_PAGE_V2":
-		*e = OutputAzureBlobDataPageVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureBlobDataPageVersion: %v", v)
-	}
-}
-
-type OutputAzureBlobKeyValueMetadatum struct {
-	Key   *string `default:"" json:"key"`
-	Value string  `json:"value"`
-}
-
-func (o OutputAzureBlobKeyValueMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputAzureBlobKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputAzureBlobKeyValueMetadatum) GetKey() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Key
-}
-
-func (o *OutputAzureBlobKeyValueMetadatum) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-type OutputAzureBlobCertificate struct {
-	// The certificate you registered as credentials for your app in the Azure portal
-	CertificateName string `json:"certificateName"`
-}
-
-func (o OutputAzureBlobCertificate) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputAzureBlobCertificate) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"certificateName"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputAzureBlobCertificate) GetCertificateName() string {
-	if o == nil {
-		return ""
-	}
-	return o.CertificateName
-}
-
 type OutputAzureBlob struct {
 	// Unique ID for this output
-	ID   *string              `json:"id,omitempty"`
-	Type *OutputAzureBlobType `json:"type,omitempty"`
+	ID   *string             `json:"id,omitempty"`
+	Type OutputAzureBlobType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -361,79 +83,86 @@ type OutputAzureBlob struct {
 	Environment *string `json:"environment,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
-	// The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backtickss, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
+	// The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
 	ContainerName string `json:"containerName"`
 	// Create the configured container in Azure Blob Storage if it does not already exist
-	CreateContainer *bool `default:"false" json:"createContainer"`
+	CreateContainer *bool `json:"createContainer,omitempty"`
 	// Root directory prepended to path before uploading. Value can be a JavaScript expression enclosed in quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myBlobPrefix-${C.env["CRIBL_WORKER_ID"]}`.
 	DestPath *string `json:"destPath,omitempty"`
 	// Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
-	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath string `json:"stagePath"`
 	// Add the Output ID value to staging location
-	AddIDToStagePath *bool `default:"true" json:"addIdToStagePath"`
+	AddIDToStagePath *bool `json:"addIdToStagePath,omitempty"`
 	// Maximum number of parts to upload in parallel per file
-	MaxConcurrentFileParts *float64 `default:"1" json:"maxConcurrentFileParts"`
+	MaxConcurrentFileParts *float64 `json:"maxConcurrentFileParts,omitempty"`
 	// Remove empty staging directories after moving files
-	RemoveEmptyDirs *bool `default:"true" json:"removeEmptyDirs"`
+	RemoveEmptyDirs *bool `json:"removeEmptyDirs,omitempty"`
 	// JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
-	PartitionExpr *string `default:"C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')" json:"partitionExpr"`
+	PartitionExpr *string `json:"partitionExpr,omitempty"`
 	// Format of the output data
-	Format *OutputAzureBlobDataFormat `default:"json" json:"format"`
+	Format *DataFormatOptions `json:"format,omitempty"`
 	// JavaScript expression to define the output filename prefix (can be constant)
-	BaseFileName *string `default:"CriblOut" json:"baseFileName"`
+	BaseFileName *string `json:"baseFileName,omitempty"`
 	// JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
-	FileNameSuffix *string `default:".\\${C.env[\"CRIBL_WORKER_ID\"]}.\\${__format}\\${__compression === \"gzip\" ? \".gz\" : \"\"}" json:"fileNameSuffix"`
+	FileNameSuffix *string `json:"fileNameSuffix,omitempty"`
 	// Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
-	MaxFileSizeMB *float64 `default:"32" json:"maxFileSizeMB"`
+	MaxFileSizeMB *float64 `json:"maxFileSizeMB,omitempty"`
 	// Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
-	MaxFileOpenTimeSec *float64 `default:"300" json:"maxFileOpenTimeSec"`
+	MaxFileOpenTimeSec *float64 `json:"maxFileOpenTimeSec,omitempty"`
 	// Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
-	MaxFileIdleTimeSec *float64 `default:"30" json:"maxFileIdleTimeSec"`
+	MaxFileIdleTimeSec *float64 `json:"maxFileIdleTimeSec,omitempty"`
 	// Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
-	MaxOpenFiles *float64 `default:"100" json:"maxOpenFiles"`
+	MaxOpenFiles *float64 `json:"maxOpenFiles,omitempty"`
 	// If set, this line will be written to the beginning of each output file
-	HeaderLine *string `default:"" json:"headerLine"`
+	HeaderLine *string `json:"headerLine,omitempty"`
 	// Buffer size used to write to a file
-	WriteHighWaterMark *float64 `default:"64" json:"writeHighWaterMark"`
+	WriteHighWaterMark *float64 `json:"writeHighWaterMark,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputAzureBlobBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptionsBlockDrop `json:"onBackpressure,omitempty"`
 	// If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
-	DeadletterEnabled *bool `default:"false" json:"deadletterEnabled"`
+	DeadletterEnabled *bool `json:"deadletterEnabled,omitempty"`
 	// How to handle events when disk space is below the global 'Min free disk space' limit
-	OnDiskFullBackpressure *OutputAzureBlobDiskSpaceProtection  `default:"block" json:"onDiskFullBackpressure"`
-	AuthType               *OutputAzureBlobAuthenticationMethod `default:"manual" json:"authType"`
-	StorageClass           *BlobAccessTier                      `default:"Inferred" json:"storageClass"`
-	Description            *string                              `json:"description,omitempty"`
+	OnDiskFullBackpressure *DiskSpaceProtectionOptions `json:"onDiskFullBackpressure,omitempty"`
+	// Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
+	ForceCloseOnShutdown *bool                        `json:"forceCloseOnShutdown,omitempty"`
+	RetrySettings        *RetrySettingsType           `json:"retrySettings,omitempty"`
+	AuthType             *AuthenticationMethodOptions `json:"authType,omitempty"`
+	StorageClass         *BlobAccessTier              `json:"storageClass,omitempty"`
+	Description          *string                      `json:"description,omitempty"`
 	// Data compression format to apply to HTTP content before it is delivered
-	Compress *OutputAzureBlobCompression `default:"gzip" json:"compress"`
+	Compress *CompressionOptionsHTTP `json:"compress,omitempty"`
 	// Compression level to apply before moving files to final destination
-	CompressionLevel *OutputAzureBlobCompressionLevel `default:"best_speed" json:"compressionLevel"`
+	CompressionLevel *CompressionLevelOptions `json:"compressionLevel,omitempty"`
 	// Automatically calculate the schema based on the events of each Parquet file generated
-	AutomaticSchema *bool `default:"false" json:"automaticSchema"`
+	AutomaticSchema *bool `json:"automaticSchema,omitempty"`
+	// To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
+	ParquetSchema *string `json:"parquetSchema,omitempty"`
 	// Determines which data types are supported and how they are represented
-	ParquetVersion *OutputAzureBlobParquetVersion `default:"PARQUET_2_6" json:"parquetVersion"`
+	ParquetVersion *ParquetVersionOptions `json:"parquetVersion,omitempty"`
 	// Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
-	ParquetDataPageVersion *OutputAzureBlobDataPageVersion `default:"DATA_PAGE_V2" json:"parquetDataPageVersion"`
+	ParquetDataPageVersion *DataPageVersionOptions `json:"parquetDataPageVersion,omitempty"`
 	// The number of rows that every group will contain. The final group can contain a smaller number of rows.
-	ParquetRowGroupLength *float64 `default:"10000" json:"parquetRowGroupLength"`
+	ParquetRowGroupLength *float64 `json:"parquetRowGroupLength,omitempty"`
 	// Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
-	ParquetPageSize *string `default:"1MB" json:"parquetPageSize"`
+	ParquetPageSize *string `json:"parquetPageSize,omitempty"`
 	// Log up to 3 rows that @{product} skips due to data mismatch
 	ShouldLogInvalidRows *bool `json:"shouldLogInvalidRows,omitempty"`
 	// The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"
-	KeyValueMetadata []OutputAzureBlobKeyValueMetadatum `json:"keyValueMetadata,omitempty"`
+	KeyValueMetadata []ItemsTypeKeyValueMetadata `json:"keyValueMetadata,omitempty"`
 	// Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
-	EnableStatistics *bool `default:"true" json:"enableStatistics"`
+	EnableStatistics *bool `json:"enableStatistics,omitempty"`
 	// One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-	EnableWritePageIndex *bool `default:"true" json:"enableWritePageIndex"`
+	EnableWritePageIndex *bool `json:"enableWritePageIndex,omitempty"`
 	// Parquet tools can use the checksum of a Parquet page to verify data integrity
-	EnablePageChecksum *bool `default:"false" json:"enablePageChecksum"`
+	EnablePageChecksum *bool `json:"enablePageChecksum,omitempty"`
 	// How frequently, in seconds, to clean up empty directories
-	EmptyDirCleanupSec *float64 `default:"300" json:"emptyDirCleanupSec"`
+	EmptyDirCleanupSec *float64 `json:"emptyDirCleanupSec,omitempty"`
+	// Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
+	DirectoryBatchSize *float64 `json:"directoryBatchSize,omitempty"`
 	// Storage location for files that fail to reach their final destination after maximum retries are exceeded
-	DeadletterPath *string `default:"$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
+	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-	MaxRetryNum *float64 `default:"20" json:"maxRetryNum"`
+	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
 	// Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.
 	ConnectionString *string `json:"connectionString,omitempty"`
 	// Select or create a stored text secret
@@ -449,8 +178,18 @@ type OutputAzureBlob struct {
 	// Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 	EndpointSuffix *string `json:"endpointSuffix,omitempty"`
 	// Select or create a stored text secret
-	ClientTextSecret *string                     `json:"clientTextSecret,omitempty"`
-	Certificate      *OutputAzureBlobCertificate `json:"certificate,omitempty"`
+	ClientTextSecret *string                                     `json:"clientTextSecret,omitempty"`
+	Certificate      *CertificateTypeAzureBlobAuthTypeClientCert `json:"certificate,omitempty"`
+	// Binds 'containerName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'containerName' at runtime.
+	TemplateContainerName *string `json:"__template_containerName,omitempty"`
+	// Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
+	TemplateFormat *string `json:"__template_format,omitempty"`
+	// Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.
+	TemplateConnectionString *string `json:"__template_connectionString,omitempty"`
+	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
+	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
+	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+	TemplateClientID *string `json:"__template_clientId,omitempty"`
 }
 
 func (o OutputAzureBlob) MarshalJSON() ([]byte, error) {
@@ -458,7 +197,7 @@ func (o OutputAzureBlob) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureBlob) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"containerName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "containerName", "stagePath"}); err != nil {
 		return err
 	}
 	return nil
@@ -471,9 +210,9 @@ func (o *OutputAzureBlob) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputAzureBlob) GetType() *OutputAzureBlobType {
+func (o *OutputAzureBlob) GetType() OutputAzureBlobType {
 	if o == nil {
-		return nil
+		return OutputAzureBlobType("")
 	}
 	return o.Type
 }
@@ -527,9 +266,9 @@ func (o *OutputAzureBlob) GetDestPath() *string {
 	return o.DestPath
 }
 
-func (o *OutputAzureBlob) GetStagePath() *string {
+func (o *OutputAzureBlob) GetStagePath() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.StagePath
 }
@@ -562,7 +301,7 @@ func (o *OutputAzureBlob) GetPartitionExpr() *string {
 	return o.PartitionExpr
 }
 
-func (o *OutputAzureBlob) GetFormat() *OutputAzureBlobDataFormat {
+func (o *OutputAzureBlob) GetFormat() *DataFormatOptions {
 	if o == nil {
 		return nil
 	}
@@ -625,7 +364,7 @@ func (o *OutputAzureBlob) GetWriteHighWaterMark() *float64 {
 	return o.WriteHighWaterMark
 }
 
-func (o *OutputAzureBlob) GetOnBackpressure() *OutputAzureBlobBackpressureBehavior {
+func (o *OutputAzureBlob) GetOnBackpressure() *BackpressureBehaviorOptionsBlockDrop {
 	if o == nil {
 		return nil
 	}
@@ -639,14 +378,28 @@ func (o *OutputAzureBlob) GetDeadletterEnabled() *bool {
 	return o.DeadletterEnabled
 }
 
-func (o *OutputAzureBlob) GetOnDiskFullBackpressure() *OutputAzureBlobDiskSpaceProtection {
+func (o *OutputAzureBlob) GetOnDiskFullBackpressure() *DiskSpaceProtectionOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnDiskFullBackpressure
 }
 
-func (o *OutputAzureBlob) GetAuthType() *OutputAzureBlobAuthenticationMethod {
+func (o *OutputAzureBlob) GetForceCloseOnShutdown() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ForceCloseOnShutdown
+}
+
+func (o *OutputAzureBlob) GetRetrySettings() *RetrySettingsType {
+	if o == nil {
+		return nil
+	}
+	return o.RetrySettings
+}
+
+func (o *OutputAzureBlob) GetAuthType() *AuthenticationMethodOptions {
 	if o == nil {
 		return nil
 	}
@@ -667,14 +420,14 @@ func (o *OutputAzureBlob) GetDescription() *string {
 	return o.Description
 }
 
-func (o *OutputAzureBlob) GetCompress() *OutputAzureBlobCompression {
+func (o *OutputAzureBlob) GetCompress() *CompressionOptionsHTTP {
 	if o == nil {
 		return nil
 	}
 	return o.Compress
 }
 
-func (o *OutputAzureBlob) GetCompressionLevel() *OutputAzureBlobCompressionLevel {
+func (o *OutputAzureBlob) GetCompressionLevel() *CompressionLevelOptions {
 	if o == nil {
 		return nil
 	}
@@ -688,14 +441,21 @@ func (o *OutputAzureBlob) GetAutomaticSchema() *bool {
 	return o.AutomaticSchema
 }
 
-func (o *OutputAzureBlob) GetParquetVersion() *OutputAzureBlobParquetVersion {
+func (o *OutputAzureBlob) GetParquetSchema() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ParquetSchema
+}
+
+func (o *OutputAzureBlob) GetParquetVersion() *ParquetVersionOptions {
 	if o == nil {
 		return nil
 	}
 	return o.ParquetVersion
 }
 
-func (o *OutputAzureBlob) GetParquetDataPageVersion() *OutputAzureBlobDataPageVersion {
+func (o *OutputAzureBlob) GetParquetDataPageVersion() *DataPageVersionOptions {
 	if o == nil {
 		return nil
 	}
@@ -723,7 +483,7 @@ func (o *OutputAzureBlob) GetShouldLogInvalidRows() *bool {
 	return o.ShouldLogInvalidRows
 }
 
-func (o *OutputAzureBlob) GetKeyValueMetadata() []OutputAzureBlobKeyValueMetadatum {
+func (o *OutputAzureBlob) GetKeyValueMetadata() []ItemsTypeKeyValueMetadata {
 	if o == nil {
 		return nil
 	}
@@ -756,6 +516,13 @@ func (o *OutputAzureBlob) GetEmptyDirCleanupSec() *float64 {
 		return nil
 	}
 	return o.EmptyDirCleanupSec
+}
+
+func (o *OutputAzureBlob) GetDirectoryBatchSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.DirectoryBatchSize
 }
 
 func (o *OutputAzureBlob) GetDeadletterPath() *string {
@@ -828,9 +595,44 @@ func (o *OutputAzureBlob) GetClientTextSecret() *string {
 	return o.ClientTextSecret
 }
 
-func (o *OutputAzureBlob) GetCertificate() *OutputAzureBlobCertificate {
+func (o *OutputAzureBlob) GetCertificate() *CertificateTypeAzureBlobAuthTypeClientCert {
 	if o == nil {
 		return nil
 	}
 	return o.Certificate
+}
+
+func (o *OutputAzureBlob) GetTemplateContainerName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateContainerName
+}
+
+func (o *OutputAzureBlob) GetTemplateFormat() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateFormat
+}
+
+func (o *OutputAzureBlob) GetTemplateConnectionString() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateConnectionString
+}
+
+func (o *OutputAzureBlob) GetTemplateTenantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateTenantID
+}
+
+func (o *OutputAzureBlob) GetTemplateClientID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateClientID
 }

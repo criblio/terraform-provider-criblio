@@ -31,336 +31,6 @@ func (e *OutputNewrelicEventsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputNewrelicEventsRegion - Which New Relic region endpoint to use.
-type OutputNewrelicEventsRegion string
-
-const (
-	OutputNewrelicEventsRegionUs     OutputNewrelicEventsRegion = "US"
-	OutputNewrelicEventsRegionEu     OutputNewrelicEventsRegion = "EU"
-	OutputNewrelicEventsRegionCustom OutputNewrelicEventsRegion = "Custom"
-)
-
-func (e OutputNewrelicEventsRegion) ToPointer() *OutputNewrelicEventsRegion {
-	return &e
-}
-func (e *OutputNewrelicEventsRegion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "US":
-		fallthrough
-	case "EU":
-		fallthrough
-	case "Custom":
-		*e = OutputNewrelicEventsRegion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsRegion: %v", v)
-	}
-}
-
-type OutputNewrelicEventsExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputNewrelicEventsExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputNewrelicEventsExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputNewrelicEventsExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputNewrelicEventsExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputNewrelicEventsFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputNewrelicEventsFailedRequestLoggingMode string
-
-const (
-	OutputNewrelicEventsFailedRequestLoggingModePayload           OutputNewrelicEventsFailedRequestLoggingMode = "payload"
-	OutputNewrelicEventsFailedRequestLoggingModePayloadAndHeaders OutputNewrelicEventsFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputNewrelicEventsFailedRequestLoggingModeNone              OutputNewrelicEventsFailedRequestLoggingMode = "none"
-)
-
-func (e OutputNewrelicEventsFailedRequestLoggingMode) ToPointer() *OutputNewrelicEventsFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputNewrelicEventsFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputNewrelicEventsFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsFailedRequestLoggingMode: %v", v)
-	}
-}
-
-type OutputNewrelicEventsResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputNewrelicEventsResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputNewrelicEventsResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputNewrelicEventsResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputNewrelicEventsResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputNewrelicEventsResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputNewrelicEventsResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputNewrelicEventsTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputNewrelicEventsTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputNewrelicEventsTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputNewrelicEventsTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputNewrelicEventsTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputNewrelicEventsTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputNewrelicEventsTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputNewrelicEventsBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputNewrelicEventsBackpressureBehavior string
-
-const (
-	OutputNewrelicEventsBackpressureBehaviorBlock OutputNewrelicEventsBackpressureBehavior = "block"
-	OutputNewrelicEventsBackpressureBehaviorDrop  OutputNewrelicEventsBackpressureBehavior = "drop"
-	OutputNewrelicEventsBackpressureBehaviorQueue OutputNewrelicEventsBackpressureBehavior = "queue"
-)
-
-func (e OutputNewrelicEventsBackpressureBehavior) ToPointer() *OutputNewrelicEventsBackpressureBehavior {
-	return &e
-}
-func (e *OutputNewrelicEventsBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputNewrelicEventsBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputNewrelicEventsAuthenticationMethod - Enter API key directly, or select a stored secret
-type OutputNewrelicEventsAuthenticationMethod string
-
-const (
-	OutputNewrelicEventsAuthenticationMethodManual OutputNewrelicEventsAuthenticationMethod = "manual"
-	OutputNewrelicEventsAuthenticationMethodSecret OutputNewrelicEventsAuthenticationMethod = "secret"
-)
-
-func (e OutputNewrelicEventsAuthenticationMethod) ToPointer() *OutputNewrelicEventsAuthenticationMethod {
-	return &e
-}
-func (e *OutputNewrelicEventsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputNewrelicEventsAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputNewrelicEventsCompression - Codec to use to compress the persisted data
-type OutputNewrelicEventsCompression string
-
-const (
-	OutputNewrelicEventsCompressionNone OutputNewrelicEventsCompression = "none"
-	OutputNewrelicEventsCompressionGzip OutputNewrelicEventsCompression = "gzip"
-)
-
-func (e OutputNewrelicEventsCompression) ToPointer() *OutputNewrelicEventsCompression {
-	return &e
-}
-func (e *OutputNewrelicEventsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputNewrelicEventsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsCompression: %v", v)
-	}
-}
-
-// OutputNewrelicEventsQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputNewrelicEventsQueueFullBehavior string
-
-const (
-	OutputNewrelicEventsQueueFullBehaviorBlock OutputNewrelicEventsQueueFullBehavior = "block"
-	OutputNewrelicEventsQueueFullBehaviorDrop  OutputNewrelicEventsQueueFullBehavior = "drop"
-)
-
-func (e OutputNewrelicEventsQueueFullBehavior) ToPointer() *OutputNewrelicEventsQueueFullBehavior {
-	return &e
-}
-func (e *OutputNewrelicEventsQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputNewrelicEventsQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputNewrelicEventsMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputNewrelicEventsMode string
-
-const (
-	OutputNewrelicEventsModeError        OutputNewrelicEventsMode = "error"
-	OutputNewrelicEventsModeBackpressure OutputNewrelicEventsMode = "backpressure"
-	OutputNewrelicEventsModeAlways       OutputNewrelicEventsMode = "always"
-)
-
-func (e OutputNewrelicEventsMode) ToPointer() *OutputNewrelicEventsMode {
-	return &e
-}
-func (e *OutputNewrelicEventsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputNewrelicEventsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputNewrelicEventsMode: %v", v)
-	}
-}
-
 type OutputNewrelicEventsPqControls struct {
 }
 
@@ -377,8 +47,8 @@ func (o *OutputNewrelicEventsPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputNewrelicEvents struct {
 	// Unique ID for this output
-	ID   *string                   `json:"id,omitempty"`
-	Type *OutputNewrelicEventsType `json:"type,omitempty"`
+	ID   *string                  `json:"id,omitempty"`
+	Type OutputNewrelicEventsType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -388,63 +58,81 @@ type OutputNewrelicEvents struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Which New Relic region endpoint to use.
-	Region *OutputNewrelicEventsRegion `default:"US" json:"region"`
+	Region *RegionOptions `json:"region,omitempty"`
 	// New Relic account ID
 	AccountID string `json:"accountId"`
 	// Default eventType to use when not present in an event. For more information, see [here](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).
 	EventType string `json:"eventType"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"1024" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputNewrelicEventsExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputNewrelicEventsFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputNewrelicEventsResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputNewrelicEventsTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputNewrelicEventsBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
 	// Enter API key directly, or select a stored secret
-	AuthType    *OutputNewrelicEventsAuthenticationMethod `default:"manual" json:"authType"`
-	Description *string                                   `json:"description,omitempty"`
-	CustomURL   *string                                   `json:"customUrl,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputNewrelicEventsCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputNewrelicEventsQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	AuthType    *AuthenticationMethodOptionsAPI `json:"authType,omitempty"`
+	Description *string                         `json:"description,omitempty"`
+	CustomURL   *string                         `json:"customUrl,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputNewrelicEventsMode       `default:"error" json:"pqMode"`
-	PqControls *OutputNewrelicEventsPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                         `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputNewrelicEventsPqControls `json:"pqControls,omitempty"`
 	// New Relic API key. Can be overridden using __newRelic_apiKey field.
 	APIKey *string `json:"apiKey,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
+	// Binds 'accountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'accountId' at runtime.
+	TemplateAccountID *string `json:"__template_accountId,omitempty"`
+	// Binds 'eventType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'eventType' at runtime.
+	TemplateEventType *string `json:"__template_eventType,omitempty"`
+	// Binds 'customUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customUrl' at runtime.
+	TemplateCustomURL *string `json:"__template_customUrl,omitempty"`
 }
 
 func (o OutputNewrelicEvents) MarshalJSON() ([]byte, error) {
@@ -452,7 +140,7 @@ func (o OutputNewrelicEvents) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNewrelicEvents) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"accountId", "eventType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "accountId", "eventType"}); err != nil {
 		return err
 	}
 	return nil
@@ -465,9 +153,9 @@ func (o *OutputNewrelicEvents) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputNewrelicEvents) GetType() *OutputNewrelicEventsType {
+func (o *OutputNewrelicEvents) GetType() OutputNewrelicEventsType {
 	if o == nil {
-		return nil
+		return OutputNewrelicEventsType("")
 	}
 	return o.Type
 }
@@ -500,7 +188,7 @@ func (o *OutputNewrelicEvents) GetStreamtags() []string {
 	return o.Streamtags
 }
 
-func (o *OutputNewrelicEvents) GetRegion() *OutputNewrelicEventsRegion {
+func (o *OutputNewrelicEvents) GetRegion() *RegionOptions {
 	if o == nil {
 		return nil
 	}
@@ -570,7 +258,7 @@ func (o *OutputNewrelicEvents) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputNewrelicEvents) GetExtraHTTPHeaders() []OutputNewrelicEventsExtraHTTPHeader {
+func (o *OutputNewrelicEvents) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
@@ -584,7 +272,7 @@ func (o *OutputNewrelicEvents) GetUseRoundRobinDNS() *bool {
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputNewrelicEvents) GetFailedRequestLoggingMode() *OutputNewrelicEventsFailedRequestLoggingMode {
+func (o *OutputNewrelicEvents) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -598,14 +286,14 @@ func (o *OutputNewrelicEvents) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputNewrelicEvents) GetResponseRetrySettings() []OutputNewrelicEventsResponseRetrySetting {
+func (o *OutputNewrelicEvents) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputNewrelicEvents) GetTimeoutRetrySettings() *OutputNewrelicEventsTimeoutRetrySettings {
+func (o *OutputNewrelicEvents) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -619,14 +307,14 @@ func (o *OutputNewrelicEvents) GetResponseHonorRetryAfterHeader() *bool {
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputNewrelicEvents) GetOnBackpressure() *OutputNewrelicEventsBackpressureBehavior {
+func (o *OutputNewrelicEvents) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnBackpressure
 }
 
-func (o *OutputNewrelicEvents) GetAuthType() *OutputNewrelicEventsAuthenticationMethod {
+func (o *OutputNewrelicEvents) GetAuthType() *AuthenticationMethodOptionsAPI {
 	if o == nil {
 		return nil
 	}
@@ -645,6 +333,41 @@ func (o *OutputNewrelicEvents) GetCustomURL() *string {
 		return nil
 	}
 	return o.CustomURL
+}
+
+func (o *OutputNewrelicEvents) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputNewrelicEvents) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputNewrelicEvents) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputNewrelicEvents) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputNewrelicEvents) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputNewrelicEvents) GetPqMaxFileSize() *string {
@@ -668,25 +391,25 @@ func (o *OutputNewrelicEvents) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputNewrelicEvents) GetPqCompress() *OutputNewrelicEventsCompression {
+func (o *OutputNewrelicEvents) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputNewrelicEvents) GetPqOnBackpressure() *OutputNewrelicEventsQueueFullBehavior {
+func (o *OutputNewrelicEvents) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputNewrelicEvents) GetPqMode() *OutputNewrelicEventsMode {
+func (o *OutputNewrelicEvents) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputNewrelicEvents) GetPqControls() *OutputNewrelicEventsPqControls {
@@ -708,4 +431,32 @@ func (o *OutputNewrelicEvents) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
+}
+
+func (o *OutputNewrelicEvents) GetTemplateRegion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateRegion
+}
+
+func (o *OutputNewrelicEvents) GetTemplateAccountID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAccountID
+}
+
+func (o *OutputNewrelicEvents) GetTemplateEventType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateEventType
+}
+
+func (o *OutputNewrelicEvents) GetTemplateCustomURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateCustomURL
 }

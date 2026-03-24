@@ -348,16 +348,17 @@ func (e *VariantVisualization) UnmarshalJSON(data []byte) error {
 }
 
 type DashboardElementVisualization struct {
-	Config          map[string]any  `json:"config,omitempty"`
-	Description     *string         `json:"description,omitempty"`
-	Empty           *bool           `json:"empty,omitempty"`
-	Group           *string         `json:"group,omitempty"`
-	HidePanel       *bool           `default:"false" json:"hidePanel"`
-	HorizontalChart *bool           `default:"false" json:"horizontalChart"`
-	ID              string          `json:"id"`
-	Index           *float64        `json:"index,omitempty"`
-	Layout          DashboardLayout `json:"layout"`
-	Search          SearchQuery     `json:"search"`
+	// Chart/visualization-specific config (e.g. xAxis, yAxis, columns).
+	Config          *ElementConfigType `json:"config,omitempty"`
+	Description     *string            `json:"description,omitempty"`
+	Empty           *bool              `json:"empty,omitempty"`
+	Group           *string            `json:"group,omitempty"`
+	HidePanel       *bool              `default:"false" json:"hidePanel"`
+	HorizontalChart *bool              `default:"false" json:"horizontalChart"`
+	ID              string             `json:"id"`
+	Index           *float64           `json:"index,omitempty"`
+	Layout          DashboardLayout    `json:"layout"`
+	Search          SearchQuery        `json:"search"`
 	// Title of the element.
 	Title       *string                  `json:"title,omitempty"`
 	TitleAction *TitleAction             `json:"titleAction,omitempty"`
@@ -376,7 +377,7 @@ func (d *DashboardElementVisualization) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DashboardElementVisualization) GetConfig() map[string]any {
+func (d *DashboardElementVisualization) GetConfig() *ElementConfigType {
 	if d == nil {
 		return nil
 	}

@@ -31,345 +31,13 @@ func (e *OutputSplunkLbType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputSplunkLbNestedFieldSerialization - How to serialize nested fields into index-time fields
-type OutputSplunkLbNestedFieldSerialization string
-
-const (
-	OutputSplunkLbNestedFieldSerializationJSON OutputSplunkLbNestedFieldSerialization = "json"
-	OutputSplunkLbNestedFieldSerializationNone OutputSplunkLbNestedFieldSerialization = "none"
-)
-
-func (e OutputSplunkLbNestedFieldSerialization) ToPointer() *OutputSplunkLbNestedFieldSerialization {
-	return &e
-}
-func (e *OutputSplunkLbNestedFieldSerialization) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "json":
-		fallthrough
-	case "none":
-		*e = OutputSplunkLbNestedFieldSerialization(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbNestedFieldSerialization: %v", v)
-	}
-}
-
-type OutputSplunkLbMinimumTLSVersion string
-
-const (
-	OutputSplunkLbMinimumTLSVersionTlSv1  OutputSplunkLbMinimumTLSVersion = "TLSv1"
-	OutputSplunkLbMinimumTLSVersionTlSv11 OutputSplunkLbMinimumTLSVersion = "TLSv1.1"
-	OutputSplunkLbMinimumTLSVersionTlSv12 OutputSplunkLbMinimumTLSVersion = "TLSv1.2"
-	OutputSplunkLbMinimumTLSVersionTlSv13 OutputSplunkLbMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e OutputSplunkLbMinimumTLSVersion) ToPointer() *OutputSplunkLbMinimumTLSVersion {
-	return &e
-}
-func (e *OutputSplunkLbMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = OutputSplunkLbMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbMinimumTLSVersion: %v", v)
-	}
-}
-
-type OutputSplunkLbMaximumTLSVersion string
-
-const (
-	OutputSplunkLbMaximumTLSVersionTlSv1  OutputSplunkLbMaximumTLSVersion = "TLSv1"
-	OutputSplunkLbMaximumTLSVersionTlSv11 OutputSplunkLbMaximumTLSVersion = "TLSv1.1"
-	OutputSplunkLbMaximumTLSVersionTlSv12 OutputSplunkLbMaximumTLSVersion = "TLSv1.2"
-	OutputSplunkLbMaximumTLSVersionTlSv13 OutputSplunkLbMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e OutputSplunkLbMaximumTLSVersion) ToPointer() *OutputSplunkLbMaximumTLSVersion {
-	return &e
-}
-func (e *OutputSplunkLbMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = OutputSplunkLbMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbMaximumTLSVersion: %v", v)
-	}
-}
-
-type OutputSplunkLbTLSSettingsClientSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another
-	//
-	//
-	//                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
-	// Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
-	Servername *string `json:"servername,omitempty"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on client in which to find CA certificates to verify the server's cert. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Path on client in which to find certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string                          `json:"passphrase,omitempty"`
-	MinVersion *OutputSplunkLbMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion *OutputSplunkLbMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (o OutputSplunkLbTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RejectUnauthorized
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetServername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Servername
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetCertificateName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CertificateName
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetCaPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CaPath
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetPrivKeyPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.PrivKeyPath
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetCertPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CertPath
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetPassphrase() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Passphrase
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetMinVersion() *OutputSplunkLbMinimumTLSVersion {
-	if o == nil {
-		return nil
-	}
-	return o.MinVersion
-}
-
-func (o *OutputSplunkLbTLSSettingsClientSide) GetMaxVersion() *OutputSplunkLbMaximumTLSVersion {
-	if o == nil {
-		return nil
-	}
-	return o.MaxVersion
-}
-
-// OutputSplunkLbMaxS2SVersion - The highest S2S protocol version to advertise during handshake
-type OutputSplunkLbMaxS2SVersion string
-
-const (
-	OutputSplunkLbMaxS2SVersionV3 OutputSplunkLbMaxS2SVersion = "v3"
-	OutputSplunkLbMaxS2SVersionV4 OutputSplunkLbMaxS2SVersion = "v4"
-)
-
-func (e OutputSplunkLbMaxS2SVersion) ToPointer() *OutputSplunkLbMaxS2SVersion {
-	return &e
-}
-func (e *OutputSplunkLbMaxS2SVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "v3":
-		fallthrough
-	case "v4":
-		*e = OutputSplunkLbMaxS2SVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbMaxS2SVersion: %v", v)
-	}
-}
-
-// OutputSplunkLbBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputSplunkLbBackpressureBehavior string
-
-const (
-	OutputSplunkLbBackpressureBehaviorBlock OutputSplunkLbBackpressureBehavior = "block"
-	OutputSplunkLbBackpressureBehaviorDrop  OutputSplunkLbBackpressureBehavior = "drop"
-	OutputSplunkLbBackpressureBehaviorQueue OutputSplunkLbBackpressureBehavior = "queue"
-)
-
-func (e OutputSplunkLbBackpressureBehavior) ToPointer() *OutputSplunkLbBackpressureBehavior {
-	return &e
-}
-func (e *OutputSplunkLbBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputSplunkLbBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputSplunkLbAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-type OutputSplunkLbAuthenticationMethod string
-
-const (
-	OutputSplunkLbAuthenticationMethodManual OutputSplunkLbAuthenticationMethod = "manual"
-	OutputSplunkLbAuthenticationMethodSecret OutputSplunkLbAuthenticationMethod = "secret"
-)
-
-func (e OutputSplunkLbAuthenticationMethod) ToPointer() *OutputSplunkLbAuthenticationMethod {
-	return &e
-}
-func (e *OutputSplunkLbAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputSplunkLbAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputSplunkLbCompressCompression - Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.
-type OutputSplunkLbCompressCompression string
-
-const (
-	OutputSplunkLbCompressCompressionDisabled OutputSplunkLbCompressCompression = "disabled"
-	OutputSplunkLbCompressCompressionAuto     OutputSplunkLbCompressCompression = "auto"
-	OutputSplunkLbCompressCompressionAlways   OutputSplunkLbCompressCompression = "always"
-)
-
-func (e OutputSplunkLbCompressCompression) ToPointer() *OutputSplunkLbCompressCompression {
-	return &e
-}
-func (e *OutputSplunkLbCompressCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "disabled":
-		fallthrough
-	case "auto":
-		fallthrough
-	case "always":
-		*e = OutputSplunkLbCompressCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbCompressCompression: %v", v)
-	}
-}
-
-// IndexerDiscoveryConfigsAuthTokenAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-type IndexerDiscoveryConfigsAuthTokenAuthenticationMethod string
-
-const (
-	IndexerDiscoveryConfigsAuthTokenAuthenticationMethodManual IndexerDiscoveryConfigsAuthTokenAuthenticationMethod = "manual"
-	IndexerDiscoveryConfigsAuthTokenAuthenticationMethodSecret IndexerDiscoveryConfigsAuthTokenAuthenticationMethod = "secret"
-)
-
-func (e IndexerDiscoveryConfigsAuthTokenAuthenticationMethod) ToPointer() *IndexerDiscoveryConfigsAuthTokenAuthenticationMethod {
-	return &e
-}
-func (e *IndexerDiscoveryConfigsAuthTokenAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = IndexerDiscoveryConfigsAuthTokenAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for IndexerDiscoveryConfigsAuthTokenAuthenticationMethod: %v", v)
-	}
-}
-
 type OutputSplunkLbAuthToken struct {
 	// Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-	AuthType *IndexerDiscoveryConfigsAuthTokenAuthenticationMethod `default:"manual" json:"authType"`
+	AuthType *AuthenticationMethodOptionsAuthTokensItems `json:"authType,omitempty"`
+	// Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
+	AuthToken *string `json:"authToken,omitempty"`
+	// Select or create a stored text secret
+	TextSecret *string `json:"textSecret,omitempty"`
 }
 
 func (o OutputSplunkLbAuthToken) MarshalJSON() ([]byte, error) {
@@ -383,56 +51,43 @@ func (o *OutputSplunkLbAuthToken) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputSplunkLbAuthToken) GetAuthType() *IndexerDiscoveryConfigsAuthTokenAuthenticationMethod {
+func (o *OutputSplunkLbAuthToken) GetAuthType() *AuthenticationMethodOptionsAuthTokensItems {
 	if o == nil {
 		return nil
 	}
 	return o.AuthType
 }
 
-// IndexerDiscoveryConfigsAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-type IndexerDiscoveryConfigsAuthenticationMethod string
-
-const (
-	IndexerDiscoveryConfigsAuthenticationMethodManual IndexerDiscoveryConfigsAuthenticationMethod = "manual"
-	IndexerDiscoveryConfigsAuthenticationMethodSecret IndexerDiscoveryConfigsAuthenticationMethod = "secret"
-)
-
-func (e IndexerDiscoveryConfigsAuthenticationMethod) ToPointer() *IndexerDiscoveryConfigsAuthenticationMethod {
-	return &e
-}
-func (e *IndexerDiscoveryConfigsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = IndexerDiscoveryConfigsAuthenticationMethod(v)
+func (o *OutputSplunkLbAuthToken) GetAuthToken() *string {
+	if o == nil {
 		return nil
-	default:
-		return fmt.Errorf("invalid value for IndexerDiscoveryConfigsAuthenticationMethod: %v", v)
 	}
+	return o.AuthToken
+}
+
+func (o *OutputSplunkLbAuthToken) GetTextSecret() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TextSecret
 }
 
 // IndexerDiscoveryConfigs - List of configurations to set up indexer discovery in Splunk Indexer clustering environment.
 type IndexerDiscoveryConfigs struct {
 	// Clustering site of the indexers from where indexers need to be discovered. In case of single site cluster, it defaults to 'default' site.
-	Site *string `default:"default" json:"site"`
+	Site string `json:"site"`
 	// Full URI of Splunk cluster manager (scheme://host:port). Example: https://managerAddress:8089
 	MasterURI string `json:"masterUri"`
 	// Time interval, in seconds, between two consecutive indexer list fetches from cluster manager
-	RefreshIntervalSec *float64 `default:"300" json:"refreshIntervalSec"`
+	RefreshIntervalSec float64 `json:"refreshIntervalSec"`
 	// During indexer discovery, reject cluster manager certificates that are not authorized by the system's CA. Disable to allow untrusted (for example, self-signed) certificates.
-	RejectUnauthorized *bool `default:"false" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Tokens required to authenticate to cluster manager for indexer discovery
 	AuthTokens []OutputSplunkLbAuthToken `json:"authTokens,omitempty"`
 	// Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-	AuthType *IndexerDiscoveryConfigsAuthenticationMethod `default:"manual" json:"authType"`
+	AuthType *AuthenticationMethodOptionsAuthTokensItems `json:"authType,omitempty"`
 	// Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
-	AuthToken *string `default:"" json:"authToken"`
+	AuthToken *string `json:"authToken,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
 }
@@ -442,15 +97,15 @@ func (i IndexerDiscoveryConfigs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IndexerDiscoveryConfigs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"masterUri"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"site", "masterUri", "refreshIntervalSec"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *IndexerDiscoveryConfigs) GetSite() *string {
+func (i *IndexerDiscoveryConfigs) GetSite() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Site
 }
@@ -462,9 +117,9 @@ func (i *IndexerDiscoveryConfigs) GetMasterURI() string {
 	return i.MasterURI
 }
 
-func (i *IndexerDiscoveryConfigs) GetRefreshIntervalSec() *float64 {
+func (i *IndexerDiscoveryConfigs) GetRefreshIntervalSec() float64 {
 	if i == nil {
-		return nil
+		return 0.0
 	}
 	return i.RefreshIntervalSec
 }
@@ -483,7 +138,7 @@ func (i *IndexerDiscoveryConfigs) GetAuthTokens() []OutputSplunkLbAuthToken {
 	return i.AuthTokens
 }
 
-func (i *IndexerDiscoveryConfigs) GetAuthType() *IndexerDiscoveryConfigsAuthenticationMethod {
+func (i *IndexerDiscoveryConfigs) GetAuthType() *AuthenticationMethodOptionsAuthTokensItems {
 	if i == nil {
 		return nil
 	}
@@ -502,176 +157,6 @@ func (i *IndexerDiscoveryConfigs) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
-}
-
-// OutputSplunkLbTLS - Whether to inherit TLS configs from group setting or disable TLS
-type OutputSplunkLbTLS string
-
-const (
-	OutputSplunkLbTLSInherit OutputSplunkLbTLS = "inherit"
-	OutputSplunkLbTLSOff     OutputSplunkLbTLS = "off"
-)
-
-func (e OutputSplunkLbTLS) ToPointer() *OutputSplunkLbTLS {
-	return &e
-}
-func (e *OutputSplunkLbTLS) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "inherit":
-		fallthrough
-	case "off":
-		*e = OutputSplunkLbTLS(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbTLS: %v", v)
-	}
-}
-
-type OutputSplunkLbHost struct {
-	// The hostname of the receiver
-	Host string `json:"host"`
-	// The port to connect to on the provided host
-	Port *float64 `default:"9997" json:"port"`
-	// Whether to inherit TLS configs from group setting or disable TLS
-	TLS *OutputSplunkLbTLS `default:"inherit" json:"tls"`
-	// Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
-	Servername *string `json:"servername,omitempty"`
-	// Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
-	Weight *float64 `default:"1" json:"weight"`
-}
-
-func (o OutputSplunkLbHost) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputSplunkLbHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputSplunkLbHost) GetHost() string {
-	if o == nil {
-		return ""
-	}
-	return o.Host
-}
-
-func (o *OutputSplunkLbHost) GetPort() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Port
-}
-
-func (o *OutputSplunkLbHost) GetTLS() *OutputSplunkLbTLS {
-	if o == nil {
-		return nil
-	}
-	return o.TLS
-}
-
-func (o *OutputSplunkLbHost) GetServername() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Servername
-}
-
-func (o *OutputSplunkLbHost) GetWeight() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Weight
-}
-
-// OutputSplunkLbPqCompressCompression - Codec to use to compress the persisted data
-type OutputSplunkLbPqCompressCompression string
-
-const (
-	OutputSplunkLbPqCompressCompressionNone OutputSplunkLbPqCompressCompression = "none"
-	OutputSplunkLbPqCompressCompressionGzip OutputSplunkLbPqCompressCompression = "gzip"
-)
-
-func (e OutputSplunkLbPqCompressCompression) ToPointer() *OutputSplunkLbPqCompressCompression {
-	return &e
-}
-func (e *OutputSplunkLbPqCompressCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputSplunkLbPqCompressCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbPqCompressCompression: %v", v)
-	}
-}
-
-// OutputSplunkLbQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputSplunkLbQueueFullBehavior string
-
-const (
-	OutputSplunkLbQueueFullBehaviorBlock OutputSplunkLbQueueFullBehavior = "block"
-	OutputSplunkLbQueueFullBehaviorDrop  OutputSplunkLbQueueFullBehavior = "drop"
-)
-
-func (e OutputSplunkLbQueueFullBehavior) ToPointer() *OutputSplunkLbQueueFullBehavior {
-	return &e
-}
-func (e *OutputSplunkLbQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputSplunkLbQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputSplunkLbMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputSplunkLbMode string
-
-const (
-	OutputSplunkLbModeError        OutputSplunkLbMode = "error"
-	OutputSplunkLbModeBackpressure OutputSplunkLbMode = "backpressure"
-	OutputSplunkLbModeAlways       OutputSplunkLbMode = "always"
-)
-
-func (e OutputSplunkLbMode) ToPointer() *OutputSplunkLbMode {
-	return &e
-}
-func (e *OutputSplunkLbMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputSplunkLbMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSplunkLbMode: %v", v)
-	}
 }
 
 type OutputSplunkLbPqControls struct {
@@ -701,62 +186,72 @@ type OutputSplunkLb struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// The interval in which to re-resolve any hostnames and pick up destinations from A records
-	DNSResolvePeriodSec *float64 `default:"600" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	// How far back in time to keep traffic stats for load balancing purposes
-	LoadBalanceStatsPeriodSec *float64 `default:"300" json:"loadBalanceStatsPeriodSec"`
+	LoadBalanceStatsPeriodSec *float64 `json:"loadBalanceStatsPeriodSec,omitempty"`
 	// Maximum number of concurrent connections (per Worker Process). A random set of IPs will be picked on every DNS resolution period. Use 0 for unlimited.
-	MaxConcurrentSenders *float64 `default:"0" json:"maxConcurrentSenders"`
+	MaxConcurrentSenders *float64 `json:"maxConcurrentSenders,omitempty"`
 	// How to serialize nested fields into index-time fields
-	NestedFields *OutputSplunkLbNestedFieldSerialization `default:"none" json:"nestedFields"`
+	NestedFields *NestedFieldSerializationOptions `json:"nestedFields,omitempty"`
 	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-	ThrottleRatePerSec *string `default:"0" json:"throttleRatePerSec"`
+	ThrottleRatePerSec *string `json:"throttleRatePerSec,omitempty"`
 	// Amount of time (milliseconds) to wait for the connection to establish before retrying
-	ConnectionTimeout *float64 `default:"10000" json:"connectionTimeout"`
+	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
 	// Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
-	WriteTimeout *float64                             `default:"60000" json:"writeTimeout"`
-	TLS          *OutputSplunkLbTLSSettingsClientSide `json:"tls,omitempty"`
+	WriteTimeout *float64                                 `json:"writeTimeout,omitempty"`
+	TLS          *TLSSettingsClientSideTypeCaPathCertPath `json:"tls,omitempty"`
 	// Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.
-	EnableMultiMetrics *bool `default:"false" json:"enableMultiMetrics"`
+	EnableMultiMetrics *bool `json:"enableMultiMetrics,omitempty"`
 	// Check if indexer is shutting down and stop sending data. This helps minimize data loss during shutdown.
-	EnableACK *bool `default:"true" json:"enableACK"`
+	EnableACK *bool `json:"enableACK,omitempty"`
 	// Use to troubleshoot issues with sending data
-	LogFailedRequests *bool `default:"false" json:"logFailedRequests"`
+	LogFailedRequests *bool `json:"logFailedRequests,omitempty"`
 	// The highest S2S protocol version to advertise during handshake
-	MaxS2Sversion *OutputSplunkLbMaxS2SVersion `default:"v3" json:"maxS2Sversion"`
+	MaxS2Sversion *MaxS2SVersionOptions `json:"maxS2Sversion,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputSplunkLbBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
 	// Automatically discover indexers in indexer clustering environment.
-	IndexerDiscovery *bool `default:"false" json:"indexerDiscovery"`
+	IndexerDiscovery *bool `json:"indexerDiscovery,omitempty"`
 	// How long (in milliseconds) each LB endpoint can report blocked before the Destination reports unhealthy, blocking the sender. (Grace period for fluctuations.) Use 0 to disable; max 1 minute.
-	SenderUnhealthyTimeAllowance *float64 `default:"100" json:"senderUnhealthyTimeAllowance"`
+	SenderUnhealthyTimeAllowance *float64 `json:"senderUnhealthyTimeAllowance,omitempty"`
 	// Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-	AuthType    *OutputSplunkLbAuthenticationMethod `default:"manual" json:"authType"`
-	Description *string                             `json:"description,omitempty"`
+	AuthType    *AuthenticationMethodOptionsAuthTokensItems `json:"authType,omitempty"`
+	Description *string                                     `json:"description,omitempty"`
 	// Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
-	MaxFailedHealthChecks *float64 `default:"1" json:"maxFailedHealthChecks"`
+	MaxFailedHealthChecks *float64 `json:"maxFailedHealthChecks,omitempty"`
 	// Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.
-	Compress *OutputSplunkLbCompressCompression `default:"disabled" json:"compress"`
+	Compress *CompressionOptions `json:"compress,omitempty"`
 	// List of configurations to set up indexer discovery in Splunk Indexer clustering environment.
 	IndexerDiscoveryConfigs *IndexerDiscoveryConfigs `json:"indexerDiscoveryConfigs,omitempty"`
 	// Exclude all IPs of the current host from the list of any resolved hostnames
-	ExcludeSelf *bool `default:"false" json:"excludeSelf"`
+	ExcludeSelf *bool `json:"excludeSelf,omitempty"`
 	// Set of Splunk indexers to load-balance data to.
-	Hosts []OutputSplunkLbHost `json:"hosts"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputSplunkLbPqCompressCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputSplunkLbQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	Hosts []ItemsTypeHosts `json:"hosts"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputSplunkLbMode       `default:"error" json:"pqMode"`
-	PqControls *OutputSplunkLbPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                   `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputSplunkLbPqControls `json:"pqControls,omitempty"`
 	// Shared secret token to use when establishing a connection to a Splunk indexer.
-	AuthToken *string `default:"" json:"authToken"`
+	AuthToken *string `json:"authToken,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
 }
@@ -835,7 +330,7 @@ func (o *OutputSplunkLb) GetMaxConcurrentSenders() *float64 {
 	return o.MaxConcurrentSenders
 }
 
-func (o *OutputSplunkLb) GetNestedFields() *OutputSplunkLbNestedFieldSerialization {
+func (o *OutputSplunkLb) GetNestedFields() *NestedFieldSerializationOptions {
 	if o == nil {
 		return nil
 	}
@@ -863,7 +358,7 @@ func (o *OutputSplunkLb) GetWriteTimeout() *float64 {
 	return o.WriteTimeout
 }
 
-func (o *OutputSplunkLb) GetTLS() *OutputSplunkLbTLSSettingsClientSide {
+func (o *OutputSplunkLb) GetTLS() *TLSSettingsClientSideTypeCaPathCertPath {
 	if o == nil {
 		return nil
 	}
@@ -891,14 +386,14 @@ func (o *OutputSplunkLb) GetLogFailedRequests() *bool {
 	return o.LogFailedRequests
 }
 
-func (o *OutputSplunkLb) GetMaxS2Sversion() *OutputSplunkLbMaxS2SVersion {
+func (o *OutputSplunkLb) GetMaxS2Sversion() *MaxS2SVersionOptions {
 	if o == nil {
 		return nil
 	}
 	return o.MaxS2Sversion
 }
 
-func (o *OutputSplunkLb) GetOnBackpressure() *OutputSplunkLbBackpressureBehavior {
+func (o *OutputSplunkLb) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -919,7 +414,7 @@ func (o *OutputSplunkLb) GetSenderUnhealthyTimeAllowance() *float64 {
 	return o.SenderUnhealthyTimeAllowance
 }
 
-func (o *OutputSplunkLb) GetAuthType() *OutputSplunkLbAuthenticationMethod {
+func (o *OutputSplunkLb) GetAuthType() *AuthenticationMethodOptionsAuthTokensItems {
 	if o == nil {
 		return nil
 	}
@@ -940,7 +435,7 @@ func (o *OutputSplunkLb) GetMaxFailedHealthChecks() *float64 {
 	return o.MaxFailedHealthChecks
 }
 
-func (o *OutputSplunkLb) GetCompress() *OutputSplunkLbCompressCompression {
+func (o *OutputSplunkLb) GetCompress() *CompressionOptions {
 	if o == nil {
 		return nil
 	}
@@ -961,11 +456,46 @@ func (o *OutputSplunkLb) GetExcludeSelf() *bool {
 	return o.ExcludeSelf
 }
 
-func (o *OutputSplunkLb) GetHosts() []OutputSplunkLbHost {
+func (o *OutputSplunkLb) GetHosts() []ItemsTypeHosts {
 	if o == nil {
-		return []OutputSplunkLbHost{}
+		return []ItemsTypeHosts{}
 	}
 	return o.Hosts
+}
+
+func (o *OutputSplunkLb) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputSplunkLb) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputSplunkLb) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputSplunkLb) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputSplunkLb) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputSplunkLb) GetPqMaxFileSize() *string {
@@ -989,25 +519,25 @@ func (o *OutputSplunkLb) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputSplunkLb) GetPqCompress() *OutputSplunkLbPqCompressCompression {
+func (o *OutputSplunkLb) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputSplunkLb) GetPqOnBackpressure() *OutputSplunkLbQueueFullBehavior {
+func (o *OutputSplunkLb) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputSplunkLb) GetPqMode() *OutputSplunkLbMode {
+func (o *OutputSplunkLb) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputSplunkLb) GetPqControls() *OutputSplunkLbPqControls {

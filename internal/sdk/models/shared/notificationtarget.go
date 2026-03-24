@@ -62,20 +62,20 @@ func (e *Encryption) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// NotificationTargetMinimumTLSVersion - Minimum TLS version to accept
-type NotificationTargetMinimumTLSVersion string
+// MinimumTLSVersion - Minimum TLS version to accept
+type MinimumTLSVersion string
 
 const (
-	NotificationTargetMinimumTLSVersionTlSv1  NotificationTargetMinimumTLSVersion = "TLSv1"
-	NotificationTargetMinimumTLSVersionTlSv11 NotificationTargetMinimumTLSVersion = "TLSv1.1"
-	NotificationTargetMinimumTLSVersionTlSv12 NotificationTargetMinimumTLSVersion = "TLSv1.2"
-	NotificationTargetMinimumTLSVersionTlSv13 NotificationTargetMinimumTLSVersion = "TLSv1.3"
+	MinimumTLSVersionTlSv1  MinimumTLSVersion = "TLSv1"
+	MinimumTLSVersionTlSv11 MinimumTLSVersion = "TLSv1.1"
+	MinimumTLSVersionTlSv12 MinimumTLSVersion = "TLSv1.2"
+	MinimumTLSVersionTlSv13 MinimumTLSVersion = "TLSv1.3"
 )
 
-func (e NotificationTargetMinimumTLSVersion) ToPointer() *NotificationTargetMinimumTLSVersion {
+func (e MinimumTLSVersion) ToPointer() *MinimumTLSVersion {
 	return &e
 }
-func (e *NotificationTargetMinimumTLSVersion) UnmarshalJSON(data []byte) error {
+func (e *MinimumTLSVersion) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -88,27 +88,27 @@ func (e *NotificationTargetMinimumTLSVersion) UnmarshalJSON(data []byte) error {
 	case "TLSv1.2":
 		fallthrough
 	case "TLSv1.3":
-		*e = NotificationTargetMinimumTLSVersion(v)
+		*e = MinimumTLSVersion(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NotificationTargetMinimumTLSVersion: %v", v)
+		return fmt.Errorf("invalid value for MinimumTLSVersion: %v", v)
 	}
 }
 
-// NotificationTargetMaximumTLSVersion - Maximum TLS version to accept
-type NotificationTargetMaximumTLSVersion string
+// MaximumTLSVersion - Maximum TLS version to accept
+type MaximumTLSVersion string
 
 const (
-	NotificationTargetMaximumTLSVersionTlSv1  NotificationTargetMaximumTLSVersion = "TLSv1"
-	NotificationTargetMaximumTLSVersionTlSv11 NotificationTargetMaximumTLSVersion = "TLSv1.1"
-	NotificationTargetMaximumTLSVersionTlSv12 NotificationTargetMaximumTLSVersion = "TLSv1.2"
-	NotificationTargetMaximumTLSVersionTlSv13 NotificationTargetMaximumTLSVersion = "TLSv1.3"
+	MaximumTLSVersionTlSv1  MaximumTLSVersion = "TLSv1"
+	MaximumTLSVersionTlSv11 MaximumTLSVersion = "TLSv1.1"
+	MaximumTLSVersionTlSv12 MaximumTLSVersion = "TLSv1.2"
+	MaximumTLSVersionTlSv13 MaximumTLSVersion = "TLSv1.3"
 )
 
-func (e NotificationTargetMaximumTLSVersion) ToPointer() *NotificationTargetMaximumTLSVersion {
+func (e MaximumTLSVersion) ToPointer() *MaximumTLSVersion {
 	return &e
 }
-func (e *NotificationTargetMaximumTLSVersion) UnmarshalJSON(data []byte) error {
+func (e *MaximumTLSVersion) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -121,10 +121,10 @@ func (e *NotificationTargetMaximumTLSVersion) UnmarshalJSON(data []byte) error {
 	case "TLSv1.2":
 		fallthrough
 	case "TLSv1.3":
-		*e = NotificationTargetMaximumTLSVersion(v)
+		*e = MaximumTLSVersion(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NotificationTargetMaximumTLSVersion: %v", v)
+		return fmt.Errorf("invalid value for MaximumTLSVersion: %v", v)
 	}
 }
 
@@ -133,9 +133,9 @@ type TLSConfiguration struct {
 	// Whether to reject unauthorized certificates
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
 	// Minimum TLS version to accept
-	MinVersion *NotificationTargetMinimumTLSVersion `default:"TLSv1.2" json:"minVersion"`
+	MinVersion *MinimumTLSVersion `default:"TLSv1.2" json:"minVersion"`
 	// Maximum TLS version to accept
-	MaxVersion *NotificationTargetMaximumTLSVersion `default:"TLSv1.3" json:"maxVersion"`
+	MaxVersion *MaximumTLSVersion `default:"TLSv1.3" json:"maxVersion"`
 }
 
 func (t TLSConfiguration) MarshalJSON() ([]byte, error) {
@@ -156,14 +156,14 @@ func (t *TLSConfiguration) GetRejectUnauthorized() *bool {
 	return t.RejectUnauthorized
 }
 
-func (t *TLSConfiguration) GetMinVersion() *NotificationTargetMinimumTLSVersion {
+func (t *TLSConfiguration) GetMinVersion() *MinimumTLSVersion {
 	if t == nil {
 		return nil
 	}
 	return t.MinVersion
 }
 
-func (t *TLSConfiguration) GetMaxVersion() *NotificationTargetMaximumTLSVersion {
+func (t *TLSConfiguration) GetMaxVersion() *MaximumTLSVersion {
 	if t == nil {
 		return nil
 	}

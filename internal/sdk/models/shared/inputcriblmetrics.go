@@ -31,223 +31,31 @@ func (e *InputCriblmetricsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputCriblmetricsConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputCriblmetricsConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCriblmetricsConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputCriblmetricsConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputCriblmetricsConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputCriblmetricsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputCriblmetricsMode string
-
-const (
-	InputCriblmetricsModeSmart  InputCriblmetricsMode = "smart"
-	InputCriblmetricsModeAlways InputCriblmetricsMode = "always"
-)
-
-func (e InputCriblmetricsMode) ToPointer() *InputCriblmetricsMode {
-	return &e
-}
-func (e *InputCriblmetricsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputCriblmetricsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCriblmetricsMode: %v", v)
-	}
-}
-
-// InputCriblmetricsCompression - Codec to use to compress the persisted data
-type InputCriblmetricsCompression string
-
-const (
-	InputCriblmetricsCompressionNone InputCriblmetricsCompression = "none"
-	InputCriblmetricsCompressionGzip InputCriblmetricsCompression = "gzip"
-)
-
-func (e InputCriblmetricsCompression) ToPointer() *InputCriblmetricsCompression {
-	return &e
-}
-func (e *InputCriblmetricsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputCriblmetricsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCriblmetricsCompression: %v", v)
-	}
-}
-
-type InputCriblmetricsPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputCriblmetricsMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputCriblmetricsCompression `default:"none" json:"compress"`
-}
-
-func (i InputCriblmetricsPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCriblmetricsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputCriblmetricsPq) GetMode() *InputCriblmetricsMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputCriblmetricsPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputCriblmetricsPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputCriblmetricsPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputCriblmetricsPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputCriblmetricsPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputCriblmetricsPq) GetCompress() *InputCriblmetricsCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputCriblmetricsMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputCriblmetricsMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputCriblmetricsMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputCriblmetricsMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputCriblmetricsMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputCriblmetrics struct {
 	// Unique ID for this input
-	ID       string                `json:"id"`
+	ID       *string               `json:"id,omitempty"`
 	Type     InputCriblmetricsType `json:"type"`
-	Disabled *bool                 `default:"false" json:"disabled"`
+	Disabled *bool                 `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputCriblmetricsConnection `json:"connections,omitempty"`
-	Pq          *InputCriblmetricsPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// A prefix that is applied to the metrics provided by Cribl Stream
-	Prefix *string `default:"cribl.logstream." json:"prefix"`
+	Prefix *string `json:"prefix,omitempty"`
 	// Include granular metrics. Disabling this will drop the following metrics events: `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)`.
-	FullFidelity *bool `default:"true" json:"fullFidelity"`
+	FullFidelity *bool `json:"fullFidelity,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputCriblmetricsMetadatum `json:"metadata,omitempty"`
-	Description *string                      `json:"description,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
 }
 
 func (i InputCriblmetrics) MarshalJSON() ([]byte, error) {
@@ -255,15 +63,15 @@ func (i InputCriblmetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCriblmetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputCriblmetrics) GetID() string {
+func (i *InputCriblmetrics) GetID() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ID
 }
@@ -317,14 +125,14 @@ func (i *InputCriblmetrics) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputCriblmetrics) GetConnections() []InputCriblmetricsConnection {
+func (i *InputCriblmetrics) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputCriblmetrics) GetPq() *InputCriblmetricsPq {
+func (i *InputCriblmetrics) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -345,7 +153,7 @@ func (i *InputCriblmetrics) GetFullFidelity() *bool {
 	return i.FullFidelity
 }
 
-func (i *InputCriblmetrics) GetMetadata() []InputCriblmetricsMetadatum {
+func (i *InputCriblmetrics) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}

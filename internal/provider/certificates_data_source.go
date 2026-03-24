@@ -54,30 +54,47 @@ func (r *CertificatesDataSource) Schema(ctx context.Context, req datasource.Sche
 					Attributes: map[string]schema.Attribute{
 						"ca": schema.StringAttribute{
 							Computed:    true,
-							Description: `Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.`,
+							Description: `Certificate Authority (CA) certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple CA certificates in a single JSON string, each beginning and ending with its own delimiters.`,
+						},
+						"ca_path": schema.StringAttribute{
+							Computed:    true,
+							Description: `Path to the Certificate Authority (CA) certificate file.`,
 						},
 						"cert": schema.StringAttribute{
 							Computed:    true,
-							Description: `Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here`,
+							Description: `Certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple certificates in a single JSON string, each beginning and ending with its own delimiters.`,
+						},
+						"cert_expiry_date": schema.StringAttribute{
+							Computed:    true,
+							Description: `Certificate expiration date and time as an ISO-8601 UTC string.`,
+						},
+						"cert_path": schema.StringAttribute{
+							Computed:    true,
+							Description: `Path to the certificate file.`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Brief description of the certificate.`,
 						},
 						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"in_use": schema.ListAttribute{
 							Computed:    true,
-							ElementType: types.StringType,
-							Description: `List of configurations that reference this certificate`,
+							Description: `Unique identifier for the certificate.`,
 						},
 						"passphrase": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
+							Computed:    true,
+							Description: `If the private key is encrypted, the decryption passphrase.`,
+						},
+						"passphrase_path": schema.StringAttribute{
+							Computed:    true,
+							Description: `Path to the passphrase file.`,
 						},
 						"priv_key": schema.StringAttribute{
-							Computed:  true,
-							Sensitive: true,
+							Computed:    true,
+							Description: `Private key for the certificate in PEM format:<br/><br/> Base64-encoded data enclosed by the appropriate delimiters for the key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do not include the <code>privKey</code> value.`,
+						},
+						"priv_key_path": schema.StringAttribute{
+							Computed:    true,
+							Description: `Path to the private key file.`,
 						},
 					},
 				},

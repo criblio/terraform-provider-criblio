@@ -7,6 +7,7 @@ import (
 )
 
 type OutputWebhookURL struct {
-	URL    types.String  `tfsdk:"url"`
-	Weight types.Float64 `tfsdk:"weight"`
+	TemplateURL types.String  `tfsdk:"template_url"`
+	URL         types.String  `tfsdk:"url"`
+	Weight      types.Float64 `tfsdk:"weight"`
 }

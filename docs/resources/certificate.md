@@ -14,18 +14,18 @@ Certificate Resource
 
 ```terraform
 resource "criblio_certificate" "my_certificate" {
-  ca          = "LS0tLS1CR...FLS0tLS0K"
-  cert        = "LS0tLS1CR...FLS0tLS0K"
-  description = "Short description of x509 certificate"
-  group_id    = "default"
-  id          = "myUniqueCertId"
-  in_use = [
-    "list",
-    "of",
-    "configurations",
-  ]
-  passphrase = "SecurityPassphrase"
-  priv_key   = "dont-share-this-key"
+  ca               = "...my_ca..."
+  ca_path          = "...my_ca_path..."
+  cert             = "...my_cert..."
+  cert_expiry_date = "...my_cert_expiry_date..."
+  cert_path        = "...my_cert_path..."
+  description      = "...my_description..."
+  group_id         = "default"
+  id               = "cert-001"
+  passphrase       = "...my_passphrase..."
+  passphrase_path  = "...my_passphrase_path..."
+  priv_key         = "...my_priv_key..."
+  priv_key_path    = "...my_priv_key_path..."
 }
 ```
 
@@ -34,17 +34,21 @@ resource "criblio_certificate" "my_certificate" {
 
 ### Required
 
-- `cert` (String) Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
+- `cert` (String) Certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple certificates in a single JSON string, each beginning and ending with its own delimiters.
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to PATCH
-- `priv_key` (String, Sensitive)
+- `id` (String) Unique identifier for the certificate.
+- `priv_key` (String) Private key for the certificate in PEM format:<br/><br/> Base64-encoded data enclosed by the appropriate delimiters for the key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do not include the <code>privKey</code> value.
 
 ### Optional
 
-- `ca` (String) Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.
-- `description` (String)
-- `in_use` (List of String) List of configurations that reference this certificate
-- `passphrase` (String, Sensitive)
+- `ca` (String) Certificate Authority (CA) certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple CA certificates in a single JSON string, each beginning and ending with its own delimiters.
+- `ca_path` (String) Path to the Certificate Authority (CA) certificate file.
+- `cert_expiry_date` (String) Certificate expiration date and time as an ISO-8601 UTC string.
+- `cert_path` (String) Path to the certificate file.
+- `description` (String) Brief description of the certificate.
+- `passphrase` (String) If the private key is encrypted, the decryption passphrase.
+- `passphrase_path` (String) Path to the passphrase file.
+- `priv_key_path` (String) Path to the private key file.
 
 ## Import
 

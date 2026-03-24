@@ -14,8 +14,7 @@ import (
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetProviderResponseBody(ctx context.Context, resp *operations.CreateDatasetProviderResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
-		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
+	if resp != nil {
 	}
 
 	return diags
@@ -24,8 +23,7 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsCreateDatasetP
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.GetDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
-		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
+	if resp != nil {
 	}
 
 	return diags
@@ -34,8 +32,7 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsGetDatasetProv
 func (r *SearchDatasetProviderResourceModel) RefreshFromOperationsUpdateDatasetProviderByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetProviderByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	if resp != nil && len(resp.Items) > 0 {
-		diags.Append(r.RefreshFromSharedGenericProvider(ctx, &resp.Items[0])...)
+	if resp != nil {
 	}
 
 	return diags
@@ -100,26 +97,13 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.APIAzureProvider.Type
 	}
 	if resp.APIElasticSearchProvider != nil {
-		// Preserve existing password if it exists, as API returns masked value
-		existingPassword := types.StringNull()
-		if r.APIElasticSearchProvider != nil {
-			existingPassword = r.APIElasticSearchProvider.Password
-		}
-		
 		r.APIElasticSearchProvider = &tfTypes.APIElasticSearchProvider{}
 		r.APIElasticSearchProvider.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
 		r.Description = r.APIElasticSearchProvider.Description
 		r.APIElasticSearchProvider.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
 		r.APIElasticSearchProvider.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
 		r.ID = r.APIElasticSearchProvider.ID
-		// Only update password if it's not masked (contains asterisks)
-		if resp.APIElasticSearchProvider.Password != "" && resp.APIElasticSearchProvider.Password[0] != '*' {
-			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
-		} else if !existingPassword.IsNull() {
-			r.APIElasticSearchProvider.Password = existingPassword
-		} else {
-			r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
-		}
+		r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
 		r.APIElasticSearchProvider.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
 		r.Type = r.APIElasticSearchProvider.Type
 		r.APIElasticSearchProvider.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
@@ -396,14 +380,6 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.Type = r.MetaProvider.Type
 	}
 	if resp.PrometheusProvider != nil {
-		// Preserve existing password and token if they exist, as API returns masked values
-		existingPassword := types.StringNull()
-		existingToken := types.StringNull()
-		if r.PrometheusProvider != nil {
-			existingPassword = r.PrometheusProvider.Password
-			existingToken = r.PrometheusProvider.Token
-		}
-		
 		r.PrometheusProvider = &tfTypes.PrometheusProvider{}
 		if resp.PrometheusProvider.AuthType != nil {
 			r.PrometheusProvider.AuthType = types.StringValue(string(*resp.PrometheusProvider.AuthType))
@@ -416,33 +392,13 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		r.PrometheusProvider.ID = types.StringValue(resp.PrometheusProvider.ID)
 		r.ID = r.PrometheusProvider.ID
 		r.PrometheusProvider.MaxConcurrency = types.Float64PointerValue(resp.PrometheusProvider.MaxConcurrency)
-		// Only update password if it's not masked
-		if resp.PrometheusProvider.Password != nil && *resp.PrometheusProvider.Password != "" && (*resp.PrometheusProvider.Password)[0] != '*' {
-			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
-		} else if !existingPassword.IsNull() {
-			r.PrometheusProvider.Password = existingPassword
-		} else {
-			r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
-		}
-		// Only update token if it's not masked
-		if resp.PrometheusProvider.Token != nil && *resp.PrometheusProvider.Token != "" && (*resp.PrometheusProvider.Token)[0] != '*' {
-			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
-		} else if !existingToken.IsNull() {
-			r.PrometheusProvider.Token = existingToken
-		} else {
-			r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
-		}
+		r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
 		r.PrometheusProvider.Type = types.StringValue(resp.PrometheusProvider.Type)
 		r.Type = r.PrometheusProvider.Type
 		r.PrometheusProvider.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
 	}
 	if resp.S3Provider != nil {
-		// Preserve existing aws_secret_key if it exists, as API returns masked value
-		existingAwsSecretKey := types.StringNull()
-		if r.S3Provider != nil {
-			existingAwsSecretKey = r.S3Provider.AwsSecretKey
-		}
-		
 		r.S3Provider = &tfTypes.S3Provider{}
 		r.S3Provider.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
 		r.S3Provider.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
@@ -452,14 +408,7 @@ func (r *SearchDatasetProviderResourceModel) RefreshFromSharedGenericProvider(ct
 		} else {
 			r.S3Provider.AwsAuthenticationMethod = types.StringNull()
 		}
-		// Only update aws_secret_key if it's not masked (contains asterisks)
-		if resp.S3Provider.AwsSecretKey != nil && *resp.S3Provider.AwsSecretKey != "" && (*resp.S3Provider.AwsSecretKey)[0] != '*' {
-			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
-		} else if !existingAwsSecretKey.IsNull() {
-			r.S3Provider.AwsSecretKey = existingAwsSecretKey
-		} else {
-			r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
-		}
+		r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
 		r.S3Provider.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
 		r.S3Provider.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
 		r.S3Provider.Description = types.StringPointerValue(resp.S3Provider.Description)
@@ -572,9 +521,9 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			} else {
 				dataField = nil
 			}
-			method := new(shared.HTTPEndpointMethod)
+			method := new(shared.Method)
 			if !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.IsUnknown() && !r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.IsNull() {
-				*method = shared.HTTPEndpointMethod(r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.ValueString())
+				*method = shared.Method(r.APIHTTPProvider.AvailableEndpoints[availableEndpointsIndex].Method.ValueString())
 			} else {
 				method = nil
 			}
@@ -1443,20 +1392,22 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	}
 	var criblSearchProvider *shared.CriblSearchProvider
 	if r.CriblSearchProvider != nil {
-		var idCriblSearch string
-		idCriblSearch = r.CriblSearchProvider.ID.ValueString()
-		var typeCriblSearch string
-		typeCriblSearch = r.CriblSearchProvider.Type.ValueString()
-		descCriblSearch := new(string)
+		var id18 string
+		id18 = r.CriblSearchProvider.ID.ValueString()
+
+		var typeVar18 string
+		typeVar18 = r.CriblSearchProvider.Type.ValueString()
+
+		description18 := new(string)
 		if !r.CriblSearchProvider.Description.IsUnknown() && !r.CriblSearchProvider.Description.IsNull() {
-			*descCriblSearch = r.CriblSearchProvider.Description.ValueString()
+			*description18 = r.CriblSearchProvider.Description.ValueString()
 		} else {
-			descCriblSearch = nil
+			description18 = nil
 		}
 		criblSearchProvider = &shared.CriblSearchProvider{
-			ID:          idCriblSearch,
-			Type:        typeCriblSearch,
-			Description: descCriblSearch,
+			ID:          id18,
+			Type:        typeVar18,
+			Description: description18,
 		}
 	}
 	if criblSearchProvider != nil {
@@ -1466,22 +1417,22 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	}
 	var metaProvider *shared.MetaProvider
 	if r.MetaProvider != nil {
-		var id18 string
-		id18 = r.MetaProvider.ID.ValueString()
+		var id19 string
+		id19 = r.MetaProvider.ID.ValueString()
 
-		var typeVar18 string
-		typeVar18 = r.MetaProvider.Type.ValueString()
+		var typeVar19 string
+		typeVar19 = r.MetaProvider.Type.ValueString()
 
-		description18 := new(string)
+		description19 := new(string)
 		if !r.MetaProvider.Description.IsUnknown() && !r.MetaProvider.Description.IsNull() {
-			*description18 = r.MetaProvider.Description.ValueString()
+			*description19 = r.MetaProvider.Description.ValueString()
 		} else {
-			description18 = nil
+			description19 = nil
 		}
 		metaProvider = &shared.MetaProvider{
-			ID:          id18,
-			Type:        typeVar18,
-			Description: description18,
+			ID:          id19,
+			Type:        typeVar19,
+			Description: description19,
 		}
 	}
 	if metaProvider != nil {
@@ -1491,22 +1442,22 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	}
 	var edgeProvider *shared.EdgeProvider
 	if r.EdgeProvider != nil {
-		var id19 string
-		id19 = r.EdgeProvider.ID.ValueString()
+		var id20 string
+		id20 = r.EdgeProvider.ID.ValueString()
 
-		var typeVar19 string
-		typeVar19 = r.EdgeProvider.Type.ValueString()
+		var typeVar20 string
+		typeVar20 = r.EdgeProvider.Type.ValueString()
 
-		description19 := new(string)
+		description20 := new(string)
 		if !r.EdgeProvider.Description.IsUnknown() && !r.EdgeProvider.Description.IsNull() {
-			*description19 = r.EdgeProvider.Description.ValueString()
+			*description20 = r.EdgeProvider.Description.ValueString()
 		} else {
-			description19 = nil
+			description20 = nil
 		}
 		edgeProvider = &shared.EdgeProvider{
-			ID:          id19,
-			Type:        typeVar19,
-			Description: description19,
+			ID:          id20,
+			Type:        typeVar20,
+			Description: description20,
 		}
 	}
 	if edgeProvider != nil {
@@ -1516,17 +1467,17 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	}
 	var azureBlobProvider *shared.AzureBlobProvider
 	if r.AzureBlobProvider != nil {
-		var id20 string
-		id20 = r.AzureBlobProvider.ID.ValueString()
+		var id21 string
+		id21 = r.AzureBlobProvider.ID.ValueString()
 
-		var typeVar20 string
-		typeVar20 = r.AzureBlobProvider.Type.ValueString()
+		var typeVar21 string
+		typeVar21 = r.AzureBlobProvider.Type.ValueString()
 
-		description20 := new(string)
+		description21 := new(string)
 		if !r.AzureBlobProvider.Description.IsUnknown() && !r.AzureBlobProvider.Description.IsNull() {
-			*description20 = r.AzureBlobProvider.Description.ValueString()
+			*description21 = r.AzureBlobProvider.Description.ValueString()
 		} else {
-			description20 = nil
+			description21 = nil
 		}
 		authenticationMethod1 := new(shared.AzureBlobProviderAuthenticationMethod)
 		if !r.AzureBlobProvider.AuthenticationMethod.IsUnknown() && !r.AzureBlobProvider.AuthenticationMethod.IsNull() {
@@ -1581,9 +1532,9 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			clientSecret5 = nil
 		}
 		azureBlobProvider = &shared.AzureBlobProvider{
-			ID:                   id20,
-			Type:                 typeVar20,
-			Description:          description20,
+			ID:                   id21,
+			Type:                 typeVar21,
+			Description:          description21,
 			AuthenticationMethod: authenticationMethod1,
 			Location:             location,
 			ConnectionString:     connectionString,
@@ -1601,17 +1552,17 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	}
 	var gcsProvider *shared.GcsProvider
 	if r.GcsProvider != nil {
-		var id21 string
-		id21 = r.GcsProvider.ID.ValueString()
+		var id22 string
+		id22 = r.GcsProvider.ID.ValueString()
 
-		var typeVar21 string
-		typeVar21 = r.GcsProvider.Type.ValueString()
+		var typeVar22 string
+		typeVar22 = r.GcsProvider.Type.ValueString()
 
-		description21 := new(string)
+		description22 := new(string)
 		if !r.GcsProvider.Description.IsUnknown() && !r.GcsProvider.Description.IsNull() {
-			*description21 = r.GcsProvider.Description.ValueString()
+			*description22 = r.GcsProvider.Description.ValueString()
 		} else {
-			description21 = nil
+			description22 = nil
 		}
 		var serviceAccountCredentials2 string
 		serviceAccountCredentials2 = r.GcsProvider.ServiceAccountCredentials.ValueString()
@@ -1623,9 +1574,9 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 			endpoint6 = nil
 		}
 		gcsProvider = &shared.GcsProvider{
-			ID:                        id21,
-			Type:                      typeVar21,
-			Description:               description21,
+			ID:                        id22,
+			Type:                      typeVar22,
+			Description:               description22,
 			ServiceAccountCredentials: serviceAccountCredentials2,
 			Endpoint:                  endpoint6,
 		}
@@ -1633,17 +1584,6 @@ func (r *SearchDatasetProviderResourceModel) ToSharedGenericProvider(ctx context
 	if gcsProvider != nil {
 		out = shared.GenericProvider{
 			GcsProvider: gcsProvider,
-		}
-	}
-
-	// Fallback: when plan has cribl_search_provider = null (e.g. config omits it) but resource is cribl_search type,
-	// build minimal CriblSearchProvider to avoid "all fields are null" marshal error. cribl_search providers are read-only.
-	if r.CriblSearchProvider == nil && r.Type.ValueString() == "cribl_search" && r.ID.ValueString() != "" {
-		out = shared.GenericProvider{
-			CriblSearchProvider: &shared.CriblSearchProvider{
-				ID:   r.ID.ValueString(),
-				Type: "cribl_search",
-			},
 		}
 	}
 

@@ -7,7 +7,18 @@ import (
 )
 
 type InputWizContentConfig struct {
-	ContentDescription types.String `tfsdk:"content_description"`
-	ContentType        types.String `tfsdk:"content_type"`
-	Enabled            types.Bool   `tfsdk:"enabled"`
+	ContentDescription    types.String         `tfsdk:"content_description"`
+	ContentQuery          types.String         `tfsdk:"content_query"`
+	ContentType           types.String         `tfsdk:"content_type"`
+	CronSchedule          types.String         `tfsdk:"cron_schedule"`
+	Earliest              types.String         `tfsdk:"earliest"`
+	Enabled               types.Bool           `tfsdk:"enabled"`
+	JobTimeout            types.String         `tfsdk:"job_timeout"`
+	Latest                types.String         `tfsdk:"latest"`
+	LogLevel              types.String         `tfsdk:"log_level"`
+	ManageState           *InputWizManageState `tfsdk:"manage_state"`
+	MaxPages              types.Float64        `tfsdk:"max_pages"`
+	StateMergeExpression  types.String         `tfsdk:"state_merge_expression"`
+	StateTracking         types.Bool           `tfsdk:"state_tracking"`
+	StateUpdateExpression types.String         `tfsdk:"state_update_expression"`
 }

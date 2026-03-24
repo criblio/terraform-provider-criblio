@@ -34,10 +34,14 @@ func (e *OutputGoogleCloudLoggingType) UnmarshalJSON(data []byte) error {
 type LogLocationType string
 
 const (
-	LogLocationTypeProject        LogLocationType = "project"
-	LogLocationTypeOrganization   LogLocationType = "organization"
+	// LogLocationTypeProject Project
+	LogLocationTypeProject LogLocationType = "project"
+	// LogLocationTypeOrganization Organization
+	LogLocationTypeOrganization LogLocationType = "organization"
+	// LogLocationTypeBillingAccount Billing Account
 	LogLocationTypeBillingAccount LogLocationType = "billingAccount"
-	LogLocationTypeFolder         LogLocationType = "folder"
+	// LogLocationTypeFolder Folder
+	LogLocationTypeFolder LogLocationType = "folder"
 )
 
 func (e LogLocationType) ToPointer() *LogLocationType {
@@ -67,7 +71,9 @@ func (e *LogLocationType) UnmarshalJSON(data []byte) error {
 type PayloadFormat string
 
 const (
+	// PayloadFormatText Text
 	PayloadFormatText PayloadFormat = "text"
+	// PayloadFormatJSON JSON
 	PayloadFormatJSON PayloadFormat = "json"
 )
 
@@ -90,214 +96,6 @@ func (e *PayloadFormat) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type LogLabel struct {
-	// Label name
-	Label string `json:"label"`
-	// JavaScript expression to compute the label's value.
-	ValueExpression string `json:"valueExpression"`
-}
-
-func (l LogLabel) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *LogLabel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"label", "valueExpression"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (l *LogLabel) GetLabel() string {
-	if l == nil {
-		return ""
-	}
-	return l.Label
-}
-
-func (l *LogLabel) GetValueExpression() string {
-	if l == nil {
-		return ""
-	}
-	return l.ValueExpression
-}
-
-type ResourceTypeLabel struct {
-	// Label name
-	Label string `json:"label"`
-	// JavaScript expression to compute the label's value.
-	ValueExpression string `json:"valueExpression"`
-}
-
-func (r ResourceTypeLabel) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(r, "", false)
-}
-
-func (r *ResourceTypeLabel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"label", "valueExpression"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *ResourceTypeLabel) GetLabel() string {
-	if r == nil {
-		return ""
-	}
-	return r.Label
-}
-
-func (r *ResourceTypeLabel) GetValueExpression() string {
-	if r == nil {
-		return ""
-	}
-	return r.ValueExpression
-}
-
-// OutputGoogleCloudLoggingGoogleAuthenticationMethod - Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
-type OutputGoogleCloudLoggingGoogleAuthenticationMethod string
-
-const (
-	OutputGoogleCloudLoggingGoogleAuthenticationMethodAuto   OutputGoogleCloudLoggingGoogleAuthenticationMethod = "auto"
-	OutputGoogleCloudLoggingGoogleAuthenticationMethodManual OutputGoogleCloudLoggingGoogleAuthenticationMethod = "manual"
-	OutputGoogleCloudLoggingGoogleAuthenticationMethodSecret OutputGoogleCloudLoggingGoogleAuthenticationMethod = "secret"
-)
-
-func (e OutputGoogleCloudLoggingGoogleAuthenticationMethod) ToPointer() *OutputGoogleCloudLoggingGoogleAuthenticationMethod {
-	return &e
-}
-func (e *OutputGoogleCloudLoggingGoogleAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputGoogleCloudLoggingGoogleAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleCloudLoggingGoogleAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputGoogleCloudLoggingBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputGoogleCloudLoggingBackpressureBehavior string
-
-const (
-	OutputGoogleCloudLoggingBackpressureBehaviorBlock OutputGoogleCloudLoggingBackpressureBehavior = "block"
-	OutputGoogleCloudLoggingBackpressureBehaviorDrop  OutputGoogleCloudLoggingBackpressureBehavior = "drop"
-	OutputGoogleCloudLoggingBackpressureBehaviorQueue OutputGoogleCloudLoggingBackpressureBehavior = "queue"
-)
-
-func (e OutputGoogleCloudLoggingBackpressureBehavior) ToPointer() *OutputGoogleCloudLoggingBackpressureBehavior {
-	return &e
-}
-func (e *OutputGoogleCloudLoggingBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputGoogleCloudLoggingBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleCloudLoggingBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputGoogleCloudLoggingCompression - Codec to use to compress the persisted data
-type OutputGoogleCloudLoggingCompression string
-
-const (
-	OutputGoogleCloudLoggingCompressionNone OutputGoogleCloudLoggingCompression = "none"
-	OutputGoogleCloudLoggingCompressionGzip OutputGoogleCloudLoggingCompression = "gzip"
-)
-
-func (e OutputGoogleCloudLoggingCompression) ToPointer() *OutputGoogleCloudLoggingCompression {
-	return &e
-}
-func (e *OutputGoogleCloudLoggingCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputGoogleCloudLoggingCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleCloudLoggingCompression: %v", v)
-	}
-}
-
-// OutputGoogleCloudLoggingQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputGoogleCloudLoggingQueueFullBehavior string
-
-const (
-	OutputGoogleCloudLoggingQueueFullBehaviorBlock OutputGoogleCloudLoggingQueueFullBehavior = "block"
-	OutputGoogleCloudLoggingQueueFullBehaviorDrop  OutputGoogleCloudLoggingQueueFullBehavior = "drop"
-)
-
-func (e OutputGoogleCloudLoggingQueueFullBehavior) ToPointer() *OutputGoogleCloudLoggingQueueFullBehavior {
-	return &e
-}
-func (e *OutputGoogleCloudLoggingQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputGoogleCloudLoggingQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleCloudLoggingQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputGoogleCloudLoggingMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputGoogleCloudLoggingMode string
-
-const (
-	OutputGoogleCloudLoggingModeError        OutputGoogleCloudLoggingMode = "error"
-	OutputGoogleCloudLoggingModeBackpressure OutputGoogleCloudLoggingMode = "backpressure"
-	OutputGoogleCloudLoggingModeAlways       OutputGoogleCloudLoggingMode = "always"
-)
-
-func (e OutputGoogleCloudLoggingMode) ToPointer() *OutputGoogleCloudLoggingMode {
-	return &e
-}
-func (e *OutputGoogleCloudLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputGoogleCloudLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleCloudLoggingMode: %v", v)
-	}
-}
-
 type OutputGoogleCloudLoggingPqControls struct {
 }
 
@@ -314,8 +112,8 @@ func (o *OutputGoogleCloudLoggingPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputGoogleCloudLogging struct {
 	// Unique ID for this output
-	ID   *string                       `json:"id,omitempty"`
-	Type *OutputGoogleCloudLoggingType `json:"type,omitempty"`
+	ID   *string                      `json:"id,omitempty"`
+	Type OutputGoogleCloudLoggingType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -325,38 +123,39 @@ type OutputGoogleCloudLogging struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags      []string        `json:"streamtags,omitempty"`
 	LogLocationType LogLocationType `json:"logLocationType"`
-	// JavaScript expression to compute the value of the log name.
+	// JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
 	LogNameExpression string `json:"logNameExpression"`
+	SanitizeLogNames  *bool  `json:"sanitizeLogNames,omitempty"`
 	// Format to use when sending payload. Defaults to Text.
-	PayloadFormat *PayloadFormat `default:"text" json:"payloadFormat"`
+	PayloadFormat *PayloadFormat `json:"payloadFormat,omitempty"`
 	// Labels to apply to the log entry
-	LogLabels []LogLabel `json:"logLabels,omitempty"`
+	LogLabels []ItemsTypeLogLabels `json:"logLabels,omitempty"`
 	// JavaScript expression to compute the value of the managed resource type field. Must evaluate to one of the valid values [here](https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types). Defaults to "global".
 	ResourceTypeExpression *string `json:"resourceTypeExpression,omitempty"`
 	// Labels to apply to the managed resource. These must correspond to the valid labels for the specified resource type (see [here](https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types)). Otherwise, they will be dropped by Google Cloud Logging.
-	ResourceTypeLabels []ResourceTypeLabel `json:"resourceTypeLabels,omitempty"`
+	ResourceTypeLabels []ItemsTypeLogLabels `json:"resourceTypeLabels,omitempty"`
 	// JavaScript expression to compute the value of the severity field. Must evaluate to one of the severity values supported by Google Cloud Logging [here](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity) (case insensitive). Defaults to "DEFAULT".
 	SeverityExpression *string `json:"severityExpression,omitempty"`
 	// JavaScript expression to compute the value of the insert ID field.
 	InsertIDExpression *string `json:"insertIdExpression,omitempty"`
 	// Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
-	GoogleAuthMethod *OutputGoogleCloudLoggingGoogleAuthenticationMethod `default:"manual" json:"googleAuthMethod"`
+	GoogleAuthMethod *GoogleAuthenticationMethodOptions `json:"googleAuthMethod,omitempty"`
 	// Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 	ServiceAccountCredentials *string `json:"serviceAccountCredentials,omitempty"`
 	// Select or create a stored text secret
 	Secret *string `json:"secret,omitempty"`
 	// Maximum size, in KB, of the request body.
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Max number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Maximum number of ongoing requests before blocking.
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Amount of time (milliseconds) to wait for the connection to establish before retrying
-	ConnectionTimeout *float64 `default:"10000" json:"connectionTimeout"`
+	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it.
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum number of requests to limit to per second.
 	ThrottleRateReqPerSec *int64 `json:"throttleRateReqPerSec,omitempty"`
 	// A JavaScript expression that evaluates to the HTTP request method as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
@@ -416,27 +215,37 @@ type OutputGoogleCloudLogging struct {
 	// A JavaScript expression that evaluates to the the sampling decision of the span associated with the log entry. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
 	TraceSampledExpression *string `json:"traceSampledExpression,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputGoogleCloudLoggingBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
 	// Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 	TotalMemoryLimitKB *float64 `json:"totalMemoryLimitKB,omitempty"`
 	Description        *string  `json:"description,omitempty"`
-	// JavaScript expression to compute the value of the folder ID with which log entries should be associated.
+	// JavaScript expression to compute the value of the folder ID with which log entries should be associated. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
 	LogLocationExpression string `json:"logLocationExpression"`
 	// JavaScript expression to compute the value of the payload. Must evaluate to a JavaScript object value. If an invalid value is encountered it will result in the default value instead. Defaults to the entire event.
 	PayloadExpression *string `json:"payloadExpression,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputGoogleCloudLoggingCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputGoogleCloudLoggingQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputGoogleCloudLoggingMode       `default:"error" json:"pqMode"`
-	PqControls *OutputGoogleCloudLoggingPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                             `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputGoogleCloudLoggingPqControls `json:"pqControls,omitempty"`
 }
 
 func (o OutputGoogleCloudLogging) MarshalJSON() ([]byte, error) {
@@ -444,7 +253,7 @@ func (o OutputGoogleCloudLogging) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGoogleCloudLogging) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"logLocationType", "logNameExpression", "logLocationExpression"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "logLocationType", "logNameExpression", "logLocationExpression"}); err != nil {
 		return err
 	}
 	return nil
@@ -457,9 +266,9 @@ func (o *OutputGoogleCloudLogging) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputGoogleCloudLogging) GetType() *OutputGoogleCloudLoggingType {
+func (o *OutputGoogleCloudLogging) GetType() OutputGoogleCloudLoggingType {
 	if o == nil {
-		return nil
+		return OutputGoogleCloudLoggingType("")
 	}
 	return o.Type
 }
@@ -506,6 +315,13 @@ func (o *OutputGoogleCloudLogging) GetLogNameExpression() string {
 	return o.LogNameExpression
 }
 
+func (o *OutputGoogleCloudLogging) GetSanitizeLogNames() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.SanitizeLogNames
+}
+
 func (o *OutputGoogleCloudLogging) GetPayloadFormat() *PayloadFormat {
 	if o == nil {
 		return nil
@@ -513,7 +329,7 @@ func (o *OutputGoogleCloudLogging) GetPayloadFormat() *PayloadFormat {
 	return o.PayloadFormat
 }
 
-func (o *OutputGoogleCloudLogging) GetLogLabels() []LogLabel {
+func (o *OutputGoogleCloudLogging) GetLogLabels() []ItemsTypeLogLabels {
 	if o == nil {
 		return nil
 	}
@@ -527,7 +343,7 @@ func (o *OutputGoogleCloudLogging) GetResourceTypeExpression() *string {
 	return o.ResourceTypeExpression
 }
 
-func (o *OutputGoogleCloudLogging) GetResourceTypeLabels() []ResourceTypeLabel {
+func (o *OutputGoogleCloudLogging) GetResourceTypeLabels() []ItemsTypeLogLabels {
 	if o == nil {
 		return nil
 	}
@@ -548,7 +364,7 @@ func (o *OutputGoogleCloudLogging) GetInsertIDExpression() *string {
 	return o.InsertIDExpression
 }
 
-func (o *OutputGoogleCloudLogging) GetGoogleAuthMethod() *OutputGoogleCloudLoggingGoogleAuthenticationMethod {
+func (o *OutputGoogleCloudLogging) GetGoogleAuthMethod() *GoogleAuthenticationMethodOptions {
 	if o == nil {
 		return nil
 	}
@@ -814,7 +630,7 @@ func (o *OutputGoogleCloudLogging) GetTraceSampledExpression() *string {
 	return o.TraceSampledExpression
 }
 
-func (o *OutputGoogleCloudLogging) GetOnBackpressure() *OutputGoogleCloudLoggingBackpressureBehavior {
+func (o *OutputGoogleCloudLogging) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -849,6 +665,41 @@ func (o *OutputGoogleCloudLogging) GetPayloadExpression() *string {
 	return o.PayloadExpression
 }
 
+func (o *OutputGoogleCloudLogging) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputGoogleCloudLogging) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputGoogleCloudLogging) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputGoogleCloudLogging) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputGoogleCloudLogging) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputGoogleCloudLogging) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -870,25 +721,25 @@ func (o *OutputGoogleCloudLogging) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputGoogleCloudLogging) GetPqCompress() *OutputGoogleCloudLoggingCompression {
+func (o *OutputGoogleCloudLogging) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputGoogleCloudLogging) GetPqOnBackpressure() *OutputGoogleCloudLoggingQueueFullBehavior {
+func (o *OutputGoogleCloudLogging) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputGoogleCloudLogging) GetPqMode() *OutputGoogleCloudLoggingMode {
+func (o *OutputGoogleCloudLogging) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputGoogleCloudLogging) GetPqControls() *OutputGoogleCloudLoggingPqControls {

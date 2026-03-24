@@ -39,10 +39,10 @@ func (d *DeleteSystemInputsByPackRequest) GetID() string {
 
 // DeleteSystemInputsByPackResponseBody - a list of Input objects
 type DeleteSystemInputsByPackResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (d *DeleteSystemInputsByPackResponseBody) GetItems() []shared.Input {
+func (d *DeleteSystemInputsByPackResponseBody) GetItems() []shared.InputUnion1 {
 	if d == nil {
 		return nil
 	}

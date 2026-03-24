@@ -8,19 +8,19 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type PaginationType string
+type PaginationConfigPaginationType string
 
 const (
-	PaginationTypeNone   PaginationType = "none"
-	PaginationTypeOffset PaginationType = "offset"
-	PaginationTypeCursor PaginationType = "cursor"
-	PaginationTypePage   PaginationType = "page"
+	PaginationConfigPaginationTypeNone   PaginationConfigPaginationType = "none"
+	PaginationConfigPaginationTypeOffset PaginationConfigPaginationType = "offset"
+	PaginationConfigPaginationTypeCursor PaginationConfigPaginationType = "cursor"
+	PaginationConfigPaginationTypePage   PaginationConfigPaginationType = "page"
 )
 
-func (e PaginationType) ToPointer() *PaginationType {
+func (e PaginationConfigPaginationType) ToPointer() *PaginationConfigPaginationType {
 	return &e
 }
-func (e *PaginationType) UnmarshalJSON(data []byte) error {
+func (e *PaginationConfigPaginationType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -33,27 +33,27 @@ func (e *PaginationType) UnmarshalJSON(data []byte) error {
 	case "cursor":
 		fallthrough
 	case "page":
-		*e = PaginationType(v)
+		*e = PaginationConfigPaginationType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for PaginationType: %v", v)
+		return fmt.Errorf("invalid value for PaginationConfigPaginationType: %v", v)
 	}
 }
 
 type PaginationConfig struct {
-	Type             *PaginationType `default:"none" json:"type"`
-	OffsetField      *string         `json:"offsetField,omitempty"`
-	LimitField       *string         `json:"limitField,omitempty"`
-	Limit            *int64          `default:"100" json:"limit"`
-	MaxPages         *int64          `default:"0" json:"maxPages"`
-	ZeroIndexed      *bool           `default:"false" json:"zeroIndexed"`
-	PageField        *string         `json:"pageField,omitempty"`
-	SizeField        *string         `json:"sizeField,omitempty"`
-	Size             *int64          `default:"50" json:"size"`
-	Attribute        []string        `json:"attribute,omitempty"`
-	LastPageExpr     *string         `json:"lastPageExpr,omitempty"`
-	Offset           *int64          `json:"offset,omitempty"`
-	TotalRecordField *string         `json:"totalRecordField,omitempty"`
+	Type             *PaginationConfigPaginationType `default:"none" json:"type"`
+	OffsetField      *string                         `json:"offsetField,omitempty"`
+	LimitField       *string                         `json:"limitField,omitempty"`
+	Limit            *int64                          `default:"100" json:"limit"`
+	MaxPages         *int64                          `default:"0" json:"maxPages"`
+	ZeroIndexed      *bool                           `default:"false" json:"zeroIndexed"`
+	PageField        *string                         `json:"pageField,omitempty"`
+	SizeField        *string                         `json:"sizeField,omitempty"`
+	Size             *int64                          `default:"50" json:"size"`
+	Attribute        []string                        `json:"attribute,omitempty"`
+	LastPageExpr     *string                         `json:"lastPageExpr,omitempty"`
+	Offset           *int64                          `json:"offset,omitempty"`
+	TotalRecordField *string                         `json:"totalRecordField,omitempty"`
 }
 
 func (p PaginationConfig) MarshalJSON() ([]byte, error) {
@@ -67,7 +67,7 @@ func (p *PaginationConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (p *PaginationConfig) GetType() *PaginationType {
+func (p *PaginationConfig) GetType() *PaginationConfigPaginationType {
 	if p == nil {
 		return nil
 	}

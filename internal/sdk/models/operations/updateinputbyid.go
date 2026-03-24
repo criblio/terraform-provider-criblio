@@ -13,7 +13,7 @@ type UpdateInputByIDRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'default'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Input object to be updated
-	Input shared.Input `request:"mediaType=application/json"`
+	Input shared.InputUnion2 `request:"mediaType=application/json"`
 }
 
 func (u *UpdateInputByIDRequest) GetID() string {
@@ -30,19 +30,19 @@ func (u *UpdateInputByIDRequest) GetGroupID() string {
 	return u.GroupID
 }
 
-func (u *UpdateInputByIDRequest) GetInput() shared.Input {
+func (u *UpdateInputByIDRequest) GetInput() shared.InputUnion2 {
 	if u == nil {
-		return shared.Input{}
+		return shared.InputUnion2{}
 	}
 	return u.Input
 }
 
 // UpdateInputByIDResponseBody - a list of Input objects
 type UpdateInputByIDResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (u *UpdateInputByIDResponseBody) GetItems() []shared.Input {
+func (u *UpdateInputByIDResponseBody) GetItems() []shared.InputUnion1 {
 	if u == nil {
 		return nil
 	}

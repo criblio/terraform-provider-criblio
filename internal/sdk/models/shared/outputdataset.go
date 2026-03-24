@@ -35,13 +35,20 @@ func (e *OutputDatasetType) UnmarshalJSON(data []byte) error {
 type OutputDatasetSeverity string
 
 const (
-	OutputDatasetSeverityFinest  OutputDatasetSeverity = "finest"
-	OutputDatasetSeverityFiner   OutputDatasetSeverity = "finer"
-	OutputDatasetSeverityFine    OutputDatasetSeverity = "fine"
-	OutputDatasetSeverityInfo    OutputDatasetSeverity = "info"
+	// OutputDatasetSeverityFinest 0 - finest
+	OutputDatasetSeverityFinest OutputDatasetSeverity = "finest"
+	// OutputDatasetSeverityFiner 1 - finer
+	OutputDatasetSeverityFiner OutputDatasetSeverity = "finer"
+	// OutputDatasetSeverityFine 2 - fine
+	OutputDatasetSeverityFine OutputDatasetSeverity = "fine"
+	// OutputDatasetSeverityInfo 3 - info
+	OutputDatasetSeverityInfo OutputDatasetSeverity = "info"
+	// OutputDatasetSeverityWarning 4 - warning
 	OutputDatasetSeverityWarning OutputDatasetSeverity = "warning"
-	OutputDatasetSeverityError   OutputDatasetSeverity = "error"
-	OutputDatasetSeverityFatal   OutputDatasetSeverity = "fatal"
+	// OutputDatasetSeverityError 5 - error
+	OutputDatasetSeverityError OutputDatasetSeverity = "error"
+	// OutputDatasetSeverityFatal 6 - fatal
+	OutputDatasetSeverityFatal OutputDatasetSeverity = "fatal"
 )
 
 func (e OutputDatasetSeverity) ToPointer() *OutputDatasetSeverity {
@@ -73,111 +80,15 @@ func (e *OutputDatasetSeverity) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputDatasetResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputDatasetResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDatasetResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDatasetResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputDatasetResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputDatasetResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputDatasetResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputDatasetTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputDatasetTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDatasetTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDatasetTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputDatasetTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputDatasetTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputDatasetTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
 // DataSetSite - DataSet site to which events should be sent
 type DataSetSite string
 
 const (
-	DataSetSiteUs     DataSetSite = "us"
-	DataSetSiteEu     DataSetSite = "eu"
+	// DataSetSiteUs US
+	DataSetSiteUs DataSetSite = "us"
+	// DataSetSiteEu Europe
+	DataSetSiteEu DataSetSite = "eu"
+	// DataSetSiteCustom Custom
 	DataSetSiteCustom DataSetSite = "custom"
 )
 
@@ -202,207 +113,6 @@ func (e *DataSetSite) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputDatasetExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputDatasetExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDatasetExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDatasetExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputDatasetExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputDatasetFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputDatasetFailedRequestLoggingMode string
-
-const (
-	OutputDatasetFailedRequestLoggingModePayload           OutputDatasetFailedRequestLoggingMode = "payload"
-	OutputDatasetFailedRequestLoggingModePayloadAndHeaders OutputDatasetFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputDatasetFailedRequestLoggingModeNone              OutputDatasetFailedRequestLoggingMode = "none"
-)
-
-func (e OutputDatasetFailedRequestLoggingMode) ToPointer() *OutputDatasetFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputDatasetFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputDatasetFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetFailedRequestLoggingMode: %v", v)
-	}
-}
-
-// OutputDatasetBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputDatasetBackpressureBehavior string
-
-const (
-	OutputDatasetBackpressureBehaviorBlock OutputDatasetBackpressureBehavior = "block"
-	OutputDatasetBackpressureBehaviorDrop  OutputDatasetBackpressureBehavior = "drop"
-	OutputDatasetBackpressureBehaviorQueue OutputDatasetBackpressureBehavior = "queue"
-)
-
-func (e OutputDatasetBackpressureBehavior) ToPointer() *OutputDatasetBackpressureBehavior {
-	return &e
-}
-func (e *OutputDatasetBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputDatasetBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputDatasetAuthenticationMethod - Enter API key directly, or select a stored secret
-type OutputDatasetAuthenticationMethod string
-
-const (
-	OutputDatasetAuthenticationMethodManual OutputDatasetAuthenticationMethod = "manual"
-	OutputDatasetAuthenticationMethodSecret OutputDatasetAuthenticationMethod = "secret"
-)
-
-func (e OutputDatasetAuthenticationMethod) ToPointer() *OutputDatasetAuthenticationMethod {
-	return &e
-}
-func (e *OutputDatasetAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputDatasetAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputDatasetCompression - Codec to use to compress the persisted data
-type OutputDatasetCompression string
-
-const (
-	OutputDatasetCompressionNone OutputDatasetCompression = "none"
-	OutputDatasetCompressionGzip OutputDatasetCompression = "gzip"
-)
-
-func (e OutputDatasetCompression) ToPointer() *OutputDatasetCompression {
-	return &e
-}
-func (e *OutputDatasetCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputDatasetCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetCompression: %v", v)
-	}
-}
-
-// OutputDatasetQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputDatasetQueueFullBehavior string
-
-const (
-	OutputDatasetQueueFullBehaviorBlock OutputDatasetQueueFullBehavior = "block"
-	OutputDatasetQueueFullBehaviorDrop  OutputDatasetQueueFullBehavior = "drop"
-)
-
-func (e OutputDatasetQueueFullBehavior) ToPointer() *OutputDatasetQueueFullBehavior {
-	return &e
-}
-func (e *OutputDatasetQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputDatasetQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputDatasetMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputDatasetMode string
-
-const (
-	OutputDatasetModeError        OutputDatasetMode = "error"
-	OutputDatasetModeBackpressure OutputDatasetMode = "backpressure"
-	OutputDatasetModeAlways       OutputDatasetMode = "always"
-)
-
-func (e OutputDatasetMode) ToPointer() *OutputDatasetMode {
-	return &e
-}
-func (e *OutputDatasetMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputDatasetMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetMode: %v", v)
-	}
-}
-
 type OutputDatasetPqControls struct {
 }
 
@@ -419,7 +129,7 @@ func (o *OutputDatasetPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputDataset struct {
 	// Unique ID for this output
-	ID   string            `json:"id"`
+	ID   *string           `json:"id,omitempty"`
 	Type OutputDatasetType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -438,63 +148,75 @@ type OutputDataset struct {
 	// Name of the event field that contains the timestamp. If not specified, defaults to `ts`, `_time`, or `Date.now()`, in that order.
 	TimestampField *string `json:"timestampField,omitempty"`
 	// Default value for event severity. If the `sev` or `__severity` fields are set on an event, the first one matching will override this value.
-	DefaultSeverity *OutputDatasetSeverity `default:"info" json:"defaultSeverity"`
+	DefaultSeverity *OutputDatasetSeverity `json:"defaultSeverity,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputDatasetResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputDatasetTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// DataSet site to which events should be sent
-	Site *DataSetSite `default:"us" json:"site"`
+	Site *DataSetSite `json:"site,omitempty"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputDatasetExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputDatasetFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputDatasetBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
 	// Enter API key directly, or select a stored secret
-	AuthType *OutputDatasetAuthenticationMethod `default:"manual" json:"authType"`
+	AuthType *AuthenticationMethodOptionsAPI `json:"authType,omitempty"`
 	// Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 	TotalMemoryLimitKB *float64 `json:"totalMemoryLimitKB,omitempty"`
 	Description        *string  `json:"description,omitempty"`
 	CustomURL          *string  `json:"customUrl,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputDatasetCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputDatasetQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputDatasetMode       `default:"error" json:"pqMode"`
-	PqControls *OutputDatasetPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                  `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputDatasetPqControls `json:"pqControls,omitempty"`
 	// A 'Log Write Access' API key for the DataSet account
 	APIKey *string `json:"apiKey,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
+	// Binds 'customUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customUrl' at runtime.
+	TemplateCustomURL *string `json:"__template_customUrl,omitempty"`
 }
 
 func (o OutputDataset) MarshalJSON() ([]byte, error) {
@@ -502,15 +224,15 @@ func (o OutputDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputDataset) GetID() string {
+func (o *OutputDataset) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
@@ -585,14 +307,14 @@ func (o *OutputDataset) GetDefaultSeverity() *OutputDatasetSeverity {
 	return o.DefaultSeverity
 }
 
-func (o *OutputDataset) GetResponseRetrySettings() []OutputDatasetResponseRetrySetting {
+func (o *OutputDataset) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputDataset) GetTimeoutRetrySettings() *OutputDatasetTimeoutRetrySettings {
+func (o *OutputDataset) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -662,7 +384,7 @@ func (o *OutputDataset) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputDataset) GetExtraHTTPHeaders() []OutputDatasetExtraHTTPHeader {
+func (o *OutputDataset) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
@@ -676,7 +398,7 @@ func (o *OutputDataset) GetUseRoundRobinDNS() *bool {
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputDataset) GetFailedRequestLoggingMode() *OutputDatasetFailedRequestLoggingMode {
+func (o *OutputDataset) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -690,14 +412,14 @@ func (o *OutputDataset) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputDataset) GetOnBackpressure() *OutputDatasetBackpressureBehavior {
+func (o *OutputDataset) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnBackpressure
 }
 
-func (o *OutputDataset) GetAuthType() *OutputDatasetAuthenticationMethod {
+func (o *OutputDataset) GetAuthType() *AuthenticationMethodOptionsAPI {
 	if o == nil {
 		return nil
 	}
@@ -725,6 +447,41 @@ func (o *OutputDataset) GetCustomURL() *string {
 	return o.CustomURL
 }
 
+func (o *OutputDataset) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputDataset) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputDataset) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputDataset) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputDataset) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputDataset) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -746,25 +503,25 @@ func (o *OutputDataset) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputDataset) GetPqCompress() *OutputDatasetCompression {
+func (o *OutputDataset) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputDataset) GetPqOnBackpressure() *OutputDatasetQueueFullBehavior {
+func (o *OutputDataset) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputDataset) GetPqMode() *OutputDatasetMode {
+func (o *OutputDataset) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputDataset) GetPqControls() *OutputDatasetPqControls {
@@ -786,4 +543,11 @@ func (o *OutputDataset) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
+}
+
+func (o *OutputDataset) GetTemplateCustomURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateCustomURL
 }

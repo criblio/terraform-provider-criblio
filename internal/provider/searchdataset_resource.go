@@ -22,9 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -2017,13 +2015,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 					}...),
 				},
 			},
-		"description": schema.StringAttribute{
-			Computed:    true,
-			Description: `Description of the dataset`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Description of the dataset`,
 			},
-		},
 			"edge_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -2315,13 +2310,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 					}...),
 				},
 			},
-		"id": schema.StringAttribute{
-			Computed:    true,
-			Description: `Unique identifier for the dataset`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the dataset`,
 			},
-		},
 			"meta_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -2547,13 +2539,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 					}...),
 				},
 			},
-		"provider_id": schema.StringAttribute{
-			Computed:    true,
-			Description: `Dataset provider ID`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"provider_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Dataset provider ID`,
 			},
-		},
 			"s3_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -2891,13 +2880,10 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 					}...),
 				},
 			},
-		"type": schema.StringAttribute{
-			Computed:    true,
-			Description: `Dataset provider type, set automatically from the dataset provider`,
-			PlanModifiers: []planmodifier.String{
-				stringplanmodifier.UseStateForUnknown(),
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Dataset provider type, set automatically from the dataset provider`,
 			},
-		},
 		},
 	}
 }

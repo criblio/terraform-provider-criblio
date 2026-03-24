@@ -7,20 +7,25 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
-	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
-	"github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/int64planmodifier"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -62,8 +67,11 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"async_func_timeout": schema.Int64Attribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
 						Description: `Time (in ms) to wait for an async function to complete processing of a data item`,
 						Validators: []validator.Int64{
 							int64validator.AtMost(10000),
@@ -72,57 +80,84 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					"description": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"functions": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.StringAttribute{
-									CustomType: jsontypes.NormalizedType{},
-									Computed:   true,
-									Optional:   true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
+								"conf": schema.MapAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Map{
+										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 									},
-									Description: `Function-specific configuration as a JSON object. Different functions require different configuration fields.`,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
+									Validators: []validator.Map{
+										speakeasy_mapvalidators.NotNull(),
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									},
 								},
 								"description": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(""),
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Simple description of this step`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     booldefault.StaticBool(false),
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `If true, data will not be pushed through this function`,
 								},
 								"filter": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(`true`),
+									Computed: true,
+									Optional: true,
+									Default:  stringdefault.StaticString(`true`),
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Filter that selects data to be fed through this Function. Default: "true"`,
 								},
 								"final": schema.BoolAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     booldefault.StaticBool(false),
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
 								},
 								"group_id": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(""),
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Group ID`,
 								},
 								"id": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Function ID. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
@@ -136,26 +171,38 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Map{
-							mapplanmodifier.SuppressDiff(mapplanmodifier.ExplicitSuppress),
+							speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"description": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Short description of this group`,
 								},
 								"disabled": schema.BoolAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `Whether this group is disabled`,
 								},
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),

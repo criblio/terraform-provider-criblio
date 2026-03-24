@@ -11,6 +11,7 @@ import (
 	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -18,13 +19,11 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -72,7 +71,7 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					custom_stringplanmodifier.PreferState(),
 				},
 			},
 			"group_id": schema.StringAttribute{
@@ -192,15 +191,6 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 						"fields": schema.ListNestedAttribute{
 							Computed: true,
 							Optional: true,
-							Default: listdefault.StaticValue(types.ListValueMust(
-								types.ObjectType{
-									AttrTypes: map[string]attr.Type{
-										"name":  types.StringType,
-										"value": types.StringType,
-									},
-								},
-								[]attr.Value{},
-							)),
 							PlanModifiers: []planmodifier.List{
 								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
@@ -393,7 +383,7 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"]`,
+							Description: `Default: "regex"; must be one of ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow", "azure_flowlog"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
 									"regex",
@@ -404,6 +394,7 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 									"csv",
 									"aws_cloudtrail",
 									"aws_vpcflow",
+									"azure_flowlog",
 								),
 							},
 						},
@@ -466,7 +457,6 @@ func (r *PackBreakersResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.CreateBreakersByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -527,7 +517,6 @@ func (r *PackBreakersResource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -582,7 +571,6 @@ func (r *PackBreakersResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.UpdateBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -643,7 +631,6 @@ func (r *PackBreakersResource) Delete(ctx context.Context, req resource.DeleteRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Pipelines.DeleteBreakersByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

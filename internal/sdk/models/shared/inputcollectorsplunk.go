@@ -600,17 +600,17 @@ func (e *InputCollectorSplunkTypeSplunk) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputCollectorSplunkOutputMode string
+type OutputMode string
 
 const (
-	InputCollectorSplunkOutputModeCsv  InputCollectorSplunkOutputMode = "csv"
-	InputCollectorSplunkOutputModeJSON InputCollectorSplunkOutputMode = "json"
+	OutputModeCsv  OutputMode = "csv"
+	OutputModeJSON OutputMode = "json"
 )
 
-func (e InputCollectorSplunkOutputMode) ToPointer() *InputCollectorSplunkOutputMode {
+func (e OutputMode) ToPointer() *OutputMode {
 	return &e
 }
-func (e *InputCollectorSplunkOutputMode) UnmarshalJSON(data []byte) error {
+func (e *OutputMode) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -619,10 +619,10 @@ func (e *InputCollectorSplunkOutputMode) UnmarshalJSON(data []byte) error {
 	case "csv":
 		fallthrough
 	case "json":
-		*e = InputCollectorSplunkOutputMode(v)
+		*e = OutputMode(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InputCollectorSplunkOutputMode: %v", v)
+		return fmt.Errorf("invalid value for OutputMode: %v", v)
 	}
 }
 
@@ -693,7 +693,7 @@ type InputCollectorSplunkConf struct {
 	Latest *string `json:"latest,omitempty"`
 	// REST API endpoint used to create a search
 	Endpoint           *string                             `json:"endpoint,omitempty"`
-	OutputMode         *InputCollectorSplunkOutputMode     `json:"outputMode,omitempty"`
+	OutputMode         *OutputMode                         `json:"outputMode,omitempty"`
 	Authentication     *InputCollectorSplunkAuthentication `json:"authentication,omitempty"`
 	Timeout            *int64                              `json:"timeout,omitempty"`
 	UseRoundRobinDNS   *bool                               `json:"useRoundRobinDns,omitempty"`
@@ -753,7 +753,7 @@ func (i *InputCollectorSplunkConf) GetEndpoint() *string {
 	return i.Endpoint
 }
 
-func (i *InputCollectorSplunkConf) GetOutputMode() *InputCollectorSplunkOutputMode {
+func (i *InputCollectorSplunkConf) GetOutputMode() *OutputMode {
 	if i == nil {
 		return nil
 	}

@@ -14,6 +14,7 @@ type Output struct {
 	OutputConfluentCloud         *OutputConfluentCloud         `queryParam:"inline" tfsdk:"output_confluent_cloud" tfPlanOnly:"true"`
 	OutputCriblHTTP              *OutputCriblHTTP              `queryParam:"inline" tfsdk:"output_cribl_http" tfPlanOnly:"true"`
 	OutputCriblLake              *OutputCriblLake              `queryParam:"inline" tfsdk:"output_cribl_lake" tfPlanOnly:"true"`
+	OutputCriblSearchEngine      *OutputCriblSearchEngine      `queryParam:"inline" tfsdk:"output_cribl_search_engine" tfPlanOnly:"true"`
 	OutputCriblTCP               *OutputCriblTCP               `queryParam:"inline" tfsdk:"output_cribl_tcp" tfPlanOnly:"true"`
 	OutputCrowdstrikeNextGenSiem *OutputCrowdstrikeNextGenSiem `queryParam:"inline" tfsdk:"output_crowdstrike_next_gen_siem" tfPlanOnly:"true"`
 	OutputDatabricks             *OutputDatabricks             `queryParam:"inline" tfsdk:"output_databricks" tfPlanOnly:"true"`
@@ -40,6 +41,7 @@ type Output struct {
 	OutputInfluxdb               *OutputInfluxdb               `queryParam:"inline" tfsdk:"output_influxdb" tfPlanOnly:"true"`
 	OutputKafka                  *OutputKafka                  `queryParam:"inline" tfsdk:"output_kafka" tfPlanOnly:"true"`
 	OutputKinesis                *OutputKinesis                `queryParam:"inline" tfsdk:"output_kinesis" tfPlanOnly:"true"`
+	OutputLocalSearchStorage     *OutputLocalSearchStorage     `queryParam:"inline" tfsdk:"output_local_search_storage" tfPlanOnly:"true"`
 	OutputLoki                   *OutputLoki                   `queryParam:"inline" tfsdk:"output_loki" tfPlanOnly:"true"`
 	OutputMicrosoftFabric        *OutputMicrosoftFabric        `queryParam:"inline" tfsdk:"output_microsoft_fabric" tfPlanOnly:"true"`
 	OutputMinio                  *OutputMinio                  `queryParam:"inline" tfsdk:"output_minio" tfPlanOnly:"true"`
@@ -70,5 +72,6 @@ type Output struct {
 	OutputTcpjson                *OutputTcpjson                `queryParam:"inline" tfsdk:"output_tcpjson" tfPlanOnly:"true"`
 	OutputWavefront              *OutputWavefront              `queryParam:"inline" tfsdk:"output_wavefront" tfPlanOnly:"true"`
 	OutputWebhook                *OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook" tfPlanOnly:"true"`
+	OutputWizHec                 *OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec" tfPlanOnly:"true"`
 	OutputXsiam                  *OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam" tfPlanOnly:"true"`
 }

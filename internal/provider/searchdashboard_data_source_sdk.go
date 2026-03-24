@@ -46,12 +46,22 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			if len(elementsItem.DashboardElementVisualization.Config) > 0 {
-				elements.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElementVisualization.Config))
-				for key, value := range elementsItem.DashboardElementVisualization.Config {
-					result, _ := json.Marshal(value)
-					elements.DashboardElementVisualization.Config[key] = jsontypes.NewNormalizedValue(string(result))
+			if elementsItem.DashboardElementVisualization.Config == nil {
+				elements.DashboardElementVisualization.Config = nil
+			} else {
+				elements.DashboardElementVisualization.Config = &tfTypes.ElementConfigType{}
+				if elementsItem.DashboardElementVisualization.Config.AdditionalProperties == nil {
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedNull()
+				} else {
+					additionalPropertiesResult, _ := json.Marshal(elementsItem.DashboardElementVisualization.Config.AdditionalProperties)
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
 				}
+				elements.DashboardElementVisualization.Config.Columns = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Columns)
+				elements.DashboardElementVisualization.Config.GroupBy = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.GroupBy)
+				elements.DashboardElementVisualization.Config.MaxRows = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MaxRows)
+				elements.DashboardElementVisualization.Config.Series = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Series)
+				elements.DashboardElementVisualization.Config.XAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis)
+				elements.DashboardElementVisualization.Config.YAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis)
 			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
@@ -263,8 +273,8 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 				dashboardGroupsResult.Action.Label = types.StringValue(dashboardGroupsValue.Action.Label)
 				if len(dashboardGroupsValue.Action.Params) > 0 {
 					dashboardGroupsResult.Action.Params = make(map[string]types.String, len(dashboardGroupsValue.Action.Params))
-					for key1, value1 := range dashboardGroupsValue.Action.Params {
-						dashboardGroupsResult.Action.Params[key1] = types.StringValue(value1)
+					for key, value := range dashboardGroupsValue.Action.Params {
+						dashboardGroupsResult.Action.Params[key] = types.StringValue(value)
 					}
 				}
 				dashboardGroupsResult.Action.Target = types.StringValue(dashboardGroupsValue.Action.Target)

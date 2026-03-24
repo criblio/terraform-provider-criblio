@@ -562,15 +562,15 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 			} else {
 				rejectUnauthorized = nil
 			}
-			minVersion := new(shared.NotificationTargetMinimumTLSVersion)
+			minVersion := new(shared.MinimumTLSVersion)
 			if !r.SMTPTarget.TLS.MinVersion.IsUnknown() && !r.SMTPTarget.TLS.MinVersion.IsNull() {
-				*minVersion = shared.NotificationTargetMinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
+				*minVersion = shared.MinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
 			} else {
 				minVersion = nil
 			}
-			maxVersion := new(shared.NotificationTargetMaximumTLSVersion)
+			maxVersion := new(shared.MaximumTLSVersion)
 			if !r.SMTPTarget.TLS.MaxVersion.IsUnknown() && !r.SMTPTarget.TLS.MaxVersion.IsNull() {
-				*maxVersion = shared.NotificationTargetMaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
+				*maxVersion = shared.MaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion = nil
 			}

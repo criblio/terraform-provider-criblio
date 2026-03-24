@@ -9,9 +9,11 @@ import (
 type OutputNetflow struct {
 	Description         types.String        `tfsdk:"description"`
 	DNSResolvePeriodSec types.Float64       `tfsdk:"dns_resolve_period_sec"`
+	EnableIPSpoofing    types.Bool          `tfsdk:"enable_ip_spoofing"`
 	Environment         types.String        `tfsdk:"environment"`
 	Hosts               []OutputNetflowHost `tfsdk:"hosts"`
 	ID                  types.String        `tfsdk:"id"`
+	MaxRecordSize       types.Float64       `tfsdk:"max_record_size"`
 	Pipeline            types.String        `tfsdk:"pipeline"`
 	Streamtags          []types.String      `tfsdk:"streamtags"`
 	SystemFields        []types.String      `tfsdk:"system_fields"`

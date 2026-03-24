@@ -7,10 +7,13 @@ import (
 )
 
 type InputOffice365Service struct {
+	TemplateAppID        types.String                         `tfsdk:"template_app_id"`
+	TemplateClientSecret types.String                         `tfsdk:"template_client_secret"`
+	TemplateTenantID     types.String                         `tfsdk:"template_tenant_id"`
 	AppID                types.String                         `tfsdk:"app_id"`
 	AuthType             types.String                         `tfsdk:"auth_type"`
 	ClientSecret         types.String                         `tfsdk:"client_secret"`
-	Connections          []InputOffice365ServiceConnection    `tfsdk:"connections"`
+	Connections          []ItemsTypeConnectionsOptional       `tfsdk:"connections"`
 	ContentConfig        []InputOffice365ServiceContentConfig `tfsdk:"content_config"`
 	Description          types.String                         `tfsdk:"description"`
 	Disabled             types.Bool                           `tfsdk:"disabled"`
@@ -20,12 +23,12 @@ type InputOffice365Service struct {
 	JobTimeout           types.String                         `tfsdk:"job_timeout"`
 	KeepAliveTime        types.Float64                        `tfsdk:"keep_alive_time"`
 	MaxMissedKeepAlives  types.Float64                        `tfsdk:"max_missed_keep_alives"`
-	Metadata             []InputOffice365ServiceMetadatum     `tfsdk:"metadata"`
+	Metadata             []ItemsTypeMetadata                  `tfsdk:"metadata"`
 	Pipeline             types.String                         `tfsdk:"pipeline"`
 	PlanType             types.String                         `tfsdk:"plan_type"`
-	Pq                   *InputOffice365ServicePq             `tfsdk:"pq"`
+	Pq                   *PqType                              `tfsdk:"pq"`
 	PqEnabled            types.Bool                           `tfsdk:"pq_enabled"`
-	RetryRules           *InputOffice365ServiceRetryRules     `tfsdk:"retry_rules"`
+	RetryRules           *RetryRulesTypeCodesEnableHeader     `tfsdk:"retry_rules"`
 	SendToRoutes         types.Bool                           `tfsdk:"send_to_routes"`
 	Streamtags           []types.String                       `tfsdk:"streamtags"`
 	TenantID             types.String                         `tfsdk:"tenant_id"`

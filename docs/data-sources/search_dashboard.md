@@ -251,7 +251,7 @@ Read-Only:
 
 Read-Only:
 
-- `config` (Map of String)
+- `config` (Attributes) Chart/visualization-specific config (e.g. xAxis, yAxis, columns). (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String)
@@ -260,6 +260,20 @@ Read-Only:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--title_action))
 - `type` (String)
+
+<a id="nestedatt--elements--dashboard_element_visualization--config"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config`
+
+Read-Only:
+
+- `additional_properties` (String) Parsed as JSON.
+- `columns` (String) Column configuration (e.g. auto)
+- `group_by` (String) Group-by field
+- `max_rows` (String) Max rows for tables
+- `series` (String) Series configuration
+- `x_axis` (String) X-axis field for charts
+- `y_axis` (String) Y-axis field for charts
+
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.layout`

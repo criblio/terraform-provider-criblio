@@ -31,66 +31,6 @@ func (e *OutputXsiamType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputXsiamExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputXsiamExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputXsiamExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputXsiamExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputXsiamExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputXsiamFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputXsiamFailedRequestLoggingMode string
-
-const (
-	OutputXsiamFailedRequestLoggingModePayload           OutputXsiamFailedRequestLoggingMode = "payload"
-	OutputXsiamFailedRequestLoggingModePayloadAndHeaders OutputXsiamFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputXsiamFailedRequestLoggingModeNone              OutputXsiamFailedRequestLoggingMode = "none"
-)
-
-func (e OutputXsiamFailedRequestLoggingMode) ToPointer() *OutputXsiamFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputXsiamFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputXsiamFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamFailedRequestLoggingMode: %v", v)
-	}
-}
-
 // OutputXsiamAuthenticationMethod - Enter a token directly, or provide a secret referencing a token
 type OutputXsiamAuthenticationMethod string
 
@@ -118,139 +58,10 @@ func (e *OutputXsiamAuthenticationMethod) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputXsiamResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputXsiamResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputXsiamResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputXsiamResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputXsiamResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputXsiamResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputXsiamResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputXsiamTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputXsiamTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputXsiamTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputXsiamTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputXsiamTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputXsiamTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputXsiamTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputXsiamBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputXsiamBackpressureBehavior string
-
-const (
-	OutputXsiamBackpressureBehaviorBlock OutputXsiamBackpressureBehavior = "block"
-	OutputXsiamBackpressureBehaviorDrop  OutputXsiamBackpressureBehavior = "drop"
-	OutputXsiamBackpressureBehaviorQueue OutputXsiamBackpressureBehavior = "queue"
-)
-
-func (e OutputXsiamBackpressureBehavior) ToPointer() *OutputXsiamBackpressureBehavior {
-	return &e
-}
-func (e *OutputXsiamBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputXsiamBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamBackpressureBehavior: %v", v)
-	}
-}
-
 type OutputXsiamURL struct {
-	URL any `json:"url"`
 	// Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
-	Weight *float64 `default:"1" json:"weight"`
+	Weight *float64 `json:"weight,omitempty"`
+	URL    any      `json:"url,omitempty"`
 }
 
 func (o OutputXsiamURL) MarshalJSON() ([]byte, error) {
@@ -258,17 +69,10 @@ func (o OutputXsiamURL) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiamURL) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
-}
-
-func (o *OutputXsiamURL) GetURL() any {
-	if o == nil {
-		return nil
-	}
-	return o.URL
 }
 
 func (o *OutputXsiamURL) GetWeight() *float64 {
@@ -278,88 +82,11 @@ func (o *OutputXsiamURL) GetWeight() *float64 {
 	return o.Weight
 }
 
-// OutputXsiamCompression - Codec to use to compress the persisted data
-type OutputXsiamCompression string
-
-const (
-	OutputXsiamCompressionNone OutputXsiamCompression = "none"
-	OutputXsiamCompressionGzip OutputXsiamCompression = "gzip"
-)
-
-func (e OutputXsiamCompression) ToPointer() *OutputXsiamCompression {
-	return &e
-}
-func (e *OutputXsiamCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputXsiamCompression(v)
+func (o *OutputXsiamURL) GetURL() any {
+	if o == nil {
 		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamCompression: %v", v)
 	}
-}
-
-// OutputXsiamQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputXsiamQueueFullBehavior string
-
-const (
-	OutputXsiamQueueFullBehaviorBlock OutputXsiamQueueFullBehavior = "block"
-	OutputXsiamQueueFullBehaviorDrop  OutputXsiamQueueFullBehavior = "drop"
-)
-
-func (e OutputXsiamQueueFullBehavior) ToPointer() *OutputXsiamQueueFullBehavior {
-	return &e
-}
-func (e *OutputXsiamQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputXsiamQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputXsiamMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputXsiamMode string
-
-const (
-	OutputXsiamModeError        OutputXsiamMode = "error"
-	OutputXsiamModeBackpressure OutputXsiamMode = "backpressure"
-	OutputXsiamModeAlways       OutputXsiamMode = "always"
-)
-
-func (e OutputXsiamMode) ToPointer() *OutputXsiamMode {
-	return &e
-}
-func (e *OutputXsiamMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputXsiamMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamMode: %v", v)
-	}
+	return o.URL
 }
 
 type OutputXsiamPqControls struct {
@@ -378,7 +105,7 @@ func (o *OutputXsiamPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputXsiam struct {
 	// Unique ID for this output
-	ID   string          `json:"id"`
+	ID   *string         `json:"id,omitempty"`
 	Type OutputXsiamType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -389,69 +116,81 @@ type OutputXsiam struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
-	LoadBalanced *bool `default:"false" json:"loadBalanced"`
+	LoadBalanced *bool `json:"loadBalanced,omitempty"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"10000" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputXsiamExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputXsiamFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Enter a token directly, or provide a secret referencing a token
-	AuthType *OutputXsiamAuthenticationMethod `default:"token" json:"authType"`
+	AuthType *OutputXsiamAuthenticationMethod `json:"authType,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputXsiamResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputXsiamTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// Maximum number of requests to limit to per second
-	ThrottleRateReqPerSec *int64 `default:"400" json:"throttleRateReqPerSec"`
+	ThrottleRateReqPerSec *int64 `json:"throttleRateReqPerSec,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputXsiamBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
 	// Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 	TotalMemoryLimitKB *float64 `json:"totalMemoryLimitKB,omitempty"`
 	Description        *string  `json:"description,omitempty"`
 	// XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event
-	URL *string `default:"http://localhost:8088/logs/v1/event" json:"url"`
+	URL *string `json:"url,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Exclude all IPs of the current host from the list of any resolved hostnames
-	ExcludeSelf *bool            `default:"false" json:"excludeSelf"`
+	ExcludeSelf *bool            `json:"excludeSelf,omitempty"`
 	Urls        []OutputXsiamURL `json:"urls,omitempty"`
 	// The interval in which to re-resolve any hostnames and pick up destinations from A records
-	DNSResolvePeriodSec *float64 `default:"600" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	// How far back in time to keep traffic stats for load balancing purposes
-	LoadBalanceStatsPeriodSec *float64 `default:"300" json:"loadBalanceStatsPeriodSec"`
+	LoadBalanceStatsPeriodSec *float64 `json:"loadBalanceStatsPeriodSec,omitempty"`
 	// XSIAM authentication token
 	Token *string `json:"token,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputXsiamCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputXsiamQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputXsiamMode       `default:"error" json:"pqMode"`
-	PqControls *OutputXsiamPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputXsiamPqControls `json:"pqControls,omitempty"`
+	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputXsiam) MarshalJSON() ([]byte, error) {
@@ -459,15 +198,15 @@ func (o OutputXsiam) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputXsiam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputXsiam) GetID() string {
+func (o *OutputXsiam) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
@@ -556,14 +295,14 @@ func (o *OutputXsiam) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputXsiam) GetExtraHTTPHeaders() []OutputXsiamExtraHTTPHeader {
+func (o *OutputXsiam) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
 	return o.ExtraHTTPHeaders
 }
 
-func (o *OutputXsiam) GetFailedRequestLoggingMode() *OutputXsiamFailedRequestLoggingMode {
+func (o *OutputXsiam) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -584,14 +323,14 @@ func (o *OutputXsiam) GetAuthType() *OutputXsiamAuthenticationMethod {
 	return o.AuthType
 }
 
-func (o *OutputXsiam) GetResponseRetrySettings() []OutputXsiamResponseRetrySetting {
+func (o *OutputXsiam) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputXsiam) GetTimeoutRetrySettings() *OutputXsiamTimeoutRetrySettings {
+func (o *OutputXsiam) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -612,7 +351,7 @@ func (o *OutputXsiam) GetThrottleRateReqPerSec() *int64 {
 	return o.ThrottleRateReqPerSec
 }
 
-func (o *OutputXsiam) GetOnBackpressure() *OutputXsiamBackpressureBehavior {
+func (o *OutputXsiam) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -689,6 +428,41 @@ func (o *OutputXsiam) GetTextSecret() *string {
 	return o.TextSecret
 }
 
+func (o *OutputXsiam) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputXsiam) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputXsiam) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputXsiam) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputXsiam) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputXsiam) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -710,25 +484,25 @@ func (o *OutputXsiam) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputXsiam) GetPqCompress() *OutputXsiamCompression {
+func (o *OutputXsiam) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputXsiam) GetPqOnBackpressure() *OutputXsiamQueueFullBehavior {
+func (o *OutputXsiam) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputXsiam) GetPqMode() *OutputXsiamMode {
+func (o *OutputXsiam) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputXsiam) GetPqControls() *OutputXsiamPqControls {
@@ -736,4 +510,11 @@ func (o *OutputXsiam) GetPqControls() *OutputXsiamPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputXsiam) GetTemplateURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateURL
 }

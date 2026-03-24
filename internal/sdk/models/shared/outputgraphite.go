@@ -31,147 +31,6 @@ func (e *OutputGraphiteType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputGraphiteDestinationProtocol - Protocol to use when communicating with the destination.
-type OutputGraphiteDestinationProtocol string
-
-const (
-	OutputGraphiteDestinationProtocolUDP OutputGraphiteDestinationProtocol = "udp"
-	OutputGraphiteDestinationProtocolTCP OutputGraphiteDestinationProtocol = "tcp"
-)
-
-func (e OutputGraphiteDestinationProtocol) ToPointer() *OutputGraphiteDestinationProtocol {
-	return &e
-}
-func (e *OutputGraphiteDestinationProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "udp":
-		fallthrough
-	case "tcp":
-		*e = OutputGraphiteDestinationProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGraphiteDestinationProtocol: %v", v)
-	}
-}
-
-// OutputGraphiteBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputGraphiteBackpressureBehavior string
-
-const (
-	OutputGraphiteBackpressureBehaviorBlock OutputGraphiteBackpressureBehavior = "block"
-	OutputGraphiteBackpressureBehaviorDrop  OutputGraphiteBackpressureBehavior = "drop"
-	OutputGraphiteBackpressureBehaviorQueue OutputGraphiteBackpressureBehavior = "queue"
-)
-
-func (e OutputGraphiteBackpressureBehavior) ToPointer() *OutputGraphiteBackpressureBehavior {
-	return &e
-}
-func (e *OutputGraphiteBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputGraphiteBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGraphiteBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputGraphiteCompression - Codec to use to compress the persisted data
-type OutputGraphiteCompression string
-
-const (
-	OutputGraphiteCompressionNone OutputGraphiteCompression = "none"
-	OutputGraphiteCompressionGzip OutputGraphiteCompression = "gzip"
-)
-
-func (e OutputGraphiteCompression) ToPointer() *OutputGraphiteCompression {
-	return &e
-}
-func (e *OutputGraphiteCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputGraphiteCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGraphiteCompression: %v", v)
-	}
-}
-
-// OutputGraphiteQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputGraphiteQueueFullBehavior string
-
-const (
-	OutputGraphiteQueueFullBehaviorBlock OutputGraphiteQueueFullBehavior = "block"
-	OutputGraphiteQueueFullBehaviorDrop  OutputGraphiteQueueFullBehavior = "drop"
-)
-
-func (e OutputGraphiteQueueFullBehavior) ToPointer() *OutputGraphiteQueueFullBehavior {
-	return &e
-}
-func (e *OutputGraphiteQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputGraphiteQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGraphiteQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputGraphiteMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputGraphiteMode string
-
-const (
-	OutputGraphiteModeError        OutputGraphiteMode = "error"
-	OutputGraphiteModeBackpressure OutputGraphiteMode = "backpressure"
-	OutputGraphiteModeAlways       OutputGraphiteMode = "always"
-)
-
-func (e OutputGraphiteMode) ToPointer() *OutputGraphiteMode {
-	return &e
-}
-func (e *OutputGraphiteMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputGraphiteMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGraphiteMode: %v", v)
-	}
-}
-
 type OutputGraphitePqControls struct {
 }
 
@@ -188,8 +47,8 @@ func (o *OutputGraphitePqControls) UnmarshalJSON(data []byte) error {
 
 type OutputGraphite struct {
 	// Unique ID for this output
-	ID   *string             `json:"id,omitempty"`
-	Type *OutputGraphiteType `json:"type,omitempty"`
+	ID   *string            `json:"id,omitempty"`
+	Type OutputGraphiteType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -199,39 +58,49 @@ type OutputGraphite struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Protocol to use when communicating with the destination.
-	Protocol *OutputGraphiteDestinationProtocol `default:"udp" json:"protocol"`
+	Protocol DestinationProtocolOptions `json:"protocol"`
 	// The hostname of the destination.
 	Host string `json:"host"`
 	// Destination port.
-	Port *float64 `default:"8125" json:"port"`
+	Port float64 `json:"port"`
 	// When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
-	Mtu *float64 `default:"512" json:"mtu"`
+	Mtu *float64 `json:"mtu,omitempty"`
 	// When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
-	DNSResolvePeriodSec *float64 `default:"0" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	Description         *string  `json:"description,omitempty"`
 	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-	ThrottleRatePerSec *string `default:"0" json:"throttleRatePerSec"`
+	ThrottleRatePerSec *string `json:"throttleRatePerSec,omitempty"`
 	// Amount of time (milliseconds) to wait for the connection to establish before retrying
-	ConnectionTimeout *float64 `default:"10000" json:"connectionTimeout"`
+	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
 	// Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
-	WriteTimeout *float64 `default:"60000" json:"writeTimeout"`
+	WriteTimeout *float64 `json:"writeTimeout,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputGraphiteBackpressureBehavior `default:"block" json:"onBackpressure"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputGraphiteCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputGraphiteQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputGraphiteMode       `default:"error" json:"pqMode"`
-	PqControls *OutputGraphitePqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                   `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputGraphitePqControls `json:"pqControls,omitempty"`
 }
 
 func (o OutputGraphite) MarshalJSON() ([]byte, error) {
@@ -239,7 +108,7 @@ func (o OutputGraphite) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputGraphite) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "protocol", "host", "port"}); err != nil {
 		return err
 	}
 	return nil
@@ -252,9 +121,9 @@ func (o *OutputGraphite) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputGraphite) GetType() *OutputGraphiteType {
+func (o *OutputGraphite) GetType() OutputGraphiteType {
 	if o == nil {
-		return nil
+		return OutputGraphiteType("")
 	}
 	return o.Type
 }
@@ -287,9 +156,9 @@ func (o *OutputGraphite) GetStreamtags() []string {
 	return o.Streamtags
 }
 
-func (o *OutputGraphite) GetProtocol() *OutputGraphiteDestinationProtocol {
+func (o *OutputGraphite) GetProtocol() DestinationProtocolOptions {
 	if o == nil {
-		return nil
+		return DestinationProtocolOptions("")
 	}
 	return o.Protocol
 }
@@ -301,9 +170,9 @@ func (o *OutputGraphite) GetHost() string {
 	return o.Host
 }
 
-func (o *OutputGraphite) GetPort() *float64 {
+func (o *OutputGraphite) GetPort() float64 {
 	if o == nil {
-		return nil
+		return 0.0
 	}
 	return o.Port
 }
@@ -357,11 +226,46 @@ func (o *OutputGraphite) GetWriteTimeout() *float64 {
 	return o.WriteTimeout
 }
 
-func (o *OutputGraphite) GetOnBackpressure() *OutputGraphiteBackpressureBehavior {
+func (o *OutputGraphite) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnBackpressure
+}
+
+func (o *OutputGraphite) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputGraphite) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputGraphite) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputGraphite) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputGraphite) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputGraphite) GetPqMaxFileSize() *string {
@@ -385,25 +289,25 @@ func (o *OutputGraphite) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputGraphite) GetPqCompress() *OutputGraphiteCompression {
+func (o *OutputGraphite) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputGraphite) GetPqOnBackpressure() *OutputGraphiteQueueFullBehavior {
+func (o *OutputGraphite) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputGraphite) GetPqMode() *OutputGraphiteMode {
+func (o *OutputGraphite) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputGraphite) GetPqControls() *OutputGraphitePqControls {

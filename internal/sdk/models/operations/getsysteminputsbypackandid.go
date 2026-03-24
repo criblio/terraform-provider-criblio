@@ -39,10 +39,10 @@ func (g *GetSystemInputsByPackAndIDRequest) GetGroupID() string {
 
 // GetSystemInputsByPackAndIDResponseBody - a list of Input objects
 type GetSystemInputsByPackAndIDResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (g *GetSystemInputsByPackAndIDResponseBody) GetItems() []shared.Input {
+func (g *GetSystemInputsByPackAndIDResponseBody) GetItems() []shared.InputUnion1 {
 	if g == nil {
 		return nil
 	}

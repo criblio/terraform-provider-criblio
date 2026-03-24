@@ -7,5 +7,7 @@ import (
 )
 
 type OutputSplunkLbAuthToken struct {
-	AuthType types.String `tfsdk:"auth_type"`
+	AuthToken  types.String `tfsdk:"auth_token"`
+	AuthType   types.String `tfsdk:"auth_type"`
+	TextSecret types.String `tfsdk:"text_secret"`
 }

@@ -28,7 +28,6 @@ type CriblioProvider struct {
 
 // CriblioProviderModel describes the provider data model.
 type CriblioProviderModel struct {
-	BearerAuth     types.String `tfsdk:"bearer_auth"`
 	ClientID       types.String `tfsdk:"client_id"`
 	ClientSecret   types.String `tfsdk:"client_secret"`
 	CloudDomain    types.String `tfsdk:"cloud_domain"`
@@ -46,11 +45,6 @@ func (p *CriblioProvider) Metadata(ctx context.Context, req provider.MetadataReq
 func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
-			"bearer_auth": schema.StringAttribute{
-				MarkdownDescription: `HTTP Bearer.`,
-				Optional:            true,
-				Sensitive:           true,
-			},
 			"client_id": schema.StringAttribute{
 				MarkdownDescription: `OAuth2 Client Credentials Flow client identifier. Configurable via environment variable ` + "`" + `CRIBL_CLIENT_ID` + "`" + `.`,
 				Optional:            true,
@@ -145,10 +139,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	security := shared.Security{}
-
-	if !data.BearerAuth.IsUnknown() {
-		security.BearerAuth = data.BearerAuth.ValueStringPointer()
-	}
 
 	clientOauth := &shared.SchemeClientOauth{}
 

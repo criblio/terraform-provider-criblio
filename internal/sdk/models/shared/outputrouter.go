@@ -39,7 +39,7 @@ type OutputRouterRule struct {
 	// Description of this rule's purpose
 	Description *string `json:"description,omitempty"`
 	// Flag to control whether to stop the event from being checked against other rules
-	Final *bool `default:"true" json:"final"`
+	Final *bool `json:"final,omitempty"`
 }
 
 func (o OutputRouterRule) MarshalJSON() ([]byte, error) {

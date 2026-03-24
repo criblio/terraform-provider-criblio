@@ -31,229 +31,12 @@ func (e *OutputDynatraceHTTPType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputDynatraceHTTPMethod - The method to use when sending events
-type OutputDynatraceHTTPMethod string
-
-const (
-	OutputDynatraceHTTPMethodPost  OutputDynatraceHTTPMethod = "POST"
-	OutputDynatraceHTTPMethodPut   OutputDynatraceHTTPMethod = "PUT"
-	OutputDynatraceHTTPMethodPatch OutputDynatraceHTTPMethod = "PATCH"
-)
-
-func (e OutputDynatraceHTTPMethod) ToPointer() *OutputDynatraceHTTPMethod {
-	return &e
-}
-func (e *OutputDynatraceHTTPMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "POST":
-		fallthrough
-	case "PUT":
-		fallthrough
-	case "PATCH":
-		*e = OutputDynatraceHTTPMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPMethod: %v", v)
-	}
-}
-
-type OutputDynatraceHTTPExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputDynatraceHTTPExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDynatraceHTTPExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDynatraceHTTPExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputDynatraceHTTPExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputDynatraceHTTPFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputDynatraceHTTPFailedRequestLoggingMode string
-
-const (
-	OutputDynatraceHTTPFailedRequestLoggingModePayload           OutputDynatraceHTTPFailedRequestLoggingMode = "payload"
-	OutputDynatraceHTTPFailedRequestLoggingModePayloadAndHeaders OutputDynatraceHTTPFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputDynatraceHTTPFailedRequestLoggingModeNone              OutputDynatraceHTTPFailedRequestLoggingMode = "none"
-)
-
-func (e OutputDynatraceHTTPFailedRequestLoggingMode) ToPointer() *OutputDynatraceHTTPFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputDynatraceHTTPFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputDynatraceHTTPFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPFailedRequestLoggingMode: %v", v)
-	}
-}
-
-type OutputDynatraceHTTPResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputDynatraceHTTPResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDynatraceHTTPResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDynatraceHTTPResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputDynatraceHTTPResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputDynatraceHTTPResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputDynatraceHTTPResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputDynatraceHTTPTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputDynatraceHTTPTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDynatraceHTTPTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDynatraceHTTPTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputDynatraceHTTPTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputDynatraceHTTPTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputDynatraceHTTPTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputDynatraceHTTPBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputDynatraceHTTPBackpressureBehavior string
-
-const (
-	OutputDynatraceHTTPBackpressureBehaviorBlock OutputDynatraceHTTPBackpressureBehavior = "block"
-	OutputDynatraceHTTPBackpressureBehaviorDrop  OutputDynatraceHTTPBackpressureBehavior = "drop"
-	OutputDynatraceHTTPBackpressureBehaviorQueue OutputDynatraceHTTPBackpressureBehavior = "queue"
-)
-
-func (e OutputDynatraceHTTPBackpressureBehavior) ToPointer() *OutputDynatraceHTTPBackpressureBehavior {
-	return &e
-}
-func (e *OutputDynatraceHTTPBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputDynatraceHTTPBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPBackpressureBehavior: %v", v)
-	}
-}
-
 type OutputDynatraceHTTPAuthenticationType string
 
 const (
-	OutputDynatraceHTTPAuthenticationTypeToken      OutputDynatraceHTTPAuthenticationType = "token"
+	// OutputDynatraceHTTPAuthenticationTypeToken Auth token
+	OutputDynatraceHTTPAuthenticationTypeToken OutputDynatraceHTTPAuthenticationType = "token"
+	// OutputDynatraceHTTPAuthenticationTypeTextSecret Token (text secret)
 	OutputDynatraceHTTPAuthenticationTypeTextSecret OutputDynatraceHTTPAuthenticationType = "textSecret"
 )
 
@@ -280,7 +63,9 @@ func (e *OutputDynatraceHTTPAuthenticationType) UnmarshalJSON(data []byte) error
 type OutputDynatraceHTTPFormat string
 
 const (
+	// OutputDynatraceHTTPFormatJSONArray JSON
 	OutputDynatraceHTTPFormatJSONArray OutputDynatraceHTTPFormat = "json_array"
+	// OutputDynatraceHTTPFormatPlaintext Plaintext
 	OutputDynatraceHTTPFormatPlaintext OutputDynatraceHTTPFormat = "plaintext"
 )
 
@@ -306,9 +91,12 @@ func (e *OutputDynatraceHTTPFormat) UnmarshalJSON(data []byte) error {
 type Endpoint string
 
 const (
-	EndpointCloud      Endpoint = "cloud"
+	// EndpointCloud Cloud
+	EndpointCloud Endpoint = "cloud"
+	// EndpointActiveGate ActiveGate
 	EndpointActiveGate Endpoint = "activeGate"
-	EndpointManual     Endpoint = "manual"
+	// EndpointManual Manual
+	EndpointManual Endpoint = "manual"
 )
 
 func (e Endpoint) ToPointer() *Endpoint {
@@ -335,7 +123,9 @@ func (e *Endpoint) UnmarshalJSON(data []byte) error {
 type TelemetryType string
 
 const (
-	TelemetryTypeLogs    TelemetryType = "logs"
+	// TelemetryTypeLogs Logs
+	TelemetryTypeLogs TelemetryType = "logs"
+	// TelemetryTypeMetrics Metrics
 	TelemetryTypeMetrics TelemetryType = "metrics"
 )
 
@@ -358,90 +148,6 @@ func (e *TelemetryType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputDynatraceHTTPCompression - Codec to use to compress the persisted data
-type OutputDynatraceHTTPCompression string
-
-const (
-	OutputDynatraceHTTPCompressionNone OutputDynatraceHTTPCompression = "none"
-	OutputDynatraceHTTPCompressionGzip OutputDynatraceHTTPCompression = "gzip"
-)
-
-func (e OutputDynatraceHTTPCompression) ToPointer() *OutputDynatraceHTTPCompression {
-	return &e
-}
-func (e *OutputDynatraceHTTPCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputDynatraceHTTPCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPCompression: %v", v)
-	}
-}
-
-// OutputDynatraceHTTPQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputDynatraceHTTPQueueFullBehavior string
-
-const (
-	OutputDynatraceHTTPQueueFullBehaviorBlock OutputDynatraceHTTPQueueFullBehavior = "block"
-	OutputDynatraceHTTPQueueFullBehaviorDrop  OutputDynatraceHTTPQueueFullBehavior = "drop"
-)
-
-func (e OutputDynatraceHTTPQueueFullBehavior) ToPointer() *OutputDynatraceHTTPQueueFullBehavior {
-	return &e
-}
-func (e *OutputDynatraceHTTPQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputDynatraceHTTPQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputDynatraceHTTPMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputDynatraceHTTPMode string
-
-const (
-	OutputDynatraceHTTPModeError        OutputDynatraceHTTPMode = "error"
-	OutputDynatraceHTTPModeBackpressure OutputDynatraceHTTPMode = "backpressure"
-	OutputDynatraceHTTPModeAlways       OutputDynatraceHTTPMode = "always"
-)
-
-func (e OutputDynatraceHTTPMode) ToPointer() *OutputDynatraceHTTPMode {
-	return &e
-}
-func (e *OutputDynatraceHTTPMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputDynatraceHTTPMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPMode: %v", v)
-	}
-}
-
 type OutputDynatraceHTTPPqControls struct {
 }
 
@@ -458,8 +164,8 @@ func (o *OutputDynatraceHTTPPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputDynatraceHTTP struct {
 	// Unique ID for this output
-	ID   *string                  `json:"id,omitempty"`
-	Type *OutputDynatraceHTTPType `json:"type,omitempty"`
+	ID   *string                 `json:"id,omitempty"`
+	Type OutputDynatraceHTTPType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -469,61 +175,71 @@ type OutputDynatraceHTTP struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// The method to use when sending events
-	Method *OutputDynatraceHTTPMethod `default:"POST" json:"method"`
+	Method *MethodOptions `json:"method,omitempty"`
 	// Disable to close the connection immediately after sending the outgoing request
-	KeepAlive *bool `default:"true" json:"keepAlive"`
+	KeepAlive *bool `json:"keepAlive,omitempty"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).
-	ExtraHTTPHeaders []OutputDynatraceHTTPExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputDynatraceHTTPFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputDynatraceHTTPResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputDynatraceHTTPTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputDynatraceHTTPBackpressureBehavior `default:"block" json:"onBackpressure"`
-	AuthType       *OutputDynatraceHTTPAuthenticationType   `default:"token" json:"authType"`
+	OnBackpressure *BackpressureBehaviorOptions           `json:"onBackpressure,omitempty"`
+	AuthType       *OutputDynatraceHTTPAuthenticationType `json:"authType,omitempty"`
 	// How to format events before sending. Defaults to JSON. Plaintext is not currently supported.
-	Format        *OutputDynatraceHTTPFormat `default:"json_array" json:"format"`
-	Endpoint      *Endpoint                  `default:"cloud" json:"endpoint"`
-	TelemetryType *TelemetryType             `default:"logs" json:"telemetryType"`
+	Format        OutputDynatraceHTTPFormat `json:"format"`
+	Endpoint      Endpoint                  `json:"endpoint"`
+	TelemetryType TelemetryType             `json:"telemetryType"`
 	// Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 	TotalMemoryLimitKB *float64 `json:"totalMemoryLimitKB,omitempty"`
 	Description        *string  `json:"description,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputDynatraceHTTPCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputDynatraceHTTPQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputDynatraceHTTPMode       `default:"error" json:"pqMode"`
-	PqControls *OutputDynatraceHTTPPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                        `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputDynatraceHTTPPqControls `json:"pqControls,omitempty"`
 	// Bearer token to include in the authorization header
 	Token *string `json:"token,omitempty"`
 	// Select or create a stored text secret
@@ -534,6 +250,8 @@ type OutputDynatraceHTTP struct {
 	ActiveGateDomain *string `json:"activeGateDomain,omitempty"`
 	// URL to send events to. Can be overwritten by an event's __url field.
 	URL *string `json:"url,omitempty"`
+	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputDynatraceHTTP) MarshalJSON() ([]byte, error) {
@@ -541,7 +259,7 @@ func (o OutputDynatraceHTTP) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDynatraceHTTP) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "format", "endpoint", "telemetryType"}); err != nil {
 		return err
 	}
 	return nil
@@ -554,9 +272,9 @@ func (o *OutputDynatraceHTTP) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputDynatraceHTTP) GetType() *OutputDynatraceHTTPType {
+func (o *OutputDynatraceHTTP) GetType() OutputDynatraceHTTPType {
 	if o == nil {
-		return nil
+		return OutputDynatraceHTTPType("")
 	}
 	return o.Type
 }
@@ -589,7 +307,7 @@ func (o *OutputDynatraceHTTP) GetStreamtags() []string {
 	return o.Streamtags
 }
 
-func (o *OutputDynatraceHTTP) GetMethod() *OutputDynatraceHTTPMethod {
+func (o *OutputDynatraceHTTP) GetMethod() *MethodOptions {
 	if o == nil {
 		return nil
 	}
@@ -652,7 +370,7 @@ func (o *OutputDynatraceHTTP) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputDynatraceHTTP) GetExtraHTTPHeaders() []OutputDynatraceHTTPExtraHTTPHeader {
+func (o *OutputDynatraceHTTP) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
@@ -666,7 +384,7 @@ func (o *OutputDynatraceHTTP) GetUseRoundRobinDNS() *bool {
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputDynatraceHTTP) GetFailedRequestLoggingMode() *OutputDynatraceHTTPFailedRequestLoggingMode {
+func (o *OutputDynatraceHTTP) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -680,14 +398,14 @@ func (o *OutputDynatraceHTTP) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputDynatraceHTTP) GetResponseRetrySettings() []OutputDynatraceHTTPResponseRetrySetting {
+func (o *OutputDynatraceHTTP) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputDynatraceHTTP) GetTimeoutRetrySettings() *OutputDynatraceHTTPTimeoutRetrySettings {
+func (o *OutputDynatraceHTTP) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -701,7 +419,7 @@ func (o *OutputDynatraceHTTP) GetResponseHonorRetryAfterHeader() *bool {
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputDynatraceHTTP) GetOnBackpressure() *OutputDynatraceHTTPBackpressureBehavior {
+func (o *OutputDynatraceHTTP) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -715,23 +433,23 @@ func (o *OutputDynatraceHTTP) GetAuthType() *OutputDynatraceHTTPAuthenticationTy
 	return o.AuthType
 }
 
-func (o *OutputDynatraceHTTP) GetFormat() *OutputDynatraceHTTPFormat {
+func (o *OutputDynatraceHTTP) GetFormat() OutputDynatraceHTTPFormat {
 	if o == nil {
-		return nil
+		return OutputDynatraceHTTPFormat("")
 	}
 	return o.Format
 }
 
-func (o *OutputDynatraceHTTP) GetEndpoint() *Endpoint {
+func (o *OutputDynatraceHTTP) GetEndpoint() Endpoint {
 	if o == nil {
-		return nil
+		return Endpoint("")
 	}
 	return o.Endpoint
 }
 
-func (o *OutputDynatraceHTTP) GetTelemetryType() *TelemetryType {
+func (o *OutputDynatraceHTTP) GetTelemetryType() TelemetryType {
 	if o == nil {
-		return nil
+		return TelemetryType("")
 	}
 	return o.TelemetryType
 }
@@ -748,6 +466,41 @@ func (o *OutputDynatraceHTTP) GetDescription() *string {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *OutputDynatraceHTTP) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputDynatraceHTTP) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputDynatraceHTTP) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputDynatraceHTTP) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputDynatraceHTTP) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputDynatraceHTTP) GetPqMaxFileSize() *string {
@@ -771,25 +524,25 @@ func (o *OutputDynatraceHTTP) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputDynatraceHTTP) GetPqCompress() *OutputDynatraceHTTPCompression {
+func (o *OutputDynatraceHTTP) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputDynatraceHTTP) GetPqOnBackpressure() *OutputDynatraceHTTPQueueFullBehavior {
+func (o *OutputDynatraceHTTP) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputDynatraceHTTP) GetPqMode() *OutputDynatraceHTTPMode {
+func (o *OutputDynatraceHTTP) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputDynatraceHTTP) GetPqControls() *OutputDynatraceHTTPPqControls {
@@ -832,4 +585,11 @@ func (o *OutputDynatraceHTTP) GetURL() *string {
 		return nil
 	}
 	return o.URL
+}
+
+func (o *OutputDynatraceHTTP) GetTemplateURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateURL
 }

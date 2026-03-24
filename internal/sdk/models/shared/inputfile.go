@@ -31,173 +31,14 @@ func (e *InputFileType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputFileConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputFileConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputFileConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputFileConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputFileConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputFilePqMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputFilePqMode string
-
-const (
-	InputFilePqModeSmart  InputFilePqMode = "smart"
-	InputFilePqModeAlways InputFilePqMode = "always"
-)
-
-func (e InputFilePqMode) ToPointer() *InputFilePqMode {
-	return &e
-}
-func (e *InputFilePqMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputFilePqMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputFilePqMode: %v", v)
-	}
-}
-
-// InputFileCompression - Codec to use to compress the persisted data
-type InputFileCompression string
-
-const (
-	InputFileCompressionNone InputFileCompression = "none"
-	InputFileCompressionGzip InputFileCompression = "gzip"
-)
-
-func (e InputFileCompression) ToPointer() *InputFileCompression {
-	return &e
-}
-func (e *InputFileCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputFileCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputFileCompression: %v", v)
-	}
-}
-
-type InputFilePq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputFilePqMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputFileCompression `default:"none" json:"compress"`
-}
-
-func (i InputFilePq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputFilePq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputFilePq) GetMode() *InputFilePqMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputFilePq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputFilePq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputFilePq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputFilePq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputFilePq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputFilePq) GetCompress() *InputFileCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
 // InputFileMode - Choose how to discover files to monitor
 type InputFileMode string
 
 const (
-	InputFileModeAuto   InputFileMode = "auto"
+	// InputFileModeManual Manual
 	InputFileModeManual InputFileMode = "manual"
+	// InputFileModeAuto Auto
+	InputFileModeAuto InputFileMode = "auto"
 )
 
 func (e InputFileMode) ToPointer() *InputFileMode {
@@ -209,9 +50,9 @@ func (e *InputFileMode) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "auto":
-		fallthrough
 	case "manual":
+		fallthrough
+	case "auto":
 		*e = InputFileMode(v)
 		return nil
 	default:
@@ -219,89 +60,64 @@ func (e *InputFileMode) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputFileMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputFileMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputFileMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputFileMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputFileMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputFile struct {
 	// Unique ID for this input
-	ID       string        `json:"id"`
+	ID       *string       `json:"id,omitempty"`
 	Type     InputFileType `json:"type"`
-	Disabled *bool         `default:"false" json:"disabled"`
+	Disabled *bool         `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputFileConnection `json:"connections,omitempty"`
-	Pq          *InputFilePq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Choose how to discover files to monitor
-	Mode *InputFileMode `default:"auto" json:"mode"`
+	Mode *InputFileMode `json:"mode,omitempty"`
 	// Time, in seconds, between scanning for files
-	Interval *float64 `default:"10" json:"interval"`
+	Interval *float64 `json:"interval,omitempty"`
 	// The full path of discovered files are matched against this wildcard list
 	Filenames []string `json:"filenames,omitempty"`
+	// Apply filename allowlist to file entries in archive file types, like tar or zip.
+	FilterArchivedFiles *bool `json:"filterArchivedFiles,omitempty"`
 	// Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head.
-	TailOnly *bool `default:"false" json:"tailOnly"`
+	TailOnly *bool `json:"tailOnly,omitempty"`
 	// Time, in seconds, before an idle file is closed
-	IdleTimeout *float64 `default:"300" json:"idleTimeout"`
-	// The maximum age of files to monitor. Format examples: 60s, 4h, 3d, 1w. Age is relative to file modification time. Leave empty to apply no age filters.
+	IdleTimeout *float64 `json:"idleTimeout,omitempty"`
+	// The minimum age of files to monitor. Format examples: 30s, 15m, 1h. Age is relative to file modification time. Leave empty to apply no age filters.
+	MinAgeDur *string `json:"minAgeDur,omitempty"`
+	// The maximum age of event timestamps to collect. Format examples: 60s, 4h, 3d, 1w. Can be used in conjuction with "Check file modification times". Leave empty to apply no age filters.
 	MaxAgeDur *string `json:"maxAgeDur,omitempty"`
 	// Skip files with modification times earlier than the maximum age duration
-	CheckFileModTime *bool `default:"false" json:"checkFileModTime"`
+	CheckFileModTime *bool `json:"checkFileModTime,omitempty"`
 	// Forces files containing binary data to be streamed as text
-	ForceText *bool `default:"false" json:"forceText"`
+	ForceText *bool `json:"forceText,omitempty"`
 	// Length of file header bytes to use in hash for unique file identification
-	HashLen *float64 `default:"256" json:"hashLen"`
+	HashLen *float64 `json:"hashLen,omitempty"`
 	// Fields to add to events from this input
-	Metadata []InputFileMetadatum `json:"metadata,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
 	// A list of event-breaking rulesets that will be applied, in order, to the input data stream
 	BreakerRulesets []string `json:"breakerRulesets,omitempty"`
 	// How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-	StaleChannelFlushMs *float64 `default:"10000" json:"staleChannelFlushMs"`
+	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
 	Description         *string  `json:"description,omitempty"`
 	// Directory path to search for files. Environment variables will be resolved, e.g. $CRIBL_HOME/log/.
 	Path *string `json:"path,omitempty"`
 	// Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.
 	Depth                     *float64 `json:"depth,omitempty"`
-	SuppressMissingPathErrors *bool    `default:"false" json:"suppressMissingPathErrors"`
+	SuppressMissingPathErrors *bool    `json:"suppressMissingPathErrors,omitempty"`
 	// Delete files after they have been collected
-	DeleteFiles *bool `default:"false" json:"deleteFiles"`
+	DeleteFiles *bool `json:"deleteFiles,omitempty"`
+	// Salt the file hash with the Source file path. Ensures that all files with the same header hash, such as CSV files, are ingested. Moving or renaming the file, or toggling this after starting the Source will cause re-ingestion.
+	SaltHash *bool `json:"saltHash,omitempty"`
 	// Stream binary files as Base64-encoded chunks.
-	IncludeUnidentifiableBinary *bool `default:"false" json:"includeUnidentifiableBinary"`
+	IncludeUnidentifiableBinary *bool `json:"includeUnidentifiableBinary,omitempty"`
 }
 
 func (i InputFile) MarshalJSON() ([]byte, error) {
@@ -309,15 +125,15 @@ func (i InputFile) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputFile) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputFile) GetID() string {
+func (i *InputFile) GetID() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ID
 }
@@ -371,14 +187,14 @@ func (i *InputFile) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputFile) GetConnections() []InputFileConnection {
+func (i *InputFile) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputFile) GetPq() *InputFilePq {
+func (i *InputFile) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -406,6 +222,13 @@ func (i *InputFile) GetFilenames() []string {
 	return i.Filenames
 }
 
+func (i *InputFile) GetFilterArchivedFiles() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.FilterArchivedFiles
+}
+
 func (i *InputFile) GetTailOnly() *bool {
 	if i == nil {
 		return nil
@@ -418,6 +241,13 @@ func (i *InputFile) GetIdleTimeout() *float64 {
 		return nil
 	}
 	return i.IdleTimeout
+}
+
+func (i *InputFile) GetMinAgeDur() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MinAgeDur
 }
 
 func (i *InputFile) GetMaxAgeDur() *string {
@@ -448,7 +278,7 @@ func (i *InputFile) GetHashLen() *float64 {
 	return i.HashLen
 }
 
-func (i *InputFile) GetMetadata() []InputFileMetadatum {
+func (i *InputFile) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -502,6 +332,13 @@ func (i *InputFile) GetDeleteFiles() *bool {
 		return nil
 	}
 	return i.DeleteFiles
+}
+
+func (i *InputFile) GetSaltHash() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.SaltHash
 }
 
 func (i *InputFile) GetIncludeUnidentifiableBinary() *bool {

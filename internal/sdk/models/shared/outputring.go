@@ -58,62 +58,9 @@ func (e *OutputRingDataFormat) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputRingDataCompressionFormat string
-
-const (
-	OutputRingDataCompressionFormatNone OutputRingDataCompressionFormat = "none"
-	OutputRingDataCompressionFormatGzip OutputRingDataCompressionFormat = "gzip"
-)
-
-func (e OutputRingDataCompressionFormat) ToPointer() *OutputRingDataCompressionFormat {
-	return &e
-}
-func (e *OutputRingDataCompressionFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputRingDataCompressionFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputRingDataCompressionFormat: %v", v)
-	}
-}
-
-// OutputRingBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputRingBackpressureBehavior string
-
-const (
-	OutputRingBackpressureBehaviorBlock OutputRingBackpressureBehavior = "block"
-	OutputRingBackpressureBehaviorDrop  OutputRingBackpressureBehavior = "drop"
-)
-
-func (e OutputRingBackpressureBehavior) ToPointer() *OutputRingBackpressureBehavior {
-	return &e
-}
-func (e *OutputRingBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputRingBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputRingBackpressureBehavior: %v", v)
-	}
-}
-
 type OutputRing struct {
 	// Unique ID for this output
-	ID   string         `json:"id"`
+	ID   *string        `json:"id,omitempty"`
 	Type OutputRingType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -124,19 +71,19 @@ type OutputRing struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Format of the output data.
-	Format *OutputRingDataFormat `default:"json" json:"format"`
+	Format *OutputRingDataFormat `json:"format,omitempty"`
 	// JS expression to define how files are partitioned and organized. If left blank, Cribl Stream will fallback on event.__partition.
 	PartitionExpr *string `json:"partitionExpr,omitempty"`
 	// Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
-	MaxDataSize *string `default:"1GB" json:"maxDataSize"`
+	MaxDataSize *string `json:"maxDataSize,omitempty"`
 	// Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.
-	MaxDataTime *string                          `default:"24h" json:"maxDataTime"`
-	Compress    *OutputRingDataCompressionFormat `default:"gzip" json:"compress"`
+	MaxDataTime *string                                  `json:"maxDataTime,omitempty"`
+	Compress    *DataCompressionFormatOptionsPersistence `json:"compress,omitempty"`
 	// Path to use to write metrics. Defaults to $CRIBL_HOME/state/<id>
 	DestPath *string `json:"destPath,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputRingBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                         `json:"description,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptionsBlockDrop `json:"onBackpressure,omitempty"`
+	Description    *string                               `json:"description,omitempty"`
 }
 
 func (o OutputRing) MarshalJSON() ([]byte, error) {
@@ -144,15 +91,15 @@ func (o OutputRing) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputRing) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputRing) GetID() string {
+func (o *OutputRing) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
@@ -220,7 +167,7 @@ func (o *OutputRing) GetMaxDataTime() *string {
 	return o.MaxDataTime
 }
 
-func (o *OutputRing) GetCompress() *OutputRingDataCompressionFormat {
+func (o *OutputRing) GetCompress() *DataCompressionFormatOptionsPersistence {
 	if o == nil {
 		return nil
 	}
@@ -234,7 +181,7 @@ func (o *OutputRing) GetDestPath() *string {
 	return o.DestPath
 }
 
-func (o *OutputRing) GetOnBackpressure() *OutputRingBackpressureBehavior {
+func (o *OutputRing) GetOnBackpressure() *BackpressureBehaviorOptionsBlockDrop {
 	if o == nil {
 		return nil
 	}

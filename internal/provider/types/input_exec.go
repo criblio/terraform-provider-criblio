@@ -7,23 +7,24 @@ import (
 )
 
 type InputExec struct {
-	BreakerRulesets     []types.String        `tfsdk:"breaker_rulesets"`
-	Command             types.String          `tfsdk:"command"`
-	Connections         []InputExecConnection `tfsdk:"connections"`
-	CronSchedule        types.String          `tfsdk:"cron_schedule"`
-	Description         types.String          `tfsdk:"description"`
-	Disabled            types.Bool            `tfsdk:"disabled"`
-	Environment         types.String          `tfsdk:"environment"`
-	ID                  types.String          `tfsdk:"id"`
-	Interval            types.Float64         `tfsdk:"interval"`
-	Metadata            []InputExecMetadatum  `tfsdk:"metadata"`
-	Pipeline            types.String          `tfsdk:"pipeline"`
-	Pq                  *InputExecPq          `tfsdk:"pq"`
-	PqEnabled           types.Bool            `tfsdk:"pq_enabled"`
-	Retries             types.Float64         `tfsdk:"retries"`
-	ScheduleType        types.String          `tfsdk:"schedule_type"`
-	SendToRoutes        types.Bool            `tfsdk:"send_to_routes"`
-	StaleChannelFlushMs types.Float64         `tfsdk:"stale_channel_flush_ms"`
-	Streamtags          []types.String        `tfsdk:"streamtags"`
-	Type                types.String          `tfsdk:"type"`
+	BreakerRulesets     []types.String                 `tfsdk:"breaker_rulesets"`
+	Command             types.String                   `tfsdk:"command"`
+	Connections         []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	CronSchedule        types.String                   `tfsdk:"cron_schedule"`
+	Description         types.String                   `tfsdk:"description"`
+	Disabled            types.Bool                     `tfsdk:"disabled"`
+	Environment         types.String                   `tfsdk:"environment"`
+	ID                  types.String                   `tfsdk:"id"`
+	Interval            types.Float64                  `tfsdk:"interval"`
+	Metadata            []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Pipeline            types.String                   `tfsdk:"pipeline"`
+	Pq                  *PqType                        `tfsdk:"pq"`
+	PqEnabled           types.Bool                     `tfsdk:"pq_enabled"`
+	Retries             types.Float64                  `tfsdk:"retries"`
+	ScheduleType        types.String                   `tfsdk:"schedule_type"`
+	Script              types.String                   `tfsdk:"script"`
+	SendToRoutes        types.Bool                     `tfsdk:"send_to_routes"`
+	StaleChannelFlushMs types.Float64                  `tfsdk:"stale_channel_flush_ms"`
+	Streamtags          []types.String                 `tfsdk:"streamtags"`
+	Type                types.String                   `tfsdk:"type"`
 }

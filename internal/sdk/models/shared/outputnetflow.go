@@ -35,7 +35,11 @@ type OutputNetflowHost struct {
 	// Destination host
 	Host string `json:"host"`
 	// Destination port, default is 2055
-	Port *float64 `default:"2055" json:"port"`
+	Port float64 `json:"port"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (o OutputNetflowHost) MarshalJSON() ([]byte, error) {
@@ -43,7 +47,7 @@ func (o OutputNetflowHost) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputNetflowHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host", "port"}); err != nil {
 		return err
 	}
 	return nil
@@ -56,11 +60,25 @@ func (o *OutputNetflowHost) GetHost() string {
 	return o.Host
 }
 
-func (o *OutputNetflowHost) GetPort() *float64 {
+func (o *OutputNetflowHost) GetPort() float64 {
+	if o == nil {
+		return 0.0
+	}
+	return o.Port
+}
+
+func (o *OutputNetflowHost) GetTemplateHost() *string {
 	if o == nil {
 		return nil
 	}
-	return o.Port
+	return o.TemplateHost
+}
+
+func (o *OutputNetflowHost) GetTemplatePort() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplatePort
 }
 
 type OutputNetflow struct {
@@ -75,11 +93,15 @@ type OutputNetflow struct {
 	Environment *string `json:"environment,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
-	// One or more NetFlow destinations to forward events to
+	// One or more NetFlow Destinations to forward events to
 	Hosts []OutputNetflowHost `json:"hosts"`
 	// How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.
-	DNSResolvePeriodSec *float64 `default:"0" json:"dnsResolvePeriodSec"`
-	Description         *string  `json:"description,omitempty"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
+	// Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
+	EnableIPSpoofing *bool   `json:"enableIpSpoofing,omitempty"`
+	Description      *string `json:"description,omitempty"`
+	// MTU in bytes. The actual maximum NetFlow payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). For example, with the default MTU of 1500, the max payload is 1472 bytes for IPv4. Payloads exceeding this limit will be dropped.
+	MaxRecordSize *float64 `json:"maxRecordSize,omitempty"`
 }
 
 func (o OutputNetflow) MarshalJSON() ([]byte, error) {
@@ -149,9 +171,23 @@ func (o *OutputNetflow) GetDNSResolvePeriodSec() *float64 {
 	return o.DNSResolvePeriodSec
 }
 
+func (o *OutputNetflow) GetEnableIPSpoofing() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.EnableIPSpoofing
+}
+
 func (o *OutputNetflow) GetDescription() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *OutputNetflow) GetMaxRecordSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxRecordSize
 }
