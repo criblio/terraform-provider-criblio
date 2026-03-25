@@ -90,13 +90,17 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 		r.Type = r.APIAzure.Type
 	}
 	if resp.APIElasticSearchProvider != nil {
+		var priorPassword types.String
+		if r.APIElasticsearch != nil {
+			priorPassword = r.APIElasticsearch.Password
+		}
 		r.APIElasticsearch = &tfTypes.APIElasticSearchProvider{}
 		r.APIElasticsearch.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
 		r.Description = r.APIElasticsearch.Description
 		r.APIElasticsearch.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
 		r.APIElasticsearch.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
 		r.ID = r.APIElasticsearch.ID
-		r.APIElasticsearch.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		r.APIElasticsearch.Password = stringFromAPIOrPrior(resp.APIElasticSearchProvider.Password, priorPassword)
 		r.APIElasticsearch.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
 		r.Type = r.APIElasticsearch.Type
 		r.APIElasticsearch.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
@@ -222,13 +226,17 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 		r.Type = r.APIOkta.Type
 	}
 	if resp.APIOpenSearchProvider != nil {
+		var priorPassword types.String
+		if r.APIOpensearch != nil {
+			priorPassword = r.APIOpensearch.Password
+		}
 		r.APIOpensearch = &tfTypes.APIOpenSearchProvider{}
 		r.APIOpensearch.Description = types.StringPointerValue(resp.APIOpenSearchProvider.Description)
 		r.Description = r.APIOpensearch.Description
 		r.APIOpensearch.Endpoint = types.StringValue(resp.APIOpenSearchProvider.Endpoint)
 		r.APIOpensearch.ID = types.StringValue(resp.APIOpenSearchProvider.ID)
 		r.ID = r.APIOpensearch.ID
-		r.APIOpensearch.Password = types.StringValue(resp.APIOpenSearchProvider.Password)
+		r.APIOpensearch.Password = stringFromAPIOrPrior(resp.APIOpenSearchProvider.Password, priorPassword)
 		r.APIOpensearch.Type = types.StringValue(resp.APIOpenSearchProvider.Type)
 		r.Type = r.APIOpensearch.Type
 		r.APIOpensearch.Username = types.StringValue(resp.APIOpenSearchProvider.Username)
@@ -392,16 +400,22 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 		r.Prometheus.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
 	}
 	if resp.S3Provider != nil {
+		var priorAwsSecretKey, priorAwsAPIKey, priorSessionToken types.String
+		if r.S3 != nil {
+			priorAwsSecretKey = r.S3.AwsSecretKey
+			priorAwsAPIKey = r.S3.AwsAPIKey
+			priorSessionToken = r.S3.SessionToken
+		}
 		r.S3 = &tfTypes.S3Provider{}
 		r.S3.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
 		r.S3.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
-		r.S3.AwsAPIKey = types.StringPointerValue(resp.S3Provider.AwsAPIKey)
+		r.S3.AwsAPIKey = stringPointerFromAPIOrPrior(resp.S3Provider.AwsAPIKey, priorAwsAPIKey)
 		if resp.S3Provider.AwsAuthenticationMethod != nil {
 			r.S3.AwsAuthenticationMethod = types.StringValue(string(*resp.S3Provider.AwsAuthenticationMethod))
 		} else {
 			r.S3.AwsAuthenticationMethod = types.StringNull()
 		}
-		r.S3.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		r.S3.AwsSecretKey = stringPointerFromAPIOrPrior(resp.S3Provider.AwsSecretKey, priorAwsSecretKey)
 		r.S3.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
 		r.S3.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
 		r.S3.Description = types.StringPointerValue(resp.S3Provider.Description)
@@ -414,7 +428,7 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 		r.S3.Region = types.StringPointerValue(resp.S3Provider.Region)
 		r.S3.RejectUnauthorized = types.BoolPointerValue(resp.S3Provider.RejectUnauthorized)
 		r.S3.ReuseConnections = types.BoolPointerValue(resp.S3Provider.ReuseConnections)
-		r.S3.SessionToken = types.StringPointerValue(resp.S3Provider.SessionToken)
+		r.S3.SessionToken = stringPointerFromAPIOrPrior(resp.S3Provider.SessionToken, priorSessionToken)
 		r.S3.SignatureVersion = types.StringValue(string(resp.S3Provider.SignatureVersion))
 		r.S3.Type = types.StringValue(resp.S3Provider.Type)
 		r.Type = r.S3.Type
