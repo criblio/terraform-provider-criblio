@@ -21,6 +21,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -121,10 +122,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for this source instance. Must match the ` + "`" + `id` + "`" + ` property within the Input object in the request body.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
 			"input_appscope": schema.SingleNestedAttribute{
 				Optional: true,
