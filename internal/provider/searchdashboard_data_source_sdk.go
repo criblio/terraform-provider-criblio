@@ -4,11 +4,9 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -46,23 +44,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			if elementsItem.DashboardElementVisualization.Config == nil {
-				elements.DashboardElementVisualization.Config = nil
-			} else {
-				elements.DashboardElementVisualization.Config = &tfTypes.ElementConfigType{}
-				if elementsItem.DashboardElementVisualization.Config.AdditionalProperties == nil {
-					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedNull()
-				} else {
-					additionalPropertiesResult, _ := json.Marshal(elementsItem.DashboardElementVisualization.Config.AdditionalProperties)
-					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
-				}
-				elements.DashboardElementVisualization.Config.Columns = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Columns)
-				elements.DashboardElementVisualization.Config.GroupBy = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.GroupBy)
-				elements.DashboardElementVisualization.Config.MaxRows = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MaxRows)
-				elements.DashboardElementVisualization.Config.Series = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Series)
-				elements.DashboardElementVisualization.Config.XAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis)
-				elements.DashboardElementVisualization.Config.YAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis)
-			}
+			elements.DashboardElementVisualization.Config = tfElementConfigFromShared(elementsItem.DashboardElementVisualization.Config)
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
 			elements.DashboardElementVisualization.ID = types.StringValue(elementsItem.DashboardElementVisualization.ID)

@@ -413,12 +413,13 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	// When creating from file, check if pack already exists. If so, upgrade via PATCH instead of POST create.
 	createdFromFile := !data.Filename.IsUnknown() && !data.Filename.IsNull() && data.Filename.ValueString() != ""
+	packID := effectivePackIDForAPI(data)
 	var packExists bool
-	if createdFromFile {
+	if createdFromFile && packID != "" {
 		checkReq, checkDiags := data.ToOperationsGetPacksByIDRequest(ctx)
 		resp.Diagnostics.Append(checkDiags...)
 		if !resp.Diagnostics.HasError() {
-			checkReq.ID = effectivePackIDForAPI(data)
+			checkReq.ID = packID
 			checkRes, checkErr := r.client.Packs.GetPacksByID(ctx, *checkReq)
 			if checkErr == nil && checkRes != nil && checkRes.StatusCode == 200 {
 				packExists = true
@@ -433,8 +434,8 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 			fullPath = fullSourcePath(data.Source.ValueString())
 		}
 		version := ""
-		displayName := data.ID.ValueString()
-		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), data.ID.ValueString(), fullPath, version, displayName)
+		displayName := packInstallDisplayName(data)
+		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), packID, fullPath, version, displayName)
 		if postErr == nil && body != nil {
 			resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePacksByIDResponseBody(ctx, body)...)
 		} else {
@@ -445,7 +446,7 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 			if shortName == "" {
 				shortName = data.Source.ValueString()
 			}
-			body, patchErr := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), data.ID.ValueString(), shortName, nil)
+			body, patchErr := r.patchPackByIDWithSource(ctx, data.GroupID.ValueString(), packID, shortName, nil)
 			if patchErr != nil {
 				if postErr != nil {
 					resp.Diagnostics.AddError("failure to invoke API", postErr.Error())
@@ -804,12 +805,9 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		if len(data.Items) > 0 && !data.Items[0].Version.IsNull() && !data.Items[0].Version.IsUnknown() {
 			version = data.Items[0].Version.ValueString()
 		}
-		displayName := data.ID.ValueString()
-		if len(data.Items) > 0 && !data.Items[0].DisplayName.IsNull() && !data.Items[0].DisplayName.IsUnknown() {
-			displayName = data.Items[0].DisplayName.ValueString()
-		}
+		displayName := packInstallDisplayName(data)
 		// Prefer UI-style POST (items array) so we avoid PATCH "up to date" 500.
-		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), data.ID.ValueString(), fullPath, version, displayName)
+		body, postErr := r.postPacksInstallWithItems(ctx, data.GroupID.ValueString(), effectivePackIDForAPI(data), fullPath, version, displayName)
 		if postErr == nil && body != nil {
 			patchRes = &operations.UpdatePacksByIDResponse{StatusCode: 200, Object: body}
 		} else {
@@ -1222,6 +1220,18 @@ func effectivePackIDForAPI(data *PackResourceModel) string {
 	return strings.ToLower(data.ID.ValueString())
 }
 
+// packInstallDisplayName returns the human-readable name for UI-style pack install POST (items array).
+// Cloud APIs reject empty "name"/displayName; prefer config display_name, then installed metadata, then id.
+func packInstallDisplayName(data *PackResourceModel) string {
+	if !data.DisplayName.IsNull() && !data.DisplayName.IsUnknown() && strings.TrimSpace(data.DisplayName.ValueString()) != "" {
+		return data.DisplayName.ValueString()
+	}
+	if len(data.Items) > 0 && !data.Items[0].DisplayName.IsNull() && !data.Items[0].DisplayName.IsUnknown() && strings.TrimSpace(data.Items[0].DisplayName.ValueString()) != "" {
+		return data.Items[0].DisplayName.ValueString()
+	}
+	return data.ID.ValueString()
+}
+
 // shortNameForPatch returns the source value for PATCH: API expects only the filename (e.g. "billing_pipeline.W3avtlR.crbl");
 // it prepends its base path, so sending the full "file:..." path causes a doubled path and ENOENT.
 func shortNameForPatch(source string) string {
@@ -1278,14 +1288,22 @@ func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, p
 	if baseURL == "" {
 		return nil, fmt.Errorf("failed to extract base URL for POST packs")
 	}
+	if strings.TrimSpace(packID) == "" {
+		return nil, fmt.Errorf("pack id is empty")
+	}
+	if strings.TrimSpace(sourceFullPath) == "" {
+		return nil, fmt.Errorf("pack source path is empty")
+	}
 	path := fmt.Sprintf("/api/v1/m/%s/packs", groupID)
 	rawURL := baseURL + path
 	if displayName == "" {
 		displayName = packID
 	}
+	// Cribl Cloud expects a non-empty `name` on the install item (human-readable pack name); omitting it yields "Pack name cannot be empty".
 	body := struct {
 		Items []struct {
 			ID          string   `json:"id"`
+			Name        string   `json:"name"`
 			Source      string   `json:"source"`
 			Version     string   `json:"version,omitempty"`
 			Warnings    []string `json:"warnings,omitempty"`
@@ -1295,12 +1313,13 @@ func (r *PackResource) postPacksInstallWithItems(ctx context.Context, groupID, p
 	}{
 		Items: []struct {
 			ID          string   `json:"id"`
+			Name        string   `json:"name"`
 			Source      string   `json:"source"`
 			Version     string   `json:"version,omitempty"`
 			Warnings    []string `json:"warnings,omitempty"`
 			DisplayName string   `json:"displayName,omitempty"`
 		}{
-			{ID: packID, Source: sourceFullPath, Version: version, Warnings: []string{}, DisplayName: displayName},
+			{ID: packID, Name: displayName, Source: sourceFullPath, Version: version, Warnings: []string{}, DisplayName: displayName},
 		},
 		Count: 1,
 	}

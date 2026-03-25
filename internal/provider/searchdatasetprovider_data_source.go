@@ -29,32 +29,32 @@ type SearchDatasetProviderDataSource struct {
 
 // SearchDatasetProviderDataSourceModel describes the data model.
 type SearchDatasetProviderDataSourceModel struct {
-	APIAwsProvider               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws_provider"`
-	APIAzureDataExplorerProvider *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer_provider"`
-	APIAzureProvider             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure_provider"`
-	APIElasticSearchProvider     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elastic_search_provider"`
-	APIGcpProvider               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp_provider"`
-	APIGoogleWorkspaceProvider   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace_provider"`
-	APIHTTPProvider              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp_provider"`
-	APIMsGraphProvider           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_ms_graph_provider"`
-	APIOktaProvider              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta_provider"`
-	APIOpenSearchProvider        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_open_search_provider"`
-	APITailscaleProvider         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale_provider"`
-	APIZoomProvider              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom_provider"`
-	AwsSecurityLakeProvider      *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"aws_security_lake_provider"`
-	AzureBlobProvider            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob_provider"`
-	ClickHouseProvider           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"click_house_provider"`
-	CriblLeaderProvider          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader_provider"`
-	CriblSearchProvider          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search_provider"`
-	Description                  types.String                          `tfsdk:"description"`
-	EdgeProvider                 *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"edge_provider"`
-	GcsProvider                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs_provider"`
-	ID                           types.String                          `tfsdk:"id"`
-	MetaProvider                 *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"meta_provider"`
-	PrometheusProvider           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus_provider"`
-	S3Provider                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3_provider"`
-	SnowflakeProvider            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake_provider"`
-	Type                         types.String                          `tfsdk:"type"`
+	AmazonSecurityLake   *tfTypes.AwsSecurityLakeProvider      `queryParam:"inline" tfsdk:"amazon_security_lake"`
+	APIAws               *tfTypes.APIAwsProvider               `queryParam:"inline" tfsdk:"api_aws"`
+	APIAzure             *tfTypes.APIAzureProvider             `queryParam:"inline" tfsdk:"api_azure"`
+	APIAzureDataExplorer *tfTypes.APIAzureDataExplorerProvider `queryParam:"inline" tfsdk:"api_azure_data_explorer"`
+	APIElasticsearch     *tfTypes.APIElasticSearchProvider     `queryParam:"inline" tfsdk:"api_elasticsearch"`
+	APIGcp               *tfTypes.APIGcpProvider               `queryParam:"inline" tfsdk:"api_gcp"`
+	APIGoogleWorkspace   *tfTypes.APIGoogleWorkspaceProvider   `queryParam:"inline" tfsdk:"api_google_workspace"`
+	Apihttp              *tfTypes.APIHTTPProvider              `queryParam:"inline" tfsdk:"apihttp"`
+	APIMsgraph           *tfTypes.APIMsGraphProvider           `queryParam:"inline" tfsdk:"api_msgraph"`
+	APIOkta              *tfTypes.APIOktaProvider              `queryParam:"inline" tfsdk:"api_okta"`
+	APIOpensearch        *tfTypes.APIOpenSearchProvider        `queryParam:"inline" tfsdk:"api_opensearch"`
+	APITailscale         *tfTypes.APITailscaleProvider         `queryParam:"inline" tfsdk:"api_tailscale"`
+	APIZoom              *tfTypes.APIZoomProvider              `queryParam:"inline" tfsdk:"api_zoom"`
+	AzureBlob            *tfTypes.AzureBlobProvider            `queryParam:"inline" tfsdk:"azure_blob"`
+	Clickhouse           *tfTypes.ClickHouseProvider           `queryParam:"inline" tfsdk:"clickhouse"`
+	CriblEdge            *tfTypes.EdgeProvider                 `queryParam:"inline" tfsdk:"cribl_edge"`
+	CriblLeader          *tfTypes.CriblLeaderProvider          `queryParam:"inline" tfsdk:"cribl_leader"`
+	CriblMeta            *tfTypes.MetaProvider                 `queryParam:"inline" tfsdk:"cribl_meta"`
+	CriblSearch          *tfTypes.CriblSearchProvider          `queryParam:"inline" tfsdk:"cribl_search"`
+	Description          types.String                          `tfsdk:"description"`
+	Gcs                  *tfTypes.GcsProvider                  `queryParam:"inline" tfsdk:"gcs"`
+	ID                   types.String                          `tfsdk:"id"`
+	Prometheus           *tfTypes.PrometheusProvider           `queryParam:"inline" tfsdk:"prometheus"`
+	S3                   *tfTypes.S3Provider                   `queryParam:"inline" tfsdk:"s3"`
+	Snowflake            *tfTypes.SnowflakeProvider            `queryParam:"inline" tfsdk:"snowflake"`
+	Type                 types.String                          `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -68,7 +68,24 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 		MarkdownDescription: "SearchDatasetProvider DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"api_aws_provider": schema.SingleNestedAttribute{
+			"amazon_security_lake": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_aws": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -113,36 +130,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_azure_data_explorer_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"client_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The Client ID (also known as Secret ID) of the authorized application`,
-					},
-					"client_secret": schema.StringAttribute{
-						Computed:    true,
-						Description: `The Client Secret of the authorized application`,
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the provider`,
-					},
-					"tenant_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The Tenant ID of the authorized application`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of the provider`,
-					},
-				},
-			},
-			"api_azure_provider": schema.SingleNestedAttribute{
+			"api_azure": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -183,7 +171,36 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_elastic_search_provider": schema.SingleNestedAttribute{
+			"api_azure_data_explorer": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"client_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Client ID (also known as Secret ID) of the authorized application`,
+					},
+					"client_secret": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Client Secret of the authorized application`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"tenant_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The Tenant ID of the authorized application`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"api_elasticsearch": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -212,7 +229,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_gcp_provider": schema.SingleNestedAttribute{
+			"api_gcp": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -245,7 +262,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_google_workspace_provider": schema.SingleNestedAttribute{
+			"api_google_workspace": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -281,7 +298,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_ms_graph_provider": schema.SingleNestedAttribute{
+			"api_msgraph": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -319,7 +336,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_okta_provider": schema.SingleNestedAttribute{
+			"api_okta": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -356,7 +373,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_open_search_provider": schema.SingleNestedAttribute{
+			"api_opensearch": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -385,7 +402,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_tailscale_provider": schema.SingleNestedAttribute{
+			"api_tailscale": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -422,7 +439,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"api_zoom_provider": schema.SingleNestedAttribute{
+			"api_zoom": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_configs": schema.ListNestedAttribute{
@@ -463,7 +480,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"apihttp_provider": schema.SingleNestedAttribute{
+			"apihttp": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_method": schema.StringAttribute{
@@ -523,24 +540,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"aws_security_lake_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the provider`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of the provider`,
-					},
-				},
-			},
-			"azure_blob_provider": schema.SingleNestedAttribute{
+			"azure_blob": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"authentication_method": schema.StringAttribute{
@@ -601,7 +601,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"click_house_provider": schema.SingleNestedAttribute{
+			"clickhouse": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -630,7 +630,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"cribl_leader_provider": schema.SingleNestedAttribute{
+			"cribl_edge": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -647,7 +647,41 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"cribl_search_provider": schema.SingleNestedAttribute{
+			"cribl_leader": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"cribl_meta": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the provider`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the provider`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of the provider`,
+					},
+				},
+			},
+			"cribl_search": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -668,24 +702,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 				Computed:    true,
 				Description: `Description of the provider`,
 			},
-			"edge_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the provider`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of the provider`,
-					},
-				},
-			},
-			"gcs_provider": schema.SingleNestedAttribute{
+			"gcs": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
@@ -714,24 +731,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 				Required:    true,
 				Description: `Unique identifier for the provider`,
 			},
-			"meta_provider": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Description of the provider`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the provider`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Type of the provider`,
-					},
-				},
-			},
-			"prometheus_provider": schema.SingleNestedAttribute{
+			"prometheus": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_type": schema.StringAttribute{
@@ -771,7 +771,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"s3_provider": schema.SingleNestedAttribute{
+			"s3": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"assume_role_arn": schema.StringAttribute{
@@ -848,7 +848,7 @@ func (r *SearchDatasetProviderDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
-			"snowflake_provider": schema.SingleNestedAttribute{
+			"snowflake": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"account_identifier": schema.StringAttribute{

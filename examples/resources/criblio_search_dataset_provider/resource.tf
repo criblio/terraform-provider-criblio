@@ -1,5 +1,5 @@
 resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
-  prometheus_provider = {
+  prometheus = {
     auth_type       = "basic"
     description     = "my generic provider description"
     endpoint        = "https://prometheus.example.com"

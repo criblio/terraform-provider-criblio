@@ -35,8 +35,8 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 	var diags diag.Diagnostics
 
 	if resp.APIAwsProvider != nil {
-		r.APIAwsProvider = &tfTypes.APIAwsProvider{}
-		r.APIAwsProvider.AccountConfigs = []tfTypes.AwsAccountConfig{}
+		r.APIAws = &tfTypes.APIAwsProvider{}
+		r.APIAws.AccountConfigs = []tfTypes.AwsAccountConfig{}
 
 		for _, accountConfigsItem := range resp.APIAwsProvider.AccountConfigs {
 			var accountConfigs tfTypes.AwsAccountConfig
@@ -47,30 +47,30 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs.AwsSecretKey = types.StringPointerValue(accountConfigsItem.AwsSecretKey)
 			accountConfigs.Name = types.StringValue(accountConfigsItem.Name)
 
-			r.APIAwsProvider.AccountConfigs = append(r.APIAwsProvider.AccountConfigs, accountConfigs)
+			r.APIAws.AccountConfigs = append(r.APIAws.AccountConfigs, accountConfigs)
 		}
-		r.APIAwsProvider.Description = types.StringPointerValue(resp.APIAwsProvider.Description)
-		r.Description = r.APIAwsProvider.Description
-		r.APIAwsProvider.ID = types.StringValue(resp.APIAwsProvider.ID)
-		r.ID = r.APIAwsProvider.ID
-		r.APIAwsProvider.Type = types.StringValue(resp.APIAwsProvider.Type)
-		r.Type = r.APIAwsProvider.Type
+		r.APIAws.Description = types.StringPointerValue(resp.APIAwsProvider.Description)
+		r.Description = r.APIAws.Description
+		r.APIAws.ID = types.StringValue(resp.APIAwsProvider.ID)
+		r.ID = r.APIAws.ID
+		r.APIAws.Type = types.StringValue(resp.APIAwsProvider.Type)
+		r.Type = r.APIAws.Type
 	}
 	if resp.APIAzureDataExplorerProvider != nil {
-		r.APIAzureDataExplorerProvider = &tfTypes.APIAzureDataExplorerProvider{}
-		r.APIAzureDataExplorerProvider.ClientID = types.StringValue(resp.APIAzureDataExplorerProvider.ClientID)
-		r.APIAzureDataExplorerProvider.ClientSecret = types.StringValue(resp.APIAzureDataExplorerProvider.ClientSecret)
-		r.APIAzureDataExplorerProvider.Description = types.StringPointerValue(resp.APIAzureDataExplorerProvider.Description)
-		r.Description = r.APIAzureDataExplorerProvider.Description
-		r.APIAzureDataExplorerProvider.ID = types.StringValue(resp.APIAzureDataExplorerProvider.ID)
-		r.ID = r.APIAzureDataExplorerProvider.ID
-		r.APIAzureDataExplorerProvider.TenantID = types.StringValue(resp.APIAzureDataExplorerProvider.TenantID)
-		r.APIAzureDataExplorerProvider.Type = types.StringValue(resp.APIAzureDataExplorerProvider.Type)
-		r.Type = r.APIAzureDataExplorerProvider.Type
+		r.APIAzureDataExplorer = &tfTypes.APIAzureDataExplorerProvider{}
+		r.APIAzureDataExplorer.ClientID = types.StringValue(resp.APIAzureDataExplorerProvider.ClientID)
+		r.APIAzureDataExplorer.ClientSecret = types.StringValue(resp.APIAzureDataExplorerProvider.ClientSecret)
+		r.APIAzureDataExplorer.Description = types.StringPointerValue(resp.APIAzureDataExplorerProvider.Description)
+		r.Description = r.APIAzureDataExplorer.Description
+		r.APIAzureDataExplorer.ID = types.StringValue(resp.APIAzureDataExplorerProvider.ID)
+		r.ID = r.APIAzureDataExplorer.ID
+		r.APIAzureDataExplorer.TenantID = types.StringValue(resp.APIAzureDataExplorerProvider.TenantID)
+		r.APIAzureDataExplorer.Type = types.StringValue(resp.APIAzureDataExplorerProvider.Type)
+		r.Type = r.APIAzureDataExplorer.Type
 	}
 	if resp.APIAzureProvider != nil {
-		r.APIAzureProvider = &tfTypes.APIAzureProvider{}
-		r.APIAzureProvider.AccountConfigs = []tfTypes.AzureAccountConfig{}
+		r.APIAzure = &tfTypes.APIAzureProvider{}
+		r.APIAzure.AccountConfigs = []tfTypes.AzureAccountConfig{}
 
 		for _, accountConfigsItem1 := range resp.APIAzureProvider.AccountConfigs {
 			var accountConfigs1 tfTypes.AzureAccountConfig
@@ -80,30 +80,30 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs1.Name = types.StringValue(accountConfigsItem1.Name)
 			accountConfigs1.TenantID = types.StringValue(accountConfigsItem1.TenantID)
 
-			r.APIAzureProvider.AccountConfigs = append(r.APIAzureProvider.AccountConfigs, accountConfigs1)
+			r.APIAzure.AccountConfigs = append(r.APIAzure.AccountConfigs, accountConfigs1)
 		}
-		r.APIAzureProvider.Description = types.StringPointerValue(resp.APIAzureProvider.Description)
-		r.Description = r.APIAzureProvider.Description
-		r.APIAzureProvider.ID = types.StringValue(resp.APIAzureProvider.ID)
-		r.ID = r.APIAzureProvider.ID
-		r.APIAzureProvider.Type = types.StringValue(resp.APIAzureProvider.Type)
-		r.Type = r.APIAzureProvider.Type
+		r.APIAzure.Description = types.StringPointerValue(resp.APIAzureProvider.Description)
+		r.Description = r.APIAzure.Description
+		r.APIAzure.ID = types.StringValue(resp.APIAzureProvider.ID)
+		r.ID = r.APIAzure.ID
+		r.APIAzure.Type = types.StringValue(resp.APIAzureProvider.Type)
+		r.Type = r.APIAzure.Type
 	}
 	if resp.APIElasticSearchProvider != nil {
-		r.APIElasticSearchProvider = &tfTypes.APIElasticSearchProvider{}
-		r.APIElasticSearchProvider.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
-		r.Description = r.APIElasticSearchProvider.Description
-		r.APIElasticSearchProvider.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
-		r.APIElasticSearchProvider.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
-		r.ID = r.APIElasticSearchProvider.ID
-		r.APIElasticSearchProvider.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
-		r.APIElasticSearchProvider.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
-		r.Type = r.APIElasticSearchProvider.Type
-		r.APIElasticSearchProvider.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
+		r.APIElasticsearch = &tfTypes.APIElasticSearchProvider{}
+		r.APIElasticsearch.Description = types.StringPointerValue(resp.APIElasticSearchProvider.Description)
+		r.Description = r.APIElasticsearch.Description
+		r.APIElasticsearch.Endpoint = types.StringValue(resp.APIElasticSearchProvider.Endpoint)
+		r.APIElasticsearch.ID = types.StringValue(resp.APIElasticSearchProvider.ID)
+		r.ID = r.APIElasticsearch.ID
+		r.APIElasticsearch.Password = types.StringValue(resp.APIElasticSearchProvider.Password)
+		r.APIElasticsearch.Type = types.StringValue(resp.APIElasticSearchProvider.Type)
+		r.Type = r.APIElasticsearch.Type
+		r.APIElasticsearch.Username = types.StringValue(resp.APIElasticSearchProvider.Username)
 	}
 	if resp.APIGcpProvider != nil {
-		r.APIGcpProvider = &tfTypes.APIGcpProvider{}
-		r.APIGcpProvider.AccountConfigs = []tfTypes.GcpAccountConfig{}
+		r.APIGcp = &tfTypes.APIGcpProvider{}
+		r.APIGcp.AccountConfigs = []tfTypes.GcpAccountConfig{}
 
 		for _, accountConfigsItem2 := range resp.APIGcpProvider.AccountConfigs {
 			var accountConfigs2 tfTypes.GcpAccountConfig
@@ -111,18 +111,18 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs2.Name = types.StringValue(accountConfigsItem2.Name)
 			accountConfigs2.ServiceAccountCredentials = types.StringValue(accountConfigsItem2.ServiceAccountCredentials)
 
-			r.APIGcpProvider.AccountConfigs = append(r.APIGcpProvider.AccountConfigs, accountConfigs2)
+			r.APIGcp.AccountConfigs = append(r.APIGcp.AccountConfigs, accountConfigs2)
 		}
-		r.APIGcpProvider.Description = types.StringPointerValue(resp.APIGcpProvider.Description)
-		r.Description = r.APIGcpProvider.Description
-		r.APIGcpProvider.ID = types.StringValue(resp.APIGcpProvider.ID)
-		r.ID = r.APIGcpProvider.ID
-		r.APIGcpProvider.Type = types.StringValue(resp.APIGcpProvider.Type)
-		r.Type = r.APIGcpProvider.Type
+		r.APIGcp.Description = types.StringPointerValue(resp.APIGcpProvider.Description)
+		r.Description = r.APIGcp.Description
+		r.APIGcp.ID = types.StringValue(resp.APIGcpProvider.ID)
+		r.ID = r.APIGcp.ID
+		r.APIGcp.Type = types.StringValue(resp.APIGcpProvider.Type)
+		r.Type = r.APIGcp.Type
 	}
 	if resp.APIGoogleWorkspaceProvider != nil {
-		r.APIGoogleWorkspaceProvider = &tfTypes.APIGoogleWorkspaceProvider{}
-		r.APIGoogleWorkspaceProvider.AccountConfigs = []tfTypes.GoogleWorkspaceAccountConfig{}
+		r.APIGoogleWorkspace = &tfTypes.APIGoogleWorkspaceProvider{}
+		r.APIGoogleWorkspace.AccountConfigs = []tfTypes.GoogleWorkspaceAccountConfig{}
 
 		for _, accountConfigsItem3 := range resp.APIGoogleWorkspaceProvider.AccountConfigs {
 			var accountConfigs3 tfTypes.GoogleWorkspaceAccountConfig
@@ -131,23 +131,23 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs3.ServiceAccountCredentials = types.StringValue(accountConfigsItem3.ServiceAccountCredentials)
 			accountConfigs3.Subject = types.StringValue(accountConfigsItem3.Subject)
 
-			r.APIGoogleWorkspaceProvider.AccountConfigs = append(r.APIGoogleWorkspaceProvider.AccountConfigs, accountConfigs3)
+			r.APIGoogleWorkspace.AccountConfigs = append(r.APIGoogleWorkspace.AccountConfigs, accountConfigs3)
 		}
-		r.APIGoogleWorkspaceProvider.Description = types.StringPointerValue(resp.APIGoogleWorkspaceProvider.Description)
-		r.Description = r.APIGoogleWorkspaceProvider.Description
-		r.APIGoogleWorkspaceProvider.ID = types.StringValue(resp.APIGoogleWorkspaceProvider.ID)
-		r.ID = r.APIGoogleWorkspaceProvider.ID
-		r.APIGoogleWorkspaceProvider.Type = types.StringValue(resp.APIGoogleWorkspaceProvider.Type)
-		r.Type = r.APIGoogleWorkspaceProvider.Type
+		r.APIGoogleWorkspace.Description = types.StringPointerValue(resp.APIGoogleWorkspaceProvider.Description)
+		r.Description = r.APIGoogleWorkspace.Description
+		r.APIGoogleWorkspace.ID = types.StringValue(resp.APIGoogleWorkspaceProvider.ID)
+		r.ID = r.APIGoogleWorkspace.ID
+		r.APIGoogleWorkspace.Type = types.StringValue(resp.APIGoogleWorkspaceProvider.Type)
+		r.Type = r.APIGoogleWorkspace.Type
 	}
 	if resp.APIHTTPProvider != nil {
-		r.APIHTTPProvider = &tfTypes.APIHTTPProvider{}
+		r.Apihttp = &tfTypes.APIHTTPProvider{}
 		if resp.APIHTTPProvider.AuthenticationMethod != nil {
-			r.APIHTTPProvider.AuthenticationMethod = types.StringValue(string(*resp.APIHTTPProvider.AuthenticationMethod))
+			r.Apihttp.AuthenticationMethod = types.StringValue(string(*resp.APIHTTPProvider.AuthenticationMethod))
 		} else {
-			r.APIHTTPProvider.AuthenticationMethod = types.StringNull()
+			r.Apihttp.AuthenticationMethod = types.StringNull()
 		}
-		r.APIHTTPProvider.AvailableEndpoints = []tfTypes.HTTPEndpoint{}
+		r.Apihttp.AvailableEndpoints = []tfTypes.HTTPEndpoint{}
 
 		for _, availableEndpointsItem := range resp.APIHTTPProvider.AvailableEndpoints {
 			var availableEndpoints tfTypes.HTTPEndpoint
@@ -171,18 +171,18 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			availableEndpoints.Name = types.StringValue(availableEndpointsItem.Name)
 			availableEndpoints.URL = types.StringValue(availableEndpointsItem.URL)
 
-			r.APIHTTPProvider.AvailableEndpoints = append(r.APIHTTPProvider.AvailableEndpoints, availableEndpoints)
+			r.Apihttp.AvailableEndpoints = append(r.Apihttp.AvailableEndpoints, availableEndpoints)
 		}
-		r.APIHTTPProvider.Description = types.StringPointerValue(resp.APIHTTPProvider.Description)
-		r.Description = r.APIHTTPProvider.Description
-		r.APIHTTPProvider.ID = types.StringValue(resp.APIHTTPProvider.ID)
-		r.ID = r.APIHTTPProvider.ID
-		r.APIHTTPProvider.Type = types.StringValue(resp.APIHTTPProvider.Type)
-		r.Type = r.APIHTTPProvider.Type
+		r.Apihttp.Description = types.StringPointerValue(resp.APIHTTPProvider.Description)
+		r.Description = r.Apihttp.Description
+		r.Apihttp.ID = types.StringValue(resp.APIHTTPProvider.ID)
+		r.ID = r.Apihttp.ID
+		r.Apihttp.Type = types.StringValue(resp.APIHTTPProvider.Type)
+		r.Type = r.Apihttp.Type
 	}
 	if resp.APIMsGraphProvider != nil {
-		r.APIMsGraphProvider = &tfTypes.APIMsGraphProvider{}
-		r.APIMsGraphProvider.AccountConfigs = []tfTypes.MsGraphAccountConfig{}
+		r.APIMsgraph = &tfTypes.APIMsGraphProvider{}
+		r.APIMsgraph.AccountConfigs = []tfTypes.MsGraphAccountConfig{}
 
 		for _, accountConfigsItem4 := range resp.APIMsGraphProvider.AccountConfigs {
 			var accountConfigs4 tfTypes.MsGraphAccountConfig
@@ -192,18 +192,18 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs4.Name = types.StringValue(accountConfigsItem4.Name)
 			accountConfigs4.TenantID = types.StringValue(accountConfigsItem4.TenantID)
 
-			r.APIMsGraphProvider.AccountConfigs = append(r.APIMsGraphProvider.AccountConfigs, accountConfigs4)
+			r.APIMsgraph.AccountConfigs = append(r.APIMsgraph.AccountConfigs, accountConfigs4)
 		}
-		r.APIMsGraphProvider.Description = types.StringPointerValue(resp.APIMsGraphProvider.Description)
-		r.Description = r.APIMsGraphProvider.Description
-		r.APIMsGraphProvider.ID = types.StringValue(resp.APIMsGraphProvider.ID)
-		r.ID = r.APIMsGraphProvider.ID
-		r.APIMsGraphProvider.Type = types.StringValue(resp.APIMsGraphProvider.Type)
-		r.Type = r.APIMsGraphProvider.Type
+		r.APIMsgraph.Description = types.StringPointerValue(resp.APIMsGraphProvider.Description)
+		r.Description = r.APIMsgraph.Description
+		r.APIMsgraph.ID = types.StringValue(resp.APIMsGraphProvider.ID)
+		r.ID = r.APIMsgraph.ID
+		r.APIMsgraph.Type = types.StringValue(resp.APIMsGraphProvider.Type)
+		r.Type = r.APIMsgraph.Type
 	}
 	if resp.APIOktaProvider != nil {
-		r.APIOktaProvider = &tfTypes.APIOktaProvider{}
-		r.APIOktaProvider.AccountConfigs = []tfTypes.OktaAccountConfig{}
+		r.APIOkta = &tfTypes.APIOktaProvider{}
+		r.APIOkta.AccountConfigs = []tfTypes.OktaAccountConfig{}
 
 		for _, accountConfigsItem5 := range resp.APIOktaProvider.AccountConfigs {
 			var accountConfigs5 tfTypes.OktaAccountConfig
@@ -212,30 +212,30 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs5.DomainEndpoint = types.StringValue(accountConfigsItem5.DomainEndpoint)
 			accountConfigs5.Name = types.StringValue(accountConfigsItem5.Name)
 
-			r.APIOktaProvider.AccountConfigs = append(r.APIOktaProvider.AccountConfigs, accountConfigs5)
+			r.APIOkta.AccountConfigs = append(r.APIOkta.AccountConfigs, accountConfigs5)
 		}
-		r.APIOktaProvider.Description = types.StringPointerValue(resp.APIOktaProvider.Description)
-		r.Description = r.APIOktaProvider.Description
-		r.APIOktaProvider.ID = types.StringValue(resp.APIOktaProvider.ID)
-		r.ID = r.APIOktaProvider.ID
-		r.APIOktaProvider.Type = types.StringValue(resp.APIOktaProvider.Type)
-		r.Type = r.APIOktaProvider.Type
+		r.APIOkta.Description = types.StringPointerValue(resp.APIOktaProvider.Description)
+		r.Description = r.APIOkta.Description
+		r.APIOkta.ID = types.StringValue(resp.APIOktaProvider.ID)
+		r.ID = r.APIOkta.ID
+		r.APIOkta.Type = types.StringValue(resp.APIOktaProvider.Type)
+		r.Type = r.APIOkta.Type
 	}
 	if resp.APIOpenSearchProvider != nil {
-		r.APIOpenSearchProvider = &tfTypes.APIOpenSearchProvider{}
-		r.APIOpenSearchProvider.Description = types.StringPointerValue(resp.APIOpenSearchProvider.Description)
-		r.Description = r.APIOpenSearchProvider.Description
-		r.APIOpenSearchProvider.Endpoint = types.StringValue(resp.APIOpenSearchProvider.Endpoint)
-		r.APIOpenSearchProvider.ID = types.StringValue(resp.APIOpenSearchProvider.ID)
-		r.ID = r.APIOpenSearchProvider.ID
-		r.APIOpenSearchProvider.Password = types.StringValue(resp.APIOpenSearchProvider.Password)
-		r.APIOpenSearchProvider.Type = types.StringValue(resp.APIOpenSearchProvider.Type)
-		r.Type = r.APIOpenSearchProvider.Type
-		r.APIOpenSearchProvider.Username = types.StringValue(resp.APIOpenSearchProvider.Username)
+		r.APIOpensearch = &tfTypes.APIOpenSearchProvider{}
+		r.APIOpensearch.Description = types.StringPointerValue(resp.APIOpenSearchProvider.Description)
+		r.Description = r.APIOpensearch.Description
+		r.APIOpensearch.Endpoint = types.StringValue(resp.APIOpenSearchProvider.Endpoint)
+		r.APIOpensearch.ID = types.StringValue(resp.APIOpenSearchProvider.ID)
+		r.ID = r.APIOpensearch.ID
+		r.APIOpensearch.Password = types.StringValue(resp.APIOpenSearchProvider.Password)
+		r.APIOpensearch.Type = types.StringValue(resp.APIOpenSearchProvider.Type)
+		r.Type = r.APIOpensearch.Type
+		r.APIOpensearch.Username = types.StringValue(resp.APIOpenSearchProvider.Username)
 	}
 	if resp.APITailscaleProvider != nil {
-		r.APITailscaleProvider = &tfTypes.APITailscaleProvider{}
-		r.APITailscaleProvider.AccountConfigs = []tfTypes.TailscaleAccountConfig{}
+		r.APITailscale = &tfTypes.APITailscaleProvider{}
+		r.APITailscale.AccountConfigs = []tfTypes.TailscaleAccountConfig{}
 
 		for _, accountConfigsItem6 := range resp.APITailscaleProvider.AccountConfigs {
 			var accountConfigs6 tfTypes.TailscaleAccountConfig
@@ -244,18 +244,18 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs6.ClientSecret = types.StringValue(accountConfigsItem6.ClientSecret)
 			accountConfigs6.Name = types.StringValue(accountConfigsItem6.Name)
 
-			r.APITailscaleProvider.AccountConfigs = append(r.APITailscaleProvider.AccountConfigs, accountConfigs6)
+			r.APITailscale.AccountConfigs = append(r.APITailscale.AccountConfigs, accountConfigs6)
 		}
-		r.APITailscaleProvider.Description = types.StringPointerValue(resp.APITailscaleProvider.Description)
-		r.Description = r.APITailscaleProvider.Description
-		r.APITailscaleProvider.ID = types.StringValue(resp.APITailscaleProvider.ID)
-		r.ID = r.APITailscaleProvider.ID
-		r.APITailscaleProvider.Type = types.StringValue(resp.APITailscaleProvider.Type)
-		r.Type = r.APITailscaleProvider.Type
+		r.APITailscale.Description = types.StringPointerValue(resp.APITailscaleProvider.Description)
+		r.Description = r.APITailscale.Description
+		r.APITailscale.ID = types.StringValue(resp.APITailscaleProvider.ID)
+		r.ID = r.APITailscale.ID
+		r.APITailscale.Type = types.StringValue(resp.APITailscaleProvider.Type)
+		r.Type = r.APITailscale.Type
 	}
 	if resp.APIZoomProvider != nil {
-		r.APIZoomProvider = &tfTypes.APIZoomProvider{}
-		r.APIZoomProvider.AccountConfigs = []tfTypes.ZoomAccountConfig{}
+		r.APIZoom = &tfTypes.APIZoomProvider{}
+		r.APIZoom.AccountConfigs = []tfTypes.ZoomAccountConfig{}
 
 		for _, accountConfigsItem7 := range resp.APIZoomProvider.AccountConfigs {
 			var accountConfigs7 tfTypes.ZoomAccountConfig
@@ -265,40 +265,40 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			accountConfigs7.ClientSecret = types.StringValue(accountConfigsItem7.ClientSecret)
 			accountConfigs7.Name = types.StringValue(accountConfigsItem7.Name)
 
-			r.APIZoomProvider.AccountConfigs = append(r.APIZoomProvider.AccountConfigs, accountConfigs7)
+			r.APIZoom.AccountConfigs = append(r.APIZoom.AccountConfigs, accountConfigs7)
 		}
-		r.APIZoomProvider.Description = types.StringPointerValue(resp.APIZoomProvider.Description)
-		r.Description = r.APIZoomProvider.Description
-		r.APIZoomProvider.ID = types.StringValue(resp.APIZoomProvider.ID)
-		r.ID = r.APIZoomProvider.ID
-		r.APIZoomProvider.Type = types.StringValue(resp.APIZoomProvider.Type)
-		r.Type = r.APIZoomProvider.Type
+		r.APIZoom.Description = types.StringPointerValue(resp.APIZoomProvider.Description)
+		r.Description = r.APIZoom.Description
+		r.APIZoom.ID = types.StringValue(resp.APIZoomProvider.ID)
+		r.ID = r.APIZoom.ID
+		r.APIZoom.Type = types.StringValue(resp.APIZoomProvider.Type)
+		r.Type = r.APIZoom.Type
 	}
 	if resp.AwsSecurityLakeProvider != nil {
-		r.AwsSecurityLakeProvider = &tfTypes.AwsSecurityLakeProvider{}
-		r.AwsSecurityLakeProvider.Description = types.StringPointerValue(resp.AwsSecurityLakeProvider.Description)
-		r.Description = r.AwsSecurityLakeProvider.Description
-		r.AwsSecurityLakeProvider.ID = types.StringValue(resp.AwsSecurityLakeProvider.ID)
-		r.ID = r.AwsSecurityLakeProvider.ID
-		r.AwsSecurityLakeProvider.Type = types.StringValue(resp.AwsSecurityLakeProvider.Type)
-		r.Type = r.AwsSecurityLakeProvider.Type
+		r.AmazonSecurityLake = &tfTypes.AwsSecurityLakeProvider{}
+		r.AmazonSecurityLake.Description = types.StringPointerValue(resp.AwsSecurityLakeProvider.Description)
+		r.Description = r.AmazonSecurityLake.Description
+		r.AmazonSecurityLake.ID = types.StringValue(resp.AwsSecurityLakeProvider.ID)
+		r.ID = r.AmazonSecurityLake.ID
+		r.AmazonSecurityLake.Type = types.StringValue(resp.AwsSecurityLakeProvider.Type)
+		r.Type = r.AmazonSecurityLake.Type
 	}
 	if resp.AzureBlobProvider != nil {
-		r.AzureBlobProvider = &tfTypes.AzureBlobProvider{}
+		r.AzureBlob = &tfTypes.AzureBlobProvider{}
 		if resp.AzureBlobProvider.AuthenticationMethod != nil {
-			r.AzureBlobProvider.AuthenticationMethod = types.StringValue(string(*resp.AzureBlobProvider.AuthenticationMethod))
+			r.AzureBlob.AuthenticationMethod = types.StringValue(string(*resp.AzureBlobProvider.AuthenticationMethod))
 		} else {
-			r.AzureBlobProvider.AuthenticationMethod = types.StringNull()
+			r.AzureBlob.AuthenticationMethod = types.StringNull()
 		}
-		r.AzureBlobProvider.ClientID = types.StringPointerValue(resp.AzureBlobProvider.ClientID)
-		r.AzureBlobProvider.ClientSecret = types.StringPointerValue(resp.AzureBlobProvider.ClientSecret)
-		r.AzureBlobProvider.ConnectionString = types.StringPointerValue(resp.AzureBlobProvider.ConnectionString)
-		r.AzureBlobProvider.Description = types.StringPointerValue(resp.AzureBlobProvider.Description)
-		r.Description = r.AzureBlobProvider.Description
-		r.AzureBlobProvider.ID = types.StringValue(resp.AzureBlobProvider.ID)
-		r.ID = r.AzureBlobProvider.ID
-		r.AzureBlobProvider.Location = types.StringValue(resp.AzureBlobProvider.Location)
-		r.AzureBlobProvider.SasConfigs = []tfTypes.SasConfig{}
+		r.AzureBlob.ClientID = types.StringPointerValue(resp.AzureBlobProvider.ClientID)
+		r.AzureBlob.ClientSecret = types.StringPointerValue(resp.AzureBlobProvider.ClientSecret)
+		r.AzureBlob.ConnectionString = types.StringPointerValue(resp.AzureBlobProvider.ConnectionString)
+		r.AzureBlob.Description = types.StringPointerValue(resp.AzureBlobProvider.Description)
+		r.Description = r.AzureBlob.Description
+		r.AzureBlob.ID = types.StringValue(resp.AzureBlobProvider.ID)
+		r.ID = r.AzureBlob.ID
+		r.AzureBlob.Location = types.StringValue(resp.AzureBlobProvider.Location)
+		r.AzureBlob.SasConfigs = []tfTypes.SasConfig{}
 
 		for _, sasConfigsItem := range resp.AzureBlobProvider.SasConfigs {
 			var sasConfigs tfTypes.SasConfig
@@ -306,133 +306,133 @@ func (r *SearchDatasetProviderDataSourceModel) RefreshFromSharedGenericProvider(
 			sasConfigs.BlobSasURL = types.StringValue(sasConfigsItem.BlobSasURL)
 			sasConfigs.ContainerName = types.StringValue(sasConfigsItem.ContainerName)
 
-			r.AzureBlobProvider.SasConfigs = append(r.AzureBlobProvider.SasConfigs, sasConfigs)
+			r.AzureBlob.SasConfigs = append(r.AzureBlob.SasConfigs, sasConfigs)
 		}
-		r.AzureBlobProvider.StorageAccountName = types.StringPointerValue(resp.AzureBlobProvider.StorageAccountName)
-		r.AzureBlobProvider.TenantID = types.StringPointerValue(resp.AzureBlobProvider.TenantID)
-		r.AzureBlobProvider.Type = types.StringValue(resp.AzureBlobProvider.Type)
-		r.Type = r.AzureBlobProvider.Type
+		r.AzureBlob.StorageAccountName = types.StringPointerValue(resp.AzureBlobProvider.StorageAccountName)
+		r.AzureBlob.TenantID = types.StringPointerValue(resp.AzureBlobProvider.TenantID)
+		r.AzureBlob.Type = types.StringValue(resp.AzureBlobProvider.Type)
+		r.Type = r.AzureBlob.Type
 	}
 	if resp.ClickHouseProvider != nil {
-		r.ClickHouseProvider = &tfTypes.ClickHouseProvider{}
-		r.ClickHouseProvider.Description = types.StringPointerValue(resp.ClickHouseProvider.Description)
-		r.Description = r.ClickHouseProvider.Description
-		r.ClickHouseProvider.Endpoint = types.StringValue(resp.ClickHouseProvider.Endpoint)
-		r.ClickHouseProvider.ID = types.StringValue(resp.ClickHouseProvider.ID)
-		r.ID = r.ClickHouseProvider.ID
-		r.ClickHouseProvider.Password = types.StringPointerValue(resp.ClickHouseProvider.Password)
-		r.ClickHouseProvider.Type = types.StringValue(resp.ClickHouseProvider.Type)
-		r.Type = r.ClickHouseProvider.Type
-		r.ClickHouseProvider.Username = types.StringValue(resp.ClickHouseProvider.Username)
+		r.Clickhouse = &tfTypes.ClickHouseProvider{}
+		r.Clickhouse.Description = types.StringPointerValue(resp.ClickHouseProvider.Description)
+		r.Description = r.Clickhouse.Description
+		r.Clickhouse.Endpoint = types.StringValue(resp.ClickHouseProvider.Endpoint)
+		r.Clickhouse.ID = types.StringValue(resp.ClickHouseProvider.ID)
+		r.ID = r.Clickhouse.ID
+		r.Clickhouse.Password = types.StringPointerValue(resp.ClickHouseProvider.Password)
+		r.Clickhouse.Type = types.StringValue(resp.ClickHouseProvider.Type)
+		r.Type = r.Clickhouse.Type
+		r.Clickhouse.Username = types.StringValue(resp.ClickHouseProvider.Username)
 	}
 	if resp.CriblLeaderProvider != nil {
-		r.CriblLeaderProvider = &tfTypes.CriblLeaderProvider{}
-		r.CriblLeaderProvider.Description = types.StringPointerValue(resp.CriblLeaderProvider.Description)
-		r.Description = r.CriblLeaderProvider.Description
-		r.CriblLeaderProvider.ID = types.StringValue(resp.CriblLeaderProvider.ID)
-		r.ID = r.CriblLeaderProvider.ID
-		r.CriblLeaderProvider.Type = types.StringValue(resp.CriblLeaderProvider.Type)
-		r.Type = r.CriblLeaderProvider.Type
+		r.CriblLeader = &tfTypes.CriblLeaderProvider{}
+		r.CriblLeader.Description = types.StringPointerValue(resp.CriblLeaderProvider.Description)
+		r.Description = r.CriblLeader.Description
+		r.CriblLeader.ID = types.StringValue(resp.CriblLeaderProvider.ID)
+		r.ID = r.CriblLeader.ID
+		r.CriblLeader.Type = types.StringValue(resp.CriblLeaderProvider.Type)
+		r.Type = r.CriblLeader.Type
 	}
 	if resp.CriblSearchProvider != nil {
-		r.CriblSearchProvider = &tfTypes.CriblSearchProvider{}
-		r.CriblSearchProvider.Description = types.StringPointerValue(resp.CriblSearchProvider.Description)
-		r.Description = r.CriblSearchProvider.Description
-		r.CriblSearchProvider.ID = types.StringValue(resp.CriblSearchProvider.ID)
-		r.ID = r.CriblSearchProvider.ID
-		r.CriblSearchProvider.Type = types.StringValue(resp.CriblSearchProvider.Type)
-		r.Type = r.CriblSearchProvider.Type
+		r.CriblSearch = &tfTypes.CriblSearchProvider{}
+		r.CriblSearch.Description = types.StringPointerValue(resp.CriblSearchProvider.Description)
+		r.Description = r.CriblSearch.Description
+		r.CriblSearch.ID = types.StringValue(resp.CriblSearchProvider.ID)
+		r.ID = r.CriblSearch.ID
+		r.CriblSearch.Type = types.StringValue(resp.CriblSearchProvider.Type)
+		r.Type = r.CriblSearch.Type
 	}
 	if resp.EdgeProvider != nil {
-		r.EdgeProvider = &tfTypes.EdgeProvider{}
-		r.EdgeProvider.Description = types.StringPointerValue(resp.EdgeProvider.Description)
-		r.Description = r.EdgeProvider.Description
-		r.EdgeProvider.ID = types.StringValue(resp.EdgeProvider.ID)
-		r.ID = r.EdgeProvider.ID
-		r.EdgeProvider.Type = types.StringValue(resp.EdgeProvider.Type)
-		r.Type = r.EdgeProvider.Type
+		r.CriblEdge = &tfTypes.EdgeProvider{}
+		r.CriblEdge.Description = types.StringPointerValue(resp.EdgeProvider.Description)
+		r.Description = r.CriblEdge.Description
+		r.CriblEdge.ID = types.StringValue(resp.EdgeProvider.ID)
+		r.ID = r.CriblEdge.ID
+		r.CriblEdge.Type = types.StringValue(resp.EdgeProvider.Type)
+		r.Type = r.CriblEdge.Type
 	}
 	if resp.GcsProvider != nil {
-		r.GcsProvider = &tfTypes.GcsProvider{}
-		r.GcsProvider.Description = types.StringPointerValue(resp.GcsProvider.Description)
-		r.Description = r.GcsProvider.Description
-		r.GcsProvider.Endpoint = types.StringPointerValue(resp.GcsProvider.Endpoint)
-		r.GcsProvider.ID = types.StringValue(resp.GcsProvider.ID)
-		r.ID = r.GcsProvider.ID
-		r.GcsProvider.ServiceAccountCredentials = types.StringValue(resp.GcsProvider.ServiceAccountCredentials)
-		r.GcsProvider.Type = types.StringValue(resp.GcsProvider.Type)
-		r.Type = r.GcsProvider.Type
+		r.Gcs = &tfTypes.GcsProvider{}
+		r.Gcs.Description = types.StringPointerValue(resp.GcsProvider.Description)
+		r.Description = r.Gcs.Description
+		r.Gcs.Endpoint = types.StringPointerValue(resp.GcsProvider.Endpoint)
+		r.Gcs.ID = types.StringValue(resp.GcsProvider.ID)
+		r.ID = r.Gcs.ID
+		r.Gcs.ServiceAccountCredentials = types.StringValue(resp.GcsProvider.ServiceAccountCredentials)
+		r.Gcs.Type = types.StringValue(resp.GcsProvider.Type)
+		r.Type = r.Gcs.Type
 	}
 	if resp.MetaProvider != nil {
-		r.MetaProvider = &tfTypes.MetaProvider{}
-		r.MetaProvider.Description = types.StringPointerValue(resp.MetaProvider.Description)
-		r.Description = r.MetaProvider.Description
-		r.MetaProvider.ID = types.StringValue(resp.MetaProvider.ID)
-		r.ID = r.MetaProvider.ID
-		r.MetaProvider.Type = types.StringValue(resp.MetaProvider.Type)
-		r.Type = r.MetaProvider.Type
+		r.CriblMeta = &tfTypes.MetaProvider{}
+		r.CriblMeta.Description = types.StringPointerValue(resp.MetaProvider.Description)
+		r.Description = r.CriblMeta.Description
+		r.CriblMeta.ID = types.StringValue(resp.MetaProvider.ID)
+		r.ID = r.CriblMeta.ID
+		r.CriblMeta.Type = types.StringValue(resp.MetaProvider.Type)
+		r.Type = r.CriblMeta.Type
 	}
 	if resp.PrometheusProvider != nil {
-		r.PrometheusProvider = &tfTypes.PrometheusProvider{}
+		r.Prometheus = &tfTypes.PrometheusProvider{}
 		if resp.PrometheusProvider.AuthType != nil {
-			r.PrometheusProvider.AuthType = types.StringValue(string(*resp.PrometheusProvider.AuthType))
+			r.Prometheus.AuthType = types.StringValue(string(*resp.PrometheusProvider.AuthType))
 		} else {
-			r.PrometheusProvider.AuthType = types.StringNull()
+			r.Prometheus.AuthType = types.StringNull()
 		}
-		r.PrometheusProvider.Description = types.StringPointerValue(resp.PrometheusProvider.Description)
-		r.Description = r.PrometheusProvider.Description
-		r.PrometheusProvider.Endpoint = types.StringValue(resp.PrometheusProvider.Endpoint)
-		r.PrometheusProvider.ID = types.StringValue(resp.PrometheusProvider.ID)
-		r.ID = r.PrometheusProvider.ID
-		r.PrometheusProvider.MaxConcurrency = types.Float64PointerValue(resp.PrometheusProvider.MaxConcurrency)
-		r.PrometheusProvider.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
-		r.PrometheusProvider.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
-		r.PrometheusProvider.Type = types.StringValue(resp.PrometheusProvider.Type)
-		r.Type = r.PrometheusProvider.Type
-		r.PrometheusProvider.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
+		r.Prometheus.Description = types.StringPointerValue(resp.PrometheusProvider.Description)
+		r.Description = r.Prometheus.Description
+		r.Prometheus.Endpoint = types.StringValue(resp.PrometheusProvider.Endpoint)
+		r.Prometheus.ID = types.StringValue(resp.PrometheusProvider.ID)
+		r.ID = r.Prometheus.ID
+		r.Prometheus.MaxConcurrency = types.Float64PointerValue(resp.PrometheusProvider.MaxConcurrency)
+		r.Prometheus.Password = types.StringPointerValue(resp.PrometheusProvider.Password)
+		r.Prometheus.Token = types.StringPointerValue(resp.PrometheusProvider.Token)
+		r.Prometheus.Type = types.StringValue(resp.PrometheusProvider.Type)
+		r.Type = r.Prometheus.Type
+		r.Prometheus.Username = types.StringPointerValue(resp.PrometheusProvider.Username)
 	}
 	if resp.S3Provider != nil {
-		r.S3Provider = &tfTypes.S3Provider{}
-		r.S3Provider.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
-		r.S3Provider.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
-		r.S3Provider.AwsAPIKey = types.StringPointerValue(resp.S3Provider.AwsAPIKey)
+		r.S3 = &tfTypes.S3Provider{}
+		r.S3.AssumeRoleArn = types.StringPointerValue(resp.S3Provider.AssumeRoleArn)
+		r.S3.AssumeRoleExternalID = types.StringPointerValue(resp.S3Provider.AssumeRoleExternalID)
+		r.S3.AwsAPIKey = types.StringPointerValue(resp.S3Provider.AwsAPIKey)
 		if resp.S3Provider.AwsAuthenticationMethod != nil {
-			r.S3Provider.AwsAuthenticationMethod = types.StringValue(string(*resp.S3Provider.AwsAuthenticationMethod))
+			r.S3.AwsAuthenticationMethod = types.StringValue(string(*resp.S3Provider.AwsAuthenticationMethod))
 		} else {
-			r.S3Provider.AwsAuthenticationMethod = types.StringNull()
+			r.S3.AwsAuthenticationMethod = types.StringNull()
 		}
-		r.S3Provider.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
-		r.S3Provider.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
-		r.S3Provider.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
-		r.S3Provider.Description = types.StringPointerValue(resp.S3Provider.Description)
-		r.Description = r.S3Provider.Description
-		r.S3Provider.EnableAbacTagging = types.BoolPointerValue(resp.S3Provider.EnableAbacTagging)
-		r.S3Provider.EnableAssumeRole = types.BoolPointerValue(resp.S3Provider.EnableAssumeRole)
-		r.S3Provider.Endpoint = types.StringPointerValue(resp.S3Provider.Endpoint)
-		r.S3Provider.ID = types.StringValue(resp.S3Provider.ID)
-		r.ID = r.S3Provider.ID
-		r.S3Provider.Region = types.StringPointerValue(resp.S3Provider.Region)
-		r.S3Provider.RejectUnauthorized = types.BoolPointerValue(resp.S3Provider.RejectUnauthorized)
-		r.S3Provider.ReuseConnections = types.BoolPointerValue(resp.S3Provider.ReuseConnections)
-		r.S3Provider.SessionToken = types.StringPointerValue(resp.S3Provider.SessionToken)
-		r.S3Provider.SignatureVersion = types.StringValue(string(resp.S3Provider.SignatureVersion))
-		r.S3Provider.Type = types.StringValue(resp.S3Provider.Type)
-		r.Type = r.S3Provider.Type
+		r.S3.AwsSecretKey = types.StringPointerValue(resp.S3Provider.AwsSecretKey)
+		r.S3.Bucket = types.StringPointerValue(resp.S3Provider.Bucket)
+		r.S3.BucketPathSuggestion = types.StringPointerValue(resp.S3Provider.BucketPathSuggestion)
+		r.S3.Description = types.StringPointerValue(resp.S3Provider.Description)
+		r.Description = r.S3.Description
+		r.S3.EnableAbacTagging = types.BoolPointerValue(resp.S3Provider.EnableAbacTagging)
+		r.S3.EnableAssumeRole = types.BoolPointerValue(resp.S3Provider.EnableAssumeRole)
+		r.S3.Endpoint = types.StringPointerValue(resp.S3Provider.Endpoint)
+		r.S3.ID = types.StringValue(resp.S3Provider.ID)
+		r.ID = r.S3.ID
+		r.S3.Region = types.StringPointerValue(resp.S3Provider.Region)
+		r.S3.RejectUnauthorized = types.BoolPointerValue(resp.S3Provider.RejectUnauthorized)
+		r.S3.ReuseConnections = types.BoolPointerValue(resp.S3Provider.ReuseConnections)
+		r.S3.SessionToken = types.StringPointerValue(resp.S3Provider.SessionToken)
+		r.S3.SignatureVersion = types.StringValue(string(resp.S3Provider.SignatureVersion))
+		r.S3.Type = types.StringValue(resp.S3Provider.Type)
+		r.Type = r.S3.Type
 	}
 	if resp.SnowflakeProvider != nil {
-		r.SnowflakeProvider = &tfTypes.SnowflakeProvider{}
-		r.SnowflakeProvider.AccountIdentifier = types.StringValue(resp.SnowflakeProvider.AccountIdentifier)
-		r.SnowflakeProvider.Description = types.StringPointerValue(resp.SnowflakeProvider.Description)
-		r.Description = r.SnowflakeProvider.Description
-		r.SnowflakeProvider.Endpoint = types.StringPointerValue(resp.SnowflakeProvider.Endpoint)
-		r.SnowflakeProvider.ID = types.StringValue(resp.SnowflakeProvider.ID)
-		r.ID = r.SnowflakeProvider.ID
-		r.SnowflakeProvider.MaxConcurrency = types.Int64PointerValue(resp.SnowflakeProvider.MaxConcurrency)
-		r.SnowflakeProvider.Passphrase = types.StringPointerValue(resp.SnowflakeProvider.Passphrase)
-		r.SnowflakeProvider.PrivKey = types.StringValue(resp.SnowflakeProvider.PrivKey)
-		r.SnowflakeProvider.Type = types.StringValue(resp.SnowflakeProvider.Type)
-		r.Type = r.SnowflakeProvider.Type
-		r.SnowflakeProvider.Username = types.StringValue(resp.SnowflakeProvider.Username)
+		r.Snowflake = &tfTypes.SnowflakeProvider{}
+		r.Snowflake.AccountIdentifier = types.StringValue(resp.SnowflakeProvider.AccountIdentifier)
+		r.Snowflake.Description = types.StringPointerValue(resp.SnowflakeProvider.Description)
+		r.Description = r.Snowflake.Description
+		r.Snowflake.Endpoint = types.StringPointerValue(resp.SnowflakeProvider.Endpoint)
+		r.Snowflake.ID = types.StringValue(resp.SnowflakeProvider.ID)
+		r.ID = r.Snowflake.ID
+		r.Snowflake.MaxConcurrency = types.Int64PointerValue(resp.SnowflakeProvider.MaxConcurrency)
+		r.Snowflake.Passphrase = types.StringPointerValue(resp.SnowflakeProvider.Passphrase)
+		r.Snowflake.PrivKey = types.StringValue(resp.SnowflakeProvider.PrivKey)
+		r.Snowflake.Type = types.StringValue(resp.SnowflakeProvider.Type)
+		r.Type = r.Snowflake.Type
+		r.Snowflake.Username = types.StringValue(resp.SnowflakeProvider.Username)
 	}
 
 	return diags

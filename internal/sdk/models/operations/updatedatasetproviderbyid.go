@@ -28,95 +28,95 @@ func (u *UpdateDatasetProviderByIDRequest) GetGenericProvider() shared.GenericPr
 	return u.GenericProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIHTTPProvider() *shared.APIHTTPProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIHTTP() *shared.APIHTTPProvider {
 	return u.GetGenericProvider().APIHTTPProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAwsProvider() *shared.APIAwsProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAws() *shared.APIAwsProvider {
 	return u.GetGenericProvider().APIAwsProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAzureProvider() *shared.APIAzureProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAzure() *shared.APIAzureProvider {
 	return u.GetGenericProvider().APIAzureProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIGcpProvider() *shared.APIGcpProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIGcp() *shared.APIGcpProvider {
 	return u.GetGenericProvider().APIGcpProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIGoogleWorkspaceProvider() *shared.APIGoogleWorkspaceProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIGoogleWorkspace() *shared.APIGoogleWorkspaceProvider {
 	return u.GetGenericProvider().APIGoogleWorkspaceProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIMsGraphProvider() *shared.APIMsGraphProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIMsgraph() *shared.APIMsGraphProvider {
 	return u.GetGenericProvider().APIMsGraphProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIOktaProvider() *shared.APIOktaProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIOkta() *shared.APIOktaProvider {
 	return u.GetGenericProvider().APIOktaProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPITailscaleProvider() *shared.APITailscaleProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPITailscale() *shared.APITailscaleProvider {
 	return u.GetGenericProvider().APITailscaleProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIZoomProvider() *shared.APIZoomProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIZoom() *shared.APIZoomProvider {
 	return u.GetGenericProvider().APIZoomProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAzureDataExplorerProvider() *shared.APIAzureDataExplorerProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIAzureDataExplorer() *shared.APIAzureDataExplorerProvider {
 	return u.GetGenericProvider().APIAzureDataExplorerProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderSnowflakeProvider() *shared.SnowflakeProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderSnowflake() *shared.SnowflakeProvider {
 	return u.GetGenericProvider().SnowflakeProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderClickHouseProvider() *shared.ClickHouseProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderClickhouse() *shared.ClickHouseProvider {
 	return u.GetGenericProvider().ClickHouseProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderPrometheusProvider() *shared.PrometheusProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderPrometheus() *shared.PrometheusProvider {
 	return u.GetGenericProvider().PrometheusProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIOpenSearchProvider() *shared.APIOpenSearchProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIOpensearch() *shared.APIOpenSearchProvider {
 	return u.GetGenericProvider().APIOpenSearchProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIElasticSearchProvider() *shared.APIElasticSearchProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAPIElasticsearch() *shared.APIElasticSearchProvider {
 	return u.GetGenericProvider().APIElasticSearchProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAwsSecurityLakeProvider() *shared.AwsSecurityLakeProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAmazonSecurityLake() *shared.AwsSecurityLakeProvider {
 	return u.GetGenericProvider().AwsSecurityLakeProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderS3Provider() *shared.S3Provider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderS3() *shared.S3Provider {
 	return u.GetGenericProvider().S3Provider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblLeaderProvider() *shared.CriblLeaderProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblLeader() *shared.CriblLeaderProvider {
 	return u.GetGenericProvider().CriblLeaderProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblSearchProvider() *shared.CriblSearchProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblSearch() *shared.CriblSearchProvider {
 	return u.GetGenericProvider().CriblSearchProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderMetaProvider() *shared.MetaProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblMeta() *shared.MetaProvider {
 	return u.GetGenericProvider().MetaProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderEdgeProvider() *shared.EdgeProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderCriblEdge() *shared.EdgeProvider {
 	return u.GetGenericProvider().EdgeProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAzureBlobProvider() *shared.AzureBlobProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderAzureBlob() *shared.AzureBlobProvider {
 	return u.GetGenericProvider().AzureBlobProvider
 }
 
-func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderGcsProvider() *shared.GcsProvider {
+func (u *UpdateDatasetProviderByIDRequest) GetGenericProviderGcs() *shared.GcsProvider {
 	return u.GetGenericProvider().GcsProvider
 }
 

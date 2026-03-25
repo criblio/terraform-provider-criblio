@@ -332,7 +332,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
 															path.MatchRelative().AtParent().AtName("number"),
-															path.MatchRelative().AtParent().AtName("array_of"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 														}...),
 													},
 												},
@@ -341,7 +341,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.Float64{
 														float64validator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
-															path.MatchRelative().AtParent().AtName("array_of"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},
@@ -351,7 +351,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.String{
 														stringvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("number"),
-															path.MatchRelative().AtParent().AtName("array_of"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},

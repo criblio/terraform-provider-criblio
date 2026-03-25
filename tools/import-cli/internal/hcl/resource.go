@@ -94,6 +94,12 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 		if err != nil {
 			return nil, fmt.Errorf("attribute %q: %w", k, err)
 		}
+		if typeName == "criblio_search_dashboard" && k == "elements" {
+			ctyVal, err = PruneSearchDashboardElementsCty(ctyVal)
+			if err != nil {
+				return nil, fmt.Errorf("attribute %q: %w", k, err)
+			}
+		}
 		body.SetAttributeValue(k, ctyVal)
 	}
 	if len(lifecycleIgnoreChanges) > 0 {

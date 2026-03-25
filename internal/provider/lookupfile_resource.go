@@ -160,6 +160,17 @@ func (r *LookupFileResource) Configure(ctx context.Context, req resource.Configu
 	r.client = client
 }
 
+// lookupFilePreserveContentFromState keeps content in state when the API omits it on GET.
+// PreferState applies at plan time only; Read would otherwise clear content and cause perpetual drift.
+func lookupFilePreserveContentFromState(data *LookupFileResourceModel, prior types.String) {
+	if prior.IsNull() || prior.IsUnknown() {
+		return
+	}
+	if data.Content.IsNull() || data.Content.IsUnknown() {
+		data.Content = prior
+	}
+}
+
 func (r *LookupFileResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *LookupFileResourceModel
 	var plan types.Object
@@ -268,11 +279,14 @@ func (r *LookupFileResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+	priorContent := data.Content
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetLookupFileByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	lookupFilePreserveContentFromState(data, priorContent)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

@@ -5305,6 +5305,7 @@ resource "criblio_destination" "my_destination" {
 
 ### Optional
 
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `output_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob))
 - `output_azure_data_explorer` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer))
 - `output_azure_eventhub` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub))
@@ -5376,10 +5377,6 @@ resource "criblio_destination" "my_destination" {
 - `output_webhook` (Attributes) (see [below for nested schema](#nestedatt--output_webhook))
 - `output_wiz_hec` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec))
 - `output_xsiam` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam))
-
-### Read-Only
-
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `type` (String)
 

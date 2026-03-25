@@ -177,6 +177,22 @@ func TestReplaceSecretValuesWithVariableRefs_tokenPlaceholder(t *testing.T) {
 	assert.True(t, isVariableName(tokenVal.Sensitive))
 }
 
+func TestReplaceSecretValuesWithVariableRefs_token_timeout_secs_not_secret(t *testing.T) {
+	// token_timeout_secs must not be treated as .token (substring match); export should not create tfvars for it.
+	attrs := map[string]Value{
+		"output_open_telemetry": {
+			Kind: KindMap,
+			Map: map[string]Value{
+				"token_timeout_secs": {Kind: KindString, String: "3600"},
+			},
+		},
+	}
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "destination_default_elastic_otel")
+	assert.Empty(t, used)
+	assert.Equal(t, KindString, attrs["output_open_telemetry"].Map["token_timeout_secs"].Kind)
+	assert.Equal(t, "3600", attrs["output_open_telemetry"].Map["token_timeout_secs"].String)
+}
+
 // TestModelToValue_complex_nested validates lists, maps, and nested objects.
 func TestModelToValue_complex_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{

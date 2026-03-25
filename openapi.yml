@@ -3591,6 +3591,30 @@ components:
           example: my generic provider description
       discriminator:
         propertyName: type
+        mapping:
+          api_http: '#/components/schemas/ApiHttpProvider'
+          api_aws: '#/components/schemas/ApiAwsProvider'
+          api_azure: '#/components/schemas/ApiAzureProvider'
+          api_gcp: '#/components/schemas/ApiGcpProvider'
+          api_google_workspace: '#/components/schemas/ApiGoogleWorkspaceProvider'
+          api_msgraph: '#/components/schemas/ApiMsGraphProvider'
+          api_okta: '#/components/schemas/ApiOktaProvider'
+          api_tailscale: '#/components/schemas/ApiTailscaleProvider'
+          api_zoom: '#/components/schemas/ApiZoomProvider'
+          api_azure_data_explorer: '#/components/schemas/ApiAzureDataExplorerProvider'
+          snowflake: '#/components/schemas/SnowflakeProvider'
+          clickhouse: '#/components/schemas/ClickHouseProvider'
+          prometheus: '#/components/schemas/PrometheusProvider'
+          api_opensearch: '#/components/schemas/ApiOpenSearchProvider'
+          api_elasticsearch: '#/components/schemas/ApiElasticSearchProvider'
+          amazon_security_lake: '#/components/schemas/AwsSecurityLakeProvider'
+          s3: '#/components/schemas/S3Provider'
+          cribl_leader: '#/components/schemas/CriblLeaderProvider'
+          cribl_search: '#/components/schemas/CriblSearchProvider'
+          cribl_meta: '#/components/schemas/MetaProvider'
+          cribl_edge: '#/components/schemas/EdgeProvider'
+          azure_blob: '#/components/schemas/AzureBlobProvider'
+          gcs: '#/components/schemas/GcsProvider'
       oneOf:
         - $ref: '#/components/schemas/ApiHttpProvider'
         - $ref: '#/components/schemas/ApiAwsProvider'
@@ -6777,26 +6801,7 @@ components:
             $ref: '#/components/schemas/SearchDashboard'
     ElementConfigType:
       type: object
-      description: Chart/visualization-specific config (e.g. xAxis, yAxis, columns).
-      properties:
-        xAxis:
-          type: string
-          description: X-axis field for charts
-        yAxis:
-          type: string
-          description: Y-axis field for charts
-        columns:
-          type: string
-          description: Column configuration (e.g. auto)
-        maxRows:
-          type: string
-          description: Max rows for tables
-        series:
-          type: string
-          description: Series configuration
-        groupBy:
-          type: string
-          description: Group-by field
+      description: Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
       additionalProperties: true
     TitleAction:
       type: object
