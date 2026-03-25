@@ -338,6 +338,16 @@ func (r *PackResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	// Required and user-set fields must come from config when the plan maps unknown/computed values to
+	// empty strings (UnhandledUnknownAsEmpty). Otherwise pack id/display name are empty and UI-style
+	// POST /packs fails with "Pack name cannot be empty".
+	var cfg PackResourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &cfg)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	mergePackCreateConfigIntoModel(data, &cfg)
+
 	// When creating from file, full source from PUT response (e.g. "file:/opt/.../name.crbl") for PATCH when pack exists.
 	var uploadedFullSource string
 	// If filename is provided, first upload the file via PUT
@@ -1210,14 +1220,36 @@ func fullSourcePath(source string) string {
 	return "file:/opt/cribl_config/state/packs/" + source
 }
 
+// mergePackCreateConfigIntoModel copies identity fields from raw config into the plan model when the plan
+// dropped them (see Create: UnhandledUnknownAsEmpty).
+func mergePackCreateConfigIntoModel(data *PackResourceModel, cfg *PackResourceModel) {
+	if data == nil || cfg == nil {
+		return
+	}
+	if !cfg.ID.IsNull() && !cfg.ID.IsUnknown() && strings.TrimSpace(cfg.ID.ValueString()) != "" {
+		data.ID = cfg.ID
+	}
+	if !cfg.GroupID.IsNull() && !cfg.GroupID.IsUnknown() && strings.TrimSpace(cfg.GroupID.ValueString()) != "" {
+		data.GroupID = cfg.GroupID
+	}
+	if !cfg.DisplayName.IsNull() && !cfg.DisplayName.IsUnknown() && strings.TrimSpace(cfg.DisplayName.ValueString()) != "" {
+		data.DisplayName = cfg.DisplayName
+	}
+	if !cfg.Filename.IsNull() && !cfg.Filename.IsUnknown() && strings.TrimSpace(cfg.Filename.ValueString()) != "" {
+		data.Filename = cfg.Filename
+	}
+}
+
 // effectivePackIDForAPI returns the pack ID to use for pack API calls (GetPacksByID, pack/settings, etc.).
 // The Cribl API normalizes pack IDs (e.g. to lowercase) when creating; these endpoints are case-sensitive.
 // When Items is populated from an install response, use Items[0].ID; otherwise use lowercase of config id.
 func effectivePackIDForAPI(data *PackResourceModel) string {
 	if len(data.Items) > 0 && !data.Items[0].ID.IsNull() && !data.Items[0].ID.IsUnknown() {
-		return data.Items[0].ID.ValueString()
+		if s := strings.TrimSpace(data.Items[0].ID.ValueString()); s != "" {
+			return s
+		}
 	}
-	return strings.ToLower(data.ID.ValueString())
+	return strings.ToLower(strings.TrimSpace(data.ID.ValueString()))
 }
 
 // packInstallDisplayName returns the human-readable name for UI-style pack install POST (items array).
