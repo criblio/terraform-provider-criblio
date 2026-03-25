@@ -5,8 +5,6 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -175,7 +173,7 @@ func (r *PackRoutesResourceModel) ToOperationsCreateRoutesByPackRequest(ctx cont
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -201,7 +199,7 @@ func (r *PackRoutesResourceModel) ToOperationsGetRoutesByPackRequest(ctx context
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -269,7 +267,7 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		} else {
 			final = nil
 		}
-		var additionalProperties interface{}
+		var additionalProperties map[string]any
 		if !r.Routes[routesIndex].AdditionalProperties.IsUnknown() && !r.Routes[routesIndex].AdditionalProperties.IsNull() {
 			_ = json.Unmarshal([]byte(r.Routes[routesIndex].AdditionalProperties.ValueString()), &additionalProperties)
 		}
@@ -318,7 +316,7 @@ func (r *PackRoutesResourceModel) ToSharedRoutesInput(ctx context.Context) (*sha
 		} else {
 			comment = nil
 		}
-		var additionalProperties1 interface{}
+		var additionalProperties1 map[string]any
 		if !r.Comments[commentsIndex].AdditionalProperties.IsUnknown() && !r.Comments[commentsIndex].AdditionalProperties.IsNull() {
 			_ = json.Unmarshal([]byte(r.Comments[commentsIndex].AdditionalProperties.ValueString()), &additionalProperties1)
 		}

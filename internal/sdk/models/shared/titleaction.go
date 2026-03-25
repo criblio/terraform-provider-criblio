@@ -17,7 +17,7 @@ func (t TitleAction) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TitleAction) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"label", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

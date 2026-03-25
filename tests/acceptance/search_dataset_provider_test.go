@@ -21,9 +21,9 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ConfigDirectory: config.TestNameDirectory(),
 					//ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "id", "test_http"),
-						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "id", "test_elastic"),
-						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "id", "test_s3"),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_searchdatasetprovider", "id", "example_api_http"),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "id", "example_elasticsearch"),
+						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "id", "example_s3"),
 					),
 				},
 			},

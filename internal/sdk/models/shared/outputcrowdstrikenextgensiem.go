@@ -31,333 +31,6 @@ func (e *OutputCrowdstrikeNextGenSiemType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputCrowdstrikeNextGenSiemExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputCrowdstrikeNextGenSiemExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCrowdstrikeNextGenSiemExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCrowdstrikeNextGenSiemExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputCrowdstrikeNextGenSiemExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode string
-
-const (
-	OutputCrowdstrikeNextGenSiemFailedRequestLoggingModePayload           OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode = "payload"
-	OutputCrowdstrikeNextGenSiemFailedRequestLoggingModePayloadAndHeaders OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputCrowdstrikeNextGenSiemFailedRequestLoggingModeNone              OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode = "none"
-)
-
-func (e OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode) ToPointer() *OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode: %v", v)
-	}
-}
-
-// OutputCrowdstrikeNextGenSiemRequestFormat - When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.
-type OutputCrowdstrikeNextGenSiemRequestFormat string
-
-const (
-	OutputCrowdstrikeNextGenSiemRequestFormatJSON OutputCrowdstrikeNextGenSiemRequestFormat = "JSON"
-	OutputCrowdstrikeNextGenSiemRequestFormatRaw  OutputCrowdstrikeNextGenSiemRequestFormat = "raw"
-)
-
-func (e OutputCrowdstrikeNextGenSiemRequestFormat) ToPointer() *OutputCrowdstrikeNextGenSiemRequestFormat {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemRequestFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "JSON":
-		fallthrough
-	case "raw":
-		*e = OutputCrowdstrikeNextGenSiemRequestFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemRequestFormat: %v", v)
-	}
-}
-
-// OutputCrowdstrikeNextGenSiemAuthenticationMethod - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-type OutputCrowdstrikeNextGenSiemAuthenticationMethod string
-
-const (
-	OutputCrowdstrikeNextGenSiemAuthenticationMethodManual OutputCrowdstrikeNextGenSiemAuthenticationMethod = "manual"
-	OutputCrowdstrikeNextGenSiemAuthenticationMethodSecret OutputCrowdstrikeNextGenSiemAuthenticationMethod = "secret"
-)
-
-func (e OutputCrowdstrikeNextGenSiemAuthenticationMethod) ToPointer() *OutputCrowdstrikeNextGenSiemAuthenticationMethod {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputCrowdstrikeNextGenSiemAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemAuthenticationMethod: %v", v)
-	}
-}
-
-type OutputCrowdstrikeNextGenSiemResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputCrowdstrikeNextGenSiemResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputCrowdstrikeNextGenSiemResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputCrowdstrikeNextGenSiemTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputCrowdstrikeNextGenSiemBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputCrowdstrikeNextGenSiemBackpressureBehavior string
-
-const (
-	OutputCrowdstrikeNextGenSiemBackpressureBehaviorBlock OutputCrowdstrikeNextGenSiemBackpressureBehavior = "block"
-	OutputCrowdstrikeNextGenSiemBackpressureBehaviorDrop  OutputCrowdstrikeNextGenSiemBackpressureBehavior = "drop"
-	OutputCrowdstrikeNextGenSiemBackpressureBehaviorQueue OutputCrowdstrikeNextGenSiemBackpressureBehavior = "queue"
-)
-
-func (e OutputCrowdstrikeNextGenSiemBackpressureBehavior) ToPointer() *OutputCrowdstrikeNextGenSiemBackpressureBehavior {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputCrowdstrikeNextGenSiemBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputCrowdstrikeNextGenSiemCompression - Codec to use to compress the persisted data
-type OutputCrowdstrikeNextGenSiemCompression string
-
-const (
-	OutputCrowdstrikeNextGenSiemCompressionNone OutputCrowdstrikeNextGenSiemCompression = "none"
-	OutputCrowdstrikeNextGenSiemCompressionGzip OutputCrowdstrikeNextGenSiemCompression = "gzip"
-)
-
-func (e OutputCrowdstrikeNextGenSiemCompression) ToPointer() *OutputCrowdstrikeNextGenSiemCompression {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputCrowdstrikeNextGenSiemCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemCompression: %v", v)
-	}
-}
-
-// OutputCrowdstrikeNextGenSiemQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputCrowdstrikeNextGenSiemQueueFullBehavior string
-
-const (
-	OutputCrowdstrikeNextGenSiemQueueFullBehaviorBlock OutputCrowdstrikeNextGenSiemQueueFullBehavior = "block"
-	OutputCrowdstrikeNextGenSiemQueueFullBehaviorDrop  OutputCrowdstrikeNextGenSiemQueueFullBehavior = "drop"
-)
-
-func (e OutputCrowdstrikeNextGenSiemQueueFullBehavior) ToPointer() *OutputCrowdstrikeNextGenSiemQueueFullBehavior {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputCrowdstrikeNextGenSiemQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputCrowdstrikeNextGenSiemMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputCrowdstrikeNextGenSiemMode string
-
-const (
-	OutputCrowdstrikeNextGenSiemModeError        OutputCrowdstrikeNextGenSiemMode = "error"
-	OutputCrowdstrikeNextGenSiemModeBackpressure OutputCrowdstrikeNextGenSiemMode = "backpressure"
-	OutputCrowdstrikeNextGenSiemModeAlways       OutputCrowdstrikeNextGenSiemMode = "always"
-)
-
-func (e OutputCrowdstrikeNextGenSiemMode) ToPointer() *OutputCrowdstrikeNextGenSiemMode {
-	return &e
-}
-func (e *OutputCrowdstrikeNextGenSiemMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputCrowdstrikeNextGenSiemMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCrowdstrikeNextGenSiemMode: %v", v)
-	}
-}
-
 type OutputCrowdstrikeNextGenSiemPqControls struct {
 }
 
@@ -374,8 +47,8 @@ func (o *OutputCrowdstrikeNextGenSiemPqControls) UnmarshalJSON(data []byte) erro
 
 type OutputCrowdstrikeNextGenSiem struct {
 	// Unique ID for this output
-	ID   *string                           `json:"id,omitempty"`
-	Type *OutputCrowdstrikeNextGenSiemType `json:"type,omitempty"`
+	ID   *string                          `json:"id,omitempty"`
+	Type OutputCrowdstrikeNextGenSiemType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -388,57 +61,69 @@ type OutputCrowdstrikeNextGenSiem struct {
 	// Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
 	URL string `json:"url"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size, in KB, of the request body
-	MaxPayloadSizeKB *float64 `default:"4096" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Headers to add to all events
-	ExtraHTTPHeaders []OutputCrowdstrikeNextGenSiemExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"true" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.
-	Format *OutputCrowdstrikeNextGenSiemRequestFormat `default:"raw" json:"format"`
+	Format RequestFormatOptions `json:"format"`
 	// Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-	AuthType *OutputCrowdstrikeNextGenSiemAuthenticationMethod `default:"manual" json:"authType"`
+	AuthType *AuthenticationMethodOptionsAuthTokensItems `json:"authType,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputCrowdstrikeNextGenSiemResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputCrowdstrikeNextGenSiemBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                                           `json:"description,omitempty"`
-	Token          *string                                           `json:"token,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	Token          *string                      `json:"token,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputCrowdstrikeNextGenSiemCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputCrowdstrikeNextGenSiemQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputCrowdstrikeNextGenSiemMode       `default:"error" json:"pqMode"`
-	PqControls *OutputCrowdstrikeNextGenSiemPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                                 `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputCrowdstrikeNextGenSiemPqControls `json:"pqControls,omitempty"`
+	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputCrowdstrikeNextGenSiem) MarshalJSON() ([]byte, error) {
@@ -446,7 +131,7 @@ func (o OutputCrowdstrikeNextGenSiem) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputCrowdstrikeNextGenSiem) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -459,9 +144,9 @@ func (o *OutputCrowdstrikeNextGenSiem) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetType() *OutputCrowdstrikeNextGenSiemType {
+func (o *OutputCrowdstrikeNextGenSiem) GetType() OutputCrowdstrikeNextGenSiemType {
 	if o == nil {
-		return nil
+		return OutputCrowdstrikeNextGenSiemType("")
 	}
 	return o.Type
 }
@@ -550,7 +235,7 @@ func (o *OutputCrowdstrikeNextGenSiem) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetExtraHTTPHeaders() []OutputCrowdstrikeNextGenSiemExtraHTTPHeader {
+func (o *OutputCrowdstrikeNextGenSiem) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
@@ -564,7 +249,7 @@ func (o *OutputCrowdstrikeNextGenSiem) GetUseRoundRobinDNS() *bool {
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetFailedRequestLoggingMode() *OutputCrowdstrikeNextGenSiemFailedRequestLoggingMode {
+func (o *OutputCrowdstrikeNextGenSiem) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -578,28 +263,28 @@ func (o *OutputCrowdstrikeNextGenSiem) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetFormat() *OutputCrowdstrikeNextGenSiemRequestFormat {
+func (o *OutputCrowdstrikeNextGenSiem) GetFormat() RequestFormatOptions {
 	if o == nil {
-		return nil
+		return RequestFormatOptions("")
 	}
 	return o.Format
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetAuthType() *OutputCrowdstrikeNextGenSiemAuthenticationMethod {
+func (o *OutputCrowdstrikeNextGenSiem) GetAuthType() *AuthenticationMethodOptionsAuthTokensItems {
 	if o == nil {
 		return nil
 	}
 	return o.AuthType
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetResponseRetrySettings() []OutputCrowdstrikeNextGenSiemResponseRetrySetting {
+func (o *OutputCrowdstrikeNextGenSiem) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetTimeoutRetrySettings() *OutputCrowdstrikeNextGenSiemTimeoutRetrySettings {
+func (o *OutputCrowdstrikeNextGenSiem) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -613,7 +298,7 @@ func (o *OutputCrowdstrikeNextGenSiem) GetResponseHonorRetryAfterHeader() *bool 
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetOnBackpressure() *OutputCrowdstrikeNextGenSiemBackpressureBehavior {
+func (o *OutputCrowdstrikeNextGenSiem) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -641,6 +326,41 @@ func (o *OutputCrowdstrikeNextGenSiem) GetTextSecret() *string {
 	return o.TextSecret
 }
 
+func (o *OutputCrowdstrikeNextGenSiem) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputCrowdstrikeNextGenSiem) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputCrowdstrikeNextGenSiem) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputCrowdstrikeNextGenSiem) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputCrowdstrikeNextGenSiem) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputCrowdstrikeNextGenSiem) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -662,25 +382,25 @@ func (o *OutputCrowdstrikeNextGenSiem) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetPqCompress() *OutputCrowdstrikeNextGenSiemCompression {
+func (o *OutputCrowdstrikeNextGenSiem) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetPqOnBackpressure() *OutputCrowdstrikeNextGenSiemQueueFullBehavior {
+func (o *OutputCrowdstrikeNextGenSiem) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputCrowdstrikeNextGenSiem) GetPqMode() *OutputCrowdstrikeNextGenSiemMode {
+func (o *OutputCrowdstrikeNextGenSiem) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputCrowdstrikeNextGenSiem) GetPqControls() *OutputCrowdstrikeNextGenSiemPqControls {
@@ -688,4 +408,11 @@ func (o *OutputCrowdstrikeNextGenSiem) GetPqControls() *OutputCrowdstrikeNextGen
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputCrowdstrikeNextGenSiem) GetTemplateURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateURL
 }

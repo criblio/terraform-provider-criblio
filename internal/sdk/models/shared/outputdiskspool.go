@@ -31,36 +31,9 @@ func (e *OutputDiskSpoolType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputDiskSpoolCompression - Data compression format. Default is gzip.
-type OutputDiskSpoolCompression string
-
-const (
-	OutputDiskSpoolCompressionNone OutputDiskSpoolCompression = "none"
-	OutputDiskSpoolCompressionGzip OutputDiskSpoolCompression = "gzip"
-)
-
-func (e OutputDiskSpoolCompression) ToPointer() *OutputDiskSpoolCompression {
-	return &e
-}
-func (e *OutputDiskSpoolCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputDiskSpoolCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDiskSpoolCompression: %v", v)
-	}
-}
-
 type OutputDiskSpool struct {
 	// Unique ID for this output
-	ID   string              `json:"id"`
+	ID   *string             `json:"id,omitempty"`
 	Type OutputDiskSpoolType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -71,13 +44,13 @@ type OutputDiskSpool struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Time period for grouping spooled events. Default is 10m.
-	TimeWindow *string `default:"10m" json:"timeWindow"`
+	TimeWindow *string `json:"timeWindow,omitempty"`
 	// Maximum disk space that can be consumed before older buckets are deleted. Examples: 420MB, 4GB. Default is 1GB.
-	MaxDataSize *string `default:"1GB" json:"maxDataSize"`
+	MaxDataSize *string `json:"maxDataSize,omitempty"`
 	// Maximum amount of time to retain data before older buckets are deleted. Examples: 2h, 4d. Default is 24h.
-	MaxDataTime *string `default:"24h" json:"maxDataTime"`
+	MaxDataTime *string `json:"maxDataTime,omitempty"`
 	// Data compression format. Default is gzip.
-	Compress *OutputDiskSpoolCompression `default:"gzip" json:"compress"`
+	Compress *CompressionOptionsPersistence `json:"compress,omitempty"`
 	// JavaScript expression defining how files are partitioned and organized within the time-buckets. If blank, the event's __partition property is used and otherwise, events go directly into the time-bucket directory.
 	PartitionExpr *string `json:"partitionExpr,omitempty"`
 	Description   *string `json:"description,omitempty"`
@@ -88,15 +61,15 @@ func (o OutputDiskSpool) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDiskSpool) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputDiskSpool) GetID() string {
+func (o *OutputDiskSpool) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }
@@ -157,7 +130,7 @@ func (o *OutputDiskSpool) GetMaxDataTime() *string {
 	return o.MaxDataTime
 }
 
-func (o *OutputDiskSpool) GetCompress() *OutputDiskSpoolCompression {
+func (o *OutputDiskSpool) GetCompress() *CompressionOptionsPersistence {
 	if o == nil {
 		return nil
 	}

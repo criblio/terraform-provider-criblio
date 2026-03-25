@@ -31,272 +31,15 @@ func (e *InputOffice365MgmtType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputOffice365MgmtConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputOffice365MgmtConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputOffice365MgmtConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputOffice365MgmtConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputOffice365MgmtConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputOffice365MgmtMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputOffice365MgmtMode string
-
-const (
-	InputOffice365MgmtModeSmart  InputOffice365MgmtMode = "smart"
-	InputOffice365MgmtModeAlways InputOffice365MgmtMode = "always"
-)
-
-func (e InputOffice365MgmtMode) ToPointer() *InputOffice365MgmtMode {
-	return &e
-}
-func (e *InputOffice365MgmtMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputOffice365MgmtMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtMode: %v", v)
-	}
-}
-
-// InputOffice365MgmtCompression - Codec to use to compress the persisted data
-type InputOffice365MgmtCompression string
-
-const (
-	InputOffice365MgmtCompressionNone InputOffice365MgmtCompression = "none"
-	InputOffice365MgmtCompressionGzip InputOffice365MgmtCompression = "gzip"
-)
-
-func (e InputOffice365MgmtCompression) ToPointer() *InputOffice365MgmtCompression {
-	return &e
-}
-func (e *InputOffice365MgmtCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputOffice365MgmtCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtCompression: %v", v)
-	}
-}
-
-type InputOffice365MgmtPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputOffice365MgmtMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputOffice365MgmtCompression `default:"none" json:"compress"`
-}
-
-func (i InputOffice365MgmtPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputOffice365MgmtPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputOffice365MgmtPq) GetMode() *InputOffice365MgmtMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputOffice365MgmtPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputOffice365MgmtPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputOffice365MgmtPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputOffice365MgmtPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputOffice365MgmtPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputOffice365MgmtPq) GetCompress() *InputOffice365MgmtCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-// InputOffice365MgmtSubscriptionPlan - Office 365 subscription plan for your organization, typically Office 365 Enterprise
-type InputOffice365MgmtSubscriptionPlan string
-
-const (
-	InputOffice365MgmtSubscriptionPlanEnterpriseGcc InputOffice365MgmtSubscriptionPlan = "enterprise_gcc"
-	InputOffice365MgmtSubscriptionPlanGcc           InputOffice365MgmtSubscriptionPlan = "gcc"
-	InputOffice365MgmtSubscriptionPlanGccHigh       InputOffice365MgmtSubscriptionPlan = "gcc_high"
-	InputOffice365MgmtSubscriptionPlanDod           InputOffice365MgmtSubscriptionPlan = "dod"
-)
-
-func (e InputOffice365MgmtSubscriptionPlan) ToPointer() *InputOffice365MgmtSubscriptionPlan {
-	return &e
-}
-func (e *InputOffice365MgmtSubscriptionPlan) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "enterprise_gcc":
-		fallthrough
-	case "gcc":
-		fallthrough
-	case "gcc_high":
-		fallthrough
-	case "dod":
-		*e = InputOffice365MgmtSubscriptionPlan(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtSubscriptionPlan: %v", v)
-	}
-}
-
-type InputOffice365MgmtMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputOffice365MgmtMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputOffice365MgmtMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputOffice365MgmtMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputOffice365MgmtMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
-type InputOffice365MgmtLogLevel string
-
-const (
-	InputOffice365MgmtLogLevelError InputOffice365MgmtLogLevel = "error"
-	InputOffice365MgmtLogLevelWarn  InputOffice365MgmtLogLevel = "warn"
-	InputOffice365MgmtLogLevelInfo  InputOffice365MgmtLogLevel = "info"
-	InputOffice365MgmtLogLevelDebug InputOffice365MgmtLogLevel = "debug"
-)
-
-func (e InputOffice365MgmtLogLevel) ToPointer() *InputOffice365MgmtLogLevel {
-	return &e
-}
-func (e *InputOffice365MgmtLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		*e = InputOffice365MgmtLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtLogLevel: %v", v)
-	}
-}
-
 type InputOffice365MgmtContentConfig struct {
 	// Office 365 Management Activity API Content Type
-	ContentType string `json:"contentType"`
+	ContentType *string `json:"contentType,omitempty"`
 	// If interval type is minutes the value entered must evenly divisible by 60 or save will fail
-	Description *string `json:"description,omitempty"`
-	// Interval, in minutes, between polls
-	Interval float64                    `json:"interval"`
-	LogLevel InputOffice365MgmtLogLevel `json:"logLevel"`
-	Enabled  bool                       `json:"enabled"`
+	Description *string  `json:"description,omitempty"`
+	Interval    *float64 `json:"interval,omitempty"`
+	// Collector runtime Log Level
+	LogLevel *LogLevelOptionsContentConfigItems `json:"logLevel,omitempty"`
+	Enabled  *bool                              `json:"enabled,omitempty"`
 }
 
 func (i InputOffice365MgmtContentConfig) MarshalJSON() ([]byte, error) {
@@ -304,15 +47,15 @@ func (i InputOffice365MgmtContentConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365MgmtContentConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"contentType", "interval", "logLevel", "enabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputOffice365MgmtContentConfig) GetContentType() string {
+func (i *InputOffice365MgmtContentConfig) GetContentType() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ContentType
 }
@@ -324,222 +67,90 @@ func (i *InputOffice365MgmtContentConfig) GetDescription() *string {
 	return i.Description
 }
 
-func (i *InputOffice365MgmtContentConfig) GetInterval() float64 {
+func (i *InputOffice365MgmtContentConfig) GetInterval() *float64 {
 	if i == nil {
-		return 0.0
+		return nil
 	}
 	return i.Interval
 }
 
-func (i *InputOffice365MgmtContentConfig) GetLogLevel() InputOffice365MgmtLogLevel {
+func (i *InputOffice365MgmtContentConfig) GetLogLevel() *LogLevelOptionsContentConfigItems {
 	if i == nil {
-		return InputOffice365MgmtLogLevel("")
+		return nil
 	}
 	return i.LogLevel
 }
 
-func (i *InputOffice365MgmtContentConfig) GetEnabled() bool {
+func (i *InputOffice365MgmtContentConfig) GetEnabled() *bool {
 	if i == nil {
-		return false
+		return nil
 	}
 	return i.Enabled
 }
 
-// InputOffice365MgmtRetryType - The algorithm to use when performing HTTP retries
-type InputOffice365MgmtRetryType string
-
-const (
-	InputOffice365MgmtRetryTypeNone    InputOffice365MgmtRetryType = "none"
-	InputOffice365MgmtRetryTypeBackoff InputOffice365MgmtRetryType = "backoff"
-	InputOffice365MgmtRetryTypeStatic  InputOffice365MgmtRetryType = "static"
-)
-
-func (e InputOffice365MgmtRetryType) ToPointer() *InputOffice365MgmtRetryType {
-	return &e
-}
-func (e *InputOffice365MgmtRetryType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "backoff":
-		fallthrough
-	case "static":
-		*e = InputOffice365MgmtRetryType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtRetryType: %v", v)
-	}
-}
-
-type InputOffice365MgmtRetryRules struct {
-	// The algorithm to use when performing HTTP retries
-	Type *InputOffice365MgmtRetryType `default:"backoff" json:"type"`
-	// Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).
-	Interval *float64 `default:"1000" json:"interval"`
-	// The maximum number of times to retry a failed HTTP request
-	Limit *float64 `default:"5" json:"limit"`
-	// Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on
-	Multiplier *float64 `default:"2" json:"multiplier"`
-	// List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.
-	Codes []float64 `json:"codes,omitempty"`
-	// Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
-	EnableHeader *bool `default:"true" json:"enableHeader"`
-	// Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
-	RetryConnectTimeout *bool `default:"false" json:"retryConnectTimeout"`
-	// Retry request when a connection reset (ECONNRESET) error occurs
-	RetryConnectReset *bool `default:"false" json:"retryConnectReset"`
-}
-
-func (i InputOffice365MgmtRetryRules) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputOffice365MgmtRetryRules) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputOffice365MgmtRetryRules) GetType() *InputOffice365MgmtRetryType {
-	if i == nil {
-		return nil
-	}
-	return i.Type
-}
-
-func (i *InputOffice365MgmtRetryRules) GetInterval() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Interval
-}
-
-func (i *InputOffice365MgmtRetryRules) GetLimit() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Limit
-}
-
-func (i *InputOffice365MgmtRetryRules) GetMultiplier() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Multiplier
-}
-
-func (i *InputOffice365MgmtRetryRules) GetCodes() []float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Codes
-}
-
-func (i *InputOffice365MgmtRetryRules) GetEnableHeader() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.EnableHeader
-}
-
-func (i *InputOffice365MgmtRetryRules) GetRetryConnectTimeout() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RetryConnectTimeout
-}
-
-func (i *InputOffice365MgmtRetryRules) GetRetryConnectReset() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RetryConnectReset
-}
-
-// InputOffice365MgmtAuthenticationMethod - Enter client secret directly, or select a stored secret
-type InputOffice365MgmtAuthenticationMethod string
-
-const (
-	InputOffice365MgmtAuthenticationMethodManual InputOffice365MgmtAuthenticationMethod = "manual"
-	InputOffice365MgmtAuthenticationMethodSecret InputOffice365MgmtAuthenticationMethod = "secret"
-)
-
-func (e InputOffice365MgmtAuthenticationMethod) ToPointer() *InputOffice365MgmtAuthenticationMethod {
-	return &e
-}
-func (e *InputOffice365MgmtAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputOffice365MgmtAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOffice365MgmtAuthenticationMethod: %v", v)
-	}
-}
+// #region class-body-inputoffice365mgmtcontentconfig
+// #endregion class-body-inputoffice365mgmtcontentconfig
 
 type InputOffice365Mgmt struct {
 	// Unique ID for this input
-	ID       *string                 `json:"id,omitempty"`
-	Type     *InputOffice365MgmtType `json:"type,omitempty"`
-	Disabled *bool                   `default:"false" json:"disabled"`
+	ID       *string                `json:"id,omitempty"`
+	Type     InputOffice365MgmtType `json:"type"`
+	Disabled *bool                  `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputOffice365MgmtConnection `json:"connections,omitempty"`
-	Pq          *InputOffice365MgmtPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Office 365 subscription plan for your organization, typically Office 365 Enterprise
-	PlanType *InputOffice365MgmtSubscriptionPlan `default:"enterprise_gcc" json:"planType"`
+	PlanType SubscriptionPlanOptions `json:"planType"`
 	// Office 365 Azure Tenant ID
 	TenantID string `json:"tenantId"`
 	// Office 365 Azure Application ID
 	AppID string `json:"appId"`
 	// HTTP request inactivity timeout, use 0 to disable
-	Timeout *float64 `default:"300" json:"timeout"`
+	Timeout *float64 `json:"timeout,omitempty"`
 	// How often workers should check in with the scheduler to keep job subscription alive
-	KeepAliveTime *float64 `default:"30" json:"keepAliveTime"`
+	KeepAliveTime *float64 `json:"keepAliveTime,omitempty"`
 	// Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
-	JobTimeout *string `default:"0" json:"jobTimeout"`
+	JobTimeout *string `json:"jobTimeout,omitempty"`
 	// The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-	MaxMissedKeepAlives *float64 `default:"3" json:"maxMissedKeepAlives"`
+	MaxMissedKeepAlives *float64 `json:"maxMissedKeepAlives,omitempty"`
 	// Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
-	TTL *string `default:"4h" json:"ttl"`
+	TTL *string `json:"ttl,omitempty"`
 	// When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
-	IgnoreGroupJobsLimit *bool `default:"false" json:"ignoreGroupJobsLimit"`
+	IgnoreGroupJobsLimit *bool `json:"ignoreGroupJobsLimit,omitempty"`
 	// Fields to add to events from this input
-	Metadata []InputOffice365MgmtMetadatum `json:"metadata,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
 	// Optional Publisher Identifier to use in API requests, defaults to tenant id if not defined. For more information see [here](https://docs.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference#start-a-subscription)
 	PublisherIdentifier *string `json:"publisherIdentifier,omitempty"`
 	// Enable Office 365 Management Activity API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered must be evenly divisible by 60 to give a predictable schedule.
 	ContentConfig []InputOffice365MgmtContentConfig `json:"contentConfig,omitempty"`
 	// Use this setting to account for ingestion lag. This is necessary because there can be a lag of 60 - 90 minutes (or longer) before Office 365 events are available for retrieval.
-	IngestionLag *float64                      `default:"0" json:"ingestionLag"`
-	RetryRules   *InputOffice365MgmtRetryRules `json:"retryRules,omitempty"`
+	IngestionLag *float64                         `json:"ingestionLag,omitempty"`
+	RetryRules   *RetryRulesTypeCodesEnableHeader `json:"retryRules,omitempty"`
 	// Enter client secret directly, or select a stored secret
-	AuthType    *InputOffice365MgmtAuthenticationMethod `default:"manual" json:"authType"`
-	Description *string                                 `json:"description,omitempty"`
+	AuthType    *AuthenticationMethodOptionsManualSecret `json:"authType,omitempty"`
+	Description *string                                  `json:"description,omitempty"`
 	// Office 365 Azure client secret
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
+	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
+	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
+	// Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
+	TemplateAppID *string `json:"__template_appId,omitempty"`
+	// Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.
+	TemplatePublisherIdentifier *string `json:"__template_publisherIdentifier,omitempty"`
+	// Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
+	TemplateClientSecret *string `json:"__template_clientSecret,omitempty"`
 }
 
 func (i InputOffice365Mgmt) MarshalJSON() ([]byte, error) {
@@ -547,7 +158,7 @@ func (i InputOffice365Mgmt) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputOffice365Mgmt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"tenantId", "appId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -560,9 +171,9 @@ func (i *InputOffice365Mgmt) GetID() *string {
 	return i.ID
 }
 
-func (i *InputOffice365Mgmt) GetType() *InputOffice365MgmtType {
+func (i *InputOffice365Mgmt) GetType() InputOffice365MgmtType {
 	if i == nil {
-		return nil
+		return InputOffice365MgmtType("")
 	}
 	return i.Type
 }
@@ -609,23 +220,23 @@ func (i *InputOffice365Mgmt) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputOffice365Mgmt) GetConnections() []InputOffice365MgmtConnection {
+func (i *InputOffice365Mgmt) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputOffice365Mgmt) GetPq() *InputOffice365MgmtPq {
+func (i *InputOffice365Mgmt) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputOffice365Mgmt) GetPlanType() *InputOffice365MgmtSubscriptionPlan {
+func (i *InputOffice365Mgmt) GetPlanType() SubscriptionPlanOptions {
 	if i == nil {
-		return nil
+		return SubscriptionPlanOptions("")
 	}
 	return i.PlanType
 }
@@ -686,7 +297,7 @@ func (i *InputOffice365Mgmt) GetIgnoreGroupJobsLimit() *bool {
 	return i.IgnoreGroupJobsLimit
 }
 
-func (i *InputOffice365Mgmt) GetMetadata() []InputOffice365MgmtMetadatum {
+func (i *InputOffice365Mgmt) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -714,14 +325,14 @@ func (i *InputOffice365Mgmt) GetIngestionLag() *float64 {
 	return i.IngestionLag
 }
 
-func (i *InputOffice365Mgmt) GetRetryRules() *InputOffice365MgmtRetryRules {
+func (i *InputOffice365Mgmt) GetRetryRules() *RetryRulesTypeCodesEnableHeader {
 	if i == nil {
 		return nil
 	}
 	return i.RetryRules
 }
 
-func (i *InputOffice365Mgmt) GetAuthType() *InputOffice365MgmtAuthenticationMethod {
+func (i *InputOffice365Mgmt) GetAuthType() *AuthenticationMethodOptionsManualSecret {
 	if i == nil {
 		return nil
 	}
@@ -748,3 +359,34 @@ func (i *InputOffice365Mgmt) GetTextSecret() *string {
 	}
 	return i.TextSecret
 }
+
+func (i *InputOffice365Mgmt) GetTemplateTenantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateTenantID
+}
+
+func (i *InputOffice365Mgmt) GetTemplateAppID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAppID
+}
+
+func (i *InputOffice365Mgmt) GetTemplatePublisherIdentifier() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplatePublisherIdentifier
+}
+
+func (i *InputOffice365Mgmt) GetTemplateClientSecret() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateClientSecret
+}
+
+// #region class-body-inputoffice365mgmt
+// #endregion class-body-inputoffice365mgmt

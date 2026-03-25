@@ -32,6 +32,9 @@ func (v *V1WorkspacesDeleteWorkspaceRequest) GetWorkspaceID() string {
 	return v.WorkspaceID
 }
 
+// #region class-body-v1workspacesdeleteworkspacerequest
+// #endregion class-body-v1workspacesdeleteworkspacerequest
+
 type V1WorkspacesDeleteWorkspaceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -70,3 +73,6 @@ func (v *V1WorkspacesDeleteWorkspaceResponse) GetDefaultErrorDTO() *shared.Defau
 	}
 	return v.DefaultErrorDTO
 }
+
+// #region class-body-v1workspacesdeleteworkspaceresponse
+// #endregion class-body-v1workspacesdeleteworkspaceresponse

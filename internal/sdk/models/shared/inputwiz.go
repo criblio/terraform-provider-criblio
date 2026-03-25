@@ -31,172 +31,82 @@ func (e *InputWizType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputWizConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
+type InputWizManageState struct {
 }
 
-func (i InputWizConnection) MarshalJSON() ([]byte, error) {
+func (i InputWizManageState) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(i, "", false)
 }
 
-func (i *InputWizConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputWizConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputWizConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputWizMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputWizMode string
-
-const (
-	InputWizModeSmart  InputWizMode = "smart"
-	InputWizModeAlways InputWizMode = "always"
-)
-
-func (e InputWizMode) ToPointer() *InputWizMode {
-	return &e
-}
-func (e *InputWizMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputWizMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWizMode: %v", v)
-	}
-}
-
-// InputWizCompression - Codec to use to compress the persisted data
-type InputWizCompression string
-
-const (
-	InputWizCompressionNone InputWizCompression = "none"
-	InputWizCompressionGzip InputWizCompression = "gzip"
-)
-
-func (e InputWizCompression) ToPointer() *InputWizCompression {
-	return &e
-}
-func (e *InputWizCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputWizCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWizCompression: %v", v)
-	}
-}
-
-type InputWizPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputWizMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputWizCompression `default:"none" json:"compress"`
-}
-
-func (i InputWizPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputWizPq) UnmarshalJSON(data []byte) error {
+func (i *InputWizManageState) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputWizPq) GetMode() *InputWizMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
+// InputWizLogLevel - Collector runtime log level
+type InputWizLogLevel string
 
-func (i *InputWizPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
+const (
+	InputWizLogLevelError InputWizLogLevel = "error"
+	InputWizLogLevelWarn  InputWizLogLevel = "warn"
+	InputWizLogLevelInfo  InputWizLogLevel = "info"
+	InputWizLogLevelDebug InputWizLogLevel = "debug"
+	InputWizLogLevelSilly InputWizLogLevel = "silly"
+)
 
-func (i *InputWizPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
+func (e InputWizLogLevel) ToPointer() *InputWizLogLevel {
+	return &e
 }
-
-func (i *InputWizPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
+func (e *InputWizLogLevel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
 	}
-	return i.MaxFileSize
-}
-
-func (i *InputWizPq) GetMaxSize() *string {
-	if i == nil {
+	switch v {
+	case "error":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "info":
+		fallthrough
+	case "debug":
+		fallthrough
+	case "silly":
+		*e = InputWizLogLevel(v)
 		return nil
+	default:
+		return fmt.Errorf("invalid value for InputWizLogLevel: %v", v)
 	}
-	return i.MaxSize
-}
-
-func (i *InputWizPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputWizPq) GetCompress() *InputWizCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
 }
 
 type InputWizContentConfig struct {
 	// The name of the Wiz query
 	ContentType        string  `json:"contentType"`
 	ContentDescription *string `json:"contentDescription,omitempty"`
-	Enabled            *bool   `default:"false" json:"enabled"`
+	Enabled            *bool   `json:"enabled,omitempty"`
+	// Track collection progress between consecutive scheduled executions
+	StateTracking *bool `json:"stateTracking,omitempty"`
+	// JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.
+	StateUpdateExpression *string `json:"stateUpdateExpression,omitempty"`
+	// JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.
+	StateMergeExpression *string              `json:"stateMergeExpression,omitempty"`
+	ManageState          *InputWizManageState `json:"manageState,omitempty"`
+	// Template for POST body to send with the Collect request. Reference global variables, or functions using template params: `${C.vars.myVar}`, or `${Date.now()}`, `${param}`.
+	ContentQuery string `json:"contentQuery"`
+	// A cron schedule on which to run this job
+	CronSchedule string `json:"cronSchedule"`
+	// Earliest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)
+	Earliest string `json:"earliest"`
+	// Latest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)
+	Latest string `json:"latest"`
+	// Maximum time the job is allowed to run (examples: 30, 45s, 15m). Units default to seconds if not specified. Enter 0 for unlimited time.
+	JobTimeout *string `json:"jobTimeout,omitempty"`
+	// Collector runtime log level
+	LogLevel *InputWizLogLevel `json:"logLevel,omitempty"`
+	// Maximum number of pages to retrieve per collection task. Defaults to 0. Set to 0 to retrieve all pages.
+	MaxPages *float64 `json:"maxPages,omitempty"`
 }
 
 func (i InputWizContentConfig) MarshalJSON() ([]byte, error) {
@@ -204,7 +114,7 @@ func (i InputWizContentConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWizContentConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"contentType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -231,227 +141,136 @@ func (i *InputWizContentConfig) GetEnabled() *bool {
 	return i.Enabled
 }
 
-type InputWizMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputWizMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputWizMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
+func (i *InputWizContentConfig) GetStateTracking() *bool {
+	if i == nil {
+		return nil
 	}
-	return nil
+	return i.StateTracking
 }
 
-func (i *InputWizMetadatum) GetName() string {
+func (i *InputWizContentConfig) GetStateUpdateExpression() *string {
+	if i == nil {
+		return nil
+	}
+	return i.StateUpdateExpression
+}
+
+func (i *InputWizContentConfig) GetStateMergeExpression() *string {
+	if i == nil {
+		return nil
+	}
+	return i.StateMergeExpression
+}
+
+func (i *InputWizContentConfig) GetManageState() *InputWizManageState {
+	if i == nil {
+		return nil
+	}
+	return i.ManageState
+}
+
+func (i *InputWizContentConfig) GetContentQuery() string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.ContentQuery
 }
 
-func (i *InputWizMetadatum) GetValue() string {
+func (i *InputWizContentConfig) GetCronSchedule() string {
 	if i == nil {
 		return ""
 	}
-	return i.Value
+	return i.CronSchedule
 }
 
-// InputWizRetryType - The algorithm to use when performing HTTP retries
-type InputWizRetryType string
-
-const (
-	InputWizRetryTypeNone    InputWizRetryType = "none"
-	InputWizRetryTypeBackoff InputWizRetryType = "backoff"
-	InputWizRetryTypeStatic  InputWizRetryType = "static"
-)
-
-func (e InputWizRetryType) ToPointer() *InputWizRetryType {
-	return &e
-}
-func (e *InputWizRetryType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+func (i *InputWizContentConfig) GetEarliest() string {
+	if i == nil {
+		return ""
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "backoff":
-		fallthrough
-	case "static":
-		*e = InputWizRetryType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWizRetryType: %v", v)
+	return i.Earliest
+}
+
+func (i *InputWizContentConfig) GetLatest() string {
+	if i == nil {
+		return ""
 	}
+	return i.Latest
 }
 
-type InputWizRetryRules struct {
-	// The algorithm to use when performing HTTP retries
-	Type *InputWizRetryType `default:"backoff" json:"type"`
-	// Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).
-	Interval *float64 `default:"1000" json:"interval"`
-	// The maximum number of times to retry a failed HTTP request
-	Limit *float64 `default:"5" json:"limit"`
-	// Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on
-	Multiplier *float64 `default:"2" json:"multiplier"`
-	// List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
-	Codes []float64 `json:"codes,omitempty"`
-	// Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
-	EnableHeader *bool `default:"true" json:"enableHeader"`
-	// Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
-	RetryConnectTimeout *bool `default:"false" json:"retryConnectTimeout"`
-	// Retry request when a connection reset (ECONNRESET) error occurs
-	RetryConnectReset *bool `default:"false" json:"retryConnectReset"`
-}
-
-func (i InputWizRetryRules) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputWizRetryRules) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputWizRetryRules) GetType() *InputWizRetryType {
+func (i *InputWizContentConfig) GetJobTimeout() *string {
 	if i == nil {
 		return nil
 	}
-	return i.Type
+	return i.JobTimeout
 }
 
-func (i *InputWizRetryRules) GetInterval() *float64 {
+func (i *InputWizContentConfig) GetLogLevel() *InputWizLogLevel {
 	if i == nil {
 		return nil
 	}
-	return i.Interval
+	return i.LogLevel
 }
 
-func (i *InputWizRetryRules) GetLimit() *float64 {
+func (i *InputWizContentConfig) GetMaxPages() *float64 {
 	if i == nil {
 		return nil
 	}
-	return i.Limit
-}
-
-func (i *InputWizRetryRules) GetMultiplier() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Multiplier
-}
-
-func (i *InputWizRetryRules) GetCodes() []float64 {
-	if i == nil {
-		return nil
-	}
-	return i.Codes
-}
-
-func (i *InputWizRetryRules) GetEnableHeader() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.EnableHeader
-}
-
-func (i *InputWizRetryRules) GetRetryConnectTimeout() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RetryConnectTimeout
-}
-
-func (i *InputWizRetryRules) GetRetryConnectReset() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RetryConnectReset
-}
-
-// InputWizAuthenticationMethod - Enter client secret directly, or select a stored secret
-type InputWizAuthenticationMethod string
-
-const (
-	InputWizAuthenticationMethodManual InputWizAuthenticationMethod = "manual"
-	InputWizAuthenticationMethodSecret InputWizAuthenticationMethod = "secret"
-)
-
-func (e InputWizAuthenticationMethod) ToPointer() *InputWizAuthenticationMethod {
-	return &e
-}
-func (e *InputWizAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputWizAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWizAuthenticationMethod: %v", v)
-	}
+	return i.MaxPages
 }
 
 type InputWiz struct {
 	// Unique ID for this input
-	ID       *string       `json:"id,omitempty"`
-	Type     *InputWizType `json:"type,omitempty"`
-	Disabled *bool         `default:"false" json:"disabled"`
+	ID       *string      `json:"id,omitempty"`
+	Type     InputWizType `json:"type"`
+	Disabled *bool        `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputWizConnection `json:"connections,omitempty"`
-	Pq          *InputWizPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// The Wiz GraphQL API endpoint. Example: https://api.us1.app.wiz.io/graphql
-	Endpoint *string `default:"https://api.<region>.app.wiz.io/graphql" json:"endpoint"`
+	Endpoint string `json:"endpoint"`
 	// The authentication URL to generate an OAuth token
 	AuthURL string `json:"authUrl"`
 	// The audience to use when requesting an OAuth token for a custom auth URL. When not specified, `wiz-api` will be used.
 	AuthAudienceOverride *string `json:"authAudienceOverride,omitempty"`
 	// The client ID of the Wiz application
 	ClientID      string                  `json:"clientId"`
-	ContentConfig []InputWizContentConfig `json:"contentConfig,omitempty"`
+	ContentConfig []InputWizContentConfig `json:"contentConfig"`
 	// HTTP request inactivity timeout. Use 0 to disable.
-	RequestTimeout *float64 `default:"300" json:"requestTimeout"`
+	RequestTimeout *float64 `json:"requestTimeout,omitempty"`
 	// How often workers should check in with the scheduler to keep job subscription alive
-	KeepAliveTime *float64 `default:"30" json:"keepAliveTime"`
+	KeepAliveTime *float64 `json:"keepAliveTime,omitempty"`
 	// The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-	MaxMissedKeepAlives *float64 `default:"3" json:"maxMissedKeepAlives"`
+	MaxMissedKeepAlives *float64 `json:"maxMissedKeepAlives,omitempty"`
 	// Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
-	TTL *string `default:"4h" json:"ttl"`
+	TTL *string `json:"ttl,omitempty"`
 	// When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
-	IgnoreGroupJobsLimit *bool `default:"false" json:"ignoreGroupJobsLimit"`
+	IgnoreGroupJobsLimit *bool `json:"ignoreGroupJobsLimit,omitempty"`
 	// Fields to add to events from this input
-	Metadata   []InputWizMetadatum `json:"metadata,omitempty"`
-	RetryRules *InputWizRetryRules `json:"retryRules,omitempty"`
+	Metadata   []ItemsTypeMetadata `json:"metadata,omitempty"`
+	RetryRules *RetryRulesType     `json:"retryRules,omitempty"`
 	// Enter client secret directly, or select a stored secret
-	AuthType    *InputWizAuthenticationMethod `default:"manual" json:"authType"`
-	Description *string                       `json:"description,omitempty"`
+	AuthType    *AuthenticationMethodOptionsManualSecret `json:"authType,omitempty"`
+	Description *string                                  `json:"description,omitempty"`
 	// The client secret of the Wiz application
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
+	// Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.
+	TemplateEndpoint *string `json:"__template_endpoint,omitempty"`
+	// Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.
+	TemplateAuthURL *string `json:"__template_authUrl,omitempty"`
+	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+	TemplateClientID *string `json:"__template_clientId,omitempty"`
 }
 
 func (i InputWiz) MarshalJSON() ([]byte, error) {
@@ -459,7 +278,7 @@ func (i InputWiz) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputWiz) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"authUrl", "clientId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -472,9 +291,9 @@ func (i *InputWiz) GetID() *string {
 	return i.ID
 }
 
-func (i *InputWiz) GetType() *InputWizType {
+func (i *InputWiz) GetType() InputWizType {
 	if i == nil {
-		return nil
+		return InputWizType("")
 	}
 	return i.Type
 }
@@ -521,23 +340,23 @@ func (i *InputWiz) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputWiz) GetConnections() []InputWizConnection {
+func (i *InputWiz) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputWiz) GetPq() *InputWizPq {
+func (i *InputWiz) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputWiz) GetEndpoint() *string {
+func (i *InputWiz) GetEndpoint() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Endpoint
 }
@@ -565,7 +384,7 @@ func (i *InputWiz) GetClientID() string {
 
 func (i *InputWiz) GetContentConfig() []InputWizContentConfig {
 	if i == nil {
-		return nil
+		return []InputWizContentConfig{}
 	}
 	return i.ContentConfig
 }
@@ -605,21 +424,21 @@ func (i *InputWiz) GetIgnoreGroupJobsLimit() *bool {
 	return i.IgnoreGroupJobsLimit
 }
 
-func (i *InputWiz) GetMetadata() []InputWizMetadatum {
+func (i *InputWiz) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
 	return i.Metadata
 }
 
-func (i *InputWiz) GetRetryRules() *InputWizRetryRules {
+func (i *InputWiz) GetRetryRules() *RetryRulesType {
 	if i == nil {
 		return nil
 	}
 	return i.RetryRules
 }
 
-func (i *InputWiz) GetAuthType() *InputWizAuthenticationMethod {
+func (i *InputWiz) GetAuthType() *AuthenticationMethodOptionsManualSecret {
 	if i == nil {
 		return nil
 	}
@@ -645,4 +464,25 @@ func (i *InputWiz) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
+}
+
+func (i *InputWiz) GetTemplateEndpoint() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateEndpoint
+}
+
+func (i *InputWiz) GetTemplateAuthURL() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateAuthURL
+}
+
+func (i *InputWiz) GetTemplateClientID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateClientID
 }

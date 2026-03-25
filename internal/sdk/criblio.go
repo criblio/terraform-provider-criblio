@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 4.14.0 and generator version 2.755.9
+// Generated from  generator version 2.869.10
 
 import (
 	"bytes"
@@ -54,16 +54,13 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// CriblIo - Cribl Terraform Provider: The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.
+// CriblIo - The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.
 //
 // This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.
 //
 // Complementary API reference documentation is available at https://docs.cribl.io/cribl-as-code/api-reference/. Product documentation is available at https://docs.cribl.io.
 type CriblIo struct {
 	SDKVersion string
-	// Actions related to REST server health
-	Health     *Health
-	Workspaces *Workspaces
 	// Actions related to Projects
 	Projects *Projects
 	// Actions related to Subscriptions
@@ -207,6 +204,8 @@ type CriblIo struct {
 	Conditions *Conditions
 	// Actions related to diagnostics
 	Diag *Diag
+	// Actions related to REST server health
+	Health *Health
 	// Actions related to Jobs
 	Jobs *Jobs
 	// Actions related to Security
@@ -242,7 +241,8 @@ type CriblIo struct {
 	// Actions related to Executors
 	Executors *Executors
 	// Actions related to Groups
-	Groups *Groups
+	Groups     *Groups
+	Workspaces *Workspaces
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -250,7 +250,7 @@ type CriblIo struct {
 
 type SDKOption func(*CriblIo)
 
-// WithServerURL allows the overriding of the default server URL
+// WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
 	return func(sdk *CriblIo) {
 		sdk.sdkConfiguration.ServerURL = serverURL
@@ -358,9 +358,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.20.145",
+		SDKVersion: "1.21.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.20.145 2.755.9 4.14.0 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.21.1 2.869.10 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -388,8 +388,6 @@ func New(opts ...SDKOption) *CriblIo {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Projects = newProjects(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Versioning = newVersioning(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -463,6 +461,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Expressions = newExpressions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Conditions = newConditions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Diag = newDiag(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Health = newHealth(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Jobs = newJobs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Security = newSecurity(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Licenses = newLicenses(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -481,6 +480,7 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Collectors = newCollectors(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Executors = newExecutors(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Groups = newGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }
@@ -546,7 +546,7 @@ func (s *CriblIo) CreateAdminProductsMappingsByProduct(ctx context.Context, requ
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -686,6 +686,7 @@ func (s *CriblIo) CreateAdminProductsMappingsByProduct(ctx context.Context, requ
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -909,6 +910,7 @@ func (s *CriblIo) GetAdminProductsMappingsByProduct(ctx context.Context, request
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -931,6 +933,7 @@ func (s *CriblIo) GetAdminProductsMappingsByProduct(ctx context.Context, request
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -1133,6 +1136,7 @@ func (s *CriblIo) DeleteAdminProductsMappingsByProductAndID(ctx context.Context,
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1154,6 +1158,8 @@ func (s *CriblIo) DeleteAdminProductsMappingsByProductAndID(ctx context.Context,
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -1356,6 +1362,7 @@ func (s *CriblIo) GetAdminProductsMappingsByProductAndID(ctx context.Context, re
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1378,6 +1385,7 @@ func (s *CriblIo) GetAdminProductsMappingsByProductAndID(ctx context.Context, re
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -1587,6 +1595,7 @@ func (s *CriblIo) UpdateAdminProductsMappingsByProductAndID(ctx context.Context,
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 401:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):

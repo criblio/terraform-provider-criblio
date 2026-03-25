@@ -32,22 +32,22 @@ type GroupSystemSettingsResource struct {
 
 // GroupSystemSettingsResourceModel describes the resource data model.
 type GroupSystemSettingsResourceModel struct {
-	API                  tfTypes.SystemSettingsConfAPI        `tfsdk:"api"`
-	Backups              tfTypes.SystemSettingsConfBackups    `tfsdk:"backups"`
-	CustomLogo           tfTypes.SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
-	GroupID              types.String                         `tfsdk:"group_id"`
-	Items                []tfTypes.SystemSettings             `tfsdk:"items"`
-	Pii                  tfTypes.SystemSettingsConfPii        `tfsdk:"pii"`
-	Proxy                tfTypes.SystemSettingsConfProxy      `tfsdk:"proxy"`
-	Rollback             tfTypes.SystemSettingsConfRollback   `tfsdk:"rollback"`
-	Shutdown             tfTypes.SystemSettingsConfShutdown   `tfsdk:"shutdown"`
-	Sni                  tfTypes.SystemSettingsConfSni        `tfsdk:"sni"`
-	Sockets              *tfTypes.SystemSettingsConfSockets   `tfsdk:"sockets"`
-	System               tfTypes.SystemSettingsConfSystem     `tfsdk:"system"`
-	TLS                  tfTypes.SystemSettingsConfTLS        `tfsdk:"tls"`
-	UpgradeGroupSettings tfTypes.UpgradeGroupSettings         `tfsdk:"upgrade_group_settings"`
-	UpgradeSettings      tfTypes.UpgradeSettings              `tfsdk:"upgrade_settings"`
-	Workers              tfTypes.SystemSettingsConfWorkers    `tfsdk:"workers"`
+	API                  *tfTypes.SystemSettingsConfAPI        `tfsdk:"api"`
+	Backups              *tfTypes.SystemSettingsConfBackups    `tfsdk:"backups"`
+	CustomLogo           *tfTypes.SystemSettingsConfCustomLogo `tfsdk:"custom_logo"`
+	GroupID              types.String                          `tfsdk:"group_id"`
+	Items                []tfTypes.SystemSettings              `tfsdk:"items"`
+	Pii                  *tfTypes.SystemSettingsConfPii        `tfsdk:"pii"`
+	Proxy                *tfTypes.SystemSettingsConfProxy      `tfsdk:"proxy"`
+	Rollback             *tfTypes.SystemSettingsConfRollback   `tfsdk:"rollback"`
+	Shutdown             *tfTypes.SystemSettingsConfShutdown   `tfsdk:"shutdown"`
+	Sni                  *tfTypes.SystemSettingsConfSni        `tfsdk:"sni"`
+	Sockets              *tfTypes.SystemSettingsConfSockets    `tfsdk:"sockets"`
+	System               *tfTypes.SystemSettingsConfSystem     `tfsdk:"system"`
+	TLS                  *tfTypes.SystemSettingsConfTLS        `tfsdk:"tls"`
+	UpgradeGroupSettings *tfTypes.UpgradeGroupSettings         `tfsdk:"upgrade_group_settings"`
+	UpgradeSettings      *tfTypes.UpgradeSettings              `tfsdk:"upgrade_settings"`
+	Workers              *tfTypes.SystemSettingsConfWorkers    `tfsdk:"workers"`
 }
 
 func (r *GroupSystemSettingsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -977,52 +977,6 @@ func (r *GroupSystemSettingsResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSystemSettingsConfResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetSystemSettingsConfRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.System.GetSystemSettingsConf(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -1128,52 +1082,6 @@ func (r *GroupSystemSettingsResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateSystemSettingsConfResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetSystemSettingsConfRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.System.GetSystemSettingsConf(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetSystemSettingsConfResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -1221,7 +1129,10 @@ func (r *GroupSystemSettingsResource) Delete(ctx context.Context, req resource.D
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

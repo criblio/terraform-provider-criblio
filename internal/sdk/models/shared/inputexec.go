@@ -31,167 +31,6 @@ func (e *InputExecType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputExecConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputExecConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputExecConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputExecConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputExecConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputExecMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputExecMode string
-
-const (
-	InputExecModeSmart  InputExecMode = "smart"
-	InputExecModeAlways InputExecMode = "always"
-)
-
-func (e InputExecMode) ToPointer() *InputExecMode {
-	return &e
-}
-func (e *InputExecMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputExecMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputExecMode: %v", v)
-	}
-}
-
-// InputExecCompression - Codec to use to compress the persisted data
-type InputExecCompression string
-
-const (
-	InputExecCompressionNone InputExecCompression = "none"
-	InputExecCompressionGzip InputExecCompression = "gzip"
-)
-
-func (e InputExecCompression) ToPointer() *InputExecCompression {
-	return &e
-}
-func (e *InputExecCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputExecCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputExecCompression: %v", v)
-	}
-}
-
-type InputExecPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputExecMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputExecCompression `default:"none" json:"compress"`
-}
-
-func (i InputExecPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputExecPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputExecPq) GetMode() *InputExecMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputExecPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputExecPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputExecPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputExecPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputExecPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputExecPq) GetCompress() *InputExecCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
 // ScheduleType - Select a schedule type; either an interval (in seconds) or a cron-style schedule.
 type ScheduleType string
 
@@ -219,72 +58,43 @@ func (e *ScheduleType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputExecMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputExecMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputExecMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputExecMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputExecMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputExec struct {
 	// Unique ID for this input
 	ID       *string       `json:"id,omitempty"`
 	Type     InputExecType `json:"type"`
-	Disabled *bool         `default:"false" json:"disabled"`
+	Disabled *bool         `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputExecConnection `json:"connections,omitempty"`
-	Pq          *InputExecPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Command to execute; supports Bourne shell (or CMD on Windows) syntax
 	Command string `json:"command"`
+	// Optional script content to pipe into the command's stdin. The stdin stream is closed after the script is written.
+	Script *string `json:"script,omitempty"`
 	// Maximum number of retry attempts in the event that the command fails
-	Retries *float64 `default:"10" json:"retries"`
+	Retries *float64 `json:"retries,omitempty"`
 	// Select a schedule type; either an interval (in seconds) or a cron-style schedule.
-	ScheduleType *ScheduleType `default:"interval" json:"scheduleType"`
+	ScheduleType *ScheduleType `json:"scheduleType,omitempty"`
 	// A list of event-breaking rulesets that will be applied, in order, to the input data stream
 	BreakerRulesets []string `json:"breakerRulesets,omitempty"`
 	// How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-	StaleChannelFlushMs *float64 `default:"10000" json:"staleChannelFlushMs"`
+	StaleChannelFlushMs *float64 `json:"staleChannelFlushMs,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputExecMetadatum `json:"metadata,omitempty"`
-	Description *string              `json:"description,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
 	// Interval between command executions in seconds.
-	Interval *float64 `default:"60" json:"interval"`
+	Interval *float64 `json:"interval,omitempty"`
 	// Cron schedule to execute the command on.
-	CronSchedule *string `default:"* * * * *" json:"cronSchedule"`
+	CronSchedule *string `json:"cronSchedule,omitempty"`
 }
 
 func (i InputExec) MarshalJSON() ([]byte, error) {
@@ -292,7 +102,7 @@ func (i InputExec) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputExec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "command"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -354,14 +164,14 @@ func (i *InputExec) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputExec) GetConnections() []InputExecConnection {
+func (i *InputExec) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputExec) GetPq() *InputExecPq {
+func (i *InputExec) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -373,6 +183,13 @@ func (i *InputExec) GetCommand() string {
 		return ""
 	}
 	return i.Command
+}
+
+func (i *InputExec) GetScript() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Script
 }
 
 func (i *InputExec) GetRetries() *float64 {
@@ -403,7 +220,7 @@ func (i *InputExec) GetStaleChannelFlushMs() *float64 {
 	return i.StaleChannelFlushMs
 }
 
-func (i *InputExec) GetMetadata() []InputExecMetadatum {
+func (i *InputExec) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}

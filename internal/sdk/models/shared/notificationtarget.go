@@ -62,20 +62,20 @@ func (e *Encryption) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// NotificationTargetMinimumTLSVersion - Minimum TLS version to accept
-type NotificationTargetMinimumTLSVersion string
+// MinimumTLSVersion - Minimum TLS version to accept
+type MinimumTLSVersion string
 
 const (
-	NotificationTargetMinimumTLSVersionTlSv1  NotificationTargetMinimumTLSVersion = "TLSv1"
-	NotificationTargetMinimumTLSVersionTlSv11 NotificationTargetMinimumTLSVersion = "TLSv1.1"
-	NotificationTargetMinimumTLSVersionTlSv12 NotificationTargetMinimumTLSVersion = "TLSv1.2"
-	NotificationTargetMinimumTLSVersionTlSv13 NotificationTargetMinimumTLSVersion = "TLSv1.3"
+	MinimumTLSVersionTlSv1  MinimumTLSVersion = "TLSv1"
+	MinimumTLSVersionTlSv11 MinimumTLSVersion = "TLSv1.1"
+	MinimumTLSVersionTlSv12 MinimumTLSVersion = "TLSv1.2"
+	MinimumTLSVersionTlSv13 MinimumTLSVersion = "TLSv1.3"
 )
 
-func (e NotificationTargetMinimumTLSVersion) ToPointer() *NotificationTargetMinimumTLSVersion {
+func (e MinimumTLSVersion) ToPointer() *MinimumTLSVersion {
 	return &e
 }
-func (e *NotificationTargetMinimumTLSVersion) UnmarshalJSON(data []byte) error {
+func (e *MinimumTLSVersion) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -88,27 +88,27 @@ func (e *NotificationTargetMinimumTLSVersion) UnmarshalJSON(data []byte) error {
 	case "TLSv1.2":
 		fallthrough
 	case "TLSv1.3":
-		*e = NotificationTargetMinimumTLSVersion(v)
+		*e = MinimumTLSVersion(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NotificationTargetMinimumTLSVersion: %v", v)
+		return fmt.Errorf("invalid value for MinimumTLSVersion: %v", v)
 	}
 }
 
-// NotificationTargetMaximumTLSVersion - Maximum TLS version to accept
-type NotificationTargetMaximumTLSVersion string
+// MaximumTLSVersion - Maximum TLS version to accept
+type MaximumTLSVersion string
 
 const (
-	NotificationTargetMaximumTLSVersionTlSv1  NotificationTargetMaximumTLSVersion = "TLSv1"
-	NotificationTargetMaximumTLSVersionTlSv11 NotificationTargetMaximumTLSVersion = "TLSv1.1"
-	NotificationTargetMaximumTLSVersionTlSv12 NotificationTargetMaximumTLSVersion = "TLSv1.2"
-	NotificationTargetMaximumTLSVersionTlSv13 NotificationTargetMaximumTLSVersion = "TLSv1.3"
+	MaximumTLSVersionTlSv1  MaximumTLSVersion = "TLSv1"
+	MaximumTLSVersionTlSv11 MaximumTLSVersion = "TLSv1.1"
+	MaximumTLSVersionTlSv12 MaximumTLSVersion = "TLSv1.2"
+	MaximumTLSVersionTlSv13 MaximumTLSVersion = "TLSv1.3"
 )
 
-func (e NotificationTargetMaximumTLSVersion) ToPointer() *NotificationTargetMaximumTLSVersion {
+func (e MaximumTLSVersion) ToPointer() *MaximumTLSVersion {
 	return &e
 }
-func (e *NotificationTargetMaximumTLSVersion) UnmarshalJSON(data []byte) error {
+func (e *MaximumTLSVersion) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -121,10 +121,10 @@ func (e *NotificationTargetMaximumTLSVersion) UnmarshalJSON(data []byte) error {
 	case "TLSv1.2":
 		fallthrough
 	case "TLSv1.3":
-		*e = NotificationTargetMaximumTLSVersion(v)
+		*e = MaximumTLSVersion(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for NotificationTargetMaximumTLSVersion: %v", v)
+		return fmt.Errorf("invalid value for MaximumTLSVersion: %v", v)
 	}
 }
 
@@ -133,9 +133,9 @@ type TLSConfiguration struct {
 	// Whether to reject unauthorized certificates
 	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
 	// Minimum TLS version to accept
-	MinVersion *NotificationTargetMinimumTLSVersion `default:"TLSv1.2" json:"minVersion"`
+	MinVersion *MinimumTLSVersion `default:"TLSv1.2" json:"minVersion"`
 	// Maximum TLS version to accept
-	MaxVersion *NotificationTargetMaximumTLSVersion `default:"TLSv1.3" json:"maxVersion"`
+	MaxVersion *MaximumTLSVersion `default:"TLSv1.3" json:"maxVersion"`
 }
 
 func (t TLSConfiguration) MarshalJSON() ([]byte, error) {
@@ -156,14 +156,14 @@ func (t *TLSConfiguration) GetRejectUnauthorized() *bool {
 	return t.RejectUnauthorized
 }
 
-func (t *TLSConfiguration) GetMinVersion() *NotificationTargetMinimumTLSVersion {
+func (t *TLSConfiguration) GetMinVersion() *MinimumTLSVersion {
 	if t == nil {
 		return nil
 	}
 	return t.MinVersion
 }
 
-func (t *TLSConfiguration) GetMaxVersion() *NotificationTargetMaximumTLSVersion {
+func (t *TLSConfiguration) GetMaxVersion() *MaximumTLSVersion {
 	if t == nil {
 		return nil
 	}
@@ -197,7 +197,7 @@ func (s SMTPTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SMTPTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "host", "port", "from"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -419,7 +419,7 @@ func (s SnsTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SnsTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -575,7 +575,7 @@ func (s SlackTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SlackTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"id", "type", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -688,7 +688,7 @@ func (p PagerDutyTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PagerDutyTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id", "type", "routingKey"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -890,7 +890,7 @@ func (w WebhookTarget) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WebhookTarget) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"id", "type", "url", "format", "method"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -977,11 +977,11 @@ const (
 )
 
 type NotificationTarget struct {
-	WebhookTarget   *WebhookTarget   `queryParam:"inline,name=NotificationTarget"`
-	PagerDutyTarget *PagerDutyTarget `queryParam:"inline,name=NotificationTarget"`
-	SlackTarget     *SlackTarget     `queryParam:"inline,name=NotificationTarget"`
-	SnsTarget       *SnsTarget       `queryParam:"inline,name=NotificationTarget"`
-	SMTPTarget      *SMTPTarget      `queryParam:"inline,name=NotificationTarget"`
+	WebhookTarget   *WebhookTarget   `queryParam:"inline" union:"member"`
+	PagerDutyTarget *PagerDutyTarget `queryParam:"inline" union:"member"`
+	SlackTarget     *SlackTarget     `queryParam:"inline" union:"member"`
+	SnsTarget       *SnsTarget       `queryParam:"inline" union:"member"`
+	SMTPTarget      *SMTPTarget      `queryParam:"inline" union:"member"`
 
 	Type NotificationTargetType
 }
@@ -1044,14 +1044,6 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		})
 	}
 
-	var smtpTarget SMTPTarget = SMTPTarget{}
-	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  NotificationTargetTypeSMTPTarget,
-			Value: &smtpTarget,
-		})
-	}
-
 	var pagerDutyTarget PagerDutyTarget = PagerDutyTarget{}
 	if err := utils.UnmarshalJSON(data, &pagerDutyTarget, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -1076,12 +1068,20 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var smtpTarget SMTPTarget = SMTPTarget{}
+	if err := utils.UnmarshalJSON(data, &smtpTarget, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  NotificationTargetTypeSMTPTarget,
+			Value: &smtpTarget,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for NotificationTarget", string(data))
 	}
@@ -1092,9 +1092,6 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 	case NotificationTargetTypeWebhookTarget:
 		u.WebhookTarget = best.Value.(*WebhookTarget)
 		return nil
-	case NotificationTargetTypeSMTPTarget:
-		u.SMTPTarget = best.Value.(*SMTPTarget)
-		return nil
 	case NotificationTargetTypePagerDutyTarget:
 		u.PagerDutyTarget = best.Value.(*PagerDutyTarget)
 		return nil
@@ -1103,6 +1100,9 @@ func (u *NotificationTarget) UnmarshalJSON(data []byte) error {
 		return nil
 	case NotificationTargetTypeSnsTarget:
 		u.SnsTarget = best.Value.(*SnsTarget)
+		return nil
+	case NotificationTargetTypeSMTPTarget:
+		u.SMTPTarget = best.Value.(*SMTPTarget)
 		return nil
 	}
 

@@ -140,10 +140,10 @@ func Struct(ctx context.Context, typ attr.Type, object tftypes.Value, target ref
 
 		fieldReflected := structType.Field(structFieldPos)
 		if opts.SourceType == SourceTypeState && fieldReflected.Tag.Get(`tfPlanOnly`) == "true" {
-			// skip explicitly excluded fields
+			// skip explicitly excluded fields when merging prior state (Update); plan pass fills them.
 			continue
 		}
-		// Fork End
+
 		structField := result.Field(structFieldPos)
 		fieldVal, fieldValDiags := BuildValue(ctx, attrType, objectFields[field], structField, opts, path.AtName(field))
 		diags.Append(fieldValDiags...)

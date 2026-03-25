@@ -23,6 +23,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 
 			if itemsItem.OutputAzureBlob != nil {
 				items.OutputAzureBlob = &tfTypes.OutputAzureBlob{}
+				items.OutputAzureBlob.TemplateClientID = types.StringPointerValue(itemsItem.OutputAzureBlob.TemplateClientID)
+				items.OutputAzureBlob.TemplateConnectionString = types.StringPointerValue(itemsItem.OutputAzureBlob.TemplateConnectionString)
+				items.OutputAzureBlob.TemplateContainerName = types.StringPointerValue(itemsItem.OutputAzureBlob.TemplateContainerName)
+				items.OutputAzureBlob.TemplateFormat = types.StringPointerValue(itemsItem.OutputAzureBlob.TemplateFormat)
+				items.OutputAzureBlob.TemplateTenantID = types.StringPointerValue(itemsItem.OutputAzureBlob.TemplateTenantID)
 				items.OutputAzureBlob.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputAzureBlob.AddIDToStagePath)
 				if itemsItem.OutputAzureBlob.AuthType != nil {
 					items.OutputAzureBlob.AuthType = types.StringValue(string(*itemsItem.OutputAzureBlob.AuthType))
@@ -35,7 +40,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputAzureBlob.Certificate == nil {
 					items.OutputAzureBlob.Certificate = nil
 				} else {
-					items.OutputAzureBlob.Certificate = &tfTypes.OutputAzureBlobCertificate{}
+					items.OutputAzureBlob.Certificate = &tfTypes.CertificateTypeAzureBlobAuthTypeClientCert{}
 					items.OutputAzureBlob.Certificate.CertificateName = types.StringValue(itemsItem.OutputAzureBlob.Certificate.CertificateName)
 				}
 				items.OutputAzureBlob.ClientID = types.StringPointerValue(itemsItem.OutputAzureBlob.ClientID)
@@ -57,6 +62,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureBlob.DeadletterPath = types.StringPointerValue(itemsItem.OutputAzureBlob.DeadletterPath)
 				items.OutputAzureBlob.Description = types.StringPointerValue(itemsItem.OutputAzureBlob.Description)
 				items.OutputAzureBlob.DestPath = types.StringPointerValue(itemsItem.OutputAzureBlob.DestPath)
+				items.OutputAzureBlob.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputAzureBlob.DirectoryBatchSize)
 				items.OutputAzureBlob.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputAzureBlob.EmptyDirCleanupSec)
 				items.OutputAzureBlob.EnablePageChecksum = types.BoolPointerValue(itemsItem.OutputAzureBlob.EnablePageChecksum)
 				items.OutputAzureBlob.EnableStatistics = types.BoolPointerValue(itemsItem.OutputAzureBlob.EnableStatistics)
@@ -64,6 +70,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureBlob.EndpointSuffix = types.StringPointerValue(itemsItem.OutputAzureBlob.EndpointSuffix)
 				items.OutputAzureBlob.Environment = types.StringPointerValue(itemsItem.OutputAzureBlob.Environment)
 				items.OutputAzureBlob.FileNameSuffix = types.StringPointerValue(itemsItem.OutputAzureBlob.FileNameSuffix)
+				items.OutputAzureBlob.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputAzureBlob.ForceCloseOnShutdown)
 				if itemsItem.OutputAzureBlob.Format != nil {
 					items.OutputAzureBlob.Format = types.StringValue(string(*itemsItem.OutputAzureBlob.Format))
 				} else {
@@ -71,12 +78,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputAzureBlob.HeaderLine = types.StringPointerValue(itemsItem.OutputAzureBlob.HeaderLine)
 				items.OutputAzureBlob.ID = types.StringPointerValue(itemsItem.OutputAzureBlob.ID)
-				items.OutputAzureBlob.KeyValueMetadata = []tfTypes.OutputAzureBlobKeyValueMetadatum{}
+				items.OutputAzureBlob.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 				for _, keyValueMetadataItem := range itemsItem.OutputAzureBlob.KeyValueMetadata {
-					var keyValueMetadata tfTypes.OutputAzureBlobKeyValueMetadatum
+					var keyValueMetadata tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata.Key = types.StringPointerValue(keyValueMetadataItem.Key)
+					keyValueMetadata.Key = types.StringValue(keyValueMetadataItem.Key)
 					keyValueMetadata.Value = types.StringValue(keyValueMetadataItem.Value)
 
 					items.OutputAzureBlob.KeyValueMetadata = append(items.OutputAzureBlob.KeyValueMetadata, keyValueMetadata)
@@ -104,6 +111,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputAzureBlob.ParquetPageSize = types.StringPointerValue(itemsItem.OutputAzureBlob.ParquetPageSize)
 				items.OutputAzureBlob.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputAzureBlob.ParquetRowGroupLength)
+				items.OutputAzureBlob.ParquetSchema = types.StringPointerValue(itemsItem.OutputAzureBlob.ParquetSchema)
 				if itemsItem.OutputAzureBlob.ParquetVersion != nil {
 					items.OutputAzureBlob.ParquetVersion = types.StringValue(string(*itemsItem.OutputAzureBlob.ParquetVersion))
 				} else {
@@ -112,8 +120,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureBlob.PartitionExpr = types.StringPointerValue(itemsItem.OutputAzureBlob.PartitionExpr)
 				items.OutputAzureBlob.Pipeline = types.StringPointerValue(itemsItem.OutputAzureBlob.Pipeline)
 				items.OutputAzureBlob.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputAzureBlob.RemoveEmptyDirs)
+				if itemsItem.OutputAzureBlob.RetrySettings == nil {
+					items.OutputAzureBlob.RetrySettings = nil
+				} else {
+					items.OutputAzureBlob.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputAzureBlob.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputAzureBlob.RetrySettings.BackoffMultiplier)
+					items.OutputAzureBlob.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputAzureBlob.RetrySettings.Enabled)
+					items.OutputAzureBlob.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputAzureBlob.RetrySettings.InitialBackoffMs)
+					items.OutputAzureBlob.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputAzureBlob.RetrySettings.JitterPercent)
+					items.OutputAzureBlob.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputAzureBlob.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputAzureBlob.ShouldLogInvalidRows = types.BoolPointerValue(itemsItem.OutputAzureBlob.ShouldLogInvalidRows)
-				items.OutputAzureBlob.StagePath = types.StringPointerValue(itemsItem.OutputAzureBlob.StagePath)
+				items.OutputAzureBlob.StagePath = types.StringValue(itemsItem.OutputAzureBlob.StagePath)
 				items.OutputAzureBlob.StorageAccountName = types.StringPointerValue(itemsItem.OutputAzureBlob.StorageAccountName)
 				if itemsItem.OutputAzureBlob.StorageClass != nil {
 					items.OutputAzureBlob.StorageClass = types.StringValue(string(*itemsItem.OutputAzureBlob.StorageClass))
@@ -130,15 +148,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputAzureBlob.TenantID = types.StringPointerValue(itemsItem.OutputAzureBlob.TenantID)
 				items.OutputAzureBlob.TextSecret = types.StringPointerValue(itemsItem.OutputAzureBlob.TextSecret)
-				if itemsItem.OutputAzureBlob.Type != nil {
-					items.OutputAzureBlob.Type = types.StringValue(string(*itemsItem.OutputAzureBlob.Type))
-				} else {
-					items.OutputAzureBlob.Type = types.StringNull()
-				}
+				items.OutputAzureBlob.Type = types.StringValue(string(itemsItem.OutputAzureBlob.Type))
 				items.OutputAzureBlob.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputAzureBlob.WriteHighWaterMark)
 			}
 			if itemsItem.OutputAzureDataExplorer != nil {
 				items.OutputAzureDataExplorer = &tfTypes.OutputAzureDataExplorer{}
+				items.OutputAzureDataExplorer.TemplateClientID = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateClientID)
+				items.OutputAzureDataExplorer.TemplateClientSecret = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateClientSecret)
+				items.OutputAzureDataExplorer.TemplateClusterURL = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateClusterURL)
+				items.OutputAzureDataExplorer.TemplateDatabase = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateDatabase)
+				items.OutputAzureDataExplorer.TemplateFormat = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateFormat)
+				items.OutputAzureDataExplorer.TemplateIngestURL = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateIngestURL)
+				items.OutputAzureDataExplorer.TemplateScope = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateScope)
+				items.OutputAzureDataExplorer.TemplateTable = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateTable)
+				items.OutputAzureDataExplorer.TemplateTenantID = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.TemplateTenantID)
 				items.OutputAzureDataExplorer.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.AddIDToStagePath)
 				items.OutputAzureDataExplorer.AdditionalProperties = []tfTypes.AdditionalProperty{}
 
@@ -150,6 +173,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 
 					items.OutputAzureDataExplorer.AdditionalProperties = append(items.OutputAzureDataExplorer.AdditionalProperties, additionalProperties)
 				}
+				items.OutputAzureDataExplorer.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.AutomaticSchema)
 				if itemsItem.OutputAzureDataExplorer.Certificate == nil {
 					items.OutputAzureDataExplorer.Certificate = nil
 				} else {
@@ -159,15 +183,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureDataExplorer.ClientID = types.StringValue(itemsItem.OutputAzureDataExplorer.ClientID)
 				items.OutputAzureDataExplorer.ClientSecret = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.ClientSecret)
 				items.OutputAzureDataExplorer.ClusterURL = types.StringValue(itemsItem.OutputAzureDataExplorer.ClusterURL)
-				if itemsItem.OutputAzureDataExplorer.Compress != nil {
-					items.OutputAzureDataExplorer.Compress = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.Compress))
+				items.OutputAzureDataExplorer.Compress = types.StringValue(string(itemsItem.OutputAzureDataExplorer.Compress))
+				if itemsItem.OutputAzureDataExplorer.CompressionLevel != nil {
+					items.OutputAzureDataExplorer.CompressionLevel = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.CompressionLevel))
 				} else {
-					items.OutputAzureDataExplorer.Compress = types.StringNull()
+					items.OutputAzureDataExplorer.CompressionLevel = types.StringNull()
 				}
 				items.OutputAzureDataExplorer.Concurrency = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.Concurrency)
 				items.OutputAzureDataExplorer.Database = types.StringValue(itemsItem.OutputAzureDataExplorer.Database)
 				items.OutputAzureDataExplorer.DeadletterEnabled = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.DeadletterEnabled)
+				items.OutputAzureDataExplorer.DeadletterPath = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.DeadletterPath)
 				items.OutputAzureDataExplorer.Description = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.Description)
+				items.OutputAzureDataExplorer.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.DirectoryBatchSize)
+				items.OutputAzureDataExplorer.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.EmptyDirCleanupSec)
+				items.OutputAzureDataExplorer.EnablePageChecksum = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.EnablePageChecksum)
+				items.OutputAzureDataExplorer.EnableStatistics = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.EnableStatistics)
+				items.OutputAzureDataExplorer.EnableWritePageIndex = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.EnableWritePageIndex)
 				items.OutputAzureDataExplorer.Environment = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.Environment)
 				items.OutputAzureDataExplorer.ExtentTags = []tfTypes.ExtentTag{}
 
@@ -209,6 +240,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureDataExplorer.IngestURL = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.IngestURL)
 				items.OutputAzureDataExplorer.IsMappingObj = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.IsMappingObj)
 				items.OutputAzureDataExplorer.KeepAlive = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.KeepAlive)
+				items.OutputAzureDataExplorer.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
+
+				for _, keyValueMetadataItem1 := range itemsItem.OutputAzureDataExplorer.KeyValueMetadata {
+					var keyValueMetadata1 tfTypes.ItemsTypeKeyValueMetadata
+
+					keyValueMetadata1.Key = types.StringValue(keyValueMetadataItem1.Key)
+					keyValueMetadata1.Value = types.StringValue(keyValueMetadataItem1.Value)
+
+					items.OutputAzureDataExplorer.KeyValueMetadata = append(items.OutputAzureDataExplorer.KeyValueMetadata, keyValueMetadata1)
+				}
+				items.OutputAzureDataExplorer.MappingObj = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.MappingObj)
 				items.OutputAzureDataExplorer.MappingRef = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.MappingRef)
 				items.OutputAzureDataExplorer.MaxConcurrentFileParts = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxConcurrentFileParts)
 				items.OutputAzureDataExplorer.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxFileIdleTimeSec)
@@ -217,16 +259,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureDataExplorer.MaxOpenFiles = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxOpenFiles)
 				items.OutputAzureDataExplorer.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxPayloadEvents)
 				items.OutputAzureDataExplorer.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxPayloadSizeKB)
-				if itemsItem.OutputAzureDataExplorer.OauthEndpoint != nil {
-					items.OutputAzureDataExplorer.OauthEndpoint = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.OauthEndpoint))
-				} else {
-					items.OutputAzureDataExplorer.OauthEndpoint = types.StringNull()
-				}
-				if itemsItem.OutputAzureDataExplorer.OauthType != nil {
-					items.OutputAzureDataExplorer.OauthType = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.OauthType))
-				} else {
-					items.OutputAzureDataExplorer.OauthType = types.StringNull()
-				}
+				items.OutputAzureDataExplorer.MaxRetryNum = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.MaxRetryNum)
+				items.OutputAzureDataExplorer.OauthEndpoint = types.StringValue(string(itemsItem.OutputAzureDataExplorer.OauthEndpoint))
+				items.OutputAzureDataExplorer.OauthType = types.StringValue(string(itemsItem.OutputAzureDataExplorer.OauthType))
 				if itemsItem.OutputAzureDataExplorer.OnBackpressure != nil {
 					items.OutputAzureDataExplorer.OnBackpressure = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.OnBackpressure))
 				} else {
@@ -236,6 +271,19 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureDataExplorer.OnDiskFullBackpressure = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.OnDiskFullBackpressure))
 				} else {
 					items.OutputAzureDataExplorer.OnDiskFullBackpressure = types.StringNull()
+				}
+				if itemsItem.OutputAzureDataExplorer.ParquetDataPageVersion != nil {
+					items.OutputAzureDataExplorer.ParquetDataPageVersion = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.ParquetDataPageVersion))
+				} else {
+					items.OutputAzureDataExplorer.ParquetDataPageVersion = types.StringNull()
+				}
+				items.OutputAzureDataExplorer.ParquetPageSize = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.ParquetPageSize)
+				items.OutputAzureDataExplorer.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.ParquetRowGroupLength)
+				items.OutputAzureDataExplorer.ParquetSchema = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.ParquetSchema)
+				if itemsItem.OutputAzureDataExplorer.ParquetVersion != nil {
+					items.OutputAzureDataExplorer.ParquetVersion = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.ParquetVersion))
+				} else {
+					items.OutputAzureDataExplorer.ParquetVersion = types.StringNull()
 				}
 				items.OutputAzureDataExplorer.Pipeline = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.Pipeline)
 				if itemsItem.OutputAzureDataExplorer.PqCompress != nil {
@@ -248,6 +296,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputAzureDataExplorer.PqControls = &tfTypes.OutputAzureDataExplorerPqControls{}
 				}
+				items.OutputAzureDataExplorer.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.PqMaxBackpressureSec)
+				items.OutputAzureDataExplorer.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.PqMaxBufferSize)
+				items.OutputAzureDataExplorer.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.PqMaxBufferSizeBytes)
 				items.OutputAzureDataExplorer.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.PqMaxFileSize)
 				items.OutputAzureDataExplorer.PqMaxSize = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.PqMaxSize)
 				if itemsItem.OutputAzureDataExplorer.PqMode != nil {
@@ -261,6 +312,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureDataExplorer.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputAzureDataExplorer.PqPath = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.PqPath)
+				items.OutputAzureDataExplorer.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.PqRatePerSec)
+				items.OutputAzureDataExplorer.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.PqStrictOrdering)
 				items.OutputAzureDataExplorer.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.RejectUnauthorized)
 				items.OutputAzureDataExplorer.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.RemoveEmptyDirs)
 				if itemsItem.OutputAzureDataExplorer.ReportLevel != nil {
@@ -274,10 +327,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureDataExplorer.ReportMethod = types.StringNull()
 				}
 				items.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader)
-				items.OutputAzureDataExplorer.ResponseRetrySettings = []tfTypes.OutputAzureDataExplorerResponseRetrySetting{}
+				items.OutputAzureDataExplorer.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 				for _, responseRetrySettingsItem := range itemsItem.OutputAzureDataExplorer.ResponseRetrySettings {
-					var responseRetrySettings tfTypes.OutputAzureDataExplorerResponseRetrySetting
+					var responseRetrySettings tfTypes.ItemsTypeResponseRetrySettings
 
 					responseRetrySettings.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem.BackoffRate)
 					responseRetrySettings.HTTPStatus = types.Float64Value(responseRetrySettingsItem.HTTPStatus)
@@ -287,7 +340,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureDataExplorer.ResponseRetrySettings = append(items.OutputAzureDataExplorer.ResponseRetrySettings, responseRetrySettings)
 				}
 				items.OutputAzureDataExplorer.RetainBlobOnSuccess = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.RetainBlobOnSuccess)
+				if itemsItem.OutputAzureDataExplorer.RetrySettings == nil {
+					items.OutputAzureDataExplorer.RetrySettings = nil
+				} else {
+					items.OutputAzureDataExplorer.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputAzureDataExplorer.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.RetrySettings.BackoffMultiplier)
+					items.OutputAzureDataExplorer.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.RetrySettings.Enabled)
+					items.OutputAzureDataExplorer.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.RetrySettings.InitialBackoffMs)
+					items.OutputAzureDataExplorer.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.RetrySettings.JitterPercent)
+					items.OutputAzureDataExplorer.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputAzureDataExplorer.Scope = types.StringValue(itemsItem.OutputAzureDataExplorer.Scope)
+				items.OutputAzureDataExplorer.ShouldLogInvalidRows = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.ShouldLogInvalidRows)
 				items.OutputAzureDataExplorer.StagePath = types.StringPointerValue(itemsItem.OutputAzureDataExplorer.StagePath)
 				items.OutputAzureDataExplorer.Streamtags = make([]types.String, 0, len(itemsItem.OutputAzureDataExplorer.Streamtags))
 				for _, v := range itemsItem.OutputAzureDataExplorer.Streamtags {
@@ -303,23 +367,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings == nil {
 					items.OutputAzureDataExplorer.TimeoutRetrySettings = nil
 				} else {
-					items.OutputAzureDataExplorer.TimeoutRetrySettings = &tfTypes.OutputAzureDataExplorerTimeoutRetrySettings{}
+					items.OutputAzureDataExplorer.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputAzureDataExplorer.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings.BackoffRate)
 					items.OutputAzureDataExplorer.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings.InitialBackoff)
 					items.OutputAzureDataExplorer.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings.MaxBackoff)
-					items.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputAzureDataExplorer.TimeoutSec = types.Float64PointerValue(itemsItem.OutputAzureDataExplorer.TimeoutSec)
-				if itemsItem.OutputAzureDataExplorer.Type != nil {
-					items.OutputAzureDataExplorer.Type = types.StringValue(string(*itemsItem.OutputAzureDataExplorer.Type))
-				} else {
-					items.OutputAzureDataExplorer.Type = types.StringNull()
-				}
+				items.OutputAzureDataExplorer.Type = types.StringValue(string(itemsItem.OutputAzureDataExplorer.Type))
 				items.OutputAzureDataExplorer.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.UseRoundRobinDNS)
 				items.OutputAzureDataExplorer.ValidateDatabaseSettings = types.BoolPointerValue(itemsItem.OutputAzureDataExplorer.ValidateDatabaseSettings)
 			}
 			if itemsItem.OutputAzureEventhub != nil {
 				items.OutputAzureEventhub = &tfTypes.OutputAzureEventhub{}
+				items.OutputAzureEventhub.TemplateTopic = types.StringPointerValue(itemsItem.OutputAzureEventhub.TemplateTopic)
 				if itemsItem.OutputAzureEventhub.Ack != nil {
 					items.OutputAzureEventhub.Ack = types.Int64Value(int64(*itemsItem.OutputAzureEventhub.Ack))
 				} else {
@@ -362,6 +423,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputAzureEventhub.PqControls = &tfTypes.OutputAzureEventhubPqControls{}
 				}
+				items.OutputAzureEventhub.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputAzureEventhub.PqMaxBackpressureSec)
+				items.OutputAzureEventhub.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputAzureEventhub.PqMaxBufferSize)
+				items.OutputAzureEventhub.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputAzureEventhub.PqMaxBufferSizeBytes)
 				items.OutputAzureEventhub.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputAzureEventhub.PqMaxFileSize)
 				items.OutputAzureEventhub.PqMaxSize = types.StringPointerValue(itemsItem.OutputAzureEventhub.PqMaxSize)
 				if itemsItem.OutputAzureEventhub.PqMode != nil {
@@ -375,18 +439,47 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureEventhub.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputAzureEventhub.PqPath = types.StringPointerValue(itemsItem.OutputAzureEventhub.PqPath)
+				items.OutputAzureEventhub.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputAzureEventhub.PqRatePerSec)
+				items.OutputAzureEventhub.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputAzureEventhub.PqStrictOrdering)
 				items.OutputAzureEventhub.ReauthenticationThreshold = types.Float64PointerValue(itemsItem.OutputAzureEventhub.ReauthenticationThreshold)
 				items.OutputAzureEventhub.RequestTimeout = types.Float64PointerValue(itemsItem.OutputAzureEventhub.RequestTimeout)
 				if itemsItem.OutputAzureEventhub.Sasl == nil {
 					items.OutputAzureEventhub.Sasl = nil
 				} else {
-					items.OutputAzureEventhub.Sasl = &tfTypes.OutputAzureEventhubAuthentication{}
-					items.OutputAzureEventhub.Sasl.Disabled = types.BoolPointerValue(itemsItem.OutputAzureEventhub.Sasl.Disabled)
+					items.OutputAzureEventhub.Sasl = &tfTypes.AuthenticationTypeUse{}
+					if itemsItem.OutputAzureEventhub.Sasl.AuthType != nil {
+						items.OutputAzureEventhub.Sasl.AuthType = types.StringValue(string(*itemsItem.OutputAzureEventhub.Sasl.AuthType))
+					} else {
+						items.OutputAzureEventhub.Sasl.AuthType = types.StringNull()
+					}
+					items.OutputAzureEventhub.Sasl.CertificateName = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.CertificateName)
+					items.OutputAzureEventhub.Sasl.CertPath = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.CertPath)
+					items.OutputAzureEventhub.Sasl.ClientID = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.ClientID)
+					items.OutputAzureEventhub.Sasl.ClientSecret = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.ClientSecret)
+					if itemsItem.OutputAzureEventhub.Sasl.ClientSecretAuthType != nil {
+						items.OutputAzureEventhub.Sasl.ClientSecretAuthType = types.StringValue(string(*itemsItem.OutputAzureEventhub.Sasl.ClientSecretAuthType))
+					} else {
+						items.OutputAzureEventhub.Sasl.ClientSecretAuthType = types.StringNull()
+					}
+					items.OutputAzureEventhub.Sasl.ClientTextSecret = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.ClientTextSecret)
+					items.OutputAzureEventhub.Sasl.Disabled = types.BoolValue(itemsItem.OutputAzureEventhub.Sasl.Disabled)
 					if itemsItem.OutputAzureEventhub.Sasl.Mechanism != nil {
 						items.OutputAzureEventhub.Sasl.Mechanism = types.StringValue(string(*itemsItem.OutputAzureEventhub.Sasl.Mechanism))
 					} else {
 						items.OutputAzureEventhub.Sasl.Mechanism = types.StringNull()
 					}
+					if itemsItem.OutputAzureEventhub.Sasl.OauthEndpoint != nil {
+						items.OutputAzureEventhub.Sasl.OauthEndpoint = types.StringValue(string(*itemsItem.OutputAzureEventhub.Sasl.OauthEndpoint))
+					} else {
+						items.OutputAzureEventhub.Sasl.OauthEndpoint = types.StringNull()
+					}
+					items.OutputAzureEventhub.Sasl.Passphrase = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.Passphrase)
+					items.OutputAzureEventhub.Sasl.Password = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.Password)
+					items.OutputAzureEventhub.Sasl.PrivKeyPath = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.PrivKeyPath)
+					items.OutputAzureEventhub.Sasl.Scope = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.Scope)
+					items.OutputAzureEventhub.Sasl.TenantID = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.TenantID)
+					items.OutputAzureEventhub.Sasl.TextSecret = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.TextSecret)
+					items.OutputAzureEventhub.Sasl.Username = types.StringPointerValue(itemsItem.OutputAzureEventhub.Sasl.Username)
 				}
 				items.OutputAzureEventhub.Streamtags = make([]types.String, 0, len(itemsItem.OutputAzureEventhub.Streamtags))
 				for _, v := range itemsItem.OutputAzureEventhub.Streamtags {
@@ -399,19 +492,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputAzureEventhub.TLS == nil {
 					items.OutputAzureEventhub.TLS = nil
 				} else {
-					items.OutputAzureEventhub.TLS = &tfTypes.OutputAzureEventhubTLSSettingsClientSide{}
-					items.OutputAzureEventhub.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputAzureEventhub.TLS.Disabled)
+					items.OutputAzureEventhub.TLS = &tfTypes.TLSSettingsClientSideType{}
+					items.OutputAzureEventhub.TLS.Disabled = types.BoolValue(itemsItem.OutputAzureEventhub.TLS.Disabled)
 					items.OutputAzureEventhub.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputAzureEventhub.TLS.RejectUnauthorized)
 				}
 				items.OutputAzureEventhub.Topic = types.StringValue(itemsItem.OutputAzureEventhub.Topic)
-				if itemsItem.OutputAzureEventhub.Type != nil {
-					items.OutputAzureEventhub.Type = types.StringValue(string(*itemsItem.OutputAzureEventhub.Type))
-				} else {
-					items.OutputAzureEventhub.Type = types.StringNull()
-				}
+				items.OutputAzureEventhub.Type = types.StringValue(string(itemsItem.OutputAzureEventhub.Type))
 			}
 			if itemsItem.OutputAzureLogs != nil {
 				items.OutputAzureLogs = &tfTypes.OutputAzureLogs{}
+				items.OutputAzureLogs.TemplateWorkspaceID = types.StringPointerValue(itemsItem.OutputAzureLogs.TemplateWorkspaceID)
+				items.OutputAzureLogs.TemplateWorkspaceKey = types.StringPointerValue(itemsItem.OutputAzureLogs.TemplateWorkspaceKey)
 				items.OutputAzureLogs.APIURL = types.StringPointerValue(itemsItem.OutputAzureLogs.APIURL)
 				if itemsItem.OutputAzureLogs.AuthType != nil {
 					items.OutputAzureLogs.AuthType = types.StringValue(string(*itemsItem.OutputAzureLogs.AuthType))
@@ -422,10 +513,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureLogs.Concurrency = types.Float64PointerValue(itemsItem.OutputAzureLogs.Concurrency)
 				items.OutputAzureLogs.Description = types.StringPointerValue(itemsItem.OutputAzureLogs.Description)
 				items.OutputAzureLogs.Environment = types.StringPointerValue(itemsItem.OutputAzureLogs.Environment)
-				items.OutputAzureLogs.ExtraHTTPHeaders = []tfTypes.OutputAzureLogsExtraHTTPHeader{}
+				items.OutputAzureLogs.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 				for _, extraHTTPHeadersItem := range itemsItem.OutputAzureLogs.ExtraHTTPHeaders {
-					var extraHTTPHeaders tfTypes.OutputAzureLogsExtraHTTPHeader
+					var extraHTTPHeaders tfTypes.ItemsTypeExtraHTTPHeaders
 
 					extraHTTPHeaders.Name = types.StringPointerValue(extraHTTPHeadersItem.Name)
 					extraHTTPHeaders.Value = types.StringValue(extraHTTPHeadersItem.Value)
@@ -440,7 +531,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputAzureLogs.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputAzureLogs.FlushPeriodSec)
 				items.OutputAzureLogs.ID = types.StringPointerValue(itemsItem.OutputAzureLogs.ID)
 				items.OutputAzureLogs.KeypairSecret = types.StringPointerValue(itemsItem.OutputAzureLogs.KeypairSecret)
-				items.OutputAzureLogs.LogType = types.StringPointerValue(itemsItem.OutputAzureLogs.LogType)
+				items.OutputAzureLogs.LogType = types.StringValue(itemsItem.OutputAzureLogs.LogType)
 				items.OutputAzureLogs.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputAzureLogs.MaxPayloadEvents)
 				items.OutputAzureLogs.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputAzureLogs.MaxPayloadSizeKB)
 				if itemsItem.OutputAzureLogs.OnBackpressure != nil {
@@ -459,6 +550,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputAzureLogs.PqControls = &tfTypes.OutputAzureLogsPqControls{}
 				}
+				items.OutputAzureLogs.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputAzureLogs.PqMaxBackpressureSec)
+				items.OutputAzureLogs.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputAzureLogs.PqMaxBufferSize)
+				items.OutputAzureLogs.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputAzureLogs.PqMaxBufferSizeBytes)
 				items.OutputAzureLogs.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputAzureLogs.PqMaxFileSize)
 				items.OutputAzureLogs.PqMaxSize = types.StringPointerValue(itemsItem.OutputAzureLogs.PqMaxSize)
 				if itemsItem.OutputAzureLogs.PqMode != nil {
@@ -472,13 +566,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputAzureLogs.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputAzureLogs.PqPath = types.StringPointerValue(itemsItem.OutputAzureLogs.PqPath)
+				items.OutputAzureLogs.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputAzureLogs.PqRatePerSec)
+				items.OutputAzureLogs.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputAzureLogs.PqStrictOrdering)
 				items.OutputAzureLogs.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputAzureLogs.RejectUnauthorized)
 				items.OutputAzureLogs.ResourceID = types.StringPointerValue(itemsItem.OutputAzureLogs.ResourceID)
 				items.OutputAzureLogs.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputAzureLogs.ResponseHonorRetryAfterHeader)
-				items.OutputAzureLogs.ResponseRetrySettings = []tfTypes.OutputAzureLogsResponseRetrySetting{}
+				items.OutputAzureLogs.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 				for _, responseRetrySettingsItem1 := range itemsItem.OutputAzureLogs.ResponseRetrySettings {
-					var responseRetrySettings1 tfTypes.OutputAzureLogsResponseRetrySetting
+					var responseRetrySettings1 tfTypes.ItemsTypeResponseRetrySettings
 
 					responseRetrySettings1.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem1.BackoffRate)
 					responseRetrySettings1.HTTPStatus = types.Float64Value(responseRetrySettingsItem1.HTTPStatus)
@@ -502,11 +598,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputAzureLogs.TimeoutRetrySettings == nil {
 					items.OutputAzureLogs.TimeoutRetrySettings = nil
 				} else {
-					items.OutputAzureLogs.TimeoutRetrySettings = &tfTypes.OutputAzureLogsTimeoutRetrySettings{}
+					items.OutputAzureLogs.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputAzureLogs.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputAzureLogs.TimeoutRetrySettings.BackoffRate)
 					items.OutputAzureLogs.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputAzureLogs.TimeoutRetrySettings.InitialBackoff)
 					items.OutputAzureLogs.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputAzureLogs.TimeoutRetrySettings.MaxBackoff)
-					items.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputAzureLogs.TimeoutSec = types.Float64PointerValue(itemsItem.OutputAzureLogs.TimeoutSec)
 				items.OutputAzureLogs.Type = types.StringValue(string(itemsItem.OutputAzureLogs.Type))
@@ -516,6 +612,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputChronicle != nil {
 				items.OutputChronicle = &tfTypes.OutputChronicle{}
+				items.OutputChronicle.TemplateEndpoint = types.StringPointerValue(itemsItem.OutputChronicle.TemplateEndpoint)
+				items.OutputChronicle.TemplateRegion = types.StringPointerValue(itemsItem.OutputChronicle.TemplateRegion)
 				items.OutputChronicle.APIVersion = types.StringPointerValue(itemsItem.OutputChronicle.APIVersion)
 				if itemsItem.OutputChronicle.AuthenticationMethod != nil {
 					items.OutputChronicle.AuthenticationMethod = types.StringValue(string(*itemsItem.OutputChronicle.AuthenticationMethod))
@@ -524,10 +622,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputChronicle.Compress = types.BoolPointerValue(itemsItem.OutputChronicle.Compress)
 				items.OutputChronicle.Concurrency = types.Float64PointerValue(itemsItem.OutputChronicle.Concurrency)
-				items.OutputChronicle.CustomLabels = []tfTypes.OutputChronicleCustomLabel{}
+				items.OutputChronicle.CustomLabels = []tfTypes.CustomLabel{}
 
 				for _, customLabelsItem := range itemsItem.OutputChronicle.CustomLabels {
-					var customLabels tfTypes.OutputChronicleCustomLabel
+					var customLabels tfTypes.CustomLabel
 
 					customLabels.Key = types.StringValue(customLabelsItem.Key)
 					customLabels.RbacEnabled = types.BoolPointerValue(customLabelsItem.RbacEnabled)
@@ -536,11 +634,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputChronicle.CustomLabels = append(items.OutputChronicle.CustomLabels, customLabels)
 				}
 				items.OutputChronicle.Description = types.StringPointerValue(itemsItem.OutputChronicle.Description)
+				items.OutputChronicle.Endpoint = types.StringPointerValue(itemsItem.OutputChronicle.Endpoint)
 				items.OutputChronicle.Environment = types.StringPointerValue(itemsItem.OutputChronicle.Environment)
-				items.OutputChronicle.ExtraHTTPHeaders = []tfTypes.OutputChronicleExtraHTTPHeader{}
+				items.OutputChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 				for _, extraHTTPHeadersItem1 := range itemsItem.OutputChronicle.ExtraHTTPHeaders {
-					var extraHTTPHeaders1 tfTypes.OutputChronicleExtraHTTPHeader
+					var extraHTTPHeaders1 tfTypes.ItemsTypeExtraHTTPHeaders
 
 					extraHTTPHeaders1.Name = types.StringPointerValue(extraHTTPHeadersItem1.Name)
 					extraHTTPHeaders1.Value = types.StringValue(extraHTTPHeadersItem1.Value)
@@ -580,6 +679,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputChronicle.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputChronicle.PqMaxBackpressureSec)
 				items.OutputChronicle.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputChronicle.PqMaxBufferSize)
+				items.OutputChronicle.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputChronicle.PqMaxBufferSizeBytes)
 				items.OutputChronicle.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputChronicle.PqMaxFileSize)
 				items.OutputChronicle.PqMaxSize = types.StringPointerValue(itemsItem.OutputChronicle.PqMaxSize)
 				if itemsItem.OutputChronicle.PqMode != nil {
@@ -598,10 +698,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputChronicle.Region = types.StringValue(itemsItem.OutputChronicle.Region)
 				items.OutputChronicle.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputChronicle.RejectUnauthorized)
 				items.OutputChronicle.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputChronicle.ResponseHonorRetryAfterHeader)
-				items.OutputChronicle.ResponseRetrySettings = []tfTypes.OutputChronicleResponseRetrySetting{}
+				items.OutputChronicle.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 				for _, responseRetrySettingsItem2 := range itemsItem.OutputChronicle.ResponseRetrySettings {
-					var responseRetrySettings2 tfTypes.OutputChronicleResponseRetrySetting
+					var responseRetrySettings2 tfTypes.ItemsTypeResponseRetrySettings
 
 					responseRetrySettings2.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem2.BackoffRate)
 					responseRetrySettings2.HTTPStatus = types.Float64Value(responseRetrySettingsItem2.HTTPStatus)
@@ -627,11 +727,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputChronicle.TimeoutRetrySettings == nil {
 					items.OutputChronicle.TimeoutRetrySettings = nil
 				} else {
-					items.OutputChronicle.TimeoutRetrySettings = &tfTypes.OutputChronicleTimeoutRetrySettings{}
+					items.OutputChronicle.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputChronicle.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputChronicle.TimeoutRetrySettings.BackoffRate)
 					items.OutputChronicle.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputChronicle.TimeoutRetrySettings.InitialBackoff)
 					items.OutputChronicle.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputChronicle.TimeoutRetrySettings.MaxBackoff)
-					items.OutputChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputChronicle.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputChronicle.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputChronicle.TimeoutSec = types.Float64PointerValue(itemsItem.OutputChronicle.TimeoutSec)
 				items.OutputChronicle.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputChronicle.TotalMemoryLimitKB)
@@ -640,8 +740,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputClickHouse != nil {
 				items.OutputClickHouse = &tfTypes.OutputClickHouse{}
+				items.OutputClickHouse.TemplateDatabase = types.StringPointerValue(itemsItem.OutputClickHouse.TemplateDatabase)
+				items.OutputClickHouse.TemplateTableName = types.StringPointerValue(itemsItem.OutputClickHouse.TemplateTableName)
+				items.OutputClickHouse.TemplateURL = types.StringPointerValue(itemsItem.OutputClickHouse.TemplateURL)
 				items.OutputClickHouse.AsyncInserts = types.BoolPointerValue(itemsItem.OutputClickHouse.AsyncInserts)
-				items.OutputClickHouse.AuthHeaderExpr = types.StringPointerValue(itemsItem.OutputClickHouse.AuthHeaderExpr)
+				if itemsItem.OutputClickHouse.AuthHeaderExpr == nil {
+					items.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+				} else {
+					authHeaderExprResult, _ := json.Marshal(itemsItem.OutputClickHouse.AuthHeaderExpr)
+					items.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
+				}
 				if itemsItem.OutputClickHouse.AuthType != nil {
 					items.OutputClickHouse.AuthType = types.StringValue(string(*itemsItem.OutputClickHouse.AuthType))
 				} else {
@@ -670,10 +778,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputClickHouse.ExcludeMappingFields {
 					items.OutputClickHouse.ExcludeMappingFields = append(items.OutputClickHouse.ExcludeMappingFields, types.StringValue(v))
 				}
-				items.OutputClickHouse.ExtraHTTPHeaders = []tfTypes.OutputClickHouseExtraHTTPHeader{}
+				items.OutputClickHouse.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 				for _, extraHTTPHeadersItem2 := range itemsItem.OutputClickHouse.ExtraHTTPHeaders {
-					var extraHTTPHeaders2 tfTypes.OutputClickHouseExtraHTTPHeader
+					var extraHTTPHeaders2 tfTypes.ItemsTypeExtraHTTPHeaders
 
 					extraHTTPHeaders2.Name = types.StringPointerValue(extraHTTPHeadersItem2.Name)
 					extraHTTPHeaders2.Value = types.StringValue(extraHTTPHeadersItem2.Value)
@@ -692,7 +800,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputClickHouse.Format = types.StringNull()
 				}
 				items.OutputClickHouse.ID = types.StringPointerValue(itemsItem.OutputClickHouse.ID)
-				items.OutputClickHouse.LoginURL = types.StringPointerValue(itemsItem.OutputClickHouse.LoginURL)
+				if itemsItem.OutputClickHouse.LoginURL == nil {
+					items.OutputClickHouse.LoginURL = jsontypes.NewNormalizedNull()
+				} else {
+					loginURLResult, _ := json.Marshal(itemsItem.OutputClickHouse.LoginURL)
+					items.OutputClickHouse.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
+				}
 				if itemsItem.OutputClickHouse.MappingType != nil {
 					items.OutputClickHouse.MappingType = types.StringValue(string(*itemsItem.OutputClickHouse.MappingType))
 				} else {
@@ -705,8 +818,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, oauthHeadersItem := range itemsItem.OutputClickHouse.OauthHeaders {
 					var oauthHeaders tfTypes.OutputClickHouseOauthHeader
 
-					oauthHeaders.Name = types.StringValue(oauthHeadersItem.Name)
-					oauthHeaders.Value = types.StringValue(oauthHeadersItem.Value)
+					if oauthHeadersItem.Name == nil {
+						oauthHeaders.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult, _ := json.Marshal(oauthHeadersItem.Name)
+						oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
+					}
+					if oauthHeadersItem.Value == nil {
+						oauthHeaders.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult, _ := json.Marshal(oauthHeadersItem.Value)
+						oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
+					}
 
 					items.OutputClickHouse.OauthHeaders = append(items.OutputClickHouse.OauthHeaders, oauthHeaders)
 				}
@@ -715,8 +838,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, oauthParamsItem := range itemsItem.OutputClickHouse.OauthParams {
 					var oauthParams tfTypes.OutputClickHouseOauthParam
 
-					oauthParams.Name = types.StringValue(oauthParamsItem.Name)
-					oauthParams.Value = types.StringValue(oauthParamsItem.Value)
+					if oauthParamsItem.Name == nil {
+						oauthParams.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult1, _ := json.Marshal(oauthParamsItem.Name)
+						oauthParams.Name = jsontypes.NewNormalizedValue(string(nameResult1))
+					}
+					if oauthParamsItem.Value == nil {
+						oauthParams.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult1, _ := json.Marshal(oauthParamsItem.Value)
+						oauthParams.Value = jsontypes.NewNormalizedValue(string(valueResult1))
+					}
 
 					items.OutputClickHouse.OauthParams = append(items.OutputClickHouse.OauthParams, oauthParams)
 				}
@@ -737,6 +870,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputClickHouse.PqControls = &tfTypes.OutputClickHousePqControls{}
 				}
+				items.OutputClickHouse.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputClickHouse.PqMaxBackpressureSec)
+				items.OutputClickHouse.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputClickHouse.PqMaxBufferSize)
+				items.OutputClickHouse.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputClickHouse.PqMaxBufferSizeBytes)
 				items.OutputClickHouse.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputClickHouse.PqMaxFileSize)
 				items.OutputClickHouse.PqMaxSize = types.StringPointerValue(itemsItem.OutputClickHouse.PqMaxSize)
 				if itemsItem.OutputClickHouse.PqMode != nil {
@@ -750,12 +886,14 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputClickHouse.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputClickHouse.PqPath = types.StringPointerValue(itemsItem.OutputClickHouse.PqPath)
+				items.OutputClickHouse.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputClickHouse.PqRatePerSec)
+				items.OutputClickHouse.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputClickHouse.PqStrictOrdering)
 				items.OutputClickHouse.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputClickHouse.RejectUnauthorized)
 				items.OutputClickHouse.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputClickHouse.ResponseHonorRetryAfterHeader)
-				items.OutputClickHouse.ResponseRetrySettings = []tfTypes.OutputClickHouseResponseRetrySetting{}
+				items.OutputClickHouse.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 				for _, responseRetrySettingsItem3 := range itemsItem.OutputClickHouse.ResponseRetrySettings {
-					var responseRetrySettings3 tfTypes.OutputClickHouseResponseRetrySetting
+					var responseRetrySettings3 tfTypes.ItemsTypeResponseRetrySettings
 
 					responseRetrySettings3.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem3.BackoffRate)
 					responseRetrySettings3.HTTPStatus = types.Float64Value(responseRetrySettingsItem3.HTTPStatus)
@@ -768,8 +906,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputClickHouse.SafeHeaders {
 					items.OutputClickHouse.SafeHeaders = append(items.OutputClickHouse.SafeHeaders, types.StringValue(v))
 				}
-				items.OutputClickHouse.Secret = types.StringPointerValue(itemsItem.OutputClickHouse.Secret)
-				items.OutputClickHouse.SecretParamName = types.StringPointerValue(itemsItem.OutputClickHouse.SecretParamName)
+				if itemsItem.OutputClickHouse.Secret == nil {
+					items.OutputClickHouse.Secret = jsontypes.NewNormalizedNull()
+				} else {
+					secretResult, _ := json.Marshal(itemsItem.OutputClickHouse.Secret)
+					items.OutputClickHouse.Secret = jsontypes.NewNormalizedValue(string(secretResult))
+				}
+				if itemsItem.OutputClickHouse.SecretParamName == nil {
+					items.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedNull()
+				} else {
+					secretParamNameResult, _ := json.Marshal(itemsItem.OutputClickHouse.SecretParamName)
+					items.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
+				}
 				items.OutputClickHouse.SQLUsername = types.StringPointerValue(itemsItem.OutputClickHouse.SQLUsername)
 				items.OutputClickHouse.Streamtags = make([]types.String, 0, len(itemsItem.OutputClickHouse.Streamtags))
 				for _, v := range itemsItem.OutputClickHouse.Streamtags {
@@ -780,21 +928,26 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputClickHouse.SystemFields = append(items.OutputClickHouse.SystemFields, types.StringValue(v))
 				}
 				items.OutputClickHouse.TableName = types.StringValue(itemsItem.OutputClickHouse.TableName)
-				items.OutputClickHouse.TextSecret = types.StringPointerValue(itemsItem.OutputClickHouse.TextSecret)
+				if itemsItem.OutputClickHouse.TextSecret == nil {
+					items.OutputClickHouse.TextSecret = jsontypes.NewNormalizedNull()
+				} else {
+					textSecretResult, _ := json.Marshal(itemsItem.OutputClickHouse.TextSecret)
+					items.OutputClickHouse.TextSecret = jsontypes.NewNormalizedValue(string(textSecretResult))
+				}
 				if itemsItem.OutputClickHouse.TimeoutRetrySettings == nil {
 					items.OutputClickHouse.TimeoutRetrySettings = nil
 				} else {
-					items.OutputClickHouse.TimeoutRetrySettings = &tfTypes.OutputClickHouseTimeoutRetrySettings{}
+					items.OutputClickHouse.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputClickHouse.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputClickHouse.TimeoutRetrySettings.BackoffRate)
 					items.OutputClickHouse.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputClickHouse.TimeoutRetrySettings.InitialBackoff)
 					items.OutputClickHouse.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputClickHouse.TimeoutRetrySettings.MaxBackoff)
-					items.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputClickHouse.TimeoutSec = types.Float64PointerValue(itemsItem.OutputClickHouse.TimeoutSec)
 				if itemsItem.OutputClickHouse.TLS == nil {
 					items.OutputClickHouse.TLS = nil
 				} else {
-					items.OutputClickHouse.TLS = &tfTypes.OutputClickHouseTLSSettingsClientSide{}
+					items.OutputClickHouse.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
 					items.OutputClickHouse.TLS.CaPath = types.StringPointerValue(itemsItem.OutputClickHouse.TLS.CaPath)
 					items.OutputClickHouse.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputClickHouse.TLS.CertificateName)
 					items.OutputClickHouse.TLS.CertPath = types.StringPointerValue(itemsItem.OutputClickHouse.TLS.CertPath)
@@ -813,14 +966,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputClickHouse.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.OutputClickHouse.TLS.PrivKeyPath)
 					items.OutputClickHouse.TLS.Servername = types.StringPointerValue(itemsItem.OutputClickHouse.TLS.Servername)
 				}
-				items.OutputClickHouse.Token = types.StringPointerValue(itemsItem.OutputClickHouse.Token)
-				items.OutputClickHouse.TokenAttributeName = types.StringPointerValue(itemsItem.OutputClickHouse.TokenAttributeName)
-				items.OutputClickHouse.TokenTimeoutSecs = types.Float64PointerValue(itemsItem.OutputClickHouse.TokenTimeoutSecs)
-				if itemsItem.OutputClickHouse.Type != nil {
-					items.OutputClickHouse.Type = types.StringValue(string(*itemsItem.OutputClickHouse.Type))
+				if itemsItem.OutputClickHouse.Token == nil {
+					items.OutputClickHouse.Token = jsontypes.NewNormalizedNull()
 				} else {
-					items.OutputClickHouse.Type = types.StringNull()
+					tokenResult, _ := json.Marshal(itemsItem.OutputClickHouse.Token)
+					items.OutputClickHouse.Token = jsontypes.NewNormalizedValue(string(tokenResult))
 				}
+				if itemsItem.OutputClickHouse.TokenAttributeName == nil {
+					items.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedNull()
+				} else {
+					tokenAttributeNameResult, _ := json.Marshal(itemsItem.OutputClickHouse.TokenAttributeName)
+					items.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
+				}
+				if itemsItem.OutputClickHouse.TokenTimeoutSecs == nil {
+					items.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+				} else {
+					tokenTimeoutSecsResult, _ := json.Marshal(itemsItem.OutputClickHouse.TokenTimeoutSecs)
+					items.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
+				}
+				items.OutputClickHouse.Type = types.StringValue(string(itemsItem.OutputClickHouse.Type))
 				items.OutputClickHouse.URL = types.StringValue(itemsItem.OutputClickHouse.URL)
 				items.OutputClickHouse.Username = types.StringPointerValue(itemsItem.OutputClickHouse.Username)
 				items.OutputClickHouse.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputClickHouse.UseRoundRobinDNS)
@@ -828,9 +992,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputCloudflareR2 != nil {
 				items.OutputCloudflareR2 = &tfTypes.OutputCloudflareR2{}
+				items.OutputCloudflareR2.TemplateBucket = types.StringPointerValue(itemsItem.OutputCloudflareR2.TemplateBucket)
+				items.OutputCloudflareR2.TemplateFormat = types.StringPointerValue(itemsItem.OutputCloudflareR2.TemplateFormat)
 				items.OutputCloudflareR2.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputCloudflareR2.AddIDToStagePath)
 				items.OutputCloudflareR2.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputCloudflareR2.AutomaticSchema)
-				items.OutputCloudflareR2.AwsAPIKey = types.StringPointerValue(itemsItem.OutputCloudflareR2.AwsAPIKey)
+				if itemsItem.OutputCloudflareR2.AwsAPIKey == nil {
+					items.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedNull()
+				} else {
+					awsAPIKeyResult, _ := json.Marshal(itemsItem.OutputCloudflareR2.AwsAPIKey)
+					items.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedValue(string(awsAPIKeyResult))
+				}
 				if itemsItem.OutputCloudflareR2.AwsAuthenticationMethod != nil {
 					items.OutputCloudflareR2.AwsAuthenticationMethod = types.StringValue(string(*itemsItem.OutputCloudflareR2.AwsAuthenticationMethod))
 				} else {
@@ -870,15 +1041,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputCloudflareR2.HeaderLine = types.StringPointerValue(itemsItem.OutputCloudflareR2.HeaderLine)
 				items.OutputCloudflareR2.ID = types.StringPointerValue(itemsItem.OutputCloudflareR2.ID)
-				items.OutputCloudflareR2.KeyValueMetadata = []tfTypes.OutputCloudflareR2KeyValueMetadatum{}
+				items.OutputCloudflareR2.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem1 := range itemsItem.OutputCloudflareR2.KeyValueMetadata {
-					var keyValueMetadata1 tfTypes.OutputCloudflareR2KeyValueMetadatum
+				for _, keyValueMetadataItem2 := range itemsItem.OutputCloudflareR2.KeyValueMetadata {
+					var keyValueMetadata2 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata1.Key = types.StringPointerValue(keyValueMetadataItem1.Key)
-					keyValueMetadata1.Value = types.StringValue(keyValueMetadataItem1.Value)
+					keyValueMetadata2.Key = types.StringValue(keyValueMetadataItem2.Key)
+					keyValueMetadata2.Value = types.StringValue(keyValueMetadataItem2.Value)
 
-					items.OutputCloudflareR2.KeyValueMetadata = append(items.OutputCloudflareR2.KeyValueMetadata, keyValueMetadata1)
+					items.OutputCloudflareR2.KeyValueMetadata = append(items.OutputCloudflareR2.KeyValueMetadata, keyValueMetadata2)
 				}
 				items.OutputCloudflareR2.MaxConcurrentFileParts = types.Float64PointerValue(itemsItem.OutputCloudflareR2.MaxConcurrentFileParts)
 				items.OutputCloudflareR2.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputCloudflareR2.MaxFileIdleTimeSec)
@@ -925,6 +1096,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputCloudflareR2.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCloudflareR2.RejectUnauthorized)
 				items.OutputCloudflareR2.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputCloudflareR2.RemoveEmptyDirs)
+				if itemsItem.OutputCloudflareR2.RetrySettings == nil {
+					items.OutputCloudflareR2.RetrySettings = nil
+				} else {
+					items.OutputCloudflareR2.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputCloudflareR2.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputCloudflareR2.RetrySettings.BackoffMultiplier)
+					items.OutputCloudflareR2.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputCloudflareR2.RetrySettings.Enabled)
+					items.OutputCloudflareR2.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputCloudflareR2.RetrySettings.InitialBackoffMs)
+					items.OutputCloudflareR2.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputCloudflareR2.RetrySettings.JitterPercent)
+					items.OutputCloudflareR2.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputCloudflareR2.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputCloudflareR2.ReuseConnections = types.BoolPointerValue(itemsItem.OutputCloudflareR2.ReuseConnections)
 				if itemsItem.OutputCloudflareR2.ServerSideEncryption != nil {
 					items.OutputCloudflareR2.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputCloudflareR2.ServerSideEncryption))
@@ -937,7 +1118,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputCloudflareR2.SignatureVersion = types.StringNull()
 				}
-				items.OutputCloudflareR2.StagePath = types.StringPointerValue(itemsItem.OutputCloudflareR2.StagePath)
+				items.OutputCloudflareR2.StagePath = types.StringValue(itemsItem.OutputCloudflareR2.StagePath)
 				if itemsItem.OutputCloudflareR2.StorageClass != nil {
 					items.OutputCloudflareR2.StorageClass = types.StringValue(string(*itemsItem.OutputCloudflareR2.StorageClass))
 				} else {
@@ -957,6 +1138,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputCloudwatch != nil {
 				items.OutputCloudwatch = &tfTypes.OutputCloudwatch{}
+				items.OutputCloudwatch.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputCloudwatch.TemplateAssumeRoleArn)
+				items.OutputCloudwatch.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputCloudwatch.TemplateAssumeRoleExternalID)
+				items.OutputCloudwatch.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputCloudwatch.TemplateAwsAPIKey)
+				items.OutputCloudwatch.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputCloudwatch.TemplateAwsSecretKey)
+				items.OutputCloudwatch.TemplateRegion = types.StringPointerValue(itemsItem.OutputCloudwatch.TemplateRegion)
 				items.OutputCloudwatch.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputCloudwatch.AssumeRoleArn)
 				items.OutputCloudwatch.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputCloudwatch.AssumeRoleExternalID)
 				items.OutputCloudwatch.AwsAPIKey = types.StringPointerValue(itemsItem.OutputCloudwatch.AwsAPIKey)
@@ -994,6 +1180,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputCloudwatch.PqControls = &tfTypes.OutputCloudwatchPqControls{}
 				}
+				items.OutputCloudwatch.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputCloudwatch.PqMaxBackpressureSec)
+				items.OutputCloudwatch.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputCloudwatch.PqMaxBufferSize)
+				items.OutputCloudwatch.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputCloudwatch.PqMaxBufferSizeBytes)
 				items.OutputCloudwatch.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputCloudwatch.PqMaxFileSize)
 				items.OutputCloudwatch.PqMaxSize = types.StringPointerValue(itemsItem.OutputCloudwatch.PqMaxSize)
 				if itemsItem.OutputCloudwatch.PqMode != nil {
@@ -1007,6 +1196,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCloudwatch.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputCloudwatch.PqPath = types.StringPointerValue(itemsItem.OutputCloudwatch.PqPath)
+				items.OutputCloudwatch.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputCloudwatch.PqRatePerSec)
+				items.OutputCloudwatch.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputCloudwatch.PqStrictOrdering)
 				items.OutputCloudwatch.Region = types.StringValue(itemsItem.OutputCloudwatch.Region)
 				items.OutputCloudwatch.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCloudwatch.RejectUnauthorized)
 				items.OutputCloudwatch.ReuseConnections = types.BoolPointerValue(itemsItem.OutputCloudwatch.ReuseConnections)
@@ -1018,14 +1209,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputCloudwatch.SystemFields {
 					items.OutputCloudwatch.SystemFields = append(items.OutputCloudwatch.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputCloudwatch.Type != nil {
-					items.OutputCloudwatch.Type = types.StringValue(string(*itemsItem.OutputCloudwatch.Type))
-				} else {
-					items.OutputCloudwatch.Type = types.StringNull()
-				}
+				items.OutputCloudwatch.Type = types.StringValue(string(itemsItem.OutputCloudwatch.Type))
 			}
 			if itemsItem.OutputConfluentCloud != nil {
 				items.OutputConfluentCloud = &tfTypes.OutputConfluentCloud{}
+				items.OutputConfluentCloud.TemplateTopic = types.StringPointerValue(itemsItem.OutputConfluentCloud.TemplateTopic)
 				if itemsItem.OutputConfluentCloud.Ack != nil {
 					items.OutputConfluentCloud.Ack = types.Int64Value(int64(*itemsItem.OutputConfluentCloud.Ack))
 				} else {
@@ -1057,25 +1245,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputConfluentCloud.KafkaSchemaRegistry == nil {
 					items.OutputConfluentCloud.KafkaSchemaRegistry = nil
 				} else {
-					items.OutputConfluentCloud.KafkaSchemaRegistry = &tfTypes.OutputConfluentCloudKafkaSchemaRegistryAuthentication{}
+					items.OutputConfluentCloud.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 					if itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Auth == nil {
 						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth = nil
 					} else {
-						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.OutputConfluentCloudAuth{}
+						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret)
-						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled)
+						items.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled)
 					}
 					items.OutputConfluentCloud.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.ConnectionTimeout)
 					items.OutputConfluentCloud.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.DefaultKeySchemaID)
 					items.OutputConfluentCloud.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.DefaultValueSchemaID)
-					items.OutputConfluentCloud.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Disabled)
+					items.OutputConfluentCloud.KafkaSchemaRegistry.Disabled = types.BoolValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.Disabled)
 					items.OutputConfluentCloud.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.MaxRetries)
 					items.OutputConfluentCloud.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.RequestTimeout)
 					items.OutputConfluentCloud.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.SchemaRegistryURL)
 					if itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.TLS == nil {
 						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS = nil
 					} else {
-						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.OutputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide{}
+						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath)
 						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName)
 						items.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(itemsItem.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath)
@@ -1115,6 +1303,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputConfluentCloud.PqControls = &tfTypes.OutputConfluentCloudPqControls{}
 				}
+				items.OutputConfluentCloud.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputConfluentCloud.PqMaxBackpressureSec)
+				items.OutputConfluentCloud.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputConfluentCloud.PqMaxBufferSize)
+				items.OutputConfluentCloud.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputConfluentCloud.PqMaxBufferSizeBytes)
 				items.OutputConfluentCloud.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputConfluentCloud.PqMaxFileSize)
 				items.OutputConfluentCloud.PqMaxSize = types.StringPointerValue(itemsItem.OutputConfluentCloud.PqMaxSize)
 				if itemsItem.OutputConfluentCloud.PqMode != nil {
@@ -1128,19 +1319,58 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputConfluentCloud.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputConfluentCloud.PqPath = types.StringPointerValue(itemsItem.OutputConfluentCloud.PqPath)
+				items.OutputConfluentCloud.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputConfluentCloud.PqRatePerSec)
+				items.OutputConfluentCloud.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputConfluentCloud.PqStrictOrdering)
+				items.OutputConfluentCloud.ProtobufEncodingID = types.StringPointerValue(itemsItem.OutputConfluentCloud.ProtobufEncodingID)
 				items.OutputConfluentCloud.ProtobufLibraryID = types.StringPointerValue(itemsItem.OutputConfluentCloud.ProtobufLibraryID)
 				items.OutputConfluentCloud.ReauthenticationThreshold = types.Float64PointerValue(itemsItem.OutputConfluentCloud.ReauthenticationThreshold)
 				items.OutputConfluentCloud.RequestTimeout = types.Float64PointerValue(itemsItem.OutputConfluentCloud.RequestTimeout)
 				if itemsItem.OutputConfluentCloud.Sasl == nil {
 					items.OutputConfluentCloud.Sasl = nil
 				} else {
-					items.OutputConfluentCloud.Sasl = &tfTypes.OutputConfluentCloudAuthentication{}
-					items.OutputConfluentCloud.Sasl.Disabled = types.BoolPointerValue(itemsItem.OutputConfluentCloud.Sasl.Disabled)
+					items.OutputConfluentCloud.Sasl = &tfTypes.AuthenticationType{}
+					if itemsItem.OutputConfluentCloud.Sasl.AuthType != nil {
+						items.OutputConfluentCloud.Sasl.AuthType = types.StringValue(string(*itemsItem.OutputConfluentCloud.Sasl.AuthType))
+					} else {
+						items.OutputConfluentCloud.Sasl.AuthType = types.StringNull()
+					}
+					items.OutputConfluentCloud.Sasl.BrokerServiceClass = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.BrokerServiceClass)
+					items.OutputConfluentCloud.Sasl.ClientID = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.ClientID)
+					items.OutputConfluentCloud.Sasl.ClientTextSecret = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.ClientTextSecret)
+					items.OutputConfluentCloud.Sasl.CredentialsSecret = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.CredentialsSecret)
+					items.OutputConfluentCloud.Sasl.Disabled = types.BoolValue(itemsItem.OutputConfluentCloud.Sasl.Disabled)
+					items.OutputConfluentCloud.Sasl.KeytabLocation = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.KeytabLocation)
 					if itemsItem.OutputConfluentCloud.Sasl.Mechanism != nil {
 						items.OutputConfluentCloud.Sasl.Mechanism = types.StringValue(string(*itemsItem.OutputConfluentCloud.Sasl.Mechanism))
 					} else {
 						items.OutputConfluentCloud.Sasl.Mechanism = types.StringNull()
 					}
+					items.OutputConfluentCloud.Sasl.OauthEnabled = types.BoolPointerValue(itemsItem.OutputConfluentCloud.Sasl.OauthEnabled)
+					items.OutputConfluentCloud.Sasl.OauthParams = []tfTypes.ItemsTypeSaslOauthParams{}
+
+					for _, oauthParamsItem1 := range itemsItem.OutputConfluentCloud.Sasl.OauthParams {
+						var oauthParams1 tfTypes.ItemsTypeSaslOauthParams
+
+						oauthParams1.Name = types.StringValue(oauthParamsItem1.Name)
+						oauthParams1.Value = types.StringValue(oauthParamsItem1.Value)
+
+						items.OutputConfluentCloud.Sasl.OauthParams = append(items.OutputConfluentCloud.Sasl.OauthParams, oauthParams1)
+					}
+					items.OutputConfluentCloud.Sasl.OauthSecretType = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.OauthSecretType)
+					items.OutputConfluentCloud.Sasl.Password = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.Password)
+					items.OutputConfluentCloud.Sasl.Principal = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.Principal)
+					items.OutputConfluentCloud.Sasl.SaslExtensions = []tfTypes.ItemsTypeSaslSaslExtensions{}
+
+					for _, saslExtensionsItem := range itemsItem.OutputConfluentCloud.Sasl.SaslExtensions {
+						var saslExtensions tfTypes.ItemsTypeSaslSaslExtensions
+
+						saslExtensions.Name = types.StringValue(saslExtensionsItem.Name)
+						saslExtensions.Value = types.StringValue(saslExtensionsItem.Value)
+
+						items.OutputConfluentCloud.Sasl.SaslExtensions = append(items.OutputConfluentCloud.Sasl.SaslExtensions, saslExtensions)
+					}
+					items.OutputConfluentCloud.Sasl.TokenURL = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.TokenURL)
+					items.OutputConfluentCloud.Sasl.Username = types.StringPointerValue(itemsItem.OutputConfluentCloud.Sasl.Username)
 				}
 				items.OutputConfluentCloud.Streamtags = make([]types.String, 0, len(itemsItem.OutputConfluentCloud.Streamtags))
 				for _, v := range itemsItem.OutputConfluentCloud.Streamtags {
@@ -1153,7 +1383,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputConfluentCloud.TLS == nil {
 					items.OutputConfluentCloud.TLS = nil
 				} else {
-					items.OutputConfluentCloud.TLS = &tfTypes.OutputConfluentCloudTLSSettingsClientSide{}
+					items.OutputConfluentCloud.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputConfluentCloud.TLS.CaPath = types.StringPointerValue(itemsItem.OutputConfluentCloud.TLS.CaPath)
 					items.OutputConfluentCloud.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputConfluentCloud.TLS.CertificateName)
 					items.OutputConfluentCloud.TLS.CertPath = types.StringPointerValue(itemsItem.OutputConfluentCloud.TLS.CertPath)
@@ -1174,14 +1404,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputConfluentCloud.TLS.Servername = types.StringPointerValue(itemsItem.OutputConfluentCloud.TLS.Servername)
 				}
 				items.OutputConfluentCloud.Topic = types.StringValue(itemsItem.OutputConfluentCloud.Topic)
-				if itemsItem.OutputConfluentCloud.Type != nil {
-					items.OutputConfluentCloud.Type = types.StringValue(string(*itemsItem.OutputConfluentCloud.Type))
-				} else {
-					items.OutputConfluentCloud.Type = types.StringNull()
-				}
+				items.OutputConfluentCloud.Type = types.StringValue(string(itemsItem.OutputConfluentCloud.Type))
 			}
 			if itemsItem.OutputCriblHTTP != nil {
 				items.OutputCriblHTTP = &tfTypes.OutputCriblHTTP{}
+				items.OutputCriblHTTP.TemplateURL = types.StringPointerValue(itemsItem.OutputCriblHTTP.TemplateURL)
+				items.OutputCriblHTTP.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
+
+				for _, authTokensItem := range itemsItem.OutputCriblHTTP.AuthTokens {
+					var authTokens tfTypes.ItemsTypeAuthTokensTokenSecret
+
+					authTokens.Description = types.StringPointerValue(authTokensItem.Description)
+					authTokens.Enabled = types.BoolPointerValue(authTokensItem.Enabled)
+					authTokens.TokenSecret = types.StringValue(authTokensItem.TokenSecret)
+
+					items.OutputCriblHTTP.AuthTokens = append(items.OutputCriblHTTP.AuthTokens, authTokens)
+				}
 				if itemsItem.OutputCriblHTTP.Compression != nil {
 					items.OutputCriblHTTP.Compression = types.StringValue(string(*itemsItem.OutputCriblHTTP.Compression))
 				} else {
@@ -1196,10 +1434,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCriblHTTP.ExcludeFields = append(items.OutputCriblHTTP.ExcludeFields, types.StringValue(v))
 				}
 				items.OutputCriblHTTP.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputCriblHTTP.ExcludeSelf)
-				items.OutputCriblHTTP.ExtraHTTPHeaders = []tfTypes.OutputCriblHTTPExtraHTTPHeader{}
+				items.OutputCriblHTTP.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 				for _, extraHTTPHeadersItem3 := range itemsItem.OutputCriblHTTP.ExtraHTTPHeaders {
-					var extraHTTPHeaders3 tfTypes.OutputCriblHTTPExtraHTTPHeader
+					var extraHTTPHeaders3 tfTypes.ItemsTypeExtraHTTPHeaders
 
 					extraHTTPHeaders3.Name = types.StringPointerValue(extraHTTPHeadersItem3.Name)
 					extraHTTPHeaders3.Value = types.StringValue(extraHTTPHeadersItem3.Value)
@@ -1212,7 +1450,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCriblHTTP.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputCriblHTTP.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputCriblHTTP.FlushPeriodSec)
-				items.OutputCriblHTTP.ID = types.StringValue(itemsItem.OutputCriblHTTP.ID)
+				items.OutputCriblHTTP.ID = types.StringPointerValue(itemsItem.OutputCriblHTTP.ID)
 				items.OutputCriblHTTP.LoadBalanced = types.BoolPointerValue(itemsItem.OutputCriblHTTP.LoadBalanced)
 				items.OutputCriblHTTP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputCriblHTTP.LoadBalanceStatsPeriodSec)
 				items.OutputCriblHTTP.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputCriblHTTP.MaxPayloadEvents)
@@ -1233,6 +1471,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputCriblHTTP.PqControls = &tfTypes.OutputCriblHTTPPqControls{}
 				}
+				items.OutputCriblHTTP.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputCriblHTTP.PqMaxBackpressureSec)
+				items.OutputCriblHTTP.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputCriblHTTP.PqMaxBufferSize)
+				items.OutputCriblHTTP.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputCriblHTTP.PqMaxBufferSizeBytes)
 				items.OutputCriblHTTP.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputCriblHTTP.PqMaxFileSize)
 				items.OutputCriblHTTP.PqMaxSize = types.StringPointerValue(itemsItem.OutputCriblHTTP.PqMaxSize)
 				if itemsItem.OutputCriblHTTP.PqMode != nil {
@@ -1246,12 +1487,14 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCriblHTTP.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputCriblHTTP.PqPath = types.StringPointerValue(itemsItem.OutputCriblHTTP.PqPath)
+				items.OutputCriblHTTP.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputCriblHTTP.PqRatePerSec)
+				items.OutputCriblHTTP.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputCriblHTTP.PqStrictOrdering)
 				items.OutputCriblHTTP.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCriblHTTP.RejectUnauthorized)
 				items.OutputCriblHTTP.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputCriblHTTP.ResponseHonorRetryAfterHeader)
-				items.OutputCriblHTTP.ResponseRetrySettings = []tfTypes.OutputCriblHTTPResponseRetrySetting{}
+				items.OutputCriblHTTP.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 				for _, responseRetrySettingsItem4 := range itemsItem.OutputCriblHTTP.ResponseRetrySettings {
-					var responseRetrySettings4 tfTypes.OutputCriblHTTPResponseRetrySetting
+					var responseRetrySettings4 tfTypes.ItemsTypeResponseRetrySettings
 
 					responseRetrySettings4.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem4.BackoffRate)
 					responseRetrySettings4.HTTPStatus = types.Float64Value(responseRetrySettingsItem4.HTTPStatus)
@@ -1272,20 +1515,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputCriblHTTP.SystemFields {
 					items.OutputCriblHTTP.SystemFields = append(items.OutputCriblHTTP.SystemFields, types.StringValue(v))
 				}
+				items.OutputCriblHTTP.ThrottleRatePerSec = types.StringPointerValue(itemsItem.OutputCriblHTTP.ThrottleRatePerSec)
 				if itemsItem.OutputCriblHTTP.TimeoutRetrySettings == nil {
 					items.OutputCriblHTTP.TimeoutRetrySettings = nil
 				} else {
-					items.OutputCriblHTTP.TimeoutRetrySettings = &tfTypes.OutputCriblHTTPTimeoutRetrySettings{}
+					items.OutputCriblHTTP.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate)
 					items.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff)
 					items.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff)
-					items.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputCriblHTTP.TimeoutSec = types.Float64PointerValue(itemsItem.OutputCriblHTTP.TimeoutSec)
 				if itemsItem.OutputCriblHTTP.TLS == nil {
 					items.OutputCriblHTTP.TLS = nil
 				} else {
-					items.OutputCriblHTTP.TLS = &tfTypes.OutputCriblHTTPTLSSettingsClientSide{}
+					items.OutputCriblHTTP.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputCriblHTTP.TLS.CaPath = types.StringPointerValue(itemsItem.OutputCriblHTTP.TLS.CaPath)
 					items.OutputCriblHTTP.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputCriblHTTP.TLS.CertificateName)
 					items.OutputCriblHTTP.TLS.CertPath = types.StringPointerValue(itemsItem.OutputCriblHTTP.TLS.CertPath)
@@ -1308,11 +1552,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputCriblHTTP.TokenTTLMinutes = types.Float64PointerValue(itemsItem.OutputCriblHTTP.TokenTTLMinutes)
 				items.OutputCriblHTTP.Type = types.StringValue(string(itemsItem.OutputCriblHTTP.Type))
 				items.OutputCriblHTTP.URL = types.StringPointerValue(itemsItem.OutputCriblHTTP.URL)
-				items.OutputCriblHTTP.Urls = []tfTypes.OutputCriblHTTPURL{}
+				items.OutputCriblHTTP.Urls = []tfTypes.ItemsTypeUrls{}
 
 				for _, urlsItem := range itemsItem.OutputCriblHTTP.Urls {
-					var urls tfTypes.OutputCriblHTTPURL
+					var urls tfTypes.ItemsTypeUrls
 
+					urls.TemplateURL = types.StringPointerValue(urlsItem.TemplateURL)
 					urls.URL = types.StringValue(urlsItem.URL)
 					urls.Weight = types.Float64PointerValue(urlsItem.Weight)
 
@@ -1322,13 +1567,282 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputCriblLake != nil {
 				items.OutputCriblLake = &tfTypes.OutputCriblLake{}
+				items.OutputCriblLake.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateAssumeRoleArn)
+				items.OutputCriblLake.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateAssumeRoleExternalID)
+				items.OutputCriblLake.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateAwsSecretKey)
+				items.OutputCriblLake.TemplateBucket = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateBucket)
+				items.OutputCriblLake.TemplateDestPath = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateDestPath)
+				items.OutputCriblLake.TemplateRegion = types.StringPointerValue(itemsItem.OutputCriblLake.TemplateRegion)
+				items.OutputCriblLake.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputCriblLake.AddIDToStagePath)
+				items.OutputCriblLake.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputCriblLake.AssumeRoleArn)
+				items.OutputCriblLake.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputCriblLake.AssumeRoleExternalID)
+				if itemsItem.OutputCriblLake.AwsAuthenticationMethod != nil {
+					items.OutputCriblLake.AwsAuthenticationMethod = types.StringValue(string(*itemsItem.OutputCriblLake.AwsAuthenticationMethod))
+				} else {
+					items.OutputCriblLake.AwsAuthenticationMethod = types.StringNull()
+				}
+				items.OutputCriblLake.AwsSecretKey = types.StringPointerValue(itemsItem.OutputCriblLake.AwsSecretKey)
+				items.OutputCriblLake.BaseFileName = types.StringPointerValue(itemsItem.OutputCriblLake.BaseFileName)
+				items.OutputCriblLake.Bucket = types.StringPointerValue(itemsItem.OutputCriblLake.Bucket)
+				items.OutputCriblLake.DeadletterEnabled = types.BoolPointerValue(itemsItem.OutputCriblLake.DeadletterEnabled)
+				items.OutputCriblLake.DeadletterPath = types.StringPointerValue(itemsItem.OutputCriblLake.DeadletterPath)
 				items.OutputCriblLake.Description = types.StringPointerValue(itemsItem.OutputCriblLake.Description)
 				items.OutputCriblLake.DestPath = types.StringPointerValue(itemsItem.OutputCriblLake.DestPath)
-				items.OutputCriblLake.ID = types.StringValue(itemsItem.OutputCriblLake.ID)
+				items.OutputCriblLake.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputCriblLake.DirectoryBatchSize)
+				items.OutputCriblLake.DurationSeconds = types.Float64PointerValue(itemsItem.OutputCriblLake.DurationSeconds)
+				items.OutputCriblLake.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputCriblLake.EmptyDirCleanupSec)
+				items.OutputCriblLake.EnableAssumeRole = types.BoolPointerValue(itemsItem.OutputCriblLake.EnableAssumeRole)
+				items.OutputCriblLake.Endpoint = types.StringPointerValue(itemsItem.OutputCriblLake.Endpoint)
+				items.OutputCriblLake.Environment = types.StringPointerValue(itemsItem.OutputCriblLake.Environment)
+				items.OutputCriblLake.FileNameSuffix = types.StringPointerValue(itemsItem.OutputCriblLake.FileNameSuffix)
+				items.OutputCriblLake.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputCriblLake.ForceCloseOnShutdown)
+				if itemsItem.OutputCriblLake.Format != nil {
+					items.OutputCriblLake.Format = types.StringValue(string(*itemsItem.OutputCriblLake.Format))
+				} else {
+					items.OutputCriblLake.Format = types.StringNull()
+				}
+				items.OutputCriblLake.HeaderLine = types.StringPointerValue(itemsItem.OutputCriblLake.HeaderLine)
+				items.OutputCriblLake.ID = types.StringPointerValue(itemsItem.OutputCriblLake.ID)
+				items.OutputCriblLake.KmsKeyID = types.StringPointerValue(itemsItem.OutputCriblLake.KmsKeyID)
+				items.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxClosingFilesToBackpressure)
+				items.OutputCriblLake.MaxConcurrentFileParts = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxConcurrentFileParts)
+				items.OutputCriblLake.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxFileIdleTimeSec)
+				items.OutputCriblLake.MaxFileOpenTimeSec = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxFileOpenTimeSec)
+				items.OutputCriblLake.MaxFileSizeMB = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxFileSizeMB)
+				items.OutputCriblLake.MaxOpenFiles = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxOpenFiles)
+				items.OutputCriblLake.MaxRetryNum = types.Float64PointerValue(itemsItem.OutputCriblLake.MaxRetryNum)
+				if itemsItem.OutputCriblLake.ObjectACL != nil {
+					items.OutputCriblLake.ObjectACL = types.StringValue(string(*itemsItem.OutputCriblLake.ObjectACL))
+				} else {
+					items.OutputCriblLake.ObjectACL = types.StringNull()
+				}
+				if itemsItem.OutputCriblLake.OnBackpressure != nil {
+					items.OutputCriblLake.OnBackpressure = types.StringValue(string(*itemsItem.OutputCriblLake.OnBackpressure))
+				} else {
+					items.OutputCriblLake.OnBackpressure = types.StringNull()
+				}
+				if itemsItem.OutputCriblLake.OnDiskFullBackpressure != nil {
+					items.OutputCriblLake.OnDiskFullBackpressure = types.StringValue(string(*itemsItem.OutputCriblLake.OnDiskFullBackpressure))
+				} else {
+					items.OutputCriblLake.OnDiskFullBackpressure = types.StringNull()
+				}
+				items.OutputCriblLake.Pipeline = types.StringPointerValue(itemsItem.OutputCriblLake.Pipeline)
+				items.OutputCriblLake.Region = types.StringPointerValue(itemsItem.OutputCriblLake.Region)
+				items.OutputCriblLake.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCriblLake.RejectUnauthorized)
+				items.OutputCriblLake.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputCriblLake.RemoveEmptyDirs)
+				if itemsItem.OutputCriblLake.RetrySettings == nil {
+					items.OutputCriblLake.RetrySettings = nil
+				} else {
+					items.OutputCriblLake.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputCriblLake.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputCriblLake.RetrySettings.BackoffMultiplier)
+					items.OutputCriblLake.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputCriblLake.RetrySettings.Enabled)
+					items.OutputCriblLake.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputCriblLake.RetrySettings.InitialBackoffMs)
+					items.OutputCriblLake.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputCriblLake.RetrySettings.JitterPercent)
+					items.OutputCriblLake.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputCriblLake.RetrySettings.MaxBackoffMs)
+				}
+				items.OutputCriblLake.ReuseConnections = types.BoolPointerValue(itemsItem.OutputCriblLake.ReuseConnections)
+				if itemsItem.OutputCriblLake.ServerSideEncryption != nil {
+					items.OutputCriblLake.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputCriblLake.ServerSideEncryption))
+				} else {
+					items.OutputCriblLake.ServerSideEncryption = types.StringNull()
+				}
+				if itemsItem.OutputCriblLake.SignatureVersion != nil {
+					items.OutputCriblLake.SignatureVersion = types.StringValue(string(*itemsItem.OutputCriblLake.SignatureVersion))
+				} else {
+					items.OutputCriblLake.SignatureVersion = types.StringNull()
+				}
+				items.OutputCriblLake.StagePath = types.StringPointerValue(itemsItem.OutputCriblLake.StagePath)
+				if itemsItem.OutputCriblLake.StorageClass != nil {
+					items.OutputCriblLake.StorageClass = types.StringValue(string(*itemsItem.OutputCriblLake.StorageClass))
+				} else {
+					items.OutputCriblLake.StorageClass = types.StringNull()
+				}
+				items.OutputCriblLake.Streamtags = make([]types.String, 0, len(itemsItem.OutputCriblLake.Streamtags))
+				for _, v := range itemsItem.OutputCriblLake.Streamtags {
+					items.OutputCriblLake.Streamtags = append(items.OutputCriblLake.Streamtags, types.StringValue(v))
+				}
+				items.OutputCriblLake.SystemFields = make([]types.String, 0, len(itemsItem.OutputCriblLake.SystemFields))
+				for _, v := range itemsItem.OutputCriblLake.SystemFields {
+					items.OutputCriblLake.SystemFields = append(items.OutputCriblLake.SystemFields, types.StringValue(v))
+				}
 				items.OutputCriblLake.Type = types.StringValue(string(itemsItem.OutputCriblLake.Type))
+				items.OutputCriblLake.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputCriblLake.VerifyPermissions)
+				items.OutputCriblLake.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputCriblLake.WriteHighWaterMark)
+			}
+			if itemsItem.OutputCriblSearchEngine != nil {
+				items.OutputCriblSearchEngine = &tfTypes.OutputCriblSearchEngine{}
+				items.OutputCriblSearchEngine.TemplateURL = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TemplateURL)
+				items.OutputCriblSearchEngine.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
+
+				for _, authTokensItem1 := range itemsItem.OutputCriblSearchEngine.AuthTokens {
+					var authTokens1 tfTypes.ItemsTypeAuthTokensTokenSecret
+
+					authTokens1.Description = types.StringPointerValue(authTokensItem1.Description)
+					authTokens1.Enabled = types.BoolPointerValue(authTokensItem1.Enabled)
+					authTokens1.TokenSecret = types.StringValue(authTokensItem1.TokenSecret)
+
+					items.OutputCriblSearchEngine.AuthTokens = append(items.OutputCriblSearchEngine.AuthTokens, authTokens1)
+				}
+				if itemsItem.OutputCriblSearchEngine.Compression != nil {
+					items.OutputCriblSearchEngine.Compression = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.Compression))
+				} else {
+					items.OutputCriblSearchEngine.Compression = types.StringNull()
+				}
+				items.OutputCriblSearchEngine.Concurrency = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.Concurrency)
+				items.OutputCriblSearchEngine.Description = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.Description)
+				items.OutputCriblSearchEngine.DNSResolvePeriodSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.DNSResolvePeriodSec)
+				items.OutputCriblSearchEngine.Environment = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.Environment)
+				items.OutputCriblSearchEngine.ExcludeFields = make([]types.String, 0, len(itemsItem.OutputCriblSearchEngine.ExcludeFields))
+				for _, v := range itemsItem.OutputCriblSearchEngine.ExcludeFields {
+					items.OutputCriblSearchEngine.ExcludeFields = append(items.OutputCriblSearchEngine.ExcludeFields, types.StringValue(v))
+				}
+				items.OutputCriblSearchEngine.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.ExcludeSelf)
+				items.OutputCriblSearchEngine.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+				for _, extraHTTPHeadersItem4 := range itemsItem.OutputCriblSearchEngine.ExtraHTTPHeaders {
+					var extraHTTPHeaders4 tfTypes.ItemsTypeExtraHTTPHeaders
+
+					extraHTTPHeaders4.Name = types.StringPointerValue(extraHTTPHeadersItem4.Name)
+					extraHTTPHeaders4.Value = types.StringValue(extraHTTPHeadersItem4.Value)
+
+					items.OutputCriblSearchEngine.ExtraHTTPHeaders = append(items.OutputCriblSearchEngine.ExtraHTTPHeaders, extraHTTPHeaders4)
+				}
+				if itemsItem.OutputCriblSearchEngine.FailedRequestLoggingMode != nil {
+					items.OutputCriblSearchEngine.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.FailedRequestLoggingMode))
+				} else {
+					items.OutputCriblSearchEngine.FailedRequestLoggingMode = types.StringNull()
+				}
+				items.OutputCriblSearchEngine.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.FlushPeriodSec)
+				items.OutputCriblSearchEngine.ID = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.ID)
+				items.OutputCriblSearchEngine.LoadBalanced = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.LoadBalanced)
+				items.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec)
+				items.OutputCriblSearchEngine.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.MaxPayloadEvents)
+				items.OutputCriblSearchEngine.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.MaxPayloadSizeKB)
+				if itemsItem.OutputCriblSearchEngine.OnBackpressure != nil {
+					items.OutputCriblSearchEngine.OnBackpressure = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.OnBackpressure))
+				} else {
+					items.OutputCriblSearchEngine.OnBackpressure = types.StringNull()
+				}
+				items.OutputCriblSearchEngine.Pipeline = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.Pipeline)
+				if itemsItem.OutputCriblSearchEngine.PqCompress != nil {
+					items.OutputCriblSearchEngine.PqCompress = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.PqCompress))
+				} else {
+					items.OutputCriblSearchEngine.PqCompress = types.StringNull()
+				}
+				if itemsItem.OutputCriblSearchEngine.PqControls == nil {
+					items.OutputCriblSearchEngine.PqControls = nil
+				} else {
+					items.OutputCriblSearchEngine.PqControls = &tfTypes.OutputCriblSearchEnginePqControls{}
+				}
+				items.OutputCriblSearchEngine.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.PqMaxBackpressureSec)
+				items.OutputCriblSearchEngine.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.PqMaxBufferSize)
+				items.OutputCriblSearchEngine.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.PqMaxBufferSizeBytes)
+				items.OutputCriblSearchEngine.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.PqMaxFileSize)
+				items.OutputCriblSearchEngine.PqMaxSize = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.PqMaxSize)
+				if itemsItem.OutputCriblSearchEngine.PqMode != nil {
+					items.OutputCriblSearchEngine.PqMode = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.PqMode))
+				} else {
+					items.OutputCriblSearchEngine.PqMode = types.StringNull()
+				}
+				if itemsItem.OutputCriblSearchEngine.PqOnBackpressure != nil {
+					items.OutputCriblSearchEngine.PqOnBackpressure = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.PqOnBackpressure))
+				} else {
+					items.OutputCriblSearchEngine.PqOnBackpressure = types.StringNull()
+				}
+				items.OutputCriblSearchEngine.PqPath = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.PqPath)
+				items.OutputCriblSearchEngine.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.PqRatePerSec)
+				items.OutputCriblSearchEngine.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.PqStrictOrdering)
+				items.OutputCriblSearchEngine.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.RejectUnauthorized)
+				items.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader)
+				items.OutputCriblSearchEngine.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+				for _, responseRetrySettingsItem5 := range itemsItem.OutputCriblSearchEngine.ResponseRetrySettings {
+					var responseRetrySettings5 tfTypes.ItemsTypeResponseRetrySettings
+
+					responseRetrySettings5.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem5.BackoffRate)
+					responseRetrySettings5.HTTPStatus = types.Float64Value(responseRetrySettingsItem5.HTTPStatus)
+					responseRetrySettings5.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem5.InitialBackoff)
+					responseRetrySettings5.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem5.MaxBackoff)
+
+					items.OutputCriblSearchEngine.ResponseRetrySettings = append(items.OutputCriblSearchEngine.ResponseRetrySettings, responseRetrySettings5)
+				}
+				items.OutputCriblSearchEngine.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputCriblSearchEngine.SafeHeaders))
+				for _, v := range itemsItem.OutputCriblSearchEngine.SafeHeaders {
+					items.OutputCriblSearchEngine.SafeHeaders = append(items.OutputCriblSearchEngine.SafeHeaders, types.StringValue(v))
+				}
+				items.OutputCriblSearchEngine.Streamtags = make([]types.String, 0, len(itemsItem.OutputCriblSearchEngine.Streamtags))
+				for _, v := range itemsItem.OutputCriblSearchEngine.Streamtags {
+					items.OutputCriblSearchEngine.Streamtags = append(items.OutputCriblSearchEngine.Streamtags, types.StringValue(v))
+				}
+				items.OutputCriblSearchEngine.SystemFields = make([]types.String, 0, len(itemsItem.OutputCriblSearchEngine.SystemFields))
+				for _, v := range itemsItem.OutputCriblSearchEngine.SystemFields {
+					items.OutputCriblSearchEngine.SystemFields = append(items.OutputCriblSearchEngine.SystemFields, types.StringValue(v))
+				}
+				items.OutputCriblSearchEngine.ThrottleRatePerSec = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.ThrottleRatePerSec)
+				if itemsItem.OutputCriblSearchEngine.TimeoutRetrySettings == nil {
+					items.OutputCriblSearchEngine.TimeoutRetrySettings = nil
+				} else {
+					items.OutputCriblSearchEngine.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+					items.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate)
+					items.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff)
+					items.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff)
+					items.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry)
+				}
+				items.OutputCriblSearchEngine.TimeoutSec = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.TimeoutSec)
+				if itemsItem.OutputCriblSearchEngine.TLS == nil {
+					items.OutputCriblSearchEngine.TLS = nil
+				} else {
+					items.OutputCriblSearchEngine.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
+					items.OutputCriblSearchEngine.TLS.CaPath = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.CaPath)
+					items.OutputCriblSearchEngine.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.CertificateName)
+					items.OutputCriblSearchEngine.TLS.CertPath = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.CertPath)
+					items.OutputCriblSearchEngine.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.TLS.Disabled)
+					if itemsItem.OutputCriblSearchEngine.TLS.MaxVersion != nil {
+						items.OutputCriblSearchEngine.TLS.MaxVersion = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.TLS.MaxVersion))
+					} else {
+						items.OutputCriblSearchEngine.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.OutputCriblSearchEngine.TLS.MinVersion != nil {
+						items.OutputCriblSearchEngine.TLS.MinVersion = types.StringValue(string(*itemsItem.OutputCriblSearchEngine.TLS.MinVersion))
+					} else {
+						items.OutputCriblSearchEngine.TLS.MinVersion = types.StringNull()
+					}
+					items.OutputCriblSearchEngine.TLS.Passphrase = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.Passphrase)
+					items.OutputCriblSearchEngine.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.PrivKeyPath)
+					items.OutputCriblSearchEngine.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.TLS.RejectUnauthorized)
+					items.OutputCriblSearchEngine.TLS.Servername = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.TLS.Servername)
+				}
+				items.OutputCriblSearchEngine.TokenTTLMinutes = types.Float64PointerValue(itemsItem.OutputCriblSearchEngine.TokenTTLMinutes)
+				items.OutputCriblSearchEngine.Type = types.StringValue(string(itemsItem.OutputCriblSearchEngine.Type))
+				items.OutputCriblSearchEngine.URL = types.StringPointerValue(itemsItem.OutputCriblSearchEngine.URL)
+				items.OutputCriblSearchEngine.Urls = []tfTypes.ItemsTypeUrls{}
+
+				for _, urlsItem1 := range itemsItem.OutputCriblSearchEngine.Urls {
+					var urls1 tfTypes.ItemsTypeUrls
+
+					urls1.TemplateURL = types.StringPointerValue(urlsItem1.TemplateURL)
+					urls1.URL = types.StringValue(urlsItem1.URL)
+					urls1.Weight = types.Float64PointerValue(urlsItem1.Weight)
+
+					items.OutputCriblSearchEngine.Urls = append(items.OutputCriblSearchEngine.Urls, urls1)
+				}
+				items.OutputCriblSearchEngine.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputCriblSearchEngine.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputCriblTCP != nil {
 				items.OutputCriblTCP = &tfTypes.OutputCriblTCP{}
+				items.OutputCriblTCP.TemplateHost = types.StringPointerValue(itemsItem.OutputCriblTCP.TemplateHost)
+				items.OutputCriblTCP.TemplatePort = types.StringPointerValue(itemsItem.OutputCriblTCP.TemplatePort)
+				items.OutputCriblTCP.AuthTokens = []tfTypes.ItemsTypeAuthTokens{}
+
+				for _, authTokensItem2 := range itemsItem.OutputCriblTCP.AuthTokens {
+					var authTokens2 tfTypes.ItemsTypeAuthTokens
+
+					authTokens2.Description = types.StringPointerValue(authTokensItem2.Description)
+					authTokens2.Enabled = types.BoolPointerValue(authTokensItem2.Enabled)
+					authTokens2.TokenSecret = types.StringValue(authTokensItem2.TokenSecret)
+
+					items.OutputCriblTCP.AuthTokens = append(items.OutputCriblTCP.AuthTokens, authTokens2)
+				}
 				if itemsItem.OutputCriblTCP.Compression != nil {
 					items.OutputCriblTCP.Compression = types.StringValue(string(*itemsItem.OutputCriblTCP.Compression))
 				} else {
@@ -1344,13 +1858,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputCriblTCP.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputCriblTCP.ExcludeSelf)
 				items.OutputCriblTCP.Host = types.StringPointerValue(itemsItem.OutputCriblTCP.Host)
-				items.OutputCriblTCP.Hosts = []tfTypes.OutputCriblTCPHost{}
+				items.OutputCriblTCP.Hosts = []tfTypes.ItemsTypeHosts{}
 
 				for _, hostsItem := range itemsItem.OutputCriblTCP.Hosts {
-					var hosts tfTypes.OutputCriblTCPHost
+					var hosts tfTypes.ItemsTypeHosts
 
+					hosts.TemplateHost = types.StringPointerValue(hostsItem.TemplateHost)
+					hosts.TemplatePort = types.StringPointerValue(hostsItem.TemplatePort)
 					hosts.Host = types.StringValue(hostsItem.Host)
-					hosts.Port = types.Float64PointerValue(hostsItem.Port)
+					hosts.Port = types.Float64Value(hostsItem.Port)
 					hosts.Servername = types.StringPointerValue(hostsItem.Servername)
 					if hostsItem.TLS != nil {
 						hosts.TLS = types.StringValue(string(*hostsItem.TLS))
@@ -1361,7 +1877,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 
 					items.OutputCriblTCP.Hosts = append(items.OutputCriblTCP.Hosts, hosts)
 				}
-				items.OutputCriblTCP.ID = types.StringValue(itemsItem.OutputCriblTCP.ID)
+				items.OutputCriblTCP.ID = types.StringPointerValue(itemsItem.OutputCriblTCP.ID)
 				items.OutputCriblTCP.LoadBalanced = types.BoolPointerValue(itemsItem.OutputCriblTCP.LoadBalanced)
 				items.OutputCriblTCP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputCriblTCP.LoadBalanceStatsPeriodSec)
 				items.OutputCriblTCP.LogFailedRequests = types.BoolPointerValue(itemsItem.OutputCriblTCP.LogFailedRequests)
@@ -1383,6 +1899,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputCriblTCP.PqControls = &tfTypes.OutputCriblTCPPqControls{}
 				}
+				items.OutputCriblTCP.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputCriblTCP.PqMaxBackpressureSec)
+				items.OutputCriblTCP.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputCriblTCP.PqMaxBufferSize)
+				items.OutputCriblTCP.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputCriblTCP.PqMaxBufferSizeBytes)
 				items.OutputCriblTCP.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputCriblTCP.PqMaxFileSize)
 				items.OutputCriblTCP.PqMaxSize = types.StringPointerValue(itemsItem.OutputCriblTCP.PqMaxSize)
 				if itemsItem.OutputCriblTCP.PqMode != nil {
@@ -1396,6 +1915,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCriblTCP.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputCriblTCP.PqPath = types.StringPointerValue(itemsItem.OutputCriblTCP.PqPath)
+				items.OutputCriblTCP.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputCriblTCP.PqRatePerSec)
+				items.OutputCriblTCP.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputCriblTCP.PqStrictOrdering)
 				items.OutputCriblTCP.Streamtags = make([]types.String, 0, len(itemsItem.OutputCriblTCP.Streamtags))
 				for _, v := range itemsItem.OutputCriblTCP.Streamtags {
 					items.OutputCriblTCP.Streamtags = append(items.OutputCriblTCP.Streamtags, types.StringValue(v))
@@ -1408,7 +1929,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputCriblTCP.TLS == nil {
 					items.OutputCriblTCP.TLS = nil
 				} else {
-					items.OutputCriblTCP.TLS = &tfTypes.OutputCriblTCPTLSSettingsClientSide{}
+					items.OutputCriblTCP.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputCriblTCP.TLS.CaPath = types.StringPointerValue(itemsItem.OutputCriblTCP.TLS.CaPath)
 					items.OutputCriblTCP.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputCriblTCP.TLS.CertificateName)
 					items.OutputCriblTCP.TLS.CertPath = types.StringPointerValue(itemsItem.OutputCriblTCP.TLS.CertPath)
@@ -1434,6 +1955,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputCrowdstrikeNextGenSiem != nil {
 				items.OutputCrowdstrikeNextGenSiem = &tfTypes.OutputCrowdstrikeNextGenSiem{}
+				items.OutputCrowdstrikeNextGenSiem.TemplateURL = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TemplateURL)
 				if itemsItem.OutputCrowdstrikeNextGenSiem.AuthType != nil {
 					items.OutputCrowdstrikeNextGenSiem.AuthType = types.StringValue(string(*itemsItem.OutputCrowdstrikeNextGenSiem.AuthType))
 				} else {
@@ -1443,15 +1965,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputCrowdstrikeNextGenSiem.Concurrency = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.Concurrency)
 				items.OutputCrowdstrikeNextGenSiem.Description = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.Description)
 				items.OutputCrowdstrikeNextGenSiem.Environment = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.Environment)
-				items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = []tfTypes.OutputCrowdstrikeNextGenSiemExtraHTTPHeader{}
+				items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem4 := range itemsItem.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
-					var extraHTTPHeaders4 tfTypes.OutputCrowdstrikeNextGenSiemExtraHTTPHeader
+				for _, extraHTTPHeadersItem5 := range itemsItem.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
+					var extraHTTPHeaders5 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders4.Name = types.StringPointerValue(extraHTTPHeadersItem4.Name)
-					extraHTTPHeaders4.Value = types.StringValue(extraHTTPHeadersItem4.Value)
+					extraHTTPHeaders5.Name = types.StringPointerValue(extraHTTPHeadersItem5.Name)
+					extraHTTPHeaders5.Value = types.StringValue(extraHTTPHeadersItem5.Value)
 
-					items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = append(items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders, extraHTTPHeaders4)
+					items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = append(items.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders, extraHTTPHeaders5)
 				}
 				if itemsItem.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode != nil {
 					items.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode))
@@ -1459,11 +1981,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputCrowdstrikeNextGenSiem.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.FlushPeriodSec)
-				if itemsItem.OutputCrowdstrikeNextGenSiem.Format != nil {
-					items.OutputCrowdstrikeNextGenSiem.Format = types.StringValue(string(*itemsItem.OutputCrowdstrikeNextGenSiem.Format))
-				} else {
-					items.OutputCrowdstrikeNextGenSiem.Format = types.StringNull()
-				}
+				items.OutputCrowdstrikeNextGenSiem.Format = types.StringValue(string(itemsItem.OutputCrowdstrikeNextGenSiem.Format))
 				items.OutputCrowdstrikeNextGenSiem.ID = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.ID)
 				items.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents)
 				items.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB)
@@ -1483,6 +2001,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputCrowdstrikeNextGenSiem.PqControls = &tfTypes.OutputCrowdstrikeNextGenSiemPqControls{}
 				}
+				items.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec)
+				items.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize)
+				items.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes)
 				items.OutputCrowdstrikeNextGenSiem.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqMaxFileSize)
 				items.OutputCrowdstrikeNextGenSiem.PqMaxSize = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqMaxSize)
 				if itemsItem.OutputCrowdstrikeNextGenSiem.PqMode != nil {
@@ -1496,19 +2017,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputCrowdstrikeNextGenSiem.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputCrowdstrikeNextGenSiem.PqPath = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqPath)
+				items.OutputCrowdstrikeNextGenSiem.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqRatePerSec)
+				items.OutputCrowdstrikeNextGenSiem.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.PqStrictOrdering)
 				items.OutputCrowdstrikeNextGenSiem.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.RejectUnauthorized)
 				items.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader)
-				items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = []tfTypes.OutputCrowdstrikeNextGenSiemResponseRetrySetting{}
+				items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem5 := range itemsItem.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
-					var responseRetrySettings5 tfTypes.OutputCrowdstrikeNextGenSiemResponseRetrySetting
+				for _, responseRetrySettingsItem6 := range itemsItem.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
+					var responseRetrySettings6 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings5.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem5.BackoffRate)
-					responseRetrySettings5.HTTPStatus = types.Float64Value(responseRetrySettingsItem5.HTTPStatus)
-					responseRetrySettings5.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem5.InitialBackoff)
-					responseRetrySettings5.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem5.MaxBackoff)
+					responseRetrySettings6.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem6.BackoffRate)
+					responseRetrySettings6.HTTPStatus = types.Float64Value(responseRetrySettingsItem6.HTTPStatus)
+					responseRetrySettings6.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem6.InitialBackoff)
+					responseRetrySettings6.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem6.MaxBackoff)
 
-					items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = append(items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings, responseRetrySettings5)
+					items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = append(items.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings, responseRetrySettings6)
 				}
 				items.OutputCrowdstrikeNextGenSiem.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputCrowdstrikeNextGenSiem.SafeHeaders))
 				for _, v := range itemsItem.OutputCrowdstrikeNextGenSiem.SafeHeaders {
@@ -1526,28 +2049,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings == nil {
 					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = nil
 				} else {
-					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = &tfTypes.OutputCrowdstrikeNextGenSiemTimeoutRetrySettings{}
+					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate)
 					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff)
 					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff)
-					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputCrowdstrikeNextGenSiem.TimeoutSec = types.Float64PointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.TimeoutSec)
 				items.OutputCrowdstrikeNextGenSiem.Token = types.StringPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.Token)
-				if itemsItem.OutputCrowdstrikeNextGenSiem.Type != nil {
-					items.OutputCrowdstrikeNextGenSiem.Type = types.StringValue(string(*itemsItem.OutputCrowdstrikeNextGenSiem.Type))
-				} else {
-					items.OutputCrowdstrikeNextGenSiem.Type = types.StringNull()
-				}
+				items.OutputCrowdstrikeNextGenSiem.Type = types.StringValue(string(itemsItem.OutputCrowdstrikeNextGenSiem.Type))
 				items.OutputCrowdstrikeNextGenSiem.URL = types.StringValue(itemsItem.OutputCrowdstrikeNextGenSiem.URL)
 				items.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputDatabricks != nil {
 				items.OutputDatabricks = &tfTypes.OutputDatabricks{}
+				items.OutputDatabricks.TemplateFormat = types.StringPointerValue(itemsItem.OutputDatabricks.TemplateFormat)
 				items.OutputDatabricks.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputDatabricks.AddIDToStagePath)
 				items.OutputDatabricks.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputDatabricks.AutomaticSchema)
 				items.OutputDatabricks.BaseFileName = types.StringPointerValue(itemsItem.OutputDatabricks.BaseFileName)
-				items.OutputDatabricks.Catalog = types.StringPointerValue(itemsItem.OutputDatabricks.Catalog)
+				items.OutputDatabricks.Catalog = types.StringValue(itemsItem.OutputDatabricks.Catalog)
 				items.OutputDatabricks.ClientID = types.StringValue(itemsItem.OutputDatabricks.ClientID)
 				items.OutputDatabricks.ClientTextSecret = types.StringValue(itemsItem.OutputDatabricks.ClientTextSecret)
 				if itemsItem.OutputDatabricks.Compress != nil {
@@ -1570,7 +2090,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDatabricks.EnableStatistics = types.BoolPointerValue(itemsItem.OutputDatabricks.EnableStatistics)
 				items.OutputDatabricks.EnableWritePageIndex = types.BoolPointerValue(itemsItem.OutputDatabricks.EnableWritePageIndex)
 				items.OutputDatabricks.Environment = types.StringPointerValue(itemsItem.OutputDatabricks.Environment)
-				items.OutputDatabricks.EventsVolumeName = types.StringPointerValue(itemsItem.OutputDatabricks.EventsVolumeName)
+				items.OutputDatabricks.EventsVolumeName = types.StringValue(itemsItem.OutputDatabricks.EventsVolumeName)
 				items.OutputDatabricks.FileNameSuffix = types.StringPointerValue(itemsItem.OutputDatabricks.FileNameSuffix)
 				items.OutputDatabricks.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputDatabricks.ForceCloseOnShutdown)
 				if itemsItem.OutputDatabricks.Format != nil {
@@ -1580,15 +2100,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputDatabricks.HeaderLine = types.StringPointerValue(itemsItem.OutputDatabricks.HeaderLine)
 				items.OutputDatabricks.ID = types.StringPointerValue(itemsItem.OutputDatabricks.ID)
-				items.OutputDatabricks.KeyValueMetadata = []tfTypes.OutputDatabricksKeyValueMetadatum{}
+				items.OutputDatabricks.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem2 := range itemsItem.OutputDatabricks.KeyValueMetadata {
-					var keyValueMetadata2 tfTypes.OutputDatabricksKeyValueMetadatum
+				for _, keyValueMetadataItem3 := range itemsItem.OutputDatabricks.KeyValueMetadata {
+					var keyValueMetadata3 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata2.Key = types.StringPointerValue(keyValueMetadataItem2.Key)
-					keyValueMetadata2.Value = types.StringValue(keyValueMetadataItem2.Value)
+					keyValueMetadata3.Key = types.StringValue(keyValueMetadataItem3.Key)
+					keyValueMetadata3.Value = types.StringValue(keyValueMetadataItem3.Value)
 
-					items.OutputDatabricks.KeyValueMetadata = append(items.OutputDatabricks.KeyValueMetadata, keyValueMetadata2)
+					items.OutputDatabricks.KeyValueMetadata = append(items.OutputDatabricks.KeyValueMetadata, keyValueMetadata3)
 				}
 				items.OutputDatabricks.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputDatabricks.MaxFileIdleTimeSec)
 				items.OutputDatabricks.MaxFileOpenTimeSec = types.Float64PointerValue(itemsItem.OutputDatabricks.MaxFileOpenTimeSec)
@@ -1621,8 +2141,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDatabricks.PartitionExpr = types.StringPointerValue(itemsItem.OutputDatabricks.PartitionExpr)
 				items.OutputDatabricks.Pipeline = types.StringPointerValue(itemsItem.OutputDatabricks.Pipeline)
 				items.OutputDatabricks.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputDatabricks.RemoveEmptyDirs)
-				items.OutputDatabricks.Schema = types.StringPointerValue(itemsItem.OutputDatabricks.Schema)
-				items.OutputDatabricks.Scope = types.StringPointerValue(itemsItem.OutputDatabricks.Scope)
+				if itemsItem.OutputDatabricks.RetrySettings == nil {
+					items.OutputDatabricks.RetrySettings = nil
+				} else {
+					items.OutputDatabricks.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputDatabricks.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputDatabricks.RetrySettings.BackoffMultiplier)
+					items.OutputDatabricks.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputDatabricks.RetrySettings.Enabled)
+					items.OutputDatabricks.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputDatabricks.RetrySettings.InitialBackoffMs)
+					items.OutputDatabricks.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputDatabricks.RetrySettings.JitterPercent)
+					items.OutputDatabricks.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputDatabricks.RetrySettings.MaxBackoffMs)
+				}
+				items.OutputDatabricks.Schema = types.StringValue(itemsItem.OutputDatabricks.Schema)
+				items.OutputDatabricks.Scope = types.StringValue(itemsItem.OutputDatabricks.Scope)
 				items.OutputDatabricks.ShouldLogInvalidRows = types.BoolPointerValue(itemsItem.OutputDatabricks.ShouldLogInvalidRows)
 				items.OutputDatabricks.StagePath = types.StringPointerValue(itemsItem.OutputDatabricks.StagePath)
 				items.OutputDatabricks.Streamtags = make([]types.String, 0, len(itemsItem.OutputDatabricks.Streamtags))
@@ -1633,7 +2163,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputDatabricks.SystemFields {
 					items.OutputDatabricks.SystemFields = append(items.OutputDatabricks.SystemFields, types.StringValue(v))
 				}
-				items.OutputDatabricks.TimeoutSec = types.Float64PointerValue(itemsItem.OutputDatabricks.TimeoutSec)
+				items.OutputDatabricks.TimeoutSec = types.Int64PointerValue(itemsItem.OutputDatabricks.TimeoutSec)
 				items.OutputDatabricks.Type = types.StringValue(string(itemsItem.OutputDatabricks.Type))
 				items.OutputDatabricks.WorkspaceID = types.StringValue(itemsItem.OutputDatabricks.WorkspaceID)
 				items.OutputDatabricks.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputDatabricks.WriteHighWaterMark)
@@ -1658,15 +2188,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDatadog.CustomURL = types.StringPointerValue(itemsItem.OutputDatadog.CustomURL)
 				items.OutputDatadog.Description = types.StringPointerValue(itemsItem.OutputDatadog.Description)
 				items.OutputDatadog.Environment = types.StringPointerValue(itemsItem.OutputDatadog.Environment)
-				items.OutputDatadog.ExtraHTTPHeaders = []tfTypes.OutputDatadogExtraHTTPHeader{}
+				items.OutputDatadog.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem5 := range itemsItem.OutputDatadog.ExtraHTTPHeaders {
-					var extraHTTPHeaders5 tfTypes.OutputDatadogExtraHTTPHeader
+				for _, extraHTTPHeadersItem6 := range itemsItem.OutputDatadog.ExtraHTTPHeaders {
+					var extraHTTPHeaders6 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders5.Name = types.StringPointerValue(extraHTTPHeadersItem5.Name)
-					extraHTTPHeaders5.Value = types.StringValue(extraHTTPHeadersItem5.Value)
+					extraHTTPHeaders6.Name = types.StringPointerValue(extraHTTPHeadersItem6.Name)
+					extraHTTPHeaders6.Value = types.StringValue(extraHTTPHeadersItem6.Value)
 
-					items.OutputDatadog.ExtraHTTPHeaders = append(items.OutputDatadog.ExtraHTTPHeaders, extraHTTPHeaders5)
+					items.OutputDatadog.ExtraHTTPHeaders = append(items.OutputDatadog.ExtraHTTPHeaders, extraHTTPHeaders6)
 				}
 				if itemsItem.OutputDatadog.FailedRequestLoggingMode != nil {
 					items.OutputDatadog.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputDatadog.FailedRequestLoggingMode))
@@ -1675,7 +2205,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputDatadog.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputDatadog.FlushPeriodSec)
 				items.OutputDatadog.Host = types.StringPointerValue(itemsItem.OutputDatadog.Host)
-				items.OutputDatadog.ID = types.StringValue(itemsItem.OutputDatadog.ID)
+				items.OutputDatadog.ID = types.StringPointerValue(itemsItem.OutputDatadog.ID)
 				items.OutputDatadog.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputDatadog.MaxPayloadEvents)
 				items.OutputDatadog.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputDatadog.MaxPayloadSizeKB)
 				items.OutputDatadog.Message = types.StringPointerValue(itemsItem.OutputDatadog.Message)
@@ -1695,6 +2225,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDatadog.PqControls = &tfTypes.OutputDatadogPqControls{}
 				}
+				items.OutputDatadog.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputDatadog.PqMaxBackpressureSec)
+				items.OutputDatadog.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputDatadog.PqMaxBufferSize)
+				items.OutputDatadog.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputDatadog.PqMaxBufferSizeBytes)
 				items.OutputDatadog.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputDatadog.PqMaxFileSize)
 				items.OutputDatadog.PqMaxSize = types.StringPointerValue(itemsItem.OutputDatadog.PqMaxSize)
 				if itemsItem.OutputDatadog.PqMode != nil {
@@ -1708,19 +2241,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDatadog.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputDatadog.PqPath = types.StringPointerValue(itemsItem.OutputDatadog.PqPath)
+				items.OutputDatadog.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputDatadog.PqRatePerSec)
+				items.OutputDatadog.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputDatadog.PqStrictOrdering)
 				items.OutputDatadog.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputDatadog.RejectUnauthorized)
 				items.OutputDatadog.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputDatadog.ResponseHonorRetryAfterHeader)
-				items.OutputDatadog.ResponseRetrySettings = []tfTypes.OutputDatadogResponseRetrySetting{}
+				items.OutputDatadog.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem6 := range itemsItem.OutputDatadog.ResponseRetrySettings {
-					var responseRetrySettings6 tfTypes.OutputDatadogResponseRetrySetting
+				for _, responseRetrySettingsItem7 := range itemsItem.OutputDatadog.ResponseRetrySettings {
+					var responseRetrySettings7 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings6.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem6.BackoffRate)
-					responseRetrySettings6.HTTPStatus = types.Float64Value(responseRetrySettingsItem6.HTTPStatus)
-					responseRetrySettings6.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem6.InitialBackoff)
-					responseRetrySettings6.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem6.MaxBackoff)
+					responseRetrySettings7.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem7.BackoffRate)
+					responseRetrySettings7.HTTPStatus = types.Float64Value(responseRetrySettingsItem7.HTTPStatus)
+					responseRetrySettings7.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem7.InitialBackoff)
+					responseRetrySettings7.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem7.MaxBackoff)
 
-					items.OutputDatadog.ResponseRetrySettings = append(items.OutputDatadog.ResponseRetrySettings, responseRetrySettings6)
+					items.OutputDatadog.ResponseRetrySettings = append(items.OutputDatadog.ResponseRetrySettings, responseRetrySettings7)
 				}
 				items.OutputDatadog.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputDatadog.SafeHeaders))
 				for _, v := range itemsItem.OutputDatadog.SafeHeaders {
@@ -1755,11 +2290,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputDatadog.TimeoutRetrySettings == nil {
 					items.OutputDatadog.TimeoutRetrySettings = nil
 				} else {
-					items.OutputDatadog.TimeoutRetrySettings = &tfTypes.OutputDatadogTimeoutRetrySettings{}
+					items.OutputDatadog.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputDatadog.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputDatadog.TimeoutRetrySettings.BackoffRate)
 					items.OutputDatadog.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputDatadog.TimeoutRetrySettings.InitialBackoff)
 					items.OutputDatadog.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputDatadog.TimeoutRetrySettings.MaxBackoff)
-					items.OutputDatadog.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputDatadog.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputDatadog.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputDatadog.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputDatadog.TimeoutSec = types.Float64PointerValue(itemsItem.OutputDatadog.TimeoutSec)
 				items.OutputDatadog.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputDatadog.TotalMemoryLimitKB)
@@ -1768,6 +2303,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputDataset != nil {
 				items.OutputDataset = &tfTypes.OutputDataset{}
+				items.OutputDataset.TemplateCustomURL = types.StringPointerValue(itemsItem.OutputDataset.TemplateCustomURL)
 				items.OutputDataset.APIKey = types.StringPointerValue(itemsItem.OutputDataset.APIKey)
 				if itemsItem.OutputDataset.AuthType != nil {
 					items.OutputDataset.AuthType = types.StringValue(string(*itemsItem.OutputDataset.AuthType))
@@ -1788,15 +2324,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputDataset.ExcludeFields {
 					items.OutputDataset.ExcludeFields = append(items.OutputDataset.ExcludeFields, types.StringValue(v))
 				}
-				items.OutputDataset.ExtraHTTPHeaders = []tfTypes.OutputDatasetExtraHTTPHeader{}
+				items.OutputDataset.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem6 := range itemsItem.OutputDataset.ExtraHTTPHeaders {
-					var extraHTTPHeaders6 tfTypes.OutputDatasetExtraHTTPHeader
+				for _, extraHTTPHeadersItem7 := range itemsItem.OutputDataset.ExtraHTTPHeaders {
+					var extraHTTPHeaders7 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders6.Name = types.StringPointerValue(extraHTTPHeadersItem6.Name)
-					extraHTTPHeaders6.Value = types.StringValue(extraHTTPHeadersItem6.Value)
+					extraHTTPHeaders7.Name = types.StringPointerValue(extraHTTPHeadersItem7.Name)
+					extraHTTPHeaders7.Value = types.StringValue(extraHTTPHeadersItem7.Value)
 
-					items.OutputDataset.ExtraHTTPHeaders = append(items.OutputDataset.ExtraHTTPHeaders, extraHTTPHeaders6)
+					items.OutputDataset.ExtraHTTPHeaders = append(items.OutputDataset.ExtraHTTPHeaders, extraHTTPHeaders7)
 				}
 				if itemsItem.OutputDataset.FailedRequestLoggingMode != nil {
 					items.OutputDataset.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputDataset.FailedRequestLoggingMode))
@@ -1804,7 +2340,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDataset.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputDataset.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputDataset.FlushPeriodSec)
-				items.OutputDataset.ID = types.StringValue(itemsItem.OutputDataset.ID)
+				items.OutputDataset.ID = types.StringPointerValue(itemsItem.OutputDataset.ID)
 				items.OutputDataset.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputDataset.MaxPayloadEvents)
 				items.OutputDataset.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputDataset.MaxPayloadSizeKB)
 				items.OutputDataset.MessageField = types.StringPointerValue(itemsItem.OutputDataset.MessageField)
@@ -1824,6 +2360,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDataset.PqControls = &tfTypes.OutputDatasetPqControls{}
 				}
+				items.OutputDataset.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputDataset.PqMaxBackpressureSec)
+				items.OutputDataset.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputDataset.PqMaxBufferSize)
+				items.OutputDataset.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputDataset.PqMaxBufferSizeBytes)
 				items.OutputDataset.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputDataset.PqMaxFileSize)
 				items.OutputDataset.PqMaxSize = types.StringPointerValue(itemsItem.OutputDataset.PqMaxSize)
 				if itemsItem.OutputDataset.PqMode != nil {
@@ -1837,19 +2376,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDataset.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputDataset.PqPath = types.StringPointerValue(itemsItem.OutputDataset.PqPath)
+				items.OutputDataset.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputDataset.PqRatePerSec)
+				items.OutputDataset.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputDataset.PqStrictOrdering)
 				items.OutputDataset.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputDataset.RejectUnauthorized)
 				items.OutputDataset.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputDataset.ResponseHonorRetryAfterHeader)
-				items.OutputDataset.ResponseRetrySettings = []tfTypes.OutputDatasetResponseRetrySetting{}
+				items.OutputDataset.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem7 := range itemsItem.OutputDataset.ResponseRetrySettings {
-					var responseRetrySettings7 tfTypes.OutputDatasetResponseRetrySetting
+				for _, responseRetrySettingsItem8 := range itemsItem.OutputDataset.ResponseRetrySettings {
+					var responseRetrySettings8 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings7.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem7.BackoffRate)
-					responseRetrySettings7.HTTPStatus = types.Float64Value(responseRetrySettingsItem7.HTTPStatus)
-					responseRetrySettings7.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem7.InitialBackoff)
-					responseRetrySettings7.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem7.MaxBackoff)
+					responseRetrySettings8.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem8.BackoffRate)
+					responseRetrySettings8.HTTPStatus = types.Float64Value(responseRetrySettingsItem8.HTTPStatus)
+					responseRetrySettings8.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem8.InitialBackoff)
+					responseRetrySettings8.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem8.MaxBackoff)
 
-					items.OutputDataset.ResponseRetrySettings = append(items.OutputDataset.ResponseRetrySettings, responseRetrySettings7)
+					items.OutputDataset.ResponseRetrySettings = append(items.OutputDataset.ResponseRetrySettings, responseRetrySettings8)
 				}
 				items.OutputDataset.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputDataset.SafeHeaders))
 				for _, v := range itemsItem.OutputDataset.SafeHeaders {
@@ -1873,11 +2414,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputDataset.TimeoutRetrySettings == nil {
 					items.OutputDataset.TimeoutRetrySettings = nil
 				} else {
-					items.OutputDataset.TimeoutRetrySettings = &tfTypes.OutputDatasetTimeoutRetrySettings{}
+					items.OutputDataset.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputDataset.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputDataset.TimeoutRetrySettings.BackoffRate)
 					items.OutputDataset.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputDataset.TimeoutRetrySettings.InitialBackoff)
 					items.OutputDataset.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputDataset.TimeoutRetrySettings.MaxBackoff)
-					items.OutputDataset.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputDataset.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputDataset.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputDataset.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputDataset.TimeoutSec = types.Float64PointerValue(itemsItem.OutputDataset.TimeoutSec)
 				items.OutputDataset.TimestampField = types.StringPointerValue(itemsItem.OutputDataset.TimestampField)
@@ -1887,7 +2428,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputDefault != nil {
 				items.OutputDefault = &tfTypes.OutputDefault{}
-				items.OutputDefault.DefaultID = types.StringValue(itemsItem.OutputDefault.DefaultID)
+				items.OutputDefault.DefaultID = types.StringPointerValue(itemsItem.OutputDefault.DefaultID)
 				items.OutputDefault.Environment = types.StringPointerValue(itemsItem.OutputDefault.Environment)
 				items.OutputDefault.ID = types.StringPointerValue(itemsItem.OutputDefault.ID)
 				items.OutputDefault.Pipeline = types.StringPointerValue(itemsItem.OutputDefault.Pipeline)
@@ -1904,7 +2445,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			if itemsItem.OutputDevnull != nil {
 				items.OutputDevnull = &tfTypes.OutputDevnull{}
 				items.OutputDevnull.Environment = types.StringPointerValue(itemsItem.OutputDevnull.Environment)
-				items.OutputDevnull.ID = types.StringValue(itemsItem.OutputDevnull.ID)
+				items.OutputDevnull.ID = types.StringPointerValue(itemsItem.OutputDevnull.ID)
 				items.OutputDevnull.Pipeline = types.StringPointerValue(itemsItem.OutputDevnull.Pipeline)
 				items.OutputDevnull.Streamtags = make([]types.String, 0, len(itemsItem.OutputDevnull.Streamtags))
 				for _, v := range itemsItem.OutputDevnull.Streamtags {
@@ -1925,7 +2466,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputDiskSpool.Description = types.StringPointerValue(itemsItem.OutputDiskSpool.Description)
 				items.OutputDiskSpool.Environment = types.StringPointerValue(itemsItem.OutputDiskSpool.Environment)
-				items.OutputDiskSpool.ID = types.StringValue(itemsItem.OutputDiskSpool.ID)
+				items.OutputDiskSpool.ID = types.StringPointerValue(itemsItem.OutputDiskSpool.ID)
 				items.OutputDiskSpool.MaxDataSize = types.StringPointerValue(itemsItem.OutputDiskSpool.MaxDataSize)
 				items.OutputDiskSpool.MaxDataTime = types.StringPointerValue(itemsItem.OutputDiskSpool.MaxDataTime)
 				items.OutputDiskSpool.PartitionExpr = types.StringPointerValue(itemsItem.OutputDiskSpool.PartitionExpr)
@@ -1943,6 +2484,13 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputDlS3 != nil {
 				items.OutputDlS3 = &tfTypes.OutputDlS3{}
+				items.OutputDlS3.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputDlS3.TemplateAssumeRoleArn)
+				items.OutputDlS3.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputDlS3.TemplateAssumeRoleExternalID)
+				items.OutputDlS3.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputDlS3.TemplateAwsAPIKey)
+				items.OutputDlS3.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputDlS3.TemplateAwsSecretKey)
+				items.OutputDlS3.TemplateBucket = types.StringPointerValue(itemsItem.OutputDlS3.TemplateBucket)
+				items.OutputDlS3.TemplateFormat = types.StringPointerValue(itemsItem.OutputDlS3.TemplateFormat)
+				items.OutputDlS3.TemplateRegion = types.StringPointerValue(itemsItem.OutputDlS3.TemplateRegion)
 				items.OutputDlS3.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputDlS3.AddIDToStagePath)
 				items.OutputDlS3.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputDlS3.AssumeRoleArn)
 				items.OutputDlS3.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputDlS3.AssumeRoleExternalID)
@@ -1971,6 +2519,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDlS3.DeadletterPath = types.StringPointerValue(itemsItem.OutputDlS3.DeadletterPath)
 				items.OutputDlS3.Description = types.StringPointerValue(itemsItem.OutputDlS3.Description)
 				items.OutputDlS3.DestPath = types.StringPointerValue(itemsItem.OutputDlS3.DestPath)
+				items.OutputDlS3.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputDlS3.DirectoryBatchSize)
 				items.OutputDlS3.DurationSeconds = types.Float64PointerValue(itemsItem.OutputDlS3.DurationSeconds)
 				items.OutputDlS3.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputDlS3.EmptyDirCleanupSec)
 				items.OutputDlS3.EnableAssumeRole = types.BoolPointerValue(itemsItem.OutputDlS3.EnableAssumeRole)
@@ -1980,6 +2529,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDlS3.Endpoint = types.StringPointerValue(itemsItem.OutputDlS3.Endpoint)
 				items.OutputDlS3.Environment = types.StringPointerValue(itemsItem.OutputDlS3.Environment)
 				items.OutputDlS3.FileNameSuffix = types.StringPointerValue(itemsItem.OutputDlS3.FileNameSuffix)
+				items.OutputDlS3.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputDlS3.ForceCloseOnShutdown)
 				if itemsItem.OutputDlS3.Format != nil {
 					items.OutputDlS3.Format = types.StringValue(string(*itemsItem.OutputDlS3.Format))
 				} else {
@@ -1987,15 +2537,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputDlS3.HeaderLine = types.StringPointerValue(itemsItem.OutputDlS3.HeaderLine)
 				items.OutputDlS3.ID = types.StringPointerValue(itemsItem.OutputDlS3.ID)
-				items.OutputDlS3.KeyValueMetadata = []tfTypes.OutputDlS3KeyValueMetadatum{}
+				items.OutputDlS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem3 := range itemsItem.OutputDlS3.KeyValueMetadata {
-					var keyValueMetadata3 tfTypes.OutputDlS3KeyValueMetadatum
+				for _, keyValueMetadataItem4 := range itemsItem.OutputDlS3.KeyValueMetadata {
+					var keyValueMetadata4 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata3.Key = types.StringPointerValue(keyValueMetadataItem3.Key)
-					keyValueMetadata3.Value = types.StringValue(keyValueMetadataItem3.Value)
+					keyValueMetadata4.Key = types.StringValue(keyValueMetadataItem4.Key)
+					keyValueMetadata4.Value = types.StringValue(keyValueMetadataItem4.Value)
 
-					items.OutputDlS3.KeyValueMetadata = append(items.OutputDlS3.KeyValueMetadata, keyValueMetadata3)
+					items.OutputDlS3.KeyValueMetadata = append(items.OutputDlS3.KeyValueMetadata, keyValueMetadata4)
 				}
 				items.OutputDlS3.KmsKeyID = types.StringPointerValue(itemsItem.OutputDlS3.KmsKeyID)
 				items.OutputDlS3.MaxClosingFilesToBackpressure = types.Float64PointerValue(itemsItem.OutputDlS3.MaxClosingFilesToBackpressure)
@@ -2010,6 +2560,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDlS3.ObjectACL = types.StringNull()
 				}
+				if itemsItem.OutputDlS3.OnBackpressure != nil {
+					items.OutputDlS3.OnBackpressure = types.StringValue(string(*itemsItem.OutputDlS3.OnBackpressure))
+				} else {
+					items.OutputDlS3.OnBackpressure = types.StringNull()
+				}
 				if itemsItem.OutputDlS3.OnDiskFullBackpressure != nil {
 					items.OutputDlS3.OnDiskFullBackpressure = types.StringValue(string(*itemsItem.OutputDlS3.OnDiskFullBackpressure))
 				} else {
@@ -2022,6 +2577,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputDlS3.ParquetPageSize = types.StringPointerValue(itemsItem.OutputDlS3.ParquetPageSize)
 				items.OutputDlS3.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputDlS3.ParquetRowGroupLength)
+				items.OutputDlS3.ParquetSchema = types.StringPointerValue(itemsItem.OutputDlS3.ParquetSchema)
 				if itemsItem.OutputDlS3.ParquetVersion != nil {
 					items.OutputDlS3.ParquetVersion = types.StringValue(string(*itemsItem.OutputDlS3.ParquetVersion))
 				} else {
@@ -2035,6 +2591,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDlS3.Region = types.StringPointerValue(itemsItem.OutputDlS3.Region)
 				items.OutputDlS3.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputDlS3.RejectUnauthorized)
 				items.OutputDlS3.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputDlS3.RemoveEmptyDirs)
+				if itemsItem.OutputDlS3.RetrySettings == nil {
+					items.OutputDlS3.RetrySettings = nil
+				} else {
+					items.OutputDlS3.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputDlS3.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputDlS3.RetrySettings.BackoffMultiplier)
+					items.OutputDlS3.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputDlS3.RetrySettings.Enabled)
+					items.OutputDlS3.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputDlS3.RetrySettings.InitialBackoffMs)
+					items.OutputDlS3.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputDlS3.RetrySettings.JitterPercent)
+					items.OutputDlS3.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputDlS3.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputDlS3.ReuseConnections = types.BoolPointerValue(itemsItem.OutputDlS3.ReuseConnections)
 				if itemsItem.OutputDlS3.ServerSideEncryption != nil {
 					items.OutputDlS3.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputDlS3.ServerSideEncryption))
@@ -2047,7 +2613,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDlS3.SignatureVersion = types.StringNull()
 				}
-				items.OutputDlS3.StagePath = types.StringPointerValue(itemsItem.OutputDlS3.StagePath)
+				items.OutputDlS3.StagePath = types.StringValue(itemsItem.OutputDlS3.StagePath)
 				if itemsItem.OutputDlS3.StorageClass != nil {
 					items.OutputDlS3.StorageClass = types.StringValue(string(*itemsItem.OutputDlS3.StorageClass))
 				} else {
@@ -2061,16 +2627,13 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputDlS3.SystemFields {
 					items.OutputDlS3.SystemFields = append(items.OutputDlS3.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputDlS3.Type != nil {
-					items.OutputDlS3.Type = types.StringValue(string(*itemsItem.OutputDlS3.Type))
-				} else {
-					items.OutputDlS3.Type = types.StringNull()
-				}
+				items.OutputDlS3.Type = types.StringValue(string(itemsItem.OutputDlS3.Type))
 				items.OutputDlS3.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputDlS3.VerifyPermissions)
 				items.OutputDlS3.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputDlS3.WriteHighWaterMark)
 			}
 			if itemsItem.OutputDynatraceHTTP != nil {
 				items.OutputDynatraceHTTP = &tfTypes.OutputDynatraceHTTP{}
+				items.OutputDynatraceHTTP.TemplateURL = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.TemplateURL)
 				items.OutputDynatraceHTTP.ActiveGateDomain = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.ActiveGateDomain)
 				if itemsItem.OutputDynatraceHTTP.AuthType != nil {
 					items.OutputDynatraceHTTP.AuthType = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.AuthType))
@@ -2080,22 +2643,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDynatraceHTTP.Compress = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.Compress)
 				items.OutputDynatraceHTTP.Concurrency = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.Concurrency)
 				items.OutputDynatraceHTTP.Description = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.Description)
-				if itemsItem.OutputDynatraceHTTP.Endpoint != nil {
-					items.OutputDynatraceHTTP.Endpoint = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.Endpoint))
-				} else {
-					items.OutputDynatraceHTTP.Endpoint = types.StringNull()
-				}
+				items.OutputDynatraceHTTP.Endpoint = types.StringValue(string(itemsItem.OutputDynatraceHTTP.Endpoint))
 				items.OutputDynatraceHTTP.Environment = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.Environment)
 				items.OutputDynatraceHTTP.EnvironmentID = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.EnvironmentID)
-				items.OutputDynatraceHTTP.ExtraHTTPHeaders = []tfTypes.OutputDynatraceHTTPExtraHTTPHeader{}
+				items.OutputDynatraceHTTP.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem7 := range itemsItem.OutputDynatraceHTTP.ExtraHTTPHeaders {
-					var extraHTTPHeaders7 tfTypes.OutputDynatraceHTTPExtraHTTPHeader
+				for _, extraHTTPHeadersItem8 := range itemsItem.OutputDynatraceHTTP.ExtraHTTPHeaders {
+					var extraHTTPHeaders8 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders7.Name = types.StringPointerValue(extraHTTPHeadersItem7.Name)
-					extraHTTPHeaders7.Value = types.StringValue(extraHTTPHeadersItem7.Value)
+					extraHTTPHeaders8.Name = types.StringPointerValue(extraHTTPHeadersItem8.Name)
+					extraHTTPHeaders8.Value = types.StringValue(extraHTTPHeadersItem8.Value)
 
-					items.OutputDynatraceHTTP.ExtraHTTPHeaders = append(items.OutputDynatraceHTTP.ExtraHTTPHeaders, extraHTTPHeaders7)
+					items.OutputDynatraceHTTP.ExtraHTTPHeaders = append(items.OutputDynatraceHTTP.ExtraHTTPHeaders, extraHTTPHeaders8)
 				}
 				if itemsItem.OutputDynatraceHTTP.FailedRequestLoggingMode != nil {
 					items.OutputDynatraceHTTP.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.FailedRequestLoggingMode))
@@ -2103,11 +2662,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDynatraceHTTP.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputDynatraceHTTP.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.FlushPeriodSec)
-				if itemsItem.OutputDynatraceHTTP.Format != nil {
-					items.OutputDynatraceHTTP.Format = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.Format))
-				} else {
-					items.OutputDynatraceHTTP.Format = types.StringNull()
-				}
+				items.OutputDynatraceHTTP.Format = types.StringValue(string(itemsItem.OutputDynatraceHTTP.Format))
 				items.OutputDynatraceHTTP.ID = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.ID)
 				items.OutputDynatraceHTTP.KeepAlive = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.KeepAlive)
 				items.OutputDynatraceHTTP.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.MaxPayloadEvents)
@@ -2133,6 +2688,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDynatraceHTTP.PqControls = &tfTypes.OutputDynatraceHTTPPqControls{}
 				}
+				items.OutputDynatraceHTTP.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.PqMaxBackpressureSec)
+				items.OutputDynatraceHTTP.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.PqMaxBufferSize)
+				items.OutputDynatraceHTTP.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.PqMaxBufferSizeBytes)
 				items.OutputDynatraceHTTP.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.PqMaxFileSize)
 				items.OutputDynatraceHTTP.PqMaxSize = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.PqMaxSize)
 				if itemsItem.OutputDynatraceHTTP.PqMode != nil {
@@ -2146,19 +2704,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDynatraceHTTP.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputDynatraceHTTP.PqPath = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.PqPath)
+				items.OutputDynatraceHTTP.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.PqRatePerSec)
+				items.OutputDynatraceHTTP.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.PqStrictOrdering)
 				items.OutputDynatraceHTTP.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.RejectUnauthorized)
 				items.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader)
-				items.OutputDynatraceHTTP.ResponseRetrySettings = []tfTypes.OutputDynatraceHTTPResponseRetrySetting{}
+				items.OutputDynatraceHTTP.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem8 := range itemsItem.OutputDynatraceHTTP.ResponseRetrySettings {
-					var responseRetrySettings8 tfTypes.OutputDynatraceHTTPResponseRetrySetting
+				for _, responseRetrySettingsItem9 := range itemsItem.OutputDynatraceHTTP.ResponseRetrySettings {
+					var responseRetrySettings9 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings8.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem8.BackoffRate)
-					responseRetrySettings8.HTTPStatus = types.Float64Value(responseRetrySettingsItem8.HTTPStatus)
-					responseRetrySettings8.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem8.InitialBackoff)
-					responseRetrySettings8.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem8.MaxBackoff)
+					responseRetrySettings9.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem9.BackoffRate)
+					responseRetrySettings9.HTTPStatus = types.Float64Value(responseRetrySettingsItem9.HTTPStatus)
+					responseRetrySettings9.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem9.InitialBackoff)
+					responseRetrySettings9.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem9.MaxBackoff)
 
-					items.OutputDynatraceHTTP.ResponseRetrySettings = append(items.OutputDynatraceHTTP.ResponseRetrySettings, responseRetrySettings8)
+					items.OutputDynatraceHTTP.ResponseRetrySettings = append(items.OutputDynatraceHTTP.ResponseRetrySettings, responseRetrySettings9)
 				}
 				items.OutputDynatraceHTTP.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputDynatraceHTTP.SafeHeaders))
 				for _, v := range itemsItem.OutputDynatraceHTTP.SafeHeaders {
@@ -2172,29 +2732,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputDynatraceHTTP.SystemFields {
 					items.OutputDynatraceHTTP.SystemFields = append(items.OutputDynatraceHTTP.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputDynatraceHTTP.TelemetryType != nil {
-					items.OutputDynatraceHTTP.TelemetryType = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.TelemetryType))
-				} else {
-					items.OutputDynatraceHTTP.TelemetryType = types.StringNull()
-				}
+				items.OutputDynatraceHTTP.TelemetryType = types.StringValue(string(itemsItem.OutputDynatraceHTTP.TelemetryType))
 				items.OutputDynatraceHTTP.TextSecret = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.TextSecret)
 				if itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings == nil {
 					items.OutputDynatraceHTTP.TimeoutRetrySettings = nil
 				} else {
-					items.OutputDynatraceHTTP.TimeoutRetrySettings = &tfTypes.OutputDynatraceHTTPTimeoutRetrySettings{}
+					items.OutputDynatraceHTTP.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate)
 					items.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff)
 					items.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff)
-					items.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputDynatraceHTTP.TimeoutSec = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.TimeoutSec)
 				items.OutputDynatraceHTTP.Token = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.Token)
 				items.OutputDynatraceHTTP.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputDynatraceHTTP.TotalMemoryLimitKB)
-				if itemsItem.OutputDynatraceHTTP.Type != nil {
-					items.OutputDynatraceHTTP.Type = types.StringValue(string(*itemsItem.OutputDynatraceHTTP.Type))
-				} else {
-					items.OutputDynatraceHTTP.Type = types.StringNull()
-				}
+				items.OutputDynatraceHTTP.Type = types.StringValue(string(itemsItem.OutputDynatraceHTTP.Type))
 				items.OutputDynatraceHTTP.URL = types.StringPointerValue(itemsItem.OutputDynatraceHTTP.URL)
 				items.OutputDynatraceHTTP.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputDynatraceHTTP.UseRoundRobinDNS)
 			}
@@ -2209,22 +2761,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDynatraceOtlp.Concurrency = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.Concurrency)
 				items.OutputDynatraceOtlp.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.ConnectionTimeout)
 				items.OutputDynatraceOtlp.Description = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.Description)
-				items.OutputDynatraceOtlp.Endpoint = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.Endpoint)
-				if itemsItem.OutputDynatraceOtlp.EndpointType != nil {
-					items.OutputDynatraceOtlp.EndpointType = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.EndpointType))
-				} else {
-					items.OutputDynatraceOtlp.EndpointType = types.StringNull()
-				}
+				items.OutputDynatraceOtlp.Endpoint = types.StringValue(itemsItem.OutputDynatraceOtlp.Endpoint)
+				items.OutputDynatraceOtlp.EndpointType = types.StringValue(string(itemsItem.OutputDynatraceOtlp.EndpointType))
 				items.OutputDynatraceOtlp.Environment = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.Environment)
-				items.OutputDynatraceOtlp.ExtraHTTPHeaders = []tfTypes.OutputDynatraceOtlpExtraHTTPHeader{}
+				items.OutputDynatraceOtlp.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem8 := range itemsItem.OutputDynatraceOtlp.ExtraHTTPHeaders {
-					var extraHTTPHeaders8 tfTypes.OutputDynatraceOtlpExtraHTTPHeader
+				for _, extraHTTPHeadersItem9 := range itemsItem.OutputDynatraceOtlp.ExtraHTTPHeaders {
+					var extraHTTPHeaders9 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders8.Name = types.StringPointerValue(extraHTTPHeadersItem8.Name)
-					extraHTTPHeaders8.Value = types.StringValue(extraHTTPHeadersItem8.Value)
+					extraHTTPHeaders9.Name = types.StringPointerValue(extraHTTPHeadersItem9.Name)
+					extraHTTPHeaders9.Value = types.StringValue(extraHTTPHeadersItem9.Value)
 
-					items.OutputDynatraceOtlp.ExtraHTTPHeaders = append(items.OutputDynatraceOtlp.ExtraHTTPHeaders, extraHTTPHeaders8)
+					items.OutputDynatraceOtlp.ExtraHTTPHeaders = append(items.OutputDynatraceOtlp.ExtraHTTPHeaders, extraHTTPHeaders9)
 				}
 				if itemsItem.OutputDynatraceOtlp.FailedRequestLoggingMode != nil {
 					items.OutputDynatraceOtlp.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.FailedRequestLoggingMode))
@@ -2244,12 +2792,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputDynatraceOtlp.KeepAlive = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.KeepAlive)
 				items.OutputDynatraceOtlp.KeepAliveTime = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.KeepAliveTime)
 				items.OutputDynatraceOtlp.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.MaxPayloadSizeKB)
-				items.OutputDynatraceOtlp.Metadata = []tfTypes.OutputDynatraceOtlpMetadatum{}
+				items.OutputDynatraceOtlp.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 				for _, metadataItem := range itemsItem.OutputDynatraceOtlp.Metadata {
-					var metadata tfTypes.OutputDynatraceOtlpMetadatum
+					var metadata tfTypes.ItemsTypeKeyValueMetadata
 
-					metadata.Key = types.StringPointerValue(metadataItem.Key)
+					metadata.Key = types.StringValue(metadataItem.Key)
 					metadata.Value = types.StringValue(metadataItem.Value)
 
 					items.OutputDynatraceOtlp.Metadata = append(items.OutputDynatraceOtlp.Metadata, metadata)
@@ -2259,11 +2807,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDynatraceOtlp.OnBackpressure = types.StringNull()
 				}
-				if itemsItem.OutputDynatraceOtlp.OtlpVersion != nil {
-					items.OutputDynatraceOtlp.OtlpVersion = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.OtlpVersion))
-				} else {
-					items.OutputDynatraceOtlp.OtlpVersion = types.StringNull()
-				}
+				items.OutputDynatraceOtlp.OtlpVersion = types.StringValue(string(itemsItem.OutputDynatraceOtlp.OtlpVersion))
 				items.OutputDynatraceOtlp.Pipeline = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.Pipeline)
 				if itemsItem.OutputDynatraceOtlp.PqCompress != nil {
 					items.OutputDynatraceOtlp.PqCompress = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.PqCompress))
@@ -2275,6 +2819,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputDynatraceOtlp.PqControls = &tfTypes.OutputDynatraceOtlpPqControls{}
 				}
+				items.OutputDynatraceOtlp.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.PqMaxBackpressureSec)
+				items.OutputDynatraceOtlp.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.PqMaxBufferSize)
+				items.OutputDynatraceOtlp.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.PqMaxBufferSizeBytes)
 				items.OutputDynatraceOtlp.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.PqMaxFileSize)
 				items.OutputDynatraceOtlp.PqMaxSize = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.PqMaxSize)
 				if itemsItem.OutputDynatraceOtlp.PqMode != nil {
@@ -2288,24 +2835,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputDynatraceOtlp.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputDynatraceOtlp.PqPath = types.StringPointerValue(itemsItem.OutputDynatraceOtlp.PqPath)
-				if itemsItem.OutputDynatraceOtlp.Protocol != nil {
-					items.OutputDynatraceOtlp.Protocol = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.Protocol))
-				} else {
-					items.OutputDynatraceOtlp.Protocol = types.StringNull()
-				}
+				items.OutputDynatraceOtlp.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.PqRatePerSec)
+				items.OutputDynatraceOtlp.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.PqStrictOrdering)
+				items.OutputDynatraceOtlp.Protocol = types.StringValue(string(itemsItem.OutputDynatraceOtlp.Protocol))
 				items.OutputDynatraceOtlp.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.RejectUnauthorized)
 				items.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader)
-				items.OutputDynatraceOtlp.ResponseRetrySettings = []tfTypes.OutputDynatraceOtlpResponseRetrySetting{}
+				items.OutputDynatraceOtlp.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem9 := range itemsItem.OutputDynatraceOtlp.ResponseRetrySettings {
-					var responseRetrySettings9 tfTypes.OutputDynatraceOtlpResponseRetrySetting
+				for _, responseRetrySettingsItem10 := range itemsItem.OutputDynatraceOtlp.ResponseRetrySettings {
+					var responseRetrySettings10 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings9.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem9.BackoffRate)
-					responseRetrySettings9.HTTPStatus = types.Float64Value(responseRetrySettingsItem9.HTTPStatus)
-					responseRetrySettings9.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem9.InitialBackoff)
-					responseRetrySettings9.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem9.MaxBackoff)
+					responseRetrySettings10.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem10.BackoffRate)
+					responseRetrySettings10.HTTPStatus = types.Float64Value(responseRetrySettingsItem10.HTTPStatus)
+					responseRetrySettings10.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem10.InitialBackoff)
+					responseRetrySettings10.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem10.MaxBackoff)
 
-					items.OutputDynatraceOtlp.ResponseRetrySettings = append(items.OutputDynatraceOtlp.ResponseRetrySettings, responseRetrySettings9)
+					items.OutputDynatraceOtlp.ResponseRetrySettings = append(items.OutputDynatraceOtlp.ResponseRetrySettings, responseRetrySettings10)
 				}
 				items.OutputDynatraceOtlp.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputDynatraceOtlp.SafeHeaders))
 				for _, v := range itemsItem.OutputDynatraceOtlp.SafeHeaders {
@@ -2322,33 +2867,35 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings == nil {
 					items.OutputDynatraceOtlp.TimeoutRetrySettings = nil
 				} else {
-					items.OutputDynatraceOtlp.TimeoutRetrySettings = &tfTypes.OutputDynatraceOtlpTimeoutRetrySettings{}
+					items.OutputDynatraceOtlp.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate)
 					items.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff)
 					items.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff)
-					items.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputDynatraceOtlp.TimeoutSec = types.Float64PointerValue(itemsItem.OutputDynatraceOtlp.TimeoutSec)
 				items.OutputDynatraceOtlp.TokenSecret = types.StringValue(itemsItem.OutputDynatraceOtlp.TokenSecret)
-				if itemsItem.OutputDynatraceOtlp.Type != nil {
-					items.OutputDynatraceOtlp.Type = types.StringValue(string(*itemsItem.OutputDynatraceOtlp.Type))
-				} else {
-					items.OutputDynatraceOtlp.Type = types.StringNull()
-				}
+				items.OutputDynatraceOtlp.Type = types.StringValue(string(itemsItem.OutputDynatraceOtlp.Type))
 				items.OutputDynatraceOtlp.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputDynatraceOtlp.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputElastic != nil {
 				items.OutputElastic = &tfTypes.OutputElastic{}
+				items.OutputElastic.TemplateURL = types.StringPointerValue(itemsItem.OutputElastic.TemplateURL)
 				if itemsItem.OutputElastic.Auth == nil {
 					items.OutputElastic.Auth = nil
 				} else {
-					items.OutputElastic.Auth = &tfTypes.OutputElasticAuth{}
+					items.OutputElastic.Auth = &tfTypes.AuthTypeAuthTypeCredentialsSecret{}
 					if itemsItem.OutputElastic.Auth.AuthType != nil {
 						items.OutputElastic.Auth.AuthType = types.StringValue(string(*itemsItem.OutputElastic.Auth.AuthType))
 					} else {
 						items.OutputElastic.Auth.AuthType = types.StringNull()
 					}
-					items.OutputElastic.Auth.Disabled = types.BoolPointerValue(itemsItem.OutputElastic.Auth.Disabled)
+					items.OutputElastic.Auth.CredentialsSecret = types.StringPointerValue(itemsItem.OutputElastic.Auth.CredentialsSecret)
+					items.OutputElastic.Auth.Disabled = types.BoolValue(itemsItem.OutputElastic.Auth.Disabled)
+					items.OutputElastic.Auth.ManualAPIKey = types.StringPointerValue(itemsItem.OutputElastic.Auth.ManualAPIKey)
+					items.OutputElastic.Auth.Password = types.StringPointerValue(itemsItem.OutputElastic.Auth.Password)
+					items.OutputElastic.Auth.TextSecret = types.StringPointerValue(itemsItem.OutputElastic.Auth.TextSecret)
+					items.OutputElastic.Auth.Username = types.StringPointerValue(itemsItem.OutputElastic.Auth.Username)
 				}
 				items.OutputElastic.Compress = types.BoolPointerValue(itemsItem.OutputElastic.Compress)
 				items.OutputElastic.Concurrency = types.Float64PointerValue(itemsItem.OutputElastic.Concurrency)
@@ -2363,20 +2910,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputElastic.Environment = types.StringPointerValue(itemsItem.OutputElastic.Environment)
 				items.OutputElastic.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputElastic.ExcludeSelf)
-				items.OutputElastic.ExtraHTTPHeaders = []tfTypes.OutputElasticExtraHTTPHeader{}
+				items.OutputElastic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem9 := range itemsItem.OutputElastic.ExtraHTTPHeaders {
-					var extraHTTPHeaders9 tfTypes.OutputElasticExtraHTTPHeader
+				for _, extraHTTPHeadersItem10 := range itemsItem.OutputElastic.ExtraHTTPHeaders {
+					var extraHTTPHeaders10 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders9.Name = types.StringPointerValue(extraHTTPHeadersItem9.Name)
-					extraHTTPHeaders9.Value = types.StringValue(extraHTTPHeadersItem9.Value)
+					extraHTTPHeaders10.Name = types.StringPointerValue(extraHTTPHeadersItem10.Name)
+					extraHTTPHeaders10.Value = types.StringValue(extraHTTPHeadersItem10.Value)
 
-					items.OutputElastic.ExtraHTTPHeaders = append(items.OutputElastic.ExtraHTTPHeaders, extraHTTPHeaders9)
+					items.OutputElastic.ExtraHTTPHeaders = append(items.OutputElastic.ExtraHTTPHeaders, extraHTTPHeaders10)
 				}
-				items.OutputElastic.ExtraParams = []tfTypes.OutputElasticExtraParam{}
+				items.OutputElastic.ExtraParams = []tfTypes.ItemsTypeSaslSaslExtensions{}
 
 				for _, extraParamsItem := range itemsItem.OutputElastic.ExtraParams {
-					var extraParams tfTypes.OutputElasticExtraParam
+					var extraParams tfTypes.ItemsTypeSaslSaslExtensions
 
 					extraParams.Name = types.StringValue(extraParamsItem.Name)
 					extraParams.Value = types.StringValue(extraParamsItem.Value)
@@ -2412,6 +2959,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputElastic.PqControls = &tfTypes.OutputElasticPqControls{}
 				}
+				items.OutputElastic.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputElastic.PqMaxBackpressureSec)
+				items.OutputElastic.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputElastic.PqMaxBufferSize)
+				items.OutputElastic.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputElastic.PqMaxBufferSizeBytes)
 				items.OutputElastic.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputElastic.PqMaxFileSize)
 				items.OutputElastic.PqMaxSize = types.StringPointerValue(itemsItem.OutputElastic.PqMaxSize)
 				if itemsItem.OutputElastic.PqMode != nil {
@@ -2425,19 +2975,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputElastic.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputElastic.PqPath = types.StringPointerValue(itemsItem.OutputElastic.PqPath)
+				items.OutputElastic.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputElastic.PqRatePerSec)
+				items.OutputElastic.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputElastic.PqStrictOrdering)
 				items.OutputElastic.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputElastic.RejectUnauthorized)
 				items.OutputElastic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputElastic.ResponseHonorRetryAfterHeader)
-				items.OutputElastic.ResponseRetrySettings = []tfTypes.OutputElasticResponseRetrySetting{}
+				items.OutputElastic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem10 := range itemsItem.OutputElastic.ResponseRetrySettings {
-					var responseRetrySettings10 tfTypes.OutputElasticResponseRetrySetting
+				for _, responseRetrySettingsItem11 := range itemsItem.OutputElastic.ResponseRetrySettings {
+					var responseRetrySettings11 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings10.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem10.BackoffRate)
-					responseRetrySettings10.HTTPStatus = types.Float64Value(responseRetrySettingsItem10.HTTPStatus)
-					responseRetrySettings10.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem10.InitialBackoff)
-					responseRetrySettings10.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem10.MaxBackoff)
+					responseRetrySettings11.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem11.BackoffRate)
+					responseRetrySettings11.HTTPStatus = types.Float64Value(responseRetrySettingsItem11.HTTPStatus)
+					responseRetrySettings11.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem11.InitialBackoff)
+					responseRetrySettings11.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem11.MaxBackoff)
 
-					items.OutputElastic.ResponseRetrySettings = append(items.OutputElastic.ResponseRetrySettings, responseRetrySettings10)
+					items.OutputElastic.ResponseRetrySettings = append(items.OutputElastic.ResponseRetrySettings, responseRetrySettings11)
 				}
 				items.OutputElastic.RetryPartialErrors = types.BoolPointerValue(itemsItem.OutputElastic.RetryPartialErrors)
 				items.OutputElastic.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputElastic.SafeHeaders))
@@ -2455,24 +3007,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputElastic.TimeoutRetrySettings == nil {
 					items.OutputElastic.TimeoutRetrySettings = nil
 				} else {
-					items.OutputElastic.TimeoutRetrySettings = &tfTypes.OutputElasticTimeoutRetrySettings{}
+					items.OutputElastic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputElastic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputElastic.TimeoutRetrySettings.BackoffRate)
 					items.OutputElastic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputElastic.TimeoutRetrySettings.InitialBackoff)
 					items.OutputElastic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputElastic.TimeoutRetrySettings.MaxBackoff)
-					items.OutputElastic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputElastic.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputElastic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputElastic.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputElastic.TimeoutSec = types.Float64PointerValue(itemsItem.OutputElastic.TimeoutSec)
 				items.OutputElastic.Type = types.StringValue(string(itemsItem.OutputElastic.Type))
 				items.OutputElastic.URL = types.StringPointerValue(itemsItem.OutputElastic.URL)
 				items.OutputElastic.Urls = []tfTypes.OutputElasticURL{}
 
-				for _, urlsItem1 := range itemsItem.OutputElastic.Urls {
-					var urls1 tfTypes.OutputElasticURL
+				for _, urlsItem2 := range itemsItem.OutputElastic.Urls {
+					var urls2 tfTypes.OutputElasticURL
 
-					urls1.URL = types.StringValue(urlsItem1.URL)
-					urls1.Weight = types.Float64PointerValue(urlsItem1.Weight)
+					urls2.TemplateURL = types.StringPointerValue(urlsItem2.TemplateURL)
+					urls2.URL = types.StringValue(urlsItem2.URL)
+					urls2.Weight = types.Float64PointerValue(urlsItem2.Weight)
 
-					items.OutputElastic.Urls = append(items.OutputElastic.Urls, urls1)
+					items.OutputElastic.Urls = append(items.OutputElastic.Urls, urls2)
 				}
 				items.OutputElastic.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputElastic.UseRoundRobinDNS)
 				if itemsItem.OutputElastic.WriteAction != nil {
@@ -2486,33 +3039,38 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputElasticCloud.Auth == nil {
 					items.OutputElasticCloud.Auth = nil
 				} else {
-					items.OutputElasticCloud.Auth = &tfTypes.OutputElasticCloudAuth{}
+					items.OutputElasticCloud.Auth = &tfTypes.AuthTypeAuthTypeCredentialsSecret{}
 					if itemsItem.OutputElasticCloud.Auth.AuthType != nil {
 						items.OutputElasticCloud.Auth.AuthType = types.StringValue(string(*itemsItem.OutputElasticCloud.Auth.AuthType))
 					} else {
 						items.OutputElasticCloud.Auth.AuthType = types.StringNull()
 					}
-					items.OutputElasticCloud.Auth.Disabled = types.BoolPointerValue(itemsItem.OutputElasticCloud.Auth.Disabled)
+					items.OutputElasticCloud.Auth.CredentialsSecret = types.StringPointerValue(itemsItem.OutputElasticCloud.Auth.CredentialsSecret)
+					items.OutputElasticCloud.Auth.Disabled = types.BoolValue(itemsItem.OutputElasticCloud.Auth.Disabled)
+					items.OutputElasticCloud.Auth.ManualAPIKey = types.StringPointerValue(itemsItem.OutputElasticCloud.Auth.ManualAPIKey)
+					items.OutputElasticCloud.Auth.Password = types.StringPointerValue(itemsItem.OutputElasticCloud.Auth.Password)
+					items.OutputElasticCloud.Auth.TextSecret = types.StringPointerValue(itemsItem.OutputElasticCloud.Auth.TextSecret)
+					items.OutputElasticCloud.Auth.Username = types.StringPointerValue(itemsItem.OutputElasticCloud.Auth.Username)
 				}
 				items.OutputElasticCloud.Compress = types.BoolPointerValue(itemsItem.OutputElasticCloud.Compress)
 				items.OutputElasticCloud.Concurrency = types.Float64PointerValue(itemsItem.OutputElasticCloud.Concurrency)
 				items.OutputElasticCloud.Description = types.StringPointerValue(itemsItem.OutputElasticCloud.Description)
 				items.OutputElasticCloud.ElasticPipeline = types.StringPointerValue(itemsItem.OutputElasticCloud.ElasticPipeline)
 				items.OutputElasticCloud.Environment = types.StringPointerValue(itemsItem.OutputElasticCloud.Environment)
-				items.OutputElasticCloud.ExtraHTTPHeaders = []tfTypes.OutputElasticCloudExtraHTTPHeader{}
+				items.OutputElasticCloud.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem10 := range itemsItem.OutputElasticCloud.ExtraHTTPHeaders {
-					var extraHTTPHeaders10 tfTypes.OutputElasticCloudExtraHTTPHeader
+				for _, extraHTTPHeadersItem11 := range itemsItem.OutputElasticCloud.ExtraHTTPHeaders {
+					var extraHTTPHeaders11 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders10.Name = types.StringPointerValue(extraHTTPHeadersItem10.Name)
-					extraHTTPHeaders10.Value = types.StringValue(extraHTTPHeadersItem10.Value)
+					extraHTTPHeaders11.Name = types.StringPointerValue(extraHTTPHeadersItem11.Name)
+					extraHTTPHeaders11.Value = types.StringValue(extraHTTPHeadersItem11.Value)
 
-					items.OutputElasticCloud.ExtraHTTPHeaders = append(items.OutputElasticCloud.ExtraHTTPHeaders, extraHTTPHeaders10)
+					items.OutputElasticCloud.ExtraHTTPHeaders = append(items.OutputElasticCloud.ExtraHTTPHeaders, extraHTTPHeaders11)
 				}
-				items.OutputElasticCloud.ExtraParams = []tfTypes.OutputElasticCloudExtraParam{}
+				items.OutputElasticCloud.ExtraParams = []tfTypes.ItemsTypeSaslSaslExtensions{}
 
 				for _, extraParamsItem1 := range itemsItem.OutputElasticCloud.ExtraParams {
-					var extraParams1 tfTypes.OutputElasticCloudExtraParam
+					var extraParams1 tfTypes.ItemsTypeSaslSaslExtensions
 
 					extraParams1.Name = types.StringValue(extraParamsItem1.Name)
 					extraParams1.Value = types.StringValue(extraParamsItem1.Value)
@@ -2546,6 +3104,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputElasticCloud.PqControls = &tfTypes.OutputElasticCloudPqControls{}
 				}
+				items.OutputElasticCloud.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputElasticCloud.PqMaxBackpressureSec)
+				items.OutputElasticCloud.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputElasticCloud.PqMaxBufferSize)
+				items.OutputElasticCloud.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputElasticCloud.PqMaxBufferSizeBytes)
 				items.OutputElasticCloud.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputElasticCloud.PqMaxFileSize)
 				items.OutputElasticCloud.PqMaxSize = types.StringPointerValue(itemsItem.OutputElasticCloud.PqMaxSize)
 				if itemsItem.OutputElasticCloud.PqMode != nil {
@@ -2559,19 +3120,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputElasticCloud.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputElasticCloud.PqPath = types.StringPointerValue(itemsItem.OutputElasticCloud.PqPath)
+				items.OutputElasticCloud.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputElasticCloud.PqRatePerSec)
+				items.OutputElasticCloud.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputElasticCloud.PqStrictOrdering)
 				items.OutputElasticCloud.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputElasticCloud.RejectUnauthorized)
 				items.OutputElasticCloud.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputElasticCloud.ResponseHonorRetryAfterHeader)
-				items.OutputElasticCloud.ResponseRetrySettings = []tfTypes.OutputElasticCloudResponseRetrySetting{}
+				items.OutputElasticCloud.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem11 := range itemsItem.OutputElasticCloud.ResponseRetrySettings {
-					var responseRetrySettings11 tfTypes.OutputElasticCloudResponseRetrySetting
+				for _, responseRetrySettingsItem12 := range itemsItem.OutputElasticCloud.ResponseRetrySettings {
+					var responseRetrySettings12 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings11.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem11.BackoffRate)
-					responseRetrySettings11.HTTPStatus = types.Float64Value(responseRetrySettingsItem11.HTTPStatus)
-					responseRetrySettings11.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem11.InitialBackoff)
-					responseRetrySettings11.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem11.MaxBackoff)
+					responseRetrySettings12.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem12.BackoffRate)
+					responseRetrySettings12.HTTPStatus = types.Float64Value(responseRetrySettingsItem12.HTTPStatus)
+					responseRetrySettings12.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem12.InitialBackoff)
+					responseRetrySettings12.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem12.MaxBackoff)
 
-					items.OutputElasticCloud.ResponseRetrySettings = append(items.OutputElasticCloud.ResponseRetrySettings, responseRetrySettings11)
+					items.OutputElasticCloud.ResponseRetrySettings = append(items.OutputElasticCloud.ResponseRetrySettings, responseRetrySettings12)
 				}
 				items.OutputElasticCloud.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputElasticCloud.SafeHeaders))
 				for _, v := range itemsItem.OutputElasticCloud.SafeHeaders {
@@ -2588,22 +3151,19 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputElasticCloud.TimeoutRetrySettings == nil {
 					items.OutputElasticCloud.TimeoutRetrySettings = nil
 				} else {
-					items.OutputElasticCloud.TimeoutRetrySettings = &tfTypes.OutputElasticCloudTimeoutRetrySettings{}
+					items.OutputElasticCloud.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputElasticCloud.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputElasticCloud.TimeoutRetrySettings.BackoffRate)
 					items.OutputElasticCloud.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputElasticCloud.TimeoutRetrySettings.InitialBackoff)
 					items.OutputElasticCloud.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputElasticCloud.TimeoutRetrySettings.MaxBackoff)
-					items.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputElasticCloud.TimeoutSec = types.Float64PointerValue(itemsItem.OutputElasticCloud.TimeoutSec)
-				if itemsItem.OutputElasticCloud.Type != nil {
-					items.OutputElasticCloud.Type = types.StringValue(string(*itemsItem.OutputElasticCloud.Type))
-				} else {
-					items.OutputElasticCloud.Type = types.StringNull()
-				}
+				items.OutputElasticCloud.Type = types.StringValue(string(itemsItem.OutputElasticCloud.Type))
 				items.OutputElasticCloud.URL = types.StringValue(itemsItem.OutputElasticCloud.URL)
 			}
 			if itemsItem.OutputExabeam != nil {
 				items.OutputExabeam = &tfTypes.OutputExabeam{}
+				items.OutputExabeam.TemplateRegion = types.StringPointerValue(itemsItem.OutputExabeam.TemplateRegion)
 				items.OutputExabeam.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputExabeam.AddIDToStagePath)
 				items.OutputExabeam.AwsAPIKey = types.StringPointerValue(itemsItem.OutputExabeam.AwsAPIKey)
 				items.OutputExabeam.AwsSecretKey = types.StringPointerValue(itemsItem.OutputExabeam.AwsSecretKey)
@@ -2612,9 +3172,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputExabeam.DeadletterEnabled = types.BoolPointerValue(itemsItem.OutputExabeam.DeadletterEnabled)
 				items.OutputExabeam.DeadletterPath = types.StringPointerValue(itemsItem.OutputExabeam.DeadletterPath)
 				items.OutputExabeam.Description = types.StringPointerValue(itemsItem.OutputExabeam.Description)
+				items.OutputExabeam.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputExabeam.DirectoryBatchSize)
 				items.OutputExabeam.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputExabeam.EmptyDirCleanupSec)
 				items.OutputExabeam.EncodedConfiguration = types.StringPointerValue(itemsItem.OutputExabeam.EncodedConfiguration)
-				items.OutputExabeam.Endpoint = types.StringPointerValue(itemsItem.OutputExabeam.Endpoint)
+				items.OutputExabeam.Endpoint = types.StringValue(itemsItem.OutputExabeam.Endpoint)
 				items.OutputExabeam.Environment = types.StringPointerValue(itemsItem.OutputExabeam.Environment)
 				items.OutputExabeam.ID = types.StringPointerValue(itemsItem.OutputExabeam.ID)
 				items.OutputExabeam.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputExabeam.MaxFileIdleTimeSec)
@@ -2641,6 +3202,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputExabeam.Region = types.StringValue(itemsItem.OutputExabeam.Region)
 				items.OutputExabeam.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputExabeam.RejectUnauthorized)
 				items.OutputExabeam.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputExabeam.RemoveEmptyDirs)
+				if itemsItem.OutputExabeam.RetrySettings == nil {
+					items.OutputExabeam.RetrySettings = nil
+				} else {
+					items.OutputExabeam.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputExabeam.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputExabeam.RetrySettings.BackoffMultiplier)
+					items.OutputExabeam.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputExabeam.RetrySettings.Enabled)
+					items.OutputExabeam.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputExabeam.RetrySettings.InitialBackoffMs)
+					items.OutputExabeam.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputExabeam.RetrySettings.JitterPercent)
+					items.OutputExabeam.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputExabeam.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputExabeam.ReuseConnections = types.BoolPointerValue(itemsItem.OutputExabeam.ReuseConnections)
 				if itemsItem.OutputExabeam.SignatureVersion != nil {
 					items.OutputExabeam.SignatureVersion = types.StringValue(string(*itemsItem.OutputExabeam.SignatureVersion))
@@ -2649,7 +3220,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputExabeam.SiteID = types.StringPointerValue(itemsItem.OutputExabeam.SiteID)
 				items.OutputExabeam.SiteName = types.StringPointerValue(itemsItem.OutputExabeam.SiteName)
-				items.OutputExabeam.StagePath = types.StringPointerValue(itemsItem.OutputExabeam.StagePath)
+				items.OutputExabeam.StagePath = types.StringValue(itemsItem.OutputExabeam.StagePath)
 				if itemsItem.OutputExabeam.StorageClass != nil {
 					items.OutputExabeam.StorageClass = types.StringValue(string(*itemsItem.OutputExabeam.StorageClass))
 				} else {
@@ -2664,14 +3235,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputExabeam.SystemFields = append(items.OutputExabeam.SystemFields, types.StringValue(v))
 				}
 				items.OutputExabeam.TimezoneOffset = types.StringPointerValue(itemsItem.OutputExabeam.TimezoneOffset)
-				if itemsItem.OutputExabeam.Type != nil {
-					items.OutputExabeam.Type = types.StringValue(string(*itemsItem.OutputExabeam.Type))
-				} else {
-					items.OutputExabeam.Type = types.StringNull()
-				}
+				items.OutputExabeam.Type = types.StringValue(string(itemsItem.OutputExabeam.Type))
 			}
 			if itemsItem.OutputFilesystem != nil {
 				items.OutputFilesystem = &tfTypes.OutputFilesystem{}
+				items.OutputFilesystem.TemplateFormat = types.StringPointerValue(itemsItem.OutputFilesystem.TemplateFormat)
 				items.OutputFilesystem.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputFilesystem.AddIDToStagePath)
 				items.OutputFilesystem.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputFilesystem.AutomaticSchema)
 				items.OutputFilesystem.BaseFileName = types.StringPointerValue(itemsItem.OutputFilesystem.BaseFileName)
@@ -2689,12 +3257,14 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputFilesystem.DeadletterPath = types.StringPointerValue(itemsItem.OutputFilesystem.DeadletterPath)
 				items.OutputFilesystem.Description = types.StringPointerValue(itemsItem.OutputFilesystem.Description)
 				items.OutputFilesystem.DestPath = types.StringValue(itemsItem.OutputFilesystem.DestPath)
+				items.OutputFilesystem.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputFilesystem.DirectoryBatchSize)
 				items.OutputFilesystem.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputFilesystem.EmptyDirCleanupSec)
 				items.OutputFilesystem.EnablePageChecksum = types.BoolPointerValue(itemsItem.OutputFilesystem.EnablePageChecksum)
 				items.OutputFilesystem.EnableStatistics = types.BoolPointerValue(itemsItem.OutputFilesystem.EnableStatistics)
 				items.OutputFilesystem.EnableWritePageIndex = types.BoolPointerValue(itemsItem.OutputFilesystem.EnableWritePageIndex)
 				items.OutputFilesystem.Environment = types.StringPointerValue(itemsItem.OutputFilesystem.Environment)
 				items.OutputFilesystem.FileNameSuffix = types.StringPointerValue(itemsItem.OutputFilesystem.FileNameSuffix)
+				items.OutputFilesystem.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputFilesystem.ForceCloseOnShutdown)
 				if itemsItem.OutputFilesystem.Format != nil {
 					items.OutputFilesystem.Format = types.StringValue(string(*itemsItem.OutputFilesystem.Format))
 				} else {
@@ -2702,15 +3272,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputFilesystem.HeaderLine = types.StringPointerValue(itemsItem.OutputFilesystem.HeaderLine)
 				items.OutputFilesystem.ID = types.StringPointerValue(itemsItem.OutputFilesystem.ID)
-				items.OutputFilesystem.KeyValueMetadata = []tfTypes.OutputFilesystemKeyValueMetadatum{}
+				items.OutputFilesystem.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem4 := range itemsItem.OutputFilesystem.KeyValueMetadata {
-					var keyValueMetadata4 tfTypes.OutputFilesystemKeyValueMetadatum
+				for _, keyValueMetadataItem5 := range itemsItem.OutputFilesystem.KeyValueMetadata {
+					var keyValueMetadata5 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata4.Key = types.StringPointerValue(keyValueMetadataItem4.Key)
-					keyValueMetadata4.Value = types.StringValue(keyValueMetadataItem4.Value)
+					keyValueMetadata5.Key = types.StringValue(keyValueMetadataItem5.Key)
+					keyValueMetadata5.Value = types.StringValue(keyValueMetadataItem5.Value)
 
-					items.OutputFilesystem.KeyValueMetadata = append(items.OutputFilesystem.KeyValueMetadata, keyValueMetadata4)
+					items.OutputFilesystem.KeyValueMetadata = append(items.OutputFilesystem.KeyValueMetadata, keyValueMetadata5)
 				}
 				items.OutputFilesystem.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputFilesystem.MaxFileIdleTimeSec)
 				items.OutputFilesystem.MaxFileOpenTimeSec = types.Float64PointerValue(itemsItem.OutputFilesystem.MaxFileOpenTimeSec)
@@ -2734,6 +3304,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputFilesystem.ParquetPageSize = types.StringPointerValue(itemsItem.OutputFilesystem.ParquetPageSize)
 				items.OutputFilesystem.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputFilesystem.ParquetRowGroupLength)
+				items.OutputFilesystem.ParquetSchema = types.StringPointerValue(itemsItem.OutputFilesystem.ParquetSchema)
 				if itemsItem.OutputFilesystem.ParquetVersion != nil {
 					items.OutputFilesystem.ParquetVersion = types.StringValue(string(*itemsItem.OutputFilesystem.ParquetVersion))
 				} else {
@@ -2742,6 +3313,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputFilesystem.PartitionExpr = types.StringPointerValue(itemsItem.OutputFilesystem.PartitionExpr)
 				items.OutputFilesystem.Pipeline = types.StringPointerValue(itemsItem.OutputFilesystem.Pipeline)
 				items.OutputFilesystem.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputFilesystem.RemoveEmptyDirs)
+				if itemsItem.OutputFilesystem.RetrySettings == nil {
+					items.OutputFilesystem.RetrySettings = nil
+				} else {
+					items.OutputFilesystem.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputFilesystem.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputFilesystem.RetrySettings.BackoffMultiplier)
+					items.OutputFilesystem.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputFilesystem.RetrySettings.Enabled)
+					items.OutputFilesystem.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputFilesystem.RetrySettings.InitialBackoffMs)
+					items.OutputFilesystem.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputFilesystem.RetrySettings.JitterPercent)
+					items.OutputFilesystem.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputFilesystem.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputFilesystem.ShouldLogInvalidRows = types.BoolPointerValue(itemsItem.OutputFilesystem.ShouldLogInvalidRows)
 				items.OutputFilesystem.StagePath = types.StringPointerValue(itemsItem.OutputFilesystem.StagePath)
 				items.OutputFilesystem.Streamtags = make([]types.String, 0, len(itemsItem.OutputFilesystem.Streamtags))
@@ -2757,6 +3338,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputGoogleChronicle != nil {
 				items.OutputGoogleChronicle = &tfTypes.OutputGoogleChronicle{}
+				items.OutputGoogleChronicle.TemplateAPIVersion = types.StringPointerValue(itemsItem.OutputGoogleChronicle.TemplateAPIVersion)
+				items.OutputGoogleChronicle.TemplateCustomerID = types.StringPointerValue(itemsItem.OutputGoogleChronicle.TemplateCustomerID)
+				items.OutputGoogleChronicle.TemplateRegion = types.StringPointerValue(itemsItem.OutputGoogleChronicle.TemplateRegion)
 				items.OutputGoogleChronicle.APIKey = types.StringPointerValue(itemsItem.OutputGoogleChronicle.APIKey)
 				items.OutputGoogleChronicle.APIKeySecret = types.StringPointerValue(itemsItem.OutputGoogleChronicle.APIKeySecret)
 				if itemsItem.OutputGoogleChronicle.APIVersion != nil {
@@ -2772,10 +3356,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleChronicle.Compress = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.Compress)
 				items.OutputGoogleChronicle.Concurrency = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.Concurrency)
 				items.OutputGoogleChronicle.CustomerID = types.StringPointerValue(itemsItem.OutputGoogleChronicle.CustomerID)
-				items.OutputGoogleChronicle.CustomLabels = []tfTypes.OutputGoogleChronicleCustomLabel{}
+				items.OutputGoogleChronicle.CustomLabels = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 				for _, customLabelsItem1 := range itemsItem.OutputGoogleChronicle.CustomLabels {
-					var customLabels1 tfTypes.OutputGoogleChronicleCustomLabel
+					var customLabels1 tfTypes.ItemsTypeKeyValueMetadata
 
 					customLabels1.Key = types.StringValue(customLabelsItem1.Key)
 					customLabels1.Value = types.StringValue(customLabelsItem1.Value)
@@ -2784,15 +3368,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputGoogleChronicle.Description = types.StringPointerValue(itemsItem.OutputGoogleChronicle.Description)
 				items.OutputGoogleChronicle.Environment = types.StringPointerValue(itemsItem.OutputGoogleChronicle.Environment)
-				items.OutputGoogleChronicle.ExtraHTTPHeaders = []tfTypes.OutputGoogleChronicleExtraHTTPHeader{}
+				items.OutputGoogleChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem11 := range itemsItem.OutputGoogleChronicle.ExtraHTTPHeaders {
-					var extraHTTPHeaders11 tfTypes.OutputGoogleChronicleExtraHTTPHeader
+				for _, extraHTTPHeadersItem12 := range itemsItem.OutputGoogleChronicle.ExtraHTTPHeaders {
+					var extraHTTPHeaders12 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders11.Name = types.StringPointerValue(extraHTTPHeadersItem11.Name)
-					extraHTTPHeaders11.Value = types.StringValue(extraHTTPHeadersItem11.Value)
+					extraHTTPHeaders12.Name = types.StringPointerValue(extraHTTPHeadersItem12.Name)
+					extraHTTPHeaders12.Value = types.StringValue(extraHTTPHeadersItem12.Value)
 
-					items.OutputGoogleChronicle.ExtraHTTPHeaders = append(items.OutputGoogleChronicle.ExtraHTTPHeaders, extraHTTPHeaders11)
+					items.OutputGoogleChronicle.ExtraHTTPHeaders = append(items.OutputGoogleChronicle.ExtraHTTPHeaders, extraHTTPHeaders12)
 				}
 				items.OutputGoogleChronicle.ExtraLogTypes = []tfTypes.ExtraLogType{}
 
@@ -2811,11 +3395,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputGoogleChronicle.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.FlushPeriodSec)
 				items.OutputGoogleChronicle.ID = types.StringPointerValue(itemsItem.OutputGoogleChronicle.ID)
-				if itemsItem.OutputGoogleChronicle.LogFormatType != nil {
-					items.OutputGoogleChronicle.LogFormatType = types.StringValue(string(*itemsItem.OutputGoogleChronicle.LogFormatType))
-				} else {
-					items.OutputGoogleChronicle.LogFormatType = types.StringNull()
-				}
+				items.OutputGoogleChronicle.LogFormatType = types.StringValue(string(itemsItem.OutputGoogleChronicle.LogFormatType))
 				items.OutputGoogleChronicle.LogTextField = types.StringPointerValue(itemsItem.OutputGoogleChronicle.LogTextField)
 				items.OutputGoogleChronicle.LogType = types.StringPointerValue(itemsItem.OutputGoogleChronicle.LogType)
 				items.OutputGoogleChronicle.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.MaxPayloadEvents)
@@ -2837,6 +3417,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputGoogleChronicle.PqControls = &tfTypes.OutputGoogleChroniclePqControls{}
 				}
+				items.OutputGoogleChronicle.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.PqMaxBackpressureSec)
+				items.OutputGoogleChronicle.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.PqMaxBufferSize)
+				items.OutputGoogleChronicle.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputGoogleChronicle.PqMaxBufferSizeBytes)
 				items.OutputGoogleChronicle.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputGoogleChronicle.PqMaxFileSize)
 				items.OutputGoogleChronicle.PqMaxSize = types.StringPointerValue(itemsItem.OutputGoogleChronicle.PqMaxSize)
 				if itemsItem.OutputGoogleChronicle.PqMode != nil {
@@ -2850,20 +3433,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGoogleChronicle.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputGoogleChronicle.PqPath = types.StringPointerValue(itemsItem.OutputGoogleChronicle.PqPath)
+				items.OutputGoogleChronicle.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.PqRatePerSec)
+				items.OutputGoogleChronicle.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.PqStrictOrdering)
 				items.OutputGoogleChronicle.Region = types.StringPointerValue(itemsItem.OutputGoogleChronicle.Region)
 				items.OutputGoogleChronicle.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.RejectUnauthorized)
 				items.OutputGoogleChronicle.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.ResponseHonorRetryAfterHeader)
-				items.OutputGoogleChronicle.ResponseRetrySettings = []tfTypes.OutputGoogleChronicleResponseRetrySetting{}
+				items.OutputGoogleChronicle.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem12 := range itemsItem.OutputGoogleChronicle.ResponseRetrySettings {
-					var responseRetrySettings12 tfTypes.OutputGoogleChronicleResponseRetrySetting
+				for _, responseRetrySettingsItem13 := range itemsItem.OutputGoogleChronicle.ResponseRetrySettings {
+					var responseRetrySettings13 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings12.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem12.BackoffRate)
-					responseRetrySettings12.HTTPStatus = types.Float64Value(responseRetrySettingsItem12.HTTPStatus)
-					responseRetrySettings12.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem12.InitialBackoff)
-					responseRetrySettings12.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem12.MaxBackoff)
+					responseRetrySettings13.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem13.BackoffRate)
+					responseRetrySettings13.HTTPStatus = types.Float64Value(responseRetrySettingsItem13.HTTPStatus)
+					responseRetrySettings13.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem13.InitialBackoff)
+					responseRetrySettings13.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem13.MaxBackoff)
 
-					items.OutputGoogleChronicle.ResponseRetrySettings = append(items.OutputGoogleChronicle.ResponseRetrySettings, responseRetrySettings12)
+					items.OutputGoogleChronicle.ResponseRetrySettings = append(items.OutputGoogleChronicle.ResponseRetrySettings, responseRetrySettings13)
 				}
 				items.OutputGoogleChronicle.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputGoogleChronicle.SafeHeaders))
 				for _, v := range itemsItem.OutputGoogleChronicle.SafeHeaders {
@@ -2882,15 +3467,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputGoogleChronicle.TimeoutRetrySettings == nil {
 					items.OutputGoogleChronicle.TimeoutRetrySettings = nil
 				} else {
-					items.OutputGoogleChronicle.TimeoutRetrySettings = &tfTypes.OutputGoogleChronicleTimeoutRetrySettings{}
+					items.OutputGoogleChronicle.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputGoogleChronicle.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.TimeoutRetrySettings.BackoffRate)
 					items.OutputGoogleChronicle.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.TimeoutRetrySettings.InitialBackoff)
 					items.OutputGoogleChronicle.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.TimeoutRetrySettings.MaxBackoff)
-					items.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputGoogleChronicle.TimeoutSec = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.TimeoutSec)
 				items.OutputGoogleChronicle.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputGoogleChronicle.TotalMemoryLimitKB)
 				items.OutputGoogleChronicle.Type = types.StringValue(string(itemsItem.OutputGoogleChronicle.Type))
+				if itemsItem.OutputGoogleChronicle.UdmType != nil {
+					items.OutputGoogleChronicle.UdmType = types.StringValue(string(*itemsItem.OutputGoogleChronicle.UdmType))
+				} else {
+					items.OutputGoogleChronicle.UdmType = types.StringNull()
+				}
 				items.OutputGoogleChronicle.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputGoogleChronicle.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputGoogleCloudLogging != nil {
@@ -2919,10 +3509,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleCloudLogging.LastExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.LastExpression)
 				items.OutputGoogleCloudLogging.LatencyExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.LatencyExpression)
 				items.OutputGoogleCloudLogging.LineExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.LineExpression)
-				items.OutputGoogleCloudLogging.LogLabels = []tfTypes.LogLabel{}
+				items.OutputGoogleCloudLogging.LogLabels = []tfTypes.ItemsTypeLogLabels{}
 
 				for _, logLabelsItem := range itemsItem.OutputGoogleCloudLogging.LogLabels {
-					var logLabels tfTypes.LogLabel
+					var logLabels tfTypes.ItemsTypeLogLabels
 
 					logLabels.Label = types.StringValue(logLabelsItem.Label)
 					logLabels.ValueExpression = types.StringValue(logLabelsItem.ValueExpression)
@@ -2956,6 +3546,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputGoogleCloudLogging.PqControls = &tfTypes.OutputGoogleCloudLoggingPqControls{}
 				}
+				items.OutputGoogleCloudLogging.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputGoogleCloudLogging.PqMaxBackpressureSec)
+				items.OutputGoogleCloudLogging.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputGoogleCloudLogging.PqMaxBufferSize)
+				items.OutputGoogleCloudLogging.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.PqMaxBufferSizeBytes)
 				items.OutputGoogleCloudLogging.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.PqMaxFileSize)
 				items.OutputGoogleCloudLogging.PqMaxSize = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.PqMaxSize)
 				if itemsItem.OutputGoogleCloudLogging.PqMode != nil {
@@ -2969,6 +3562,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGoogleCloudLogging.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputGoogleCloudLogging.PqPath = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.PqPath)
+				items.OutputGoogleCloudLogging.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputGoogleCloudLogging.PqRatePerSec)
+				items.OutputGoogleCloudLogging.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputGoogleCloudLogging.PqStrictOrdering)
 				items.OutputGoogleCloudLogging.ProducerExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ProducerExpression)
 				items.OutputGoogleCloudLogging.ProtocolExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ProtocolExpression)
 				items.OutputGoogleCloudLogging.RefererExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.RefererExpression)
@@ -2977,10 +3572,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleCloudLogging.RequestSizeExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.RequestSizeExpression)
 				items.OutputGoogleCloudLogging.RequestURLExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.RequestURLExpression)
 				items.OutputGoogleCloudLogging.ResourceTypeExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ResourceTypeExpression)
-				items.OutputGoogleCloudLogging.ResourceTypeLabels = []tfTypes.ResourceTypeLabel{}
+				items.OutputGoogleCloudLogging.ResourceTypeLabels = []tfTypes.ItemsTypeLogLabels{}
 
 				for _, resourceTypeLabelsItem := range itemsItem.OutputGoogleCloudLogging.ResourceTypeLabels {
-					var resourceTypeLabels tfTypes.ResourceTypeLabel
+					var resourceTypeLabels tfTypes.ItemsTypeLogLabels
 
 					resourceTypeLabels.Label = types.StringValue(resourceTypeLabelsItem.Label)
 					resourceTypeLabels.ValueExpression = types.StringValue(resourceTypeLabelsItem.ValueExpression)
@@ -2988,6 +3583,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGoogleCloudLogging.ResourceTypeLabels = append(items.OutputGoogleCloudLogging.ResourceTypeLabels, resourceTypeLabels)
 				}
 				items.OutputGoogleCloudLogging.ResponseSizeExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ResponseSizeExpression)
+				items.OutputGoogleCloudLogging.SanitizeLogNames = types.BoolPointerValue(itemsItem.OutputGoogleCloudLogging.SanitizeLogNames)
 				items.OutputGoogleCloudLogging.Secret = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.Secret)
 				items.OutputGoogleCloudLogging.ServerIPExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ServerIPExpression)
 				items.OutputGoogleCloudLogging.ServiceAccountCredentials = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.ServiceAccountCredentials)
@@ -3008,16 +3604,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleCloudLogging.TotalSplitsExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.TotalSplitsExpression)
 				items.OutputGoogleCloudLogging.TraceExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.TraceExpression)
 				items.OutputGoogleCloudLogging.TraceSampledExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.TraceSampledExpression)
-				if itemsItem.OutputGoogleCloudLogging.Type != nil {
-					items.OutputGoogleCloudLogging.Type = types.StringValue(string(*itemsItem.OutputGoogleCloudLogging.Type))
-				} else {
-					items.OutputGoogleCloudLogging.Type = types.StringNull()
-				}
+				items.OutputGoogleCloudLogging.Type = types.StringValue(string(itemsItem.OutputGoogleCloudLogging.Type))
 				items.OutputGoogleCloudLogging.UIDExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.UIDExpression)
 				items.OutputGoogleCloudLogging.UserAgentExpression = types.StringPointerValue(itemsItem.OutputGoogleCloudLogging.UserAgentExpression)
 			}
 			if itemsItem.OutputGoogleCloudStorage != nil {
 				items.OutputGoogleCloudStorage = &tfTypes.OutputGoogleCloudStorage{}
+				items.OutputGoogleCloudStorage.TemplateBucket = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.TemplateBucket)
+				items.OutputGoogleCloudStorage.TemplateFormat = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.TemplateFormat)
+				items.OutputGoogleCloudStorage.TemplateRegion = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.TemplateRegion)
 				items.OutputGoogleCloudStorage.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.AddIDToStagePath)
 				items.OutputGoogleCloudStorage.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.AutomaticSchema)
 				items.OutputGoogleCloudStorage.AwsAPIKey = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.AwsAPIKey)
@@ -3044,13 +3639,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleCloudStorage.DeadletterPath = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.DeadletterPath)
 				items.OutputGoogleCloudStorage.Description = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.Description)
 				items.OutputGoogleCloudStorage.DestPath = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.DestPath)
+				items.OutputGoogleCloudStorage.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.DirectoryBatchSize)
 				items.OutputGoogleCloudStorage.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.EmptyDirCleanupSec)
 				items.OutputGoogleCloudStorage.EnablePageChecksum = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.EnablePageChecksum)
 				items.OutputGoogleCloudStorage.EnableStatistics = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.EnableStatistics)
 				items.OutputGoogleCloudStorage.EnableWritePageIndex = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.EnableWritePageIndex)
-				items.OutputGoogleCloudStorage.Endpoint = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.Endpoint)
+				items.OutputGoogleCloudStorage.Endpoint = types.StringValue(itemsItem.OutputGoogleCloudStorage.Endpoint)
 				items.OutputGoogleCloudStorage.Environment = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.Environment)
 				items.OutputGoogleCloudStorage.FileNameSuffix = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.FileNameSuffix)
+				items.OutputGoogleCloudStorage.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.ForceCloseOnShutdown)
 				if itemsItem.OutputGoogleCloudStorage.Format != nil {
 					items.OutputGoogleCloudStorage.Format = types.StringValue(string(*itemsItem.OutputGoogleCloudStorage.Format))
 				} else {
@@ -3058,15 +3655,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputGoogleCloudStorage.HeaderLine = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.HeaderLine)
 				items.OutputGoogleCloudStorage.ID = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.ID)
-				items.OutputGoogleCloudStorage.KeyValueMetadata = []tfTypes.OutputGoogleCloudStorageKeyValueMetadatum{}
+				items.OutputGoogleCloudStorage.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem5 := range itemsItem.OutputGoogleCloudStorage.KeyValueMetadata {
-					var keyValueMetadata5 tfTypes.OutputGoogleCloudStorageKeyValueMetadatum
+				for _, keyValueMetadataItem6 := range itemsItem.OutputGoogleCloudStorage.KeyValueMetadata {
+					var keyValueMetadata6 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata5.Key = types.StringPointerValue(keyValueMetadataItem5.Key)
-					keyValueMetadata5.Value = types.StringValue(keyValueMetadataItem5.Value)
+					keyValueMetadata6.Key = types.StringValue(keyValueMetadataItem6.Key)
+					keyValueMetadata6.Value = types.StringValue(keyValueMetadataItem6.Value)
 
-					items.OutputGoogleCloudStorage.KeyValueMetadata = append(items.OutputGoogleCloudStorage.KeyValueMetadata, keyValueMetadata5)
+					items.OutputGoogleCloudStorage.KeyValueMetadata = append(items.OutputGoogleCloudStorage.KeyValueMetadata, keyValueMetadata6)
 				}
 				items.OutputGoogleCloudStorage.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.MaxFileIdleTimeSec)
 				items.OutputGoogleCloudStorage.MaxFileOpenTimeSec = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.MaxFileOpenTimeSec)
@@ -3095,6 +3692,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputGoogleCloudStorage.ParquetPageSize = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.ParquetPageSize)
 				items.OutputGoogleCloudStorage.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.ParquetRowGroupLength)
+				items.OutputGoogleCloudStorage.ParquetSchema = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.ParquetSchema)
 				if itemsItem.OutputGoogleCloudStorage.ParquetVersion != nil {
 					items.OutputGoogleCloudStorage.ParquetVersion = types.StringValue(string(*itemsItem.OutputGoogleCloudStorage.ParquetVersion))
 				} else {
@@ -3105,6 +3703,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGoogleCloudStorage.Region = types.StringValue(itemsItem.OutputGoogleCloudStorage.Region)
 				items.OutputGoogleCloudStorage.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.RejectUnauthorized)
 				items.OutputGoogleCloudStorage.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.RemoveEmptyDirs)
+				if itemsItem.OutputGoogleCloudStorage.RetrySettings == nil {
+					items.OutputGoogleCloudStorage.RetrySettings = nil
+				} else {
+					items.OutputGoogleCloudStorage.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputGoogleCloudStorage.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.RetrySettings.BackoffMultiplier)
+					items.OutputGoogleCloudStorage.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.RetrySettings.Enabled)
+					items.OutputGoogleCloudStorage.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.RetrySettings.InitialBackoffMs)
+					items.OutputGoogleCloudStorage.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.RetrySettings.JitterPercent)
+					items.OutputGoogleCloudStorage.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputGoogleCloudStorage.ReuseConnections = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.ReuseConnections)
 				items.OutputGoogleCloudStorage.ShouldLogInvalidRows = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.ShouldLogInvalidRows)
 				if itemsItem.OutputGoogleCloudStorage.SignatureVersion != nil {
@@ -3112,7 +3720,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputGoogleCloudStorage.SignatureVersion = types.StringNull()
 				}
-				items.OutputGoogleCloudStorage.StagePath = types.StringPointerValue(itemsItem.OutputGoogleCloudStorage.StagePath)
+				items.OutputGoogleCloudStorage.StagePath = types.StringValue(itemsItem.OutputGoogleCloudStorage.StagePath)
 				if itemsItem.OutputGoogleCloudStorage.StorageClass != nil {
 					items.OutputGoogleCloudStorage.StorageClass = types.StringValue(string(*itemsItem.OutputGoogleCloudStorage.StorageClass))
 				} else {
@@ -3126,22 +3734,26 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputGoogleCloudStorage.SystemFields {
 					items.OutputGoogleCloudStorage.SystemFields = append(items.OutputGoogleCloudStorage.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputGoogleCloudStorage.Type != nil {
-					items.OutputGoogleCloudStorage.Type = types.StringValue(string(*itemsItem.OutputGoogleCloudStorage.Type))
-				} else {
-					items.OutputGoogleCloudStorage.Type = types.StringNull()
-				}
+				items.OutputGoogleCloudStorage.Type = types.StringValue(string(itemsItem.OutputGoogleCloudStorage.Type))
 				items.OutputGoogleCloudStorage.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputGoogleCloudStorage.VerifyPermissions)
 				items.OutputGoogleCloudStorage.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputGoogleCloudStorage.WriteHighWaterMark)
 			}
 			if itemsItem.OutputGooglePubsub != nil {
 				items.OutputGooglePubsub = &tfTypes.OutputGooglePubsub{}
+				items.OutputGooglePubsub.TemplateRegion = types.StringPointerValue(itemsItem.OutputGooglePubsub.TemplateRegion)
+				items.OutputGooglePubsub.TemplateTopicName = types.StringPointerValue(itemsItem.OutputGooglePubsub.TemplateTopicName)
 				items.OutputGooglePubsub.BatchSize = types.Float64PointerValue(itemsItem.OutputGooglePubsub.BatchSize)
 				items.OutputGooglePubsub.BatchTimeout = types.Float64PointerValue(itemsItem.OutputGooglePubsub.BatchTimeout)
 				items.OutputGooglePubsub.CreateTopic = types.BoolPointerValue(itemsItem.OutputGooglePubsub.CreateTopic)
 				items.OutputGooglePubsub.Description = types.StringPointerValue(itemsItem.OutputGooglePubsub.Description)
 				items.OutputGooglePubsub.Environment = types.StringPointerValue(itemsItem.OutputGooglePubsub.Environment)
-				items.OutputGooglePubsub.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputGooglePubsub.FlushPeriodSec)
+				items.OutputGooglePubsub.FlushPeriod = types.Float64PointerValue(itemsItem.OutputGooglePubsub.FlushPeriod)
+				if itemsItem.OutputGooglePubsub.FlushPeriodSec == nil {
+					items.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedNull()
+				} else {
+					flushPeriodSecResult, _ := json.Marshal(itemsItem.OutputGooglePubsub.FlushPeriodSec)
+					items.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedValue(string(flushPeriodSecResult))
+				}
 				if itemsItem.OutputGooglePubsub.GoogleAuthMethod != nil {
 					items.OutputGooglePubsub.GoogleAuthMethod = types.StringValue(string(*itemsItem.OutputGooglePubsub.GoogleAuthMethod))
 				} else {
@@ -3168,6 +3780,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputGooglePubsub.PqControls = &tfTypes.OutputGooglePubsubPqControls{}
 				}
+				items.OutputGooglePubsub.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputGooglePubsub.PqMaxBackpressureSec)
+				items.OutputGooglePubsub.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputGooglePubsub.PqMaxBufferSize)
+				items.OutputGooglePubsub.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputGooglePubsub.PqMaxBufferSizeBytes)
 				items.OutputGooglePubsub.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputGooglePubsub.PqMaxFileSize)
 				items.OutputGooglePubsub.PqMaxSize = types.StringPointerValue(itemsItem.OutputGooglePubsub.PqMaxSize)
 				if itemsItem.OutputGooglePubsub.PqMode != nil {
@@ -3181,6 +3796,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGooglePubsub.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputGooglePubsub.PqPath = types.StringPointerValue(itemsItem.OutputGooglePubsub.PqPath)
+				items.OutputGooglePubsub.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputGooglePubsub.PqRatePerSec)
+				items.OutputGooglePubsub.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputGooglePubsub.PqStrictOrdering)
 				items.OutputGooglePubsub.Region = types.StringPointerValue(itemsItem.OutputGooglePubsub.Region)
 				items.OutputGooglePubsub.Secret = types.StringPointerValue(itemsItem.OutputGooglePubsub.Secret)
 				items.OutputGooglePubsub.ServiceAccountCredentials = types.StringPointerValue(itemsItem.OutputGooglePubsub.ServiceAccountCredentials)
@@ -3201,15 +3818,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGrafanaCloud.Concurrency = types.Float64PointerValue(itemsItem.OutputGrafanaCloud.Concurrency)
 				items.OutputGrafanaCloud.Description = types.StringPointerValue(itemsItem.OutputGrafanaCloud.Description)
 				items.OutputGrafanaCloud.Environment = types.StringPointerValue(itemsItem.OutputGrafanaCloud.Environment)
-				items.OutputGrafanaCloud.ExtraHTTPHeaders = []tfTypes.OutputGrafanaCloudExtraHTTPHeader{}
+				items.OutputGrafanaCloud.ExtraHTTPHeaders = []tfTypes.ExtraHTTPHeader{}
 
-				for _, extraHTTPHeadersItem12 := range itemsItem.OutputGrafanaCloud.ExtraHTTPHeaders {
-					var extraHTTPHeaders12 tfTypes.OutputGrafanaCloudExtraHTTPHeader
+				for _, extraHTTPHeadersItem13 := range itemsItem.OutputGrafanaCloud.ExtraHTTPHeaders {
+					var extraHTTPHeaders13 tfTypes.ExtraHTTPHeader
 
-					extraHTTPHeaders12.Name = types.StringPointerValue(extraHTTPHeadersItem12.Name)
-					extraHTTPHeaders12.Value = types.StringValue(extraHTTPHeadersItem12.Value)
+					extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
+					extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
 
-					items.OutputGrafanaCloud.ExtraHTTPHeaders = append(items.OutputGrafanaCloud.ExtraHTTPHeaders, extraHTTPHeaders12)
+					items.OutputGrafanaCloud.ExtraHTTPHeaders = append(items.OutputGrafanaCloud.ExtraHTTPHeaders, extraHTTPHeaders13)
 				}
 				if itemsItem.OutputGrafanaCloud.FailedRequestLoggingMode != nil {
 					items.OutputGrafanaCloud.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputGrafanaCloud.FailedRequestLoggingMode))
@@ -3218,10 +3835,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputGrafanaCloud.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputGrafanaCloud.FlushPeriodSec)
 				items.OutputGrafanaCloud.ID = types.StringValue(itemsItem.OutputGrafanaCloud.ID)
-				items.OutputGrafanaCloud.Labels = []tfTypes.OutputGrafanaCloudLabel{}
+				items.OutputGrafanaCloud.Labels = []tfTypes.Label{}
 
 				for _, labelsItem := range itemsItem.OutputGrafanaCloud.Labels {
-					var labels tfTypes.OutputGrafanaCloudLabel
+					var labels tfTypes.Label
 
 					labels.Name = types.StringPointerValue(labelsItem.Name)
 					labels.Value = types.StringValue(labelsItem.Value)
@@ -3300,17 +3917,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputGrafanaCloud.PrometheusURL = types.StringPointerValue(itemsItem.OutputGrafanaCloud.PrometheusURL)
 				items.OutputGrafanaCloud.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputGrafanaCloud.RejectUnauthorized)
 				items.OutputGrafanaCloud.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputGrafanaCloud.ResponseHonorRetryAfterHeader)
-				items.OutputGrafanaCloud.ResponseRetrySettings = []tfTypes.OutputGrafanaCloudResponseRetrySetting{}
+				items.OutputGrafanaCloud.ResponseRetrySettings = []tfTypes.ResponseRetrySetting{}
 
-				for _, responseRetrySettingsItem13 := range itemsItem.OutputGrafanaCloud.ResponseRetrySettings {
-					var responseRetrySettings13 tfTypes.OutputGrafanaCloudResponseRetrySetting
+				for _, responseRetrySettingsItem14 := range itemsItem.OutputGrafanaCloud.ResponseRetrySettings {
+					var responseRetrySettings14 tfTypes.ResponseRetrySetting
 
-					responseRetrySettings13.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem13.BackoffRate)
-					responseRetrySettings13.HTTPStatus = types.Float64Value(responseRetrySettingsItem13.HTTPStatus)
-					responseRetrySettings13.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem13.InitialBackoff)
-					responseRetrySettings13.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem13.MaxBackoff)
+					responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
+					responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
+					responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
+					responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
 
-					items.OutputGrafanaCloud.ResponseRetrySettings = append(items.OutputGrafanaCloud.ResponseRetrySettings, responseRetrySettings13)
+					items.OutputGrafanaCloud.ResponseRetrySettings = append(items.OutputGrafanaCloud.ResponseRetrySettings, responseRetrySettings14)
 				}
 				items.OutputGrafanaCloud.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputGrafanaCloud.SafeHeaders))
 				for _, v := range itemsItem.OutputGrafanaCloud.SafeHeaders {
@@ -3327,7 +3944,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputGrafanaCloud.TimeoutRetrySettings == nil {
 					items.OutputGrafanaCloud.TimeoutRetrySettings = nil
 				} else {
-					items.OutputGrafanaCloud.TimeoutRetrySettings = &tfTypes.OutputGrafanaCloudTimeoutRetrySettings{}
+					items.OutputGrafanaCloud.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettings{}
 					items.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate)
 					items.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff)
 					items.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff)
@@ -3353,7 +3970,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGraphite.OnBackpressure = types.StringNull()
 				}
 				items.OutputGraphite.Pipeline = types.StringPointerValue(itemsItem.OutputGraphite.Pipeline)
-				items.OutputGraphite.Port = types.Float64PointerValue(itemsItem.OutputGraphite.Port)
+				items.OutputGraphite.Port = types.Float64Value(itemsItem.OutputGraphite.Port)
 				if itemsItem.OutputGraphite.PqCompress != nil {
 					items.OutputGraphite.PqCompress = types.StringValue(string(*itemsItem.OutputGraphite.PqCompress))
 				} else {
@@ -3364,6 +3981,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputGraphite.PqControls = &tfTypes.OutputGraphitePqControls{}
 				}
+				items.OutputGraphite.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputGraphite.PqMaxBackpressureSec)
+				items.OutputGraphite.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputGraphite.PqMaxBufferSize)
+				items.OutputGraphite.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputGraphite.PqMaxBufferSizeBytes)
 				items.OutputGraphite.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputGraphite.PqMaxFileSize)
 				items.OutputGraphite.PqMaxSize = types.StringPointerValue(itemsItem.OutputGraphite.PqMaxSize)
 				if itemsItem.OutputGraphite.PqMode != nil {
@@ -3377,11 +3997,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGraphite.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputGraphite.PqPath = types.StringPointerValue(itemsItem.OutputGraphite.PqPath)
-				if itemsItem.OutputGraphite.Protocol != nil {
-					items.OutputGraphite.Protocol = types.StringValue(string(*itemsItem.OutputGraphite.Protocol))
-				} else {
-					items.OutputGraphite.Protocol = types.StringNull()
-				}
+				items.OutputGraphite.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputGraphite.PqRatePerSec)
+				items.OutputGraphite.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputGraphite.PqStrictOrdering)
+				items.OutputGraphite.Protocol = types.StringValue(string(itemsItem.OutputGraphite.Protocol))
 				items.OutputGraphite.Streamtags = make([]types.String, 0, len(itemsItem.OutputGraphite.Streamtags))
 				for _, v := range itemsItem.OutputGraphite.Streamtags {
 					items.OutputGraphite.Streamtags = append(items.OutputGraphite.Streamtags, types.StringValue(v))
@@ -3391,11 +4009,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputGraphite.SystemFields = append(items.OutputGraphite.SystemFields, types.StringValue(v))
 				}
 				items.OutputGraphite.ThrottleRatePerSec = types.StringPointerValue(itemsItem.OutputGraphite.ThrottleRatePerSec)
-				if itemsItem.OutputGraphite.Type != nil {
-					items.OutputGraphite.Type = types.StringValue(string(*itemsItem.OutputGraphite.Type))
-				} else {
-					items.OutputGraphite.Type = types.StringNull()
-				}
+				items.OutputGraphite.Type = types.StringValue(string(itemsItem.OutputGraphite.Type))
 				items.OutputGraphite.WriteTimeout = types.Float64PointerValue(itemsItem.OutputGraphite.WriteTimeout)
 			}
 			if itemsItem.OutputHoneycomb != nil {
@@ -3410,15 +4024,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputHoneycomb.Dataset = types.StringValue(itemsItem.OutputHoneycomb.Dataset)
 				items.OutputHoneycomb.Description = types.StringPointerValue(itemsItem.OutputHoneycomb.Description)
 				items.OutputHoneycomb.Environment = types.StringPointerValue(itemsItem.OutputHoneycomb.Environment)
-				items.OutputHoneycomb.ExtraHTTPHeaders = []tfTypes.OutputHoneycombExtraHTTPHeader{}
+				items.OutputHoneycomb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem13 := range itemsItem.OutputHoneycomb.ExtraHTTPHeaders {
-					var extraHTTPHeaders13 tfTypes.OutputHoneycombExtraHTTPHeader
+				for _, extraHTTPHeadersItem14 := range itemsItem.OutputHoneycomb.ExtraHTTPHeaders {
+					var extraHTTPHeaders14 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
-					extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
+					extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
+					extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
 
-					items.OutputHoneycomb.ExtraHTTPHeaders = append(items.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders13)
+					items.OutputHoneycomb.ExtraHTTPHeaders = append(items.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders14)
 				}
 				if itemsItem.OutputHoneycomb.FailedRequestLoggingMode != nil {
 					items.OutputHoneycomb.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputHoneycomb.FailedRequestLoggingMode))
@@ -3445,6 +4059,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputHoneycomb.PqControls = &tfTypes.OutputHoneycombPqControls{}
 				}
+				items.OutputHoneycomb.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputHoneycomb.PqMaxBackpressureSec)
+				items.OutputHoneycomb.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputHoneycomb.PqMaxBufferSize)
+				items.OutputHoneycomb.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputHoneycomb.PqMaxBufferSizeBytes)
 				items.OutputHoneycomb.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputHoneycomb.PqMaxFileSize)
 				items.OutputHoneycomb.PqMaxSize = types.StringPointerValue(itemsItem.OutputHoneycomb.PqMaxSize)
 				if itemsItem.OutputHoneycomb.PqMode != nil {
@@ -3458,19 +4075,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputHoneycomb.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputHoneycomb.PqPath = types.StringPointerValue(itemsItem.OutputHoneycomb.PqPath)
+				items.OutputHoneycomb.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputHoneycomb.PqRatePerSec)
+				items.OutputHoneycomb.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputHoneycomb.PqStrictOrdering)
 				items.OutputHoneycomb.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputHoneycomb.RejectUnauthorized)
 				items.OutputHoneycomb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputHoneycomb.ResponseHonorRetryAfterHeader)
-				items.OutputHoneycomb.ResponseRetrySettings = []tfTypes.OutputHoneycombResponseRetrySetting{}
+				items.OutputHoneycomb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem14 := range itemsItem.OutputHoneycomb.ResponseRetrySettings {
-					var responseRetrySettings14 tfTypes.OutputHoneycombResponseRetrySetting
+				for _, responseRetrySettingsItem15 := range itemsItem.OutputHoneycomb.ResponseRetrySettings {
+					var responseRetrySettings15 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
-					responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
-					responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
-					responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
+					responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
+					responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
+					responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
+					responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
 
-					items.OutputHoneycomb.ResponseRetrySettings = append(items.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings14)
+					items.OutputHoneycomb.ResponseRetrySettings = append(items.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings15)
 				}
 				items.OutputHoneycomb.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputHoneycomb.SafeHeaders))
 				for _, v := range itemsItem.OutputHoneycomb.SafeHeaders {
@@ -3489,11 +4108,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputHoneycomb.TimeoutRetrySettings == nil {
 					items.OutputHoneycomb.TimeoutRetrySettings = nil
 				} else {
-					items.OutputHoneycomb.TimeoutRetrySettings = &tfTypes.OutputHoneycombTimeoutRetrySettings{}
+					items.OutputHoneycomb.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputHoneycomb.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputHoneycomb.TimeoutRetrySettings.BackoffRate)
 					items.OutputHoneycomb.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputHoneycomb.TimeoutRetrySettings.InitialBackoff)
 					items.OutputHoneycomb.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputHoneycomb.TimeoutRetrySettings.MaxBackoff)
-					items.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputHoneycomb.TimeoutSec = types.Float64PointerValue(itemsItem.OutputHoneycomb.TimeoutSec)
 				items.OutputHoneycomb.Type = types.StringValue(string(itemsItem.OutputHoneycomb.Type))
@@ -3501,6 +4120,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputHumioHec != nil {
 				items.OutputHumioHec = &tfTypes.OutputHumioHec{}
+				items.OutputHumioHec.TemplateURL = types.StringPointerValue(itemsItem.OutputHumioHec.TemplateURL)
 				if itemsItem.OutputHumioHec.AuthType != nil {
 					items.OutputHumioHec.AuthType = types.StringValue(string(*itemsItem.OutputHumioHec.AuthType))
 				} else {
@@ -3510,15 +4130,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputHumioHec.Concurrency = types.Float64PointerValue(itemsItem.OutputHumioHec.Concurrency)
 				items.OutputHumioHec.Description = types.StringPointerValue(itemsItem.OutputHumioHec.Description)
 				items.OutputHumioHec.Environment = types.StringPointerValue(itemsItem.OutputHumioHec.Environment)
-				items.OutputHumioHec.ExtraHTTPHeaders = []tfTypes.OutputHumioHecExtraHTTPHeader{}
+				items.OutputHumioHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem14 := range itemsItem.OutputHumioHec.ExtraHTTPHeaders {
-					var extraHTTPHeaders14 tfTypes.OutputHumioHecExtraHTTPHeader
+				for _, extraHTTPHeadersItem15 := range itemsItem.OutputHumioHec.ExtraHTTPHeaders {
+					var extraHTTPHeaders15 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
-					extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
+					extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
+					extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
 
-					items.OutputHumioHec.ExtraHTTPHeaders = append(items.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders14)
+					items.OutputHumioHec.ExtraHTTPHeaders = append(items.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders15)
 				}
 				if itemsItem.OutputHumioHec.FailedRequestLoggingMode != nil {
 					items.OutputHumioHec.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputHumioHec.FailedRequestLoggingMode))
@@ -3526,11 +4146,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputHumioHec.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputHumioHec.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputHumioHec.FlushPeriodSec)
-				if itemsItem.OutputHumioHec.Format != nil {
-					items.OutputHumioHec.Format = types.StringValue(string(*itemsItem.OutputHumioHec.Format))
-				} else {
-					items.OutputHumioHec.Format = types.StringNull()
-				}
+				items.OutputHumioHec.Format = types.StringValue(string(itemsItem.OutputHumioHec.Format))
 				items.OutputHumioHec.ID = types.StringPointerValue(itemsItem.OutputHumioHec.ID)
 				items.OutputHumioHec.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputHumioHec.MaxPayloadEvents)
 				items.OutputHumioHec.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputHumioHec.MaxPayloadSizeKB)
@@ -3550,6 +4166,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputHumioHec.PqControls = &tfTypes.OutputHumioHecPqControls{}
 				}
+				items.OutputHumioHec.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputHumioHec.PqMaxBackpressureSec)
+				items.OutputHumioHec.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputHumioHec.PqMaxBufferSize)
+				items.OutputHumioHec.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputHumioHec.PqMaxBufferSizeBytes)
 				items.OutputHumioHec.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputHumioHec.PqMaxFileSize)
 				items.OutputHumioHec.PqMaxSize = types.StringPointerValue(itemsItem.OutputHumioHec.PqMaxSize)
 				if itemsItem.OutputHumioHec.PqMode != nil {
@@ -3563,19 +4182,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputHumioHec.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputHumioHec.PqPath = types.StringPointerValue(itemsItem.OutputHumioHec.PqPath)
+				items.OutputHumioHec.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputHumioHec.PqRatePerSec)
+				items.OutputHumioHec.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputHumioHec.PqStrictOrdering)
 				items.OutputHumioHec.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputHumioHec.RejectUnauthorized)
 				items.OutputHumioHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputHumioHec.ResponseHonorRetryAfterHeader)
-				items.OutputHumioHec.ResponseRetrySettings = []tfTypes.OutputHumioHecResponseRetrySetting{}
+				items.OutputHumioHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem15 := range itemsItem.OutputHumioHec.ResponseRetrySettings {
-					var responseRetrySettings15 tfTypes.OutputHumioHecResponseRetrySetting
+				for _, responseRetrySettingsItem16 := range itemsItem.OutputHumioHec.ResponseRetrySettings {
+					var responseRetrySettings16 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
-					responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
-					responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
-					responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
+					responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
+					responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
+					responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
+					responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
 
-					items.OutputHumioHec.ResponseRetrySettings = append(items.OutputHumioHec.ResponseRetrySettings, responseRetrySettings15)
+					items.OutputHumioHec.ResponseRetrySettings = append(items.OutputHumioHec.ResponseRetrySettings, responseRetrySettings16)
 				}
 				items.OutputHumioHec.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputHumioHec.SafeHeaders))
 				for _, v := range itemsItem.OutputHumioHec.SafeHeaders {
@@ -3593,25 +4214,29 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputHumioHec.TimeoutRetrySettings == nil {
 					items.OutputHumioHec.TimeoutRetrySettings = nil
 				} else {
-					items.OutputHumioHec.TimeoutRetrySettings = &tfTypes.OutputHumioHecTimeoutRetrySettings{}
+					items.OutputHumioHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputHumioHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputHumioHec.TimeoutRetrySettings.BackoffRate)
 					items.OutputHumioHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputHumioHec.TimeoutRetrySettings.InitialBackoff)
 					items.OutputHumioHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputHumioHec.TimeoutRetrySettings.MaxBackoff)
-					items.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputHumioHec.TimeoutSec = types.Float64PointerValue(itemsItem.OutputHumioHec.TimeoutSec)
 				items.OutputHumioHec.Token = types.StringPointerValue(itemsItem.OutputHumioHec.Token)
-				if itemsItem.OutputHumioHec.Type != nil {
-					items.OutputHumioHec.Type = types.StringValue(string(*itemsItem.OutputHumioHec.Type))
-				} else {
-					items.OutputHumioHec.Type = types.StringNull()
-				}
-				items.OutputHumioHec.URL = types.StringPointerValue(itemsItem.OutputHumioHec.URL)
+				items.OutputHumioHec.Type = types.StringValue(string(itemsItem.OutputHumioHec.Type))
+				items.OutputHumioHec.URL = types.StringValue(itemsItem.OutputHumioHec.URL)
 				items.OutputHumioHec.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputHumioHec.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputInfluxdb != nil {
 				items.OutputInfluxdb = &tfTypes.OutputInfluxdb{}
-				items.OutputInfluxdb.AuthHeaderExpr = types.StringPointerValue(itemsItem.OutputInfluxdb.AuthHeaderExpr)
+				items.OutputInfluxdb.TemplateBucket = types.StringPointerValue(itemsItem.OutputInfluxdb.TemplateBucket)
+				items.OutputInfluxdb.TemplateDatabase = types.StringPointerValue(itemsItem.OutputInfluxdb.TemplateDatabase)
+				items.OutputInfluxdb.TemplateURL = types.StringPointerValue(itemsItem.OutputInfluxdb.TemplateURL)
+				if itemsItem.OutputInfluxdb.AuthHeaderExpr == nil {
+					items.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+				} else {
+					authHeaderExprResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.AuthHeaderExpr)
+					items.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
+				}
 				if itemsItem.OutputInfluxdb.AuthType != nil {
 					items.OutputInfluxdb.AuthType = types.StringValue(string(*itemsItem.OutputInfluxdb.AuthType))
 				} else {
@@ -3625,15 +4250,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputInfluxdb.Description = types.StringPointerValue(itemsItem.OutputInfluxdb.Description)
 				items.OutputInfluxdb.DynamicValueFieldName = types.BoolPointerValue(itemsItem.OutputInfluxdb.DynamicValueFieldName)
 				items.OutputInfluxdb.Environment = types.StringPointerValue(itemsItem.OutputInfluxdb.Environment)
-				items.OutputInfluxdb.ExtraHTTPHeaders = []tfTypes.OutputInfluxdbExtraHTTPHeader{}
+				items.OutputInfluxdb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem15 := range itemsItem.OutputInfluxdb.ExtraHTTPHeaders {
-					var extraHTTPHeaders15 tfTypes.OutputInfluxdbExtraHTTPHeader
+				for _, extraHTTPHeadersItem16 := range itemsItem.OutputInfluxdb.ExtraHTTPHeaders {
+					var extraHTTPHeaders16 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
-					extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
+					extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
+					extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
 
-					items.OutputInfluxdb.ExtraHTTPHeaders = append(items.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders15)
+					items.OutputInfluxdb.ExtraHTTPHeaders = append(items.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders16)
 				}
 				if itemsItem.OutputInfluxdb.FailedRequestLoggingMode != nil {
 					items.OutputInfluxdb.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputInfluxdb.FailedRequestLoggingMode))
@@ -3642,7 +4267,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputInfluxdb.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputInfluxdb.FlushPeriodSec)
 				items.OutputInfluxdb.ID = types.StringPointerValue(itemsItem.OutputInfluxdb.ID)
-				items.OutputInfluxdb.LoginURL = types.StringPointerValue(itemsItem.OutputInfluxdb.LoginURL)
+				if itemsItem.OutputInfluxdb.LoginURL == nil {
+					items.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedNull()
+				} else {
+					loginURLResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.LoginURL)
+					items.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
+				}
 				items.OutputInfluxdb.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputInfluxdb.MaxPayloadEvents)
 				items.OutputInfluxdb.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputInfluxdb.MaxPayloadSizeKB)
 				items.OutputInfluxdb.OauthHeaders = []tfTypes.OutputInfluxdbOauthHeader{}
@@ -3650,20 +4280,40 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, oauthHeadersItem1 := range itemsItem.OutputInfluxdb.OauthHeaders {
 					var oauthHeaders1 tfTypes.OutputInfluxdbOauthHeader
 
-					oauthHeaders1.Name = types.StringValue(oauthHeadersItem1.Name)
-					oauthHeaders1.Value = types.StringValue(oauthHeadersItem1.Value)
+					if oauthHeadersItem1.Name == nil {
+						oauthHeaders1.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
+						oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
+					}
+					if oauthHeadersItem1.Value == nil {
+						oauthHeaders1.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
+						oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
+					}
 
 					items.OutputInfluxdb.OauthHeaders = append(items.OutputInfluxdb.OauthHeaders, oauthHeaders1)
 				}
 				items.OutputInfluxdb.OauthParams = []tfTypes.OutputInfluxdbOauthParam{}
 
-				for _, oauthParamsItem1 := range itemsItem.OutputInfluxdb.OauthParams {
-					var oauthParams1 tfTypes.OutputInfluxdbOauthParam
+				for _, oauthParamsItem2 := range itemsItem.OutputInfluxdb.OauthParams {
+					var oauthParams2 tfTypes.OutputInfluxdbOauthParam
 
-					oauthParams1.Name = types.StringValue(oauthParamsItem1.Name)
-					oauthParams1.Value = types.StringValue(oauthParamsItem1.Value)
+					if oauthParamsItem2.Name == nil {
+						oauthParams2.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
+						oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
+					}
+					if oauthParamsItem2.Value == nil {
+						oauthParams2.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
+						oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
+					}
 
-					items.OutputInfluxdb.OauthParams = append(items.OutputInfluxdb.OauthParams, oauthParams1)
+					items.OutputInfluxdb.OauthParams = append(items.OutputInfluxdb.OauthParams, oauthParams2)
 				}
 				if itemsItem.OutputInfluxdb.OnBackpressure != nil {
 					items.OutputInfluxdb.OnBackpressure = types.StringValue(string(*itemsItem.OutputInfluxdb.OnBackpressure))
@@ -3683,6 +4333,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputInfluxdb.PqControls = &tfTypes.OutputInfluxdbPqControls{}
 				}
+				items.OutputInfluxdb.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputInfluxdb.PqMaxBackpressureSec)
+				items.OutputInfluxdb.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputInfluxdb.PqMaxBufferSize)
+				items.OutputInfluxdb.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputInfluxdb.PqMaxBufferSizeBytes)
 				items.OutputInfluxdb.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputInfluxdb.PqMaxFileSize)
 				items.OutputInfluxdb.PqMaxSize = types.StringPointerValue(itemsItem.OutputInfluxdb.PqMaxSize)
 				if itemsItem.OutputInfluxdb.PqMode != nil {
@@ -3696,26 +4349,38 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputInfluxdb.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputInfluxdb.PqPath = types.StringPointerValue(itemsItem.OutputInfluxdb.PqPath)
+				items.OutputInfluxdb.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputInfluxdb.PqRatePerSec)
+				items.OutputInfluxdb.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputInfluxdb.PqStrictOrdering)
 				items.OutputInfluxdb.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputInfluxdb.RejectUnauthorized)
 				items.OutputInfluxdb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputInfluxdb.ResponseHonorRetryAfterHeader)
-				items.OutputInfluxdb.ResponseRetrySettings = []tfTypes.OutputInfluxdbResponseRetrySetting{}
+				items.OutputInfluxdb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem16 := range itemsItem.OutputInfluxdb.ResponseRetrySettings {
-					var responseRetrySettings16 tfTypes.OutputInfluxdbResponseRetrySetting
+				for _, responseRetrySettingsItem17 := range itemsItem.OutputInfluxdb.ResponseRetrySettings {
+					var responseRetrySettings17 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
-					responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
-					responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
-					responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
+					responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
+					responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
+					responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
+					responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
 
-					items.OutputInfluxdb.ResponseRetrySettings = append(items.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings16)
+					items.OutputInfluxdb.ResponseRetrySettings = append(items.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings17)
 				}
 				items.OutputInfluxdb.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputInfluxdb.SafeHeaders))
 				for _, v := range itemsItem.OutputInfluxdb.SafeHeaders {
 					items.OutputInfluxdb.SafeHeaders = append(items.OutputInfluxdb.SafeHeaders, types.StringValue(v))
 				}
-				items.OutputInfluxdb.Secret = types.StringPointerValue(itemsItem.OutputInfluxdb.Secret)
-				items.OutputInfluxdb.SecretParamName = types.StringPointerValue(itemsItem.OutputInfluxdb.SecretParamName)
+				if itemsItem.OutputInfluxdb.Secret == nil {
+					items.OutputInfluxdb.Secret = jsontypes.NewNormalizedNull()
+				} else {
+					secretResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.Secret)
+					items.OutputInfluxdb.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
+				}
+				if itemsItem.OutputInfluxdb.SecretParamName == nil {
+					items.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedNull()
+				} else {
+					secretParamNameResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.SecretParamName)
+					items.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
+				}
 				items.OutputInfluxdb.Streamtags = make([]types.String, 0, len(itemsItem.OutputInfluxdb.Streamtags))
 				for _, v := range itemsItem.OutputInfluxdb.Streamtags {
 					items.OutputInfluxdb.Streamtags = append(items.OutputInfluxdb.Streamtags, types.StringValue(v))
@@ -3728,11 +4393,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputInfluxdb.TimeoutRetrySettings == nil {
 					items.OutputInfluxdb.TimeoutRetrySettings = nil
 				} else {
-					items.OutputInfluxdb.TimeoutRetrySettings = &tfTypes.OutputInfluxdbTimeoutRetrySettings{}
+					items.OutputInfluxdb.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputInfluxdb.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputInfluxdb.TimeoutRetrySettings.BackoffRate)
 					items.OutputInfluxdb.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputInfluxdb.TimeoutRetrySettings.InitialBackoff)
 					items.OutputInfluxdb.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputInfluxdb.TimeoutRetrySettings.MaxBackoff)
-					items.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputInfluxdb.TimeoutSec = types.Float64PointerValue(itemsItem.OutputInfluxdb.TimeoutSec)
 				if itemsItem.OutputInfluxdb.TimestampPrecision != nil {
@@ -3741,8 +4406,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputInfluxdb.TimestampPrecision = types.StringNull()
 				}
 				items.OutputInfluxdb.Token = types.StringPointerValue(itemsItem.OutputInfluxdb.Token)
-				items.OutputInfluxdb.TokenAttributeName = types.StringPointerValue(itemsItem.OutputInfluxdb.TokenAttributeName)
-				items.OutputInfluxdb.TokenTimeoutSecs = types.Float64PointerValue(itemsItem.OutputInfluxdb.TokenTimeoutSecs)
+				if itemsItem.OutputInfluxdb.TokenAttributeName == nil {
+					items.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedNull()
+				} else {
+					tokenAttributeNameResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.TokenAttributeName)
+					items.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
+				}
+				if itemsItem.OutputInfluxdb.TokenTimeoutSecs == nil {
+					items.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+				} else {
+					tokenTimeoutSecsResult1, _ := json.Marshal(itemsItem.OutputInfluxdb.TokenTimeoutSecs)
+					items.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
+				}
 				items.OutputInfluxdb.Type = types.StringValue(string(itemsItem.OutputInfluxdb.Type))
 				items.OutputInfluxdb.URL = types.StringValue(itemsItem.OutputInfluxdb.URL)
 				items.OutputInfluxdb.Username = types.StringPointerValue(itemsItem.OutputInfluxdb.Username)
@@ -3752,6 +4427,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputKafka != nil {
 				items.OutputKafka = &tfTypes.OutputKafka{}
+				items.OutputKafka.TemplateTopic = types.StringPointerValue(itemsItem.OutputKafka.TemplateTopic)
 				if itemsItem.OutputKafka.Ack != nil {
 					items.OutputKafka.Ack = types.Int64Value(int64(*itemsItem.OutputKafka.Ack))
 				} else {
@@ -3783,25 +4459,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputKafka.KafkaSchemaRegistry == nil {
 					items.OutputKafka.KafkaSchemaRegistry = nil
 				} else {
-					items.OutputKafka.KafkaSchemaRegistry = &tfTypes.OutputKafkaKafkaSchemaRegistryAuthentication{}
+					items.OutputKafka.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 					if itemsItem.OutputKafka.KafkaSchemaRegistry.Auth == nil {
 						items.OutputKafka.KafkaSchemaRegistry.Auth = nil
 					} else {
-						items.OutputKafka.KafkaSchemaRegistry.Auth = &tfTypes.OutputKafkaAuth{}
+						items.OutputKafka.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 						items.OutputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret)
-						items.OutputKafka.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.Auth.Disabled)
+						items.OutputKafka.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(itemsItem.OutputKafka.KafkaSchemaRegistry.Auth.Disabled)
 					}
 					items.OutputKafka.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.ConnectionTimeout)
 					items.OutputKafka.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.DefaultKeySchemaID)
 					items.OutputKafka.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.DefaultValueSchemaID)
-					items.OutputKafka.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.Disabled)
+					items.OutputKafka.KafkaSchemaRegistry.Disabled = types.BoolValue(itemsItem.OutputKafka.KafkaSchemaRegistry.Disabled)
 					items.OutputKafka.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.MaxRetries)
 					items.OutputKafka.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.RequestTimeout)
 					items.OutputKafka.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.SchemaRegistryURL)
 					if itemsItem.OutputKafka.KafkaSchemaRegistry.TLS == nil {
 						items.OutputKafka.KafkaSchemaRegistry.TLS = nil
 					} else {
-						items.OutputKafka.KafkaSchemaRegistry.TLS = &tfTypes.OutputKafkaKafkaSchemaRegistryTLSSettingsClientSide{}
+						items.OutputKafka.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 						items.OutputKafka.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.TLS.CaPath)
 						items.OutputKafka.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.TLS.CertificateName)
 						items.OutputKafka.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(itemsItem.OutputKafka.KafkaSchemaRegistry.TLS.CertPath)
@@ -3841,6 +4517,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputKafka.PqControls = &tfTypes.OutputKafkaPqControls{}
 				}
+				items.OutputKafka.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputKafka.PqMaxBackpressureSec)
+				items.OutputKafka.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputKafka.PqMaxBufferSize)
+				items.OutputKafka.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputKafka.PqMaxBufferSizeBytes)
 				items.OutputKafka.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputKafka.PqMaxFileSize)
 				items.OutputKafka.PqMaxSize = types.StringPointerValue(itemsItem.OutputKafka.PqMaxSize)
 				if itemsItem.OutputKafka.PqMode != nil {
@@ -3854,19 +4533,58 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputKafka.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputKafka.PqPath = types.StringPointerValue(itemsItem.OutputKafka.PqPath)
+				items.OutputKafka.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputKafka.PqRatePerSec)
+				items.OutputKafka.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputKafka.PqStrictOrdering)
+				items.OutputKafka.ProtobufEncodingID = types.StringPointerValue(itemsItem.OutputKafka.ProtobufEncodingID)
 				items.OutputKafka.ProtobufLibraryID = types.StringPointerValue(itemsItem.OutputKafka.ProtobufLibraryID)
 				items.OutputKafka.ReauthenticationThreshold = types.Float64PointerValue(itemsItem.OutputKafka.ReauthenticationThreshold)
 				items.OutputKafka.RequestTimeout = types.Float64PointerValue(itemsItem.OutputKafka.RequestTimeout)
 				if itemsItem.OutputKafka.Sasl == nil {
 					items.OutputKafka.Sasl = nil
 				} else {
-					items.OutputKafka.Sasl = &tfTypes.OutputKafkaAuthentication{}
-					items.OutputKafka.Sasl.Disabled = types.BoolPointerValue(itemsItem.OutputKafka.Sasl.Disabled)
+					items.OutputKafka.Sasl = &tfTypes.AuthenticationType{}
+					if itemsItem.OutputKafka.Sasl.AuthType != nil {
+						items.OutputKafka.Sasl.AuthType = types.StringValue(string(*itemsItem.OutputKafka.Sasl.AuthType))
+					} else {
+						items.OutputKafka.Sasl.AuthType = types.StringNull()
+					}
+					items.OutputKafka.Sasl.BrokerServiceClass = types.StringPointerValue(itemsItem.OutputKafka.Sasl.BrokerServiceClass)
+					items.OutputKafka.Sasl.ClientID = types.StringPointerValue(itemsItem.OutputKafka.Sasl.ClientID)
+					items.OutputKafka.Sasl.ClientTextSecret = types.StringPointerValue(itemsItem.OutputKafka.Sasl.ClientTextSecret)
+					items.OutputKafka.Sasl.CredentialsSecret = types.StringPointerValue(itemsItem.OutputKafka.Sasl.CredentialsSecret)
+					items.OutputKafka.Sasl.Disabled = types.BoolValue(itemsItem.OutputKafka.Sasl.Disabled)
+					items.OutputKafka.Sasl.KeytabLocation = types.StringPointerValue(itemsItem.OutputKafka.Sasl.KeytabLocation)
 					if itemsItem.OutputKafka.Sasl.Mechanism != nil {
 						items.OutputKafka.Sasl.Mechanism = types.StringValue(string(*itemsItem.OutputKafka.Sasl.Mechanism))
 					} else {
 						items.OutputKafka.Sasl.Mechanism = types.StringNull()
 					}
+					items.OutputKafka.Sasl.OauthEnabled = types.BoolPointerValue(itemsItem.OutputKafka.Sasl.OauthEnabled)
+					items.OutputKafka.Sasl.OauthParams = []tfTypes.ItemsTypeSaslOauthParams{}
+
+					for _, oauthParamsItem3 := range itemsItem.OutputKafka.Sasl.OauthParams {
+						var oauthParams3 tfTypes.ItemsTypeSaslOauthParams
+
+						oauthParams3.Name = types.StringValue(oauthParamsItem3.Name)
+						oauthParams3.Value = types.StringValue(oauthParamsItem3.Value)
+
+						items.OutputKafka.Sasl.OauthParams = append(items.OutputKafka.Sasl.OauthParams, oauthParams3)
+					}
+					items.OutputKafka.Sasl.OauthSecretType = types.StringPointerValue(itemsItem.OutputKafka.Sasl.OauthSecretType)
+					items.OutputKafka.Sasl.Password = types.StringPointerValue(itemsItem.OutputKafka.Sasl.Password)
+					items.OutputKafka.Sasl.Principal = types.StringPointerValue(itemsItem.OutputKafka.Sasl.Principal)
+					items.OutputKafka.Sasl.SaslExtensions = []tfTypes.ItemsTypeSaslSaslExtensions{}
+
+					for _, saslExtensionsItem1 := range itemsItem.OutputKafka.Sasl.SaslExtensions {
+						var saslExtensions1 tfTypes.ItemsTypeSaslSaslExtensions
+
+						saslExtensions1.Name = types.StringValue(saslExtensionsItem1.Name)
+						saslExtensions1.Value = types.StringValue(saslExtensionsItem1.Value)
+
+						items.OutputKafka.Sasl.SaslExtensions = append(items.OutputKafka.Sasl.SaslExtensions, saslExtensions1)
+					}
+					items.OutputKafka.Sasl.TokenURL = types.StringPointerValue(itemsItem.OutputKafka.Sasl.TokenURL)
+					items.OutputKafka.Sasl.Username = types.StringPointerValue(itemsItem.OutputKafka.Sasl.Username)
 				}
 				items.OutputKafka.Streamtags = make([]types.String, 0, len(itemsItem.OutputKafka.Streamtags))
 				for _, v := range itemsItem.OutputKafka.Streamtags {
@@ -3879,7 +4597,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputKafka.TLS == nil {
 					items.OutputKafka.TLS = nil
 				} else {
-					items.OutputKafka.TLS = &tfTypes.OutputKafkaTLSSettingsClientSide{}
+					items.OutputKafka.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputKafka.TLS.CaPath = types.StringPointerValue(itemsItem.OutputKafka.TLS.CaPath)
 					items.OutputKafka.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputKafka.TLS.CertificateName)
 					items.OutputKafka.TLS.CertPath = types.StringPointerValue(itemsItem.OutputKafka.TLS.CertPath)
@@ -3900,14 +4618,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputKafka.TLS.Servername = types.StringPointerValue(itemsItem.OutputKafka.TLS.Servername)
 				}
 				items.OutputKafka.Topic = types.StringValue(itemsItem.OutputKafka.Topic)
-				if itemsItem.OutputKafka.Type != nil {
-					items.OutputKafka.Type = types.StringValue(string(*itemsItem.OutputKafka.Type))
-				} else {
-					items.OutputKafka.Type = types.StringNull()
-				}
+				items.OutputKafka.Type = types.StringValue(string(itemsItem.OutputKafka.Type))
 			}
 			if itemsItem.OutputKinesis != nil {
 				items.OutputKinesis = &tfTypes.OutputKinesis{}
+				items.OutputKinesis.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputKinesis.TemplateAssumeRoleArn)
+				items.OutputKinesis.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputKinesis.TemplateAssumeRoleExternalID)
+				items.OutputKinesis.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputKinesis.TemplateAwsAPIKey)
+				items.OutputKinesis.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputKinesis.TemplateAwsSecretKey)
+				items.OutputKinesis.TemplateRegion = types.StringPointerValue(itemsItem.OutputKinesis.TemplateRegion)
+				items.OutputKinesis.TemplateStreamName = types.StringPointerValue(itemsItem.OutputKinesis.TemplateStreamName)
 				items.OutputKinesis.AsNdjson = types.BoolPointerValue(itemsItem.OutputKinesis.AsNdjson)
 				items.OutputKinesis.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputKinesis.AssumeRoleArn)
 				items.OutputKinesis.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputKinesis.AssumeRoleExternalID)
@@ -3932,6 +4652,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputKinesis.Environment = types.StringPointerValue(itemsItem.OutputKinesis.Environment)
 				items.OutputKinesis.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputKinesis.FlushPeriodSec)
 				items.OutputKinesis.ID = types.StringPointerValue(itemsItem.OutputKinesis.ID)
+				items.OutputKinesis.MaxEventsPerFlush = types.Float64PointerValue(itemsItem.OutputKinesis.MaxEventsPerFlush)
 				items.OutputKinesis.MaxRecordSizeKB = types.Float64PointerValue(itemsItem.OutputKinesis.MaxRecordSizeKB)
 				if itemsItem.OutputKinesis.OnBackpressure != nil {
 					items.OutputKinesis.OnBackpressure = types.StringValue(string(*itemsItem.OutputKinesis.OnBackpressure))
@@ -3949,6 +4670,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputKinesis.PqControls = &tfTypes.OutputKinesisPqControls{}
 				}
+				items.OutputKinesis.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputKinesis.PqMaxBackpressureSec)
+				items.OutputKinesis.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputKinesis.PqMaxBufferSize)
+				items.OutputKinesis.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputKinesis.PqMaxBufferSizeBytes)
 				items.OutputKinesis.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputKinesis.PqMaxFileSize)
 				items.OutputKinesis.PqMaxSize = types.StringPointerValue(itemsItem.OutputKinesis.PqMaxSize)
 				if itemsItem.OutputKinesis.PqMode != nil {
@@ -3962,6 +4686,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputKinesis.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputKinesis.PqPath = types.StringPointerValue(itemsItem.OutputKinesis.PqPath)
+				items.OutputKinesis.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputKinesis.PqRatePerSec)
+				items.OutputKinesis.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputKinesis.PqStrictOrdering)
 				items.OutputKinesis.Region = types.StringValue(itemsItem.OutputKinesis.Region)
 				items.OutputKinesis.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputKinesis.RejectUnauthorized)
 				items.OutputKinesis.ReuseConnections = types.BoolPointerValue(itemsItem.OutputKinesis.ReuseConnections)
@@ -3979,12 +4705,184 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputKinesis.SystemFields {
 					items.OutputKinesis.SystemFields = append(items.OutputKinesis.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputKinesis.Type != nil {
-					items.OutputKinesis.Type = types.StringValue(string(*itemsItem.OutputKinesis.Type))
-				} else {
-					items.OutputKinesis.Type = types.StringNull()
-				}
+				items.OutputKinesis.Type = types.StringValue(string(itemsItem.OutputKinesis.Type))
 				items.OutputKinesis.UseListShards = types.BoolPointerValue(itemsItem.OutputKinesis.UseListShards)
+			}
+			if itemsItem.OutputLocalSearchStorage != nil {
+				items.OutputLocalSearchStorage = &tfTypes.OutputLocalSearchStorage{}
+				items.OutputLocalSearchStorage.TemplateDatabase = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TemplateDatabase)
+				items.OutputLocalSearchStorage.TemplateTableName = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TemplateTableName)
+				items.OutputLocalSearchStorage.TemplateURL = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TemplateURL)
+				items.OutputLocalSearchStorage.AsyncInserts = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.AsyncInserts)
+				if itemsItem.OutputLocalSearchStorage.AuthType != nil {
+					items.OutputLocalSearchStorage.AuthType = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.AuthType))
+				} else {
+					items.OutputLocalSearchStorage.AuthType = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.ColumnMappings = []tfTypes.OutputLocalSearchStorageColumnMapping{}
+
+				for _, columnMappingsItem1 := range itemsItem.OutputLocalSearchStorage.ColumnMappings {
+					var columnMappings1 tfTypes.OutputLocalSearchStorageColumnMapping
+
+					columnMappings1.ColumnName = types.StringValue(columnMappingsItem1.ColumnName)
+					columnMappings1.ColumnType = types.StringPointerValue(columnMappingsItem1.ColumnType)
+					columnMappings1.ColumnValueExpression = types.StringValue(columnMappingsItem1.ColumnValueExpression)
+
+					items.OutputLocalSearchStorage.ColumnMappings = append(items.OutputLocalSearchStorage.ColumnMappings, columnMappings1)
+				}
+				items.OutputLocalSearchStorage.Compress = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.Compress)
+				items.OutputLocalSearchStorage.Concurrency = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.Concurrency)
+				items.OutputLocalSearchStorage.CredentialsSecret = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.CredentialsSecret)
+				items.OutputLocalSearchStorage.Database = types.StringValue(itemsItem.OutputLocalSearchStorage.Database)
+				items.OutputLocalSearchStorage.DescribeTable = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.DescribeTable)
+				items.OutputLocalSearchStorage.Description = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.Description)
+				items.OutputLocalSearchStorage.DumpFormatErrorsToDisk = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.DumpFormatErrorsToDisk)
+				items.OutputLocalSearchStorage.Environment = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.Environment)
+				items.OutputLocalSearchStorage.ExcludeMappingFields = make([]types.String, 0, len(itemsItem.OutputLocalSearchStorage.ExcludeMappingFields))
+				for _, v := range itemsItem.OutputLocalSearchStorage.ExcludeMappingFields {
+					items.OutputLocalSearchStorage.ExcludeMappingFields = append(items.OutputLocalSearchStorage.ExcludeMappingFields, types.StringValue(v))
+				}
+				items.OutputLocalSearchStorage.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+				for _, extraHTTPHeadersItem17 := range itemsItem.OutputLocalSearchStorage.ExtraHTTPHeaders {
+					var extraHTTPHeaders17 tfTypes.ItemsTypeExtraHTTPHeaders
+
+					extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
+					extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
+
+					items.OutputLocalSearchStorage.ExtraHTTPHeaders = append(items.OutputLocalSearchStorage.ExtraHTTPHeaders, extraHTTPHeaders17)
+				}
+				if itemsItem.OutputLocalSearchStorage.FailedRequestLoggingMode != nil {
+					items.OutputLocalSearchStorage.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.FailedRequestLoggingMode))
+				} else {
+					items.OutputLocalSearchStorage.FailedRequestLoggingMode = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.FlushPeriodSec)
+				if itemsItem.OutputLocalSearchStorage.Format != nil {
+					items.OutputLocalSearchStorage.Format = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.Format))
+				} else {
+					items.OutputLocalSearchStorage.Format = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.ID = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.ID)
+				if itemsItem.OutputLocalSearchStorage.MappingType != nil {
+					items.OutputLocalSearchStorage.MappingType = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.MappingType))
+				} else {
+					items.OutputLocalSearchStorage.MappingType = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.MaxPayloadEvents)
+				items.OutputLocalSearchStorage.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.MaxPayloadSizeKB)
+				if itemsItem.OutputLocalSearchStorage.OnBackpressure != nil {
+					items.OutputLocalSearchStorage.OnBackpressure = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.OnBackpressure))
+				} else {
+					items.OutputLocalSearchStorage.OnBackpressure = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.Password = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.Password)
+				items.OutputLocalSearchStorage.Pipeline = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.Pipeline)
+				if itemsItem.OutputLocalSearchStorage.PqCompress != nil {
+					items.OutputLocalSearchStorage.PqCompress = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.PqCompress))
+				} else {
+					items.OutputLocalSearchStorage.PqCompress = types.StringNull()
+				}
+				if itemsItem.OutputLocalSearchStorage.PqControls == nil {
+					items.OutputLocalSearchStorage.PqControls = nil
+				} else {
+					items.OutputLocalSearchStorage.PqControls = &tfTypes.OutputLocalSearchStoragePqControls{}
+				}
+				items.OutputLocalSearchStorage.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.PqMaxBackpressureSec)
+				items.OutputLocalSearchStorage.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.PqMaxBufferSize)
+				items.OutputLocalSearchStorage.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.PqMaxBufferSizeBytes)
+				items.OutputLocalSearchStorage.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.PqMaxFileSize)
+				items.OutputLocalSearchStorage.PqMaxSize = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.PqMaxSize)
+				if itemsItem.OutputLocalSearchStorage.PqMode != nil {
+					items.OutputLocalSearchStorage.PqMode = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.PqMode))
+				} else {
+					items.OutputLocalSearchStorage.PqMode = types.StringNull()
+				}
+				if itemsItem.OutputLocalSearchStorage.PqOnBackpressure != nil {
+					items.OutputLocalSearchStorage.PqOnBackpressure = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.PqOnBackpressure))
+				} else {
+					items.OutputLocalSearchStorage.PqOnBackpressure = types.StringNull()
+				}
+				items.OutputLocalSearchStorage.PqPath = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.PqPath)
+				items.OutputLocalSearchStorage.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.PqRatePerSec)
+				items.OutputLocalSearchStorage.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.PqStrictOrdering)
+				items.OutputLocalSearchStorage.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.RejectUnauthorized)
+				items.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader)
+				items.OutputLocalSearchStorage.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+				for _, responseRetrySettingsItem18 := range itemsItem.OutputLocalSearchStorage.ResponseRetrySettings {
+					var responseRetrySettings18 tfTypes.ItemsTypeResponseRetrySettings
+
+					responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
+					responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
+					responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
+					responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
+
+					items.OutputLocalSearchStorage.ResponseRetrySettings = append(items.OutputLocalSearchStorage.ResponseRetrySettings, responseRetrySettings18)
+				}
+				items.OutputLocalSearchStorage.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputLocalSearchStorage.SafeHeaders))
+				for _, v := range itemsItem.OutputLocalSearchStorage.SafeHeaders {
+					items.OutputLocalSearchStorage.SafeHeaders = append(items.OutputLocalSearchStorage.SafeHeaders, types.StringValue(v))
+				}
+				items.OutputLocalSearchStorage.SQLUsername = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.SQLUsername)
+				if itemsItem.OutputLocalSearchStorage.StatsDestination == nil {
+					items.OutputLocalSearchStorage.StatsDestination = nil
+				} else {
+					items.OutputLocalSearchStorage.StatsDestination = &tfTypes.StatsDestination{}
+					items.OutputLocalSearchStorage.StatsDestination.AuthType = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.AuthType)
+					items.OutputLocalSearchStorage.StatsDestination.Database = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.Database)
+					items.OutputLocalSearchStorage.StatsDestination.Password = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.Password)
+					items.OutputLocalSearchStorage.StatsDestination.SQLUsername = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.SQLUsername)
+					items.OutputLocalSearchStorage.StatsDestination.TableName = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.TableName)
+					items.OutputLocalSearchStorage.StatsDestination.URL = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.URL)
+					items.OutputLocalSearchStorage.StatsDestination.Username = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.StatsDestination.Username)
+				}
+				items.OutputLocalSearchStorage.Streamtags = make([]types.String, 0, len(itemsItem.OutputLocalSearchStorage.Streamtags))
+				for _, v := range itemsItem.OutputLocalSearchStorage.Streamtags {
+					items.OutputLocalSearchStorage.Streamtags = append(items.OutputLocalSearchStorage.Streamtags, types.StringValue(v))
+				}
+				items.OutputLocalSearchStorage.SystemFields = make([]types.String, 0, len(itemsItem.OutputLocalSearchStorage.SystemFields))
+				for _, v := range itemsItem.OutputLocalSearchStorage.SystemFields {
+					items.OutputLocalSearchStorage.SystemFields = append(items.OutputLocalSearchStorage.SystemFields, types.StringValue(v))
+				}
+				items.OutputLocalSearchStorage.TableName = types.StringValue(itemsItem.OutputLocalSearchStorage.TableName)
+				if itemsItem.OutputLocalSearchStorage.TimeoutRetrySettings == nil {
+					items.OutputLocalSearchStorage.TimeoutRetrySettings = nil
+				} else {
+					items.OutputLocalSearchStorage.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+					items.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate)
+					items.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff)
+					items.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff)
+					items.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry)
+				}
+				items.OutputLocalSearchStorage.TimeoutSec = types.Float64PointerValue(itemsItem.OutputLocalSearchStorage.TimeoutSec)
+				if itemsItem.OutputLocalSearchStorage.TLS == nil {
+					items.OutputLocalSearchStorage.TLS = nil
+				} else {
+					items.OutputLocalSearchStorage.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+					items.OutputLocalSearchStorage.TLS.CaPath = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.CaPath)
+					items.OutputLocalSearchStorage.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.CertificateName)
+					items.OutputLocalSearchStorage.TLS.CertPath = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.CertPath)
+					items.OutputLocalSearchStorage.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.TLS.Disabled)
+					if itemsItem.OutputLocalSearchStorage.TLS.MaxVersion != nil {
+						items.OutputLocalSearchStorage.TLS.MaxVersion = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.TLS.MaxVersion))
+					} else {
+						items.OutputLocalSearchStorage.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.OutputLocalSearchStorage.TLS.MinVersion != nil {
+						items.OutputLocalSearchStorage.TLS.MinVersion = types.StringValue(string(*itemsItem.OutputLocalSearchStorage.TLS.MinVersion))
+					} else {
+						items.OutputLocalSearchStorage.TLS.MinVersion = types.StringNull()
+					}
+					items.OutputLocalSearchStorage.TLS.Passphrase = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.Passphrase)
+					items.OutputLocalSearchStorage.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.PrivKeyPath)
+					items.OutputLocalSearchStorage.TLS.Servername = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.TLS.Servername)
+				}
+				items.OutputLocalSearchStorage.Type = types.StringValue(string(itemsItem.OutputLocalSearchStorage.Type))
+				items.OutputLocalSearchStorage.URL = types.StringValue(itemsItem.OutputLocalSearchStorage.URL)
+				items.OutputLocalSearchStorage.Username = types.StringPointerValue(itemsItem.OutputLocalSearchStorage.Username)
+				items.OutputLocalSearchStorage.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.UseRoundRobinDNS)
+				items.OutputLocalSearchStorage.WaitForAsyncInserts = types.BoolPointerValue(itemsItem.OutputLocalSearchStorage.WaitForAsyncInserts)
 			}
 			if itemsItem.OutputLoki != nil {
 				items.OutputLoki = &tfTypes.OutputLoki{}
@@ -3997,16 +4895,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputLoki.Concurrency = types.Float64PointerValue(itemsItem.OutputLoki.Concurrency)
 				items.OutputLoki.CredentialsSecret = types.StringPointerValue(itemsItem.OutputLoki.CredentialsSecret)
 				items.OutputLoki.Description = types.StringPointerValue(itemsItem.OutputLoki.Description)
+				items.OutputLoki.EnableDynamicHeaders = types.BoolPointerValue(itemsItem.OutputLoki.EnableDynamicHeaders)
 				items.OutputLoki.Environment = types.StringPointerValue(itemsItem.OutputLoki.Environment)
-				items.OutputLoki.ExtraHTTPHeaders = []tfTypes.OutputLokiExtraHTTPHeader{}
+				items.OutputLoki.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem16 := range itemsItem.OutputLoki.ExtraHTTPHeaders {
-					var extraHTTPHeaders16 tfTypes.OutputLokiExtraHTTPHeader
+				for _, extraHTTPHeadersItem18 := range itemsItem.OutputLoki.ExtraHTTPHeaders {
+					var extraHTTPHeaders18 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
-					extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
+					extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
+					extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
 
-					items.OutputLoki.ExtraHTTPHeaders = append(items.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders16)
+					items.OutputLoki.ExtraHTTPHeaders = append(items.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders18)
 				}
 				if itemsItem.OutputLoki.FailedRequestLoggingMode != nil {
 					items.OutputLoki.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputLoki.FailedRequestLoggingMode))
@@ -4015,12 +4914,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputLoki.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputLoki.FlushPeriodSec)
 				items.OutputLoki.ID = types.StringPointerValue(itemsItem.OutputLoki.ID)
-				items.OutputLoki.Labels = []tfTypes.OutputLokiLabel{}
+				items.OutputLoki.Labels = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
 
 				for _, labelsItem1 := range itemsItem.OutputLoki.Labels {
-					var labels1 tfTypes.OutputLokiLabel
+					var labels1 tfTypes.ItemsTypeContentConfigItemsRequestParams
 
-					labels1.Name = types.StringPointerValue(labelsItem1.Name)
+					labels1.Name = types.StringValue(labelsItem1.Name)
 					labels1.Value = types.StringValue(labelsItem1.Value)
 
 					items.OutputLoki.Labels = append(items.OutputLoki.Labels, labels1)
@@ -4050,6 +4949,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputLoki.PqControls = &tfTypes.OutputLokiPqControls{}
 				}
+				items.OutputLoki.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputLoki.PqMaxBackpressureSec)
+				items.OutputLoki.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputLoki.PqMaxBufferSize)
+				items.OutputLoki.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputLoki.PqMaxBufferSizeBytes)
 				items.OutputLoki.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputLoki.PqMaxFileSize)
 				items.OutputLoki.PqMaxSize = types.StringPointerValue(itemsItem.OutputLoki.PqMaxSize)
 				if itemsItem.OutputLoki.PqMode != nil {
@@ -4063,19 +4965,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputLoki.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputLoki.PqPath = types.StringPointerValue(itemsItem.OutputLoki.PqPath)
+				items.OutputLoki.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputLoki.PqRatePerSec)
+				items.OutputLoki.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputLoki.PqStrictOrdering)
 				items.OutputLoki.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputLoki.RejectUnauthorized)
 				items.OutputLoki.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputLoki.ResponseHonorRetryAfterHeader)
-				items.OutputLoki.ResponseRetrySettings = []tfTypes.OutputLokiResponseRetrySetting{}
+				items.OutputLoki.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem17 := range itemsItem.OutputLoki.ResponseRetrySettings {
-					var responseRetrySettings17 tfTypes.OutputLokiResponseRetrySetting
+				for _, responseRetrySettingsItem19 := range itemsItem.OutputLoki.ResponseRetrySettings {
+					var responseRetrySettings19 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
-					responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
-					responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
-					responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
+					responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
+					responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
+					responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
+					responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
 
-					items.OutputLoki.ResponseRetrySettings = append(items.OutputLoki.ResponseRetrySettings, responseRetrySettings17)
+					items.OutputLoki.ResponseRetrySettings = append(items.OutputLoki.ResponseRetrySettings, responseRetrySettings19)
 				}
 				items.OutputLoki.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputLoki.SafeHeaders))
 				for _, v := range itemsItem.OutputLoki.SafeHeaders {
@@ -4093,11 +4997,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputLoki.TimeoutRetrySettings == nil {
 					items.OutputLoki.TimeoutRetrySettings = nil
 				} else {
-					items.OutputLoki.TimeoutRetrySettings = &tfTypes.OutputLokiTimeoutRetrySettings{}
+					items.OutputLoki.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputLoki.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputLoki.TimeoutRetrySettings.BackoffRate)
 					items.OutputLoki.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputLoki.TimeoutRetrySettings.InitialBackoff)
 					items.OutputLoki.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputLoki.TimeoutRetrySettings.MaxBackoff)
-					items.OutputLoki.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputLoki.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputLoki.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputLoki.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputLoki.TimeoutSec = types.Float64PointerValue(itemsItem.OutputLoki.TimeoutSec)
 				items.OutputLoki.Token = types.StringPointerValue(itemsItem.OutputLoki.Token)
@@ -4109,6 +5013,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputMicrosoftFabric != nil {
 				items.OutputMicrosoftFabric = &tfTypes.OutputMicrosoftFabric{}
+				items.OutputMicrosoftFabric.TemplateBootstrapServer = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.TemplateBootstrapServer)
+				items.OutputMicrosoftFabric.TemplateTopic = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.TemplateTopic)
 				if itemsItem.OutputMicrosoftFabric.Ack != nil {
 					items.OutputMicrosoftFabric.Ack = types.Int64Value(int64(*itemsItem.OutputMicrosoftFabric.Ack))
 				} else {
@@ -4150,6 +5056,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputMicrosoftFabric.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputMicrosoftFabric.PqMaxBackpressureSec)
 				items.OutputMicrosoftFabric.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputMicrosoftFabric.PqMaxBufferSize)
+				items.OutputMicrosoftFabric.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.PqMaxBufferSizeBytes)
 				items.OutputMicrosoftFabric.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.PqMaxFileSize)
 				items.OutputMicrosoftFabric.PqMaxSize = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.PqMaxSize)
 				if itemsItem.OutputMicrosoftFabric.PqMode != nil {
@@ -4180,7 +5087,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 						items.OutputMicrosoftFabric.Sasl.ClientSecretAuthType = types.StringNull()
 					}
 					items.OutputMicrosoftFabric.Sasl.ClientTextSecret = types.StringPointerValue(itemsItem.OutputMicrosoftFabric.Sasl.ClientTextSecret)
-					items.OutputMicrosoftFabric.Sasl.Disabled = types.BoolPointerValue(itemsItem.OutputMicrosoftFabric.Sasl.Disabled)
+					items.OutputMicrosoftFabric.Sasl.Disabled = types.BoolValue(itemsItem.OutputMicrosoftFabric.Sasl.Disabled)
 					if itemsItem.OutputMicrosoftFabric.Sasl.Mechanism != nil {
 						items.OutputMicrosoftFabric.Sasl.Mechanism = types.StringValue(string(*itemsItem.OutputMicrosoftFabric.Sasl.Mechanism))
 					} else {
@@ -4209,8 +5116,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputMicrosoftFabric.TLS == nil {
 					items.OutputMicrosoftFabric.TLS = nil
 				} else {
-					items.OutputMicrosoftFabric.TLS = &tfTypes.OutputMicrosoftFabricTLSSettingsClientSide{}
-					items.OutputMicrosoftFabric.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputMicrosoftFabric.TLS.Disabled)
+					items.OutputMicrosoftFabric.TLS = &tfTypes.TLSSettingsClientSideType{}
+					items.OutputMicrosoftFabric.TLS.Disabled = types.BoolValue(itemsItem.OutputMicrosoftFabric.TLS.Disabled)
 					items.OutputMicrosoftFabric.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputMicrosoftFabric.TLS.RejectUnauthorized)
 				}
 				items.OutputMicrosoftFabric.Topic = types.StringValue(itemsItem.OutputMicrosoftFabric.Topic)
@@ -4218,6 +5125,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputMinio != nil {
 				items.OutputMinio = &tfTypes.OutputMinio{}
+				items.OutputMinio.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputMinio.TemplateAwsAPIKey)
+				items.OutputMinio.TemplateBucket = types.StringPointerValue(itemsItem.OutputMinio.TemplateBucket)
+				items.OutputMinio.TemplateFormat = types.StringPointerValue(itemsItem.OutputMinio.TemplateFormat)
+				items.OutputMinio.TemplateRegion = types.StringPointerValue(itemsItem.OutputMinio.TemplateRegion)
 				items.OutputMinio.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputMinio.AddIDToStagePath)
 				items.OutputMinio.AutomaticSchema = types.BoolPointerValue(itemsItem.OutputMinio.AutomaticSchema)
 				items.OutputMinio.AwsAPIKey = types.StringPointerValue(itemsItem.OutputMinio.AwsAPIKey)
@@ -4244,6 +5155,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputMinio.DeadletterPath = types.StringPointerValue(itemsItem.OutputMinio.DeadletterPath)
 				items.OutputMinio.Description = types.StringPointerValue(itemsItem.OutputMinio.Description)
 				items.OutputMinio.DestPath = types.StringPointerValue(itemsItem.OutputMinio.DestPath)
+				items.OutputMinio.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputMinio.DirectoryBatchSize)
 				items.OutputMinio.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputMinio.EmptyDirCleanupSec)
 				items.OutputMinio.EnablePageChecksum = types.BoolPointerValue(itemsItem.OutputMinio.EnablePageChecksum)
 				items.OutputMinio.EnableStatistics = types.BoolPointerValue(itemsItem.OutputMinio.EnableStatistics)
@@ -4251,6 +5163,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputMinio.Endpoint = types.StringValue(itemsItem.OutputMinio.Endpoint)
 				items.OutputMinio.Environment = types.StringPointerValue(itemsItem.OutputMinio.Environment)
 				items.OutputMinio.FileNameSuffix = types.StringPointerValue(itemsItem.OutputMinio.FileNameSuffix)
+				items.OutputMinio.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputMinio.ForceCloseOnShutdown)
 				if itemsItem.OutputMinio.Format != nil {
 					items.OutputMinio.Format = types.StringValue(string(*itemsItem.OutputMinio.Format))
 				} else {
@@ -4258,15 +5171,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputMinio.HeaderLine = types.StringPointerValue(itemsItem.OutputMinio.HeaderLine)
 				items.OutputMinio.ID = types.StringPointerValue(itemsItem.OutputMinio.ID)
-				items.OutputMinio.KeyValueMetadata = []tfTypes.OutputMinioKeyValueMetadatum{}
+				items.OutputMinio.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem6 := range itemsItem.OutputMinio.KeyValueMetadata {
-					var keyValueMetadata6 tfTypes.OutputMinioKeyValueMetadatum
+				for _, keyValueMetadataItem7 := range itemsItem.OutputMinio.KeyValueMetadata {
+					var keyValueMetadata7 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata6.Key = types.StringPointerValue(keyValueMetadataItem6.Key)
-					keyValueMetadata6.Value = types.StringValue(keyValueMetadataItem6.Value)
+					keyValueMetadata7.Key = types.StringValue(keyValueMetadataItem7.Key)
+					keyValueMetadata7.Value = types.StringValue(keyValueMetadataItem7.Value)
 
-					items.OutputMinio.KeyValueMetadata = append(items.OutputMinio.KeyValueMetadata, keyValueMetadata6)
+					items.OutputMinio.KeyValueMetadata = append(items.OutputMinio.KeyValueMetadata, keyValueMetadata7)
 				}
 				items.OutputMinio.MaxConcurrentFileParts = types.Float64PointerValue(itemsItem.OutputMinio.MaxConcurrentFileParts)
 				items.OutputMinio.MaxFileIdleTimeSec = types.Float64PointerValue(itemsItem.OutputMinio.MaxFileIdleTimeSec)
@@ -4296,6 +5209,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputMinio.ParquetPageSize = types.StringPointerValue(itemsItem.OutputMinio.ParquetPageSize)
 				items.OutputMinio.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputMinio.ParquetRowGroupLength)
+				items.OutputMinio.ParquetSchema = types.StringPointerValue(itemsItem.OutputMinio.ParquetSchema)
 				if itemsItem.OutputMinio.ParquetVersion != nil {
 					items.OutputMinio.ParquetVersion = types.StringValue(string(*itemsItem.OutputMinio.ParquetVersion))
 				} else {
@@ -4306,6 +5220,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputMinio.Region = types.StringPointerValue(itemsItem.OutputMinio.Region)
 				items.OutputMinio.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputMinio.RejectUnauthorized)
 				items.OutputMinio.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputMinio.RemoveEmptyDirs)
+				if itemsItem.OutputMinio.RetrySettings == nil {
+					items.OutputMinio.RetrySettings = nil
+				} else {
+					items.OutputMinio.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputMinio.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputMinio.RetrySettings.BackoffMultiplier)
+					items.OutputMinio.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputMinio.RetrySettings.Enabled)
+					items.OutputMinio.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputMinio.RetrySettings.InitialBackoffMs)
+					items.OutputMinio.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputMinio.RetrySettings.JitterPercent)
+					items.OutputMinio.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputMinio.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputMinio.ReuseConnections = types.BoolPointerValue(itemsItem.OutputMinio.ReuseConnections)
 				if itemsItem.OutputMinio.ServerSideEncryption != nil {
 					items.OutputMinio.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputMinio.ServerSideEncryption))
@@ -4318,7 +5242,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputMinio.SignatureVersion = types.StringNull()
 				}
-				items.OutputMinio.StagePath = types.StringPointerValue(itemsItem.OutputMinio.StagePath)
+				items.OutputMinio.StagePath = types.StringValue(itemsItem.OutputMinio.StagePath)
 				if itemsItem.OutputMinio.StorageClass != nil {
 					items.OutputMinio.StorageClass = types.StringValue(string(*itemsItem.OutputMinio.StorageClass))
 				} else {
@@ -4332,16 +5256,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputMinio.SystemFields {
 					items.OutputMinio.SystemFields = append(items.OutputMinio.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputMinio.Type != nil {
-					items.OutputMinio.Type = types.StringValue(string(*itemsItem.OutputMinio.Type))
-				} else {
-					items.OutputMinio.Type = types.StringNull()
-				}
+				items.OutputMinio.Type = types.StringValue(string(itemsItem.OutputMinio.Type))
 				items.OutputMinio.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputMinio.VerifyPermissions)
 				items.OutputMinio.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputMinio.WriteHighWaterMark)
 			}
 			if itemsItem.OutputMsk != nil {
 				items.OutputMsk = &tfTypes.OutputMsk{}
+				items.OutputMsk.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputMsk.TemplateAssumeRoleArn)
+				items.OutputMsk.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputMsk.TemplateAssumeRoleExternalID)
+				items.OutputMsk.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputMsk.TemplateAwsAPIKey)
+				items.OutputMsk.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputMsk.TemplateAwsSecretKey)
+				items.OutputMsk.TemplateRegion = types.StringPointerValue(itemsItem.OutputMsk.TemplateRegion)
+				items.OutputMsk.TemplateTopic = types.StringPointerValue(itemsItem.OutputMsk.TemplateTopic)
 				if itemsItem.OutputMsk.Ack != nil {
 					items.OutputMsk.Ack = types.Int64Value(int64(*itemsItem.OutputMsk.Ack))
 				} else {
@@ -4351,11 +5277,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputMsk.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputMsk.AssumeRoleExternalID)
 				items.OutputMsk.AuthenticationTimeout = types.Float64PointerValue(itemsItem.OutputMsk.AuthenticationTimeout)
 				items.OutputMsk.AwsAPIKey = types.StringPointerValue(itemsItem.OutputMsk.AwsAPIKey)
-				if itemsItem.OutputMsk.AwsAuthenticationMethod != nil {
-					items.OutputMsk.AwsAuthenticationMethod = types.StringValue(string(*itemsItem.OutputMsk.AwsAuthenticationMethod))
-				} else {
-					items.OutputMsk.AwsAuthenticationMethod = types.StringNull()
-				}
+				items.OutputMsk.AwsAuthenticationMethod = types.StringValue(string(itemsItem.OutputMsk.AwsAuthenticationMethod))
 				items.OutputMsk.AwsSecret = types.StringPointerValue(itemsItem.OutputMsk.AwsSecret)
 				items.OutputMsk.AwsSecretKey = types.StringPointerValue(itemsItem.OutputMsk.AwsSecretKey)
 				items.OutputMsk.BackoffRate = types.Float64PointerValue(itemsItem.OutputMsk.BackoffRate)
@@ -4386,25 +5308,25 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputMsk.KafkaSchemaRegistry == nil {
 					items.OutputMsk.KafkaSchemaRegistry = nil
 				} else {
-					items.OutputMsk.KafkaSchemaRegistry = &tfTypes.OutputMskKafkaSchemaRegistryAuthentication{}
+					items.OutputMsk.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 					if itemsItem.OutputMsk.KafkaSchemaRegistry.Auth == nil {
 						items.OutputMsk.KafkaSchemaRegistry.Auth = nil
 					} else {
-						items.OutputMsk.KafkaSchemaRegistry.Auth = &tfTypes.OutputMskAuth{}
+						items.OutputMsk.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 						items.OutputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret)
-						items.OutputMsk.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.Auth.Disabled)
+						items.OutputMsk.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(itemsItem.OutputMsk.KafkaSchemaRegistry.Auth.Disabled)
 					}
 					items.OutputMsk.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.ConnectionTimeout)
 					items.OutputMsk.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.DefaultKeySchemaID)
 					items.OutputMsk.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.DefaultValueSchemaID)
-					items.OutputMsk.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.Disabled)
+					items.OutputMsk.KafkaSchemaRegistry.Disabled = types.BoolValue(itemsItem.OutputMsk.KafkaSchemaRegistry.Disabled)
 					items.OutputMsk.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.MaxRetries)
 					items.OutputMsk.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.RequestTimeout)
 					items.OutputMsk.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.SchemaRegistryURL)
 					if itemsItem.OutputMsk.KafkaSchemaRegistry.TLS == nil {
 						items.OutputMsk.KafkaSchemaRegistry.TLS = nil
 					} else {
-						items.OutputMsk.KafkaSchemaRegistry.TLS = &tfTypes.OutputMskKafkaSchemaRegistryTLSSettingsClientSide{}
+						items.OutputMsk.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 						items.OutputMsk.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.TLS.CaPath)
 						items.OutputMsk.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.TLS.CertificateName)
 						items.OutputMsk.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(itemsItem.OutputMsk.KafkaSchemaRegistry.TLS.CertPath)
@@ -4444,6 +5366,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputMsk.PqControls = &tfTypes.OutputMskPqControls{}
 				}
+				items.OutputMsk.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputMsk.PqMaxBackpressureSec)
+				items.OutputMsk.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputMsk.PqMaxBufferSize)
+				items.OutputMsk.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputMsk.PqMaxBufferSizeBytes)
 				items.OutputMsk.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputMsk.PqMaxFileSize)
 				items.OutputMsk.PqMaxSize = types.StringPointerValue(itemsItem.OutputMsk.PqMaxSize)
 				if itemsItem.OutputMsk.PqMode != nil {
@@ -4457,6 +5382,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputMsk.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputMsk.PqPath = types.StringPointerValue(itemsItem.OutputMsk.PqPath)
+				items.OutputMsk.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputMsk.PqRatePerSec)
+				items.OutputMsk.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputMsk.PqStrictOrdering)
+				items.OutputMsk.ProtobufEncodingID = types.StringPointerValue(itemsItem.OutputMsk.ProtobufEncodingID)
 				items.OutputMsk.ProtobufLibraryID = types.StringPointerValue(itemsItem.OutputMsk.ProtobufLibraryID)
 				items.OutputMsk.ReauthenticationThreshold = types.Float64PointerValue(itemsItem.OutputMsk.ReauthenticationThreshold)
 				items.OutputMsk.Region = types.StringValue(itemsItem.OutputMsk.Region)
@@ -4479,7 +5407,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputMsk.TLS == nil {
 					items.OutputMsk.TLS = nil
 				} else {
-					items.OutputMsk.TLS = &tfTypes.OutputMskTLSSettingsClientSide{}
+					items.OutputMsk.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputMsk.TLS.CaPath = types.StringPointerValue(itemsItem.OutputMsk.TLS.CaPath)
 					items.OutputMsk.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputMsk.TLS.CertificateName)
 					items.OutputMsk.TLS.CertPath = types.StringPointerValue(itemsItem.OutputMsk.TLS.CertPath)
@@ -4500,28 +5428,28 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputMsk.TLS.Servername = types.StringPointerValue(itemsItem.OutputMsk.TLS.Servername)
 				}
 				items.OutputMsk.Topic = types.StringValue(itemsItem.OutputMsk.Topic)
-				if itemsItem.OutputMsk.Type != nil {
-					items.OutputMsk.Type = types.StringValue(string(*itemsItem.OutputMsk.Type))
-				} else {
-					items.OutputMsk.Type = types.StringNull()
-				}
+				items.OutputMsk.Type = types.StringValue(string(itemsItem.OutputMsk.Type))
 			}
 			if itemsItem.OutputNetflow != nil {
 				items.OutputNetflow = &tfTypes.OutputNetflow{}
 				items.OutputNetflow.Description = types.StringPointerValue(itemsItem.OutputNetflow.Description)
 				items.OutputNetflow.DNSResolvePeriodSec = types.Float64PointerValue(itemsItem.OutputNetflow.DNSResolvePeriodSec)
+				items.OutputNetflow.EnableIPSpoofing = types.BoolPointerValue(itemsItem.OutputNetflow.EnableIPSpoofing)
 				items.OutputNetflow.Environment = types.StringPointerValue(itemsItem.OutputNetflow.Environment)
 				items.OutputNetflow.Hosts = []tfTypes.OutputNetflowHost{}
 
 				for _, hostsItem1 := range itemsItem.OutputNetflow.Hosts {
 					var hosts1 tfTypes.OutputNetflowHost
 
+					hosts1.TemplateHost = types.StringPointerValue(hostsItem1.TemplateHost)
+					hosts1.TemplatePort = types.StringPointerValue(hostsItem1.TemplatePort)
 					hosts1.Host = types.StringValue(hostsItem1.Host)
-					hosts1.Port = types.Float64PointerValue(hostsItem1.Port)
+					hosts1.Port = types.Float64Value(hostsItem1.Port)
 
 					items.OutputNetflow.Hosts = append(items.OutputNetflow.Hosts, hosts1)
 				}
 				items.OutputNetflow.ID = types.StringPointerValue(itemsItem.OutputNetflow.ID)
+				items.OutputNetflow.MaxRecordSize = types.Float64PointerValue(itemsItem.OutputNetflow.MaxRecordSize)
 				items.OutputNetflow.Pipeline = types.StringPointerValue(itemsItem.OutputNetflow.Pipeline)
 				items.OutputNetflow.Streamtags = make([]types.String, 0, len(itemsItem.OutputNetflow.Streamtags))
 				for _, v := range itemsItem.OutputNetflow.Streamtags {
@@ -4535,6 +5463,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputNewrelic != nil {
 				items.OutputNewrelic = &tfTypes.OutputNewrelic{}
+				items.OutputNewrelic.TemplateLogType = types.StringPointerValue(itemsItem.OutputNewrelic.TemplateLogType)
+				items.OutputNewrelic.TemplateMessageField = types.StringPointerValue(itemsItem.OutputNewrelic.TemplateMessageField)
+				items.OutputNewrelic.TemplateRegion = types.StringPointerValue(itemsItem.OutputNewrelic.TemplateRegion)
 				items.OutputNewrelic.APIKey = types.StringPointerValue(itemsItem.OutputNewrelic.APIKey)
 				if itemsItem.OutputNewrelic.AuthType != nil {
 					items.OutputNewrelic.AuthType = types.StringValue(string(*itemsItem.OutputNewrelic.AuthType))
@@ -4546,15 +5477,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputNewrelic.CustomURL = types.StringPointerValue(itemsItem.OutputNewrelic.CustomURL)
 				items.OutputNewrelic.Description = types.StringPointerValue(itemsItem.OutputNewrelic.Description)
 				items.OutputNewrelic.Environment = types.StringPointerValue(itemsItem.OutputNewrelic.Environment)
-				items.OutputNewrelic.ExtraHTTPHeaders = []tfTypes.OutputNewrelicExtraHTTPHeader{}
+				items.OutputNewrelic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem17 := range itemsItem.OutputNewrelic.ExtraHTTPHeaders {
-					var extraHTTPHeaders17 tfTypes.OutputNewrelicExtraHTTPHeader
+				for _, extraHTTPHeadersItem19 := range itemsItem.OutputNewrelic.ExtraHTTPHeaders {
+					var extraHTTPHeaders19 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
-					extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
+					extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
+					extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
 
-					items.OutputNewrelic.ExtraHTTPHeaders = append(items.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders17)
+					items.OutputNewrelic.ExtraHTTPHeaders = append(items.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders19)
 				}
 				if itemsItem.OutputNewrelic.FailedRequestLoggingMode != nil {
 					items.OutputNewrelic.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputNewrelic.FailedRequestLoggingMode))
@@ -4562,7 +5493,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputNewrelic.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputNewrelic.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputNewrelic.FlushPeriodSec)
-				items.OutputNewrelic.ID = types.StringValue(itemsItem.OutputNewrelic.ID)
+				items.OutputNewrelic.ID = types.StringPointerValue(itemsItem.OutputNewrelic.ID)
 				items.OutputNewrelic.LogType = types.StringPointerValue(itemsItem.OutputNewrelic.LogType)
 				items.OutputNewrelic.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputNewrelic.MaxPayloadEvents)
 				items.OutputNewrelic.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputNewrelic.MaxPayloadSizeKB)
@@ -4593,6 +5524,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputNewrelic.PqControls = &tfTypes.OutputNewrelicPqControls{}
 				}
+				items.OutputNewrelic.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputNewrelic.PqMaxBackpressureSec)
+				items.OutputNewrelic.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputNewrelic.PqMaxBufferSize)
+				items.OutputNewrelic.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputNewrelic.PqMaxBufferSizeBytes)
 				items.OutputNewrelic.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputNewrelic.PqMaxFileSize)
 				items.OutputNewrelic.PqMaxSize = types.StringPointerValue(itemsItem.OutputNewrelic.PqMaxSize)
 				if itemsItem.OutputNewrelic.PqMode != nil {
@@ -4606,6 +5540,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputNewrelic.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputNewrelic.PqPath = types.StringPointerValue(itemsItem.OutputNewrelic.PqPath)
+				items.OutputNewrelic.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputNewrelic.PqRatePerSec)
+				items.OutputNewrelic.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputNewrelic.PqStrictOrdering)
 				if itemsItem.OutputNewrelic.Region != nil {
 					items.OutputNewrelic.Region = types.StringValue(string(*itemsItem.OutputNewrelic.Region))
 				} else {
@@ -4613,17 +5549,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputNewrelic.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputNewrelic.RejectUnauthorized)
 				items.OutputNewrelic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputNewrelic.ResponseHonorRetryAfterHeader)
-				items.OutputNewrelic.ResponseRetrySettings = []tfTypes.OutputNewrelicResponseRetrySetting{}
+				items.OutputNewrelic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem18 := range itemsItem.OutputNewrelic.ResponseRetrySettings {
-					var responseRetrySettings18 tfTypes.OutputNewrelicResponseRetrySetting
+				for _, responseRetrySettingsItem20 := range itemsItem.OutputNewrelic.ResponseRetrySettings {
+					var responseRetrySettings20 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
-					responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
-					responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
-					responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
+					responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
+					responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
+					responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
+					responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
 
-					items.OutputNewrelic.ResponseRetrySettings = append(items.OutputNewrelic.ResponseRetrySettings, responseRetrySettings18)
+					items.OutputNewrelic.ResponseRetrySettings = append(items.OutputNewrelic.ResponseRetrySettings, responseRetrySettings20)
 				}
 				items.OutputNewrelic.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputNewrelic.SafeHeaders))
 				for _, v := range itemsItem.OutputNewrelic.SafeHeaders {
@@ -4641,11 +5577,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputNewrelic.TimeoutRetrySettings == nil {
 					items.OutputNewrelic.TimeoutRetrySettings = nil
 				} else {
-					items.OutputNewrelic.TimeoutRetrySettings = &tfTypes.OutputNewrelicTimeoutRetrySettings{}
+					items.OutputNewrelic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputNewrelic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputNewrelic.TimeoutRetrySettings.BackoffRate)
 					items.OutputNewrelic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputNewrelic.TimeoutRetrySettings.InitialBackoff)
 					items.OutputNewrelic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputNewrelic.TimeoutRetrySettings.MaxBackoff)
-					items.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputNewrelic.TimeoutSec = types.Float64PointerValue(itemsItem.OutputNewrelic.TimeoutSec)
 				items.OutputNewrelic.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputNewrelic.TotalMemoryLimitKB)
@@ -4654,6 +5590,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputNewrelicEvents != nil {
 				items.OutputNewrelicEvents = &tfTypes.OutputNewrelicEvents{}
+				items.OutputNewrelicEvents.TemplateAccountID = types.StringPointerValue(itemsItem.OutputNewrelicEvents.TemplateAccountID)
+				items.OutputNewrelicEvents.TemplateCustomURL = types.StringPointerValue(itemsItem.OutputNewrelicEvents.TemplateCustomURL)
+				items.OutputNewrelicEvents.TemplateEventType = types.StringPointerValue(itemsItem.OutputNewrelicEvents.TemplateEventType)
+				items.OutputNewrelicEvents.TemplateRegion = types.StringPointerValue(itemsItem.OutputNewrelicEvents.TemplateRegion)
 				items.OutputNewrelicEvents.AccountID = types.StringValue(itemsItem.OutputNewrelicEvents.AccountID)
 				items.OutputNewrelicEvents.APIKey = types.StringPointerValue(itemsItem.OutputNewrelicEvents.APIKey)
 				if itemsItem.OutputNewrelicEvents.AuthType != nil {
@@ -4667,15 +5607,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputNewrelicEvents.Description = types.StringPointerValue(itemsItem.OutputNewrelicEvents.Description)
 				items.OutputNewrelicEvents.Environment = types.StringPointerValue(itemsItem.OutputNewrelicEvents.Environment)
 				items.OutputNewrelicEvents.EventType = types.StringValue(itemsItem.OutputNewrelicEvents.EventType)
-				items.OutputNewrelicEvents.ExtraHTTPHeaders = []tfTypes.OutputNewrelicEventsExtraHTTPHeader{}
+				items.OutputNewrelicEvents.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem18 := range itemsItem.OutputNewrelicEvents.ExtraHTTPHeaders {
-					var extraHTTPHeaders18 tfTypes.OutputNewrelicEventsExtraHTTPHeader
+				for _, extraHTTPHeadersItem20 := range itemsItem.OutputNewrelicEvents.ExtraHTTPHeaders {
+					var extraHTTPHeaders20 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
-					extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
+					extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
+					extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
 
-					items.OutputNewrelicEvents.ExtraHTTPHeaders = append(items.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders18)
+					items.OutputNewrelicEvents.ExtraHTTPHeaders = append(items.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders20)
 				}
 				if itemsItem.OutputNewrelicEvents.FailedRequestLoggingMode != nil {
 					items.OutputNewrelicEvents.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputNewrelicEvents.FailedRequestLoggingMode))
@@ -4702,6 +5642,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputNewrelicEvents.PqControls = &tfTypes.OutputNewrelicEventsPqControls{}
 				}
+				items.OutputNewrelicEvents.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.PqMaxBackpressureSec)
+				items.OutputNewrelicEvents.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.PqMaxBufferSize)
+				items.OutputNewrelicEvents.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputNewrelicEvents.PqMaxBufferSizeBytes)
 				items.OutputNewrelicEvents.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputNewrelicEvents.PqMaxFileSize)
 				items.OutputNewrelicEvents.PqMaxSize = types.StringPointerValue(itemsItem.OutputNewrelicEvents.PqMaxSize)
 				if itemsItem.OutputNewrelicEvents.PqMode != nil {
@@ -4715,6 +5658,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputNewrelicEvents.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputNewrelicEvents.PqPath = types.StringPointerValue(itemsItem.OutputNewrelicEvents.PqPath)
+				items.OutputNewrelicEvents.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.PqRatePerSec)
+				items.OutputNewrelicEvents.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputNewrelicEvents.PqStrictOrdering)
 				if itemsItem.OutputNewrelicEvents.Region != nil {
 					items.OutputNewrelicEvents.Region = types.StringValue(string(*itemsItem.OutputNewrelicEvents.Region))
 				} else {
@@ -4722,17 +5667,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputNewrelicEvents.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputNewrelicEvents.RejectUnauthorized)
 				items.OutputNewrelicEvents.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputNewrelicEvents.ResponseHonorRetryAfterHeader)
-				items.OutputNewrelicEvents.ResponseRetrySettings = []tfTypes.OutputNewrelicEventsResponseRetrySetting{}
+				items.OutputNewrelicEvents.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem19 := range itemsItem.OutputNewrelicEvents.ResponseRetrySettings {
-					var responseRetrySettings19 tfTypes.OutputNewrelicEventsResponseRetrySetting
+				for _, responseRetrySettingsItem21 := range itemsItem.OutputNewrelicEvents.ResponseRetrySettings {
+					var responseRetrySettings21 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
-					responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
-					responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
-					responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
+					responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
+					responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
+					responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
+					responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
 
-					items.OutputNewrelicEvents.ResponseRetrySettings = append(items.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings19)
+					items.OutputNewrelicEvents.ResponseRetrySettings = append(items.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings21)
 				}
 				items.OutputNewrelicEvents.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputNewrelicEvents.SafeHeaders))
 				for _, v := range itemsItem.OutputNewrelicEvents.SafeHeaders {
@@ -4750,23 +5695,24 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputNewrelicEvents.TimeoutRetrySettings == nil {
 					items.OutputNewrelicEvents.TimeoutRetrySettings = nil
 				} else {
-					items.OutputNewrelicEvents.TimeoutRetrySettings = &tfTypes.OutputNewrelicEventsTimeoutRetrySettings{}
+					items.OutputNewrelicEvents.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputNewrelicEvents.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.TimeoutRetrySettings.BackoffRate)
 					items.OutputNewrelicEvents.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.TimeoutRetrySettings.InitialBackoff)
 					items.OutputNewrelicEvents.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.TimeoutRetrySettings.MaxBackoff)
-					items.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputNewrelicEvents.TimeoutSec = types.Float64PointerValue(itemsItem.OutputNewrelicEvents.TimeoutSec)
-				if itemsItem.OutputNewrelicEvents.Type != nil {
-					items.OutputNewrelicEvents.Type = types.StringValue(string(*itemsItem.OutputNewrelicEvents.Type))
-				} else {
-					items.OutputNewrelicEvents.Type = types.StringNull()
-				}
+				items.OutputNewrelicEvents.Type = types.StringValue(string(itemsItem.OutputNewrelicEvents.Type))
 				items.OutputNewrelicEvents.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputNewrelicEvents.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputOpenTelemetry != nil {
 				items.OutputOpenTelemetry = &tfTypes.OutputOpenTelemetry{}
-				items.OutputOpenTelemetry.AuthHeaderExpr = types.StringPointerValue(itemsItem.OutputOpenTelemetry.AuthHeaderExpr)
+				if itemsItem.OutputOpenTelemetry.AuthHeaderExpr == nil {
+					items.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+				} else {
+					authHeaderExprResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.AuthHeaderExpr)
+					items.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
+				}
 				if itemsItem.OutputOpenTelemetry.AuthType != nil {
 					items.OutputOpenTelemetry.AuthType = types.StringValue(string(*itemsItem.OutputOpenTelemetry.AuthType))
 				} else {
@@ -4783,15 +5729,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputOpenTelemetry.Description = types.StringPointerValue(itemsItem.OutputOpenTelemetry.Description)
 				items.OutputOpenTelemetry.Endpoint = types.StringValue(itemsItem.OutputOpenTelemetry.Endpoint)
 				items.OutputOpenTelemetry.Environment = types.StringPointerValue(itemsItem.OutputOpenTelemetry.Environment)
-				items.OutputOpenTelemetry.ExtraHTTPHeaders = []tfTypes.OutputOpenTelemetryExtraHTTPHeader{}
+				items.OutputOpenTelemetry.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem19 := range itemsItem.OutputOpenTelemetry.ExtraHTTPHeaders {
-					var extraHTTPHeaders19 tfTypes.OutputOpenTelemetryExtraHTTPHeader
+				for _, extraHTTPHeadersItem21 := range itemsItem.OutputOpenTelemetry.ExtraHTTPHeaders {
+					var extraHTTPHeaders21 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
-					extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
+					extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
+					extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
 
-					items.OutputOpenTelemetry.ExtraHTTPHeaders = append(items.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders19)
+					items.OutputOpenTelemetry.ExtraHTTPHeaders = append(items.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders21)
 				}
 				if itemsItem.OutputOpenTelemetry.FailedRequestLoggingMode != nil {
 					items.OutputOpenTelemetry.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputOpenTelemetry.FailedRequestLoggingMode))
@@ -4810,14 +5756,19 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputOpenTelemetry.ID = types.StringPointerValue(itemsItem.OutputOpenTelemetry.ID)
 				items.OutputOpenTelemetry.KeepAlive = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.KeepAlive)
 				items.OutputOpenTelemetry.KeepAliveTime = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.KeepAliveTime)
-				items.OutputOpenTelemetry.LoginURL = types.StringPointerValue(itemsItem.OutputOpenTelemetry.LoginURL)
+				if itemsItem.OutputOpenTelemetry.LoginURL == nil {
+					items.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedNull()
+				} else {
+					loginURLResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.LoginURL)
+					items.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
+				}
 				items.OutputOpenTelemetry.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.MaxPayloadSizeKB)
-				items.OutputOpenTelemetry.Metadata = []tfTypes.OutputOpenTelemetryMetadatum{}
+				items.OutputOpenTelemetry.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 				for _, metadataItem2 := range itemsItem.OutputOpenTelemetry.Metadata {
-					var metadata2 tfTypes.OutputOpenTelemetryMetadatum
+					var metadata2 tfTypes.ItemsTypeKeyValueMetadata
 
-					metadata2.Key = types.StringPointerValue(metadataItem2.Key)
+					metadata2.Key = types.StringValue(metadataItem2.Key)
 					metadata2.Value = types.StringValue(metadataItem2.Value)
 
 					items.OutputOpenTelemetry.Metadata = append(items.OutputOpenTelemetry.Metadata, metadata2)
@@ -4827,20 +5778,40 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, oauthHeadersItem2 := range itemsItem.OutputOpenTelemetry.OauthHeaders {
 					var oauthHeaders2 tfTypes.OutputOpenTelemetryOauthHeader
 
-					oauthHeaders2.Name = types.StringValue(oauthHeadersItem2.Name)
-					oauthHeaders2.Value = types.StringValue(oauthHeadersItem2.Value)
+					if oauthHeadersItem2.Name == nil {
+						oauthHeaders2.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
+						oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
+					}
+					if oauthHeadersItem2.Value == nil {
+						oauthHeaders2.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
+						oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
+					}
 
 					items.OutputOpenTelemetry.OauthHeaders = append(items.OutputOpenTelemetry.OauthHeaders, oauthHeaders2)
 				}
 				items.OutputOpenTelemetry.OauthParams = []tfTypes.OutputOpenTelemetryOauthParam{}
 
-				for _, oauthParamsItem2 := range itemsItem.OutputOpenTelemetry.OauthParams {
-					var oauthParams2 tfTypes.OutputOpenTelemetryOauthParam
+				for _, oauthParamsItem4 := range itemsItem.OutputOpenTelemetry.OauthParams {
+					var oauthParams4 tfTypes.OutputOpenTelemetryOauthParam
 
-					oauthParams2.Name = types.StringValue(oauthParamsItem2.Name)
-					oauthParams2.Value = types.StringValue(oauthParamsItem2.Value)
+					if oauthParamsItem4.Name == nil {
+						oauthParams4.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult5, _ := json.Marshal(oauthParamsItem4.Name)
+						oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult5))
+					}
+					if oauthParamsItem4.Value == nil {
+						oauthParams4.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult5, _ := json.Marshal(oauthParamsItem4.Value)
+						oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult5))
+					}
 
-					items.OutputOpenTelemetry.OauthParams = append(items.OutputOpenTelemetry.OauthParams, oauthParams2)
+					items.OutputOpenTelemetry.OauthParams = append(items.OutputOpenTelemetry.OauthParams, oauthParams4)
 				}
 				if itemsItem.OutputOpenTelemetry.OnBackpressure != nil {
 					items.OutputOpenTelemetry.OnBackpressure = types.StringValue(string(*itemsItem.OutputOpenTelemetry.OnBackpressure))
@@ -4864,6 +5835,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputOpenTelemetry.PqControls = &tfTypes.OutputOpenTelemetryPqControls{}
 				}
+				items.OutputOpenTelemetry.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.PqMaxBackpressureSec)
+				items.OutputOpenTelemetry.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.PqMaxBufferSize)
+				items.OutputOpenTelemetry.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputOpenTelemetry.PqMaxBufferSizeBytes)
 				items.OutputOpenTelemetry.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputOpenTelemetry.PqMaxFileSize)
 				items.OutputOpenTelemetry.PqMaxSize = types.StringPointerValue(itemsItem.OutputOpenTelemetry.PqMaxSize)
 				if itemsItem.OutputOpenTelemetry.PqMode != nil {
@@ -4877,6 +5851,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputOpenTelemetry.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputOpenTelemetry.PqPath = types.StringPointerValue(itemsItem.OutputOpenTelemetry.PqPath)
+				items.OutputOpenTelemetry.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.PqRatePerSec)
+				items.OutputOpenTelemetry.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.PqStrictOrdering)
 				if itemsItem.OutputOpenTelemetry.Protocol != nil {
 					items.OutputOpenTelemetry.Protocol = types.StringValue(string(*itemsItem.OutputOpenTelemetry.Protocol))
 				} else {
@@ -4884,24 +5860,34 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputOpenTelemetry.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.RejectUnauthorized)
 				items.OutputOpenTelemetry.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.ResponseHonorRetryAfterHeader)
-				items.OutputOpenTelemetry.ResponseRetrySettings = []tfTypes.OutputOpenTelemetryResponseRetrySetting{}
+				items.OutputOpenTelemetry.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem20 := range itemsItem.OutputOpenTelemetry.ResponseRetrySettings {
-					var responseRetrySettings20 tfTypes.OutputOpenTelemetryResponseRetrySetting
+				for _, responseRetrySettingsItem22 := range itemsItem.OutputOpenTelemetry.ResponseRetrySettings {
+					var responseRetrySettings22 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
-					responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
-					responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
-					responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
+					responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
+					responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
+					responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
+					responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
 
-					items.OutputOpenTelemetry.ResponseRetrySettings = append(items.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings20)
+					items.OutputOpenTelemetry.ResponseRetrySettings = append(items.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings22)
 				}
 				items.OutputOpenTelemetry.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputOpenTelemetry.SafeHeaders))
 				for _, v := range itemsItem.OutputOpenTelemetry.SafeHeaders {
 					items.OutputOpenTelemetry.SafeHeaders = append(items.OutputOpenTelemetry.SafeHeaders, types.StringValue(v))
 				}
-				items.OutputOpenTelemetry.Secret = types.StringPointerValue(itemsItem.OutputOpenTelemetry.Secret)
-				items.OutputOpenTelemetry.SecretParamName = types.StringPointerValue(itemsItem.OutputOpenTelemetry.SecretParamName)
+				if itemsItem.OutputOpenTelemetry.Secret == nil {
+					items.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedNull()
+				} else {
+					secretResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.Secret)
+					items.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
+				}
+				if itemsItem.OutputOpenTelemetry.SecretParamName == nil {
+					items.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedNull()
+				} else {
+					secretParamNameResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.SecretParamName)
+					items.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
+				}
 				items.OutputOpenTelemetry.Streamtags = make([]types.String, 0, len(itemsItem.OutputOpenTelemetry.Streamtags))
 				for _, v := range itemsItem.OutputOpenTelemetry.Streamtags {
 					items.OutputOpenTelemetry.Streamtags = append(items.OutputOpenTelemetry.Streamtags, types.StringValue(v))
@@ -4914,17 +5900,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputOpenTelemetry.TimeoutRetrySettings == nil {
 					items.OutputOpenTelemetry.TimeoutRetrySettings = nil
 				} else {
-					items.OutputOpenTelemetry.TimeoutRetrySettings = &tfTypes.OutputOpenTelemetryTimeoutRetrySettings{}
+					items.OutputOpenTelemetry.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate)
 					items.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff)
 					items.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff)
-					items.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputOpenTelemetry.TimeoutSec = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.TimeoutSec)
 				if itemsItem.OutputOpenTelemetry.TLS == nil {
 					items.OutputOpenTelemetry.TLS = nil
 				} else {
-					items.OutputOpenTelemetry.TLS = &tfTypes.OutputOpenTelemetryTLSSettingsClientSide{}
+					items.OutputOpenTelemetry.TLS = &tfTypes.TLSSettingsClientSideTypeExtended{}
 					items.OutputOpenTelemetry.TLS.CaPath = types.StringPointerValue(itemsItem.OutputOpenTelemetry.TLS.CaPath)
 					items.OutputOpenTelemetry.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputOpenTelemetry.TLS.CertificateName)
 					items.OutputOpenTelemetry.TLS.CertPath = types.StringPointerValue(itemsItem.OutputOpenTelemetry.TLS.CertPath)
@@ -4944,15 +5930,31 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputOpenTelemetry.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.TLS.RejectUnauthorized)
 				}
 				items.OutputOpenTelemetry.Token = types.StringPointerValue(itemsItem.OutputOpenTelemetry.Token)
-				items.OutputOpenTelemetry.TokenAttributeName = types.StringPointerValue(itemsItem.OutputOpenTelemetry.TokenAttributeName)
-				items.OutputOpenTelemetry.TokenTimeoutSecs = types.Float64PointerValue(itemsItem.OutputOpenTelemetry.TokenTimeoutSecs)
+				if itemsItem.OutputOpenTelemetry.TokenAttributeName == nil {
+					items.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedNull()
+				} else {
+					tokenAttributeNameResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.TokenAttributeName)
+					items.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
+				}
+				if itemsItem.OutputOpenTelemetry.TokenTimeoutSecs == nil {
+					items.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+				} else {
+					tokenTimeoutSecsResult2, _ := json.Marshal(itemsItem.OutputOpenTelemetry.TokenTimeoutSecs)
+					items.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
+				}
 				items.OutputOpenTelemetry.Type = types.StringValue(string(itemsItem.OutputOpenTelemetry.Type))
 				items.OutputOpenTelemetry.Username = types.StringPointerValue(itemsItem.OutputOpenTelemetry.Username)
 				items.OutputOpenTelemetry.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputOpenTelemetry.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputPrometheus != nil {
 				items.OutputPrometheus = &tfTypes.OutputPrometheus{}
-				items.OutputPrometheus.AuthHeaderExpr = types.StringPointerValue(itemsItem.OutputPrometheus.AuthHeaderExpr)
+				items.OutputPrometheus.TemplateURL = types.StringPointerValue(itemsItem.OutputPrometheus.TemplateURL)
+				if itemsItem.OutputPrometheus.AuthHeaderExpr == nil {
+					items.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+				} else {
+					authHeaderExprResult3, _ := json.Marshal(itemsItem.OutputPrometheus.AuthHeaderExpr)
+					items.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
+				}
 				if itemsItem.OutputPrometheus.AuthType != nil {
 					items.OutputPrometheus.AuthType = types.StringValue(string(*itemsItem.OutputPrometheus.AuthType))
 				} else {
@@ -4962,15 +5964,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputPrometheus.CredentialsSecret = types.StringPointerValue(itemsItem.OutputPrometheus.CredentialsSecret)
 				items.OutputPrometheus.Description = types.StringPointerValue(itemsItem.OutputPrometheus.Description)
 				items.OutputPrometheus.Environment = types.StringPointerValue(itemsItem.OutputPrometheus.Environment)
-				items.OutputPrometheus.ExtraHTTPHeaders = []tfTypes.OutputPrometheusExtraHTTPHeader{}
+				items.OutputPrometheus.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem20 := range itemsItem.OutputPrometheus.ExtraHTTPHeaders {
-					var extraHTTPHeaders20 tfTypes.OutputPrometheusExtraHTTPHeader
+				for _, extraHTTPHeadersItem22 := range itemsItem.OutputPrometheus.ExtraHTTPHeaders {
+					var extraHTTPHeaders22 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
-					extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
+					extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
+					extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
 
-					items.OutputPrometheus.ExtraHTTPHeaders = append(items.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders20)
+					items.OutputPrometheus.ExtraHTTPHeaders = append(items.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders22)
 				}
 				if itemsItem.OutputPrometheus.FailedRequestLoggingMode != nil {
 					items.OutputPrometheus.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputPrometheus.FailedRequestLoggingMode))
@@ -4979,7 +5981,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputPrometheus.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputPrometheus.FlushPeriodSec)
 				items.OutputPrometheus.ID = types.StringPointerValue(itemsItem.OutputPrometheus.ID)
-				items.OutputPrometheus.LoginURL = types.StringPointerValue(itemsItem.OutputPrometheus.LoginURL)
+				if itemsItem.OutputPrometheus.LoginURL == nil {
+					items.OutputPrometheus.LoginURL = jsontypes.NewNormalizedNull()
+				} else {
+					loginURLResult3, _ := json.Marshal(itemsItem.OutputPrometheus.LoginURL)
+					items.OutputPrometheus.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
+				}
 				items.OutputPrometheus.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputPrometheus.MaxPayloadEvents)
 				items.OutputPrometheus.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputPrometheus.MaxPayloadSizeKB)
 				items.OutputPrometheus.MetricRenameExpr = types.StringPointerValue(itemsItem.OutputPrometheus.MetricRenameExpr)
@@ -4989,20 +5996,40 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, oauthHeadersItem3 := range itemsItem.OutputPrometheus.OauthHeaders {
 					var oauthHeaders3 tfTypes.OutputPrometheusOauthHeader
 
-					oauthHeaders3.Name = types.StringValue(oauthHeadersItem3.Name)
-					oauthHeaders3.Value = types.StringValue(oauthHeadersItem3.Value)
+					if oauthHeadersItem3.Name == nil {
+						oauthHeaders3.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
+						oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
+					}
+					if oauthHeadersItem3.Value == nil {
+						oauthHeaders3.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
+						oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
+					}
 
 					items.OutputPrometheus.OauthHeaders = append(items.OutputPrometheus.OauthHeaders, oauthHeaders3)
 				}
 				items.OutputPrometheus.OauthParams = []tfTypes.OutputPrometheusOauthParam{}
 
-				for _, oauthParamsItem3 := range itemsItem.OutputPrometheus.OauthParams {
-					var oauthParams3 tfTypes.OutputPrometheusOauthParam
+				for _, oauthParamsItem5 := range itemsItem.OutputPrometheus.OauthParams {
+					var oauthParams5 tfTypes.OutputPrometheusOauthParam
 
-					oauthParams3.Name = types.StringValue(oauthParamsItem3.Name)
-					oauthParams3.Value = types.StringValue(oauthParamsItem3.Value)
+					if oauthParamsItem5.Name == nil {
+						oauthParams5.Name = jsontypes.NewNormalizedNull()
+					} else {
+						nameResult7, _ := json.Marshal(oauthParamsItem5.Name)
+						oauthParams5.Name = jsontypes.NewNormalizedValue(string(nameResult7))
+					}
+					if oauthParamsItem5.Value == nil {
+						oauthParams5.Value = jsontypes.NewNormalizedNull()
+					} else {
+						valueResult7, _ := json.Marshal(oauthParamsItem5.Value)
+						oauthParams5.Value = jsontypes.NewNormalizedValue(string(valueResult7))
+					}
 
-					items.OutputPrometheus.OauthParams = append(items.OutputPrometheus.OauthParams, oauthParams3)
+					items.OutputPrometheus.OauthParams = append(items.OutputPrometheus.OauthParams, oauthParams5)
 				}
 				if itemsItem.OutputPrometheus.OnBackpressure != nil {
 					items.OutputPrometheus.OnBackpressure = types.StringValue(string(*itemsItem.OutputPrometheus.OnBackpressure))
@@ -5021,6 +6048,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputPrometheus.PqControls = &tfTypes.OutputPrometheusPqControls{}
 				}
+				items.OutputPrometheus.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputPrometheus.PqMaxBackpressureSec)
+				items.OutputPrometheus.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputPrometheus.PqMaxBufferSize)
+				items.OutputPrometheus.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputPrometheus.PqMaxBufferSizeBytes)
 				items.OutputPrometheus.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputPrometheus.PqMaxFileSize)
 				items.OutputPrometheus.PqMaxSize = types.StringPointerValue(itemsItem.OutputPrometheus.PqMaxSize)
 				if itemsItem.OutputPrometheus.PqMode != nil {
@@ -5034,26 +6064,38 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputPrometheus.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputPrometheus.PqPath = types.StringPointerValue(itemsItem.OutputPrometheus.PqPath)
+				items.OutputPrometheus.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputPrometheus.PqRatePerSec)
+				items.OutputPrometheus.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputPrometheus.PqStrictOrdering)
 				items.OutputPrometheus.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputPrometheus.RejectUnauthorized)
 				items.OutputPrometheus.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputPrometheus.ResponseHonorRetryAfterHeader)
-				items.OutputPrometheus.ResponseRetrySettings = []tfTypes.OutputPrometheusResponseRetrySetting{}
+				items.OutputPrometheus.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem21 := range itemsItem.OutputPrometheus.ResponseRetrySettings {
-					var responseRetrySettings21 tfTypes.OutputPrometheusResponseRetrySetting
+				for _, responseRetrySettingsItem23 := range itemsItem.OutputPrometheus.ResponseRetrySettings {
+					var responseRetrySettings23 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
-					responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
-					responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
-					responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
+					responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
+					responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
+					responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
+					responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
 
-					items.OutputPrometheus.ResponseRetrySettings = append(items.OutputPrometheus.ResponseRetrySettings, responseRetrySettings21)
+					items.OutputPrometheus.ResponseRetrySettings = append(items.OutputPrometheus.ResponseRetrySettings, responseRetrySettings23)
 				}
 				items.OutputPrometheus.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputPrometheus.SafeHeaders))
 				for _, v := range itemsItem.OutputPrometheus.SafeHeaders {
 					items.OutputPrometheus.SafeHeaders = append(items.OutputPrometheus.SafeHeaders, types.StringValue(v))
 				}
-				items.OutputPrometheus.Secret = types.StringPointerValue(itemsItem.OutputPrometheus.Secret)
-				items.OutputPrometheus.SecretParamName = types.StringPointerValue(itemsItem.OutputPrometheus.SecretParamName)
+				if itemsItem.OutputPrometheus.Secret == nil {
+					items.OutputPrometheus.Secret = jsontypes.NewNormalizedNull()
+				} else {
+					secretResult3, _ := json.Marshal(itemsItem.OutputPrometheus.Secret)
+					items.OutputPrometheus.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
+				}
+				if itemsItem.OutputPrometheus.SecretParamName == nil {
+					items.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedNull()
+				} else {
+					secretParamNameResult3, _ := json.Marshal(itemsItem.OutputPrometheus.SecretParamName)
+					items.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
+				}
 				items.OutputPrometheus.SendMetadata = types.BoolPointerValue(itemsItem.OutputPrometheus.SendMetadata)
 				items.OutputPrometheus.Streamtags = make([]types.String, 0, len(itemsItem.OutputPrometheus.Streamtags))
 				for _, v := range itemsItem.OutputPrometheus.Streamtags {
@@ -5067,16 +6109,26 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputPrometheus.TimeoutRetrySettings == nil {
 					items.OutputPrometheus.TimeoutRetrySettings = nil
 				} else {
-					items.OutputPrometheus.TimeoutRetrySettings = &tfTypes.OutputPrometheusTimeoutRetrySettings{}
+					items.OutputPrometheus.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputPrometheus.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputPrometheus.TimeoutRetrySettings.BackoffRate)
 					items.OutputPrometheus.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputPrometheus.TimeoutRetrySettings.InitialBackoff)
 					items.OutputPrometheus.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputPrometheus.TimeoutRetrySettings.MaxBackoff)
-					items.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputPrometheus.TimeoutSec = types.Float64PointerValue(itemsItem.OutputPrometheus.TimeoutSec)
 				items.OutputPrometheus.Token = types.StringPointerValue(itemsItem.OutputPrometheus.Token)
-				items.OutputPrometheus.TokenAttributeName = types.StringPointerValue(itemsItem.OutputPrometheus.TokenAttributeName)
-				items.OutputPrometheus.TokenTimeoutSecs = types.Float64PointerValue(itemsItem.OutputPrometheus.TokenTimeoutSecs)
+				if itemsItem.OutputPrometheus.TokenAttributeName == nil {
+					items.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedNull()
+				} else {
+					tokenAttributeNameResult3, _ := json.Marshal(itemsItem.OutputPrometheus.TokenAttributeName)
+					items.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
+				}
+				if itemsItem.OutputPrometheus.TokenTimeoutSecs == nil {
+					items.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+				} else {
+					tokenTimeoutSecsResult3, _ := json.Marshal(itemsItem.OutputPrometheus.TokenTimeoutSecs)
+					items.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
+				}
 				items.OutputPrometheus.Type = types.StringValue(string(itemsItem.OutputPrometheus.Type))
 				items.OutputPrometheus.URL = types.StringValue(itemsItem.OutputPrometheus.URL)
 				items.OutputPrometheus.Username = types.StringPointerValue(itemsItem.OutputPrometheus.Username)
@@ -5097,7 +6149,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputRing.Format = types.StringNull()
 				}
-				items.OutputRing.ID = types.StringValue(itemsItem.OutputRing.ID)
+				items.OutputRing.ID = types.StringPointerValue(itemsItem.OutputRing.ID)
 				items.OutputRing.MaxDataSize = types.StringPointerValue(itemsItem.OutputRing.MaxDataSize)
 				items.OutputRing.MaxDataTime = types.StringPointerValue(itemsItem.OutputRing.MaxDataTime)
 				if itemsItem.OutputRing.OnBackpressure != nil {
@@ -5147,6 +6199,13 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputS3 != nil {
 				items.OutputS3 = &tfTypes.OutputS3{}
+				items.OutputS3.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputS3.TemplateAssumeRoleArn)
+				items.OutputS3.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputS3.TemplateAssumeRoleExternalID)
+				items.OutputS3.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputS3.TemplateAwsAPIKey)
+				items.OutputS3.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputS3.TemplateAwsSecretKey)
+				items.OutputS3.TemplateBucket = types.StringPointerValue(itemsItem.OutputS3.TemplateBucket)
+				items.OutputS3.TemplateFormat = types.StringPointerValue(itemsItem.OutputS3.TemplateFormat)
+				items.OutputS3.TemplateRegion = types.StringPointerValue(itemsItem.OutputS3.TemplateRegion)
 				items.OutputS3.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputS3.AddIDToStagePath)
 				items.OutputS3.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputS3.AssumeRoleArn)
 				items.OutputS3.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputS3.AssumeRoleExternalID)
@@ -5175,6 +6234,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputS3.DeadletterPath = types.StringPointerValue(itemsItem.OutputS3.DeadletterPath)
 				items.OutputS3.Description = types.StringPointerValue(itemsItem.OutputS3.Description)
 				items.OutputS3.DestPath = types.StringPointerValue(itemsItem.OutputS3.DestPath)
+				items.OutputS3.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputS3.DirectoryBatchSize)
 				items.OutputS3.DurationSeconds = types.Float64PointerValue(itemsItem.OutputS3.DurationSeconds)
 				items.OutputS3.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputS3.EmptyDirCleanupSec)
 				items.OutputS3.EnableAssumeRole = types.BoolPointerValue(itemsItem.OutputS3.EnableAssumeRole)
@@ -5184,6 +6244,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputS3.Endpoint = types.StringPointerValue(itemsItem.OutputS3.Endpoint)
 				items.OutputS3.Environment = types.StringPointerValue(itemsItem.OutputS3.Environment)
 				items.OutputS3.FileNameSuffix = types.StringPointerValue(itemsItem.OutputS3.FileNameSuffix)
+				items.OutputS3.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputS3.ForceCloseOnShutdown)
 				if itemsItem.OutputS3.Format != nil {
 					items.OutputS3.Format = types.StringValue(string(*itemsItem.OutputS3.Format))
 				} else {
@@ -5191,15 +6252,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputS3.HeaderLine = types.StringPointerValue(itemsItem.OutputS3.HeaderLine)
 				items.OutputS3.ID = types.StringPointerValue(itemsItem.OutputS3.ID)
-				items.OutputS3.KeyValueMetadata = []tfTypes.OutputS3KeyValueMetadatum{}
+				items.OutputS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem7 := range itemsItem.OutputS3.KeyValueMetadata {
-					var keyValueMetadata7 tfTypes.OutputS3KeyValueMetadatum
+				for _, keyValueMetadataItem8 := range itemsItem.OutputS3.KeyValueMetadata {
+					var keyValueMetadata8 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata7.Key = types.StringPointerValue(keyValueMetadataItem7.Key)
-					keyValueMetadata7.Value = types.StringValue(keyValueMetadataItem7.Value)
+					keyValueMetadata8.Key = types.StringValue(keyValueMetadataItem8.Key)
+					keyValueMetadata8.Value = types.StringValue(keyValueMetadataItem8.Value)
 
-					items.OutputS3.KeyValueMetadata = append(items.OutputS3.KeyValueMetadata, keyValueMetadata7)
+					items.OutputS3.KeyValueMetadata = append(items.OutputS3.KeyValueMetadata, keyValueMetadata8)
 				}
 				items.OutputS3.KmsKeyID = types.StringPointerValue(itemsItem.OutputS3.KmsKeyID)
 				items.OutputS3.MaxClosingFilesToBackpressure = types.Float64PointerValue(itemsItem.OutputS3.MaxClosingFilesToBackpressure)
@@ -5231,6 +6292,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputS3.ParquetPageSize = types.StringPointerValue(itemsItem.OutputS3.ParquetPageSize)
 				items.OutputS3.ParquetRowGroupLength = types.Float64PointerValue(itemsItem.OutputS3.ParquetRowGroupLength)
+				items.OutputS3.ParquetSchema = types.StringPointerValue(itemsItem.OutputS3.ParquetSchema)
 				if itemsItem.OutputS3.ParquetVersion != nil {
 					items.OutputS3.ParquetVersion = types.StringValue(string(*itemsItem.OutputS3.ParquetVersion))
 				} else {
@@ -5241,6 +6303,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputS3.Region = types.StringPointerValue(itemsItem.OutputS3.Region)
 				items.OutputS3.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputS3.RejectUnauthorized)
 				items.OutputS3.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputS3.RemoveEmptyDirs)
+				if itemsItem.OutputS3.RetrySettings == nil {
+					items.OutputS3.RetrySettings = nil
+				} else {
+					items.OutputS3.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputS3.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputS3.RetrySettings.BackoffMultiplier)
+					items.OutputS3.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputS3.RetrySettings.Enabled)
+					items.OutputS3.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputS3.RetrySettings.InitialBackoffMs)
+					items.OutputS3.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputS3.RetrySettings.JitterPercent)
+					items.OutputS3.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputS3.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputS3.ReuseConnections = types.BoolPointerValue(itemsItem.OutputS3.ReuseConnections)
 				if itemsItem.OutputS3.ServerSideEncryption != nil {
 					items.OutputS3.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputS3.ServerSideEncryption))
@@ -5253,7 +6325,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputS3.SignatureVersion = types.StringNull()
 				}
-				items.OutputS3.StagePath = types.StringPointerValue(itemsItem.OutputS3.StagePath)
+				items.OutputS3.StagePath = types.StringValue(itemsItem.OutputS3.StagePath)
 				if itemsItem.OutputS3.StorageClass != nil {
 					items.OutputS3.StorageClass = types.StringValue(string(*itemsItem.OutputS3.StorageClass))
 				} else {
@@ -5267,16 +6339,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputS3.SystemFields {
 					items.OutputS3.SystemFields = append(items.OutputS3.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputS3.Type != nil {
-					items.OutputS3.Type = types.StringValue(string(*itemsItem.OutputS3.Type))
-				} else {
-					items.OutputS3.Type = types.StringNull()
-				}
+				items.OutputS3.Type = types.StringValue(string(itemsItem.OutputS3.Type))
 				items.OutputS3.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputS3.VerifyPermissions)
 				items.OutputS3.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputS3.WriteHighWaterMark)
 			}
 			if itemsItem.OutputSecurityLake != nil {
 				items.OutputSecurityLake = &tfTypes.OutputSecurityLake{}
+				items.OutputSecurityLake.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateAssumeRoleArn)
+				items.OutputSecurityLake.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateAssumeRoleExternalID)
+				items.OutputSecurityLake.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateAwsAPIKey)
+				items.OutputSecurityLake.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateAwsSecretKey)
+				items.OutputSecurityLake.TemplateBucket = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateBucket)
+				items.OutputSecurityLake.TemplateRegion = types.StringPointerValue(itemsItem.OutputSecurityLake.TemplateRegion)
 				items.OutputSecurityLake.AccountID = types.StringValue(itemsItem.OutputSecurityLake.AccountID)
 				items.OutputSecurityLake.AddIDToStagePath = types.BoolPointerValue(itemsItem.OutputSecurityLake.AddIDToStagePath)
 				items.OutputSecurityLake.AssumeRoleArn = types.StringValue(itemsItem.OutputSecurityLake.AssumeRoleArn)
@@ -5296,6 +6370,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSecurityLake.DeadletterEnabled = types.BoolPointerValue(itemsItem.OutputSecurityLake.DeadletterEnabled)
 				items.OutputSecurityLake.DeadletterPath = types.StringPointerValue(itemsItem.OutputSecurityLake.DeadletterPath)
 				items.OutputSecurityLake.Description = types.StringPointerValue(itemsItem.OutputSecurityLake.Description)
+				items.OutputSecurityLake.DirectoryBatchSize = types.Float64PointerValue(itemsItem.OutputSecurityLake.DirectoryBatchSize)
 				items.OutputSecurityLake.DurationSeconds = types.Float64PointerValue(itemsItem.OutputSecurityLake.DurationSeconds)
 				items.OutputSecurityLake.EmptyDirCleanupSec = types.Float64PointerValue(itemsItem.OutputSecurityLake.EmptyDirCleanupSec)
 				items.OutputSecurityLake.EnableAssumeRole = types.BoolPointerValue(itemsItem.OutputSecurityLake.EnableAssumeRole)
@@ -5304,17 +6379,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSecurityLake.EnableWritePageIndex = types.BoolPointerValue(itemsItem.OutputSecurityLake.EnableWritePageIndex)
 				items.OutputSecurityLake.Endpoint = types.StringPointerValue(itemsItem.OutputSecurityLake.Endpoint)
 				items.OutputSecurityLake.Environment = types.StringPointerValue(itemsItem.OutputSecurityLake.Environment)
+				items.OutputSecurityLake.ForceCloseOnShutdown = types.BoolPointerValue(itemsItem.OutputSecurityLake.ForceCloseOnShutdown)
 				items.OutputSecurityLake.HeaderLine = types.StringPointerValue(itemsItem.OutputSecurityLake.HeaderLine)
 				items.OutputSecurityLake.ID = types.StringPointerValue(itemsItem.OutputSecurityLake.ID)
-				items.OutputSecurityLake.KeyValueMetadata = []tfTypes.OutputSecurityLakeKeyValueMetadatum{}
+				items.OutputSecurityLake.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-				for _, keyValueMetadataItem8 := range itemsItem.OutputSecurityLake.KeyValueMetadata {
-					var keyValueMetadata8 tfTypes.OutputSecurityLakeKeyValueMetadatum
+				for _, keyValueMetadataItem9 := range itemsItem.OutputSecurityLake.KeyValueMetadata {
+					var keyValueMetadata9 tfTypes.ItemsTypeKeyValueMetadata
 
-					keyValueMetadata8.Key = types.StringPointerValue(keyValueMetadataItem8.Key)
-					keyValueMetadata8.Value = types.StringValue(keyValueMetadataItem8.Value)
+					keyValueMetadata9.Key = types.StringValue(keyValueMetadataItem9.Key)
+					keyValueMetadata9.Value = types.StringValue(keyValueMetadataItem9.Value)
 
-					items.OutputSecurityLake.KeyValueMetadata = append(items.OutputSecurityLake.KeyValueMetadata, keyValueMetadata8)
+					items.OutputSecurityLake.KeyValueMetadata = append(items.OutputSecurityLake.KeyValueMetadata, keyValueMetadata9)
 				}
 				items.OutputSecurityLake.KmsKeyID = types.StringPointerValue(itemsItem.OutputSecurityLake.KmsKeyID)
 				items.OutputSecurityLake.MaxClosingFilesToBackpressure = types.Float64PointerValue(itemsItem.OutputSecurityLake.MaxClosingFilesToBackpressure)
@@ -5356,6 +6432,16 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSecurityLake.Region = types.StringValue(itemsItem.OutputSecurityLake.Region)
 				items.OutputSecurityLake.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSecurityLake.RejectUnauthorized)
 				items.OutputSecurityLake.RemoveEmptyDirs = types.BoolPointerValue(itemsItem.OutputSecurityLake.RemoveEmptyDirs)
+				if itemsItem.OutputSecurityLake.RetrySettings == nil {
+					items.OutputSecurityLake.RetrySettings = nil
+				} else {
+					items.OutputSecurityLake.RetrySettings = &tfTypes.RetrySettingsType{}
+					items.OutputSecurityLake.RetrySettings.BackoffMultiplier = types.Float64PointerValue(itemsItem.OutputSecurityLake.RetrySettings.BackoffMultiplier)
+					items.OutputSecurityLake.RetrySettings.Enabled = types.BoolPointerValue(itemsItem.OutputSecurityLake.RetrySettings.Enabled)
+					items.OutputSecurityLake.RetrySettings.InitialBackoffMs = types.Float64PointerValue(itemsItem.OutputSecurityLake.RetrySettings.InitialBackoffMs)
+					items.OutputSecurityLake.RetrySettings.JitterPercent = types.Float64PointerValue(itemsItem.OutputSecurityLake.RetrySettings.JitterPercent)
+					items.OutputSecurityLake.RetrySettings.MaxBackoffMs = types.Float64PointerValue(itemsItem.OutputSecurityLake.RetrySettings.MaxBackoffMs)
+				}
 				items.OutputSecurityLake.ReuseConnections = types.BoolPointerValue(itemsItem.OutputSecurityLake.ReuseConnections)
 				if itemsItem.OutputSecurityLake.ServerSideEncryption != nil {
 					items.OutputSecurityLake.ServerSideEncryption = types.StringValue(string(*itemsItem.OutputSecurityLake.ServerSideEncryption))
@@ -5368,7 +6454,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSecurityLake.SignatureVersion = types.StringNull()
 				}
-				items.OutputSecurityLake.StagePath = types.StringPointerValue(itemsItem.OutputSecurityLake.StagePath)
+				items.OutputSecurityLake.StagePath = types.StringValue(itemsItem.OutputSecurityLake.StagePath)
 				if itemsItem.OutputSecurityLake.StorageClass != nil {
 					items.OutputSecurityLake.StorageClass = types.StringValue(string(*itemsItem.OutputSecurityLake.StorageClass))
 				} else {
@@ -5382,16 +6468,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputSecurityLake.SystemFields {
 					items.OutputSecurityLake.SystemFields = append(items.OutputSecurityLake.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputSecurityLake.Type != nil {
-					items.OutputSecurityLake.Type = types.StringValue(string(*itemsItem.OutputSecurityLake.Type))
-				} else {
-					items.OutputSecurityLake.Type = types.StringNull()
-				}
+				items.OutputSecurityLake.Type = types.StringValue(string(itemsItem.OutputSecurityLake.Type))
 				items.OutputSecurityLake.VerifyPermissions = types.BoolPointerValue(itemsItem.OutputSecurityLake.VerifyPermissions)
 				items.OutputSecurityLake.WriteHighWaterMark = types.Float64PointerValue(itemsItem.OutputSecurityLake.WriteHighWaterMark)
 			}
 			if itemsItem.OutputSentinel != nil {
 				items.OutputSentinel = &tfTypes.OutputSentinel{}
+				items.OutputSentinel.TemplateClientID = types.StringPointerValue(itemsItem.OutputSentinel.TemplateClientID)
+				items.OutputSentinel.TemplateDceEndpoint = types.StringPointerValue(itemsItem.OutputSentinel.TemplateDceEndpoint)
+				items.OutputSentinel.TemplateDcrID = types.StringPointerValue(itemsItem.OutputSentinel.TemplateDcrID)
+				items.OutputSentinel.TemplateLoginURL = types.StringPointerValue(itemsItem.OutputSentinel.TemplateLoginURL)
+				items.OutputSentinel.TemplateScope = types.StringPointerValue(itemsItem.OutputSentinel.TemplateScope)
+				items.OutputSentinel.TemplateSecret = types.StringPointerValue(itemsItem.OutputSentinel.TemplateSecret)
+				items.OutputSentinel.TemplateStreamName = types.StringPointerValue(itemsItem.OutputSentinel.TemplateStreamName)
+				items.OutputSentinel.TemplateURL = types.StringPointerValue(itemsItem.OutputSentinel.TemplateURL)
 				items.OutputSentinel.AdvancedContentType = types.StringPointerValue(itemsItem.OutputSentinel.AdvancedContentType)
 				if itemsItem.OutputSentinel.AuthType != nil {
 					items.OutputSentinel.AuthType = types.StringValue(string(*itemsItem.OutputSentinel.AuthType))
@@ -5409,21 +6499,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSentinel.DceEndpoint = types.StringPointerValue(itemsItem.OutputSentinel.DceEndpoint)
 				items.OutputSentinel.DcrID = types.StringPointerValue(itemsItem.OutputSentinel.DcrID)
 				items.OutputSentinel.Description = types.StringPointerValue(itemsItem.OutputSentinel.Description)
-				if itemsItem.OutputSentinel.EndpointURLConfiguration != nil {
-					items.OutputSentinel.EndpointURLConfiguration = types.StringValue(string(*itemsItem.OutputSentinel.EndpointURLConfiguration))
-				} else {
-					items.OutputSentinel.EndpointURLConfiguration = types.StringNull()
-				}
+				items.OutputSentinel.EndpointURLConfiguration = types.StringValue(string(itemsItem.OutputSentinel.EndpointURLConfiguration))
 				items.OutputSentinel.Environment = types.StringPointerValue(itemsItem.OutputSentinel.Environment)
-				items.OutputSentinel.ExtraHTTPHeaders = []tfTypes.OutputSentinelExtraHTTPHeader{}
+				items.OutputSentinel.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem21 := range itemsItem.OutputSentinel.ExtraHTTPHeaders {
-					var extraHTTPHeaders21 tfTypes.OutputSentinelExtraHTTPHeader
+				for _, extraHTTPHeadersItem23 := range itemsItem.OutputSentinel.ExtraHTTPHeaders {
+					var extraHTTPHeaders23 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
-					extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
+					extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
+					extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
 
-					items.OutputSentinel.ExtraHTTPHeaders = append(items.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders21)
+					items.OutputSentinel.ExtraHTTPHeaders = append(items.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders23)
 				}
 				if itemsItem.OutputSentinel.FailedRequestLoggingMode != nil {
 					items.OutputSentinel.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputSentinel.FailedRequestLoggingMode))
@@ -5459,6 +6545,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSentinel.PqControls = &tfTypes.OutputSentinelPqControls{}
 				}
+				items.OutputSentinel.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSentinel.PqMaxBackpressureSec)
+				items.OutputSentinel.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSentinel.PqMaxBufferSize)
+				items.OutputSentinel.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSentinel.PqMaxBufferSizeBytes)
 				items.OutputSentinel.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSentinel.PqMaxFileSize)
 				items.OutputSentinel.PqMaxSize = types.StringPointerValue(itemsItem.OutputSentinel.PqMaxSize)
 				if itemsItem.OutputSentinel.PqMode != nil {
@@ -5472,19 +6561,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSentinel.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSentinel.PqPath = types.StringPointerValue(itemsItem.OutputSentinel.PqPath)
+				items.OutputSentinel.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSentinel.PqRatePerSec)
+				items.OutputSentinel.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSentinel.PqStrictOrdering)
 				items.OutputSentinel.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSentinel.RejectUnauthorized)
 				items.OutputSentinel.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputSentinel.ResponseHonorRetryAfterHeader)
-				items.OutputSentinel.ResponseRetrySettings = []tfTypes.OutputSentinelResponseRetrySetting{}
+				items.OutputSentinel.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem22 := range itemsItem.OutputSentinel.ResponseRetrySettings {
-					var responseRetrySettings22 tfTypes.OutputSentinelResponseRetrySetting
+				for _, responseRetrySettingsItem24 := range itemsItem.OutputSentinel.ResponseRetrySettings {
+					var responseRetrySettings24 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
-					responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
-					responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
-					responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
+					responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
+					responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
+					responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
+					responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
 
-					items.OutputSentinel.ResponseRetrySettings = append(items.OutputSentinel.ResponseRetrySettings, responseRetrySettings22)
+					items.OutputSentinel.ResponseRetrySettings = append(items.OutputSentinel.ResponseRetrySettings, responseRetrySettings24)
 				}
 				items.OutputSentinel.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputSentinel.SafeHeaders))
 				for _, v := range itemsItem.OutputSentinel.SafeHeaders {
@@ -5504,19 +6595,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSentinel.TimeoutRetrySettings == nil {
 					items.OutputSentinel.TimeoutRetrySettings = nil
 				} else {
-					items.OutputSentinel.TimeoutRetrySettings = &tfTypes.OutputSentinelTimeoutRetrySettings{}
+					items.OutputSentinel.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputSentinel.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputSentinel.TimeoutRetrySettings.BackoffRate)
 					items.OutputSentinel.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputSentinel.TimeoutRetrySettings.InitialBackoff)
 					items.OutputSentinel.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputSentinel.TimeoutRetrySettings.MaxBackoff)
-					items.OutputSentinel.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputSentinel.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputSentinel.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputSentinel.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputSentinel.TimeoutSec = types.Float64PointerValue(itemsItem.OutputSentinel.TimeoutSec)
 				items.OutputSentinel.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputSentinel.TotalMemoryLimitKB)
-				if itemsItem.OutputSentinel.Type != nil {
-					items.OutputSentinel.Type = types.StringValue(string(*itemsItem.OutputSentinel.Type))
-				} else {
-					items.OutputSentinel.Type = types.StringNull()
-				}
+				items.OutputSentinel.Type = types.StringValue(string(itemsItem.OutputSentinel.Type))
 				items.OutputSentinel.URL = types.StringPointerValue(itemsItem.OutputSentinel.URL)
 				items.OutputSentinel.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputSentinel.UseRoundRobinDNS)
 			}
@@ -5537,23 +6624,19 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSentinelOneAiSiem.DataSourceVendor = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.DataSourceVendor)
 				items.OutputSentinelOneAiSiem.DataSourceVendorExpression = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.DataSourceVendorExpression)
 				items.OutputSentinelOneAiSiem.Description = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.Description)
-				if itemsItem.OutputSentinelOneAiSiem.Endpoint != nil {
-					items.OutputSentinelOneAiSiem.Endpoint = types.StringValue(string(*itemsItem.OutputSentinelOneAiSiem.Endpoint))
-				} else {
-					items.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
-				}
+				items.OutputSentinelOneAiSiem.Endpoint = types.StringValue(string(itemsItem.OutputSentinelOneAiSiem.Endpoint))
 				items.OutputSentinelOneAiSiem.Environment = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.Environment)
 				items.OutputSentinelOneAiSiem.EventType = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.EventType)
 				items.OutputSentinelOneAiSiem.EventTypeExpression = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.EventTypeExpression)
-				items.OutputSentinelOneAiSiem.ExtraHTTPHeaders = []tfTypes.OutputSentinelOneAiSiemExtraHTTPHeader{}
+				items.OutputSentinelOneAiSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem22 := range itemsItem.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
-					var extraHTTPHeaders22 tfTypes.OutputSentinelOneAiSiemExtraHTTPHeader
+				for _, extraHTTPHeadersItem24 := range itemsItem.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
+					var extraHTTPHeaders24 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
-					extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
+					extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
+					extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
 
-					items.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(items.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders22)
+					items.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(items.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders24)
 				}
 				if itemsItem.OutputSentinelOneAiSiem.FailedRequestLoggingMode != nil {
 					items.OutputSentinelOneAiSiem.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputSentinelOneAiSiem.FailedRequestLoggingMode))
@@ -5584,6 +6667,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputSentinelOneAiSiem.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.PqMaxBackpressureSec)
 				items.OutputSentinelOneAiSiem.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.PqMaxBufferSize)
+				items.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes)
 				items.OutputSentinelOneAiSiem.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.PqMaxFileSize)
 				items.OutputSentinelOneAiSiem.PqMaxSize = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.PqMaxSize)
 				if itemsItem.OutputSentinelOneAiSiem.PqMode != nil {
@@ -5599,24 +6683,20 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSentinelOneAiSiem.PqPath = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.PqPath)
 				items.OutputSentinelOneAiSiem.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.PqRatePerSec)
 				items.OutputSentinelOneAiSiem.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSentinelOneAiSiem.PqStrictOrdering)
-				if itemsItem.OutputSentinelOneAiSiem.Region != nil {
-					items.OutputSentinelOneAiSiem.Region = types.StringValue(string(*itemsItem.OutputSentinelOneAiSiem.Region))
-				} else {
-					items.OutputSentinelOneAiSiem.Region = types.StringNull()
-				}
+				items.OutputSentinelOneAiSiem.Region = types.StringValue(string(itemsItem.OutputSentinelOneAiSiem.Region))
 				items.OutputSentinelOneAiSiem.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSentinelOneAiSiem.RejectUnauthorized)
 				items.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader)
-				items.OutputSentinelOneAiSiem.ResponseRetrySettings = []tfTypes.OutputSentinelOneAiSiemResponseRetrySetting{}
+				items.OutputSentinelOneAiSiem.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem23 := range itemsItem.OutputSentinelOneAiSiem.ResponseRetrySettings {
-					var responseRetrySettings23 tfTypes.OutputSentinelOneAiSiemResponseRetrySetting
+				for _, responseRetrySettingsItem25 := range itemsItem.OutputSentinelOneAiSiem.ResponseRetrySettings {
+					var responseRetrySettings25 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
-					responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
-					responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
-					responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
+					responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
+					responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
+					responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
+					responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
 
-					items.OutputSentinelOneAiSiem.ResponseRetrySettings = append(items.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings23)
+					items.OutputSentinelOneAiSiem.ResponseRetrySettings = append(items.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings25)
 				}
 				items.OutputSentinelOneAiSiem.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputSentinelOneAiSiem.SafeHeaders))
 				for _, v := range itemsItem.OutputSentinelOneAiSiem.SafeHeaders {
@@ -5638,11 +6718,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings == nil {
 					items.OutputSentinelOneAiSiem.TimeoutRetrySettings = nil
 				} else {
-					items.OutputSentinelOneAiSiem.TimeoutRetrySettings = &tfTypes.OutputSentinelOneAiSiemTimeoutRetrySettings{}
+					items.OutputSentinelOneAiSiem.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate)
 					items.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff)
 					items.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff)
-					items.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputSentinelOneAiSiem.TimeoutSec = types.Float64PointerValue(itemsItem.OutputSentinelOneAiSiem.TimeoutSec)
 				items.OutputSentinelOneAiSiem.Token = types.StringPointerValue(itemsItem.OutputSentinelOneAiSiem.Token)
@@ -5659,17 +6739,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputServiceNow.Concurrency = types.Float64PointerValue(itemsItem.OutputServiceNow.Concurrency)
 				items.OutputServiceNow.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputServiceNow.ConnectionTimeout)
 				items.OutputServiceNow.Description = types.StringPointerValue(itemsItem.OutputServiceNow.Description)
-				items.OutputServiceNow.Endpoint = types.StringPointerValue(itemsItem.OutputServiceNow.Endpoint)
+				items.OutputServiceNow.Endpoint = types.StringValue(itemsItem.OutputServiceNow.Endpoint)
 				items.OutputServiceNow.Environment = types.StringPointerValue(itemsItem.OutputServiceNow.Environment)
-				items.OutputServiceNow.ExtraHTTPHeaders = []tfTypes.OutputServiceNowExtraHTTPHeader{}
+				items.OutputServiceNow.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem23 := range itemsItem.OutputServiceNow.ExtraHTTPHeaders {
-					var extraHTTPHeaders23 tfTypes.OutputServiceNowExtraHTTPHeader
+				for _, extraHTTPHeadersItem25 := range itemsItem.OutputServiceNow.ExtraHTTPHeaders {
+					var extraHTTPHeaders25 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
-					extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
+					extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
+					extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
 
-					items.OutputServiceNow.ExtraHTTPHeaders = append(items.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders23)
+					items.OutputServiceNow.ExtraHTTPHeaders = append(items.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders25)
 				}
 				if itemsItem.OutputServiceNow.FailedRequestLoggingMode != nil {
 					items.OutputServiceNow.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputServiceNow.FailedRequestLoggingMode))
@@ -5689,12 +6769,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputServiceNow.KeepAlive = types.BoolPointerValue(itemsItem.OutputServiceNow.KeepAlive)
 				items.OutputServiceNow.KeepAliveTime = types.Float64PointerValue(itemsItem.OutputServiceNow.KeepAliveTime)
 				items.OutputServiceNow.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputServiceNow.MaxPayloadSizeKB)
-				items.OutputServiceNow.Metadata = []tfTypes.OutputServiceNowMetadatum{}
+				items.OutputServiceNow.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 				for _, metadataItem3 := range itemsItem.OutputServiceNow.Metadata {
-					var metadata3 tfTypes.OutputServiceNowMetadatum
+					var metadata3 tfTypes.ItemsTypeKeyValueMetadata
 
-					metadata3.Key = types.StringPointerValue(metadataItem3.Key)
+					metadata3.Key = types.StringValue(metadataItem3.Key)
 					metadata3.Value = types.StringValue(metadataItem3.Value)
 
 					items.OutputServiceNow.Metadata = append(items.OutputServiceNow.Metadata, metadata3)
@@ -5704,11 +6784,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputServiceNow.OnBackpressure = types.StringNull()
 				}
-				if itemsItem.OutputServiceNow.OtlpVersion != nil {
-					items.OutputServiceNow.OtlpVersion = types.StringValue(string(*itemsItem.OutputServiceNow.OtlpVersion))
-				} else {
-					items.OutputServiceNow.OtlpVersion = types.StringNull()
-				}
+				items.OutputServiceNow.OtlpVersion = types.StringValue(string(itemsItem.OutputServiceNow.OtlpVersion))
 				items.OutputServiceNow.Pipeline = types.StringPointerValue(itemsItem.OutputServiceNow.Pipeline)
 				if itemsItem.OutputServiceNow.PqCompress != nil {
 					items.OutputServiceNow.PqCompress = types.StringValue(string(*itemsItem.OutputServiceNow.PqCompress))
@@ -5720,6 +6796,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputServiceNow.PqControls = &tfTypes.OutputServiceNowPqControls{}
 				}
+				items.OutputServiceNow.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputServiceNow.PqMaxBackpressureSec)
+				items.OutputServiceNow.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputServiceNow.PqMaxBufferSize)
+				items.OutputServiceNow.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputServiceNow.PqMaxBufferSizeBytes)
 				items.OutputServiceNow.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputServiceNow.PqMaxFileSize)
 				items.OutputServiceNow.PqMaxSize = types.StringPointerValue(itemsItem.OutputServiceNow.PqMaxSize)
 				if itemsItem.OutputServiceNow.PqMode != nil {
@@ -5733,24 +6812,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputServiceNow.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputServiceNow.PqPath = types.StringPointerValue(itemsItem.OutputServiceNow.PqPath)
-				if itemsItem.OutputServiceNow.Protocol != nil {
-					items.OutputServiceNow.Protocol = types.StringValue(string(*itemsItem.OutputServiceNow.Protocol))
-				} else {
-					items.OutputServiceNow.Protocol = types.StringNull()
-				}
+				items.OutputServiceNow.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputServiceNow.PqRatePerSec)
+				items.OutputServiceNow.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputServiceNow.PqStrictOrdering)
+				items.OutputServiceNow.Protocol = types.StringValue(string(itemsItem.OutputServiceNow.Protocol))
 				items.OutputServiceNow.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputServiceNow.RejectUnauthorized)
 				items.OutputServiceNow.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputServiceNow.ResponseHonorRetryAfterHeader)
-				items.OutputServiceNow.ResponseRetrySettings = []tfTypes.OutputServiceNowResponseRetrySetting{}
+				items.OutputServiceNow.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem24 := range itemsItem.OutputServiceNow.ResponseRetrySettings {
-					var responseRetrySettings24 tfTypes.OutputServiceNowResponseRetrySetting
+				for _, responseRetrySettingsItem26 := range itemsItem.OutputServiceNow.ResponseRetrySettings {
+					var responseRetrySettings26 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
-					responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
-					responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
-					responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
+					responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
+					responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
+					responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
+					responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
 
-					items.OutputServiceNow.ResponseRetrySettings = append(items.OutputServiceNow.ResponseRetrySettings, responseRetrySettings24)
+					items.OutputServiceNow.ResponseRetrySettings = append(items.OutputServiceNow.ResponseRetrySettings, responseRetrySettings26)
 				}
 				items.OutputServiceNow.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputServiceNow.SafeHeaders))
 				for _, v := range itemsItem.OutputServiceNow.SafeHeaders {
@@ -5767,17 +6844,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputServiceNow.TimeoutRetrySettings == nil {
 					items.OutputServiceNow.TimeoutRetrySettings = nil
 				} else {
-					items.OutputServiceNow.TimeoutRetrySettings = &tfTypes.OutputServiceNowTimeoutRetrySettings{}
+					items.OutputServiceNow.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputServiceNow.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputServiceNow.TimeoutRetrySettings.BackoffRate)
 					items.OutputServiceNow.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputServiceNow.TimeoutRetrySettings.InitialBackoff)
 					items.OutputServiceNow.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputServiceNow.TimeoutRetrySettings.MaxBackoff)
-					items.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputServiceNow.TimeoutSec = types.Float64PointerValue(itemsItem.OutputServiceNow.TimeoutSec)
 				if itemsItem.OutputServiceNow.TLS == nil {
 					items.OutputServiceNow.TLS = nil
 				} else {
-					items.OutputServiceNow.TLS = &tfTypes.OutputServiceNowTLSSettingsClientSide{}
+					items.OutputServiceNow.TLS = &tfTypes.TLSSettingsClientSideTypeExtended{}
 					items.OutputServiceNow.TLS.CaPath = types.StringPointerValue(itemsItem.OutputServiceNow.TLS.CaPath)
 					items.OutputServiceNow.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputServiceNow.TLS.CertificateName)
 					items.OutputServiceNow.TLS.CertPath = types.StringPointerValue(itemsItem.OutputServiceNow.TLS.CertPath)
@@ -5797,11 +6874,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputServiceNow.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputServiceNow.TLS.RejectUnauthorized)
 				}
 				items.OutputServiceNow.TokenSecret = types.StringValue(itemsItem.OutputServiceNow.TokenSecret)
-				if itemsItem.OutputServiceNow.Type != nil {
-					items.OutputServiceNow.Type = types.StringValue(string(*itemsItem.OutputServiceNow.Type))
-				} else {
-					items.OutputServiceNow.Type = types.StringNull()
-				}
+				items.OutputServiceNow.Type = types.StringValue(string(itemsItem.OutputServiceNow.Type))
 				items.OutputServiceNow.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputServiceNow.UseRoundRobinDNS)
 			}
 			if itemsItem.OutputSignalfx != nil {
@@ -5815,15 +6888,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSignalfx.Concurrency = types.Float64PointerValue(itemsItem.OutputSignalfx.Concurrency)
 				items.OutputSignalfx.Description = types.StringPointerValue(itemsItem.OutputSignalfx.Description)
 				items.OutputSignalfx.Environment = types.StringPointerValue(itemsItem.OutputSignalfx.Environment)
-				items.OutputSignalfx.ExtraHTTPHeaders = []tfTypes.OutputSignalfxExtraHTTPHeader{}
+				items.OutputSignalfx.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem24 := range itemsItem.OutputSignalfx.ExtraHTTPHeaders {
-					var extraHTTPHeaders24 tfTypes.OutputSignalfxExtraHTTPHeader
+				for _, extraHTTPHeadersItem26 := range itemsItem.OutputSignalfx.ExtraHTTPHeaders {
+					var extraHTTPHeaders26 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
-					extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
+					extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
+					extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
 
-					items.OutputSignalfx.ExtraHTTPHeaders = append(items.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders24)
+					items.OutputSignalfx.ExtraHTTPHeaders = append(items.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders26)
 				}
 				if itemsItem.OutputSignalfx.FailedRequestLoggingMode != nil {
 					items.OutputSignalfx.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputSignalfx.FailedRequestLoggingMode))
@@ -5850,6 +6923,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSignalfx.PqControls = &tfTypes.OutputSignalfxPqControls{}
 				}
+				items.OutputSignalfx.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSignalfx.PqMaxBackpressureSec)
+				items.OutputSignalfx.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSignalfx.PqMaxBufferSize)
+				items.OutputSignalfx.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSignalfx.PqMaxBufferSizeBytes)
 				items.OutputSignalfx.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSignalfx.PqMaxFileSize)
 				items.OutputSignalfx.PqMaxSize = types.StringPointerValue(itemsItem.OutputSignalfx.PqMaxSize)
 				if itemsItem.OutputSignalfx.PqMode != nil {
@@ -5863,20 +6939,22 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSignalfx.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSignalfx.PqPath = types.StringPointerValue(itemsItem.OutputSignalfx.PqPath)
-				items.OutputSignalfx.Realm = types.StringPointerValue(itemsItem.OutputSignalfx.Realm)
+				items.OutputSignalfx.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSignalfx.PqRatePerSec)
+				items.OutputSignalfx.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSignalfx.PqStrictOrdering)
+				items.OutputSignalfx.Realm = types.StringValue(itemsItem.OutputSignalfx.Realm)
 				items.OutputSignalfx.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSignalfx.RejectUnauthorized)
 				items.OutputSignalfx.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputSignalfx.ResponseHonorRetryAfterHeader)
-				items.OutputSignalfx.ResponseRetrySettings = []tfTypes.OutputSignalfxResponseRetrySetting{}
+				items.OutputSignalfx.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem25 := range itemsItem.OutputSignalfx.ResponseRetrySettings {
-					var responseRetrySettings25 tfTypes.OutputSignalfxResponseRetrySetting
+				for _, responseRetrySettingsItem27 := range itemsItem.OutputSignalfx.ResponseRetrySettings {
+					var responseRetrySettings27 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
-					responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
-					responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
-					responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
+					responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
+					responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
+					responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
+					responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
 
-					items.OutputSignalfx.ResponseRetrySettings = append(items.OutputSignalfx.ResponseRetrySettings, responseRetrySettings25)
+					items.OutputSignalfx.ResponseRetrySettings = append(items.OutputSignalfx.ResponseRetrySettings, responseRetrySettings27)
 				}
 				items.OutputSignalfx.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputSignalfx.SafeHeaders))
 				for _, v := range itemsItem.OutputSignalfx.SafeHeaders {
@@ -5894,11 +6972,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSignalfx.TimeoutRetrySettings == nil {
 					items.OutputSignalfx.TimeoutRetrySettings = nil
 				} else {
-					items.OutputSignalfx.TimeoutRetrySettings = &tfTypes.OutputSignalfxTimeoutRetrySettings{}
+					items.OutputSignalfx.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputSignalfx.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputSignalfx.TimeoutRetrySettings.BackoffRate)
 					items.OutputSignalfx.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputSignalfx.TimeoutRetrySettings.InitialBackoff)
 					items.OutputSignalfx.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputSignalfx.TimeoutRetrySettings.MaxBackoff)
-					items.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputSignalfx.TimeoutSec = types.Float64PointerValue(itemsItem.OutputSignalfx.TimeoutSec)
 				items.OutputSignalfx.Token = types.StringPointerValue(itemsItem.OutputSignalfx.Token)
@@ -5915,8 +6993,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, hostsItem2 := range itemsItem.OutputSnmp.Hosts {
 					var hosts2 tfTypes.OutputSnmpHost
 
+					hosts2.TemplateHost = types.StringPointerValue(hostsItem2.TemplateHost)
+					hosts2.TemplatePort = types.StringPointerValue(hostsItem2.TemplatePort)
 					hosts2.Host = types.StringValue(hostsItem2.Host)
-					hosts2.Port = types.Float64PointerValue(hostsItem2.Port)
+					hosts2.Port = types.Float64Value(hostsItem2.Port)
 
 					items.OutputSnmp.Hosts = append(items.OutputSnmp.Hosts, hosts2)
 				}
@@ -5934,6 +7014,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputSns != nil {
 				items.OutputSns = &tfTypes.OutputSns{}
+				items.OutputSns.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputSns.TemplateAssumeRoleArn)
+				items.OutputSns.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputSns.TemplateAssumeRoleExternalID)
+				items.OutputSns.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputSns.TemplateAwsAPIKey)
+				items.OutputSns.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputSns.TemplateAwsSecretKey)
+				items.OutputSns.TemplateRegion = types.StringPointerValue(itemsItem.OutputSns.TemplateRegion)
 				items.OutputSns.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputSns.AssumeRoleArn)
 				items.OutputSns.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputSns.AssumeRoleExternalID)
 				items.OutputSns.AwsAPIKey = types.StringPointerValue(itemsItem.OutputSns.AwsAPIKey)
@@ -5968,6 +7053,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSns.PqControls = &tfTypes.OutputSnsPqControls{}
 				}
+				items.OutputSns.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSns.PqMaxBackpressureSec)
+				items.OutputSns.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSns.PqMaxBufferSize)
+				items.OutputSns.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSns.PqMaxBufferSizeBytes)
 				items.OutputSns.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSns.PqMaxFileSize)
 				items.OutputSns.PqMaxSize = types.StringPointerValue(itemsItem.OutputSns.PqMaxSize)
 				if itemsItem.OutputSns.PqMode != nil {
@@ -5981,6 +7069,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSns.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSns.PqPath = types.StringPointerValue(itemsItem.OutputSns.PqPath)
+				items.OutputSns.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSns.PqRatePerSec)
+				items.OutputSns.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSns.PqStrictOrdering)
 				items.OutputSns.Region = types.StringPointerValue(itemsItem.OutputSns.Region)
 				items.OutputSns.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSns.RejectUnauthorized)
 				items.OutputSns.ReuseConnections = types.BoolPointerValue(itemsItem.OutputSns.ReuseConnections)
@@ -5998,14 +7088,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSns.SystemFields = append(items.OutputSns.SystemFields, types.StringValue(v))
 				}
 				items.OutputSns.TopicArn = types.StringValue(itemsItem.OutputSns.TopicArn)
-				if itemsItem.OutputSns.Type != nil {
-					items.OutputSns.Type = types.StringValue(string(*itemsItem.OutputSns.Type))
-				} else {
-					items.OutputSns.Type = types.StringNull()
-				}
+				items.OutputSns.Type = types.StringValue(string(itemsItem.OutputSns.Type))
 			}
 			if itemsItem.OutputSplunk != nil {
 				items.OutputSplunk = &tfTypes.OutputSplunk{}
+				items.OutputSplunk.TemplateHost = types.StringPointerValue(itemsItem.OutputSplunk.TemplateHost)
+				items.OutputSplunk.TemplatePort = types.StringPointerValue(itemsItem.OutputSplunk.TemplatePort)
 				items.OutputSplunk.AuthToken = types.StringPointerValue(itemsItem.OutputSplunk.AuthToken)
 				if itemsItem.OutputSplunk.AuthType != nil {
 					items.OutputSplunk.AuthType = types.StringValue(string(*itemsItem.OutputSplunk.AuthType))
@@ -6042,7 +7130,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunk.OnBackpressure = types.StringNull()
 				}
 				items.OutputSplunk.Pipeline = types.StringPointerValue(itemsItem.OutputSplunk.Pipeline)
-				items.OutputSplunk.Port = types.Float64PointerValue(itemsItem.OutputSplunk.Port)
+				items.OutputSplunk.Port = types.Float64Value(itemsItem.OutputSplunk.Port)
 				if itemsItem.OutputSplunk.PqCompress != nil {
 					items.OutputSplunk.PqCompress = types.StringValue(string(*itemsItem.OutputSplunk.PqCompress))
 				} else {
@@ -6053,6 +7141,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSplunk.PqControls = &tfTypes.OutputSplunkPqControls{}
 				}
+				items.OutputSplunk.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSplunk.PqMaxBackpressureSec)
+				items.OutputSplunk.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSplunk.PqMaxBufferSize)
+				items.OutputSplunk.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSplunk.PqMaxBufferSizeBytes)
 				items.OutputSplunk.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSplunk.PqMaxFileSize)
 				items.OutputSplunk.PqMaxSize = types.StringPointerValue(itemsItem.OutputSplunk.PqMaxSize)
 				if itemsItem.OutputSplunk.PqMode != nil {
@@ -6066,6 +7157,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunk.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSplunk.PqPath = types.StringPointerValue(itemsItem.OutputSplunk.PqPath)
+				items.OutputSplunk.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSplunk.PqRatePerSec)
+				items.OutputSplunk.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSplunk.PqStrictOrdering)
 				items.OutputSplunk.Streamtags = make([]types.String, 0, len(itemsItem.OutputSplunk.Streamtags))
 				for _, v := range itemsItem.OutputSplunk.Streamtags {
 					items.OutputSplunk.Streamtags = append(items.OutputSplunk.Streamtags, types.StringValue(v))
@@ -6079,7 +7172,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSplunk.TLS == nil {
 					items.OutputSplunk.TLS = nil
 				} else {
-					items.OutputSplunk.TLS = &tfTypes.OutputSplunkTLSSettingsClientSide{}
+					items.OutputSplunk.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputSplunk.TLS.CaPath = types.StringPointerValue(itemsItem.OutputSplunk.TLS.CaPath)
 					items.OutputSplunk.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputSplunk.TLS.CertificateName)
 					items.OutputSplunk.TLS.CertPath = types.StringPointerValue(itemsItem.OutputSplunk.TLS.CertPath)
@@ -6099,15 +7192,12 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunk.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSplunk.TLS.RejectUnauthorized)
 					items.OutputSplunk.TLS.Servername = types.StringPointerValue(itemsItem.OutputSplunk.TLS.Servername)
 				}
-				if itemsItem.OutputSplunk.Type != nil {
-					items.OutputSplunk.Type = types.StringValue(string(*itemsItem.OutputSplunk.Type))
-				} else {
-					items.OutputSplunk.Type = types.StringNull()
-				}
+				items.OutputSplunk.Type = types.StringValue(string(itemsItem.OutputSplunk.Type))
 				items.OutputSplunk.WriteTimeout = types.Float64PointerValue(itemsItem.OutputSplunk.WriteTimeout)
 			}
 			if itemsItem.OutputSplunkHec != nil {
 				items.OutputSplunkHec = &tfTypes.OutputSplunkHec{}
+				items.OutputSplunkHec.TemplateURL = types.StringPointerValue(itemsItem.OutputSplunkHec.TemplateURL)
 				if itemsItem.OutputSplunkHec.AuthType != nil {
 					items.OutputSplunkHec.AuthType = types.StringValue(string(*itemsItem.OutputSplunkHec.AuthType))
 				} else {
@@ -6120,15 +7210,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSplunkHec.EnableMultiMetrics = types.BoolPointerValue(itemsItem.OutputSplunkHec.EnableMultiMetrics)
 				items.OutputSplunkHec.Environment = types.StringPointerValue(itemsItem.OutputSplunkHec.Environment)
 				items.OutputSplunkHec.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputSplunkHec.ExcludeSelf)
-				items.OutputSplunkHec.ExtraHTTPHeaders = []tfTypes.OutputSplunkHecExtraHTTPHeader{}
+				items.OutputSplunkHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem25 := range itemsItem.OutputSplunkHec.ExtraHTTPHeaders {
-					var extraHTTPHeaders25 tfTypes.OutputSplunkHecExtraHTTPHeader
+				for _, extraHTTPHeadersItem27 := range itemsItem.OutputSplunkHec.ExtraHTTPHeaders {
+					var extraHTTPHeaders27 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
-					extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
+					extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
+					extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
 
-					items.OutputSplunkHec.ExtraHTTPHeaders = append(items.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders25)
+					items.OutputSplunkHec.ExtraHTTPHeaders = append(items.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders27)
 				}
 				if itemsItem.OutputSplunkHec.FailedRequestLoggingMode != nil {
 					items.OutputSplunkHec.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputSplunkHec.FailedRequestLoggingMode))
@@ -6136,7 +7226,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunkHec.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputSplunkHec.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputSplunkHec.FlushPeriodSec)
-				items.OutputSplunkHec.ID = types.StringValue(itemsItem.OutputSplunkHec.ID)
+				items.OutputSplunkHec.ID = types.StringPointerValue(itemsItem.OutputSplunkHec.ID)
 				items.OutputSplunkHec.LoadBalanced = types.BoolPointerValue(itemsItem.OutputSplunkHec.LoadBalanced)
 				items.OutputSplunkHec.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputSplunkHec.LoadBalanceStatsPeriodSec)
 				items.OutputSplunkHec.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputSplunkHec.MaxPayloadEvents)
@@ -6158,6 +7248,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSplunkHec.PqControls = &tfTypes.OutputSplunkHecPqControls{}
 				}
+				items.OutputSplunkHec.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSplunkHec.PqMaxBackpressureSec)
+				items.OutputSplunkHec.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSplunkHec.PqMaxBufferSize)
+				items.OutputSplunkHec.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSplunkHec.PqMaxBufferSizeBytes)
 				items.OutputSplunkHec.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSplunkHec.PqMaxFileSize)
 				items.OutputSplunkHec.PqMaxSize = types.StringPointerValue(itemsItem.OutputSplunkHec.PqMaxSize)
 				if itemsItem.OutputSplunkHec.PqMode != nil {
@@ -6171,19 +7264,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunkHec.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSplunkHec.PqPath = types.StringPointerValue(itemsItem.OutputSplunkHec.PqPath)
+				items.OutputSplunkHec.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSplunkHec.PqRatePerSec)
+				items.OutputSplunkHec.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSplunkHec.PqStrictOrdering)
 				items.OutputSplunkHec.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSplunkHec.RejectUnauthorized)
 				items.OutputSplunkHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputSplunkHec.ResponseHonorRetryAfterHeader)
-				items.OutputSplunkHec.ResponseRetrySettings = []tfTypes.OutputSplunkHecResponseRetrySetting{}
+				items.OutputSplunkHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem26 := range itemsItem.OutputSplunkHec.ResponseRetrySettings {
-					var responseRetrySettings26 tfTypes.OutputSplunkHecResponseRetrySetting
+				for _, responseRetrySettingsItem28 := range itemsItem.OutputSplunkHec.ResponseRetrySettings {
+					var responseRetrySettings28 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
-					responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
-					responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
-					responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
+					responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
+					responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
+					responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
+					responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
 
-					items.OutputSplunkHec.ResponseRetrySettings = append(items.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings26)
+					items.OutputSplunkHec.ResponseRetrySettings = append(items.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings28)
 				}
 				items.OutputSplunkHec.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputSplunkHec.SafeHeaders))
 				for _, v := range itemsItem.OutputSplunkHec.SafeHeaders {
@@ -6202,25 +7297,48 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSplunkHec.TimeoutRetrySettings == nil {
 					items.OutputSplunkHec.TimeoutRetrySettings = nil
 				} else {
-					items.OutputSplunkHec.TimeoutRetrySettings = &tfTypes.OutputSplunkHecTimeoutRetrySettings{}
+					items.OutputSplunkHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputSplunkHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputSplunkHec.TimeoutRetrySettings.BackoffRate)
 					items.OutputSplunkHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputSplunkHec.TimeoutRetrySettings.InitialBackoff)
 					items.OutputSplunkHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputSplunkHec.TimeoutRetrySettings.MaxBackoff)
-					items.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputSplunkHec.TimeoutSec = types.Float64PointerValue(itemsItem.OutputSplunkHec.TimeoutSec)
+				if itemsItem.OutputSplunkHec.TLS == nil {
+					items.OutputSplunkHec.TLS = nil
+				} else {
+					items.OutputSplunkHec.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+					items.OutputSplunkHec.TLS.CaPath = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.CaPath)
+					items.OutputSplunkHec.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.CertificateName)
+					items.OutputSplunkHec.TLS.CertPath = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.CertPath)
+					items.OutputSplunkHec.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputSplunkHec.TLS.Disabled)
+					if itemsItem.OutputSplunkHec.TLS.MaxVersion != nil {
+						items.OutputSplunkHec.TLS.MaxVersion = types.StringValue(string(*itemsItem.OutputSplunkHec.TLS.MaxVersion))
+					} else {
+						items.OutputSplunkHec.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.OutputSplunkHec.TLS.MinVersion != nil {
+						items.OutputSplunkHec.TLS.MinVersion = types.StringValue(string(*itemsItem.OutputSplunkHec.TLS.MinVersion))
+					} else {
+						items.OutputSplunkHec.TLS.MinVersion = types.StringNull()
+					}
+					items.OutputSplunkHec.TLS.Passphrase = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.Passphrase)
+					items.OutputSplunkHec.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.PrivKeyPath)
+					items.OutputSplunkHec.TLS.Servername = types.StringPointerValue(itemsItem.OutputSplunkHec.TLS.Servername)
+				}
 				items.OutputSplunkHec.Token = types.StringPointerValue(itemsItem.OutputSplunkHec.Token)
 				items.OutputSplunkHec.Type = types.StringValue(string(itemsItem.OutputSplunkHec.Type))
 				items.OutputSplunkHec.URL = types.StringPointerValue(itemsItem.OutputSplunkHec.URL)
 				items.OutputSplunkHec.Urls = []tfTypes.OutputSplunkHecURL{}
 
-				for _, urlsItem2 := range itemsItem.OutputSplunkHec.Urls {
-					var urls2 tfTypes.OutputSplunkHecURL
+				for _, urlsItem3 := range itemsItem.OutputSplunkHec.Urls {
+					var urls3 tfTypes.OutputSplunkHecURL
 
-					urls2.URL = types.StringPointerValue(urlsItem2.URL)
-					urls2.Weight = types.Float64PointerValue(urlsItem2.Weight)
+					urls3.TemplateURL = types.StringPointerValue(urlsItem3.TemplateURL)
+					urls3.URL = types.StringValue(urlsItem3.URL)
+					urls3.Weight = types.Float64PointerValue(urlsItem3.Weight)
 
-					items.OutputSplunkHec.Urls = append(items.OutputSplunkHec.Urls, urls2)
+					items.OutputSplunkHec.Urls = append(items.OutputSplunkHec.Urls, urls3)
 				}
 				items.OutputSplunkHec.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputSplunkHec.UseRoundRobinDNS)
 			}
@@ -6244,13 +7362,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputSplunkLb.EnableMultiMetrics = types.BoolPointerValue(itemsItem.OutputSplunkLb.EnableMultiMetrics)
 				items.OutputSplunkLb.Environment = types.StringPointerValue(itemsItem.OutputSplunkLb.Environment)
 				items.OutputSplunkLb.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputSplunkLb.ExcludeSelf)
-				items.OutputSplunkLb.Hosts = []tfTypes.OutputSplunkLbHost{}
+				items.OutputSplunkLb.Hosts = []tfTypes.ItemsTypeHosts{}
 
 				for _, hostsItem3 := range itemsItem.OutputSplunkLb.Hosts {
-					var hosts3 tfTypes.OutputSplunkLbHost
+					var hosts3 tfTypes.ItemsTypeHosts
 
+					hosts3.TemplateHost = types.StringPointerValue(hostsItem3.TemplateHost)
+					hosts3.TemplatePort = types.StringPointerValue(hostsItem3.TemplatePort)
 					hosts3.Host = types.StringValue(hostsItem3.Host)
-					hosts3.Port = types.Float64PointerValue(hostsItem3.Port)
+					hosts3.Port = types.Float64Value(hostsItem3.Port)
 					hosts3.Servername = types.StringPointerValue(hostsItem3.Servername)
 					if hostsItem3.TLS != nil {
 						hosts3.TLS = types.StringValue(string(*hostsItem3.TLS))
@@ -6270,16 +7390,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthToken = types.StringPointerValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.AuthToken)
 					items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = []tfTypes.OutputSplunkLbAuthToken{}
 
-					for _, authTokensItem := range itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
-						var authTokens tfTypes.OutputSplunkLbAuthToken
+					for _, authTokensItem3 := range itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
+						var authTokens3 tfTypes.OutputSplunkLbAuthToken
 
-						if authTokensItem.AuthType != nil {
-							authTokens.AuthType = types.StringValue(string(*authTokensItem.AuthType))
+						authTokens3.AuthToken = types.StringPointerValue(authTokensItem3.AuthToken)
+						if authTokensItem3.AuthType != nil {
+							authTokens3.AuthType = types.StringValue(string(*authTokensItem3.AuthType))
 						} else {
-							authTokens.AuthType = types.StringNull()
+							authTokens3.AuthType = types.StringNull()
 						}
+						authTokens3.TextSecret = types.StringPointerValue(authTokensItem3.TextSecret)
 
-						items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = append(items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens, authTokens)
+						items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = append(items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens, authTokens3)
 					}
 					if itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType != nil {
 						items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType = types.StringValue(string(*itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType))
@@ -6287,9 +7409,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 						items.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType = types.StringNull()
 					}
 					items.OutputSplunkLb.IndexerDiscoveryConfigs.MasterURI = types.StringValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.MasterURI)
-					items.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec = types.Float64PointerValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec)
+					items.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec = types.Float64Value(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec)
 					items.OutputSplunkLb.IndexerDiscoveryConfigs.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.RejectUnauthorized)
-					items.OutputSplunkLb.IndexerDiscoveryConfigs.Site = types.StringPointerValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.Site)
+					items.OutputSplunkLb.IndexerDiscoveryConfigs.Site = types.StringValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.Site)
 					items.OutputSplunkLb.IndexerDiscoveryConfigs.TextSecret = types.StringPointerValue(itemsItem.OutputSplunkLb.IndexerDiscoveryConfigs.TextSecret)
 				}
 				items.OutputSplunkLb.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputSplunkLb.LoadBalanceStatsPeriodSec)
@@ -6322,6 +7444,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSplunkLb.PqControls = &tfTypes.OutputSplunkLbPqControls{}
 				}
+				items.OutputSplunkLb.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSplunkLb.PqMaxBackpressureSec)
+				items.OutputSplunkLb.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSplunkLb.PqMaxBufferSize)
+				items.OutputSplunkLb.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSplunkLb.PqMaxBufferSizeBytes)
 				items.OutputSplunkLb.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSplunkLb.PqMaxFileSize)
 				items.OutputSplunkLb.PqMaxSize = types.StringPointerValue(itemsItem.OutputSplunkLb.PqMaxSize)
 				if itemsItem.OutputSplunkLb.PqMode != nil {
@@ -6335,6 +7460,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSplunkLb.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSplunkLb.PqPath = types.StringPointerValue(itemsItem.OutputSplunkLb.PqPath)
+				items.OutputSplunkLb.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSplunkLb.PqRatePerSec)
+				items.OutputSplunkLb.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSplunkLb.PqStrictOrdering)
 				items.OutputSplunkLb.SenderUnhealthyTimeAllowance = types.Float64PointerValue(itemsItem.OutputSplunkLb.SenderUnhealthyTimeAllowance)
 				items.OutputSplunkLb.Streamtags = make([]types.String, 0, len(itemsItem.OutputSplunkLb.Streamtags))
 				for _, v := range itemsItem.OutputSplunkLb.Streamtags {
@@ -6349,7 +7476,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSplunkLb.TLS == nil {
 					items.OutputSplunkLb.TLS = nil
 				} else {
-					items.OutputSplunkLb.TLS = &tfTypes.OutputSplunkLbTLSSettingsClientSide{}
+					items.OutputSplunkLb.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputSplunkLb.TLS.CaPath = types.StringPointerValue(itemsItem.OutputSplunkLb.TLS.CaPath)
 					items.OutputSplunkLb.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputSplunkLb.TLS.CertificateName)
 					items.OutputSplunkLb.TLS.CertPath = types.StringPointerValue(itemsItem.OutputSplunkLb.TLS.CertPath)
@@ -6374,6 +7501,13 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputSqs != nil {
 				items.OutputSqs = &tfTypes.OutputSqs{}
+				items.OutputSqs.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.OutputSqs.TemplateAssumeRoleArn)
+				items.OutputSqs.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputSqs.TemplateAssumeRoleExternalID)
+				items.OutputSqs.TemplateAwsAccountID = types.StringPointerValue(itemsItem.OutputSqs.TemplateAwsAccountID)
+				items.OutputSqs.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.OutputSqs.TemplateAwsAPIKey)
+				items.OutputSqs.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.OutputSqs.TemplateAwsSecretKey)
+				items.OutputSqs.TemplateQueueName = types.StringPointerValue(itemsItem.OutputSqs.TemplateQueueName)
+				items.OutputSqs.TemplateRegion = types.StringPointerValue(itemsItem.OutputSqs.TemplateRegion)
 				items.OutputSqs.AssumeRoleArn = types.StringPointerValue(itemsItem.OutputSqs.AssumeRoleArn)
 				items.OutputSqs.AssumeRoleExternalID = types.StringPointerValue(itemsItem.OutputSqs.AssumeRoleExternalID)
 				items.OutputSqs.AwsAccountID = types.StringPointerValue(itemsItem.OutputSqs.AwsAccountID)
@@ -6413,6 +7547,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSqs.PqControls = &tfTypes.OutputSqsPqControls{}
 				}
+				items.OutputSqs.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSqs.PqMaxBackpressureSec)
+				items.OutputSqs.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSqs.PqMaxBufferSize)
+				items.OutputSqs.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSqs.PqMaxBufferSizeBytes)
 				items.OutputSqs.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSqs.PqMaxFileSize)
 				items.OutputSqs.PqMaxSize = types.StringPointerValue(itemsItem.OutputSqs.PqMaxSize)
 				if itemsItem.OutputSqs.PqMode != nil {
@@ -6426,12 +7563,10 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSqs.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSqs.PqPath = types.StringPointerValue(itemsItem.OutputSqs.PqPath)
+				items.OutputSqs.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSqs.PqRatePerSec)
+				items.OutputSqs.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSqs.PqStrictOrdering)
 				items.OutputSqs.QueueName = types.StringValue(itemsItem.OutputSqs.QueueName)
-				if itemsItem.OutputSqs.QueueType != nil {
-					items.OutputSqs.QueueType = types.StringValue(string(*itemsItem.OutputSqs.QueueType))
-				} else {
-					items.OutputSqs.QueueType = types.StringNull()
-				}
+				items.OutputSqs.QueueType = types.StringValue(string(itemsItem.OutputSqs.QueueType))
 				items.OutputSqs.Region = types.StringPointerValue(itemsItem.OutputSqs.Region)
 				items.OutputSqs.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSqs.RejectUnauthorized)
 				items.OutputSqs.ReuseConnections = types.BoolPointerValue(itemsItem.OutputSqs.ReuseConnections)
@@ -6448,11 +7583,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				for _, v := range itemsItem.OutputSqs.SystemFields {
 					items.OutputSqs.SystemFields = append(items.OutputSqs.SystemFields, types.StringValue(v))
 				}
-				if itemsItem.OutputSqs.Type != nil {
-					items.OutputSqs.Type = types.StringValue(string(*itemsItem.OutputSqs.Type))
-				} else {
-					items.OutputSqs.Type = types.StringNull()
-				}
+				items.OutputSqs.Type = types.StringValue(string(itemsItem.OutputSqs.Type))
 			}
 			if itemsItem.OutputStatsd != nil {
 				items.OutputStatsd = &tfTypes.OutputStatsd{}
@@ -6470,7 +7601,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsd.OnBackpressure = types.StringNull()
 				}
 				items.OutputStatsd.Pipeline = types.StringPointerValue(itemsItem.OutputStatsd.Pipeline)
-				items.OutputStatsd.Port = types.Float64PointerValue(itemsItem.OutputStatsd.Port)
+				items.OutputStatsd.Port = types.Float64Value(itemsItem.OutputStatsd.Port)
 				if itemsItem.OutputStatsd.PqCompress != nil {
 					items.OutputStatsd.PqCompress = types.StringValue(string(*itemsItem.OutputStatsd.PqCompress))
 				} else {
@@ -6481,6 +7612,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputStatsd.PqControls = &tfTypes.OutputStatsdPqControls{}
 				}
+				items.OutputStatsd.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputStatsd.PqMaxBackpressureSec)
+				items.OutputStatsd.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputStatsd.PqMaxBufferSize)
+				items.OutputStatsd.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputStatsd.PqMaxBufferSizeBytes)
 				items.OutputStatsd.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputStatsd.PqMaxFileSize)
 				items.OutputStatsd.PqMaxSize = types.StringPointerValue(itemsItem.OutputStatsd.PqMaxSize)
 				if itemsItem.OutputStatsd.PqMode != nil {
@@ -6494,11 +7628,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsd.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputStatsd.PqPath = types.StringPointerValue(itemsItem.OutputStatsd.PqPath)
-				if itemsItem.OutputStatsd.Protocol != nil {
-					items.OutputStatsd.Protocol = types.StringValue(string(*itemsItem.OutputStatsd.Protocol))
-				} else {
-					items.OutputStatsd.Protocol = types.StringNull()
-				}
+				items.OutputStatsd.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputStatsd.PqRatePerSec)
+				items.OutputStatsd.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputStatsd.PqStrictOrdering)
+				items.OutputStatsd.Protocol = types.StringValue(string(itemsItem.OutputStatsd.Protocol))
 				items.OutputStatsd.Streamtags = make([]types.String, 0, len(itemsItem.OutputStatsd.Streamtags))
 				for _, v := range itemsItem.OutputStatsd.Streamtags {
 					items.OutputStatsd.Streamtags = append(items.OutputStatsd.Streamtags, types.StringValue(v))
@@ -6508,11 +7640,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsd.SystemFields = append(items.OutputStatsd.SystemFields, types.StringValue(v))
 				}
 				items.OutputStatsd.ThrottleRatePerSec = types.StringPointerValue(itemsItem.OutputStatsd.ThrottleRatePerSec)
-				if itemsItem.OutputStatsd.Type != nil {
-					items.OutputStatsd.Type = types.StringValue(string(*itemsItem.OutputStatsd.Type))
-				} else {
-					items.OutputStatsd.Type = types.StringNull()
-				}
+				items.OutputStatsd.Type = types.StringValue(string(itemsItem.OutputStatsd.Type))
 				items.OutputStatsd.WriteTimeout = types.Float64PointerValue(itemsItem.OutputStatsd.WriteTimeout)
 			}
 			if itemsItem.OutputStatsdExt != nil {
@@ -6531,7 +7659,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsdExt.OnBackpressure = types.StringNull()
 				}
 				items.OutputStatsdExt.Pipeline = types.StringPointerValue(itemsItem.OutputStatsdExt.Pipeline)
-				items.OutputStatsdExt.Port = types.Float64PointerValue(itemsItem.OutputStatsdExt.Port)
+				items.OutputStatsdExt.Port = types.Float64Value(itemsItem.OutputStatsdExt.Port)
 				if itemsItem.OutputStatsdExt.PqCompress != nil {
 					items.OutputStatsdExt.PqCompress = types.StringValue(string(*itemsItem.OutputStatsdExt.PqCompress))
 				} else {
@@ -6542,6 +7670,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputStatsdExt.PqControls = &tfTypes.OutputStatsdExtPqControls{}
 				}
+				items.OutputStatsdExt.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputStatsdExt.PqMaxBackpressureSec)
+				items.OutputStatsdExt.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputStatsdExt.PqMaxBufferSize)
+				items.OutputStatsdExt.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputStatsdExt.PqMaxBufferSizeBytes)
 				items.OutputStatsdExt.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputStatsdExt.PqMaxFileSize)
 				items.OutputStatsdExt.PqMaxSize = types.StringPointerValue(itemsItem.OutputStatsdExt.PqMaxSize)
 				if itemsItem.OutputStatsdExt.PqMode != nil {
@@ -6555,11 +7686,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsdExt.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputStatsdExt.PqPath = types.StringPointerValue(itemsItem.OutputStatsdExt.PqPath)
-				if itemsItem.OutputStatsdExt.Protocol != nil {
-					items.OutputStatsdExt.Protocol = types.StringValue(string(*itemsItem.OutputStatsdExt.Protocol))
-				} else {
-					items.OutputStatsdExt.Protocol = types.StringNull()
-				}
+				items.OutputStatsdExt.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputStatsdExt.PqRatePerSec)
+				items.OutputStatsdExt.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputStatsdExt.PqStrictOrdering)
+				items.OutputStatsdExt.Protocol = types.StringValue(string(itemsItem.OutputStatsdExt.Protocol))
 				items.OutputStatsdExt.Streamtags = make([]types.String, 0, len(itemsItem.OutputStatsdExt.Streamtags))
 				for _, v := range itemsItem.OutputStatsdExt.Streamtags {
 					items.OutputStatsdExt.Streamtags = append(items.OutputStatsdExt.Streamtags, types.StringValue(v))
@@ -6569,30 +7698,27 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputStatsdExt.SystemFields = append(items.OutputStatsdExt.SystemFields, types.StringValue(v))
 				}
 				items.OutputStatsdExt.ThrottleRatePerSec = types.StringPointerValue(itemsItem.OutputStatsdExt.ThrottleRatePerSec)
-				if itemsItem.OutputStatsdExt.Type != nil {
-					items.OutputStatsdExt.Type = types.StringValue(string(*itemsItem.OutputStatsdExt.Type))
-				} else {
-					items.OutputStatsdExt.Type = types.StringNull()
-				}
+				items.OutputStatsdExt.Type = types.StringValue(string(itemsItem.OutputStatsdExt.Type))
 				items.OutputStatsdExt.WriteTimeout = types.Float64PointerValue(itemsItem.OutputStatsdExt.WriteTimeout)
 			}
 			if itemsItem.OutputSumoLogic != nil {
 				items.OutputSumoLogic = &tfTypes.OutputSumoLogic{}
+				items.OutputSumoLogic.TemplateURL = types.StringPointerValue(itemsItem.OutputSumoLogic.TemplateURL)
 				items.OutputSumoLogic.Compress = types.BoolPointerValue(itemsItem.OutputSumoLogic.Compress)
 				items.OutputSumoLogic.Concurrency = types.Float64PointerValue(itemsItem.OutputSumoLogic.Concurrency)
 				items.OutputSumoLogic.CustomCategory = types.StringPointerValue(itemsItem.OutputSumoLogic.CustomCategory)
 				items.OutputSumoLogic.CustomSource = types.StringPointerValue(itemsItem.OutputSumoLogic.CustomSource)
 				items.OutputSumoLogic.Description = types.StringPointerValue(itemsItem.OutputSumoLogic.Description)
 				items.OutputSumoLogic.Environment = types.StringPointerValue(itemsItem.OutputSumoLogic.Environment)
-				items.OutputSumoLogic.ExtraHTTPHeaders = []tfTypes.OutputSumoLogicExtraHTTPHeader{}
+				items.OutputSumoLogic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem26 := range itemsItem.OutputSumoLogic.ExtraHTTPHeaders {
-					var extraHTTPHeaders26 tfTypes.OutputSumoLogicExtraHTTPHeader
+				for _, extraHTTPHeadersItem28 := range itemsItem.OutputSumoLogic.ExtraHTTPHeaders {
+					var extraHTTPHeaders28 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
-					extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
+					extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
+					extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
 
-					items.OutputSumoLogic.ExtraHTTPHeaders = append(items.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders26)
+					items.OutputSumoLogic.ExtraHTTPHeaders = append(items.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders28)
 				}
 				if itemsItem.OutputSumoLogic.FailedRequestLoggingMode != nil {
 					items.OutputSumoLogic.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputSumoLogic.FailedRequestLoggingMode))
@@ -6624,6 +7750,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSumoLogic.PqControls = &tfTypes.OutputSumoLogicPqControls{}
 				}
+				items.OutputSumoLogic.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSumoLogic.PqMaxBackpressureSec)
+				items.OutputSumoLogic.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSumoLogic.PqMaxBufferSize)
+				items.OutputSumoLogic.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSumoLogic.PqMaxBufferSizeBytes)
 				items.OutputSumoLogic.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSumoLogic.PqMaxFileSize)
 				items.OutputSumoLogic.PqMaxSize = types.StringPointerValue(itemsItem.OutputSumoLogic.PqMaxSize)
 				if itemsItem.OutputSumoLogic.PqMode != nil {
@@ -6637,19 +7766,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSumoLogic.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSumoLogic.PqPath = types.StringPointerValue(itemsItem.OutputSumoLogic.PqPath)
+				items.OutputSumoLogic.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSumoLogic.PqRatePerSec)
+				items.OutputSumoLogic.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSumoLogic.PqStrictOrdering)
 				items.OutputSumoLogic.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputSumoLogic.RejectUnauthorized)
 				items.OutputSumoLogic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputSumoLogic.ResponseHonorRetryAfterHeader)
-				items.OutputSumoLogic.ResponseRetrySettings = []tfTypes.OutputSumoLogicResponseRetrySetting{}
+				items.OutputSumoLogic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem27 := range itemsItem.OutputSumoLogic.ResponseRetrySettings {
-					var responseRetrySettings27 tfTypes.OutputSumoLogicResponseRetrySetting
+				for _, responseRetrySettingsItem29 := range itemsItem.OutputSumoLogic.ResponseRetrySettings {
+					var responseRetrySettings29 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
-					responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
-					responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
-					responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
+					responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
+					responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
+					responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
+					responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
 
-					items.OutputSumoLogic.ResponseRetrySettings = append(items.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings27)
+					items.OutputSumoLogic.ResponseRetrySettings = append(items.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings29)
 				}
 				items.OutputSumoLogic.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputSumoLogic.SafeHeaders))
 				for _, v := range itemsItem.OutputSumoLogic.SafeHeaders {
@@ -6666,11 +7797,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSumoLogic.TimeoutRetrySettings == nil {
 					items.OutputSumoLogic.TimeoutRetrySettings = nil
 				} else {
-					items.OutputSumoLogic.TimeoutRetrySettings = &tfTypes.OutputSumoLogicTimeoutRetrySettings{}
+					items.OutputSumoLogic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputSumoLogic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputSumoLogic.TimeoutRetrySettings.BackoffRate)
 					items.OutputSumoLogic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputSumoLogic.TimeoutRetrySettings.InitialBackoff)
 					items.OutputSumoLogic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputSumoLogic.TimeoutRetrySettings.MaxBackoff)
-					items.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputSumoLogic.TimeoutSec = types.Float64PointerValue(itemsItem.OutputSumoLogic.TimeoutSec)
 				items.OutputSumoLogic.TotalMemoryLimitKB = types.Float64PointerValue(itemsItem.OutputSumoLogic.TotalMemoryLimitKB)
@@ -6680,19 +7811,45 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputSyslog != nil {
 				items.OutputSyslog = &tfTypes.OutputSyslog{}
+				items.OutputSyslog.TemplateHost = types.StringPointerValue(itemsItem.OutputSyslog.TemplateHost)
+				items.OutputSyslog.TemplatePort = types.StringPointerValue(itemsItem.OutputSyslog.TemplatePort)
 				items.OutputSyslog.AppName = types.StringPointerValue(itemsItem.OutputSyslog.AppName)
 				items.OutputSyslog.ConnectionTimeout = types.Float64PointerValue(itemsItem.OutputSyslog.ConnectionTimeout)
 				items.OutputSyslog.Description = types.StringPointerValue(itemsItem.OutputSyslog.Description)
+				items.OutputSyslog.DNSResolvePeriodSec = types.Float64PointerValue(itemsItem.OutputSyslog.DNSResolvePeriodSec)
+				items.OutputSyslog.EnableIPSpoofing = types.BoolPointerValue(itemsItem.OutputSyslog.EnableIPSpoofing)
 				items.OutputSyslog.Environment = types.StringPointerValue(itemsItem.OutputSyslog.Environment)
+				items.OutputSyslog.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputSyslog.ExcludeSelf)
 				if itemsItem.OutputSyslog.Facility != nil {
 					items.OutputSyslog.Facility = types.Int64Value(int64(*itemsItem.OutputSyslog.Facility))
 				} else {
 					items.OutputSyslog.Facility = types.Int64Null()
 				}
 				items.OutputSyslog.Host = types.StringPointerValue(itemsItem.OutputSyslog.Host)
-				items.OutputSyslog.ID = types.StringValue(itemsItem.OutputSyslog.ID)
+				items.OutputSyslog.Hosts = []tfTypes.ItemsTypeHosts{}
+
+				for _, hostsItem4 := range itemsItem.OutputSyslog.Hosts {
+					var hosts4 tfTypes.ItemsTypeHosts
+
+					hosts4.TemplateHost = types.StringPointerValue(hostsItem4.TemplateHost)
+					hosts4.TemplatePort = types.StringPointerValue(hostsItem4.TemplatePort)
+					hosts4.Host = types.StringValue(hostsItem4.Host)
+					hosts4.Port = types.Float64Value(hostsItem4.Port)
+					hosts4.Servername = types.StringPointerValue(hostsItem4.Servername)
+					if hostsItem4.TLS != nil {
+						hosts4.TLS = types.StringValue(string(*hostsItem4.TLS))
+					} else {
+						hosts4.TLS = types.StringNull()
+					}
+					hosts4.Weight = types.Float64PointerValue(hostsItem4.Weight)
+
+					items.OutputSyslog.Hosts = append(items.OutputSyslog.Hosts, hosts4)
+				}
+				items.OutputSyslog.ID = types.StringPointerValue(itemsItem.OutputSyslog.ID)
 				items.OutputSyslog.LoadBalanced = types.BoolPointerValue(itemsItem.OutputSyslog.LoadBalanced)
+				items.OutputSyslog.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputSyslog.LoadBalanceStatsPeriodSec)
 				items.OutputSyslog.LogFailedRequests = types.BoolPointerValue(itemsItem.OutputSyslog.LogFailedRequests)
+				items.OutputSyslog.MaxConcurrentSenders = types.Float64PointerValue(itemsItem.OutputSyslog.MaxConcurrentSenders)
 				items.OutputSyslog.MaxRecordSize = types.Float64PointerValue(itemsItem.OutputSyslog.MaxRecordSize)
 				if itemsItem.OutputSyslog.MessageFormat != nil {
 					items.OutputSyslog.MessageFormat = types.StringValue(string(*itemsItem.OutputSyslog.MessageFormat))
@@ -6717,6 +7874,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputSyslog.PqControls = &tfTypes.OutputSyslogPqControls{}
 				}
+				items.OutputSyslog.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputSyslog.PqMaxBackpressureSec)
+				items.OutputSyslog.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputSyslog.PqMaxBufferSize)
+				items.OutputSyslog.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputSyslog.PqMaxBufferSizeBytes)
 				items.OutputSyslog.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputSyslog.PqMaxFileSize)
 				items.OutputSyslog.PqMaxSize = types.StringPointerValue(itemsItem.OutputSyslog.PqMaxSize)
 				if itemsItem.OutputSyslog.PqMode != nil {
@@ -6730,6 +7890,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputSyslog.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputSyslog.PqPath = types.StringPointerValue(itemsItem.OutputSyslog.PqPath)
+				items.OutputSyslog.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputSyslog.PqRatePerSec)
+				items.OutputSyslog.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputSyslog.PqStrictOrdering)
 				if itemsItem.OutputSyslog.Protocol != nil {
 					items.OutputSyslog.Protocol = types.StringValue(string(*itemsItem.OutputSyslog.Protocol))
 				} else {
@@ -6757,7 +7919,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputSyslog.TLS == nil {
 					items.OutputSyslog.TLS = nil
 				} else {
-					items.OutputSyslog.TLS = &tfTypes.OutputSyslogTLSSettingsClientSide{}
+					items.OutputSyslog.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputSyslog.TLS.CaPath = types.StringPointerValue(itemsItem.OutputSyslog.TLS.CaPath)
 					items.OutputSyslog.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputSyslog.TLS.CertificateName)
 					items.OutputSyslog.TLS.CertPath = types.StringPointerValue(itemsItem.OutputSyslog.TLS.CertPath)
@@ -6783,6 +7945,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputTcpjson != nil {
 				items.OutputTcpjson = &tfTypes.OutputTcpjson{}
+				items.OutputTcpjson.TemplateHost = types.StringPointerValue(itemsItem.OutputTcpjson.TemplateHost)
+				items.OutputTcpjson.TemplatePort = types.StringPointerValue(itemsItem.OutputTcpjson.TemplatePort)
 				items.OutputTcpjson.AuthToken = types.StringPointerValue(itemsItem.OutputTcpjson.AuthToken)
 				if itemsItem.OutputTcpjson.AuthType != nil {
 					items.OutputTcpjson.AuthType = types.StringValue(string(*itemsItem.OutputTcpjson.AuthType))
@@ -6800,24 +7964,26 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputTcpjson.Environment = types.StringPointerValue(itemsItem.OutputTcpjson.Environment)
 				items.OutputTcpjson.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputTcpjson.ExcludeSelf)
 				items.OutputTcpjson.Host = types.StringPointerValue(itemsItem.OutputTcpjson.Host)
-				items.OutputTcpjson.Hosts = []tfTypes.OutputTcpjsonHost{}
+				items.OutputTcpjson.Hosts = []tfTypes.ItemsTypeHosts{}
 
-				for _, hostsItem4 := range itemsItem.OutputTcpjson.Hosts {
-					var hosts4 tfTypes.OutputTcpjsonHost
+				for _, hostsItem5 := range itemsItem.OutputTcpjson.Hosts {
+					var hosts5 tfTypes.ItemsTypeHosts
 
-					hosts4.Host = types.StringValue(hostsItem4.Host)
-					hosts4.Port = types.Float64Value(hostsItem4.Port)
-					hosts4.Servername = types.StringPointerValue(hostsItem4.Servername)
-					if hostsItem4.TLS != nil {
-						hosts4.TLS = types.StringValue(string(*hostsItem4.TLS))
+					hosts5.TemplateHost = types.StringPointerValue(hostsItem5.TemplateHost)
+					hosts5.TemplatePort = types.StringPointerValue(hostsItem5.TemplatePort)
+					hosts5.Host = types.StringValue(hostsItem5.Host)
+					hosts5.Port = types.Float64Value(hostsItem5.Port)
+					hosts5.Servername = types.StringPointerValue(hostsItem5.Servername)
+					if hostsItem5.TLS != nil {
+						hosts5.TLS = types.StringValue(string(*hostsItem5.TLS))
 					} else {
-						hosts4.TLS = types.StringNull()
+						hosts5.TLS = types.StringNull()
 					}
-					hosts4.Weight = types.Float64PointerValue(hostsItem4.Weight)
+					hosts5.Weight = types.Float64PointerValue(hostsItem5.Weight)
 
-					items.OutputTcpjson.Hosts = append(items.OutputTcpjson.Hosts, hosts4)
+					items.OutputTcpjson.Hosts = append(items.OutputTcpjson.Hosts, hosts5)
 				}
-				items.OutputTcpjson.ID = types.StringValue(itemsItem.OutputTcpjson.ID)
+				items.OutputTcpjson.ID = types.StringPointerValue(itemsItem.OutputTcpjson.ID)
 				items.OutputTcpjson.LoadBalanced = types.BoolPointerValue(itemsItem.OutputTcpjson.LoadBalanced)
 				items.OutputTcpjson.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputTcpjson.LoadBalanceStatsPeriodSec)
 				items.OutputTcpjson.LogFailedRequests = types.BoolPointerValue(itemsItem.OutputTcpjson.LogFailedRequests)
@@ -6839,6 +8005,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputTcpjson.PqControls = &tfTypes.OutputTcpjsonPqControls{}
 				}
+				items.OutputTcpjson.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputTcpjson.PqMaxBackpressureSec)
+				items.OutputTcpjson.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputTcpjson.PqMaxBufferSize)
+				items.OutputTcpjson.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputTcpjson.PqMaxBufferSizeBytes)
 				items.OutputTcpjson.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputTcpjson.PqMaxFileSize)
 				items.OutputTcpjson.PqMaxSize = types.StringPointerValue(itemsItem.OutputTcpjson.PqMaxSize)
 				if itemsItem.OutputTcpjson.PqMode != nil {
@@ -6852,6 +8021,8 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputTcpjson.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputTcpjson.PqPath = types.StringPointerValue(itemsItem.OutputTcpjson.PqPath)
+				items.OutputTcpjson.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputTcpjson.PqRatePerSec)
+				items.OutputTcpjson.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputTcpjson.PqStrictOrdering)
 				items.OutputTcpjson.SendHeader = types.BoolPointerValue(itemsItem.OutputTcpjson.SendHeader)
 				items.OutputTcpjson.Streamtags = make([]types.String, 0, len(itemsItem.OutputTcpjson.Streamtags))
 				for _, v := range itemsItem.OutputTcpjson.Streamtags {
@@ -6866,7 +8037,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputTcpjson.TLS == nil {
 					items.OutputTcpjson.TLS = nil
 				} else {
-					items.OutputTcpjson.TLS = &tfTypes.OutputTcpjsonTLSSettingsClientSide{}
+					items.OutputTcpjson.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 					items.OutputTcpjson.TLS.CaPath = types.StringPointerValue(itemsItem.OutputTcpjson.TLS.CaPath)
 					items.OutputTcpjson.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputTcpjson.TLS.CertificateName)
 					items.OutputTcpjson.TLS.CertPath = types.StringPointerValue(itemsItem.OutputTcpjson.TLS.CertPath)
@@ -6900,17 +8071,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputWavefront.Compress = types.BoolPointerValue(itemsItem.OutputWavefront.Compress)
 				items.OutputWavefront.Concurrency = types.Float64PointerValue(itemsItem.OutputWavefront.Concurrency)
 				items.OutputWavefront.Description = types.StringPointerValue(itemsItem.OutputWavefront.Description)
-				items.OutputWavefront.Domain = types.StringPointerValue(itemsItem.OutputWavefront.Domain)
+				items.OutputWavefront.Domain = types.StringValue(itemsItem.OutputWavefront.Domain)
 				items.OutputWavefront.Environment = types.StringPointerValue(itemsItem.OutputWavefront.Environment)
-				items.OutputWavefront.ExtraHTTPHeaders = []tfTypes.OutputWavefrontExtraHTTPHeader{}
+				items.OutputWavefront.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem27 := range itemsItem.OutputWavefront.ExtraHTTPHeaders {
-					var extraHTTPHeaders27 tfTypes.OutputWavefrontExtraHTTPHeader
+				for _, extraHTTPHeadersItem29 := range itemsItem.OutputWavefront.ExtraHTTPHeaders {
+					var extraHTTPHeaders29 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
-					extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
+					extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
+					extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
 
-					items.OutputWavefront.ExtraHTTPHeaders = append(items.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders27)
+					items.OutputWavefront.ExtraHTTPHeaders = append(items.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders29)
 				}
 				if itemsItem.OutputWavefront.FailedRequestLoggingMode != nil {
 					items.OutputWavefront.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputWavefront.FailedRequestLoggingMode))
@@ -6937,6 +8108,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputWavefront.PqControls = &tfTypes.OutputWavefrontPqControls{}
 				}
+				items.OutputWavefront.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputWavefront.PqMaxBackpressureSec)
+				items.OutputWavefront.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputWavefront.PqMaxBufferSize)
+				items.OutputWavefront.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputWavefront.PqMaxBufferSizeBytes)
 				items.OutputWavefront.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputWavefront.PqMaxFileSize)
 				items.OutputWavefront.PqMaxSize = types.StringPointerValue(itemsItem.OutputWavefront.PqMaxSize)
 				if itemsItem.OutputWavefront.PqMode != nil {
@@ -6950,19 +8124,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputWavefront.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputWavefront.PqPath = types.StringPointerValue(itemsItem.OutputWavefront.PqPath)
+				items.OutputWavefront.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputWavefront.PqRatePerSec)
+				items.OutputWavefront.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputWavefront.PqStrictOrdering)
 				items.OutputWavefront.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputWavefront.RejectUnauthorized)
 				items.OutputWavefront.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputWavefront.ResponseHonorRetryAfterHeader)
-				items.OutputWavefront.ResponseRetrySettings = []tfTypes.OutputWavefrontResponseRetrySetting{}
+				items.OutputWavefront.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem28 := range itemsItem.OutputWavefront.ResponseRetrySettings {
-					var responseRetrySettings28 tfTypes.OutputWavefrontResponseRetrySetting
+				for _, responseRetrySettingsItem30 := range itemsItem.OutputWavefront.ResponseRetrySettings {
+					var responseRetrySettings30 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
-					responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
-					responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
-					responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
+					responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
+					responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
+					responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
+					responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
 
-					items.OutputWavefront.ResponseRetrySettings = append(items.OutputWavefront.ResponseRetrySettings, responseRetrySettings28)
+					items.OutputWavefront.ResponseRetrySettings = append(items.OutputWavefront.ResponseRetrySettings, responseRetrySettings30)
 				}
 				items.OutputWavefront.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputWavefront.SafeHeaders))
 				for _, v := range itemsItem.OutputWavefront.SafeHeaders {
@@ -6980,11 +8156,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputWavefront.TimeoutRetrySettings == nil {
 					items.OutputWavefront.TimeoutRetrySettings = nil
 				} else {
-					items.OutputWavefront.TimeoutRetrySettings = &tfTypes.OutputWavefrontTimeoutRetrySettings{}
+					items.OutputWavefront.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputWavefront.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputWavefront.TimeoutRetrySettings.BackoffRate)
 					items.OutputWavefront.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputWavefront.TimeoutRetrySettings.InitialBackoff)
 					items.OutputWavefront.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputWavefront.TimeoutRetrySettings.MaxBackoff)
-					items.OutputWavefront.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputWavefront.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputWavefront.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputWavefront.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputWavefront.TimeoutSec = types.Float64PointerValue(itemsItem.OutputWavefront.TimeoutSec)
 				items.OutputWavefront.Token = types.StringPointerValue(itemsItem.OutputWavefront.Token)
@@ -6993,6 +8169,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 			}
 			if itemsItem.OutputWebhook != nil {
 				items.OutputWebhook = &tfTypes.OutputWebhook{}
+				items.OutputWebhook.TemplateLoginURL = types.StringPointerValue(itemsItem.OutputWebhook.TemplateLoginURL)
+				items.OutputWebhook.TemplateSecret = types.StringPointerValue(itemsItem.OutputWebhook.TemplateSecret)
+				items.OutputWebhook.TemplateURL = types.StringPointerValue(itemsItem.OutputWebhook.TemplateURL)
 				items.OutputWebhook.AdvancedContentType = types.StringPointerValue(itemsItem.OutputWebhook.AdvancedContentType)
 				items.OutputWebhook.AuthHeaderExpr = types.StringPointerValue(itemsItem.OutputWebhook.AuthHeaderExpr)
 				if itemsItem.OutputWebhook.AuthType != nil {
@@ -7012,15 +8191,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputWebhook.DNSResolvePeriodSec = types.Float64PointerValue(itemsItem.OutputWebhook.DNSResolvePeriodSec)
 				items.OutputWebhook.Environment = types.StringPointerValue(itemsItem.OutputWebhook.Environment)
 				items.OutputWebhook.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputWebhook.ExcludeSelf)
-				items.OutputWebhook.ExtraHTTPHeaders = []tfTypes.OutputWebhookExtraHTTPHeader{}
+				items.OutputWebhook.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem28 := range itemsItem.OutputWebhook.ExtraHTTPHeaders {
-					var extraHTTPHeaders28 tfTypes.OutputWebhookExtraHTTPHeader
+				for _, extraHTTPHeadersItem30 := range itemsItem.OutputWebhook.ExtraHTTPHeaders {
+					var extraHTTPHeaders30 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
-					extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
+					extraHTTPHeaders30.Name = types.StringPointerValue(extraHTTPHeadersItem30.Name)
+					extraHTTPHeaders30.Value = types.StringValue(extraHTTPHeadersItem30.Value)
 
-					items.OutputWebhook.ExtraHTTPHeaders = append(items.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders28)
+					items.OutputWebhook.ExtraHTTPHeaders = append(items.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders30)
 				}
 				if itemsItem.OutputWebhook.FailedRequestLoggingMode != nil {
 					items.OutputWebhook.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputWebhook.FailedRequestLoggingMode))
@@ -7035,7 +8214,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputWebhook.FormatEventCode = types.StringPointerValue(itemsItem.OutputWebhook.FormatEventCode)
 				items.OutputWebhook.FormatPayloadCode = types.StringPointerValue(itemsItem.OutputWebhook.FormatPayloadCode)
-				items.OutputWebhook.ID = types.StringValue(itemsItem.OutputWebhook.ID)
+				items.OutputWebhook.ID = types.StringPointerValue(itemsItem.OutputWebhook.ID)
 				items.OutputWebhook.KeepAlive = types.BoolPointerValue(itemsItem.OutputWebhook.KeepAlive)
 				items.OutputWebhook.LoadBalanced = types.BoolPointerValue(itemsItem.OutputWebhook.LoadBalanced)
 				items.OutputWebhook.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputWebhook.LoadBalanceStatsPeriodSec)
@@ -7059,13 +8238,13 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				}
 				items.OutputWebhook.OauthParams = []tfTypes.OutputWebhookOauthParam{}
 
-				for _, oauthParamsItem4 := range itemsItem.OutputWebhook.OauthParams {
-					var oauthParams4 tfTypes.OutputWebhookOauthParam
+				for _, oauthParamsItem6 := range itemsItem.OutputWebhook.OauthParams {
+					var oauthParams6 tfTypes.OutputWebhookOauthParam
 
-					oauthParams4.Name = types.StringValue(oauthParamsItem4.Name)
-					oauthParams4.Value = types.StringValue(oauthParamsItem4.Value)
+					oauthParams6.Name = types.StringValue(oauthParamsItem6.Name)
+					oauthParams6.Value = types.StringValue(oauthParamsItem6.Value)
 
-					items.OutputWebhook.OauthParams = append(items.OutputWebhook.OauthParams, oauthParams4)
+					items.OutputWebhook.OauthParams = append(items.OutputWebhook.OauthParams, oauthParams6)
 				}
 				if itemsItem.OutputWebhook.OnBackpressure != nil {
 					items.OutputWebhook.OnBackpressure = types.StringValue(string(*itemsItem.OutputWebhook.OnBackpressure))
@@ -7084,6 +8263,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputWebhook.PqControls = &tfTypes.OutputWebhookPqControls{}
 				}
+				items.OutputWebhook.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputWebhook.PqMaxBackpressureSec)
+				items.OutputWebhook.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputWebhook.PqMaxBufferSize)
+				items.OutputWebhook.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputWebhook.PqMaxBufferSizeBytes)
 				items.OutputWebhook.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputWebhook.PqMaxFileSize)
 				items.OutputWebhook.PqMaxSize = types.StringPointerValue(itemsItem.OutputWebhook.PqMaxSize)
 				if itemsItem.OutputWebhook.PqMode != nil {
@@ -7097,19 +8279,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputWebhook.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputWebhook.PqPath = types.StringPointerValue(itemsItem.OutputWebhook.PqPath)
+				items.OutputWebhook.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputWebhook.PqRatePerSec)
+				items.OutputWebhook.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputWebhook.PqStrictOrdering)
 				items.OutputWebhook.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputWebhook.RejectUnauthorized)
 				items.OutputWebhook.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputWebhook.ResponseHonorRetryAfterHeader)
-				items.OutputWebhook.ResponseRetrySettings = []tfTypes.OutputWebhookResponseRetrySetting{}
+				items.OutputWebhook.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem29 := range itemsItem.OutputWebhook.ResponseRetrySettings {
-					var responseRetrySettings29 tfTypes.OutputWebhookResponseRetrySetting
+				for _, responseRetrySettingsItem31 := range itemsItem.OutputWebhook.ResponseRetrySettings {
+					var responseRetrySettings31 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
-					responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
-					responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
-					responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
+					responseRetrySettings31.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem31.BackoffRate)
+					responseRetrySettings31.HTTPStatus = types.Float64Value(responseRetrySettingsItem31.HTTPStatus)
+					responseRetrySettings31.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem31.InitialBackoff)
+					responseRetrySettings31.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem31.MaxBackoff)
 
-					items.OutputWebhook.ResponseRetrySettings = append(items.OutputWebhook.ResponseRetrySettings, responseRetrySettings29)
+					items.OutputWebhook.ResponseRetrySettings = append(items.OutputWebhook.ResponseRetrySettings, responseRetrySettings31)
 				}
 				items.OutputWebhook.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputWebhook.SafeHeaders))
 				for _, v := range itemsItem.OutputWebhook.SafeHeaders {
@@ -7129,17 +8313,17 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputWebhook.TimeoutRetrySettings == nil {
 					items.OutputWebhook.TimeoutRetrySettings = nil
 				} else {
-					items.OutputWebhook.TimeoutRetrySettings = &tfTypes.OutputWebhookTimeoutRetrySettings{}
+					items.OutputWebhook.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputWebhook.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputWebhook.TimeoutRetrySettings.BackoffRate)
 					items.OutputWebhook.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputWebhook.TimeoutRetrySettings.InitialBackoff)
 					items.OutputWebhook.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputWebhook.TimeoutRetrySettings.MaxBackoff)
-					items.OutputWebhook.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputWebhook.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputWebhook.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputWebhook.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputWebhook.TimeoutSec = types.Float64PointerValue(itemsItem.OutputWebhook.TimeoutSec)
 				if itemsItem.OutputWebhook.TLS == nil {
 					items.OutputWebhook.TLS = nil
 				} else {
-					items.OutputWebhook.TLS = &tfTypes.OutputWebhookTLSSettingsClientSide{}
+					items.OutputWebhook.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
 					items.OutputWebhook.TLS.CaPath = types.StringPointerValue(itemsItem.OutputWebhook.TLS.CaPath)
 					items.OutputWebhook.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputWebhook.TLS.CertificateName)
 					items.OutputWebhook.TLS.CertPath = types.StringPointerValue(itemsItem.OutputWebhook.TLS.CertPath)
@@ -7166,19 +8350,156 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputWebhook.URL = types.StringPointerValue(itemsItem.OutputWebhook.URL)
 				items.OutputWebhook.Urls = []tfTypes.OutputWebhookURL{}
 
-				for _, urlsItem3 := range itemsItem.OutputWebhook.Urls {
-					var urls3 tfTypes.OutputWebhookURL
+				for _, urlsItem4 := range itemsItem.OutputWebhook.Urls {
+					var urls4 tfTypes.OutputWebhookURL
 
-					urls3.URL = types.StringValue(urlsItem3.URL)
-					urls3.Weight = types.Float64PointerValue(urlsItem3.Weight)
+					urls4.TemplateURL = types.StringPointerValue(urlsItem4.TemplateURL)
+					urls4.URL = types.StringValue(urlsItem4.URL)
+					urls4.Weight = types.Float64PointerValue(urlsItem4.Weight)
 
-					items.OutputWebhook.Urls = append(items.OutputWebhook.Urls, urls3)
+					items.OutputWebhook.Urls = append(items.OutputWebhook.Urls, urls4)
 				}
 				items.OutputWebhook.Username = types.StringPointerValue(itemsItem.OutputWebhook.Username)
 				items.OutputWebhook.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputWebhook.UseRoundRobinDNS)
 			}
+			if itemsItem.OutputWizHec != nil {
+				items.OutputWizHec = &tfTypes.OutputWizHec{}
+				items.OutputWizHec.TemplateDataCenter = types.StringPointerValue(itemsItem.OutputWizHec.TemplateDataCenter)
+				items.OutputWizHec.TemplateWizEnvironment = types.StringPointerValue(itemsItem.OutputWizHec.TemplateWizEnvironment)
+				items.OutputWizHec.TemplateWizSourcetype = types.StringPointerValue(itemsItem.OutputWizHec.TemplateWizSourcetype)
+				if itemsItem.OutputWizHec.AuthType != nil {
+					items.OutputWizHec.AuthType = types.StringValue(string(*itemsItem.OutputWizHec.AuthType))
+				} else {
+					items.OutputWizHec.AuthType = types.StringNull()
+				}
+				items.OutputWizHec.Compress = types.BoolPointerValue(itemsItem.OutputWizHec.Compress)
+				items.OutputWizHec.Concurrency = types.Float64PointerValue(itemsItem.OutputWizHec.Concurrency)
+				items.OutputWizHec.DataCenter = types.StringValue(itemsItem.OutputWizHec.DataCenter)
+				items.OutputWizHec.Description = types.StringPointerValue(itemsItem.OutputWizHec.Description)
+				items.OutputWizHec.Environment = types.StringPointerValue(itemsItem.OutputWizHec.Environment)
+				items.OutputWizHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+				for _, extraHTTPHeadersItem31 := range itemsItem.OutputWizHec.ExtraHTTPHeaders {
+					var extraHTTPHeaders31 tfTypes.ItemsTypeExtraHTTPHeaders
+
+					extraHTTPHeaders31.Name = types.StringPointerValue(extraHTTPHeadersItem31.Name)
+					extraHTTPHeaders31.Value = types.StringValue(extraHTTPHeadersItem31.Value)
+
+					items.OutputWizHec.ExtraHTTPHeaders = append(items.OutputWizHec.ExtraHTTPHeaders, extraHTTPHeaders31)
+				}
+				if itemsItem.OutputWizHec.FailedRequestLoggingMode != nil {
+					items.OutputWizHec.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputWizHec.FailedRequestLoggingMode))
+				} else {
+					items.OutputWizHec.FailedRequestLoggingMode = types.StringNull()
+				}
+				items.OutputWizHec.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputWizHec.FlushPeriodSec)
+				items.OutputWizHec.ID = types.StringPointerValue(itemsItem.OutputWizHec.ID)
+				items.OutputWizHec.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputWizHec.MaxPayloadEvents)
+				items.OutputWizHec.MaxPayloadSizeKB = types.Float64PointerValue(itemsItem.OutputWizHec.MaxPayloadSizeKB)
+				items.OutputWizHec.NextQueue = types.StringPointerValue(itemsItem.OutputWizHec.NextQueue)
+				if itemsItem.OutputWizHec.OnBackpressure != nil {
+					items.OutputWizHec.OnBackpressure = types.StringValue(string(*itemsItem.OutputWizHec.OnBackpressure))
+				} else {
+					items.OutputWizHec.OnBackpressure = types.StringNull()
+				}
+				items.OutputWizHec.Pipeline = types.StringPointerValue(itemsItem.OutputWizHec.Pipeline)
+				if itemsItem.OutputWizHec.PqCompress != nil {
+					items.OutputWizHec.PqCompress = types.StringValue(string(*itemsItem.OutputWizHec.PqCompress))
+				} else {
+					items.OutputWizHec.PqCompress = types.StringNull()
+				}
+				if itemsItem.OutputWizHec.PqControls == nil {
+					items.OutputWizHec.PqControls = nil
+				} else {
+					items.OutputWizHec.PqControls = &tfTypes.OutputWizHecPqControls{}
+				}
+				items.OutputWizHec.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputWizHec.PqMaxBackpressureSec)
+				items.OutputWizHec.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputWizHec.PqMaxBufferSize)
+				items.OutputWizHec.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputWizHec.PqMaxBufferSizeBytes)
+				items.OutputWizHec.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputWizHec.PqMaxFileSize)
+				items.OutputWizHec.PqMaxSize = types.StringPointerValue(itemsItem.OutputWizHec.PqMaxSize)
+				if itemsItem.OutputWizHec.PqMode != nil {
+					items.OutputWizHec.PqMode = types.StringValue(string(*itemsItem.OutputWizHec.PqMode))
+				} else {
+					items.OutputWizHec.PqMode = types.StringNull()
+				}
+				if itemsItem.OutputWizHec.PqOnBackpressure != nil {
+					items.OutputWizHec.PqOnBackpressure = types.StringValue(string(*itemsItem.OutputWizHec.PqOnBackpressure))
+				} else {
+					items.OutputWizHec.PqOnBackpressure = types.StringNull()
+				}
+				items.OutputWizHec.PqPath = types.StringPointerValue(itemsItem.OutputWizHec.PqPath)
+				items.OutputWizHec.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputWizHec.PqRatePerSec)
+				items.OutputWizHec.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputWizHec.PqStrictOrdering)
+				items.OutputWizHec.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputWizHec.RejectUnauthorized)
+				items.OutputWizHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputWizHec.ResponseHonorRetryAfterHeader)
+				items.OutputWizHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+				for _, responseRetrySettingsItem32 := range itemsItem.OutputWizHec.ResponseRetrySettings {
+					var responseRetrySettings32 tfTypes.ItemsTypeResponseRetrySettings
+
+					responseRetrySettings32.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem32.BackoffRate)
+					responseRetrySettings32.HTTPStatus = types.Float64Value(responseRetrySettingsItem32.HTTPStatus)
+					responseRetrySettings32.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem32.InitialBackoff)
+					responseRetrySettings32.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem32.MaxBackoff)
+
+					items.OutputWizHec.ResponseRetrySettings = append(items.OutputWizHec.ResponseRetrySettings, responseRetrySettings32)
+				}
+				items.OutputWizHec.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputWizHec.SafeHeaders))
+				for _, v := range itemsItem.OutputWizHec.SafeHeaders {
+					items.OutputWizHec.SafeHeaders = append(items.OutputWizHec.SafeHeaders, types.StringValue(v))
+				}
+				items.OutputWizHec.Streamtags = make([]types.String, 0, len(itemsItem.OutputWizHec.Streamtags))
+				for _, v := range itemsItem.OutputWizHec.Streamtags {
+					items.OutputWizHec.Streamtags = append(items.OutputWizHec.Streamtags, types.StringValue(v))
+				}
+				items.OutputWizHec.SystemFields = make([]types.String, 0, len(itemsItem.OutputWizHec.SystemFields))
+				for _, v := range itemsItem.OutputWizHec.SystemFields {
+					items.OutputWizHec.SystemFields = append(items.OutputWizHec.SystemFields, types.StringValue(v))
+				}
+				items.OutputWizHec.TCPRouting = types.StringPointerValue(itemsItem.OutputWizHec.TCPRouting)
+				items.OutputWizHec.TextSecret = types.StringPointerValue(itemsItem.OutputWizHec.TextSecret)
+				if itemsItem.OutputWizHec.TimeoutRetrySettings == nil {
+					items.OutputWizHec.TimeoutRetrySettings = nil
+				} else {
+					items.OutputWizHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+					items.OutputWizHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputWizHec.TimeoutRetrySettings.BackoffRate)
+					items.OutputWizHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputWizHec.TimeoutRetrySettings.InitialBackoff)
+					items.OutputWizHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputWizHec.TimeoutRetrySettings.MaxBackoff)
+					items.OutputWizHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputWizHec.TimeoutRetrySettings.TimeoutRetry)
+				}
+				items.OutputWizHec.TimeoutSec = types.Float64PointerValue(itemsItem.OutputWizHec.TimeoutSec)
+				if itemsItem.OutputWizHec.TLS == nil {
+					items.OutputWizHec.TLS = nil
+				} else {
+					items.OutputWizHec.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+					items.OutputWizHec.TLS.CaPath = types.StringPointerValue(itemsItem.OutputWizHec.TLS.CaPath)
+					items.OutputWizHec.TLS.CertificateName = types.StringPointerValue(itemsItem.OutputWizHec.TLS.CertificateName)
+					items.OutputWizHec.TLS.CertPath = types.StringPointerValue(itemsItem.OutputWizHec.TLS.CertPath)
+					items.OutputWizHec.TLS.Disabled = types.BoolPointerValue(itemsItem.OutputWizHec.TLS.Disabled)
+					if itemsItem.OutputWizHec.TLS.MaxVersion != nil {
+						items.OutputWizHec.TLS.MaxVersion = types.StringValue(string(*itemsItem.OutputWizHec.TLS.MaxVersion))
+					} else {
+						items.OutputWizHec.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.OutputWizHec.TLS.MinVersion != nil {
+						items.OutputWizHec.TLS.MinVersion = types.StringValue(string(*itemsItem.OutputWizHec.TLS.MinVersion))
+					} else {
+						items.OutputWizHec.TLS.MinVersion = types.StringNull()
+					}
+					items.OutputWizHec.TLS.Passphrase = types.StringPointerValue(itemsItem.OutputWizHec.TLS.Passphrase)
+					items.OutputWizHec.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.OutputWizHec.TLS.PrivKeyPath)
+					items.OutputWizHec.TLS.Servername = types.StringPointerValue(itemsItem.OutputWizHec.TLS.Servername)
+				}
+				items.OutputWizHec.Token = types.StringPointerValue(itemsItem.OutputWizHec.Token)
+				items.OutputWizHec.Type = types.StringValue(string(itemsItem.OutputWizHec.Type))
+				items.OutputWizHec.WizConnectorID = types.StringValue(itemsItem.OutputWizHec.WizConnectorID)
+				items.OutputWizHec.WizEnvironment = types.StringValue(itemsItem.OutputWizHec.WizEnvironment)
+				items.OutputWizHec.WizSourcetype = types.StringValue(itemsItem.OutputWizHec.WizSourcetype)
+			}
 			if itemsItem.OutputXsiam != nil {
 				items.OutputXsiam = &tfTypes.OutputXsiam{}
+				items.OutputXsiam.TemplateURL = types.StringPointerValue(itemsItem.OutputXsiam.TemplateURL)
 				if itemsItem.OutputXsiam.AuthType != nil {
 					items.OutputXsiam.AuthType = types.StringValue(string(*itemsItem.OutputXsiam.AuthType))
 				} else {
@@ -7189,15 +8510,15 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputXsiam.DNSResolvePeriodSec = types.Float64PointerValue(itemsItem.OutputXsiam.DNSResolvePeriodSec)
 				items.OutputXsiam.Environment = types.StringPointerValue(itemsItem.OutputXsiam.Environment)
 				items.OutputXsiam.ExcludeSelf = types.BoolPointerValue(itemsItem.OutputXsiam.ExcludeSelf)
-				items.OutputXsiam.ExtraHTTPHeaders = []tfTypes.OutputXsiamExtraHTTPHeader{}
+				items.OutputXsiam.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-				for _, extraHTTPHeadersItem29 := range itemsItem.OutputXsiam.ExtraHTTPHeaders {
-					var extraHTTPHeaders29 tfTypes.OutputXsiamExtraHTTPHeader
+				for _, extraHTTPHeadersItem32 := range itemsItem.OutputXsiam.ExtraHTTPHeaders {
+					var extraHTTPHeaders32 tfTypes.ItemsTypeExtraHTTPHeaders
 
-					extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
-					extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
+					extraHTTPHeaders32.Name = types.StringPointerValue(extraHTTPHeadersItem32.Name)
+					extraHTTPHeaders32.Value = types.StringValue(extraHTTPHeadersItem32.Value)
 
-					items.OutputXsiam.ExtraHTTPHeaders = append(items.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders29)
+					items.OutputXsiam.ExtraHTTPHeaders = append(items.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders32)
 				}
 				if itemsItem.OutputXsiam.FailedRequestLoggingMode != nil {
 					items.OutputXsiam.FailedRequestLoggingMode = types.StringValue(string(*itemsItem.OutputXsiam.FailedRequestLoggingMode))
@@ -7205,7 +8526,7 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputXsiam.FailedRequestLoggingMode = types.StringNull()
 				}
 				items.OutputXsiam.FlushPeriodSec = types.Float64PointerValue(itemsItem.OutputXsiam.FlushPeriodSec)
-				items.OutputXsiam.ID = types.StringValue(itemsItem.OutputXsiam.ID)
+				items.OutputXsiam.ID = types.StringPointerValue(itemsItem.OutputXsiam.ID)
 				items.OutputXsiam.LoadBalanced = types.BoolPointerValue(itemsItem.OutputXsiam.LoadBalanced)
 				items.OutputXsiam.LoadBalanceStatsPeriodSec = types.Float64PointerValue(itemsItem.OutputXsiam.LoadBalanceStatsPeriodSec)
 				items.OutputXsiam.MaxPayloadEvents = types.Float64PointerValue(itemsItem.OutputXsiam.MaxPayloadEvents)
@@ -7226,6 +8547,9 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				} else {
 					items.OutputXsiam.PqControls = &tfTypes.OutputXsiamPqControls{}
 				}
+				items.OutputXsiam.PqMaxBackpressureSec = types.Float64PointerValue(itemsItem.OutputXsiam.PqMaxBackpressureSec)
+				items.OutputXsiam.PqMaxBufferSize = types.Float64PointerValue(itemsItem.OutputXsiam.PqMaxBufferSize)
+				items.OutputXsiam.PqMaxBufferSizeBytes = types.StringPointerValue(itemsItem.OutputXsiam.PqMaxBufferSizeBytes)
 				items.OutputXsiam.PqMaxFileSize = types.StringPointerValue(itemsItem.OutputXsiam.PqMaxFileSize)
 				items.OutputXsiam.PqMaxSize = types.StringPointerValue(itemsItem.OutputXsiam.PqMaxSize)
 				if itemsItem.OutputXsiam.PqMode != nil {
@@ -7239,19 +8563,21 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 					items.OutputXsiam.PqOnBackpressure = types.StringNull()
 				}
 				items.OutputXsiam.PqPath = types.StringPointerValue(itemsItem.OutputXsiam.PqPath)
+				items.OutputXsiam.PqRatePerSec = types.Float64PointerValue(itemsItem.OutputXsiam.PqRatePerSec)
+				items.OutputXsiam.PqStrictOrdering = types.BoolPointerValue(itemsItem.OutputXsiam.PqStrictOrdering)
 				items.OutputXsiam.RejectUnauthorized = types.BoolPointerValue(itemsItem.OutputXsiam.RejectUnauthorized)
 				items.OutputXsiam.ResponseHonorRetryAfterHeader = types.BoolPointerValue(itemsItem.OutputXsiam.ResponseHonorRetryAfterHeader)
-				items.OutputXsiam.ResponseRetrySettings = []tfTypes.OutputXsiamResponseRetrySetting{}
+				items.OutputXsiam.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-				for _, responseRetrySettingsItem30 := range itemsItem.OutputXsiam.ResponseRetrySettings {
-					var responseRetrySettings30 tfTypes.OutputXsiamResponseRetrySetting
+				for _, responseRetrySettingsItem33 := range itemsItem.OutputXsiam.ResponseRetrySettings {
+					var responseRetrySettings33 tfTypes.ItemsTypeResponseRetrySettings
 
-					responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
-					responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
-					responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
-					responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
+					responseRetrySettings33.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem33.BackoffRate)
+					responseRetrySettings33.HTTPStatus = types.Float64Value(responseRetrySettingsItem33.HTTPStatus)
+					responseRetrySettings33.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem33.InitialBackoff)
+					responseRetrySettings33.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem33.MaxBackoff)
 
-					items.OutputXsiam.ResponseRetrySettings = append(items.OutputXsiam.ResponseRetrySettings, responseRetrySettings30)
+					items.OutputXsiam.ResponseRetrySettings = append(items.OutputXsiam.ResponseRetrySettings, responseRetrySettings33)
 				}
 				items.OutputXsiam.SafeHeaders = make([]types.String, 0, len(itemsItem.OutputXsiam.SafeHeaders))
 				for _, v := range itemsItem.OutputXsiam.SafeHeaders {
@@ -7270,11 +8596,11 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				if itemsItem.OutputXsiam.TimeoutRetrySettings == nil {
 					items.OutputXsiam.TimeoutRetrySettings = nil
 				} else {
-					items.OutputXsiam.TimeoutRetrySettings = &tfTypes.OutputXsiamTimeoutRetrySettings{}
+					items.OutputXsiam.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 					items.OutputXsiam.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(itemsItem.OutputXsiam.TimeoutRetrySettings.BackoffRate)
 					items.OutputXsiam.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(itemsItem.OutputXsiam.TimeoutRetrySettings.InitialBackoff)
 					items.OutputXsiam.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(itemsItem.OutputXsiam.TimeoutRetrySettings.MaxBackoff)
-					items.OutputXsiam.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(itemsItem.OutputXsiam.TimeoutRetrySettings.TimeoutRetry)
+					items.OutputXsiam.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(itemsItem.OutputXsiam.TimeoutRetrySettings.TimeoutRetry)
 				}
 				items.OutputXsiam.TimeoutSec = types.Float64PointerValue(itemsItem.OutputXsiam.TimeoutSec)
 				items.OutputXsiam.Token = types.StringPointerValue(itemsItem.OutputXsiam.Token)
@@ -7283,14 +8609,18 @@ func (r *DestinationsDataSourceModel) RefreshFromOperationsListOutputResponseBod
 				items.OutputXsiam.URL = types.StringPointerValue(itemsItem.OutputXsiam.URL)
 				items.OutputXsiam.Urls = []tfTypes.OutputXsiamURL{}
 
-				for _, urlsItem4 := range itemsItem.OutputXsiam.Urls {
-					var urls4 tfTypes.OutputXsiamURL
+				for _, urlsItem5 := range itemsItem.OutputXsiam.Urls {
+					var urls5 tfTypes.OutputXsiamURL
 
-					urlResult, _ := json.Marshal(urlsItem4.URL)
-					urls4.URL = jsontypes.NewNormalizedValue(string(urlResult))
-					urls4.Weight = types.Float64PointerValue(urlsItem4.Weight)
+					if urlsItem5.URL == nil {
+						urls5.URL = jsontypes.NewNormalizedNull()
+					} else {
+						urlResult, _ := json.Marshal(urlsItem5.URL)
+						urls5.URL = jsontypes.NewNormalizedValue(string(urlResult))
+					}
+					urls5.Weight = types.Float64PointerValue(urlsItem5.Weight)
 
-					items.OutputXsiam.Urls = append(items.OutputXsiam.Urls, urls4)
+					items.OutputXsiam.Urls = append(items.OutputXsiam.Urls, urls5)
 				}
 				items.OutputXsiam.UseRoundRobinDNS = types.BoolPointerValue(itemsItem.OutputXsiam.UseRoundRobinDNS)
 			}

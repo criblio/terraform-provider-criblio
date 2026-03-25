@@ -464,7 +464,7 @@ func (i InputCollectorRestMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -941,7 +941,7 @@ func (d DiscoveryConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DiscoveryConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"discoverType"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1031,17 +1031,17 @@ func (d *DiscoveryConfiguration) GetDiscoverDataField() *string {
 	return d.DiscoverDataField
 }
 
-type InputCollectorRestRetryType string
+type RetryType string
 
 const (
-	InputCollectorRestRetryTypeBackoff InputCollectorRestRetryType = "backoff"
-	InputCollectorRestRetryTypeFixed   InputCollectorRestRetryType = "fixed"
+	RetryTypeBackoff RetryType = "backoff"
+	RetryTypeFixed   RetryType = "fixed"
 )
 
-func (e InputCollectorRestRetryType) ToPointer() *InputCollectorRestRetryType {
+func (e RetryType) ToPointer() *RetryType {
 	return &e
 }
-func (e *InputCollectorRestRetryType) UnmarshalJSON(data []byte) error {
+func (e *RetryType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -1050,24 +1050,24 @@ func (e *InputCollectorRestRetryType) UnmarshalJSON(data []byte) error {
 	case "backoff":
 		fallthrough
 	case "fixed":
-		*e = InputCollectorRestRetryType(v)
+		*e = RetryType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InputCollectorRestRetryType: %v", v)
+		return fmt.Errorf("invalid value for RetryType: %v", v)
 	}
 }
 
 type RetryRulesConfiguration struct {
-	Type                *InputCollectorRestRetryType `default:"backoff" json:"type"`
-	Interval            *int64                       `default:"1000" json:"interval"`
-	Limit               *int64                       `default:"5" json:"limit"`
-	Multiplier          *float64                     `default:"2" json:"multiplier"`
-	MaxIntervalMs       *int64                       `default:"20000" json:"maxIntervalMs"`
-	Codes               []int64                      `json:"codes,omitempty"`
-	EnableHeader        *bool                        `default:"true" json:"enableHeader"`
-	RetryConnectTimeout *bool                        `default:"false" json:"retryConnectTimeout"`
-	RetryConnectReset   *bool                        `default:"false" json:"retryConnectReset"`
-	RetryHeaderName     *string                      `default:"retry-after" json:"retryHeaderName"`
+	Type                *RetryType `default:"backoff" json:"type"`
+	Interval            *int64     `default:"1000" json:"interval"`
+	Limit               *int64     `default:"5" json:"limit"`
+	Multiplier          *float64   `default:"2" json:"multiplier"`
+	MaxIntervalMs       *int64     `default:"20000" json:"maxIntervalMs"`
+	Codes               []int64    `json:"codes,omitempty"`
+	EnableHeader        *bool      `default:"true" json:"enableHeader"`
+	RetryConnectTimeout *bool      `default:"false" json:"retryConnectTimeout"`
+	RetryConnectReset   *bool      `default:"false" json:"retryConnectReset"`
+	RetryHeaderName     *string    `default:"retry-after" json:"retryHeaderName"`
 }
 
 func (r RetryRulesConfiguration) MarshalJSON() ([]byte, error) {
@@ -1081,7 +1081,7 @@ func (r *RetryRulesConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (r *RetryRulesConfiguration) GetType() *InputCollectorRestRetryType {
+func (r *RetryRulesConfiguration) GetType() *RetryType {
 	if r == nil {
 		return nil
 	}
@@ -1230,7 +1230,7 @@ func (i InputCollectorRestConf) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestConf) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"discovery"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1449,7 +1449,7 @@ func (i InputCollectorRestCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRestCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1494,7 +1494,7 @@ func (i InputCollectorRest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorRest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -92,6 +92,7 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 			r.PagerDutyTarget.SystemFields = append(r.PagerDutyTarget.SystemFields, types.StringValue(v))
 		}
 		r.PagerDutyTarget.Type = types.StringValue(string(resp.PagerDutyTarget.Type))
+		r.Type = r.PagerDutyTarget.Type
 	}
 	if resp.SlackTarget != nil {
 		r.SlackTarget = &tfTypes.SlackTarget{}
@@ -102,6 +103,7 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 			r.SlackTarget.SystemFields = append(r.SlackTarget.SystemFields, types.StringValue(v))
 		}
 		r.SlackTarget.Type = types.StringValue(string(resp.SlackTarget.Type))
+		r.Type = r.SlackTarget.Type
 		r.SlackTarget.URL = types.StringValue(resp.SlackTarget.URL)
 	}
 	if resp.SMTPTarget != nil {
@@ -138,6 +140,7 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 			r.SMTPTarget.TLS.RejectUnauthorized = types.BoolPointerValue(resp.SMTPTarget.TLS.RejectUnauthorized)
 		}
 		r.SMTPTarget.Type = types.StringValue(string(resp.SMTPTarget.Type))
+		r.Type = r.SMTPTarget.Type
 		r.SMTPTarget.Username = types.StringPointerValue(resp.SMTPTarget.Username)
 	}
 	if resp.SnsTarget != nil {
@@ -177,6 +180,7 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 			r.SnsTarget.TopicType = types.StringNull()
 		}
 		r.SnsTarget.Type = types.StringValue(string(resp.SnsTarget.Type))
+		r.Type = r.SnsTarget.Type
 	}
 	if resp.WebhookTarget != nil {
 		r.WebhookTarget = &tfTypes.WebhookTarget{}
@@ -196,6 +200,7 @@ func (r *NotificationTargetResourceModel) RefreshFromSharedNotificationTarget(ct
 		}
 		r.WebhookTarget.Token = types.StringPointerValue(resp.WebhookTarget.Token)
 		r.WebhookTarget.Type = types.StringValue(string(resp.WebhookTarget.Type))
+		r.Type = r.WebhookTarget.Type
 		r.WebhookTarget.URL = types.StringValue(resp.WebhookTarget.URL)
 		r.WebhookTarget.Username = types.StringPointerValue(resp.WebhookTarget.Username)
 	}
@@ -562,15 +567,15 @@ func (r *NotificationTargetResourceModel) ToSharedNotificationTarget(ctx context
 			} else {
 				rejectUnauthorized = nil
 			}
-			minVersion := new(shared.NotificationTargetMinimumTLSVersion)
+			minVersion := new(shared.MinimumTLSVersion)
 			if !r.SMTPTarget.TLS.MinVersion.IsUnknown() && !r.SMTPTarget.TLS.MinVersion.IsNull() {
-				*minVersion = shared.NotificationTargetMinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
+				*minVersion = shared.MinimumTLSVersion(r.SMTPTarget.TLS.MinVersion.ValueString())
 			} else {
 				minVersion = nil
 			}
-			maxVersion := new(shared.NotificationTargetMaximumTLSVersion)
+			maxVersion := new(shared.MaximumTLSVersion)
 			if !r.SMTPTarget.TLS.MaxVersion.IsUnknown() && !r.SMTPTarget.TLS.MaxVersion.IsNull() {
-				*maxVersion = shared.NotificationTargetMaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
+				*maxVersion = shared.MaximumTLSVersion(r.SMTPTarget.TLS.MaxVersion.ValueString())
 			} else {
 				maxVersion = nil
 			}

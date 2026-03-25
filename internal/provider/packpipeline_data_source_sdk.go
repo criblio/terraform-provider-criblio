@@ -5,8 +5,6 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -45,13 +43,13 @@ func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Cont
 	for _, functionsItem := range resp.Conf.Functions {
 		var functions tfTypes.PipelineFunctionConf
 
-		// Convert conf to JSON (tfTypes.PipelineFunctionConf.Conf is jsontypes.Normalized)
-		confBytes, err := json.Marshal(functionsItem.Conf)
-		if err != nil {
-			diags.AddError("Failed to marshal function conf", err.Error())
-			return diags
+		confJSON := "{}"
+		if len(functionsItem.Conf) > 0 {
+			if b, err := json.Marshal(functionsItem.Conf); err == nil {
+				confJSON = string(b)
+			}
 		}
-		functions.Conf = jsontypes.NewNormalizedValue(string(confBytes))
+		functions.Conf = jsontypes.NewNormalizedValue(confJSON)
 		functions.Description = types.StringPointerValue(functionsItem.Description)
 		functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 		functions.Filter = types.StringPointerValue(functionsItem.Filter)
@@ -85,8 +83,8 @@ func (r *PackPipelineDataSourceModel) RefreshFromSharedPipeline(ctx context.Cont
 func (r *PackPipelineDataSourceModel) ToOperationsGetPipelinesByPackWithIDRequest(ctx context.Context) (*operations.GetPipelinesByPackWithIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	// API normalizes pack IDs to lowercase; pack path is case-sensitive.
-	pack := strings.ToLower(r.Pack.ValueString())
+	var pack string
+	pack = r.Pack.ValueString()
 
 	var id string
 	id = r.ID.ValueString()

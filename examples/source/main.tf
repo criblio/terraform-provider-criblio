@@ -72,9 +72,9 @@ resource "criblio_source" "my_http_source" {
       disabled            = true
       max_version         = "TLSv1.3"
       min_version         = "TLSv1.2"
-      passphrase          = "$${{secret:http_key_pass}"
+      passphrase          = "$${secret:http_key_pass}"
       priv_key_path       = "/etc/ssl/private/server.key"
-      reject_unauthorized = "{ \"see\": \"documentation\" }"
+      reject_unauthorized = false
       request_cert        = false
     }
     type = "http"
@@ -103,7 +103,7 @@ resource "criblio_source" "my_cloudflare_hec_source" {
       {
         enabled      = true
         auth_type    = "secret"
-        token        = "cloudflare-hec-token"
+        token        = jsonencode("cloudflare-hec-token")
         token_secret = "cloudflare-hec-token-secret"
         description  = "Cloudflare HEC token"
       }
@@ -200,6 +200,55 @@ resource "criblio_source" "my_wiz_webhook_source" {
   }
 }
 
+resource "criblio_source" "my_source" {
+  group_id = "default"
+  id       = "cribl-http-listener"
+  input_cribl_http = {
+    activity_log_sample_rate = 10
+    auth_tokens = [
+      {
+        description  = "Example token for connected environments"
+        enabled      = true
+        token_secret = "secret-token-1"
+      },
+      {
+        description  = "Second example token"
+        enabled      = true
+        token_secret = "secret-token-2"
+      },
+    ]
+    capture_headers         = true
+    description             = "Cribl HTTP-compatible ingestion endpoint"
+    disabled                = false
+    enable_health_check     = true
+    enable_proxy_header     = false
+    environment             = "main"
+    host                    = "0.0.0.0"
+    id                      = "cribl-http-listener"
+    ip_allowlist_regex      = "/^10\\.0\\.\\d{1,3}\\.\\d{1,3}$/"
+    ip_denylist_regex       = "/^192\\.168\\.0\\.\\d{1,3}$/"
+    keep_alive_timeout      = 30
+    max_active_req          = 512
+    max_requests_per_socket = 1000
+    metadata = [
+      {
+        name  = "source"
+        value = "\"cribl_http\""
+      }
+    ]
+    pipeline        = "default"
+    port            = 10050
+    pq_enabled      = false
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
+    streamtags = [
+      "prod",
+      "cribl_http",
+    ]
+    type = "cribl_http"
+  }
+}
 
 /*
 data "criblio_source" "my_source" {

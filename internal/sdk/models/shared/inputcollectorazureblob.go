@@ -464,7 +464,7 @@ func (i InputCollectorAzureBlobMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorAzureBlobMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -764,7 +764,7 @@ func (i InputCollectorAzureBlobCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorAzureBlobCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -809,7 +809,7 @@ func (i InputCollectorAzureBlob) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorAzureBlob) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

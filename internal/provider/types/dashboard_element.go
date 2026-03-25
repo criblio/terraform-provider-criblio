@@ -11,7 +11,7 @@ type DashboardElement struct {
 	HidePanel       types.Bool             `tfsdk:"hide_panel"`
 	HorizontalChart types.Bool             `tfsdk:"horizontal_chart"`
 	ID              types.String           `tfsdk:"id"`
-	Layout          DashboardLayout        `tfsdk:"layout"`
+	Layout          *DashboardLayout       `tfsdk:"layout"`
 	Search          *PanelQueryDefinition  `tfsdk:"search"`
 	TitleAction     *TitleAction           `tfsdk:"title_action"`
 	Type            types.String           `tfsdk:"type"`

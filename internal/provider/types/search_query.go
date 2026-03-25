@@ -3,7 +3,7 @@
 package types
 
 type SearchQuery struct {
-	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" tfsdk:"search_query_saved" tfPlanOnly:"true"`
-	SearchQueryInline *SearchQueryInline `queryParam:"inline" tfsdk:"search_query_inline" tfPlanOnly:"true"`
-	SearchQueryValues *SearchQueryValues `queryParam:"inline" tfsdk:"search_query_values" tfPlanOnly:"true"`
+	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" tfsdk:"search_query_saved"`
+	SearchQueryInline *SearchQueryInline `queryParam:"inline" tfsdk:"search_query_inline"`
+	SearchQueryValues *SearchQueryValues `queryParam:"inline" tfsdk:"search_query_values"`
 }

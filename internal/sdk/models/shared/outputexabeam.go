@@ -31,163 +31,10 @@ func (e *OutputExabeamType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputExabeamSignatureVersion - Signature version to use for signing Google Cloud Storage requests
-type OutputExabeamSignatureVersion string
-
-const (
-	OutputExabeamSignatureVersionV2 OutputExabeamSignatureVersion = "v2"
-	OutputExabeamSignatureVersionV4 OutputExabeamSignatureVersion = "v4"
-)
-
-func (e OutputExabeamSignatureVersion) ToPointer() *OutputExabeamSignatureVersion {
-	return &e
-}
-func (e *OutputExabeamSignatureVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = OutputExabeamSignatureVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputExabeamSignatureVersion: %v", v)
-	}
-}
-
-// OutputExabeamObjectACL - Object ACL to assign to uploaded objects
-type OutputExabeamObjectACL string
-
-const (
-	OutputExabeamObjectACLPrivate                OutputExabeamObjectACL = "private"
-	OutputExabeamObjectACLBucketOwnerRead        OutputExabeamObjectACL = "bucket-owner-read"
-	OutputExabeamObjectACLBucketOwnerFullControl OutputExabeamObjectACL = "bucket-owner-full-control"
-	OutputExabeamObjectACLProjectPrivate         OutputExabeamObjectACL = "project-private"
-	OutputExabeamObjectACLAuthenticatedRead      OutputExabeamObjectACL = "authenticated-read"
-	OutputExabeamObjectACLPublicRead             OutputExabeamObjectACL = "public-read"
-)
-
-func (e OutputExabeamObjectACL) ToPointer() *OutputExabeamObjectACL {
-	return &e
-}
-func (e *OutputExabeamObjectACL) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "private":
-		fallthrough
-	case "bucket-owner-read":
-		fallthrough
-	case "bucket-owner-full-control":
-		fallthrough
-	case "project-private":
-		fallthrough
-	case "authenticated-read":
-		fallthrough
-	case "public-read":
-		*e = OutputExabeamObjectACL(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputExabeamObjectACL: %v", v)
-	}
-}
-
-// OutputExabeamStorageClass - Storage class to select for uploaded objects
-type OutputExabeamStorageClass string
-
-const (
-	OutputExabeamStorageClassStandard OutputExabeamStorageClass = "STANDARD"
-	OutputExabeamStorageClassNearline OutputExabeamStorageClass = "NEARLINE"
-	OutputExabeamStorageClassColdline OutputExabeamStorageClass = "COLDLINE"
-	OutputExabeamStorageClassArchive  OutputExabeamStorageClass = "ARCHIVE"
-)
-
-func (e OutputExabeamStorageClass) ToPointer() *OutputExabeamStorageClass {
-	return &e
-}
-func (e *OutputExabeamStorageClass) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "STANDARD":
-		fallthrough
-	case "NEARLINE":
-		fallthrough
-	case "COLDLINE":
-		fallthrough
-	case "ARCHIVE":
-		*e = OutputExabeamStorageClass(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputExabeamStorageClass: %v", v)
-	}
-}
-
-// OutputExabeamBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputExabeamBackpressureBehavior string
-
-const (
-	OutputExabeamBackpressureBehaviorBlock OutputExabeamBackpressureBehavior = "block"
-	OutputExabeamBackpressureBehaviorDrop  OutputExabeamBackpressureBehavior = "drop"
-)
-
-func (e OutputExabeamBackpressureBehavior) ToPointer() *OutputExabeamBackpressureBehavior {
-	return &e
-}
-func (e *OutputExabeamBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputExabeamBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputExabeamBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputExabeamDiskSpaceProtection - How to handle events when disk space is below the global 'Min free disk space' limit
-type OutputExabeamDiskSpaceProtection string
-
-const (
-	OutputExabeamDiskSpaceProtectionBlock OutputExabeamDiskSpaceProtection = "block"
-	OutputExabeamDiskSpaceProtectionDrop  OutputExabeamDiskSpaceProtection = "drop"
-)
-
-func (e OutputExabeamDiskSpaceProtection) ToPointer() *OutputExabeamDiskSpaceProtection {
-	return &e
-}
-func (e *OutputExabeamDiskSpaceProtection) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputExabeamDiskSpaceProtection(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputExabeamDiskSpaceProtection: %v", v)
-	}
-}
-
 type OutputExabeam struct {
 	// Unique ID for this output
-	ID   *string            `json:"id,omitempty"`
-	Type *OutputExabeamType `json:"type,omitempty"`
+	ID   *string           `json:"id,omitempty"`
+	Type OutputExabeamType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -201,37 +48,38 @@ type OutputExabeam struct {
 	// Region where the bucket is located
 	Region string `json:"region"`
 	// Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
-	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath string `json:"stagePath"`
 	// Google Cloud Storage service endpoint
-	Endpoint *string `default:"https://storage.googleapis.com" json:"endpoint"`
+	Endpoint string `json:"endpoint"`
 	// Signature version to use for signing Google Cloud Storage requests
-	SignatureVersion *OutputExabeamSignatureVersion `default:"v4" json:"signatureVersion"`
+	SignatureVersion *SignatureVersionOptionsGoogle `json:"signatureVersion,omitempty"`
 	// Object ACL to assign to uploaded objects
-	ObjectACL *OutputExabeamObjectACL `default:"private" json:"objectACL"`
+	ObjectACL *ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol `json:"objectACL,omitempty"`
 	// Storage class to select for uploaded objects
-	StorageClass *OutputExabeamStorageClass `json:"storageClass,omitempty"`
+	StorageClass *StorageClassOptionsArchiveColdline `json:"storageClass,omitempty"`
 	// Reuse connections between requests, which can improve performance
-	ReuseConnections *bool `default:"true" json:"reuseConnections"`
+	ReuseConnections *bool `json:"reuseConnections,omitempty"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Add the Output ID value to staging location
-	AddIDToStagePath *bool `default:"true" json:"addIdToStagePath"`
+	AddIDToStagePath *bool `json:"addIdToStagePath,omitempty"`
 	// Remove empty staging directories after moving files
-	RemoveEmptyDirs *bool `default:"true" json:"removeEmptyDirs"`
+	RemoveEmptyDirs *bool `json:"removeEmptyDirs,omitempty"`
 	// Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
-	MaxFileOpenTimeSec *float64 `default:"300" json:"maxFileOpenTimeSec"`
+	MaxFileOpenTimeSec *float64 `json:"maxFileOpenTimeSec,omitempty"`
 	// Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
-	MaxFileIdleTimeSec *float64 `default:"30" json:"maxFileIdleTimeSec"`
+	MaxFileIdleTimeSec *float64 `json:"maxFileIdleTimeSec,omitempty"`
 	// Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
-	MaxOpenFiles *float64 `default:"100" json:"maxOpenFiles"`
+	MaxOpenFiles *float64 `json:"maxOpenFiles,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputExabeamBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptionsBlockDrop `json:"onBackpressure,omitempty"`
 	// If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
-	DeadletterEnabled *bool `default:"false" json:"deadletterEnabled"`
+	DeadletterEnabled *bool `json:"deadletterEnabled,omitempty"`
 	// How to handle events when disk space is below the global 'Min free disk space' limit
-	OnDiskFullBackpressure *OutputExabeamDiskSpaceProtection `default:"block" json:"onDiskFullBackpressure"`
+	OnDiskFullBackpressure *DiskSpaceProtectionOptions `json:"onDiskFullBackpressure,omitempty"`
+	RetrySettings          *RetrySettingsType          `json:"retrySettings,omitempty"`
 	// Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
-	MaxFileSizeMB *float64 `default:"10" json:"maxFileSizeMB"`
+	MaxFileSizeMB *float64 `json:"maxFileSizeMB,omitempty"`
 	// Enter an encoded string containing Exabeam configurations
 	EncodedConfiguration *string `json:"encodedConfiguration,omitempty"`
 	// ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
@@ -248,11 +96,15 @@ type OutputExabeam struct {
 	AwsSecretKey *string `json:"awsSecretKey,omitempty"`
 	Description  *string `json:"description,omitempty"`
 	// How frequently, in seconds, to clean up empty directories
-	EmptyDirCleanupSec *float64 `default:"300" json:"emptyDirCleanupSec"`
+	EmptyDirCleanupSec *float64 `json:"emptyDirCleanupSec,omitempty"`
+	// Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
+	DirectoryBatchSize *float64 `json:"directoryBatchSize,omitempty"`
 	// Storage location for files that fail to reach their final destination after maximum retries are exceeded
-	DeadletterPath *string `default:"$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
+	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-	MaxRetryNum *float64 `default:"20" json:"maxRetryNum"`
+	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
 }
 
 func (o OutputExabeam) MarshalJSON() ([]byte, error) {
@@ -260,7 +112,7 @@ func (o OutputExabeam) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputExabeam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"bucket", "region", "collectorInstanceId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -273,9 +125,9 @@ func (o *OutputExabeam) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputExabeam) GetType() *OutputExabeamType {
+func (o *OutputExabeam) GetType() OutputExabeamType {
 	if o == nil {
-		return nil
+		return OutputExabeamType("")
 	}
 	return o.Type
 }
@@ -322,35 +174,35 @@ func (o *OutputExabeam) GetRegion() string {
 	return o.Region
 }
 
-func (o *OutputExabeam) GetStagePath() *string {
+func (o *OutputExabeam) GetStagePath() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.StagePath
 }
 
-func (o *OutputExabeam) GetEndpoint() *string {
+func (o *OutputExabeam) GetEndpoint() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Endpoint
 }
 
-func (o *OutputExabeam) GetSignatureVersion() *OutputExabeamSignatureVersion {
+func (o *OutputExabeam) GetSignatureVersion() *SignatureVersionOptionsGoogle {
 	if o == nil {
 		return nil
 	}
 	return o.SignatureVersion
 }
 
-func (o *OutputExabeam) GetObjectACL() *OutputExabeamObjectACL {
+func (o *OutputExabeam) GetObjectACL() *ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol {
 	if o == nil {
 		return nil
 	}
 	return o.ObjectACL
 }
 
-func (o *OutputExabeam) GetStorageClass() *OutputExabeamStorageClass {
+func (o *OutputExabeam) GetStorageClass() *StorageClassOptionsArchiveColdline {
 	if o == nil {
 		return nil
 	}
@@ -406,7 +258,7 @@ func (o *OutputExabeam) GetMaxOpenFiles() *float64 {
 	return o.MaxOpenFiles
 }
 
-func (o *OutputExabeam) GetOnBackpressure() *OutputExabeamBackpressureBehavior {
+func (o *OutputExabeam) GetOnBackpressure() *BackpressureBehaviorOptionsBlockDrop {
 	if o == nil {
 		return nil
 	}
@@ -420,11 +272,18 @@ func (o *OutputExabeam) GetDeadletterEnabled() *bool {
 	return o.DeadletterEnabled
 }
 
-func (o *OutputExabeam) GetOnDiskFullBackpressure() *OutputExabeamDiskSpaceProtection {
+func (o *OutputExabeam) GetOnDiskFullBackpressure() *DiskSpaceProtectionOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnDiskFullBackpressure
+}
+
+func (o *OutputExabeam) GetRetrySettings() *RetrySettingsType {
+	if o == nil {
+		return nil
+	}
+	return o.RetrySettings
 }
 
 func (o *OutputExabeam) GetMaxFileSizeMB() *float64 {
@@ -497,6 +356,13 @@ func (o *OutputExabeam) GetEmptyDirCleanupSec() *float64 {
 	return o.EmptyDirCleanupSec
 }
 
+func (o *OutputExabeam) GetDirectoryBatchSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.DirectoryBatchSize
+}
+
 func (o *OutputExabeam) GetDeadletterPath() *string {
 	if o == nil {
 		return nil
@@ -509,4 +375,11 @@ func (o *OutputExabeam) GetMaxRetryNum() *float64 {
 		return nil
 	}
 	return o.MaxRetryNum
+}
+
+func (o *OutputExabeam) GetTemplateRegion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateRegion
 }

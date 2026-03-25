@@ -23,7 +23,7 @@ data "criblio_search_saved_query" "my_searchsavedquery" {
 
 ### Required
 
-- `id` (String) Unique ID to GET
+- `id` (String) Unique identifier for the saved query
 
 ### Read-Only
 

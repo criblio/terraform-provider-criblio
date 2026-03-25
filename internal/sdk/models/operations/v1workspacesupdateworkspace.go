@@ -40,6 +40,9 @@ func (v *V1WorkspacesUpdateWorkspaceRequest) GetWorkspacePatchRequestDTO() share
 	return v.WorkspacePatchRequestDTO
 }
 
+// #region class-body-v1workspacesupdateworkspacerequest
+// #endregion class-body-v1workspacesupdateworkspacerequest
+
 type V1WorkspacesUpdateWorkspaceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -78,3 +81,6 @@ func (v *V1WorkspacesUpdateWorkspaceResponse) GetDefaultErrorDTO() *shared.Defau
 	}
 	return v.DefaultErrorDTO
 }
+
+// #region class-body-v1workspacesupdateworkspaceresponse
+// #endregion class-body-v1workspacesupdateworkspaceresponse

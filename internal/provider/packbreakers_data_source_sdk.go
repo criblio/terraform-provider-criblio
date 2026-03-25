@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -72,6 +70,7 @@ func (r *PackBreakersDataSourceModel) RefreshFromSharedEventBreakerRuleset(ctx c
 		rules.ParserEnabled = types.BoolPointerValue(rulesItem.ParserEnabled)
 		rules.QuoteChar = types.StringPointerValue(rulesItem.QuoteChar)
 		rules.ShouldUseDataRaw = types.BoolPointerValue(rulesItem.ShouldUseDataRaw)
+		rules.Timestamp = &tfTypes.EventBreakerRulesetTimestampFormat{}
 		rules.Timestamp.Format = types.StringPointerValue(rulesItem.Timestamp.Format)
 		rules.Timestamp.Length = types.Float64PointerValue(rulesItem.Timestamp.Length)
 		if rulesItem.Timestamp.Type != nil {
@@ -103,7 +102,7 @@ func (r *PackBreakersDataSourceModel) ToOperationsGetBreakersByPackAndIDRequest(
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

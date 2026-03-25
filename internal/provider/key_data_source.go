@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -72,7 +73,7 @@ func (r *KeyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
+				Description: `Name of the Group/Fleet that created this key`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -81,6 +82,9 @@ func (r *KeyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			"keyclass": schema.Float64Attribute{
 				Computed: true,
 				Optional: true,
+				Validators: []validator.Float64{
+					float64validator.AtLeast(0),
+				},
 			},
 			"kms": schema.StringAttribute{
 				Computed:    true,

@@ -31,268 +31,18 @@ func (e *InputKubeMetricsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputKubeMetricsConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputKubeMetricsConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputKubeMetricsConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputKubeMetricsConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputKubeMetricsConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputKubeMetricsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputKubeMetricsMode string
-
-const (
-	InputKubeMetricsModeSmart  InputKubeMetricsMode = "smart"
-	InputKubeMetricsModeAlways InputKubeMetricsMode = "always"
-)
-
-func (e InputKubeMetricsMode) ToPointer() *InputKubeMetricsMode {
-	return &e
-}
-func (e *InputKubeMetricsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputKubeMetricsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputKubeMetricsMode: %v", v)
-	}
-}
-
-// InputKubeMetricsCompression - Codec to use to compress the persisted data
-type InputKubeMetricsCompression string
-
-const (
-	InputKubeMetricsCompressionNone InputKubeMetricsCompression = "none"
-	InputKubeMetricsCompressionGzip InputKubeMetricsCompression = "gzip"
-)
-
-func (e InputKubeMetricsCompression) ToPointer() *InputKubeMetricsCompression {
-	return &e
-}
-func (e *InputKubeMetricsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputKubeMetricsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputKubeMetricsCompression: %v", v)
-	}
-}
-
-type InputKubeMetricsPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputKubeMetricsMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputKubeMetricsCompression `default:"none" json:"compress"`
-}
-
-func (i InputKubeMetricsPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputKubeMetricsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputKubeMetricsPq) GetMode() *InputKubeMetricsMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputKubeMetricsPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputKubeMetricsPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputKubeMetricsPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputKubeMetricsPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputKubeMetricsPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputKubeMetricsPq) GetCompress() *InputKubeMetricsCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputKubeMetricsRule struct {
-	// JavaScript expression applied to Kubernetes objects. Return 'true' to include it.
-	Filter string `json:"filter"`
-	// Optional description of this rule's purpose
-	Description *string `json:"description,omitempty"`
-}
-
-func (i InputKubeMetricsRule) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputKubeMetricsRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"filter"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputKubeMetricsRule) GetFilter() string {
-	if i == nil {
-		return ""
-	}
-	return i.Filter
-}
-
-func (i *InputKubeMetricsRule) GetDescription() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Description
-}
-
-type InputKubeMetricsMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputKubeMetricsMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputKubeMetricsMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputKubeMetricsMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputKubeMetricsMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
-type InputKubeMetricsDataCompressionFormat string
-
-const (
-	InputKubeMetricsDataCompressionFormatNone InputKubeMetricsDataCompressionFormat = "none"
-	InputKubeMetricsDataCompressionFormatGzip InputKubeMetricsDataCompressionFormat = "gzip"
-)
-
-func (e InputKubeMetricsDataCompressionFormat) ToPointer() *InputKubeMetricsDataCompressionFormat {
-	return &e
-}
-func (e *InputKubeMetricsDataCompressionFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputKubeMetricsDataCompressionFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputKubeMetricsDataCompressionFormat: %v", v)
-	}
-}
-
 type InputKubeMetricsPersistence struct {
 	// Spool metrics on disk for Cribl Search
-	Enable *bool `default:"false" json:"enable"`
+	Enable *bool `json:"enable,omitempty"`
 	// Time span for each file bucket
-	TimeWindow *string `default:"10m" json:"timeWindow"`
+	TimeWindow *string `json:"timeWindow,omitempty"`
 	// Maximum disk space allowed to be consumed (examples: 420MB, 4GB). When limit is reached, older data will be deleted.
-	MaxDataSize *string `default:"1GB" json:"maxDataSize"`
+	MaxDataSize *string `json:"maxDataSize,omitempty"`
 	// Maximum amount of time to retain data (examples: 2h, 4d). When limit is reached, older data will be deleted.
-	MaxDataTime *string                                `default:"24h" json:"maxDataTime"`
-	Compress    *InputKubeMetricsDataCompressionFormat `default:"gzip" json:"compress"`
+	MaxDataTime *string                                  `json:"maxDataTime,omitempty"`
+	Compress    *DataCompressionFormatOptionsPersistence `json:"compress,omitempty"`
 	// Path to use to write metrics. Defaults to $CRIBL_HOME/state/<id>
-	DestPath *string `default:"$CRIBL_HOME/state/kube_metrics" json:"destPath"`
+	DestPath *string `json:"destPath,omitempty"`
 }
 
 func (i InputKubeMetricsPersistence) MarshalJSON() ([]byte, error) {
@@ -334,7 +84,7 @@ func (i *InputKubeMetricsPersistence) GetMaxDataTime() *string {
 	return i.MaxDataTime
 }
 
-func (i *InputKubeMetricsPersistence) GetCompress() *InputKubeMetricsDataCompressionFormat {
+func (i *InputKubeMetricsPersistence) GetCompress() *DataCompressionFormatOptionsPersistence {
 	if i == nil {
 		return nil
 	}
@@ -350,28 +100,28 @@ func (i *InputKubeMetricsPersistence) GetDestPath() *string {
 
 type InputKubeMetrics struct {
 	// Unique ID for this input
-	ID       string               `json:"id"`
+	ID       *string              `json:"id,omitempty"`
 	Type     InputKubeMetricsType `json:"type"`
-	Disabled *bool                `default:"false" json:"disabled"`
+	Disabled *bool                `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputKubeMetricsConnection `json:"connections,omitempty"`
-	Pq          *InputKubeMetricsPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Time, in seconds, between consecutive metrics collections. Default is 15 secs.
-	Interval *float64 `default:"15" json:"interval"`
+	Interval *float64 `json:"interval,omitempty"`
 	// Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true.
-	Rules []InputKubeMetricsRule `json:"rules,omitempty"`
+	Rules []ItemsTypeRules `json:"rules,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputKubeMetricsMetadatum  `json:"metadata,omitempty"`
+	Metadata    []ItemsTypeMetadata          `json:"metadata,omitempty"`
 	Persistence *InputKubeMetricsPersistence `json:"persistence,omitempty"`
 	Description *string                      `json:"description,omitempty"`
 }
@@ -381,15 +131,15 @@ func (i InputKubeMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputKubeMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputKubeMetrics) GetID() string {
+func (i *InputKubeMetrics) GetID() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ID
 }
@@ -443,14 +193,14 @@ func (i *InputKubeMetrics) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputKubeMetrics) GetConnections() []InputKubeMetricsConnection {
+func (i *InputKubeMetrics) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputKubeMetrics) GetPq() *InputKubeMetricsPq {
+func (i *InputKubeMetrics) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -464,14 +214,14 @@ func (i *InputKubeMetrics) GetInterval() *float64 {
 	return i.Interval
 }
 
-func (i *InputKubeMetrics) GetRules() []InputKubeMetricsRule {
+func (i *InputKubeMetrics) GetRules() []ItemsTypeRules {
 	if i == nil {
 		return nil
 	}
 	return i.Rules
 }
 
-func (i *InputKubeMetrics) GetMetadata() []InputKubeMetricsMetadatum {
+func (i *InputKubeMetrics) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}

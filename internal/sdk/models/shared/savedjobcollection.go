@@ -108,13 +108,9 @@ type SavedJobCollectionRunSettings struct {
 	// A filter for tokens in the provided collect path and/or the events being collected
 	Expression *string `default:"true" json:"expression"`
 	// Limits the bundle size for small tasks. For example,
-	//
-	//
 	//         if your lower bundle size is 1MB, you can bundle up to five 200KB files into one task.
 	MinTaskSize *string `default:"1MB" json:"minTaskSize"`
 	// Limits the bundle size for files above the lower task bundle size. For example, if your upper bundle size is 10MB,
-	//
-	//
 	//         you can bundle up to five 2MB files into one task. Files greater than this size will be assigned to individual tasks.
 	MaxTaskSize *string `default:"10MB" json:"maxTaskSize"`
 }
@@ -317,7 +313,7 @@ func (s SavedJobCollectionCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "conf"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -425,7 +421,7 @@ func (s SavedJobCollectionMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollectionMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -568,7 +564,7 @@ func (s SavedJobCollection) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SavedJobCollection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil

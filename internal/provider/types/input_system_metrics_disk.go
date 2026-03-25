@@ -10,6 +10,7 @@ type InputSystemMetricsDisk struct {
 	Detail      types.Bool     `tfsdk:"detail"`
 	Devices     []types.String `tfsdk:"devices"`
 	Fstypes     []types.String `tfsdk:"fstypes"`
+	Inodes      types.Bool     `tfsdk:"inodes"`
 	Mode        types.String   `tfsdk:"mode"`
 	Mountpoints []types.String `tfsdk:"mountpoints"`
 	PerDevice   types.Bool     `tfsdk:"per_device"`

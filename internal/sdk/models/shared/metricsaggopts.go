@@ -16,8 +16,8 @@ const (
 )
 
 type MetricsAggOptsEarliest struct {
-	Str    *string  `queryParam:"inline,name=earliest"`
-	Number *float64 `queryParam:"inline,name=earliest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type MetricsAggOptsEarliestType
 }
@@ -66,7 +66,7 @@ func (u *MetricsAggOptsEarliest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsEarliest", string(data))
 	}
@@ -105,8 +105,8 @@ const (
 )
 
 type MetricsAggOptsLatest struct {
-	Str    *string  `queryParam:"inline,name=latest"`
-	Number *float64 `queryParam:"inline,name=latest"`
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
 
 	Type MetricsAggOptsLatestType
 }
@@ -155,7 +155,7 @@ func (u *MetricsAggOptsLatest) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for MetricsAggOptsLatest", string(data))
 	}

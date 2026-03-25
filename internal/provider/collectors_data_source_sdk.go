@@ -21,6 +21,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 
 			if itemsItem.InputCollectorAzureBlob != nil {
 				items.InputCollectorAzureBlob = &tfTypes.InputCollectorAzureBlob{}
+				items.InputCollectorAzureBlob.Collector = &tfTypes.InputCollectorAzureBlobCollector{}
 				if itemsItem.InputCollectorAzureBlob.Collector.Conf == nil {
 					items.InputCollectorAzureBlob.Collector.Conf = nil
 				} else {
@@ -162,6 +163,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorCriblLake != nil {
 				items.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
+				items.InputCollectorCriblLake.Collector = &tfTypes.InputCollectorCriblLakeCollector{}
 				if itemsItem.InputCollectorCriblLake.Collector.Conf == nil {
 					items.InputCollectorCriblLake.Collector.Conf = nil
 				} else {
@@ -282,6 +284,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorDatabase != nil {
 				items.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
+				items.InputCollectorDatabase.Collector = &tfTypes.InputCollectorDatabaseCollector{}
 				if itemsItem.InputCollectorDatabase.Collector.Conf == nil {
 					items.InputCollectorDatabase.Collector.Conf = nil
 				} else {
@@ -404,6 +407,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorGCS != nil {
 				items.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
+				items.InputCollectorGCS.Collector = &tfTypes.InputCollectorGCSCollector{}
 				if itemsItem.InputCollectorGCS.Collector.Conf == nil {
 					items.InputCollectorGCS.Collector.Conf = nil
 				} else {
@@ -544,6 +548,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorHealthCheck != nil {
 				items.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
+				items.InputCollectorHealthCheck.Collector = &tfTypes.InputCollectorHealthCheckCollector{}
 				if itemsItem.InputCollectorHealthCheck.Collector.Conf == nil {
 					items.InputCollectorHealthCheck.Collector.Conf = nil
 				} else {
@@ -679,6 +684,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorRest != nil {
 				items.InputCollectorRest = &tfTypes.InputCollectorRest{}
+				items.InputCollectorRest.Collector = &tfTypes.InputCollectorRestCollector{}
 				if itemsItem.InputCollectorRest.Collector.Conf == nil {
 					items.InputCollectorRest.Collector.Conf = nil
 				} else {
@@ -751,6 +757,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 					items.InputCollectorRest.Collector.Conf.CredentialsSecret = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CredentialsSecret)
 					items.InputCollectorRest.Collector.Conf.DecodeURL = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.DecodeURL)
 					items.InputCollectorRest.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.DisableTimeFilter)
+					items.InputCollectorRest.Collector.Conf.Discovery = &tfTypes.DiscoveryConfiguration{}
 					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody)
 					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField)
 					if itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod != nil {
@@ -978,6 +985,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorS3 != nil {
 				items.InputCollectorS3 = &tfTypes.InputCollectorS3{}
+				items.InputCollectorS3.Collector = &tfTypes.InputCollectorS3Collector{}
 				if itemsItem.InputCollectorS3.Collector.Conf == nil {
 					items.InputCollectorS3.Collector.Conf = nil
 				} else {
@@ -1121,6 +1129,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorScript != nil {
 				items.InputCollectorScript = &tfTypes.InputCollectorScript{}
+				items.InputCollectorScript.Collector = &tfTypes.InputCollectorScriptCollector{}
 				if itemsItem.InputCollectorScript.Collector.Conf == nil {
 					items.InputCollectorScript.Collector.Conf = nil
 				} else {
@@ -1243,6 +1252,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 			}
 			if itemsItem.InputCollectorSplunk != nil {
 				items.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
+				items.InputCollectorSplunk.Collector = &tfTypes.InputCollectorSplunkCollector{}
 				if itemsItem.InputCollectorSplunk.Collector.Conf == nil {
 					items.InputCollectorSplunk.Collector.Conf = nil
 				} else {

@@ -462,6 +462,7 @@ func (s *Workspaces) V1WorkspacesListWorkspaces(ctx context.Context, request ope
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	}
 
 	return res, nil
@@ -643,6 +644,7 @@ func (s *Workspaces) V1WorkspacesUpdateWorkspace(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 204:
+		utils.DrainBody(httpRes)
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -838,6 +840,7 @@ func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 202:
+		utils.DrainBody(httpRes)
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -859,6 +862,8 @@ func (s *Workspaces) V1WorkspacesDeleteWorkspace(ctx context.Context, request op
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	}
 
 	return res, nil
@@ -1075,6 +1080,7 @@ func (s *Workspaces) V1WorkspacesGetWorkspace(ctx context.Context, request opera
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	}
 
 	return res, nil

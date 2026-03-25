@@ -31,406 +31,48 @@ func (e *InputMetricsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputMetricsConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputMetricsConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputMetricsConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputMetricsConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputMetricsConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputMetricsMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputMetricsMode string
-
-const (
-	InputMetricsModeSmart  InputMetricsMode = "smart"
-	InputMetricsModeAlways InputMetricsMode = "always"
-)
-
-func (e InputMetricsMode) ToPointer() *InputMetricsMode {
-	return &e
-}
-func (e *InputMetricsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputMetricsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputMetricsMode: %v", v)
-	}
-}
-
-// InputMetricsCompression - Codec to use to compress the persisted data
-type InputMetricsCompression string
-
-const (
-	InputMetricsCompressionNone InputMetricsCompression = "none"
-	InputMetricsCompressionGzip InputMetricsCompression = "gzip"
-)
-
-func (e InputMetricsCompression) ToPointer() *InputMetricsCompression {
-	return &e
-}
-func (e *InputMetricsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputMetricsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputMetricsCompression: %v", v)
-	}
-}
-
-type InputMetricsPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputMetricsMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputMetricsCompression `default:"none" json:"compress"`
-}
-
-func (i InputMetricsPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputMetricsPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputMetricsPq) GetMode() *InputMetricsMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputMetricsPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputMetricsPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputMetricsPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputMetricsPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputMetricsPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputMetricsPq) GetCompress() *InputMetricsCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputMetricsMinimumTLSVersion string
-
-const (
-	InputMetricsMinimumTLSVersionTlSv1  InputMetricsMinimumTLSVersion = "TLSv1"
-	InputMetricsMinimumTLSVersionTlSv11 InputMetricsMinimumTLSVersion = "TLSv1.1"
-	InputMetricsMinimumTLSVersionTlSv12 InputMetricsMinimumTLSVersion = "TLSv1.2"
-	InputMetricsMinimumTLSVersionTlSv13 InputMetricsMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e InputMetricsMinimumTLSVersion) ToPointer() *InputMetricsMinimumTLSVersion {
-	return &e
-}
-func (e *InputMetricsMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputMetricsMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputMetricsMinimumTLSVersion: %v", v)
-	}
-}
-
-type InputMetricsMaximumTLSVersion string
-
-const (
-	InputMetricsMaximumTLSVersionTlSv1  InputMetricsMaximumTLSVersion = "TLSv1"
-	InputMetricsMaximumTLSVersionTlSv11 InputMetricsMaximumTLSVersion = "TLSv1.1"
-	InputMetricsMaximumTLSVersionTlSv12 InputMetricsMaximumTLSVersion = "TLSv1.2"
-	InputMetricsMaximumTLSVersionTlSv13 InputMetricsMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e InputMetricsMaximumTLSVersion) ToPointer() *InputMetricsMaximumTLSVersion {
-	return &e
-}
-func (e *InputMetricsMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputMetricsMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputMetricsMaximumTLSVersion: %v", v)
-	}
-}
-
-type InputMetricsTLSSettingsServerSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string `json:"passphrase,omitempty"`
-	// Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Require clients to present their certificates. Used to perform client authentication using SSL certs.
-	RequestCert        *bool                          `default:"false" json:"requestCert"`
-	RejectUnauthorized any                            `json:"rejectUnauthorized,omitempty"`
-	CommonNameRegex    any                            `json:"commonNameRegex,omitempty"`
-	MinVersion         *InputMetricsMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion         *InputMetricsMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (i InputMetricsTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputMetricsTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetDisabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.Disabled
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetCertificateName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertificateName
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.PrivKeyPath
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetPassphrase() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Passphrase
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetCertPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertPath
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetCaPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CaPath
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetRequestCert() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RequestCert
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if i == nil {
-		return nil
-	}
-	return i.RejectUnauthorized
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetCommonNameRegex() any {
-	if i == nil {
-		return nil
-	}
-	return i.CommonNameRegex
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetMinVersion() *InputMetricsMinimumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MinVersion
-}
-
-func (i *InputMetricsTLSSettingsServerSide) GetMaxVersion() *InputMetricsMaximumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MaxVersion
-}
-
-type InputMetricsMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputMetricsMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputMetricsMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputMetricsMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputMetricsMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputMetrics struct {
 	// Unique ID for this input
 	ID       *string          `json:"id,omitempty"`
 	Type     InputMetricsType `json:"type"`
-	Disabled *bool            `default:"false" json:"disabled"`
+	Disabled *bool            `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputMetricsConnection `json:"connections,omitempty"`
-	Pq          *InputMetricsPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
-	Host *string `default:"0.0.0.0" json:"host"`
+	Host string `json:"host"`
 	// Enter UDP port number to listen on. Not required if listening on TCP.
 	UDPPort *float64 `json:"udpPort,omitempty"`
 	// Enter TCP port number to listen on. Not required if listening on UDP.
 	TCPPort *float64 `json:"tcpPort,omitempty"`
 	// Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
+	MaxBufferSize *float64 `json:"maxBufferSize,omitempty"`
 	// Regex matching IP addresses that are allowed to send data
-	IPWhitelistRegex *string `default:"/.*/" json:"ipWhitelistRegex"`
+	IPWhitelistRegex *string `json:"ipWhitelistRegex,omitempty"`
 	// Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
-	EnableProxyHeader *bool                              `default:"false" json:"enableProxyHeader"`
-	TLS               *InputMetricsTLSSettingsServerSide `json:"tls,omitempty"`
+	EnableProxyHeader *bool                      `json:"enableProxyHeader,omitempty"`
+	TLS               *TLSSettingsServerSideType `json:"tls,omitempty"`
 	// Fields to add to events from this input
-	Metadata []InputMetricsMetadatum `json:"metadata,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
 	// Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 	UDPSocketRxBufSize *float64 `json:"udpSocketRxBufSize,omitempty"`
 	Description        *string  `json:"description,omitempty"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
+	TemplateUDPPort *string `json:"__template_udpPort,omitempty"`
+	// Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
+	TemplateTCPPort *string `json:"__template_tcpPort,omitempty"`
 }
 
 func (i InputMetrics) MarshalJSON() ([]byte, error) {
@@ -438,7 +80,7 @@ func (i InputMetrics) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputMetrics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -500,23 +142,23 @@ func (i *InputMetrics) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputMetrics) GetConnections() []InputMetricsConnection {
+func (i *InputMetrics) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputMetrics) GetPq() *InputMetricsPq {
+func (i *InputMetrics) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputMetrics) GetHost() *string {
+func (i *InputMetrics) GetHost() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Host
 }
@@ -556,14 +198,14 @@ func (i *InputMetrics) GetEnableProxyHeader() *bool {
 	return i.EnableProxyHeader
 }
 
-func (i *InputMetrics) GetTLS() *InputMetricsTLSSettingsServerSide {
+func (i *InputMetrics) GetTLS() *TLSSettingsServerSideType {
 	if i == nil {
 		return nil
 	}
 	return i.TLS
 }
 
-func (i *InputMetrics) GetMetadata() []InputMetricsMetadatum {
+func (i *InputMetrics) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -582,4 +224,25 @@ func (i *InputMetrics) GetDescription() *string {
 		return nil
 	}
 	return i.Description
+}
+
+func (i *InputMetrics) GetTemplateHost() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateHost
+}
+
+func (i *InputMetrics) GetTemplateUDPPort() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateUDPPort
+}
+
+func (i *InputMetrics) GetTemplateTCPPort() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateTCPPort
 }

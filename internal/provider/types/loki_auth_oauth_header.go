@@ -3,10 +3,10 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 )
 
 type LokiAuthOauthHeader struct {
-	Name  types.String `tfsdk:"name"`
-	Value types.String `tfsdk:"value"`
+	Name  jsontypes.Normalized `tfsdk:"name"`
+	Value jsontypes.Normalized `tfsdk:"value"`
 }

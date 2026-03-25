@@ -48,7 +48,7 @@ Read-Only:
 
 Read-Only:
 
-- `conf` (String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.
+- `conf` (String) Function configuration as JSON (same shape as jsonencode in the resource).
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function

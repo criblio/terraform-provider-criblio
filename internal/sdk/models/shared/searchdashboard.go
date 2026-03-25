@@ -97,7 +97,7 @@ func (s SearchDashboard) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchDashboard) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"created", "createdBy", "elements", "id", "modified", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil

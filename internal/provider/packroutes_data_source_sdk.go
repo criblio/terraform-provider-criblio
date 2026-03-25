@@ -5,8 +5,6 @@ package provider
 import (
 	"context"
 	"encoding/json"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -96,7 +94,7 @@ func (r *PackRoutesDataSourceModel) ToOperationsGetRoutesByPackRequest(ctx conte
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

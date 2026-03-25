@@ -152,6 +152,7 @@ resource "criblio_destination" "my_cloudflare_r2_destination" {
     compress                  = "gzip"
     format                    = "json"
     dest_path                 = "logs/ingest"
+    stage_path                = "/var/lib/cribl/state/outputs/staging"
     on_backpressure           = "block"
     pipeline                  = "default"
     max_file_size_mb          = 64
@@ -205,13 +206,14 @@ resource "criblio_destination" "my_microsoft_fabric_destination" {
     ack                = 1
     max_retries        = 5
     sasl = {
-      disabled           = false
-      mechanism          = "oauthbearer"
-      client_id          = "fabric-client-id"
-      client_text_secret = "fabric-client-secret"
-      tenant_id          = "tenant-id"
-      oauth_endpoint     = "https://login.microsoftonline.com"
-      scope              = "https://servicebus.azure.net/.default"
+      disabled                = false
+      mechanism               = "oauthbearer"
+      client_secret_auth_type = "secret"
+      client_id               = "fabric-client-id"
+      client_text_secret      = "fabric-client-secret"
+      tenant_id               = "tenant-id"
+      oauth_endpoint          = "https://login.microsoftonline.com"
+      scope                   = "https://servicebus.azure.net/.default"
     }
     tls = {
       disabled            = false
@@ -248,6 +250,7 @@ resource "criblio_destination" "my_sentinel_one_ai_siem_destination" {
     event_type           = "log"
     source               = "cribl"
     source_type          = "stream"
+    host                 = "'cribl'"
   }
 }
 

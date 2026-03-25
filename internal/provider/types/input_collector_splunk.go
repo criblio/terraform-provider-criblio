@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorSplunk struct {
-	Collector            InputCollectorSplunkCollector   `tfsdk:"collector"`
+	Collector            *InputCollectorSplunkCollector  `tfsdk:"collector"`
 	Environment          types.String                    `tfsdk:"environment"`
 	ID                   types.String                    `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                      `tfsdk:"ignore_group_jobs_limit"`

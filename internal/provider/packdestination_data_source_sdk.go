@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"strings"
-
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
@@ -20,7 +18,7 @@ func (r *PackDestinationDataSourceModel) ToOperationsGetPackOutputByIDRequest(ct
 	groupID = r.GroupID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	out := operations.GetPackOutputByIDRequest{
 		ID:      id,

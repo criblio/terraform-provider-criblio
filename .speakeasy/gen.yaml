@@ -13,6 +13,8 @@ generation:
     requestResponseComponentNamesFeb2024: true
     securityFeb2025: true
     sharedErrorComponentsApr2025: false
+    sharedNestedComponentsJan2026: false
+    nameOverrideFeb2026: false
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
@@ -20,18 +22,24 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
+  versioningStrategy: automatic
+  persistentEdits:
+    enabled: never
   tests:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.20.145
+  version: 1.21.1
+  additionalActions: []
   additionalDataSources: []
   additionalDependencies:
     github.com/cloudflare/circl: v1.6.3
     github.com/hashicorp/terraform-plugin-framework: v1.19.0
     google.golang.org/grpc: v1.79.3
   additionalEphemeralResources: []
+  additionalFunctions: []
+  additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
@@ -39,6 +47,7 @@ terraform:
   allowUnknownFieldsInWeakUnions: false
   author: criblio
   baseErrorName: CriblIoError
+  debugLogging: {}
   defaultErrorName: APIError
   enableCustomCodeRegions: false
   enableOperationSecurity: false
@@ -57,5 +66,9 @@ terraform:
       providerAttribute: cloud_domain
   excludeEmptyObjectSchemas: false
   includeEmptyObjects: false
+  inferUnionDiscriminators: false
   packageName: criblio
-  unionDeserializationStrategy: populated-fields
+  preApplyUnionDiscriminators: false
+  respectRequiredFields: false
+  respectTitlesForPrimitiveUnionMembers: false
+  unionStrategy: populated-fields

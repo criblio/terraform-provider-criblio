@@ -11,4 +11,5 @@ type InputSystemMetricsNetwork struct {
 	Devices      []types.String `tfsdk:"devices"`
 	Mode         types.String   `tfsdk:"mode"`
 	PerInterface types.Bool     `tfsdk:"per_interface"`
+	Protocols    types.Bool     `tfsdk:"protocols"`
 }

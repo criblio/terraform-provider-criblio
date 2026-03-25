@@ -66,7 +66,7 @@ func (l Lakehouse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Lakehouse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

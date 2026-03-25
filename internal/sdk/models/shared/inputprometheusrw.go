@@ -31,414 +31,9 @@ func (e *InputPrometheusRwType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputPrometheusRwConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputPrometheusRwConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputPrometheusRwConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputPrometheusRwConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputPrometheusRwConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputPrometheusRwMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputPrometheusRwMode string
-
-const (
-	InputPrometheusRwModeSmart  InputPrometheusRwMode = "smart"
-	InputPrometheusRwModeAlways InputPrometheusRwMode = "always"
-)
-
-func (e InputPrometheusRwMode) ToPointer() *InputPrometheusRwMode {
-	return &e
-}
-func (e *InputPrometheusRwMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputPrometheusRwMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusRwMode: %v", v)
-	}
-}
-
-// InputPrometheusRwCompression - Codec to use to compress the persisted data
-type InputPrometheusRwCompression string
-
-const (
-	InputPrometheusRwCompressionNone InputPrometheusRwCompression = "none"
-	InputPrometheusRwCompressionGzip InputPrometheusRwCompression = "gzip"
-)
-
-func (e InputPrometheusRwCompression) ToPointer() *InputPrometheusRwCompression {
-	return &e
-}
-func (e *InputPrometheusRwCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputPrometheusRwCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusRwCompression: %v", v)
-	}
-}
-
-type InputPrometheusRwPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputPrometheusRwMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputPrometheusRwCompression `default:"none" json:"compress"`
-}
-
-func (i InputPrometheusRwPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputPrometheusRwPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputPrometheusRwPq) GetMode() *InputPrometheusRwMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputPrometheusRwPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputPrometheusRwPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputPrometheusRwPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputPrometheusRwPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputPrometheusRwPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputPrometheusRwPq) GetCompress() *InputPrometheusRwCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputPrometheusRwMinimumTLSVersion string
-
-const (
-	InputPrometheusRwMinimumTLSVersionTlSv1  InputPrometheusRwMinimumTLSVersion = "TLSv1"
-	InputPrometheusRwMinimumTLSVersionTlSv11 InputPrometheusRwMinimumTLSVersion = "TLSv1.1"
-	InputPrometheusRwMinimumTLSVersionTlSv12 InputPrometheusRwMinimumTLSVersion = "TLSv1.2"
-	InputPrometheusRwMinimumTLSVersionTlSv13 InputPrometheusRwMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e InputPrometheusRwMinimumTLSVersion) ToPointer() *InputPrometheusRwMinimumTLSVersion {
-	return &e
-}
-func (e *InputPrometheusRwMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputPrometheusRwMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusRwMinimumTLSVersion: %v", v)
-	}
-}
-
-type InputPrometheusRwMaximumTLSVersion string
-
-const (
-	InputPrometheusRwMaximumTLSVersionTlSv1  InputPrometheusRwMaximumTLSVersion = "TLSv1"
-	InputPrometheusRwMaximumTLSVersionTlSv11 InputPrometheusRwMaximumTLSVersion = "TLSv1.1"
-	InputPrometheusRwMaximumTLSVersionTlSv12 InputPrometheusRwMaximumTLSVersion = "TLSv1.2"
-	InputPrometheusRwMaximumTLSVersionTlSv13 InputPrometheusRwMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e InputPrometheusRwMaximumTLSVersion) ToPointer() *InputPrometheusRwMaximumTLSVersion {
-	return &e
-}
-func (e *InputPrometheusRwMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputPrometheusRwMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusRwMaximumTLSVersion: %v", v)
-	}
-}
-
-type InputPrometheusRwTLSSettingsServerSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string `json:"passphrase,omitempty"`
-	// Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Require clients to present their certificates. Used to perform client authentication using SSL certs.
-	RequestCert        *bool                               `default:"false" json:"requestCert"`
-	RejectUnauthorized any                                 `json:"rejectUnauthorized,omitempty"`
-	CommonNameRegex    any                                 `json:"commonNameRegex,omitempty"`
-	MinVersion         *InputPrometheusRwMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion         *InputPrometheusRwMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (i InputPrometheusRwTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetDisabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.Disabled
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetCertificateName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertificateName
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.PrivKeyPath
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetPassphrase() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Passphrase
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetCertPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertPath
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetCaPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CaPath
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetRequestCert() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RequestCert
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if i == nil {
-		return nil
-	}
-	return i.RejectUnauthorized
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetCommonNameRegex() any {
-	if i == nil {
-		return nil
-	}
-	return i.CommonNameRegex
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetMinVersion() *InputPrometheusRwMinimumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MinVersion
-}
-
-func (i *InputPrometheusRwTLSSettingsServerSide) GetMaxVersion() *InputPrometheusRwMaximumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MaxVersion
-}
-
-// InputPrometheusRwAuthenticationType - Remote Write authentication type
-type InputPrometheusRwAuthenticationType string
-
-const (
-	InputPrometheusRwAuthenticationTypeNone              InputPrometheusRwAuthenticationType = "none"
-	InputPrometheusRwAuthenticationTypeBasic             InputPrometheusRwAuthenticationType = "basic"
-	InputPrometheusRwAuthenticationTypeCredentialsSecret InputPrometheusRwAuthenticationType = "credentialsSecret"
-	InputPrometheusRwAuthenticationTypeToken             InputPrometheusRwAuthenticationType = "token"
-	InputPrometheusRwAuthenticationTypeTextSecret        InputPrometheusRwAuthenticationType = "textSecret"
-	InputPrometheusRwAuthenticationTypeOauth             InputPrometheusRwAuthenticationType = "oauth"
-)
-
-func (e InputPrometheusRwAuthenticationType) ToPointer() *InputPrometheusRwAuthenticationType {
-	return &e
-}
-func (e *InputPrometheusRwAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "oauth":
-		*e = InputPrometheusRwAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusRwAuthenticationType: %v", v)
-	}
-}
-
-type InputPrometheusRwMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputPrometheusRwMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputPrometheusRwMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputPrometheusRwMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputPrometheusRwMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputPrometheusRwOauthParam struct {
-	// OAuth parameter name
-	Name string `json:"name"`
-	// OAuth parameter value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (i InputPrometheusRwOauthParam) MarshalJSON() ([]byte, error) {
@@ -446,31 +41,29 @@ func (i InputPrometheusRwOauthParam) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputPrometheusRwOauthParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputPrometheusRwOauthParam) GetName() string {
+func (i *InputPrometheusRwOauthParam) GetName() any {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.Name
 }
 
-func (i *InputPrometheusRwOauthParam) GetValue() string {
+func (i *InputPrometheusRwOauthParam) GetValue() any {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.Value
 }
 
 type InputPrometheusRwOauthHeader struct {
-	// OAuth header name
-	Name string `json:"name"`
-	// OAuth header value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (i InputPrometheusRwOauthHeader) MarshalJSON() ([]byte, error) {
@@ -478,102 +71,102 @@ func (i InputPrometheusRwOauthHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputPrometheusRwOauthHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputPrometheusRwOauthHeader) GetName() string {
+func (i *InputPrometheusRwOauthHeader) GetName() any {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.Name
 }
 
-func (i *InputPrometheusRwOauthHeader) GetValue() string {
+func (i *InputPrometheusRwOauthHeader) GetValue() any {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.Value
 }
 
 type InputPrometheusRw struct {
 	// Unique ID for this input
-	ID       *string                `json:"id,omitempty"`
-	Type     *InputPrometheusRwType `json:"type,omitempty"`
-	Disabled *bool                  `default:"false" json:"disabled"`
+	ID       *string               `json:"id,omitempty"`
+	Type     InputPrometheusRwType `json:"type"`
+	Disabled *bool                 `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputPrometheusRwConnection `json:"connections,omitempty"`
-	Pq          *InputPrometheusRwPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Address to bind on. Defaults to 0.0.0.0 (all addresses).
-	Host *string `default:"0.0.0.0" json:"host"`
+	Host string `json:"host"`
 	// Port to listen on
-	Port float64                                 `json:"port"`
-	TLS  *InputPrometheusRwTLSSettingsServerSide `json:"tls,omitempty"`
+	Port float64                    `json:"port"`
+	TLS  *TLSSettingsServerSideType `json:"tls,omitempty"`
 	// Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
-	MaxActiveReq *float64 `default:"256" json:"maxActiveReq"`
+	MaxActiveReq *float64 `json:"maxActiveReq,omitempty"`
 	// Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-	MaxRequestsPerSocket *int64 `default:"0" json:"maxRequestsPerSocket"`
+	MaxRequestsPerSocket *int64 `json:"maxRequestsPerSocket,omitempty"`
 	// Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
-	EnableProxyHeader *bool `default:"false" json:"enableProxyHeader"`
+	EnableProxyHeader *bool `json:"enableProxyHeader,omitempty"`
 	// Add request headers to events, in the __headers field
-	CaptureHeaders *bool `default:"false" json:"captureHeaders"`
+	CaptureHeaders *bool `json:"captureHeaders,omitempty"`
 	// How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-	ActivityLogSampleRate *float64 `default:"100" json:"activityLogSampleRate"`
+	ActivityLogSampleRate *float64 `json:"activityLogSampleRate,omitempty"`
 	// How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-	RequestTimeout *float64 `default:"0" json:"requestTimeout"`
+	RequestTimeout *float64 `json:"requestTimeout,omitempty"`
 	// How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-	SocketTimeout *float64 `default:"0" json:"socketTimeout"`
+	SocketTimeout *float64 `json:"socketTimeout,omitempty"`
 	// After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-	KeepAliveTimeout *float64 `default:"5" json:"keepAliveTimeout"`
+	KeepAliveTimeout *float64 `json:"keepAliveTimeout,omitempty"`
 	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-	EnableHealthCheck *bool `default:"false" json:"enableHealthCheck"`
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 	// Messages from matched IP addresses will be processed, unless also matched by the denylist
-	IPAllowlistRegex *string `default:"/.*/" json:"ipAllowlistRegex"`
+	IPAllowlistRegex *string `json:"ipAllowlistRegex,omitempty"`
 	// Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-	IPDenylistRegex *string `default:"/^\\$/" json:"ipDenylistRegex"`
+	IPDenylistRegex *string `json:"ipDenylistRegex,omitempty"`
 	// Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.
-	PrometheusAPI *string `default:"/write" json:"prometheusAPI"`
+	PrometheusAPI string `json:"prometheusAPI"`
 	// Remote Write authentication type
-	AuthType *InputPrometheusRwAuthenticationType `default:"none" json:"authType"`
+	AuthType *AuthenticationTypeOptionsPrometheusAuth `json:"authType,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputPrometheusRwMetadatum `json:"metadata,omitempty"`
-	Description *string                      `json:"description,omitempty"`
-	Username    *string                      `json:"username,omitempty"`
-	Password    *string                      `json:"password,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
+	Username    *string             `json:"username,omitempty"`
+	Password    *string             `json:"password,omitempty"`
 	// Bearer token to include in the authorization header
 	Token *string `json:"token,omitempty"`
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// URL for OAuth
-	LoginURL *string `json:"loginUrl,omitempty"`
-	// Secret parameter name to pass in request body
-	SecretParamName *string `json:"secretParamName,omitempty"`
-	// Secret parameter value to pass in request body
-	Secret *string `json:"secret,omitempty"`
-	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
-	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
-	AuthHeaderExpr *string `default:"Bearer \\${token}" json:"authHeaderExpr"`
-	// How often the OAuth token should be refreshed.
-	TokenTimeoutSecs *float64 `default:"3600" json:"tokenTimeoutSecs"`
-	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthParams []InputPrometheusRwOauthParam `json:"oauthParams,omitempty"`
-	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthHeaders []InputPrometheusRwOauthHeader `json:"oauthHeaders,omitempty"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+	TemplatePort *string `json:"__template_port,omitempty"`
+	// Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.
+	TemplatePrometheusAPI *string `json:"__template_prometheusAPI,omitempty"`
+	// Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
+	TemplateUsername   *string                        `json:"__template_username,omitempty"`
+	LoginURL           any                            `json:"loginUrl,omitempty"`
+	SecretParamName    any                            `json:"secretParamName,omitempty"`
+	Secret             any                            `json:"secret,omitempty"`
+	TokenAttributeName any                            `json:"tokenAttributeName,omitempty"`
+	AuthHeaderExpr     any                            `json:"authHeaderExpr,omitempty"`
+	TokenTimeoutSecs   any                            `json:"tokenTimeoutSecs,omitempty"`
+	OauthParams        []InputPrometheusRwOauthParam  `json:"oauthParams,omitempty"`
+	OauthHeaders       []InputPrometheusRwOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputPrometheusRw) MarshalJSON() ([]byte, error) {
@@ -581,7 +174,7 @@ func (i InputPrometheusRw) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputPrometheusRw) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -594,9 +187,9 @@ func (i *InputPrometheusRw) GetID() *string {
 	return i.ID
 }
 
-func (i *InputPrometheusRw) GetType() *InputPrometheusRwType {
+func (i *InputPrometheusRw) GetType() InputPrometheusRwType {
 	if i == nil {
-		return nil
+		return InputPrometheusRwType("")
 	}
 	return i.Type
 }
@@ -643,23 +236,23 @@ func (i *InputPrometheusRw) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputPrometheusRw) GetConnections() []InputPrometheusRwConnection {
+func (i *InputPrometheusRw) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputPrometheusRw) GetPq() *InputPrometheusRwPq {
+func (i *InputPrometheusRw) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputPrometheusRw) GetHost() *string {
+func (i *InputPrometheusRw) GetHost() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Host
 }
@@ -671,7 +264,7 @@ func (i *InputPrometheusRw) GetPort() float64 {
 	return i.Port
 }
 
-func (i *InputPrometheusRw) GetTLS() *InputPrometheusRwTLSSettingsServerSide {
+func (i *InputPrometheusRw) GetTLS() *TLSSettingsServerSideType {
 	if i == nil {
 		return nil
 	}
@@ -755,21 +348,21 @@ func (i *InputPrometheusRw) GetIPDenylistRegex() *string {
 	return i.IPDenylistRegex
 }
 
-func (i *InputPrometheusRw) GetPrometheusAPI() *string {
+func (i *InputPrometheusRw) GetPrometheusAPI() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.PrometheusAPI
 }
 
-func (i *InputPrometheusRw) GetAuthType() *InputPrometheusRwAuthenticationType {
+func (i *InputPrometheusRw) GetAuthType() *AuthenticationTypeOptionsPrometheusAuth {
 	if i == nil {
 		return nil
 	}
 	return i.AuthType
 }
 
-func (i *InputPrometheusRw) GetMetadata() []InputPrometheusRwMetadatum {
+func (i *InputPrometheusRw) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -818,42 +411,70 @@ func (i *InputPrometheusRw) GetTextSecret() *string {
 	return i.TextSecret
 }
 
-func (i *InputPrometheusRw) GetLoginURL() *string {
+func (i *InputPrometheusRw) GetTemplateHost() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateHost
+}
+
+func (i *InputPrometheusRw) GetTemplatePort() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplatePort
+}
+
+func (i *InputPrometheusRw) GetTemplatePrometheusAPI() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplatePrometheusAPI
+}
+
+func (i *InputPrometheusRw) GetTemplateUsername() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateUsername
+}
+
+func (i *InputPrometheusRw) GetLoginURL() any {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputPrometheusRw) GetSecretParamName() *string {
+func (i *InputPrometheusRw) GetSecretParamName() any {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputPrometheusRw) GetSecret() *string {
+func (i *InputPrometheusRw) GetSecret() any {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputPrometheusRw) GetTokenAttributeName() *string {
+func (i *InputPrometheusRw) GetTokenAttributeName() any {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputPrometheusRw) GetAuthHeaderExpr() *string {
+func (i *InputPrometheusRw) GetAuthHeaderExpr() any {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputPrometheusRw) GetTokenTimeoutSecs() *float64 {
+func (i *InputPrometheusRw) GetTokenTimeoutSecs() any {
 	if i == nil {
 		return nil
 	}

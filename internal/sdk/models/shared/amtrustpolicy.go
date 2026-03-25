@@ -16,8 +16,8 @@ const (
 )
 
 type Action struct {
-	Str        *string  `queryParam:"inline,name=Action"`
-	ArrayOfStr []string `queryParam:"inline,name=Action"`
+	Str        *string  `queryParam:"inline" union:"member"`
+	ArrayOfStr []string `queryParam:"inline" union:"member"`
 
 	Type ActionType
 }
@@ -66,7 +66,7 @@ func (u *Action) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Action", string(data))
 	}

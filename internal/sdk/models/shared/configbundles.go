@@ -15,7 +15,7 @@ func (c ConfigBundles) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConfigBundles) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"remoteUrl"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

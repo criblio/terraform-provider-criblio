@@ -7,10 +7,14 @@ import (
 )
 
 type InputElasticProxyMode struct {
+	TemplateURL        types.String   `tfsdk:"template_url"`
 	AuthType           types.String   `tfsdk:"auth_type"`
+	CredentialsSecret  types.String   `tfsdk:"credentials_secret"`
 	Enabled            types.Bool     `tfsdk:"enabled"`
+	Password           types.String   `tfsdk:"password"`
 	RejectUnauthorized types.Bool     `tfsdk:"reject_unauthorized"`
 	RemoveHeaders      []types.String `tfsdk:"remove_headers"`
 	TimeoutSec         types.Float64  `tfsdk:"timeout_sec"`
 	URL                types.String   `tfsdk:"url"`
+	Username           types.String   `tfsdk:"username"`
 }

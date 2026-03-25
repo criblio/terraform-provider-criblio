@@ -7,20 +7,21 @@ import (
 )
 
 type InputSystemState struct {
-	Collectors          *Collectors                  `tfsdk:"collectors"`
-	Connections         []InputSystemStateConnection `tfsdk:"connections"`
-	Description         types.String                 `tfsdk:"description"`
-	Disabled            types.Bool                   `tfsdk:"disabled"`
-	DisableNativeModule types.Bool                   `tfsdk:"disable_native_module"`
-	Environment         types.String                 `tfsdk:"environment"`
-	ID                  types.String                 `tfsdk:"id"`
-	Interval            types.Float64                `tfsdk:"interval"`
-	Metadata            []InputSystemStateMetadatum  `tfsdk:"metadata"`
-	Persistence         *InputSystemStatePersistence `tfsdk:"persistence"`
-	Pipeline            types.String                 `tfsdk:"pipeline"`
-	Pq                  *InputSystemStatePq          `tfsdk:"pq"`
-	PqEnabled           types.Bool                   `tfsdk:"pq_enabled"`
-	SendToRoutes        types.Bool                   `tfsdk:"send_to_routes"`
-	Streamtags          []types.String               `tfsdk:"streamtags"`
-	Type                types.String                 `tfsdk:"type"`
+	Collectors                 *Collectors                    `tfsdk:"collectors"`
+	Connections                []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description                types.String                   `tfsdk:"description"`
+	DisableNativeLastLogModule types.Bool                     `tfsdk:"disable_native_last_log_module"`
+	DisableNativeModule        types.Bool                     `tfsdk:"disable_native_module"`
+	Disabled                   types.Bool                     `tfsdk:"disabled"`
+	Environment                types.String                   `tfsdk:"environment"`
+	ID                         types.String                   `tfsdk:"id"`
+	Interval                   types.Float64                  `tfsdk:"interval"`
+	Metadata                   []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Persistence                *InputSystemStatePersistence   `tfsdk:"persistence"`
+	Pipeline                   types.String                   `tfsdk:"pipeline"`
+	Pq                         *PqType                        `tfsdk:"pq"`
+	PqEnabled                  types.Bool                     `tfsdk:"pq_enabled"`
+	SendToRoutes               types.Bool                     `tfsdk:"send_to_routes"`
+	Streamtags                 []types.String                 `tfsdk:"streamtags"`
+	Type                       types.String                   `tfsdk:"type"`
 }

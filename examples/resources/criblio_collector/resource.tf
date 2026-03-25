@@ -84,7 +84,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -163,7 +163,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -244,7 +244,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -335,7 +335,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -421,7 +421,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -626,7 +626,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -720,7 +720,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -801,7 +801,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -896,7 +896,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",

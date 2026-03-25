@@ -7,18 +7,18 @@ import (
 )
 
 type InputCriblmetrics struct {
-	Connections  []InputCriblmetricsConnection `tfsdk:"connections"`
-	Description  types.String                  `tfsdk:"description"`
-	Disabled     types.Bool                    `tfsdk:"disabled"`
-	Environment  types.String                  `tfsdk:"environment"`
-	FullFidelity types.Bool                    `tfsdk:"full_fidelity"`
-	ID           types.String                  `tfsdk:"id"`
-	Metadata     []InputCriblmetricsMetadatum  `tfsdk:"metadata"`
-	Pipeline     types.String                  `tfsdk:"pipeline"`
-	Pq           *InputCriblmetricsPq          `tfsdk:"pq"`
-	PqEnabled    types.Bool                    `tfsdk:"pq_enabled"`
-	Prefix       types.String                  `tfsdk:"prefix"`
-	SendToRoutes types.Bool                    `tfsdk:"send_to_routes"`
-	Streamtags   []types.String                `tfsdk:"streamtags"`
-	Type         types.String                  `tfsdk:"type"`
+	Connections  []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description  types.String                   `tfsdk:"description"`
+	Disabled     types.Bool                     `tfsdk:"disabled"`
+	Environment  types.String                   `tfsdk:"environment"`
+	FullFidelity types.Bool                     `tfsdk:"full_fidelity"`
+	ID           types.String                   `tfsdk:"id"`
+	Metadata     []ItemsTypeMetadata            `tfsdk:"metadata"`
+	Pipeline     types.String                   `tfsdk:"pipeline"`
+	Pq           *PqType                        `tfsdk:"pq"`
+	PqEnabled    types.Bool                     `tfsdk:"pq_enabled"`
+	Prefix       types.String                   `tfsdk:"prefix"`
+	SendToRoutes types.Bool                     `tfsdk:"send_to_routes"`
+	Streamtags   []types.String                 `tfsdk:"streamtags"`
+	Type         types.String                   `tfsdk:"type"`
 }

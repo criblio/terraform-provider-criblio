@@ -27,7 +27,7 @@ type OutputGoogleCloudLogging struct {
 	LastExpression            types.String                        `tfsdk:"last_expression"`
 	LatencyExpression         types.String                        `tfsdk:"latency_expression"`
 	LineExpression            types.String                        `tfsdk:"line_expression"`
-	LogLabels                 []LogLabel                          `tfsdk:"log_labels"`
+	LogLabels                 []ItemsTypeLogLabels                `tfsdk:"log_labels"`
 	LogLocationExpression     types.String                        `tfsdk:"log_location_expression"`
 	LogLocationType           types.String                        `tfsdk:"log_location_type"`
 	LogNameExpression         types.String                        `tfsdk:"log_name_expression"`
@@ -39,11 +39,16 @@ type OutputGoogleCloudLogging struct {
 	Pipeline                  types.String                        `tfsdk:"pipeline"`
 	PqCompress                types.String                        `tfsdk:"pq_compress"`
 	PqControls                *OutputGoogleCloudLoggingPqControls `tfsdk:"pq_controls"`
+	PqMaxBackpressureSec      types.Float64                       `tfsdk:"pq_max_backpressure_sec"`
+	PqMaxBufferSize           types.Float64                       `tfsdk:"pq_max_buffer_size"`
+	PqMaxBufferSizeBytes      types.String                        `tfsdk:"pq_max_buffer_size_bytes"`
 	PqMaxFileSize             types.String                        `tfsdk:"pq_max_file_size"`
 	PqMaxSize                 types.String                        `tfsdk:"pq_max_size"`
 	PqMode                    types.String                        `tfsdk:"pq_mode"`
 	PqOnBackpressure          types.String                        `tfsdk:"pq_on_backpressure"`
 	PqPath                    types.String                        `tfsdk:"pq_path"`
+	PqRatePerSec              types.Float64                       `tfsdk:"pq_rate_per_sec"`
+	PqStrictOrdering          types.Bool                          `tfsdk:"pq_strict_ordering"`
 	ProducerExpression        types.String                        `tfsdk:"producer_expression"`
 	ProtocolExpression        types.String                        `tfsdk:"protocol_expression"`
 	RefererExpression         types.String                        `tfsdk:"referer_expression"`
@@ -52,8 +57,9 @@ type OutputGoogleCloudLogging struct {
 	RequestSizeExpression     types.String                        `tfsdk:"request_size_expression"`
 	RequestURLExpression      types.String                        `tfsdk:"request_url_expression"`
 	ResourceTypeExpression    types.String                        `tfsdk:"resource_type_expression"`
-	ResourceTypeLabels        []ResourceTypeLabel                 `tfsdk:"resource_type_labels"`
+	ResourceTypeLabels        []ItemsTypeLogLabels                `tfsdk:"resource_type_labels"`
 	ResponseSizeExpression    types.String                        `tfsdk:"response_size_expression"`
+	SanitizeLogNames          types.Bool                          `tfsdk:"sanitize_log_names"`
 	Secret                    types.String                        `tfsdk:"secret"`
 	ServerIPExpression        types.String                        `tfsdk:"server_ip_expression"`
 	ServiceAccountCredentials types.String                        `tfsdk:"service_account_credentials"`

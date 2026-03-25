@@ -7,9 +7,12 @@ import (
 )
 
 type InputTCP struct {
+	TemplateHost        types.String                   `tfsdk:"template_host"`
+	TemplatePort        types.String                   `tfsdk:"template_port"`
+	AuthToken           types.String                   `tfsdk:"auth_token"`
 	AuthType            types.String                   `tfsdk:"auth_type"`
 	BreakerRulesets     []types.String                 `tfsdk:"breaker_rulesets"`
-	Connections         []InputTCPConnection           `tfsdk:"connections"`
+	Connections         []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description         types.String                   `tfsdk:"description"`
 	Disabled            types.Bool                     `tfsdk:"disabled"`
 	EnableHeader        types.Bool                     `tfsdk:"enable_header"`
@@ -19,18 +22,19 @@ type InputTCP struct {
 	ID                  types.String                   `tfsdk:"id"`
 	IPWhitelistRegex    types.String                   `tfsdk:"ip_whitelist_regex"`
 	MaxActiveCxn        types.Float64                  `tfsdk:"max_active_cxn"`
-	Metadata            []InputTCPMetadatum            `tfsdk:"metadata"`
+	Metadata            []ItemsTypeMetadata            `tfsdk:"metadata"`
 	Pipeline            types.String                   `tfsdk:"pipeline"`
 	Port                types.Float64                  `tfsdk:"port"`
-	Pq                  *InputTCPPq                    `tfsdk:"pq"`
+	Pq                  *PqType                        `tfsdk:"pq"`
 	PqEnabled           types.Bool                     `tfsdk:"pq_enabled"`
-	Preprocess          *InputTCPPreprocess            `tfsdk:"preprocess"`
+	Preprocess          *PreprocessType                `tfsdk:"preprocess"`
 	SendToRoutes        types.Bool                     `tfsdk:"send_to_routes"`
 	SocketEndingMaxWait types.Float64                  `tfsdk:"socket_ending_max_wait"`
 	SocketIdleTimeout   types.Float64                  `tfsdk:"socket_idle_timeout"`
 	SocketMaxLifespan   types.Float64                  `tfsdk:"socket_max_lifespan"`
 	StaleChannelFlushMs types.Float64                  `tfsdk:"stale_channel_flush_ms"`
 	Streamtags          []types.String                 `tfsdk:"streamtags"`
-	TLS                 *InputTCPTLSSettingsServerSide `tfsdk:"tls"`
+	TextSecret          types.String                   `tfsdk:"text_secret"`
+	TLS                 *TLSSettingsServerSideType     `tfsdk:"tls"`
 	Type                types.String                   `tfsdk:"type"`
 }

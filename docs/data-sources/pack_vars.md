@@ -26,7 +26,7 @@ data "criblio_pack_vars" "my_packvars" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to GET for pack
+- `id` (String) Global variable name.
 - `pack` (String) pack ID to GET
 
 ### Read-Only

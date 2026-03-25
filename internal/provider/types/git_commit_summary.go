@@ -7,9 +7,9 @@ import (
 )
 
 type GitCommitSummary struct {
-	Author  Author                `tfsdk:"author"`
-	Branch  types.String          `tfsdk:"branch"`
-	Commit  types.String          `tfsdk:"commit"`
-	Files   GitCommitSummaryFiles `tfsdk:"files"`
-	Summary Summary               `tfsdk:"summary"`
+	Author  *Author                `tfsdk:"author"`
+	Branch  types.String           `tfsdk:"branch"`
+	Commit  types.String           `tfsdk:"commit"`
+	Files   *GitCommitSummaryFiles `tfsdk:"files"`
+	Summary *Summary               `tfsdk:"summary"`
 }

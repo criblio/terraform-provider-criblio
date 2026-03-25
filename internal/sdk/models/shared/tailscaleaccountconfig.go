@@ -20,7 +20,7 @@ func (t TailscaleAccountConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TailscaleAccountConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "clientId", "clientSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

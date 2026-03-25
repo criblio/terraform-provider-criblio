@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -67,7 +65,7 @@ func (r *PackVarsDataSourceModel) ToOperationsGetGlobalVariableLibVarsByPackAndI
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

@@ -168,7 +168,7 @@ func (n NodeProvidedInfoOs2) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NodeProvidedInfoOs2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"addresses"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -180,6 +180,9 @@ func (n *NodeProvidedInfoOs2) GetAddresses() []string {
 	}
 	return n.Addresses
 }
+
+// #region class-body-nodeprovidedinfoos2
+// #endregion class-body-nodeprovidedinfoos2
 
 type NodeProvidedInfoOs1 struct {
 	Addresses []string `json:"addresses"`
@@ -193,7 +196,7 @@ func (n NodeProvidedInfoOs1) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NodeProvidedInfoOs1) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &n, "", false, []string{"addresses", "enabled", "id", "version"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -227,6 +230,9 @@ func (n *NodeProvidedInfoOs1) GetVersion() string {
 	return n.Version
 }
 
+// #region class-body-nodeprovidedinfoos1
+// #endregion class-body-nodeprovidedinfoos1
+
 type OsType string
 
 const (
@@ -235,8 +241,8 @@ const (
 )
 
 type Os struct {
-	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline,name=os"`
-	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline,name=os"`
+	NodeProvidedInfoOs1 *NodeProvidedInfoOs1 `queryParam:"inline" union:"member"`
+	NodeProvidedInfoOs2 *NodeProvidedInfoOs2 `queryParam:"inline" union:"member"`
 
 	Type OsType
 }
@@ -285,7 +291,7 @@ func (u *Os) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Os", string(data))
 	}

@@ -7,6 +7,7 @@ import (
 )
 
 type InputWindowsMetricsDisk struct {
+	Detail    types.Bool     `tfsdk:"detail"`
 	Mode      types.String   `tfsdk:"mode"`
 	PerVolume types.Bool     `tfsdk:"per_volume"`
 	Volumes   []types.String `tfsdk:"volumes"`

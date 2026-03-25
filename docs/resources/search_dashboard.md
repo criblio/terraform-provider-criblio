@@ -14,16 +14,16 @@ SearchDashboard Resource
 
 ```terraform
 resource "criblio_search_dashboard" "my_searchdashboard" {
-  cache_ttl_seconds = 6.24
+  cache_ttl_seconds = 0
   category          = "...my_category..."
-  description       = "...my_description..."
+  description       = ""
   elements = [
     {
       dashboard_element = {
         config = {
           markdown = "...my_markdown..."
         }
-        hide_panel       = true
+        hide_panel       = false
         horizontal_chart = false
         id               = "...my_id..."
         layout = {
@@ -63,7 +63,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   }
   id           = "dash-overview"
   name         = "...my_name..."
-  refresh_rate = 2.1
+  refresh_rate = 0
   schedule = {
     cron_schedule = "0 * * * *"
     enabled       = true
@@ -180,12 +180,14 @@ Optional:
 Optional:
 
 - `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value))
+- `multiselect` (Boolean) When true, the dropdown allows multiple values; defaultValue may be a string array.
 
 <a id="nestedatt--elements--dashboard_element_input--config--default_value"></a>
 ### Nested Schema for `elements.dashboard_element_input.config.default_value`
 
 Optional:
 
+- `array_of_str` (List of String)
 - `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value))
 - `number` (Number)
 - `str` (String)
@@ -309,7 +311,7 @@ Optional:
 
 Optional:
 
-- `config` (Map of String)
+- `config` (Attributes) Chart/visualization-specific config (e.g. xAxis, yAxis, columns). (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -318,6 +320,20 @@ Optional:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--title_action))
 - `type` (String) Not Null; must be one of ["chart.area", "chart.column", "chart.funnel", "chart.gauge", "chart.horizontalBar", "chart.line", "chart.map", "chart.pie", "chart.scatter", "counter.single", "list.events", "list.table", "custom.throughputMetrics", "custom.flowMatrix"]
+
+<a id="nestedatt--elements--dashboard_element_visualization--config"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config`
+
+Optional:
+
+- `additional_properties` (String) Parsed as JSON.
+- `columns` (String) Column configuration (e.g. auto)
+- `group_by` (String) Group-by field
+- `max_rows` (String) Max rows for tables
+- `series` (String) Series configuration
+- `x_axis` (String) X-axis field for charts
+- `y_axis` (String) Y-axis field for charts
+
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.layout`

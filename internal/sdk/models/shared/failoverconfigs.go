@@ -17,7 +17,7 @@ func (f FailoverConfigs) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FailoverConfigs) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, []string{"volume"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
 		return err
 	}
 	return nil

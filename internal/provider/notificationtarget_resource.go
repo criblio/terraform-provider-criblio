@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	speakeasy_planmodifierutils "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/utils"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	speakeasy_int64validators "github.com/criblio/terraform-provider-criblio/internal/validators/int64validators"
@@ -44,11 +46,12 @@ type NotificationTargetResource struct {
 // NotificationTargetResourceModel describes the resource data model.
 type NotificationTargetResourceModel struct {
 	ID              types.String             `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
-	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
-	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
-	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
-	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
-	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
+	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target"`
+	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target"`
+	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target"`
+	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target"`
+	Type            types.String             `tfsdk:"type"`
+	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target"`
 }
 
 func (r *NotificationTargetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -459,6 +462,14 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 					}...),
 				},
 			},
+			"type": schema.StringAttribute{
+				// Discriminator; set explicitly or hoisted from nested *_target.type. Must be Optional for Terraform (Computed-only is read-only).
+				Optional: true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("webhook_target"), FieldPath: path.Root("webhook_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("pager_duty_target"), FieldPath: path.Root("pager_duty_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("slack_target"), FieldPath: path.Root("slack_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("sns_target"), FieldPath: path.Root("sns_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("smtp_target"), FieldPath: path.Root("smtp_target").AtName("type")}}),
+				},
+			},
 			"webhook_target": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -797,7 +808,10 @@ func (r *NotificationTargetResource) Delete(ctx context.Context, req resource.De
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

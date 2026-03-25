@@ -2,6 +2,11 @@
 
 package types
 
+import (
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
 type InputElementConfig struct {
 	DefaultValue *DefaultValueUnion `tfsdk:"default_value"`
+	Multiselect  types.Bool         `tfsdk:"multiselect"`
 }

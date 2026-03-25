@@ -7,9 +7,9 @@ import (
 )
 
 type LicenseInfo struct {
-	Email        types.String  `tfsdk:"email"`
-	IsRegistered types.Bool    `tfsdk:"is_registered"`
-	IsSplunkApp  types.Bool    `tfsdk:"is_splunk_app"`
-	Limits       LicenseLimits `tfsdk:"limits"`
-	Type         types.String  `tfsdk:"type"`
+	Email        types.String   `tfsdk:"email"`
+	IsRegistered types.Bool     `tfsdk:"is_registered"`
+	IsSplunkApp  types.Bool     `tfsdk:"is_splunk_app"`
+	Limits       *LicenseLimits `tfsdk:"limits"`
+	Type         types.String   `tfsdk:"type"`
 }

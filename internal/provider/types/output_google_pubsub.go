@@ -3,16 +3,20 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type OutputGooglePubsub struct {
+	TemplateRegion            types.String                  `tfsdk:"template_region"`
+	TemplateTopicName         types.String                  `tfsdk:"template_topic_name"`
 	BatchSize                 types.Float64                 `tfsdk:"batch_size"`
 	BatchTimeout              types.Float64                 `tfsdk:"batch_timeout"`
 	CreateTopic               types.Bool                    `tfsdk:"create_topic"`
 	Description               types.String                  `tfsdk:"description"`
 	Environment               types.String                  `tfsdk:"environment"`
-	FlushPeriodSec            types.Float64                 `tfsdk:"flush_period_sec"`
+	FlushPeriod               types.Float64                 `tfsdk:"flush_period"`
+	FlushPeriodSec            jsontypes.Normalized          `tfsdk:"flush_period_sec"`
 	GoogleAuthMethod          types.String                  `tfsdk:"google_auth_method"`
 	ID                        types.String                  `tfsdk:"id"`
 	MaxInProgress             types.Float64                 `tfsdk:"max_in_progress"`
@@ -23,11 +27,16 @@ type OutputGooglePubsub struct {
 	Pipeline                  types.String                  `tfsdk:"pipeline"`
 	PqCompress                types.String                  `tfsdk:"pq_compress"`
 	PqControls                *OutputGooglePubsubPqControls `tfsdk:"pq_controls"`
+	PqMaxBackpressureSec      types.Float64                 `tfsdk:"pq_max_backpressure_sec"`
+	PqMaxBufferSize           types.Float64                 `tfsdk:"pq_max_buffer_size"`
+	PqMaxBufferSizeBytes      types.String                  `tfsdk:"pq_max_buffer_size_bytes"`
 	PqMaxFileSize             types.String                  `tfsdk:"pq_max_file_size"`
 	PqMaxSize                 types.String                  `tfsdk:"pq_max_size"`
 	PqMode                    types.String                  `tfsdk:"pq_mode"`
 	PqOnBackpressure          types.String                  `tfsdk:"pq_on_backpressure"`
 	PqPath                    types.String                  `tfsdk:"pq_path"`
+	PqRatePerSec              types.Float64                 `tfsdk:"pq_rate_per_sec"`
+	PqStrictOrdering          types.Bool                    `tfsdk:"pq_strict_ordering"`
 	Region                    types.String                  `tfsdk:"region"`
 	Secret                    types.String                  `tfsdk:"secret"`
 	ServiceAccountCredentials types.String                  `tfsdk:"service_account_credentials"`

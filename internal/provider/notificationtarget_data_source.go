@@ -33,11 +33,12 @@ type NotificationTargetDataSource struct {
 // NotificationTargetDataSourceModel describes the data model.
 type NotificationTargetDataSourceModel struct {
 	ID              types.String             `tfsdk:"id"`
-	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target" tfPlanOnly:"true"`
-	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target" tfPlanOnly:"true"`
-	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target" tfPlanOnly:"true"`
-	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target" tfPlanOnly:"true"`
-	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target" tfPlanOnly:"true"`
+	PagerDutyTarget *tfTypes.PagerDutyTarget `queryParam:"inline" tfsdk:"pager_duty_target"`
+	SlackTarget     *tfTypes.SlackTarget     `queryParam:"inline" tfsdk:"slack_target"`
+	SMTPTarget      *tfTypes.SMTPTarget      `queryParam:"inline" tfsdk:"smtp_target"`
+	SnsTarget       *tfTypes.SnsTarget       `queryParam:"inline" tfsdk:"sns_target"`
+	Type            types.String             `tfsdk:"type"`
+	WebhookTarget   *tfTypes.WebhookTarget   `queryParam:"inline" tfsdk:"webhook_target"`
 }
 
 // Metadata returns the data source type name.
@@ -53,7 +54,7 @@ func (r *NotificationTargetDataSource) Schema(ctx context.Context, req datasourc
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique ID for this notification target`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
@@ -244,6 +245,9 @@ func (r *NotificationTargetDataSource) Schema(ctx context.Context, req datasourc
 						Computed: true,
 					},
 				},
+			},
+			"type": schema.StringAttribute{
+				Computed: true,
 			},
 			"webhook_target": schema.SingleNestedAttribute{
 				Computed: true,

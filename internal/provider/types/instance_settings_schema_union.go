@@ -3,6 +3,6 @@
 package types
 
 type InstanceSettingsSchemaUnion struct {
-	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline" tfsdk:"instance_settings_schema1" tfPlanOnly:"true"`
-	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline" tfsdk:"instance_settings_schema2" tfPlanOnly:"true"`
+	InstanceSettingsSchema1 *InstanceSettingsSchema1 `queryParam:"inline" tfsdk:"instance_settings_schema1"`
+	InstanceSettingsSchema2 *InstanceSettingsSchema2 `queryParam:"inline" tfsdk:"instance_settings_schema2"`
 }

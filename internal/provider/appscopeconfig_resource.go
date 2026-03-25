@@ -39,12 +39,12 @@ type AppscopeConfigResource struct {
 
 // AppscopeConfigResourceModel describes the resource data model.
 type AppscopeConfigResourceModel struct {
-	Config      tfTypes.AppscopeConfigWithCustom `tfsdk:"config"`
-	Description types.String                     `tfsdk:"description"`
-	GroupID     types.String                     `tfsdk:"group_id"`
-	ID          types.String                     `tfsdk:"id"`
-	Lib         types.String                     `tfsdk:"lib"`
-	Tags        types.String                     `tfsdk:"tags"`
+	Config      *tfTypes.AppscopeConfigWithCustom `tfsdk:"config"`
+	Description types.String                      `tfsdk:"description"`
+	GroupID     types.String                      `tfsdk:"group_id"`
+	ID          types.String                      `tfsdk:"id"`
+	Lib         types.String                      `tfsdk:"lib"`
+	Tags        types.String                      `tfsdk:"tags"`
 }
 
 func (r *AppscopeConfigResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -1419,7 +1419,10 @@ func (r *AppscopeConfigResource) Delete(ctx context.Context, req resource.Delete
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -1440,12 +1443,12 @@ func (r *AppscopeConfigResource) ImportState(ctx context.Context, req resource.I
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"Cribl"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"scope-default"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"scope-default"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

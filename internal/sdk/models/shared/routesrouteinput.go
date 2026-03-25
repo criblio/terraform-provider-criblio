@@ -29,7 +29,7 @@ func (r RoutesRouteInput) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RoutesRouteInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"name", "pipeline"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -7,7 +7,7 @@ import (
 )
 
 type InputCollectorGCS struct {
-	Collector            InputCollectorGCSCollector   `tfsdk:"collector"`
+	Collector            *InputCollectorGCSCollector  `tfsdk:"collector"`
 	Environment          types.String                 `tfsdk:"environment"`
 	ID                   types.String                 `tfsdk:"id"`
 	IgnoreGroupJobsLimit types.Bool                   `tfsdk:"ignore_group_jobs_limit"`

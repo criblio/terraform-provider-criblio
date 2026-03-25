@@ -31,36 +31,6 @@ func (e *OutputSnsType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputSnsAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
-type OutputSnsAuthenticationMethod string
-
-const (
-	OutputSnsAuthenticationMethodAuto   OutputSnsAuthenticationMethod = "auto"
-	OutputSnsAuthenticationMethodManual OutputSnsAuthenticationMethod = "manual"
-	OutputSnsAuthenticationMethodSecret OutputSnsAuthenticationMethod = "secret"
-)
-
-func (e OutputSnsAuthenticationMethod) ToPointer() *OutputSnsAuthenticationMethod {
-	return &e
-}
-func (e *OutputSnsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputSnsAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSnsAuthenticationMethod: %v", v)
-	}
-}
-
 // OutputSnsSignatureVersion - Signature version to use for signing SNS requests
 type OutputSnsSignatureVersion string
 
@@ -88,120 +58,6 @@ func (e *OutputSnsSignatureVersion) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputSnsBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputSnsBackpressureBehavior string
-
-const (
-	OutputSnsBackpressureBehaviorBlock OutputSnsBackpressureBehavior = "block"
-	OutputSnsBackpressureBehaviorDrop  OutputSnsBackpressureBehavior = "drop"
-	OutputSnsBackpressureBehaviorQueue OutputSnsBackpressureBehavior = "queue"
-)
-
-func (e OutputSnsBackpressureBehavior) ToPointer() *OutputSnsBackpressureBehavior {
-	return &e
-}
-func (e *OutputSnsBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputSnsBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSnsBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputSnsCompression - Codec to use to compress the persisted data
-type OutputSnsCompression string
-
-const (
-	OutputSnsCompressionNone OutputSnsCompression = "none"
-	OutputSnsCompressionGzip OutputSnsCompression = "gzip"
-)
-
-func (e OutputSnsCompression) ToPointer() *OutputSnsCompression {
-	return &e
-}
-func (e *OutputSnsCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputSnsCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSnsCompression: %v", v)
-	}
-}
-
-// OutputSnsQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputSnsQueueFullBehavior string
-
-const (
-	OutputSnsQueueFullBehaviorBlock OutputSnsQueueFullBehavior = "block"
-	OutputSnsQueueFullBehaviorDrop  OutputSnsQueueFullBehavior = "drop"
-)
-
-func (e OutputSnsQueueFullBehavior) ToPointer() *OutputSnsQueueFullBehavior {
-	return &e
-}
-func (e *OutputSnsQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputSnsQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSnsQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputSnsMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputSnsMode string
-
-const (
-	OutputSnsModeError        OutputSnsMode = "error"
-	OutputSnsModeBackpressure OutputSnsMode = "backpressure"
-	OutputSnsModeAlways       OutputSnsMode = "always"
-)
-
-func (e OutputSnsMode) ToPointer() *OutputSnsMode {
-	return &e
-}
-func (e *OutputSnsMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputSnsMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSnsMode: %v", v)
-	}
-}
-
 type OutputSnsPqControls struct {
 }
 
@@ -218,8 +74,8 @@ func (o *OutputSnsPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputSns struct {
 	// Unique ID for this output
-	ID   *string        `json:"id,omitempty"`
-	Type *OutputSnsType `json:"type,omitempty"`
+	ID   *string       `json:"id,omitempty"`
+	Type OutputSnsType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -235,45 +91,65 @@ type OutputSns struct {
 	// Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.
 	MaxRetries *float64 `json:"maxRetries,omitempty"`
 	// AWS authentication method. Choose Auto to use IAM roles.
-	AwsAuthenticationMethod *OutputSnsAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
-	AwsSecretKey            *string                        `json:"awsSecretKey,omitempty"`
+	AwsAuthenticationMethod *AuthenticationMethodOptionsS3CollectorConf `json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey            *string                                     `json:"awsSecretKey,omitempty"`
 	// Region where the SNS is located
 	Region *string `json:"region,omitempty"`
 	// SNS service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to SNS-compatible endpoint.
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Signature version to use for signing SNS requests
-	SignatureVersion *OutputSnsSignatureVersion `default:"v4" json:"signatureVersion"`
+	SignatureVersion *OutputSnsSignatureVersion `json:"signatureVersion,omitempty"`
 	// Reuse connections between requests, which can improve performance
-	ReuseConnections *bool `default:"true" json:"reuseConnections"`
+	ReuseConnections *bool `json:"reuseConnections,omitempty"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Use Assume Role credentials to access SNS
-	EnableAssumeRole *bool `default:"false" json:"enableAssumeRole"`
+	EnableAssumeRole *bool `json:"enableAssumeRole,omitempty"`
 	// Amazon Resource Name (ARN) of the role to assume
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 	// External ID to use when assuming role
 	AssumeRoleExternalID *string `json:"assumeRoleExternalId,omitempty"`
 	// Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-	DurationSeconds *float64 `default:"3600" json:"durationSeconds"`
+	DurationSeconds *float64 `json:"durationSeconds,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputSnsBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                        `json:"description,omitempty"`
-	AwsAPIKey      *string                        `json:"awsApiKey,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	AwsAPIKey      *string                      `json:"awsApiKey,omitempty"`
 	// Select or create a stored secret that references your access key and secret key
 	AwsSecret *string `json:"awsSecret,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputSnsCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputSnsQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputSnsMode       `default:"error" json:"pqMode"`
-	PqControls *OutputSnsPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string              `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputSnsPqControls `json:"pqControls,omitempty"`
+	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
+	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
+	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
+	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (o OutputSns) MarshalJSON() ([]byte, error) {
@@ -281,7 +157,7 @@ func (o OutputSns) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSns) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"topicArn", "messageGroupId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -294,9 +170,9 @@ func (o *OutputSns) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputSns) GetType() *OutputSnsType {
+func (o *OutputSns) GetType() OutputSnsType {
 	if o == nil {
-		return nil
+		return OutputSnsType("")
 	}
 	return o.Type
 }
@@ -350,7 +226,7 @@ func (o *OutputSns) GetMaxRetries() *float64 {
 	return o.MaxRetries
 }
 
-func (o *OutputSns) GetAwsAuthenticationMethod() *OutputSnsAuthenticationMethod {
+func (o *OutputSns) GetAwsAuthenticationMethod() *AuthenticationMethodOptionsS3CollectorConf {
 	if o == nil {
 		return nil
 	}
@@ -427,7 +303,7 @@ func (o *OutputSns) GetDurationSeconds() *float64 {
 	return o.DurationSeconds
 }
 
-func (o *OutputSns) GetOnBackpressure() *OutputSnsBackpressureBehavior {
+func (o *OutputSns) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -455,6 +331,41 @@ func (o *OutputSns) GetAwsSecret() *string {
 	return o.AwsSecret
 }
 
+func (o *OutputSns) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputSns) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputSns) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputSns) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputSns) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputSns) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -476,25 +387,25 @@ func (o *OutputSns) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputSns) GetPqCompress() *OutputSnsCompression {
+func (o *OutputSns) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputSns) GetPqOnBackpressure() *OutputSnsQueueFullBehavior {
+func (o *OutputSns) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputSns) GetPqMode() *OutputSnsMode {
+func (o *OutputSns) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputSns) GetPqControls() *OutputSnsPqControls {
@@ -502,4 +413,39 @@ func (o *OutputSns) GetPqControls() *OutputSnsPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputSns) GetTemplateAwsSecretKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsSecretKey
+}
+
+func (o *OutputSns) GetTemplateRegion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateRegion
+}
+
+func (o *OutputSns) GetTemplateAssumeRoleArn() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleArn
+}
+
+func (o *OutputSns) GetTemplateAssumeRoleExternalID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleExternalID
+}
+
+func (o *OutputSns) GetTemplateAwsAPIKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsAPIKey
 }

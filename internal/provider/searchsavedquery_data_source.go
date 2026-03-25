@@ -60,7 +60,7 @@ func (r *SearchSavedQueryDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique identifier for the saved query`,
 			},
 			"is_private": schema.BoolAttribute{
 				Computed:    true,

@@ -12,7 +12,7 @@ type DashboardElementInput struct {
 	HorizontalChart types.Bool          `tfsdk:"horizontal_chart"`
 	ID              types.String        `tfsdk:"id"`
 	InputID         types.String        `tfsdk:"input_id"`
-	Layout          DashboardLayout     `tfsdk:"layout"`
+	Layout          *DashboardLayout    `tfsdk:"layout"`
 	Search          *SearchQuery        `tfsdk:"search"`
 	Title           types.String        `tfsdk:"title"`
 	TitleAction     *TitleAction        `tfsdk:"title_action"`

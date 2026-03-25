@@ -258,5 +258,29 @@ actions:
   - target: "$.paths['/m/default_search/search/dashboards'].get.responses['200'].content.application/json.schema.properties.items.items"
     update:
       x-speakeasy-entity: SearchDashboard
+
+  - target: "$.paths[*][*].security"
+    remove: true
+  
+  - target: "$"
+    update:
+      security:
+        - bearerAuth: []
+        - clientOauth: []
+  
+  - target: "$.components.schemas.OutputCloudflareR2.properties.fileNameSuffix"
+    description: |-
+      Workaround broken formatting of default value as there is no example value
+
+      default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+    update:
+      example: .json.gz
+  - target: "$.components.schemas.OutputDatabricks.properties.fileNameSuffix"
+    description: |-
+      Workaround broken formatting of default value as there is no example value
+
+      default: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression === "gzip" ? ".gz" : ""}`'
+    update:
+      example: .json.gz
   
   

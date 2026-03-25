@@ -31,68 +31,13 @@ func (e *OutputKinesisType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputKinesisAuthenticationMethod - AWS authentication method. Choose Auto to use IAM roles.
-type OutputKinesisAuthenticationMethod string
-
-const (
-	OutputKinesisAuthenticationMethodAuto   OutputKinesisAuthenticationMethod = "auto"
-	OutputKinesisAuthenticationMethodManual OutputKinesisAuthenticationMethod = "manual"
-	OutputKinesisAuthenticationMethodSecret OutputKinesisAuthenticationMethod = "secret"
-)
-
-func (e OutputKinesisAuthenticationMethod) ToPointer() *OutputKinesisAuthenticationMethod {
-	return &e
-}
-func (e *OutputKinesisAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputKinesisAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisAuthenticationMethod: %v", v)
-	}
-}
-
-// OutputKinesisSignatureVersion - Signature version to use for signing Kinesis stream requests
-type OutputKinesisSignatureVersion string
-
-const (
-	OutputKinesisSignatureVersionV2 OutputKinesisSignatureVersion = "v2"
-	OutputKinesisSignatureVersionV4 OutputKinesisSignatureVersion = "v4"
-)
-
-func (e OutputKinesisSignatureVersion) ToPointer() *OutputKinesisSignatureVersion {
-	return &e
-}
-func (e *OutputKinesisSignatureVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = OutputKinesisSignatureVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisSignatureVersion: %v", v)
-	}
-}
-
 // OutputKinesisCompression - Compression type to use for records
 type OutputKinesisCompression string
 
 const (
+	// OutputKinesisCompressionNone None
 	OutputKinesisCompressionNone OutputKinesisCompression = "none"
+	// OutputKinesisCompressionGzip Gzip
 	OutputKinesisCompressionGzip OutputKinesisCompression = "gzip"
 )
 
@@ -115,120 +60,6 @@ func (e *OutputKinesisCompression) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputKinesisBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputKinesisBackpressureBehavior string
-
-const (
-	OutputKinesisBackpressureBehaviorBlock OutputKinesisBackpressureBehavior = "block"
-	OutputKinesisBackpressureBehaviorDrop  OutputKinesisBackpressureBehavior = "drop"
-	OutputKinesisBackpressureBehaviorQueue OutputKinesisBackpressureBehavior = "queue"
-)
-
-func (e OutputKinesisBackpressureBehavior) ToPointer() *OutputKinesisBackpressureBehavior {
-	return &e
-}
-func (e *OutputKinesisBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputKinesisBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputKinesisPqCompressCompression - Codec to use to compress the persisted data
-type OutputKinesisPqCompressCompression string
-
-const (
-	OutputKinesisPqCompressCompressionNone OutputKinesisPqCompressCompression = "none"
-	OutputKinesisPqCompressCompressionGzip OutputKinesisPqCompressCompression = "gzip"
-)
-
-func (e OutputKinesisPqCompressCompression) ToPointer() *OutputKinesisPqCompressCompression {
-	return &e
-}
-func (e *OutputKinesisPqCompressCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputKinesisPqCompressCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisPqCompressCompression: %v", v)
-	}
-}
-
-// OutputKinesisQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputKinesisQueueFullBehavior string
-
-const (
-	OutputKinesisQueueFullBehaviorBlock OutputKinesisQueueFullBehavior = "block"
-	OutputKinesisQueueFullBehaviorDrop  OutputKinesisQueueFullBehavior = "drop"
-)
-
-func (e OutputKinesisQueueFullBehavior) ToPointer() *OutputKinesisQueueFullBehavior {
-	return &e
-}
-func (e *OutputKinesisQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputKinesisQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputKinesisMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputKinesisMode string
-
-const (
-	OutputKinesisModeError        OutputKinesisMode = "error"
-	OutputKinesisModeBackpressure OutputKinesisMode = "backpressure"
-	OutputKinesisModeAlways       OutputKinesisMode = "always"
-)
-
-func (e OutputKinesisMode) ToPointer() *OutputKinesisMode {
-	return &e
-}
-func (e *OutputKinesisMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputKinesisMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisMode: %v", v)
-	}
-}
-
 type OutputKinesisPqControls struct {
 }
 
@@ -245,8 +76,8 @@ func (o *OutputKinesisPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputKinesis struct {
 	// Unique ID for this output
-	ID   *string            `json:"id,omitempty"`
-	Type *OutputKinesisType `json:"type,omitempty"`
+	ID   *string           `json:"id,omitempty"`
+	Type OutputKinesisType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -258,57 +89,81 @@ type OutputKinesis struct {
 	// Kinesis stream name to send events to.
 	StreamName string `json:"streamName"`
 	// AWS authentication method. Choose Auto to use IAM roles.
-	AwsAuthenticationMethod *OutputKinesisAuthenticationMethod `default:"auto" json:"awsAuthenticationMethod"`
-	AwsSecretKey            *string                            `json:"awsSecretKey,omitempty"`
+	AwsAuthenticationMethod *AuthenticationMethodOptionsS3CollectorConf `json:"awsAuthenticationMethod,omitempty"`
+	AwsSecretKey            *string                                     `json:"awsSecretKey,omitempty"`
 	// Region where the Kinesis stream is located
 	Region string `json:"region"`
 	// Kinesis stream service endpoint. If empty, defaults to the AWS Region-specific endpoint. Otherwise, it must point to Kinesis stream-compatible endpoint.
 	Endpoint *string `json:"endpoint,omitempty"`
 	// Signature version to use for signing Kinesis stream requests
-	SignatureVersion *OutputKinesisSignatureVersion `default:"v4" json:"signatureVersion"`
+	SignatureVersion *SignatureVersionOptionsKinesis `json:"signatureVersion,omitempty"`
 	// Reuse connections between requests, which can improve performance
-	ReuseConnections *bool `default:"true" json:"reuseConnections"`
+	ReuseConnections *bool `json:"reuseConnections,omitempty"`
 	// Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Use Assume Role credentials to access Kinesis stream
-	EnableAssumeRole *bool `default:"false" json:"enableAssumeRole"`
+	EnableAssumeRole *bool `json:"enableAssumeRole,omitempty"`
 	// Amazon Resource Name (ARN) of the role to assume
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 	// External ID to use when assuming role
 	AssumeRoleExternalID *string `json:"assumeRoleExternalId,omitempty"`
 	// Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
-	DurationSeconds *float64 `default:"3600" json:"durationSeconds"`
+	DurationSeconds *float64 `json:"durationSeconds,omitempty"`
 	// Maximum number of ongoing put requests before blocking.
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size (KB) of each individual record before compression. For uncompressed or non-compressible data 1MB is the max recommended size
-	MaxRecordSizeKB *float64 `default:"1024" json:"maxRecordSizeKB"`
+	MaxRecordSizeKB *float64 `json:"maxRecordSizeKB,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Compression type to use for records
-	Compression *OutputKinesisCompression `default:"gzip" json:"compression"`
+	Compression *OutputKinesisCompression `json:"compression,omitempty"`
 	// Provides higher stream rate limits, improving delivery speed and reliability by minimizing throttling. See the [ListShards API](https://docs.aws.amazon.com/kinesis/latest/APIReference/API_ListShards.html) documentation for details.
-	UseListShards *bool `default:"false" json:"useListShards"`
+	UseListShards *bool `json:"useListShards,omitempty"`
 	// Batch events into a single record as NDJSON
-	AsNdjson *bool `default:"true" json:"asNdjson"`
+	AsNdjson *bool `json:"asNdjson,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputKinesisBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                            `json:"description,omitempty"`
-	AwsAPIKey      *string                            `json:"awsApiKey,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	AwsAPIKey      *string                      `json:"awsApiKey,omitempty"`
 	// Select or create a stored secret that references your access key and secret key
 	AwsSecret *string `json:"awsSecret,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputKinesisPqCompressCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputKinesisQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Maximum number of records to send in a single request
+	MaxEventsPerFlush *float64 `json:"maxEventsPerFlush,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputKinesisMode       `default:"error" json:"pqMode"`
-	PqControls *OutputKinesisPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                  `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputKinesisPqControls `json:"pqControls,omitempty"`
+	// Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
+	TemplateStreamName *string `json:"__template_streamName,omitempty"`
+	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
+	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+	TemplateRegion *string `json:"__template_region,omitempty"`
+	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
+	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
+	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (o OutputKinesis) MarshalJSON() ([]byte, error) {
@@ -316,7 +171,7 @@ func (o OutputKinesis) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputKinesis) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"streamName", "region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -329,9 +184,9 @@ func (o *OutputKinesis) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputKinesis) GetType() *OutputKinesisType {
+func (o *OutputKinesis) GetType() OutputKinesisType {
 	if o == nil {
-		return nil
+		return OutputKinesisType("")
 	}
 	return o.Type
 }
@@ -371,7 +226,7 @@ func (o *OutputKinesis) GetStreamName() string {
 	return o.StreamName
 }
 
-func (o *OutputKinesis) GetAwsAuthenticationMethod() *OutputKinesisAuthenticationMethod {
+func (o *OutputKinesis) GetAwsAuthenticationMethod() *AuthenticationMethodOptionsS3CollectorConf {
 	if o == nil {
 		return nil
 	}
@@ -399,7 +254,7 @@ func (o *OutputKinesis) GetEndpoint() *string {
 	return o.Endpoint
 }
 
-func (o *OutputKinesis) GetSignatureVersion() *OutputKinesisSignatureVersion {
+func (o *OutputKinesis) GetSignatureVersion() *SignatureVersionOptionsKinesis {
 	if o == nil {
 		return nil
 	}
@@ -490,7 +345,7 @@ func (o *OutputKinesis) GetAsNdjson() *bool {
 	return o.AsNdjson
 }
 
-func (o *OutputKinesis) GetOnBackpressure() *OutputKinesisBackpressureBehavior {
+func (o *OutputKinesis) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -518,6 +373,48 @@ func (o *OutputKinesis) GetAwsSecret() *string {
 	return o.AwsSecret
 }
 
+func (o *OutputKinesis) GetMaxEventsPerFlush() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxEventsPerFlush
+}
+
+func (o *OutputKinesis) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputKinesis) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputKinesis) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputKinesis) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputKinesis) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputKinesis) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -539,25 +436,25 @@ func (o *OutputKinesis) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputKinesis) GetPqCompress() *OutputKinesisPqCompressCompression {
+func (o *OutputKinesis) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputKinesis) GetPqOnBackpressure() *OutputKinesisQueueFullBehavior {
+func (o *OutputKinesis) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputKinesis) GetPqMode() *OutputKinesisMode {
+func (o *OutputKinesis) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputKinesis) GetPqControls() *OutputKinesisPqControls {
@@ -565,4 +462,46 @@ func (o *OutputKinesis) GetPqControls() *OutputKinesisPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputKinesis) GetTemplateStreamName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateStreamName
+}
+
+func (o *OutputKinesis) GetTemplateAwsSecretKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsSecretKey
+}
+
+func (o *OutputKinesis) GetTemplateRegion() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateRegion
+}
+
+func (o *OutputKinesis) GetTemplateAssumeRoleArn() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleArn
+}
+
+func (o *OutputKinesis) GetTemplateAssumeRoleExternalID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAssumeRoleExternalID
+}
+
+func (o *OutputKinesis) GetTemplateAwsAPIKey() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateAwsAPIKey
 }

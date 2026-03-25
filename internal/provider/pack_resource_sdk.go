@@ -135,6 +135,8 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 		// Populate top-level attributes from items[0] so state matches config after import.
 		// The import CLI flattens items[0] to top-level; without this, Terraform sees a change
 		// and triggers replacement (RequiresReplaceIfConfigured) for author, description, etc.
+		// Also required so Optional+Computed top-level fields (e.g. min_log_stream_version, source)
+		// are known after apply instead of remaining unknown.
 		if len(r.Items) > 0 {
 			first := r.Items[0]
 			r.Author = first.Author

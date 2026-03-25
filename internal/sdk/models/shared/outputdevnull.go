@@ -33,7 +33,7 @@ func (e *OutputDevnullType) UnmarshalJSON(data []byte) error {
 
 type OutputDevnull struct {
 	// Unique ID for this output
-	ID   string            `json:"id"`
+	ID   *string           `json:"id,omitempty"`
 	Type OutputDevnullType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
@@ -50,15 +50,15 @@ func (o OutputDevnull) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDevnull) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"id", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *OutputDevnull) GetID() string {
+func (o *OutputDevnull) GetID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.ID
 }

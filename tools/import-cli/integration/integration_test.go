@@ -376,8 +376,20 @@ func TestIntegration_FullExport_Cloud(t *testing.T) {
 		require.True(t, errors.As(err, &exitErr) && (exitErr.ExitCode() == 0 || exitErr.ExitCode() == 2),
 			"second terraform plan should succeed or exit 2 (in-place changes): %v\n%s", err, string(plan2Out))
 	}
-	require.Contains(t, string(plan2Out), "0 to add", "second plan should not add resources")
-	require.Contains(t, string(plan2Out), "0 to destroy", "second plan should not destroy resources")
+	// When there are zero changes, Terraform prints "No changes." and omits the
+	// "Plan: N to add, ..." summary; otherwise the summary includes 0 to add / 0 to destroy.
+	assertPlanNoAddNoDestroy(t, string(plan2Out))
+}
+
+// assertPlanNoAddNoDestroy checks plan output for no new resources and no destroys.
+// Terraform omits the numeric plan summary when the plan is completely empty (no changes).
+func assertPlanNoAddNoDestroy(t *testing.T, planOut string) {
+	t.Helper()
+	if strings.Contains(planOut, "No changes") {
+		return
+	}
+	require.Contains(t, planOut, "0 to add", "second plan should not add resources")
+	require.Contains(t, planOut, "0 to destroy", "second plan should not destroy resources")
 }
 
 func repoRoot(t *testing.T) string {

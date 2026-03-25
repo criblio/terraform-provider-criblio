@@ -7,6 +7,13 @@ import (
 )
 
 type OutputS3 struct {
+	TemplateAssumeRoleArn         types.String                `tfsdk:"template_assume_role_arn"`
+	TemplateAssumeRoleExternalID  types.String                `tfsdk:"template_assume_role_external_id"`
+	TemplateAwsAPIKey             types.String                `tfsdk:"template_aws_api_key"`
+	TemplateAwsSecretKey          types.String                `tfsdk:"template_aws_secret_key"`
+	TemplateBucket                types.String                `tfsdk:"template_bucket"`
+	TemplateFormat                types.String                `tfsdk:"template_format"`
+	TemplateRegion                types.String                `tfsdk:"template_region"`
 	AddIDToStagePath              types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AssumeRoleArn                 types.String                `tfsdk:"assume_role_arn"`
 	AssumeRoleExternalID          types.String                `tfsdk:"assume_role_external_id"`
@@ -23,6 +30,7 @@ type OutputS3 struct {
 	DeadletterPath                types.String                `tfsdk:"deadletter_path"`
 	Description                   types.String                `tfsdk:"description"`
 	DestPath                      types.String                `tfsdk:"dest_path"`
+	DirectoryBatchSize            types.Float64               `tfsdk:"directory_batch_size"`
 	DurationSeconds               types.Float64               `tfsdk:"duration_seconds"`
 	EmptyDirCleanupSec            types.Float64               `tfsdk:"empty_dir_cleanup_sec"`
 	EnableAssumeRole              types.Bool                  `tfsdk:"enable_assume_role"`
@@ -32,10 +40,11 @@ type OutputS3 struct {
 	Endpoint                      types.String                `tfsdk:"endpoint"`
 	Environment                   types.String                `tfsdk:"environment"`
 	FileNameSuffix                types.String                `tfsdk:"file_name_suffix"`
+	ForceCloseOnShutdown          types.Bool                  `tfsdk:"force_close_on_shutdown"`
 	Format                        types.String                `tfsdk:"format"`
 	HeaderLine                    types.String                `tfsdk:"header_line"`
 	ID                            types.String                `tfsdk:"id"`
-	KeyValueMetadata              []OutputS3KeyValueMetadatum `tfsdk:"key_value_metadata"`
+	KeyValueMetadata              []ItemsTypeKeyValueMetadata `tfsdk:"key_value_metadata"`
 	KmsKeyID                      types.String                `tfsdk:"kms_key_id"`
 	MaxClosingFilesToBackpressure types.Float64               `tfsdk:"max_closing_files_to_backpressure"`
 	MaxConcurrentFileParts        types.Float64               `tfsdk:"max_concurrent_file_parts"`
@@ -50,12 +59,14 @@ type OutputS3 struct {
 	ParquetDataPageVersion        types.String                `tfsdk:"parquet_data_page_version"`
 	ParquetPageSize               types.String                `tfsdk:"parquet_page_size"`
 	ParquetRowGroupLength         types.Float64               `tfsdk:"parquet_row_group_length"`
+	ParquetSchema                 types.String                `tfsdk:"parquet_schema"`
 	ParquetVersion                types.String                `tfsdk:"parquet_version"`
 	PartitionExpr                 types.String                `tfsdk:"partition_expr"`
 	Pipeline                      types.String                `tfsdk:"pipeline"`
 	Region                        types.String                `tfsdk:"region"`
 	RejectUnauthorized            types.Bool                  `tfsdk:"reject_unauthorized"`
 	RemoveEmptyDirs               types.Bool                  `tfsdk:"remove_empty_dirs"`
+	RetrySettings                 *RetrySettingsType          `tfsdk:"retry_settings"`
 	ReuseConnections              types.Bool                  `tfsdk:"reuse_connections"`
 	ServerSideEncryption          types.String                `tfsdk:"server_side_encryption"`
 	ShouldLogInvalidRows          types.Bool                  `tfsdk:"should_log_invalid_rows"`

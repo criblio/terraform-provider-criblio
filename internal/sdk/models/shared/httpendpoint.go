@@ -8,18 +8,18 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-// HTTPEndpointMethod - Method for the endpoint
-type HTTPEndpointMethod string
+// Method for the endpoint
+type Method string
 
 const (
-	HTTPEndpointMethodGet  HTTPEndpointMethod = "GET"
-	HTTPEndpointMethodPost HTTPEndpointMethod = "POST"
+	MethodGet  Method = "GET"
+	MethodPost Method = "POST"
 )
 
-func (e HTTPEndpointMethod) ToPointer() *HTTPEndpointMethod {
+func (e Method) ToPointer() *Method {
 	return &e
 }
-func (e *HTTPEndpointMethod) UnmarshalJSON(data []byte) error {
+func (e *Method) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -28,10 +28,10 @@ func (e *HTTPEndpointMethod) UnmarshalJSON(data []byte) error {
 	case "GET":
 		fallthrough
 	case "POST":
-		*e = HTTPEndpointMethod(v)
+		*e = Method(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for HTTPEndpointMethod: %v", v)
+		return fmt.Errorf("invalid value for Method: %v", v)
 	}
 }
 
@@ -40,7 +40,7 @@ type HTTPEndpoint struct {
 	// Within the response JSON, name of the field or array element to pull results from
 	DataField *string `json:"dataField,omitempty"`
 	// Method for the endpoint
-	Method *HTTPEndpointMethod `default:"GET" json:"method"`
+	Method *Method `default:"GET" json:"method"`
 	// The URL for this endpoint
 	URL string `json:"url"`
 	// Optional headers for the endpoint
@@ -52,7 +52,7 @@ func (h HTTPEndpoint) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPEndpoint) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"name", "url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -72,7 +72,7 @@ func (h *HTTPEndpoint) GetDataField() *string {
 	return h.DataField
 }
 
-func (h *HTTPEndpoint) GetMethod() *HTTPEndpointMethod {
+func (h *HTTPEndpoint) GetMethod() *Method {
 	if h == nil {
 		return nil
 	}

@@ -22,7 +22,7 @@ func (z ZoomAccountConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (z *ZoomAccountConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &z, "", false, []string{"name", "accountId", "clientId", "clientSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &z, "", false, nil); err != nil {
 		return err
 	}
 	return nil

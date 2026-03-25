@@ -75,13 +75,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 	var diags diag.Diagnostics
 
 	if resp.InputCollectorAzureBlob != nil {
-		var savedInput *tfTypes.InputCollectorAzureBlobInput
-		var savedSchedule *tfTypes.InputCollectorAzureBlobSchedule
-		if r.InputCollectorAzureBlob != nil {
-			savedInput = r.InputCollectorAzureBlob.Input
-			savedSchedule = r.InputCollectorAzureBlob.Schedule
-		}
 		r.InputCollectorAzureBlob = &tfTypes.InputCollectorAzureBlob{}
+		r.InputCollectorAzureBlob.Collector = &tfTypes.InputCollectorAzureBlobCollector{}
 		if resp.InputCollectorAzureBlob.Collector.Conf == nil {
 			r.InputCollectorAzureBlob.Collector.Conf = nil
 		} else {
@@ -116,7 +111,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorAzureBlob.ID
 		r.InputCollectorAzureBlob.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorAzureBlob.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorAzureBlob.IgnoreGroupJobsLimit
-		if resp.InputCollectorAzureBlob.Input != nil {
+		if resp.InputCollectorAzureBlob.Input == nil {
+			r.InputCollectorAzureBlob.Input = nil
+		} else {
 			r.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
 			r.InputCollectorAzureBlob.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorAzureBlob.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorAzureBlob.Input.BreakerRulesets {
@@ -153,8 +150,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorAzureBlob.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorAzureBlob.Input = savedInput
 		}
 		r.InputCollectorAzureBlob.RemoveFields = make([]types.String, 0, len(resp.InputCollectorAzureBlob.RemoveFields))
 		for _, v := range resp.InputCollectorAzureBlob.RemoveFields {
@@ -167,7 +162,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorAzureBlob.SavedState = &tfTypes.InputCollectorAzureBlobSavedState{}
 		}
-		if resp.InputCollectorAzureBlob.Schedule != nil {
+		if resp.InputCollectorAzureBlob.Schedule == nil {
+			r.InputCollectorAzureBlob.Schedule = nil
+		} else {
 			r.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
 			r.InputCollectorAzureBlob.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorAzureBlob.Schedule.CronSchedule)
 			r.InputCollectorAzureBlob.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorAzureBlob.Schedule.Enabled)
@@ -215,8 +212,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorAzureBlob.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorAzureBlob.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorAzureBlob.Schedule = savedSchedule
 		}
 		r.InputCollectorAzureBlob.Streamtags = make([]types.String, 0, len(resp.InputCollectorAzureBlob.Streamtags))
 		for _, v := range resp.InputCollectorAzureBlob.Streamtags {
@@ -228,13 +223,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorAzureBlob.WorkerAffinity
 	}
 	if resp.InputCollectorCriblLake != nil {
-		var savedInput *tfTypes.InputCollectorCriblLakeInput
-		var savedSchedule *tfTypes.InputCollectorCriblLakeSchedule
-		if r.InputCollectorCriblLake != nil {
-			savedInput = r.InputCollectorCriblLake.Input
-			savedSchedule = r.InputCollectorCriblLake.Schedule
-		}
 		r.InputCollectorCriblLake = &tfTypes.InputCollectorCriblLake{}
+		r.InputCollectorCriblLake.Collector = &tfTypes.InputCollectorCriblLakeCollector{}
 		if resp.InputCollectorCriblLake.Collector.Conf == nil {
 			r.InputCollectorCriblLake.Collector.Conf = nil
 		} else {
@@ -248,7 +238,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorCriblLake.ID
 		r.InputCollectorCriblLake.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorCriblLake.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorCriblLake.IgnoreGroupJobsLimit
-		if resp.InputCollectorCriblLake.Input != nil {
+		if resp.InputCollectorCriblLake.Input == nil {
+			r.InputCollectorCriblLake.Input = nil
+		} else {
 			r.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
 			r.InputCollectorCriblLake.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorCriblLake.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorCriblLake.Input.BreakerRulesets {
@@ -285,8 +277,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorCriblLake.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorCriblLake.Input = savedInput
 		}
 		r.InputCollectorCriblLake.RemoveFields = make([]types.String, 0, len(resp.InputCollectorCriblLake.RemoveFields))
 		for _, v := range resp.InputCollectorCriblLake.RemoveFields {
@@ -299,7 +289,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorCriblLake.SavedState = &tfTypes.InputCollectorCriblLakeSavedState{}
 		}
-		if resp.InputCollectorCriblLake.Schedule != nil {
+		if resp.InputCollectorCriblLake.Schedule == nil {
+			r.InputCollectorCriblLake.Schedule = nil
+		} else {
 			r.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
 			r.InputCollectorCriblLake.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorCriblLake.Schedule.CronSchedule)
 			r.InputCollectorCriblLake.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorCriblLake.Schedule.Enabled)
@@ -347,8 +339,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorCriblLake.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorCriblLake.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorCriblLake.Schedule = savedSchedule
 		}
 		r.InputCollectorCriblLake.Streamtags = make([]types.String, 0, len(resp.InputCollectorCriblLake.Streamtags))
 		for _, v := range resp.InputCollectorCriblLake.Streamtags {
@@ -360,13 +350,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorCriblLake.WorkerAffinity
 	}
 	if resp.InputCollectorDatabase != nil {
-		var savedInput *tfTypes.InputCollectorDatabaseInput
-		var savedSchedule *tfTypes.InputCollectorDatabaseSchedule
-		if r.InputCollectorDatabase != nil {
-			savedInput = r.InputCollectorDatabase.Input
-			savedSchedule = r.InputCollectorDatabase.Schedule
-		}
 		r.InputCollectorDatabase = &tfTypes.InputCollectorDatabase{}
+		r.InputCollectorDatabase.Collector = &tfTypes.InputCollectorDatabaseCollector{}
 		if resp.InputCollectorDatabase.Collector.Conf == nil {
 			r.InputCollectorDatabase.Collector.Conf = nil
 		} else {
@@ -382,7 +367,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorDatabase.ID
 		r.InputCollectorDatabase.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorDatabase.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorDatabase.IgnoreGroupJobsLimit
-		if resp.InputCollectorDatabase.Input != nil {
+		if resp.InputCollectorDatabase.Input == nil {
+			r.InputCollectorDatabase.Input = nil
+		} else {
 			r.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
 			r.InputCollectorDatabase.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorDatabase.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorDatabase.Input.BreakerRulesets {
@@ -419,8 +406,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorDatabase.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorDatabase.Input = savedInput
 		}
 		r.InputCollectorDatabase.RemoveFields = make([]types.String, 0, len(resp.InputCollectorDatabase.RemoveFields))
 		for _, v := range resp.InputCollectorDatabase.RemoveFields {
@@ -433,7 +418,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorDatabase.SavedState = &tfTypes.InputCollectorDatabaseSavedState{}
 		}
-		if resp.InputCollectorDatabase.Schedule != nil {
+		if resp.InputCollectorDatabase.Schedule == nil {
+			r.InputCollectorDatabase.Schedule = nil
+		} else {
 			r.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
 			r.InputCollectorDatabase.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorDatabase.Schedule.CronSchedule)
 			r.InputCollectorDatabase.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorDatabase.Schedule.Enabled)
@@ -481,8 +468,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorDatabase.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorDatabase.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorDatabase.Schedule = savedSchedule
 		}
 		r.InputCollectorDatabase.Streamtags = make([]types.String, 0, len(resp.InputCollectorDatabase.Streamtags))
 		for _, v := range resp.InputCollectorDatabase.Streamtags {
@@ -494,13 +479,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorDatabase.WorkerAffinity
 	}
 	if resp.InputCollectorGCS != nil {
-		var savedInput *tfTypes.InputCollectorGCSInput
-		var savedSchedule *tfTypes.InputCollectorGCSSchedule
-		if r.InputCollectorGCS != nil {
-			savedInput = r.InputCollectorGCS.Input
-			savedSchedule = r.InputCollectorGCS.Schedule
-		}
 		r.InputCollectorGCS = &tfTypes.InputCollectorGCS{}
+		r.InputCollectorGCS.Collector = &tfTypes.InputCollectorGCSCollector{}
 		if resp.InputCollectorGCS.Collector.Conf == nil {
 			r.InputCollectorGCS.Collector.Conf = nil
 		} else {
@@ -534,7 +514,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorGCS.ID
 		r.InputCollectorGCS.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorGCS.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorGCS.IgnoreGroupJobsLimit
-		if resp.InputCollectorGCS.Input != nil {
+		if resp.InputCollectorGCS.Input == nil {
+			r.InputCollectorGCS.Input = nil
+		} else {
 			r.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
 			r.InputCollectorGCS.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorGCS.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorGCS.Input.BreakerRulesets {
@@ -571,8 +553,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorGCS.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorGCS.Input = savedInput
 		}
 		r.InputCollectorGCS.RemoveFields = make([]types.String, 0, len(resp.InputCollectorGCS.RemoveFields))
 		for _, v := range resp.InputCollectorGCS.RemoveFields {
@@ -585,7 +565,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorGCS.SavedState = &tfTypes.InputCollectorGCSSavedState{}
 		}
-		if resp.InputCollectorGCS.Schedule != nil {
+		if resp.InputCollectorGCS.Schedule == nil {
+			r.InputCollectorGCS.Schedule = nil
+		} else {
 			r.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
 			r.InputCollectorGCS.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorGCS.Schedule.CronSchedule)
 			r.InputCollectorGCS.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorGCS.Schedule.Enabled)
@@ -633,8 +615,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorGCS.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorGCS.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorGCS.Schedule = savedSchedule
 		}
 		r.InputCollectorGCS.Streamtags = make([]types.String, 0, len(resp.InputCollectorGCS.Streamtags))
 		for _, v := range resp.InputCollectorGCS.Streamtags {
@@ -646,13 +626,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorGCS.WorkerAffinity
 	}
 	if resp.InputCollectorHealthCheck != nil {
-		var savedInput *tfTypes.InputCollectorHealthCheckInput
-		var savedSchedule *tfTypes.InputCollectorHealthCheckSchedule
-		if r.InputCollectorHealthCheck != nil {
-			savedInput = r.InputCollectorHealthCheck.Input
-			savedSchedule = r.InputCollectorHealthCheck.Schedule
-		}
 		r.InputCollectorHealthCheck = &tfTypes.InputCollectorHealthCheck{}
+		r.InputCollectorHealthCheck.Collector = &tfTypes.InputCollectorHealthCheckCollector{}
 		if resp.InputCollectorHealthCheck.Collector.Conf == nil {
 			r.InputCollectorHealthCheck.Collector.Conf = nil
 		} else {
@@ -681,7 +656,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorHealthCheck.ID
 		r.InputCollectorHealthCheck.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorHealthCheck.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorHealthCheck.IgnoreGroupJobsLimit
-		if resp.InputCollectorHealthCheck.Input != nil {
+		if resp.InputCollectorHealthCheck.Input == nil {
+			r.InputCollectorHealthCheck.Input = nil
+		} else {
 			r.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
 			r.InputCollectorHealthCheck.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorHealthCheck.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorHealthCheck.Input.BreakerRulesets {
@@ -718,8 +695,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorHealthCheck.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorHealthCheck.Input = savedInput
 		}
 		r.InputCollectorHealthCheck.RemoveFields = make([]types.String, 0, len(resp.InputCollectorHealthCheck.RemoveFields))
 		for _, v := range resp.InputCollectorHealthCheck.RemoveFields {
@@ -732,7 +707,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorHealthCheck.SavedState = &tfTypes.InputCollectorHealthCheckSavedState{}
 		}
-		if resp.InputCollectorHealthCheck.Schedule != nil {
+		if resp.InputCollectorHealthCheck.Schedule == nil {
+			r.InputCollectorHealthCheck.Schedule = nil
+		} else {
 			r.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
 			r.InputCollectorHealthCheck.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorHealthCheck.Schedule.CronSchedule)
 			r.InputCollectorHealthCheck.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorHealthCheck.Schedule.Enabled)
@@ -780,8 +757,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorHealthCheck.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorHealthCheck.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorHealthCheck.Schedule = savedSchedule
 		}
 		r.InputCollectorHealthCheck.Streamtags = make([]types.String, 0, len(resp.InputCollectorHealthCheck.Streamtags))
 		for _, v := range resp.InputCollectorHealthCheck.Streamtags {
@@ -793,13 +768,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorHealthCheck.WorkerAffinity
 	}
 	if resp.InputCollectorRest != nil {
-		var savedInput *tfTypes.InputCollectorRestInput
-		var savedSchedule *tfTypes.InputCollectorRestSchedule
-		if r.InputCollectorRest != nil {
-			savedInput = r.InputCollectorRest.Input
-			savedSchedule = r.InputCollectorRest.Schedule
-		}
 		r.InputCollectorRest = &tfTypes.InputCollectorRest{}
+		r.InputCollectorRest.Collector = &tfTypes.InputCollectorRestCollector{}
 		if resp.InputCollectorRest.Collector.Conf == nil {
 			r.InputCollectorRest.Collector.Conf = nil
 		} else {
@@ -872,6 +842,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			r.InputCollectorRest.Collector.Conf.CredentialsSecret = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.CredentialsSecret)
 			r.InputCollectorRest.Collector.Conf.DecodeURL = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.DecodeURL)
 			r.InputCollectorRest.Collector.Conf.DisableTimeFilter = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.DisableTimeFilter)
+			r.InputCollectorRest.Collector.Conf.Discovery = &tfTypes.DiscoveryConfiguration{}
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody)
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverDataField)
 			if resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverMethod != nil {
@@ -992,7 +963,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorRest.ID
 		r.InputCollectorRest.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorRest.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorRest.IgnoreGroupJobsLimit
-		if resp.InputCollectorRest.Input != nil {
+		if resp.InputCollectorRest.Input == nil {
+			r.InputCollectorRest.Input = nil
+		} else {
 			r.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
 			r.InputCollectorRest.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorRest.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorRest.Input.BreakerRulesets {
@@ -1029,8 +1002,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorRest.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorRest.Input = savedInput
 		}
 		r.InputCollectorRest.RemoveFields = make([]types.String, 0, len(resp.InputCollectorRest.RemoveFields))
 		for _, v := range resp.InputCollectorRest.RemoveFields {
@@ -1043,7 +1014,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorRest.SavedState = &tfTypes.InputCollectorRestSavedState{}
 		}
-		if resp.InputCollectorRest.Schedule != nil {
+		if resp.InputCollectorRest.Schedule == nil {
+			r.InputCollectorRest.Schedule = nil
+		} else {
 			r.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
 			r.InputCollectorRest.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorRest.Schedule.CronSchedule)
 			r.InputCollectorRest.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorRest.Schedule.Enabled)
@@ -1091,8 +1064,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorRest.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorRest.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorRest.Schedule = savedSchedule
 		}
 		r.InputCollectorRest.Streamtags = make([]types.String, 0, len(resp.InputCollectorRest.Streamtags))
 		for _, v := range resp.InputCollectorRest.Streamtags {
@@ -1104,13 +1075,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorRest.WorkerAffinity
 	}
 	if resp.InputCollectorS3 != nil {
-		var savedInput *tfTypes.InputCollectorS3Input
-		var savedSchedule *tfTypes.InputCollectorS3Schedule
-		if r.InputCollectorS3 != nil {
-			savedInput = r.InputCollectorS3.Input
-			savedSchedule = r.InputCollectorS3.Schedule
-		}
 		r.InputCollectorS3 = &tfTypes.InputCollectorS3{}
+		r.InputCollectorS3.Collector = &tfTypes.InputCollectorS3Collector{}
 		if resp.InputCollectorS3.Collector.Conf == nil {
 			r.InputCollectorS3.Collector.Conf = nil
 		} else {
@@ -1147,7 +1113,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorS3.ID
 		r.InputCollectorS3.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorS3.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorS3.IgnoreGroupJobsLimit
-		if resp.InputCollectorS3.Input != nil {
+		if resp.InputCollectorS3.Input == nil {
+			r.InputCollectorS3.Input = nil
+		} else {
 			r.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
 			r.InputCollectorS3.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorS3.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorS3.Input.BreakerRulesets {
@@ -1184,8 +1152,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorS3.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorS3.Input = savedInput
 		}
 		r.InputCollectorS3.RemoveFields = make([]types.String, 0, len(resp.InputCollectorS3.RemoveFields))
 		for _, v := range resp.InputCollectorS3.RemoveFields {
@@ -1198,7 +1164,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorS3.SavedState = &tfTypes.InputCollectorS3SavedState{}
 		}
-		if resp.InputCollectorS3.Schedule != nil {
+		if resp.InputCollectorS3.Schedule == nil {
+			r.InputCollectorS3.Schedule = nil
+		} else {
 			r.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
 			r.InputCollectorS3.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorS3.Schedule.CronSchedule)
 			r.InputCollectorS3.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorS3.Schedule.Enabled)
@@ -1246,8 +1214,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorS3.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorS3.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorS3.Schedule = savedSchedule
 		}
 		r.InputCollectorS3.Streamtags = make([]types.String, 0, len(resp.InputCollectorS3.Streamtags))
 		for _, v := range resp.InputCollectorS3.Streamtags {
@@ -1259,13 +1225,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorS3.WorkerAffinity
 	}
 	if resp.InputCollectorScript != nil {
-		var savedInput *tfTypes.InputCollectorScriptInput
-		var savedSchedule *tfTypes.InputCollectorScriptSchedule
-		if r.InputCollectorScript != nil {
-			savedInput = r.InputCollectorScript.Input
-			savedSchedule = r.InputCollectorScript.Schedule
-		}
 		r.InputCollectorScript = &tfTypes.InputCollectorScript{}
+		r.InputCollectorScript.Collector = &tfTypes.InputCollectorScriptCollector{}
 		if resp.InputCollectorScript.Collector.Conf == nil {
 			r.InputCollectorScript.Collector.Conf = nil
 		} else {
@@ -1281,7 +1242,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorScript.ID
 		r.InputCollectorScript.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorScript.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorScript.IgnoreGroupJobsLimit
-		if resp.InputCollectorScript.Input != nil {
+		if resp.InputCollectorScript.Input == nil {
+			r.InputCollectorScript.Input = nil
+		} else {
 			r.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
 			r.InputCollectorScript.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorScript.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorScript.Input.BreakerRulesets {
@@ -1318,8 +1281,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorScript.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorScript.Input = savedInput
 		}
 		r.InputCollectorScript.RemoveFields = make([]types.String, 0, len(resp.InputCollectorScript.RemoveFields))
 		for _, v := range resp.InputCollectorScript.RemoveFields {
@@ -1332,7 +1293,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorScript.SavedState = &tfTypes.InputCollectorScriptSavedState{}
 		}
-		if resp.InputCollectorScript.Schedule != nil {
+		if resp.InputCollectorScript.Schedule == nil {
+			r.InputCollectorScript.Schedule = nil
+		} else {
 			r.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
 			r.InputCollectorScript.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorScript.Schedule.CronSchedule)
 			r.InputCollectorScript.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorScript.Schedule.Enabled)
@@ -1380,8 +1343,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorScript.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorScript.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorScript.Schedule = savedSchedule
 		}
 		r.InputCollectorScript.Streamtags = make([]types.String, 0, len(resp.InputCollectorScript.Streamtags))
 		for _, v := range resp.InputCollectorScript.Streamtags {
@@ -1393,13 +1354,8 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.WorkerAffinity = r.InputCollectorScript.WorkerAffinity
 	}
 	if resp.InputCollectorSplunk != nil {
-		var savedInput *tfTypes.InputCollectorSplunkInput
-		var savedSchedule *tfTypes.InputCollectorSplunkSchedule
-		if r.InputCollectorSplunk != nil {
-			savedInput = r.InputCollectorSplunk.Input
-			savedSchedule = r.InputCollectorSplunk.Schedule
-		}
 		r.InputCollectorSplunk = &tfTypes.InputCollectorSplunk{}
+		r.InputCollectorSplunk.Collector = &tfTypes.InputCollectorSplunkCollector{}
 		if resp.InputCollectorSplunk.Collector.Conf == nil {
 			r.InputCollectorSplunk.Collector.Conf = nil
 		} else {
@@ -1437,7 +1393,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		r.ID = r.InputCollectorSplunk.ID
 		r.InputCollectorSplunk.IgnoreGroupJobsLimit = types.BoolPointerValue(resp.InputCollectorSplunk.IgnoreGroupJobsLimit)
 		r.IgnoreGroupJobsLimit = r.InputCollectorSplunk.IgnoreGroupJobsLimit
-		if resp.InputCollectorSplunk.Input != nil {
+		if resp.InputCollectorSplunk.Input == nil {
+			r.InputCollectorSplunk.Input = nil
+		} else {
 			r.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
 			r.InputCollectorSplunk.Input.BreakerRulesets = make([]types.String, 0, len(resp.InputCollectorSplunk.Input.BreakerRulesets))
 			for _, v := range resp.InputCollectorSplunk.Input.BreakerRulesets {
@@ -1474,8 +1432,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorSplunk.Input.Type = types.StringNull()
 			}
-		} else if savedInput != nil {
-			r.InputCollectorSplunk.Input = savedInput
 		}
 		r.InputCollectorSplunk.RemoveFields = make([]types.String, 0, len(resp.InputCollectorSplunk.RemoveFields))
 		for _, v := range resp.InputCollectorSplunk.RemoveFields {
@@ -1488,7 +1444,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 		} else {
 			r.InputCollectorSplunk.SavedState = &tfTypes.InputCollectorSplunkSavedState{}
 		}
-		if resp.InputCollectorSplunk.Schedule != nil {
+		if resp.InputCollectorSplunk.Schedule == nil {
+			r.InputCollectorSplunk.Schedule = nil
+		} else {
 			r.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
 			r.InputCollectorSplunk.Schedule.CronSchedule = types.StringPointerValue(resp.InputCollectorSplunk.Schedule.CronSchedule)
 			r.InputCollectorSplunk.Schedule.Enabled = types.BoolPointerValue(resp.InputCollectorSplunk.Schedule.Enabled)
@@ -1536,8 +1494,6 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				}
 			}
 			r.InputCollectorSplunk.Schedule.Skippable = types.BoolPointerValue(resp.InputCollectorSplunk.Schedule.Skippable)
-		} else if savedSchedule != nil {
-			r.InputCollectorSplunk.Schedule = savedSchedule
 		}
 		r.InputCollectorSplunk.Streamtags = make([]types.String, 0, len(resp.InputCollectorSplunk.Streamtags))
 		for _, v := range resp.InputCollectorSplunk.Streamtags {
@@ -1966,9 +1922,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				endpoint = nil
 			}
-			outputMode := new(shared.InputCollectorSplunkOutputMode)
+			outputMode := new(shared.OutputMode)
 			if !r.InputCollectorSplunk.Collector.Conf.OutputMode.IsUnknown() && !r.InputCollectorSplunk.Collector.Conf.OutputMode.IsNull() {
-				*outputMode = shared.InputCollectorSplunkOutputMode(r.InputCollectorSplunk.Collector.Conf.OutputMode.ValueString())
+				*outputMode = shared.OutputMode(r.InputCollectorSplunk.Collector.Conf.OutputMode.ValueString())
 			} else {
 				outputMode = nil
 			}
@@ -2587,9 +2543,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			var pagination *shared.PaginationConfig
 			if r.InputCollectorRest.Collector.Conf.Discovery.Pagination != nil {
-				typeVar4 := new(shared.PaginationType)
+				typeVar4 := new(shared.PaginationConfigPaginationType)
 				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.IsNull() {
-					*typeVar4 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.ValueString())
+					*typeVar4 = shared.PaginationConfigPaginationType(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Type.ValueString())
 				} else {
 					typeVar4 = nil
 				}
@@ -2755,9 +2711,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			var pagination1 *shared.PaginationConfig
 			if r.InputCollectorRest.Collector.Conf.Pagination != nil {
-				typeVar5 := new(shared.PaginationType)
+				typeVar5 := new(shared.PaginationConfigPaginationType)
 				if !r.InputCollectorRest.Collector.Conf.Pagination.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.Type.IsNull() {
-					*typeVar5 = shared.PaginationType(r.InputCollectorRest.Collector.Conf.Pagination.Type.ValueString())
+					*typeVar5 = shared.PaginationConfigPaginationType(r.InputCollectorRest.Collector.Conf.Pagination.Type.ValueString())
 				} else {
 					typeVar5 = nil
 				}
@@ -2849,9 +2805,9 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			var retryRules *shared.RetryRulesConfiguration
 			if r.InputCollectorRest.Collector.Conf.RetryRules != nil {
-				typeVar6 := new(shared.InputCollectorRestRetryType)
+				typeVar6 := new(shared.RetryType)
 				if !r.InputCollectorRest.Collector.Conf.RetryRules.Type.IsUnknown() && !r.InputCollectorRest.Collector.Conf.RetryRules.Type.IsNull() {
-					*typeVar6 = shared.InputCollectorRestRetryType(r.InputCollectorRest.Collector.Conf.RetryRules.Type.ValueString())
+					*typeVar6 = shared.RetryType(r.InputCollectorRest.Collector.Conf.RetryRules.Type.ValueString())
 				} else {
 					typeVar6 = nil
 				}

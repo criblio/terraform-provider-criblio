@@ -8,6 +8,7 @@ import (
 )
 
 type PipelineFunctionConf struct {
+	// Whole function config as one JSON value; use jsonencode({ ... }) in HCL.
 	Conf        jsontypes.Normalized `tfsdk:"conf"`
 	Description types.String         `tfsdk:"description"`
 	Disabled    types.Bool           `tfsdk:"disabled"`

@@ -464,7 +464,7 @@ func (i InputCollectorCriblLakeMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorCriblLakeMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -633,7 +633,7 @@ func (i InputCollectorCriblLakeCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorCriblLakeCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -678,7 +678,7 @@ func (i InputCollectorCriblLake) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorCriblLake) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

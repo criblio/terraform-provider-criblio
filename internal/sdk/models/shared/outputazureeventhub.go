@@ -31,265 +31,6 @@ func (e *OutputAzureEventhubType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputAzureEventhubAcknowledgments - Control the number of required acknowledgments
-type OutputAzureEventhubAcknowledgments int64
-
-const (
-	OutputAzureEventhubAcknowledgmentsOne    OutputAzureEventhubAcknowledgments = 1
-	OutputAzureEventhubAcknowledgmentsZero   OutputAzureEventhubAcknowledgments = 0
-	OutputAzureEventhubAcknowledgmentsMinus1 OutputAzureEventhubAcknowledgments = -1
-)
-
-func (e OutputAzureEventhubAcknowledgments) ToPointer() *OutputAzureEventhubAcknowledgments {
-	return &e
-}
-func (e *OutputAzureEventhubAcknowledgments) UnmarshalJSON(data []byte) error {
-	var v int64
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case 1:
-		fallthrough
-	case 0:
-		fallthrough
-	case -1:
-		*e = OutputAzureEventhubAcknowledgments(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubAcknowledgments: %v", v)
-	}
-}
-
-// OutputAzureEventhubRecordDataFormat - Format to use to serialize events before writing to the Event Hubs Kafka brokers
-type OutputAzureEventhubRecordDataFormat string
-
-const (
-	OutputAzureEventhubRecordDataFormatJSON OutputAzureEventhubRecordDataFormat = "json"
-	OutputAzureEventhubRecordDataFormatRaw  OutputAzureEventhubRecordDataFormat = "raw"
-)
-
-func (e OutputAzureEventhubRecordDataFormat) ToPointer() *OutputAzureEventhubRecordDataFormat {
-	return &e
-}
-func (e *OutputAzureEventhubRecordDataFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "json":
-		fallthrough
-	case "raw":
-		*e = OutputAzureEventhubRecordDataFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubRecordDataFormat: %v", v)
-	}
-}
-
-type OutputAzureEventhubSASLMechanism string
-
-const (
-	OutputAzureEventhubSASLMechanismPlain       OutputAzureEventhubSASLMechanism = "plain"
-	OutputAzureEventhubSASLMechanismOauthbearer OutputAzureEventhubSASLMechanism = "oauthbearer"
-)
-
-func (e OutputAzureEventhubSASLMechanism) ToPointer() *OutputAzureEventhubSASLMechanism {
-	return &e
-}
-func (e *OutputAzureEventhubSASLMechanism) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "plain":
-		fallthrough
-	case "oauthbearer":
-		*e = OutputAzureEventhubSASLMechanism(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubSASLMechanism: %v", v)
-	}
-}
-
-// OutputAzureEventhubAuthentication - Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.
-type OutputAzureEventhubAuthentication struct {
-	Disabled  *bool                             `default:"false" json:"disabled"`
-	Mechanism *OutputAzureEventhubSASLMechanism `default:"plain" json:"mechanism"`
-}
-
-func (o OutputAzureEventhubAuthentication) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputAzureEventhubAuthentication) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputAzureEventhubAuthentication) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *OutputAzureEventhubAuthentication) GetMechanism() *OutputAzureEventhubSASLMechanism {
-	if o == nil {
-		return nil
-	}
-	return o.Mechanism
-}
-
-type OutputAzureEventhubTLSSettingsClientSide struct {
-	Disabled *bool `default:"false" json:"disabled"`
-	// Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
-}
-
-func (o OutputAzureEventhubTLSSettingsClientSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputAzureEventhubTLSSettingsClientSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputAzureEventhubTLSSettingsClientSide) GetDisabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Disabled
-}
-
-func (o *OutputAzureEventhubTLSSettingsClientSide) GetRejectUnauthorized() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.RejectUnauthorized
-}
-
-// OutputAzureEventhubBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputAzureEventhubBackpressureBehavior string
-
-const (
-	OutputAzureEventhubBackpressureBehaviorBlock OutputAzureEventhubBackpressureBehavior = "block"
-	OutputAzureEventhubBackpressureBehaviorDrop  OutputAzureEventhubBackpressureBehavior = "drop"
-	OutputAzureEventhubBackpressureBehaviorQueue OutputAzureEventhubBackpressureBehavior = "queue"
-)
-
-func (e OutputAzureEventhubBackpressureBehavior) ToPointer() *OutputAzureEventhubBackpressureBehavior {
-	return &e
-}
-func (e *OutputAzureEventhubBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputAzureEventhubBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputAzureEventhubCompression - Codec to use to compress the persisted data
-type OutputAzureEventhubCompression string
-
-const (
-	OutputAzureEventhubCompressionNone OutputAzureEventhubCompression = "none"
-	OutputAzureEventhubCompressionGzip OutputAzureEventhubCompression = "gzip"
-)
-
-func (e OutputAzureEventhubCompression) ToPointer() *OutputAzureEventhubCompression {
-	return &e
-}
-func (e *OutputAzureEventhubCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputAzureEventhubCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubCompression: %v", v)
-	}
-}
-
-// OutputAzureEventhubQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputAzureEventhubQueueFullBehavior string
-
-const (
-	OutputAzureEventhubQueueFullBehaviorBlock OutputAzureEventhubQueueFullBehavior = "block"
-	OutputAzureEventhubQueueFullBehaviorDrop  OutputAzureEventhubQueueFullBehavior = "drop"
-)
-
-func (e OutputAzureEventhubQueueFullBehavior) ToPointer() *OutputAzureEventhubQueueFullBehavior {
-	return &e
-}
-func (e *OutputAzureEventhubQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputAzureEventhubQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputAzureEventhubMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputAzureEventhubMode string
-
-const (
-	OutputAzureEventhubModeError        OutputAzureEventhubMode = "error"
-	OutputAzureEventhubModeBackpressure OutputAzureEventhubMode = "backpressure"
-	OutputAzureEventhubModeAlways       OutputAzureEventhubMode = "always"
-)
-
-func (e OutputAzureEventhubMode) ToPointer() *OutputAzureEventhubMode {
-	return &e
-}
-func (e *OutputAzureEventhubMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputAzureEventhubMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureEventhubMode: %v", v)
-	}
-}
-
 type OutputAzureEventhubPqControls struct {
 }
 
@@ -306,8 +47,8 @@ func (o *OutputAzureEventhubPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputAzureEventhub struct {
 	// Unique ID for this output
-	ID   *string                  `json:"id,omitempty"`
-	Type *OutputAzureEventhubType `json:"type,omitempty"`
+	ID   *string                 `json:"id,omitempty"`
+	Type OutputAzureEventhubType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -321,50 +62,62 @@ type OutputAzureEventhub struct {
 	// The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.
 	Topic string `json:"topic"`
 	// Control the number of required acknowledgments
-	Ack *OutputAzureEventhubAcknowledgments `default:"1" json:"ack"`
+	Ack *AcknowledgmentsOptions `json:"ack,omitempty"`
 	// Format to use to serialize events before writing to the Event Hubs Kafka brokers
-	Format *OutputAzureEventhubRecordDataFormat `default:"json" json:"format"`
+	Format *RecordDataFormatOptions `json:"format,omitempty"`
 	// Maximum size of each record batch before compression. Setting should be < message.max.bytes settings in Event Hubs brokers.
-	MaxRecordSizeKB *float64 `default:"768" json:"maxRecordSizeKB"`
+	MaxRecordSizeKB *float64 `json:"maxRecordSizeKB,omitempty"`
 	// Maximum number of events in a batch before forcing a flush
-	FlushEventCount *float64 `default:"1000" json:"flushEventCount"`
+	FlushEventCount *float64 `json:"flushEventCount,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// Maximum time to wait for a connection to complete successfully
-	ConnectionTimeout *float64 `default:"10000" json:"connectionTimeout"`
+	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
 	// Maximum time to wait for Kafka to respond to a request
-	RequestTimeout *float64 `default:"60000" json:"requestTimeout"`
+	RequestTimeout *float64 `json:"requestTimeout,omitempty"`
 	// If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
-	MaxRetries *float64 `default:"5" json:"maxRetries"`
+	MaxRetries *float64 `json:"maxRetries,omitempty"`
 	// The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackOff *float64 `default:"30000" json:"maxBackOff"`
+	MaxBackOff *float64 `json:"maxBackOff,omitempty"`
 	// Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"300" json:"initialBackoff"`
+	InitialBackoff *float64 `json:"initialBackoff,omitempty"`
 	// Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
+	BackoffRate *float64 `json:"backoffRate,omitempty"`
 	// Maximum time to wait for Kafka to respond to an authentication request
-	AuthenticationTimeout *float64 `default:"10000" json:"authenticationTimeout"`
+	AuthenticationTimeout *float64 `json:"authenticationTimeout,omitempty"`
 	// Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
-	ReauthenticationThreshold *float64 `default:"10000" json:"reauthenticationThreshold"`
+	ReauthenticationThreshold *float64 `json:"reauthenticationThreshold,omitempty"`
 	// Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.
-	Sasl *OutputAzureEventhubAuthentication        `json:"sasl,omitempty"`
-	TLS  *OutputAzureEventhubTLSSettingsClientSide `json:"tls,omitempty"`
+	Sasl *AuthenticationTypeUse     `json:"sasl,omitempty"`
+	TLS  *TLSSettingsClientSideType `json:"tls,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputAzureEventhubBackpressureBehavior `default:"block" json:"onBackpressure"`
-	Description    *string                                  `json:"description,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputAzureEventhubCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputAzureEventhubQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputAzureEventhubMode       `default:"error" json:"pqMode"`
-	PqControls *OutputAzureEventhubPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                        `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputAzureEventhubPqControls `json:"pqControls,omitempty"`
+	// Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
+	TemplateTopic *string `json:"__template_topic,omitempty"`
 }
 
 func (o OutputAzureEventhub) MarshalJSON() ([]byte, error) {
@@ -372,7 +125,7 @@ func (o OutputAzureEventhub) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputAzureEventhub) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"brokers", "topic"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -385,9 +138,9 @@ func (o *OutputAzureEventhub) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputAzureEventhub) GetType() *OutputAzureEventhubType {
+func (o *OutputAzureEventhub) GetType() OutputAzureEventhubType {
 	if o == nil {
-		return nil
+		return OutputAzureEventhubType("")
 	}
 	return o.Type
 }
@@ -434,14 +187,14 @@ func (o *OutputAzureEventhub) GetTopic() string {
 	return o.Topic
 }
 
-func (o *OutputAzureEventhub) GetAck() *OutputAzureEventhubAcknowledgments {
+func (o *OutputAzureEventhub) GetAck() *AcknowledgmentsOptions {
 	if o == nil {
 		return nil
 	}
 	return o.Ack
 }
 
-func (o *OutputAzureEventhub) GetFormat() *OutputAzureEventhubRecordDataFormat {
+func (o *OutputAzureEventhub) GetFormat() *RecordDataFormatOptions {
 	if o == nil {
 		return nil
 	}
@@ -525,21 +278,21 @@ func (o *OutputAzureEventhub) GetReauthenticationThreshold() *float64 {
 	return o.ReauthenticationThreshold
 }
 
-func (o *OutputAzureEventhub) GetSasl() *OutputAzureEventhubAuthentication {
+func (o *OutputAzureEventhub) GetSasl() *AuthenticationTypeUse {
 	if o == nil {
 		return nil
 	}
 	return o.Sasl
 }
 
-func (o *OutputAzureEventhub) GetTLS() *OutputAzureEventhubTLSSettingsClientSide {
+func (o *OutputAzureEventhub) GetTLS() *TLSSettingsClientSideType {
 	if o == nil {
 		return nil
 	}
 	return o.TLS
 }
 
-func (o *OutputAzureEventhub) GetOnBackpressure() *OutputAzureEventhubBackpressureBehavior {
+func (o *OutputAzureEventhub) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -551,6 +304,41 @@ func (o *OutputAzureEventhub) GetDescription() *string {
 		return nil
 	}
 	return o.Description
+}
+
+func (o *OutputAzureEventhub) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputAzureEventhub) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputAzureEventhub) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputAzureEventhub) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputAzureEventhub) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputAzureEventhub) GetPqMaxFileSize() *string {
@@ -574,25 +362,25 @@ func (o *OutputAzureEventhub) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputAzureEventhub) GetPqCompress() *OutputAzureEventhubCompression {
+func (o *OutputAzureEventhub) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputAzureEventhub) GetPqOnBackpressure() *OutputAzureEventhubQueueFullBehavior {
+func (o *OutputAzureEventhub) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputAzureEventhub) GetPqMode() *OutputAzureEventhubMode {
+func (o *OutputAzureEventhub) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputAzureEventhub) GetPqControls() *OutputAzureEventhubPqControls {
@@ -600,4 +388,11 @@ func (o *OutputAzureEventhub) GetPqControls() *OutputAzureEventhubPqControls {
 		return nil
 	}
 	return o.PqControls
+}
+
+func (o *OutputAzureEventhub) GetTemplateTopic() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateTopic
 }

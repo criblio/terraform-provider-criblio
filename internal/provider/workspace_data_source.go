@@ -83,7 +83,7 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"workspace_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The <code>id</code> of the Workspace to get.`,
+				Description: `Unique identifier for the workspace`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(4, 41),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]*$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]*$`).String()),

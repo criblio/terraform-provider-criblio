@@ -17,8 +17,8 @@ const (
 )
 
 type Command struct {
-	Str        *string  `queryParam:"inline,name=command"`
-	ArrayOfStr []string `queryParam:"inline,name=command"`
+	Str        *string  `queryParam:"inline" union:"member"`
+	ArrayOfStr []string `queryParam:"inline" union:"member"`
 
 	Type CommandType
 }
@@ -67,7 +67,7 @@ func (u *Command) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Command", string(data))
 	}

@@ -74,12 +74,9 @@ Optional:
 <a id="nestedatt--conf--functions"></a>
 ### Nested Schema for `conf.functions`
 
-Required:
-
-- `conf` (String) Function-specific configuration as a JSON object. Different functions require different configuration fields.
-
 Optional:
 
+- `conf` (String) Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"

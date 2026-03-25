@@ -3,5 +3,5 @@
 package types
 
 type RedisLimits struct {
-	Connections RedisConnectionLimits `tfsdk:"connections"`
+	Connections *RedisConnectionLimits `tfsdk:"connections"`
 }

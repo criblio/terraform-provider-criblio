@@ -8,11 +8,11 @@ import (
 
 type InputCollectorRestConf struct {
 	Scheduling            *InternalScheduling      `tfsdk:"scheduling"`
-	Authentication        types.String             `tfsdk:"authentication"`
 	AuthHeaderExpr        types.String             `tfsdk:"auth_header_expr"`
 	AuthHeaderKey         types.String             `tfsdk:"auth_header_key"`
 	AuthRequestHeaders    []AuthRequestHeader      `tfsdk:"auth_request_headers"`
 	AuthRequestParams     []AuthRequestParam       `tfsdk:"auth_request_params"`
+	Authentication        types.String             `tfsdk:"authentication"`
 	CaptureHeaders        types.Bool               `tfsdk:"capture_headers"`
 	ClientSecretParamName types.String             `tfsdk:"client_secret_param_name"`
 	CollectMethod         types.String             `tfsdk:"collect_method"`
@@ -22,7 +22,7 @@ type InputCollectorRestConf struct {
 	CredentialsSecret     types.String             `tfsdk:"credentials_secret"`
 	DecodeURL             types.Bool               `tfsdk:"decode_url"`
 	DisableTimeFilter     types.Bool               `tfsdk:"disable_time_filter"`
-	Discovery             DiscoveryConfiguration   `tfsdk:"discovery"`
+	Discovery             *DiscoveryConfiguration  `tfsdk:"discovery"`
 	LoginBody             types.String             `tfsdk:"login_body"`
 	LoginURL              types.String             `tfsdk:"login_url"`
 	Pagination            *PaginationConfig        `tfsdk:"pagination"`
@@ -34,6 +34,6 @@ type InputCollectorRestConf struct {
 	Token                 types.String             `tfsdk:"token"`
 	TokenRespAttribute    types.String             `tfsdk:"token_resp_attribute"`
 	TokenSecret           types.String             `tfsdk:"token_secret"`
-	Username              types.String             `tfsdk:"username"`
 	UseRoundRobinDNS      types.Bool               `tfsdk:"use_round_robin_dns"`
+	Username              types.String             `tfsdk:"username"`
 }

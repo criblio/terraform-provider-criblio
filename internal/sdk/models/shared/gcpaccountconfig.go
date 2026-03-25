@@ -18,7 +18,7 @@ func (g GcpAccountConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GcpAccountConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "serviceAccountCredentials"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

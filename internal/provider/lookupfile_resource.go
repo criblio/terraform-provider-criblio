@@ -160,6 +160,17 @@ func (r *LookupFileResource) Configure(ctx context.Context, req resource.Configu
 	r.client = client
 }
 
+// lookupFilePreserveContentFromState keeps content in state when the API omits it on GET.
+// PreferState applies at plan time only; Read would otherwise clear content and cause perpetual drift.
+func lookupFilePreserveContentFromState(data *LookupFileResourceModel, prior types.String) {
+	if prior.IsNull() || prior.IsUnknown() {
+		return
+	}
+	if data.Content.IsNull() || data.Content.IsUnknown() {
+		data.Content = prior
+	}
+}
+
 func (r *LookupFileResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *LookupFileResourceModel
 	var plan types.Object
@@ -268,11 +279,14 @@ func (r *LookupFileResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+	priorContent := data.Content
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetLookupFileByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	lookupFilePreserveContentFromState(data, priorContent)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -370,7 +384,10 @@ func (r *LookupFileResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -391,12 +408,12 @@ func (r *LookupFileResource) ImportState(ctx context.Context, req resource.Impor
 	}
 
 	if len(data.GroupID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"`)
+		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID. It's expected to be a value alike '"myExistingGroupId"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myNewLookupIdToCRUD"`)
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '"myNewLookupIdToCRUD"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)

@@ -30,8 +30,8 @@ type SourcesDataSource struct {
 
 // SourcesDataSourceModel describes the data model.
 type SourcesDataSourceModel struct {
-	GroupID types.String    `tfsdk:"group_id"`
-	Items   []tfTypes.Input `tfsdk:"items"`
+	GroupID types.String          `tfsdk:"group_id"`
+	Items   []tfTypes.InputUnion1 `tfsdk:"items"`
 }
 
 // Metadata returns the data source type name.
@@ -210,7 +210,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -222,11 +226,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -259,6 +266,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
@@ -279,9 +294,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -300,10 +314,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -444,7 +457,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -456,11 +473,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -496,6 +516,22 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
+								},
+								"template_connection_string": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -571,8 +607,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Description: `Fields to add to events referencing this token`,
 											},
 											"token": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
+												Description: `Parsed as JSON.`,
 											},
 											"token_secret": schema.StringAttribute{
 												Computed:    true,
@@ -696,7 +733,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -744,6 +785,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -753,7 +802,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"cert_path": schema.StringAttribute{
 											Computed:    true,
-											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl certificate when TLS is enabled.`,
 										},
 										"certificate_name": schema.StringAttribute{
 											Computed:    true,
@@ -764,7 +813,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enable or disable TLS. Defaults to enabled for Cloudflare sources.`,
 										},
 										"max_version": schema.StringAttribute{
 											Computed: true,
@@ -778,7 +828,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"priv_key_path": schema.StringAttribute{
 											Computed:    true,
-											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl private key when TLS is enabled.`,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
@@ -864,7 +914,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -876,11 +930,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1133,7 +1190,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -1145,11 +1206,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1174,10 +1238,83 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"sasl": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
+										},
+										"broker_service_class": schema.StringAttribute{
+											Computed:    true,
+											Description: `Kerberos service class for Kafka brokers, such as ` + "`" + `kafka` + "`" + ``,
+										},
+										"client_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Client ID to use for OAuth authentication`,
+										},
+										"client_text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"credentials_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a secret that references your credentials`,
+										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
 										},
+										"keytab_location": schema.StringAttribute{
+											Computed:    true,
+											Description: `Location of keytab file for authentication principal`,
+										},
 										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+										"oauth_enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable OAuth authentication`,
+										},
+										"oauth_params": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										},
+										"oauth_secret_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"password": schema.StringAttribute{
+											Computed: true,
+										},
+										"principal": schema.StringAttribute{
+											Computed:    true,
+											Description: `Authentication principal, such as ` + "`" + `kafka_user@example.com` + "`" + ``,
+										},
+										"sasl_extensions": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											Description: `Additional SASL extension fields, such as Confluent's logicalCluster or identityPoolId`,
+										},
+										"token_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `URL of the token endpoint to use for OAuth authentication`,
+										},
+										"username": schema.StringAttribute{
 											Computed: true,
 										},
 									},
@@ -1190,7 +1327,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"session_timeout": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-										`      If the client sends no heartbeats to the broker before the timeout expires,` + "\n" +
+										`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
 										`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
 										`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
 										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
@@ -1319,7 +1456,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -1331,11 +1472,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1364,10 +1508,24 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
-								"auth_tokens": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
+								"auth_tokens": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Optional token description`,
+											},
+											"enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+										},
+									},
+									Description: `Shared secrets to be used by connected environments to authorize connections. These tokens should be installed in Cribl HTTP destinations in connected environments.`,
 								},
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
@@ -1469,7 +1627,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -1481,11 +1643,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1510,6 +1675,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -1526,9 +1699,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -1547,10 +1719,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1575,6 +1746,60 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.`,
 								},
+								"auth_tokens_ext": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed: true,
+											},
+											"elasticsearch_metadata": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"default_dataset": schema.StringAttribute{
+														Computed: true,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"metadata": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
+												Description: `Fields to add to events referencing this token`,
+											},
+											"splunk_hec_metadata": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"allowed_indexes_at_token": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"default_dataset": schema.StringAttribute{
+														Computed: true,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"token": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
 								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add request headers to events, in the __headers field`,
@@ -1593,11 +1818,19 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									},
 									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
 								},
+								"cribl_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.`,
+								},
 								"description": schema.StringAttribute{
 									Computed: true,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed: true,
+								},
+								"elastic_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable.`,
 								},
 								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
@@ -1675,7 +1908,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -1687,11 +1924,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1711,10 +1951,29 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.`,
 								},
+								"splunk_hec_acks": schema.BoolAttribute{
+									Computed: true,
+								},
+								"splunk_hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.`,
+								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
+								"template_splunk_hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -1732,9 +1991,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -1753,10 +2011,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -1772,6 +2029,25 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"input_cribl_tcp": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
+								"auth_tokens": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"description": schema.StringAttribute{
+												Computed:    true,
+												Description: `Optional token description`,
+											},
+											"enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"token_secret": schema.StringAttribute{
+												Computed:    true,
+												Description: `Select or create a stored text secret`,
+											},
+										},
+									},
+									Description: `Shared secrets to be used by connected environments to authorize connections. These tokens should be installed in Cribl TCP destinations in connected environments.`,
+								},
 								"connections": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
@@ -1852,7 +2128,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -1864,11 +2144,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -1897,6 +2180,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -1913,9 +2204,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -1934,10 +2224,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -2017,7 +2306,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -2029,11 +2322,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -2158,6 +2454,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Unique ID for this input`,
 								},
+								"include_sqs_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+								},
 								"max_messages": schema.Float64Attribute{
 									Computed:    true,
 									Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
@@ -2202,7 +2502,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -2214,11 +2518,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -2294,6 +2601,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -2415,7 +2750,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -2427,11 +2766,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -2469,6 +2811,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -2485,9 +2835,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -2506,10 +2855,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -2585,7 +2933,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -2597,11 +2949,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -2652,9 +3007,16 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Enter credentials directly, or select a stored secret`,
 								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
 									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed: true,
@@ -2800,7 +3162,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -2812,11 +3178,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -2826,7 +3195,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"record_type": schema.StringAttribute{
 									Computed:    true,
-									Description: `DNS Record type to resolve`,
+									Description: `DNS record type to resolve`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -2870,16 +3239,16 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
 												Computed:    true,
-												Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list`,
+												Description: `See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for information. Attributes can be manually entered if not present in the list.`,
 											},
 											"values": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												Description: `Search Filter Values, if empty only "running" EC2 instances will be returned`,
+												Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
 											},
 										},
 									},
-									Description: `EC2 Instance Search Filter`,
+									Description: `Filter to apply when searching for EC2 instances`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -2917,6 +3286,26 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 									},
 								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
+								},
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable`,
@@ -2926,7 +3315,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"use_public_ip": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Use public IP address for discovered targets. Set to false if the private IP address should be used.`,
+									Description: `Use public IP address for discovered targets. Disable to use the private IP address.`,
 								},
 								"username": schema.StringAttribute{
 									Computed:    true,
@@ -3082,7 +3471,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -3094,11 +3487,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -3113,9 +3509,16 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Enter credentials directly, or select a stored secret`,
 										},
+										"credentials_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a secret that references your credentials`,
+										},
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
 											Description: `Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications. See [Cribl Docs](https://docs.cribl.io/stream/sources-elastic/#proxy-mode) for more details.`,
+										},
+										"password": schema.StringAttribute{
+											Computed: true,
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
@@ -3126,6 +3529,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											ElementType: types.StringType,
 											Description: `List of headers to remove from the request to proxy`,
 										},
+										"template_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
+										},
 										"timeout_sec": schema.Float64Attribute{
 											Computed:    true,
 											Description: `Amount of time, in seconds, to wait for a proxy request to complete before canceling it`,
@@ -3133,6 +3540,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										"url": schema.StringAttribute{
 											Computed:    true,
 											Description: `URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200`,
+										},
+										"username": schema.StringAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -3153,6 +3563,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -3169,9 +3587,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -3190,10 +3607,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3339,7 +3755,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -3351,11 +3771,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -3380,11 +3803,67 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"sasl": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Enter password directly, or select a stored secret`,
+										},
+										"cert_path": schema.StringAttribute{
+											Computed: true,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored certificate`,
+										},
+										"client_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `client_id to pass in the OAuth request parameter`,
+										},
+										"client_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `client_secret to pass in the OAuth request parameter`,
+										},
+										"client_secret_auth_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"client_text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
 										},
 										"mechanism": schema.StringAttribute{
 											Computed: true,
+										},
+										"oauth_endpoint": schema.StringAttribute{
+											Computed:    true,
+											Description: `Endpoint used to acquire authentication tokens from Azure`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed: true,
+										},
+										"password": schema.StringAttribute{
+											Computed:    true,
+											Description: `Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed: true,
+										},
+										"scope": schema.StringAttribute{
+											Computed:    true,
+											Description: `Scope to pass in the OAuth request parameter`,
+										},
+										"tenant_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Directory ID (tenant identifier) in Azure Active Directory`,
+										},
+										"text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"username": schema.StringAttribute{
+											Computed:    true,
+											Description: `The username for authentication. For Event Hubs, this should always be $ConnectionString.`,
 										},
 									},
 									Description: `Authentication parameters to use when connecting to brokers. Using TLS is highly recommended.`,
@@ -3507,7 +3986,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -3519,11 +4002,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -3538,6 +4024,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"schedule_type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select a schedule type; either an interval (in seconds) or a cron-style schedule.`,
+								},
+								"script": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional script content to pipe into the command's stdin. The stdin stream is closed after the script is written.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -3606,6 +4096,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `The full path of discovered files are matched against this wildcard list`,
 								},
+								"filter_archived_files": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Apply filename allowlist to file entries in archive file types, like tar or zip.`,
+								},
 								"force_text": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Forces files containing binary data to be streamed as text`,
@@ -3632,7 +4126,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"max_age_dur": schema.StringAttribute{
 									Computed:    true,
-									Description: `The maximum age of files to monitor. Format examples: 60s, 4h, 3d, 1w. Age is relative to file modification time. Leave empty to apply no age filters.`,
+									Description: `The maximum age of event timestamps to collect. Format examples: 60s, 4h, 3d, 1w. Can be used in conjuction with "Check file modification times". Leave empty to apply no age filters.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed: true,
@@ -3648,6 +4142,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 									},
 									Description: `Fields to add to events from this input`,
+								},
+								"min_age_dur": schema.StringAttribute{
+									Computed:    true,
+									Description: `The minimum age of files to monitor. Format examples: 30s, 15m, 1h. Age is relative to file modification time. Leave empty to apply no age filters.`,
 								},
 								"mode": schema.StringAttribute{
 									Computed:    true,
@@ -3674,7 +4172,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -3686,17 +4188,24 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
 								"pq_enabled": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"salt_hash": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Salt the file hash with the Source file path. Ensures that all files with the same header hash, such as CSV files, are ingested. Moving or renaming the file, or toggling this after starting the Source will cause re-ingestion.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -3835,7 +4344,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -3847,11 +4360,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -3876,6 +4392,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -3892,9 +4416,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -3913,10 +4436,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -3995,6 +4517,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									},
 									Description: `Fields to add to events from this input`,
 								},
+								"monitor_subscription": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use when the subscription is not created by this Source and topic is not known`,
+								},
 								"ordered_delivery": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Receive events in the order they were added to the queue. The process sending events must have ordering enabled.`,
@@ -4016,7 +4542,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -4028,11 +4558,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -4067,11 +4600,23 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"subscription_name": schema.StringAttribute{
 									Computed:    true,
-									Description: `ID of the subscription to use when receiving events`,
+									Description: `ID of the subscription to use when receiving events. When Monitor subscription is enabled, the fully qualified subscription name must be entered. Example: projects/myProject/subscriptions/mySubscription`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
+								},
+								"template_subscription_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'subscriptionName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'subscriptionName' at runtime.`,
+								},
+								"template_topic_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.`,
 								},
 								"topic_name": schema.StringAttribute{
 									Computed:    true,
-									Description: `ID of the topic to receive events from`,
+									Description: `ID of the topic to receive events from. When Monitor subscription is enabled, any value may be entered.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -4143,14 +4688,15 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"loki_api": schema.StringAttribute{
 									Computed:    true,
-									Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' (Prometheus) must be configured.`,
+									Description: `Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.`,
 								},
 								"loki_auth": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"auth_header_expr": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+											Description: `Parsed as JSON.`,
 										},
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4161,51 +4707,56 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `Select or create a secret that references your credentials`,
 										},
 										"login_url": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `URL for OAuth`,
+											Description: `Parsed as JSON.`,
 										},
 										"oauth_headers": schema.ListNestedAttribute{
 											Computed: true,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth header name`,
+														Description: `Parsed as JSON.`,
 													},
 													"value": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth header value`,
+														Description: `Parsed as JSON.`,
 													},
 												},
 											},
-											Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 										},
 										"oauth_params": schema.ListNestedAttribute{
 											Computed: true,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth parameter name`,
+														Description: `Parsed as JSON.`,
 													},
 													"value": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth parameter value`,
+														Description: `Parsed as JSON.`,
 													},
 												},
 											},
-											Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 										},
 										"password": schema.StringAttribute{
 											Computed: true,
 										},
 										"secret": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Secret parameter value to pass in request body`,
+											Description: `Parsed as JSON.`,
 										},
 										"secret_param_name": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Secret parameter name to pass in request body`,
+											Description: `Parsed as JSON.`,
 										},
 										"text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -4216,12 +4767,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"token_attribute_name": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+											Description: `Parsed as JSON.`,
 										},
-										"token_timeout_secs": schema.Float64Attribute{
+										"token_timeout_secs": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `How often the OAuth token should be refreshed.`,
+											Description: `Parsed as JSON.`,
 										},
 										"username": schema.StringAttribute{
 											Computed: true,
@@ -4272,7 +4825,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -4284,11 +4841,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -4298,14 +4858,15 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"prometheus_api": schema.StringAttribute{
 									Computed:    true,
-									Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' (Loki) must be configured.`,
+									Description: `Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.`,
 								},
 								"prometheus_auth": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"auth_header_expr": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+											Description: `Parsed as JSON.`,
 										},
 										"auth_type": schema.StringAttribute{
 											Computed:    true,
@@ -4316,51 +4877,56 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `Select or create a secret that references your credentials`,
 										},
 										"login_url": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `URL for OAuth`,
+											Description: `Parsed as JSON.`,
 										},
 										"oauth_headers": schema.ListNestedAttribute{
 											Computed: true,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth header name`,
+														Description: `Parsed as JSON.`,
 													},
 													"value": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth header value`,
+														Description: `Parsed as JSON.`,
 													},
 												},
 											},
-											Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 										},
 										"oauth_params": schema.ListNestedAttribute{
 											Computed: true,
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth parameter name`,
+														Description: `Parsed as JSON.`,
 													},
 													"value": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `OAuth parameter value`,
+														Description: `Parsed as JSON.`,
 													},
 												},
 											},
-											Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 										},
 										"password": schema.StringAttribute{
 											Computed: true,
 										},
 										"secret": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Secret parameter value to pass in request body`,
+											Description: `Parsed as JSON.`,
 										},
 										"secret_param_name": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Secret parameter name to pass in request body`,
+											Description: `Parsed as JSON.`,
 										},
 										"text_secret": schema.StringAttribute{
 											Computed:    true,
@@ -4371,12 +4937,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `Bearer token to include in the authorization header`,
 										},
 										"token_attribute_name": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+											Description: `Parsed as JSON.`,
 										},
-										"token_timeout_secs": schema.Float64Attribute{
+										"token_timeout_secs": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `How often the OAuth token should be refreshed.`,
+											Description: `Parsed as JSON.`,
 										},
 										"username": schema.StringAttribute{
 											Computed: true,
@@ -4400,6 +4968,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -4416,9 +4992,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -4437,10 +5012,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -4603,7 +5177,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -4615,11 +5193,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -4651,6 +5232,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
+								"template_splunk_hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -4667,9 +5260,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -4688,10 +5280,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -4861,7 +5452,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -4873,11 +5468,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -4906,6 +5504,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -4922,9 +5528,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -4943,10 +5548,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -5043,7 +5647,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -5055,11 +5663,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -5160,8 +5771,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"heartbeat_interval": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
-										`    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
+										`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -5303,7 +5914,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -5315,11 +5930,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -5334,8 +5952,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"rebalance_timeout": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
-										`    If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
+										`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
 								},
 								"request_timeout": schema.Float64Attribute{
 									Computed:    true,
@@ -5344,10 +5962,83 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"sasl": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
+										"auth_type": schema.StringAttribute{
+											Computed:    true,
+											Description: `Enter credentials directly, or select a stored secret`,
+										},
+										"broker_service_class": schema.StringAttribute{
+											Computed:    true,
+											Description: `Kerberos service class for Kafka brokers, such as ` + "`" + `kafka` + "`" + ``,
+										},
+										"client_id": schema.StringAttribute{
+											Computed:    true,
+											Description: `Client ID to use for OAuth authentication`,
+										},
+										"client_text_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a stored text secret`,
+										},
+										"credentials_secret": schema.StringAttribute{
+											Computed:    true,
+											Description: `Select or create a secret that references your credentials`,
+										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
 										},
+										"keytab_location": schema.StringAttribute{
+											Computed:    true,
+											Description: `Location of keytab file for authentication principal`,
+										},
 										"mechanism": schema.StringAttribute{
+											Computed: true,
+										},
+										"oauth_enabled": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Enable OAuth authentication`,
+										},
+										"oauth_params": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											Description: `Additional fields to send to the token endpoint, such as scope or audience`,
+										},
+										"oauth_secret_type": schema.StringAttribute{
+											Computed: true,
+										},
+										"password": schema.StringAttribute{
+											Computed: true,
+										},
+										"principal": schema.StringAttribute{
+											Computed:    true,
+											Description: `Authentication principal, such as ` + "`" + `kafka_user@example.com` + "`" + ``,
+										},
+										"sasl_extensions": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											Description: `Additional SASL extension fields, such as Confluent's logicalCluster or identityPoolId`,
+										},
+										"token_url": schema.StringAttribute{
+											Computed:    true,
+											Description: `URL of the token endpoint to use for OAuth authentication`,
+										},
+										"username": schema.StringAttribute{
 											Computed: true,
 										},
 									},
@@ -5360,10 +6051,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"session_timeout": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-										`    If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
-										`    the broker will remove the client from the group and initiate a rebalance.` + "\n" +
-										`    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
+										`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+										`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
+										`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
 								},
 								"streamtags": schema.ListAttribute{
 									Computed:    true,
@@ -5540,7 +6231,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -5552,11 +6247,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -5604,6 +6302,30 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
+								},
+								"template_stream_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -5677,7 +6399,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -5689,11 +6415,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -5832,7 +6561,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -5844,11 +6577,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -5989,7 +6725,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -6001,11 +6741,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -6051,8 +6794,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+									Description: `Parsed as JSON.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -6119,8 +6863,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `URL for OAuth`,
+									Description: `Parsed as JSON.`,
 								},
 								"loki_api": schema.StringAttribute{
 									Computed:    true,
@@ -6154,32 +6899,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -6205,7 +6952,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -6217,11 +6968,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -6234,12 +6988,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter value to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"secret_param_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter name to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -6253,6 +7009,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -6274,9 +7038,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -6295,10 +7058,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -6311,12 +7073,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+									Description: `Parsed as JSON.`,
 								},
-								"token_timeout_secs": schema.Float64Attribute{
+								"token_timeout_secs": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `How often the OAuth token should be refreshed.`,
+									Description: `Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -6405,7 +7169,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -6417,11 +7185,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -6442,6 +7213,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_tcp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
+								},
+								"template_udp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -6458,9 +7241,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -6479,10 +7261,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -6500,6 +7281,285 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+								},
+							},
+						},
+						"input_microsoft_graph": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"auth_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select authentication method.`,
+								},
+								"cert_options": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS.`,
+										},
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate.`,
+										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt the private key.`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS.`,
+										},
+									},
+								},
+								"client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `client_id to pass in the OAuth request parameter.`,
+								},
+								"client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `client_secret to pass in the OAuth request parameter.`,
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"output": schema.StringAttribute{
+												Computed: true,
+											},
+											"pipeline": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+								},
+								"credentials_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your credentials.`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"disable_time_filter": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Disables time filtering of events when a date range is specified.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"end_date": schema.StringAttribute{
+									Computed:    true,
+									Description: `Backward offset for the search range's tail. (E.g.: -2h@h) Microsoft Graph data is delayed; this parameter (with Date range start) compensates for delay and gaps.`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
+								},
+								"interval": schema.Int64Attribute{
+									Computed:    true,
+									Description: `How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.`,
+								},
+								"job_timeout": schema.StringAttribute{
+									Computed:    true,
+									Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+								},
+								"log_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Log Level (verbosity) for collection runtime behavior.`,
+								},
+								"max_missed_keep_alives": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+								},
+								"max_task_reschedule": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of times a task can be rescheduled`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events from this input`,
+								},
+								"password": schema.StringAttribute{
+									Computed:    true,
+									Description: `Password to run Microsoft Graph API call.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"plan_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Office 365 subscription plan for your organization, typically Office 365 Enterprise`,
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"reschedule_dropped_tasks": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Reschedule tasks that failed with non-fatal errors`,
+								},
+								"resource": schema.StringAttribute{
+									Computed:    true,
+									Description: `Resource to pass in the OAuth request parameter.`,
+								},
+								"retry_rules": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"codes": schema.ListAttribute{
+											Computed:    true,
+											ElementType: types.Float64Type,
+											Description: `List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.`,
+										},
+										"enable_header": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+										},
+										"interval": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+										},
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of times to retry a failed HTTP request`,
+										},
+										"multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+										},
+										"retry_connect_reset": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
+										},
+										"retry_connect_timeout": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+										},
+										"type": schema.StringAttribute{
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
+										},
+									},
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"start_date": schema.StringAttribute{
+									Computed:    true,
+									Description: `Backward offset for the search range's head. (E.g.: -3h@h) Microsoft Graph data is delayed; this parameter (with Date range end) compensates for delay and gaps.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
+								},
+								"template_resource": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.`,
+								},
+								"template_tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
+								},
+								"template_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
+								},
+								"tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Directory ID (tenant identifier) in Azure Active Directory.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a secret that references your client_secret to pass in the OAuth request parameter.`,
+								},
+								"timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.`,
+								},
+								"ttl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Microsoft Graph API endpoint URL. (ex. https://graph.microsoft.com/v1.0/admin/exchange/tracing/messageTraces)`,
+								},
+								"username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Username to run Microsoft Graph API call.`,
 								},
 							},
 						},
@@ -6578,7 +7638,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -6590,11 +7654,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -6615,6 +7682,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -6631,9 +7706,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -6644,14 +7718,17 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										"min_version": schema.StringAttribute{
 											Computed: true,
 										},
+										"passphrase": schema.StringAttribute{
+											Computed:    true,
+											Description: `Passphrase to use to decrypt private key`,
+										},
 										"priv_key_path": schema.StringAttribute{
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -6761,8 +7838,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"heartbeat_interval": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.` + "\n" +
-										`    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
+										`      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
@@ -6904,7 +7981,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -6916,11 +7997,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -6935,8 +8019,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"rebalance_timeout": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Maximum allowed time for each worker to join the group after a rebalance begins.` + "\n" +
-										`    If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
+										`      If the timeout is exceeded, the coordinator broker will remove the worker from the group.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -6961,10 +8045,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"session_timeout": schema.Float64Attribute{
 									Computed: true,
 									MarkdownDescription: `Timeout used to detect client failures when using Kafka's group-management facilities.` + "\n" +
-										`    If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
-										`    the broker will remove the client from the group and initiate a rebalance.` + "\n" +
-										`    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
-										`    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
+										`      If the client sends no heartbeats to the broker before the timeout expires, ` + "\n" +
+										`      the broker will remove the client from the group and initiate a rebalance.` + "\n" +
+										`      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.` + "\n" +
+										`      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.`,
 								},
 								"signature_version": schema.StringAttribute{
 									Computed:    true,
@@ -6974,6 +8058,26 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -7009,9 +8113,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"reject_unauthorized": schema.BoolAttribute{
 											Computed: true,
-											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another` + "\n" +
-												`` + "\n" +
-												`` + "\n" +
+											MarkdownDescription: `Reject certificates that are not authorized by a CA in the CA certificate path, or by another ` + "\n" +
 												`                    trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.`,
 										},
 										"servername": schema.StringAttribute{
@@ -7117,7 +8219,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -7129,11 +8235,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -7153,6 +8262,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"template_cache_minutes": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -7216,11 +8333,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Computed: true,
 											},
 											"interval": schema.Float64Attribute{
-												Computed:    true,
-												Description: `Interval, in minutes, between polls`,
+												Computed: true,
 											},
 											"log_level": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Collector runtime Log Level`,
 											},
 										},
 									},
@@ -7296,7 +8413,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -7308,11 +8429,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -7370,6 +8494,22 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_app_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.`,
+								},
+								"template_client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.`,
+								},
+								"template_publisher_identifier": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.`,
+								},
+								"template_tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -7472,13 +8612,13 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 								},
-								"interval": schema.Float64Attribute{
+								"interval": schema.Int64Attribute{
 									Computed:    true,
 									Description: `How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.`,
 								},
 								"job_timeout": schema.StringAttribute{
 									Computed:    true,
-									Description: `Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.`,
+									Description: `Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
 									Computed:    true,
@@ -7536,7 +8676,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -7548,11 +8692,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -7618,6 +8765,22 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
+								},
+								"template_resource": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.`,
+								},
+								"template_tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
+								},
+								"template_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -7769,7 +8932,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -7781,11 +8948,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -7840,6 +9010,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_app_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.`,
+								},
+								"template_client_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.`,
+								},
+								"template_tenant_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
+								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Office 365 Azure Tenant ID`,
@@ -7870,8 +9052,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Parsed as JSON.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+									Description: `Parsed as JSON.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -7908,7 +9091,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
+									Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.StringAttribute{
 									CustomType:  jsontypes.NormalizedType{},
@@ -7952,8 +9135,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).`,
 								},
 								"login_url": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `URL for OAuth`,
+									Description: `Parsed as JSON.`,
 								},
 								"max_active_cxn": schema.Float64Attribute{
 									Computed:    true,
@@ -7987,32 +9171,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"otlp_version": schema.StringAttribute{
 									Computed:    true,
@@ -8042,7 +9228,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -8054,11 +9244,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -8075,12 +9268,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter value to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"secret_param_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter name to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -8094,6 +9289,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -8115,9 +9318,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -8136,10 +9338,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -8152,17 +9353,317 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+									Description: `Parsed as JSON.`,
 								},
-								"token_timeout_secs": schema.Float64Attribute{
+								"token_timeout_secs": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `How often the OAuth token should be refreshed.`,
+									Description: `Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
 								"username": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						"input_openai": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"api_key": schema.StringAttribute{
+									Computed: true,
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"output": schema.StringAttribute{
+												Computed: true,
+											},
+											"pipeline": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+								},
+								"content_config": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"collect_path": schema.StringAttribute{
+												Computed:    true,
+												Description: `OpenAI Organization API path`,
+											},
+											"content_description": schema.StringAttribute{
+												Computed: true,
+											},
+											"content_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"cron_schedule": schema.StringAttribute{
+												Computed:    true,
+												Description: `A cron schedule on which to run this job`,
+											},
+											"disabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"docs_url": schema.StringAttribute{
+												Computed: true,
+											},
+											"earliest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Relative to the current time`,
+											},
+											"endpoint_metadata": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed:    true,
+															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+														},
+													},
+												},
+												Description: `Fields automatically added to events from this Content Type`,
+											},
+											"job_timeout": schema.StringAttribute{
+												Computed:    true,
+												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
+											},
+											"latest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Relative to the current time`,
+											},
+											"log_level": schema.StringAttribute{
+												Computed:    true,
+												Description: `Collector runtime log level.`,
+											},
+											"manage_state": schema.SingleNestedAttribute{
+												Computed: true,
+											},
+											"max_pages": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Maximum number of pages to retrieve per collection task. Set to 0 only when unlimited pagination is required.`,
+											},
+											"pagination_attribute": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"pagination_cur_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Description: `Optional relation that represents the current page`,
+											},
+											"pagination_last_page_expr": schema.StringAttribute{
+												Computed: true,
+											},
+											"pagination_next_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Description: `Used only for RFC 5988 link-header pagination`,
+											},
+											"pagination_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"request_params": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Query-string parameters to send with this endpoint`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines which state to keep when merging task state`,
+											},
+											"state_tracking": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Track collection progress between consecutive scheduled executions.`,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines how to update the state from an event`,
+											},
+										},
+									},
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"ignore_group_jobs_limit": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
+								},
+								"keep_alive_time": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
+								},
+								"max_missed_keep_alives": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events from this input`,
+								},
+								"openai_organization": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional ` + "`" + `OpenAI-Organization` + "`" + ` request header value, typically ` + "`" + `org-xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
+								},
+								"openai_project": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optional ` + "`" + `OpenAI-Project` + "`" + ` request header value, typically ` + "`" + `proj_xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"pq": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"commit_frequency": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
+										},
+										"compress": schema.StringAttribute{
+											Computed:    true,
+											Description: `Codec to use to compress the persisted data`,
+										},
+										"max_buffer_size": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
+										},
+									},
+								},
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"request_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
+								},
+								"retry_rules": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"codes": schema.ListAttribute{
+											Computed:    true,
+											ElementType: types.Float64Type,
+											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
+										},
+										"enable_header": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
+										},
+										"interval": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
+										},
+										"limit": schema.Float64Attribute{
+											Computed:    true,
+											Description: `The maximum number of times to retry a failed HTTP request`,
+										},
+										"multiplier": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
+										},
+										"retry_connect_reset": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
+										},
+										"retry_connect_timeout": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
+										},
+										"type": schema.StringAttribute{
+											Computed:    true,
+											Description: `The algorithm to use when performing HTTP retries`,
+										},
+									},
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_openai_organization": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.`,
+								},
+								"template_openai_project": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.`,
+								},
+								"ttl": schema.StringAttribute{
+									Computed:    true,
+									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
+								},
+								"type": schema.StringAttribute{
 									Computed: true,
 								},
 							},
@@ -8182,9 +9683,16 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Enter credentials directly, or select a stored secret`,
 								},
+								"aws_api_key": schema.StringAttribute{
+									Computed: true,
+								},
 								"aws_authentication_method": schema.StringAttribute{
 									Computed:    true,
 									Description: `AWS authentication method. Choose Auto to use IAM roles.`,
+								},
+								"aws_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored secret that references your access key and secret key`,
 								},
 								"aws_secret_key": schema.StringAttribute{
 									Computed: true,
@@ -8248,7 +9756,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"interval": schema.Float64Attribute{
 									Computed:    true,
-									Description: `How often in minutes to scrape targets for metrics, 60 must be evenly divisible by the value or save will fail.`,
+									Description: `How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.`,
 								},
 								"job_timeout": schema.StringAttribute{
 									Computed:    true,
@@ -8260,7 +9768,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"log_level": schema.StringAttribute{
 									Computed:    true,
-									Description: `Collector runtime Log Level`,
+									Description: `Collector runtime log level`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
 									Computed:    true,
@@ -8307,7 +9815,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -8319,11 +9831,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -8333,7 +9848,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"record_type": schema.StringAttribute{
 									Computed:    true,
-									Description: `DNS Record type to resolve`,
+									Description: `DNS record type to resolve`,
 								},
 								"region": schema.StringAttribute{
 									Computed:    true,
@@ -8353,7 +9868,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"scrape_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `The port number in the metrics URL for discovered targets.`,
+									Description: `The port number in the metrics URL for discovered targets`,
 								},
 								"scrape_protocol": schema.StringAttribute{
 									Computed:    true,
@@ -8365,16 +9880,16 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
 												Computed:    true,
-												Description: `Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list`,
+												Description: `See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for information. Attributes can be manually entered if not present in the list.`,
 											},
 											"values": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												Description: `Search Filter Values, if empty only "running" EC2 instances will be returned`,
+												Description: `Values to match within this row's attribute. If empty, search will return only running EC2 instances.`,
 											},
 										},
 									},
-									Description: `EC2 Instance Search Filter`,
+									Description: `Filter to apply when searching for EC2 instances`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -8394,6 +9909,46 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.`,
 								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_discovery_type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'discoveryType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'discoveryType' at runtime.`,
+								},
+								"template_log_level": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'logLevel' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logLevel' at runtime.`,
+								},
+								"template_password": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'password' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'password' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
+								},
+								"template_username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.`,
+								},
+								"timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout`,
+								},
 								"ttl": schema.StringAttribute{
 									Computed:    true,
 									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
@@ -8403,7 +9958,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"use_public_ip": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Use public IP address for discovered targets. Set to false if the private IP address should be used.`,
+									Description: `Use public IP address for discovered targets. Disable to use the private IP address.`,
 								},
 								"username": schema.StringAttribute{
 									Computed:    true,
@@ -8419,8 +9974,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+									Description: `Parsed as JSON.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -8487,8 +10043,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `URL for OAuth`,
+									Description: `Parsed as JSON.`,
 								},
 								"max_active_req": schema.Float64Attribute{
 									Computed:    true,
@@ -8518,32 +10075,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -8569,7 +10128,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -8581,11 +10144,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -8602,12 +10168,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter value to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"secret_param_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter name to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -8621,6 +10189,22 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
+								"template_prometheus_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.`,
+								},
+								"template_username": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -8642,9 +10226,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -8663,10 +10246,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -8679,12 +10261,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+									Description: `Parsed as JSON.`,
 								},
-								"token_timeout_secs": schema.Float64Attribute{
+								"token_timeout_secs": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `How often the OAuth token should be refreshed.`,
+									Description: `Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -8739,7 +10323,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"max_buffer_size": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+									Description: `Maximum number of events to buffer when downstream is blocking.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed: true,
@@ -8777,7 +10361,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -8789,11 +10377,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -8813,6 +10404,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -8922,6 +10521,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Unique ID for this input`,
 								},
+								"include_sqs_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+								},
 								"max_messages": schema.Float64Attribute{
 									Computed:    true,
 									Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
@@ -8974,7 +10577,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -8986,11 +10593,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -9067,6 +10677,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tag_after_processing": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.`,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9176,6 +10814,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Unique ID for this input`,
 								},
+								"include_sqs_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+								},
 								"max_manifest_size_kb": schema.Int64Attribute{
 									Computed:    true,
 									Description: `Maximum download size (KB) of each manifest or checksum file. Manifest files larger than this size will not be read.        Defaults to 4096.`,
@@ -9232,7 +10874,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -9244,11 +10890,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -9324,6 +10973,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9437,6 +11114,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Unique ID for this input`,
 								},
+								"include_sqs_metadata": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Attach SQS notification metadata to a __sqsMetadata field on each event`,
+								},
 								"max_messages": schema.Float64Attribute{
 									Computed:    true,
 									Description: `The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.`,
@@ -9489,7 +11170,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -9501,11 +11186,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -9581,6 +11269,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
+								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9674,7 +11390,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -9686,11 +11406,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -9717,9 +11440,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"auth_key": schema.StringAttribute{
-														CustomType:  jsontypes.NormalizedType{},
-														Computed:    true,
-														Description: `Parsed as JSON.`,
+														Computed: true,
 													},
 													"auth_protocol": schema.StringAttribute{
 														Computed: true,
@@ -9727,10 +11448,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 													"name": schema.StringAttribute{
 														Computed: true,
 													},
+													"priv_key": schema.StringAttribute{
+														Computed: true,
+													},
 													"priv_protocol": schema.StringAttribute{
-														CustomType:  jsontypes.NormalizedType{},
-														Computed:    true,
-														Description: `Parsed as JSON.`,
+														Computed: true,
 													},
 												},
 											},
@@ -9743,6 +11465,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9769,11 +11499,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											},
 											"token": schema.StringAttribute{
 												Computed:    true,
-												Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
+												Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 											},
 										},
 									},
-									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
+									Description: `Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.`,
 								},
 								"breaker_rulesets": schema.ListAttribute{
 									Computed:    true,
@@ -9876,7 +11606,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -9888,11 +11622,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -9925,6 +11662,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -9941,9 +11686,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -9962,10 +11706,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -10040,14 +11783,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Description: `Fields to add to events referencing this token`,
 											},
 											"token": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"token_secret": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `Select or create a stored text secret`,
 											},
 										},
 									},
@@ -10171,7 +11912,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -10183,11 +11928,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -10224,6 +11972,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
+								"template_splunk_hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -10240,9 +12000,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -10261,10 +12020,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -10285,8 +12043,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"auth_header_expr": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
+									Description: `Parsed as JSON.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -10346,7 +12105,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
-												Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
+												Description: `JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 											},
 										},
 									},
@@ -10361,7 +12120,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											},
 											"value": schema.StringAttribute{
 												Computed:    true,
-												Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
+												Description: `JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., ` + "`" + `${earliest}` + "`" + `). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.`,
 											},
 										},
 									},
@@ -10396,8 +12155,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Collector runtime log level (verbosity)`,
 								},
 								"login_url": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `URL for OAuth`,
+									Description: `Parsed as JSON.`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
 									Computed:    true,
@@ -10423,32 +12183,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth header value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter name`,
+												Description: `Parsed as JSON.`,
 											},
 											"value": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `OAuth parameter value`,
+												Description: `Parsed as JSON.`,
 											},
 										},
 									},
-									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"output_mode": schema.StringAttribute{
 									Computed:    true,
@@ -10474,7 +12236,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -10486,11 +12252,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -10553,12 +12322,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Search head base URL. Can be an expression. Default is https://localhost:8089.`,
 								},
 								"secret": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter value to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"secret_param_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Secret parameter name to pass in request body`,
+									Description: `Parsed as JSON.`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -10582,12 +12353,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
+									Description: `Parsed as JSON.`,
 								},
-								"token_timeout_secs": schema.Float64Attribute{
+								"token_timeout_secs": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `How often the OAuth token should be refreshed.`,
+									Description: `Parsed as JSON.`,
 								},
 								"ttl": schema.StringAttribute{
 									Computed:    true,
@@ -10722,7 +12495,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -10734,11 +12511,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -10779,6 +12559,34 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_assume_role_arn": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
+								},
+								"template_assume_role_external_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
+								},
+								"template_aws_account_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
+								},
+								"template_aws_api_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
+								},
+								"template_aws_secret_key": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
+								},
+								"template_queue_name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
+								},
+								"template_region": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
+								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -10791,465 +12599,247 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"input_syslog": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"input_syslog_syslog1": schema.SingleNestedAttribute{
+								"allow_non_standard_app_name": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"output": schema.StringAttribute{
+												Computed: true,
+											},
+											"pipeline": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"enable_proxy_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events from this input`,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"pq": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
-										"allow_non_standard_app_name": schema.BoolAttribute{
+										"commit_frequency": schema.Float64Attribute{
 											Computed:    true,
-											Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
 										},
-										"connections": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"output": schema.StringAttribute{
-														Computed: true,
-													},
-													"pipeline": schema.StringAttribute{
-														Computed: true,
-													},
-												},
-											},
-											Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-										},
-										"description": schema.StringAttribute{
-											Computed: true,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed: true,
-										},
-										"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+										"compress": schema.StringAttribute{
 											Computed:    true,
-											Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-										},
-										"enable_load_balancing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Load balance traffic across all Worker Processes`,
-										},
-										"enable_proxy_header": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-										},
-										"environment": schema.StringAttribute{
-											Computed:    true,
-											Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-										},
-										"host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Unique ID for this input`,
-										},
-										"infer_framing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-										},
-										"ip_whitelist_regex": schema.StringAttribute{
-											Computed:    true,
-											Description: `Regex matching IP addresses that are allowed to send data`,
-										},
-										"keep_fields_list": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
 										},
-										"metadata": schema.ListNestedAttribute{
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
 											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed: true,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-													},
-												},
-											},
-											Description: `Fields to add to events from this input`,
-										},
-										"octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-										},
-										"pipeline": schema.StringAttribute{
-											Computed:    true,
-											Description: `Pipeline to process data from this Source before sending it through the Routes`,
-										},
-										"pq": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"commit_frequency": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The number of events to send downstream before committing that Stream has read them`,
-												},
-												"compress": schema.StringAttribute{
-													Computed:    true,
-													Description: `Codec to use to compress the persisted data`,
-												},
-												"max_buffer_size": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The maximum number of events to hold in memory before writing the events to disk`,
-												},
-												"max_file_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"max_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"mode": schema.StringAttribute{
-													Computed:    true,
-													Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
-												},
-												"path": schema.StringAttribute{
-													Computed:    true,
-													Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-												},
-											},
-										},
-										"pq_enabled": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-										},
-										"send_to_routes": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Select whether to send data to Routes, or directly to Destinations.`,
-										},
-										"single_msg_udp_packets": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Treat UDP packet data received as full syslog message`,
-										},
-										"socket_ending_max_wait": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_idle_timeout": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_max_lifespan": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-										},
-										"streamtags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags for filtering and grouping in @{product}`,
-										},
-										"strictly_infer_octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-										},
-										"tcp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"timestamp_timezone": schema.StringAttribute{
-											Computed:    true,
-											Description: `Timezone to assign to timestamps without timezone info`,
-										},
-										"tls": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"ca_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"cert_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"certificate_name": schema.StringAttribute{
-													Computed:    true,
-													Description: `The name of the predefined certificate`,
-												},
-												"common_name_regex": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
-													Description: `Parsed as JSON.`,
-												},
-												"disabled": schema.BoolAttribute{
-													Computed: true,
-												},
-												"max_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"min_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"passphrase": schema.StringAttribute{
-													Computed:    true,
-													Description: `Passphrase to use to decrypt private key`,
-												},
-												"priv_key_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"reject_unauthorized": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
-													Description: `Parsed as JSON.`,
-												},
-												"request_cert": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-												},
-											},
-										},
-										"type": schema.StringAttribute{
-											Computed: true,
-										},
-										"udp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-										},
-										"udp_socket_rx_buf_size": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 										},
 									},
 								},
-								"input_syslog_syslog2": schema.SingleNestedAttribute{
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_tcp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
+								},
+								"template_udp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
-										"allow_non_standard_app_name": schema.BoolAttribute{
+										"ca_path": schema.StringAttribute{
 											Computed:    true,
-											Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"connections": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"output": schema.StringAttribute{
-														Computed: true,
-													},
-													"pipeline": schema.StringAttribute{
-														Computed: true,
-													},
-												},
-											},
-											Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"description": schema.StringAttribute{
-											Computed: true,
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
 										},
-										"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-										},
-										"enable_load_balancing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Load balance traffic across all Worker Processes`,
-										},
-										"enable_proxy_header": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-										},
-										"environment": schema.StringAttribute{
-											Computed:    true,
-											Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-										},
-										"host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Unique ID for this input`,
-										},
-										"infer_framing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-										},
-										"ip_whitelist_regex": schema.StringAttribute{
-											Computed:    true,
-											Description: `Regex matching IP addresses that are allowed to send data`,
-										},
-										"keep_fields_list": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
-										},
-										"max_buffer_size": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
-										},
-										"metadata": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed: true,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-													},
-												},
-											},
-											Description: `Fields to add to events from this input`,
-										},
-										"octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-										},
-										"pipeline": schema.StringAttribute{
-											Computed:    true,
-											Description: `Pipeline to process data from this Source before sending it through the Routes`,
-										},
-										"pq": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"commit_frequency": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The number of events to send downstream before committing that Stream has read them`,
-												},
-												"compress": schema.StringAttribute{
-													Computed:    true,
-													Description: `Codec to use to compress the persisted data`,
-												},
-												"max_buffer_size": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The maximum number of events to hold in memory before writing the events to disk`,
-												},
-												"max_file_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"max_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"mode": schema.StringAttribute{
-													Computed:    true,
-													Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
-												},
-												"path": schema.StringAttribute{
-													Computed:    true,
-													Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-												},
-											},
-										},
-										"pq_enabled": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-										},
-										"send_to_routes": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Select whether to send data to Routes, or directly to Destinations.`,
-										},
-										"single_msg_udp_packets": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Treat UDP packet data received as full syslog message`,
-										},
-										"socket_ending_max_wait": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_idle_timeout": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_max_lifespan": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-										},
-										"streamtags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags for filtering and grouping in @{product}`,
-										},
-										"strictly_infer_octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-										},
-										"tcp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"timestamp_timezone": schema.StringAttribute{
-											Computed:    true,
-											Description: `Timezone to assign to timestamps without timezone info`,
-										},
-										"tls": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"ca_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"cert_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"certificate_name": schema.StringAttribute{
-													Computed:    true,
-													Description: `The name of the predefined certificate`,
-												},
-												"common_name_regex": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
-													Description: `Parsed as JSON.`,
-												},
-												"disabled": schema.BoolAttribute{
-													Computed: true,
-												},
-												"max_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"min_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"passphrase": schema.StringAttribute{
-													Computed:    true,
-													Description: `Passphrase to use to decrypt private key`,
-												},
-												"priv_key_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"reject_unauthorized": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
-													Description: `Parsed as JSON.`,
-												},
-												"request_cert": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-												},
-											},
-										},
-										"type": schema.StringAttribute{
+										"max_version": schema.StringAttribute{
 											Computed: true,
 										},
-										"udp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+										"min_version": schema.StringAttribute{
+											Computed: true,
 										},
-										"udp_socket_rx_buf_size": schema.Float64Attribute{
+										"passphrase": schema.StringAttribute{
 											Computed:    true,
-											Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
 										},
 									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 								},
 							},
 						},
@@ -11365,6 +12955,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 															ElementType: types.StringType,
 															Description: `Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty.`,
 														},
+														"inodes": schema.BoolAttribute{
+															Computed:    true,
+															Description: `Generate filesystem inode metrics`,
+														},
 														"mode": schema.StringAttribute{
 															Computed:    true,
 															Description: `Select the level of detail for disk metrics`,
@@ -11412,6 +13006,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 														"per_interface": schema.BoolAttribute{
 															Computed:    true,
 															Description: `Generate separate metrics for each interface`,
+														},
+														"protocols": schema.BoolAttribute{
+															Computed:    true,
+															Description: `Generate protocol metrics for ICMP, ICMPMsg, IP, TCP, UDP and UDPLite`,
 														},
 													},
 												},
@@ -11504,7 +13102,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -11516,11 +13118,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -11622,7 +13227,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 													Computed: true,
 												},
 											},
-											Description: `Creates events for logged-in users`,
+											Description: `Creates events from list of logged-in users`,
 										},
 										"metadata": schema.SingleNestedAttribute{
 											Computed: true,
@@ -11687,6 +13292,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"description": schema.StringAttribute{
 									Computed: true,
+								},
+								"disable_native_last_log_module": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable only to collect LastLog data via legacy implementation. This option will be removed in a future release. Please contact Support before enabling. [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)`,
 								},
 								"disable_native_module": schema.BoolAttribute{
 									Computed:    true,
@@ -11767,7 +13376,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -11779,11 +13392,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -11808,6 +13424,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"input_tcp": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
+								"auth_token": schema.StringAttribute{
+									Computed:    true,
+									Description: `Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.`,
+								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate`,
@@ -11843,7 +13463,7 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
+									Description: `Enable if the connection is proxied by a device that supports proxy protocol v1 or v2`,
 								},
 								"environment": schema.StringAttribute{
 									Computed:    true,
@@ -11901,7 +13521,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -11913,11 +13537,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -11967,6 +13594,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
+								"text_secret": schema.StringAttribute{
+									Computed:    true,
+									Description: `Select or create a stored text secret`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -11983,9 +13622,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -12004,10 +13642,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12115,7 +13752,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -12127,11 +13768,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -12160,6 +13804,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
@@ -12180,9 +13832,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -12201,10 +13852,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,
@@ -12340,7 +13990,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -12352,11 +14006,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -12402,7 +14059,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Description: `Maximum time (in seconds) between endpoint checkins before considering it unavailable`,
 											},
 											"id": schema.StringAttribute{
-												Computed: true,
+												CustomType:  jsontypes.NormalizedType{},
+												Computed:    true,
+												Description: `Parsed as JSON.`,
 											},
 											"locale": schema.StringAttribute{
 												Computed:    true,
@@ -12422,6 +14081,21 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 													},
 												},
 												Description: `Fields to add to events ingested under this subscription`,
+											},
+											"queries": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"path": schema.StringAttribute{
+															Computed:    true,
+															Description: `The Path attribute from the relevant XML Select element`,
+														},
+														"query_expression": schema.StringAttribute{
+															Computed:    true,
+															Description: `The XPath query inside the relevant XML Select element`,
+														},
+													},
+												},
 											},
 											"query_selector": schema.StringAttribute{
 												Computed: true,
@@ -12446,9 +14120,21 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Computed:    true,
 												Description: `Version UUID for this subscription. If any subscription parameters are modified, this value will change.`,
 											},
+											"xml_query": schema.StringAttribute{
+												Computed:    true,
+												Description: `The XPath query to use for selecting events`,
+											},
 										},
 									},
 									Description: `Subscriptions to events on forwarding endpoints`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -12544,9 +14230,17 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"description": schema.StringAttribute{
 									Computed: true,
 								},
+								"disable_json_rendering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)`,
+								},
 								"disable_native_module": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Enable to use built-in tools (PowerShell for JSON, wevtutil for XML) to collect event logs instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-event-logs/#advanced-settings)`,
+								},
+								"disable_xml_rendering": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed: true,
@@ -12608,7 +14302,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -12620,11 +14318,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -12711,6 +14412,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												"disk": schema.SingleNestedAttribute{
 													Computed: true,
 													Attributes: map[string]schema.Attribute{
+														"detail": schema.BoolAttribute{
+															Computed:    true,
+															Description: `Generate full disk metrics`,
+														},
 														"mode": schema.StringAttribute{
 															Computed:    true,
 															Description: `Select the level of details for disk metrics`,
@@ -12758,6 +14463,10 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 														"per_interface": schema.BoolAttribute{
 															Computed:    true,
 															Description: `Generate separate metrics for each interface`,
+														},
+														"protocols": schema.BoolAttribute{
+															Computed:    true,
+															Description: `Generate protocol metrics for ICMP, ICMPMsg, IP, TCP, UDP and UDPLite`,
 														},
 													},
 												},
@@ -12850,7 +14559,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -12862,11 +14575,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -12954,12 +14670,55 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											"content_description": schema.StringAttribute{
 												Computed: true,
 											},
+											"content_query": schema.StringAttribute{
+												Computed:    true,
+												Description: `Template for POST body to send with the Collect request. Reference global variables, or functions using template params: ` + "`" + `${C.vars.myVar}` + "`" + `, or ` + "`" + `${Date.now()}` + "`" + `, ` + "`" + `${param}` + "`" + `.`,
+											},
 											"content_type": schema.StringAttribute{
 												Computed:    true,
 												Description: `The name of the Wiz query`,
 											},
+											"cron_schedule": schema.StringAttribute{
+												Computed:    true,
+												Description: `A cron schedule on which to run this job`,
+											},
+											"earliest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Earliest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)`,
+											},
 											"enabled": schema.BoolAttribute{
 												Computed: true,
+											},
+											"job_timeout": schema.StringAttribute{
+												Computed:    true,
+												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Units default to seconds if not specified. Enter 0 for unlimited time.`,
+											},
+											"latest": schema.StringAttribute{
+												Computed:    true,
+												Description: `Latest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)`,
+											},
+											"log_level": schema.StringAttribute{
+												Computed:    true,
+												Description: `Collector runtime log level`,
+											},
+											"manage_state": schema.SingleNestedAttribute{
+												Computed: true,
+											},
+											"max_pages": schema.Float64Attribute{
+												Computed:    true,
+												Description: `Maximum number of pages to retrieve per collection task. Defaults to 0. Set to 0 to retrieve all pages.`,
+											},
+											"state_merge_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates ` + "`" + `prevState` + "`" + ` and ` + "`" + `newState` + "`" + ` variables, resolving to the state to keep.`,
+											},
+											"state_tracking": schema.BoolAttribute{
+												Computed:    true,
+												Description: `Track collection progress between consecutive scheduled executions`,
+											},
+											"state_update_expression": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.`,
 											},
 										},
 									},
@@ -13026,7 +14785,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -13038,11 +14801,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -13100,6 +14866,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_auth_url": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.`,
+								},
+								"template_client_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
+								},
+								"template_endpoint": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -13271,7 +15049,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -13318,6 +15100,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -13427,14 +15217,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 												Description: `Fields to add to events referencing this token`,
 											},
 											"token": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `Shared secret to be provided by any client (Authorization: <token>)`,
 											},
 											"token_secret": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `Select or create a stored text secret`,
 											},
 										},
 									},
@@ -13553,7 +15341,11 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `The maximum number of events to hold in memory before writing the events to disk`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
+										},
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
 											Computed:    true,
@@ -13565,11 +15357,14 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 										"mode": schema.StringAttribute{
 											Computed:    true,
-											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
 											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
+											Computed: true,
 										},
 									},
 								},
@@ -13594,6 +15389,18 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
+								"template_hec_api": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
+								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -13610,9 +15417,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Description: `The name of the predefined certificate`,
 										},
 										"common_name_regex": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
@@ -13631,10 +15437,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											Computed:    true,
 											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"reject_unauthorized": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
+										"reject_unauthorized": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Parsed as JSON.`,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
 										},
 										"request_cert": schema.BoolAttribute{
 											Computed:    true,

@@ -31,171 +31,10 @@ func (e *InputDatagenType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputDatagenConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputDatagenConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputDatagenConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputDatagenConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputDatagenConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputDatagenMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputDatagenMode string
-
-const (
-	InputDatagenModeSmart  InputDatagenMode = "smart"
-	InputDatagenModeAlways InputDatagenMode = "always"
-)
-
-func (e InputDatagenMode) ToPointer() *InputDatagenMode {
-	return &e
-}
-func (e *InputDatagenMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputDatagenMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputDatagenMode: %v", v)
-	}
-}
-
-// InputDatagenCompression - Codec to use to compress the persisted data
-type InputDatagenCompression string
-
-const (
-	InputDatagenCompressionNone InputDatagenCompression = "none"
-	InputDatagenCompressionGzip InputDatagenCompression = "gzip"
-)
-
-func (e InputDatagenCompression) ToPointer() *InputDatagenCompression {
-	return &e
-}
-func (e *InputDatagenCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputDatagenCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputDatagenCompression: %v", v)
-	}
-}
-
-type InputDatagenPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputDatagenMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputDatagenCompression `default:"none" json:"compress"`
-}
-
-func (i InputDatagenPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputDatagenPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputDatagenPq) GetMode() *InputDatagenMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputDatagenPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputDatagenPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputDatagenPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputDatagenPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputDatagenPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputDatagenPq) GetCompress() *InputDatagenCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
 type Sample struct {
 	Sample string `json:"sample"`
 	// Maximum number of events to generate per second per Worker Node. Defaults to 10.
-	EventsPerSec *float64 `default:"10" json:"eventsPerSec"`
+	EventsPerSec float64 `json:"eventsPerSec"`
 }
 
 func (s Sample) MarshalJSON() ([]byte, error) {
@@ -203,7 +42,7 @@ func (s Sample) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Sample) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"sample"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -216,66 +55,35 @@ func (s *Sample) GetSample() string {
 	return s.Sample
 }
 
-func (s *Sample) GetEventsPerSec() *float64 {
+func (s *Sample) GetEventsPerSec() float64 {
 	if s == nil {
-		return nil
+		return 0.0
 	}
 	return s.EventsPerSec
-}
-
-type InputDatagenMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputDatagenMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputDatagenMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputDatagenMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputDatagenMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
 }
 
 type InputDatagen struct {
 	// Unique ID for this input
 	ID       *string          `json:"id,omitempty"`
 	Type     InputDatagenType `json:"type"`
-	Disabled *bool            `default:"false" json:"disabled"`
+	Disabled *bool            `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputDatagenConnection `json:"connections,omitempty"`
-	Pq          *InputDatagenPq          `json:"pq,omitempty"`
-	Samples     []Sample                 `json:"samples"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
+	Samples     []Sample                       `json:"samples"`
 	// Fields to add to events from this input
-	Metadata    []InputDatagenMetadatum `json:"metadata,omitempty"`
-	Description *string                 `json:"description,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
 }
 
 func (i InputDatagen) MarshalJSON() ([]byte, error) {
@@ -283,7 +91,7 @@ func (i InputDatagen) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputDatagen) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type", "samples"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -345,14 +153,14 @@ func (i *InputDatagen) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputDatagen) GetConnections() []InputDatagenConnection {
+func (i *InputDatagen) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputDatagen) GetPq() *InputDatagenPq {
+func (i *InputDatagen) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
@@ -366,7 +174,7 @@ func (i *InputDatagen) GetSamples() []Sample {
 	return i.Samples
 }
 
-func (i *InputDatagen) GetMetadata() []InputDatagenMetadatum {
+func (i *InputDatagen) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}

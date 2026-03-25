@@ -39,7 +39,7 @@ func (e *CriblLakeDatasetFormat) UnmarshalJSON(data []byte) error {
 
 type CriblLakeDataset struct {
 	AcceleratedFields     []string                 `json:"acceleratedFields,omitempty"`
-	BucketName            *string                  `default:"lake-\\${workspaceName}-\\${organizationId}" json:"bucketName"`
+	BucketName            *string                  `default:"lake-${workspaceName}-${organizationId}" json:"bucketName"`
 	Description           *string                  `json:"description,omitempty"`
 	Format                *CriblLakeDatasetFormat  `json:"format,omitempty"`
 	ID                    string                   `json:"id"`
@@ -52,7 +52,7 @@ func (c CriblLakeDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CriblLakeDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -284,7 +284,7 @@ For detailed security information, see [SBOM.md](SBOM.md).
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
-### Resources
+### Managed Resources
 
 * [criblio_appscope_config](docs/resources/appscope_config.md)
 * [criblio_certificate](docs/resources/certificate.md)
@@ -328,11 +328,11 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_search_dataset_provider](docs/resources/search_dataset_provider.md)
 * [criblio_search_macro](docs/resources/search_macro.md)
 * [criblio_search_saved_query](docs/resources/search_saved_query.md)
-* [criblio_search_usage_group](docs/resources/search_usage_group.md)
 * [criblio_secret](docs/resources/secret.md)
 * [criblio_source](docs/resources/source.md)
 * [criblio_subscription](docs/resources/subscription.md)
 * [criblio_workspace](docs/resources/workspace.md)
+
 ### Data Sources
 
 * [criblio_appscope_config](docs/data-sources/appscope_config.md)
@@ -382,7 +382,6 @@ For detailed security information, see [SBOM.md](SBOM.md).
 * [criblio_search_dataset_provider](docs/data-sources/search_dataset_provider.md)
 * [criblio_search_macro](docs/data-sources/search_macro.md)
 * [criblio_search_saved_query](docs/data-sources/search_saved_query.md)
-* [criblio_search_usage_group](docs/data-sources/search_usage_group.md)
 * [criblio_secret](docs/data-sources/secret.md)
 * [criblio_source](docs/data-sources/source.md)
 * [criblio_sources](docs/data-sources/sources.md)

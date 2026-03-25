@@ -7,12 +7,12 @@ resource "criblio_search_dataset" "my_searchdataset" {
       {
         auto_detect_region = true
         bucket             = "...my_bucket..."
-        filter             = "...my_filter..."
+        filter             = "true"
         path               = "...my_path..."
         region             = "...my_region..."
       }
     ]
-    filter = "...my_filter..."
+    filter = "true"
     id     = "myGenericDatasetId"
     metadata = {
       created             = "2025-10-06T12:00:00Z"

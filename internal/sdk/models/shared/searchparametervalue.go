@@ -17,9 +17,9 @@ const (
 )
 
 type SearchParameterValue struct {
-	Str     *string  `queryParam:"inline,name=SearchParameterValue"`
-	Number  *float64 `queryParam:"inline,name=SearchParameterValue"`
-	Boolean *bool    `queryParam:"inline,name=SearchParameterValue"`
+	Str     *string  `queryParam:"inline" union:"member"`
+	Number  *float64 `queryParam:"inline" union:"member"`
+	Boolean *bool    `queryParam:"inline" union:"member"`
 
 	Type SearchParameterValueType
 }
@@ -85,7 +85,7 @@ func (u *SearchParameterValue) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchParameterValue", string(data))
 	}

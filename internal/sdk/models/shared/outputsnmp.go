@@ -35,7 +35,11 @@ type OutputSnmpHost struct {
 	// Destination host
 	Host string `json:"host"`
 	// Destination port, default is 162
-	Port *float64 `default:"162" json:"port"`
+	Port float64 `json:"port"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (o OutputSnmpHost) MarshalJSON() ([]byte, error) {
@@ -43,7 +47,7 @@ func (o OutputSnmpHost) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSnmpHost) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -56,11 +60,25 @@ func (o *OutputSnmpHost) GetHost() string {
 	return o.Host
 }
 
-func (o *OutputSnmpHost) GetPort() *float64 {
+func (o *OutputSnmpHost) GetPort() float64 {
+	if o == nil {
+		return 0.0
+	}
+	return o.Port
+}
+
+func (o *OutputSnmpHost) GetTemplateHost() *string {
 	if o == nil {
 		return nil
 	}
-	return o.Port
+	return o.TemplateHost
+}
+
+func (o *OutputSnmpHost) GetTemplatePort() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplatePort
 }
 
 type OutputSnmp struct {
@@ -78,7 +96,7 @@ type OutputSnmp struct {
 	// One or more SNMP destinations to forward traps to
 	Hosts []OutputSnmpHost `json:"hosts"`
 	// How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.
-	DNSResolvePeriodSec *float64 `default:"0" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	Description         *string  `json:"description,omitempty"`
 }
 
@@ -87,7 +105,7 @@ func (o OutputSnmp) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSnmp) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "hosts"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil

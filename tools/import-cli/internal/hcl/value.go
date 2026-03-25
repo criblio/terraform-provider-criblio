@@ -472,6 +472,15 @@ func sanitizeVarName(resourceName, path string) string {
 	return s
 }
 
+// pathRefersToTokenAttribute is true when path denotes the credential field `token`, not
+// unrelated names that merely contain "token" (e.g. token_timeout_secs).
+func pathRefersToTokenAttribute(path string) bool {
+	if path == "token" {
+		return true
+	}
+	return strings.HasSuffix(path, ".token") || strings.Contains(path, ".token.")
+}
+
 // ReplaceSecretValuesWithVariableRefs recursively replaces secret-looking string values with
 // KindSensitive and Sensitive set to a variable name (var.<name> will be emitted in HCL).
 // resourceName is used to build unique variable names. Returns the list of variable names used.
@@ -484,9 +493,9 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 	replaceInValue = func(v *Value, path string) {
 		switch v.Kind {
 		case KindString:
-			// Replace secret refs (#42:...) and any token attribute value (emit as jsonencode(var.xxx)).
+			// Replace secret refs (#42:...) and any `token` attribute value (emit as jsonencode(var.xxx)).
 			shouldReplace := IsSecretValue(v.String) ||
-				(strings.Contains(path, ".token") && v.String != "")
+				(pathRefersToTokenAttribute(path) && v.String != "")
 			if shouldReplace {
 				name := sanitizeVarName(resourceName, path)
 				v.Kind = KindSensitive

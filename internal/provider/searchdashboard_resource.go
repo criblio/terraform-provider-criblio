@@ -7,7 +7,6 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
 	speakeasy_float64validators "github.com/criblio/terraform-provider-criblio/internal/validators/float64validators"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
@@ -15,7 +14,7 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -258,6 +257,17 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
+												"array_of_str": schema.ListAttribute{
+													Optional:    true,
+													ElementType: types.StringType,
+													Validators: []validator.List{
+														listvalidator.ConflictsWith(path.Expressions{
+															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("default_value"),
+														}...),
+													},
+												},
 												"default_value": schema.SingleNestedAttribute{
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
@@ -322,6 +332,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
 															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 														}...),
 													},
 												},
@@ -330,6 +341,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.Float64{
 														float64validator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},
@@ -339,11 +351,17 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.String{
 														stringvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("array_of_str"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},
 												},
 											},
+										},
+										"multiselect": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `When true, the dropdown allows multiple values; defaultValue may be a string array.`,
 										},
 									},
 								},
@@ -639,13 +657,48 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						"dashboard_element_visualization": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.MapAttribute{
-									Computed:    true,
-									Optional:    true,
-									ElementType: jsontypes.NormalizedType{},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"additional_properties": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
+											Computed:    true,
+											Optional:    true,
+											Description: `Parsed as JSON.`,
+										},
+										"columns": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Column configuration (e.g. auto)`,
+										},
+										"group_by": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Group-by field`,
+										},
+										"max_rows": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Max rows for tables`,
+										},
+										"series": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Series configuration`,
+										},
+										"x_axis": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `X-axis field for charts`,
+										},
+										"y_axis": schema.StringAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `Y-axis field for charts`,
+										},
 									},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, columns).`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed:    true,
@@ -1302,7 +1355,10 @@ func (r *SearchDashboardResource) Delete(ctx context.Context, req resource.Delet
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

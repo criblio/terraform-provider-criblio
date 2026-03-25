@@ -51,7 +51,7 @@ func (r *CriblLakeHouseDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `The ID of the lakehouse to retrieve`,
+				Description: `Unique identifier for the lakehouse`,
 			},
 			"status": schema.StringAttribute{
 				Computed:    true,

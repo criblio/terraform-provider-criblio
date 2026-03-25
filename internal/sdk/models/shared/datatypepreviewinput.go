@@ -42,7 +42,7 @@ func (d DatatypePreviewInputRawData) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DatatypePreviewInputRawData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"rawData", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -95,7 +95,7 @@ func (d DatatypePreviewInputDataset) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DatatypePreviewInputDataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"dataset", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -123,8 +123,8 @@ const (
 )
 
 type DatatypePreviewInput struct {
-	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline,name=DatatypePreviewInput"`
-	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline,name=DatatypePreviewInput"`
+	DatatypePreviewInputDataset *DatatypePreviewInputDataset `queryParam:"inline" union:"member"`
+	DatatypePreviewInputRawData *DatatypePreviewInputRawData `queryParam:"inline" union:"member"`
 
 	Type DatatypePreviewInputType
 }
@@ -173,7 +173,7 @@ func (u *DatatypePreviewInput) UnmarshalJSON(data []byte) error {
 	}
 
 	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestCandidate(candidates)
+	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for DatatypePreviewInput", string(data))
 	}

@@ -68,7 +68,7 @@ func (p ParserLibEntry) MarshalJSON() ([]byte, error) {
 }
 
 func (p *ParserLibEntry) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

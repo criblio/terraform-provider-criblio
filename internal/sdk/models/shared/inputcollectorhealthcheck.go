@@ -464,7 +464,7 @@ func (i InputCollectorHealthCheckMetadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorHealthCheckMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -777,7 +777,7 @@ func (i InputCollectorHealthCheckCollector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorHealthCheckCollector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -822,7 +822,7 @@ func (i InputCollectorHealthCheck) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorHealthCheck) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

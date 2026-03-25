@@ -99,7 +99,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -178,7 +178,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -259,7 +259,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -350,7 +350,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -436,7 +436,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -641,7 +641,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -735,7 +735,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -816,7 +816,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -911,7 +911,7 @@ resource "criblio_collector" "my_collector" {
           # ...
         }
       }
-      skippable = false
+      skippable = true
     }
     streamtags = [
       "tag1",
@@ -946,10 +946,10 @@ resource "criblio_collector" "my_collector" {
 ### Read-Only
 
 - `environment` (String)
-- `ignore_group_jobs_limit` (Boolean) Default: false
-- `resume_on_boot` (Boolean) Default: true
-- `ttl` (String) Default: "4h"
-- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
+- `ignore_group_jobs_limit` (Boolean)
+- `resume_on_boot` (Boolean)
+- `ttl` (String)
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
 
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`

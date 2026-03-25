@@ -38,6 +38,11 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 
 	if resp.OutputAzureBlob != nil {
 		r.OutputAzureBlob = &tfTypes.OutputAzureBlob{}
+		r.OutputAzureBlob.TemplateClientID = types.StringPointerValue(resp.OutputAzureBlob.TemplateClientID)
+		r.OutputAzureBlob.TemplateConnectionString = types.StringPointerValue(resp.OutputAzureBlob.TemplateConnectionString)
+		r.OutputAzureBlob.TemplateContainerName = types.StringPointerValue(resp.OutputAzureBlob.TemplateContainerName)
+		r.OutputAzureBlob.TemplateFormat = types.StringPointerValue(resp.OutputAzureBlob.TemplateFormat)
+		r.OutputAzureBlob.TemplateTenantID = types.StringPointerValue(resp.OutputAzureBlob.TemplateTenantID)
 		r.OutputAzureBlob.AddIDToStagePath = types.BoolPointerValue(resp.OutputAzureBlob.AddIDToStagePath)
 		if resp.OutputAzureBlob.AuthType != nil {
 			r.OutputAzureBlob.AuthType = types.StringValue(string(*resp.OutputAzureBlob.AuthType))
@@ -50,7 +55,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputAzureBlob.Certificate == nil {
 			r.OutputAzureBlob.Certificate = nil
 		} else {
-			r.OutputAzureBlob.Certificate = &tfTypes.OutputAzureBlobCertificate{}
+			r.OutputAzureBlob.Certificate = &tfTypes.CertificateTypeAzureBlobAuthTypeClientCert{}
 			r.OutputAzureBlob.Certificate.CertificateName = types.StringValue(resp.OutputAzureBlob.Certificate.CertificateName)
 		}
 		r.OutputAzureBlob.ClientID = types.StringPointerValue(resp.OutputAzureBlob.ClientID)
@@ -72,13 +77,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureBlob.DeadletterPath = types.StringPointerValue(resp.OutputAzureBlob.DeadletterPath)
 		r.OutputAzureBlob.Description = types.StringPointerValue(resp.OutputAzureBlob.Description)
 		r.OutputAzureBlob.DestPath = types.StringPointerValue(resp.OutputAzureBlob.DestPath)
+		r.OutputAzureBlob.DirectoryBatchSize = types.Float64PointerValue(resp.OutputAzureBlob.DirectoryBatchSize)
 		r.OutputAzureBlob.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputAzureBlob.EmptyDirCleanupSec)
 		r.OutputAzureBlob.EnablePageChecksum = types.BoolPointerValue(resp.OutputAzureBlob.EnablePageChecksum)
 		r.OutputAzureBlob.EnableStatistics = types.BoolPointerValue(resp.OutputAzureBlob.EnableStatistics)
 		r.OutputAzureBlob.EnableWritePageIndex = types.BoolPointerValue(resp.OutputAzureBlob.EnableWritePageIndex)
 		r.OutputAzureBlob.EndpointSuffix = types.StringPointerValue(resp.OutputAzureBlob.EndpointSuffix)
 		r.OutputAzureBlob.Environment = types.StringPointerValue(resp.OutputAzureBlob.Environment)
+		r.Environment = r.OutputAzureBlob.Environment
 		r.OutputAzureBlob.FileNameSuffix = types.StringPointerValue(resp.OutputAzureBlob.FileNameSuffix)
+		r.OutputAzureBlob.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputAzureBlob.ForceCloseOnShutdown)
 		if resp.OutputAzureBlob.Format != nil {
 			r.OutputAzureBlob.Format = types.StringValue(string(*resp.OutputAzureBlob.Format))
 		} else {
@@ -87,12 +95,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureBlob.HeaderLine = types.StringPointerValue(resp.OutputAzureBlob.HeaderLine)
 		r.OutputAzureBlob.ID = types.StringPointerValue(resp.OutputAzureBlob.ID)
 		r.ID = r.OutputAzureBlob.ID
-		r.OutputAzureBlob.KeyValueMetadata = []tfTypes.OutputAzureBlobKeyValueMetadatum{}
+		r.OutputAzureBlob.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem := range resp.OutputAzureBlob.KeyValueMetadata {
-			var keyValueMetadata tfTypes.OutputAzureBlobKeyValueMetadatum
+			var keyValueMetadata tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata.Key = types.StringPointerValue(keyValueMetadataItem.Key)
+			keyValueMetadata.Key = types.StringValue(keyValueMetadataItem.Key)
 			keyValueMetadata.Value = types.StringValue(keyValueMetadataItem.Value)
 
 			r.OutputAzureBlob.KeyValueMetadata = append(r.OutputAzureBlob.KeyValueMetadata, keyValueMetadata)
@@ -120,6 +128,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputAzureBlob.ParquetPageSize = types.StringPointerValue(resp.OutputAzureBlob.ParquetPageSize)
 		r.OutputAzureBlob.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputAzureBlob.ParquetRowGroupLength)
+		r.OutputAzureBlob.ParquetSchema = types.StringPointerValue(resp.OutputAzureBlob.ParquetSchema)
 		if resp.OutputAzureBlob.ParquetVersion != nil {
 			r.OutputAzureBlob.ParquetVersion = types.StringValue(string(*resp.OutputAzureBlob.ParquetVersion))
 		} else {
@@ -127,9 +136,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputAzureBlob.PartitionExpr = types.StringPointerValue(resp.OutputAzureBlob.PartitionExpr)
 		r.OutputAzureBlob.Pipeline = types.StringPointerValue(resp.OutputAzureBlob.Pipeline)
+		r.Pipeline = r.OutputAzureBlob.Pipeline
 		r.OutputAzureBlob.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputAzureBlob.RemoveEmptyDirs)
+		if resp.OutputAzureBlob.RetrySettings == nil {
+			r.OutputAzureBlob.RetrySettings = nil
+		} else {
+			r.OutputAzureBlob.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputAzureBlob.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputAzureBlob.RetrySettings.BackoffMultiplier)
+			r.OutputAzureBlob.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputAzureBlob.RetrySettings.Enabled)
+			r.OutputAzureBlob.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputAzureBlob.RetrySettings.InitialBackoffMs)
+			r.OutputAzureBlob.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputAzureBlob.RetrySettings.JitterPercent)
+			r.OutputAzureBlob.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputAzureBlob.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputAzureBlob.ShouldLogInvalidRows = types.BoolPointerValue(resp.OutputAzureBlob.ShouldLogInvalidRows)
-		r.OutputAzureBlob.StagePath = types.StringPointerValue(resp.OutputAzureBlob.StagePath)
+		r.OutputAzureBlob.StagePath = types.StringValue(resp.OutputAzureBlob.StagePath)
 		r.OutputAzureBlob.StorageAccountName = types.StringPointerValue(resp.OutputAzureBlob.StorageAccountName)
 		if resp.OutputAzureBlob.StorageClass != nil {
 			r.OutputAzureBlob.StorageClass = types.StringValue(string(*resp.OutputAzureBlob.StorageClass))
@@ -146,15 +166,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputAzureBlob.TenantID = types.StringPointerValue(resp.OutputAzureBlob.TenantID)
 		r.OutputAzureBlob.TextSecret = types.StringPointerValue(resp.OutputAzureBlob.TextSecret)
-		if resp.OutputAzureBlob.Type != nil {
-			r.OutputAzureBlob.Type = types.StringValue(string(*resp.OutputAzureBlob.Type))
-		} else {
-			r.OutputAzureBlob.Type = types.StringNull()
-		}
+		r.OutputAzureBlob.Type = types.StringValue(string(resp.OutputAzureBlob.Type))
+		r.Type = r.OutputAzureBlob.Type
 		r.OutputAzureBlob.WriteHighWaterMark = types.Float64PointerValue(resp.OutputAzureBlob.WriteHighWaterMark)
 	}
 	if resp.OutputAzureDataExplorer != nil {
 		r.OutputAzureDataExplorer = &tfTypes.OutputAzureDataExplorer{}
+		r.OutputAzureDataExplorer.TemplateClientID = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClientID)
+		r.OutputAzureDataExplorer.TemplateClientSecret = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClientSecret)
+		r.OutputAzureDataExplorer.TemplateClusterURL = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClusterURL)
+		r.OutputAzureDataExplorer.TemplateDatabase = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateDatabase)
+		r.OutputAzureDataExplorer.TemplateFormat = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateFormat)
+		r.OutputAzureDataExplorer.TemplateIngestURL = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateIngestURL)
+		r.OutputAzureDataExplorer.TemplateScope = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateScope)
+		r.OutputAzureDataExplorer.TemplateTable = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateTable)
+		r.OutputAzureDataExplorer.TemplateTenantID = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateTenantID)
 		r.OutputAzureDataExplorer.AddIDToStagePath = types.BoolPointerValue(resp.OutputAzureDataExplorer.AddIDToStagePath)
 		r.OutputAzureDataExplorer.AdditionalProperties = []tfTypes.AdditionalProperty{}
 
@@ -166,6 +192,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 
 			r.OutputAzureDataExplorer.AdditionalProperties = append(r.OutputAzureDataExplorer.AdditionalProperties, additionalProperties)
 		}
+		r.OutputAzureDataExplorer.AutomaticSchema = types.BoolPointerValue(resp.OutputAzureDataExplorer.AutomaticSchema)
 		if resp.OutputAzureDataExplorer.Certificate == nil {
 			r.OutputAzureDataExplorer.Certificate = nil
 		} else {
@@ -175,16 +202,24 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureDataExplorer.ClientID = types.StringValue(resp.OutputAzureDataExplorer.ClientID)
 		r.OutputAzureDataExplorer.ClientSecret = types.StringPointerValue(resp.OutputAzureDataExplorer.ClientSecret)
 		r.OutputAzureDataExplorer.ClusterURL = types.StringValue(resp.OutputAzureDataExplorer.ClusterURL)
-		if resp.OutputAzureDataExplorer.Compress != nil {
-			r.OutputAzureDataExplorer.Compress = types.StringValue(string(*resp.OutputAzureDataExplorer.Compress))
+		r.OutputAzureDataExplorer.Compress = types.StringValue(string(resp.OutputAzureDataExplorer.Compress))
+		if resp.OutputAzureDataExplorer.CompressionLevel != nil {
+			r.OutputAzureDataExplorer.CompressionLevel = types.StringValue(string(*resp.OutputAzureDataExplorer.CompressionLevel))
 		} else {
-			r.OutputAzureDataExplorer.Compress = types.StringNull()
+			r.OutputAzureDataExplorer.CompressionLevel = types.StringNull()
 		}
 		r.OutputAzureDataExplorer.Concurrency = types.Float64PointerValue(resp.OutputAzureDataExplorer.Concurrency)
 		r.OutputAzureDataExplorer.Database = types.StringValue(resp.OutputAzureDataExplorer.Database)
 		r.OutputAzureDataExplorer.DeadletterEnabled = types.BoolPointerValue(resp.OutputAzureDataExplorer.DeadletterEnabled)
+		r.OutputAzureDataExplorer.DeadletterPath = types.StringPointerValue(resp.OutputAzureDataExplorer.DeadletterPath)
 		r.OutputAzureDataExplorer.Description = types.StringPointerValue(resp.OutputAzureDataExplorer.Description)
+		r.OutputAzureDataExplorer.DirectoryBatchSize = types.Float64PointerValue(resp.OutputAzureDataExplorer.DirectoryBatchSize)
+		r.OutputAzureDataExplorer.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.EmptyDirCleanupSec)
+		r.OutputAzureDataExplorer.EnablePageChecksum = types.BoolPointerValue(resp.OutputAzureDataExplorer.EnablePageChecksum)
+		r.OutputAzureDataExplorer.EnableStatistics = types.BoolPointerValue(resp.OutputAzureDataExplorer.EnableStatistics)
+		r.OutputAzureDataExplorer.EnableWritePageIndex = types.BoolPointerValue(resp.OutputAzureDataExplorer.EnableWritePageIndex)
 		r.OutputAzureDataExplorer.Environment = types.StringPointerValue(resp.OutputAzureDataExplorer.Environment)
+		r.Environment = r.OutputAzureDataExplorer.Environment
 		r.OutputAzureDataExplorer.ExtentTags = []tfTypes.ExtentTag{}
 
 		for _, extentTagsItem := range resp.OutputAzureDataExplorer.ExtentTags {
@@ -226,6 +261,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureDataExplorer.IngestURL = types.StringPointerValue(resp.OutputAzureDataExplorer.IngestURL)
 		r.OutputAzureDataExplorer.IsMappingObj = types.BoolPointerValue(resp.OutputAzureDataExplorer.IsMappingObj)
 		r.OutputAzureDataExplorer.KeepAlive = types.BoolPointerValue(resp.OutputAzureDataExplorer.KeepAlive)
+		r.OutputAzureDataExplorer.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
+
+		for _, keyValueMetadataItem1 := range resp.OutputAzureDataExplorer.KeyValueMetadata {
+			var keyValueMetadata1 tfTypes.ItemsTypeKeyValueMetadata
+
+			keyValueMetadata1.Key = types.StringValue(keyValueMetadataItem1.Key)
+			keyValueMetadata1.Value = types.StringValue(keyValueMetadataItem1.Value)
+
+			r.OutputAzureDataExplorer.KeyValueMetadata = append(r.OutputAzureDataExplorer.KeyValueMetadata, keyValueMetadata1)
+		}
+		r.OutputAzureDataExplorer.MappingObj = types.StringPointerValue(resp.OutputAzureDataExplorer.MappingObj)
 		r.OutputAzureDataExplorer.MappingRef = types.StringPointerValue(resp.OutputAzureDataExplorer.MappingRef)
 		r.OutputAzureDataExplorer.MaxConcurrentFileParts = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxConcurrentFileParts)
 		r.OutputAzureDataExplorer.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxFileIdleTimeSec)
@@ -234,16 +280,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureDataExplorer.MaxOpenFiles = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxOpenFiles)
 		r.OutputAzureDataExplorer.MaxPayloadEvents = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxPayloadEvents)
 		r.OutputAzureDataExplorer.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxPayloadSizeKB)
-		if resp.OutputAzureDataExplorer.OauthEndpoint != nil {
-			r.OutputAzureDataExplorer.OauthEndpoint = types.StringValue(string(*resp.OutputAzureDataExplorer.OauthEndpoint))
-		} else {
-			r.OutputAzureDataExplorer.OauthEndpoint = types.StringNull()
-		}
-		if resp.OutputAzureDataExplorer.OauthType != nil {
-			r.OutputAzureDataExplorer.OauthType = types.StringValue(string(*resp.OutputAzureDataExplorer.OauthType))
-		} else {
-			r.OutputAzureDataExplorer.OauthType = types.StringNull()
-		}
+		r.OutputAzureDataExplorer.MaxRetryNum = types.Float64PointerValue(resp.OutputAzureDataExplorer.MaxRetryNum)
+		r.OutputAzureDataExplorer.OauthEndpoint = types.StringValue(string(resp.OutputAzureDataExplorer.OauthEndpoint))
+		r.OutputAzureDataExplorer.OauthType = types.StringValue(string(resp.OutputAzureDataExplorer.OauthType))
 		if resp.OutputAzureDataExplorer.OnBackpressure != nil {
 			r.OutputAzureDataExplorer.OnBackpressure = types.StringValue(string(*resp.OutputAzureDataExplorer.OnBackpressure))
 		} else {
@@ -254,7 +293,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputAzureDataExplorer.OnDiskFullBackpressure = types.StringNull()
 		}
+		if resp.OutputAzureDataExplorer.ParquetDataPageVersion != nil {
+			r.OutputAzureDataExplorer.ParquetDataPageVersion = types.StringValue(string(*resp.OutputAzureDataExplorer.ParquetDataPageVersion))
+		} else {
+			r.OutputAzureDataExplorer.ParquetDataPageVersion = types.StringNull()
+		}
+		r.OutputAzureDataExplorer.ParquetPageSize = types.StringPointerValue(resp.OutputAzureDataExplorer.ParquetPageSize)
+		r.OutputAzureDataExplorer.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputAzureDataExplorer.ParquetRowGroupLength)
+		r.OutputAzureDataExplorer.ParquetSchema = types.StringPointerValue(resp.OutputAzureDataExplorer.ParquetSchema)
+		if resp.OutputAzureDataExplorer.ParquetVersion != nil {
+			r.OutputAzureDataExplorer.ParquetVersion = types.StringValue(string(*resp.OutputAzureDataExplorer.ParquetVersion))
+		} else {
+			r.OutputAzureDataExplorer.ParquetVersion = types.StringNull()
+		}
 		r.OutputAzureDataExplorer.Pipeline = types.StringPointerValue(resp.OutputAzureDataExplorer.Pipeline)
+		r.Pipeline = r.OutputAzureDataExplorer.Pipeline
 		if resp.OutputAzureDataExplorer.PqCompress != nil {
 			r.OutputAzureDataExplorer.PqCompress = types.StringValue(string(*resp.OutputAzureDataExplorer.PqCompress))
 		} else {
@@ -265,6 +318,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputAzureDataExplorer.PqControls = &tfTypes.OutputAzureDataExplorerPqControls{}
 		}
+		r.OutputAzureDataExplorer.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.PqMaxBackpressureSec)
+		r.OutputAzureDataExplorer.PqMaxBufferSize = types.Float64PointerValue(resp.OutputAzureDataExplorer.PqMaxBufferSize)
+		r.OutputAzureDataExplorer.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputAzureDataExplorer.PqMaxBufferSizeBytes)
 		r.OutputAzureDataExplorer.PqMaxFileSize = types.StringPointerValue(resp.OutputAzureDataExplorer.PqMaxFileSize)
 		r.OutputAzureDataExplorer.PqMaxSize = types.StringPointerValue(resp.OutputAzureDataExplorer.PqMaxSize)
 		if resp.OutputAzureDataExplorer.PqMode != nil {
@@ -278,6 +334,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureDataExplorer.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputAzureDataExplorer.PqPath = types.StringPointerValue(resp.OutputAzureDataExplorer.PqPath)
+		r.OutputAzureDataExplorer.PqRatePerSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.PqRatePerSec)
+		r.OutputAzureDataExplorer.PqStrictOrdering = types.BoolPointerValue(resp.OutputAzureDataExplorer.PqStrictOrdering)
 		r.OutputAzureDataExplorer.RejectUnauthorized = types.BoolPointerValue(resp.OutputAzureDataExplorer.RejectUnauthorized)
 		r.OutputAzureDataExplorer.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputAzureDataExplorer.RemoveEmptyDirs)
 		if resp.OutputAzureDataExplorer.ReportLevel != nil {
@@ -291,10 +349,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureDataExplorer.ReportMethod = types.StringNull()
 		}
 		r.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputAzureDataExplorer.ResponseHonorRetryAfterHeader)
-		r.OutputAzureDataExplorer.ResponseRetrySettings = []tfTypes.OutputAzureDataExplorerResponseRetrySetting{}
+		r.OutputAzureDataExplorer.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 		for _, responseRetrySettingsItem := range resp.OutputAzureDataExplorer.ResponseRetrySettings {
-			var responseRetrySettings tfTypes.OutputAzureDataExplorerResponseRetrySetting
+			var responseRetrySettings tfTypes.ItemsTypeResponseRetrySettings
 
 			responseRetrySettings.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem.BackoffRate)
 			responseRetrySettings.HTTPStatus = types.Float64Value(responseRetrySettingsItem.HTTPStatus)
@@ -304,7 +362,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureDataExplorer.ResponseRetrySettings = append(r.OutputAzureDataExplorer.ResponseRetrySettings, responseRetrySettings)
 		}
 		r.OutputAzureDataExplorer.RetainBlobOnSuccess = types.BoolPointerValue(resp.OutputAzureDataExplorer.RetainBlobOnSuccess)
+		if resp.OutputAzureDataExplorer.RetrySettings == nil {
+			r.OutputAzureDataExplorer.RetrySettings = nil
+		} else {
+			r.OutputAzureDataExplorer.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputAzureDataExplorer.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputAzureDataExplorer.RetrySettings.BackoffMultiplier)
+			r.OutputAzureDataExplorer.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputAzureDataExplorer.RetrySettings.Enabled)
+			r.OutputAzureDataExplorer.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputAzureDataExplorer.RetrySettings.InitialBackoffMs)
+			r.OutputAzureDataExplorer.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputAzureDataExplorer.RetrySettings.JitterPercent)
+			r.OutputAzureDataExplorer.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputAzureDataExplorer.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputAzureDataExplorer.Scope = types.StringValue(resp.OutputAzureDataExplorer.Scope)
+		r.OutputAzureDataExplorer.ShouldLogInvalidRows = types.BoolPointerValue(resp.OutputAzureDataExplorer.ShouldLogInvalidRows)
 		r.OutputAzureDataExplorer.StagePath = types.StringPointerValue(resp.OutputAzureDataExplorer.StagePath)
 		r.OutputAzureDataExplorer.Streamtags = make([]types.String, 0, len(resp.OutputAzureDataExplorer.Streamtags))
 		for _, v := range resp.OutputAzureDataExplorer.Streamtags {
@@ -320,23 +389,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputAzureDataExplorer.TimeoutRetrySettings == nil {
 			r.OutputAzureDataExplorer.TimeoutRetrySettings = nil
 		} else {
-			r.OutputAzureDataExplorer.TimeoutRetrySettings = &tfTypes.OutputAzureDataExplorerTimeoutRetrySettings{}
+			r.OutputAzureDataExplorer.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputAzureDataExplorer.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputAzureDataExplorer.TimeoutRetrySettings.BackoffRate)
 			r.OutputAzureDataExplorer.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputAzureDataExplorer.TimeoutRetrySettings.InitialBackoff)
 			r.OutputAzureDataExplorer.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputAzureDataExplorer.TimeoutRetrySettings.MaxBackoff)
-			r.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputAzureDataExplorer.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputAzureDataExplorer.TimeoutSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.TimeoutSec)
-		if resp.OutputAzureDataExplorer.Type != nil {
-			r.OutputAzureDataExplorer.Type = types.StringValue(string(*resp.OutputAzureDataExplorer.Type))
-		} else {
-			r.OutputAzureDataExplorer.Type = types.StringNull()
-		}
+		r.OutputAzureDataExplorer.Type = types.StringValue(string(resp.OutputAzureDataExplorer.Type))
+		r.Type = r.OutputAzureDataExplorer.Type
 		r.OutputAzureDataExplorer.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputAzureDataExplorer.UseRoundRobinDNS)
 		r.OutputAzureDataExplorer.ValidateDatabaseSettings = types.BoolPointerValue(resp.OutputAzureDataExplorer.ValidateDatabaseSettings)
 	}
 	if resp.OutputAzureEventhub != nil {
 		r.OutputAzureEventhub = &tfTypes.OutputAzureEventhub{}
+		r.OutputAzureEventhub.TemplateTopic = types.StringPointerValue(resp.OutputAzureEventhub.TemplateTopic)
 		if resp.OutputAzureEventhub.Ack != nil {
 			r.OutputAzureEventhub.Ack = types.Int64Value(int64(*resp.OutputAzureEventhub.Ack))
 		} else {
@@ -351,6 +418,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureEventhub.ConnectionTimeout = types.Float64PointerValue(resp.OutputAzureEventhub.ConnectionTimeout)
 		r.OutputAzureEventhub.Description = types.StringPointerValue(resp.OutputAzureEventhub.Description)
 		r.OutputAzureEventhub.Environment = types.StringPointerValue(resp.OutputAzureEventhub.Environment)
+		r.Environment = r.OutputAzureEventhub.Environment
 		r.OutputAzureEventhub.FlushEventCount = types.Float64PointerValue(resp.OutputAzureEventhub.FlushEventCount)
 		r.OutputAzureEventhub.FlushPeriodSec = types.Float64PointerValue(resp.OutputAzureEventhub.FlushPeriodSec)
 		if resp.OutputAzureEventhub.Format != nil {
@@ -370,6 +438,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureEventhub.OnBackpressure = types.StringNull()
 		}
 		r.OutputAzureEventhub.Pipeline = types.StringPointerValue(resp.OutputAzureEventhub.Pipeline)
+		r.Pipeline = r.OutputAzureEventhub.Pipeline
 		if resp.OutputAzureEventhub.PqCompress != nil {
 			r.OutputAzureEventhub.PqCompress = types.StringValue(string(*resp.OutputAzureEventhub.PqCompress))
 		} else {
@@ -380,6 +449,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputAzureEventhub.PqControls = &tfTypes.OutputAzureEventhubPqControls{}
 		}
+		r.OutputAzureEventhub.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputAzureEventhub.PqMaxBackpressureSec)
+		r.OutputAzureEventhub.PqMaxBufferSize = types.Float64PointerValue(resp.OutputAzureEventhub.PqMaxBufferSize)
+		r.OutputAzureEventhub.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputAzureEventhub.PqMaxBufferSizeBytes)
 		r.OutputAzureEventhub.PqMaxFileSize = types.StringPointerValue(resp.OutputAzureEventhub.PqMaxFileSize)
 		r.OutputAzureEventhub.PqMaxSize = types.StringPointerValue(resp.OutputAzureEventhub.PqMaxSize)
 		if resp.OutputAzureEventhub.PqMode != nil {
@@ -393,18 +465,47 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureEventhub.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputAzureEventhub.PqPath = types.StringPointerValue(resp.OutputAzureEventhub.PqPath)
+		r.OutputAzureEventhub.PqRatePerSec = types.Float64PointerValue(resp.OutputAzureEventhub.PqRatePerSec)
+		r.OutputAzureEventhub.PqStrictOrdering = types.BoolPointerValue(resp.OutputAzureEventhub.PqStrictOrdering)
 		r.OutputAzureEventhub.ReauthenticationThreshold = types.Float64PointerValue(resp.OutputAzureEventhub.ReauthenticationThreshold)
 		r.OutputAzureEventhub.RequestTimeout = types.Float64PointerValue(resp.OutputAzureEventhub.RequestTimeout)
 		if resp.OutputAzureEventhub.Sasl == nil {
 			r.OutputAzureEventhub.Sasl = nil
 		} else {
-			r.OutputAzureEventhub.Sasl = &tfTypes.OutputAzureEventhubAuthentication{}
-			r.OutputAzureEventhub.Sasl.Disabled = types.BoolPointerValue(resp.OutputAzureEventhub.Sasl.Disabled)
+			r.OutputAzureEventhub.Sasl = &tfTypes.AuthenticationTypeUse{}
+			if resp.OutputAzureEventhub.Sasl.AuthType != nil {
+				r.OutputAzureEventhub.Sasl.AuthType = types.StringValue(string(*resp.OutputAzureEventhub.Sasl.AuthType))
+			} else {
+				r.OutputAzureEventhub.Sasl.AuthType = types.StringNull()
+			}
+			r.OutputAzureEventhub.Sasl.CertificateName = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.CertificateName)
+			r.OutputAzureEventhub.Sasl.CertPath = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.CertPath)
+			r.OutputAzureEventhub.Sasl.ClientID = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.ClientID)
+			r.OutputAzureEventhub.Sasl.ClientSecret = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.ClientSecret)
+			if resp.OutputAzureEventhub.Sasl.ClientSecretAuthType != nil {
+				r.OutputAzureEventhub.Sasl.ClientSecretAuthType = types.StringValue(string(*resp.OutputAzureEventhub.Sasl.ClientSecretAuthType))
+			} else {
+				r.OutputAzureEventhub.Sasl.ClientSecretAuthType = types.StringNull()
+			}
+			r.OutputAzureEventhub.Sasl.ClientTextSecret = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.ClientTextSecret)
+			r.OutputAzureEventhub.Sasl.Disabled = types.BoolValue(resp.OutputAzureEventhub.Sasl.Disabled)
 			if resp.OutputAzureEventhub.Sasl.Mechanism != nil {
 				r.OutputAzureEventhub.Sasl.Mechanism = types.StringValue(string(*resp.OutputAzureEventhub.Sasl.Mechanism))
 			} else {
 				r.OutputAzureEventhub.Sasl.Mechanism = types.StringNull()
 			}
+			if resp.OutputAzureEventhub.Sasl.OauthEndpoint != nil {
+				r.OutputAzureEventhub.Sasl.OauthEndpoint = types.StringValue(string(*resp.OutputAzureEventhub.Sasl.OauthEndpoint))
+			} else {
+				r.OutputAzureEventhub.Sasl.OauthEndpoint = types.StringNull()
+			}
+			r.OutputAzureEventhub.Sasl.Passphrase = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.Passphrase)
+			r.OutputAzureEventhub.Sasl.Password = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.Password)
+			r.OutputAzureEventhub.Sasl.PrivKeyPath = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.PrivKeyPath)
+			r.OutputAzureEventhub.Sasl.Scope = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.Scope)
+			r.OutputAzureEventhub.Sasl.TenantID = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.TenantID)
+			r.OutputAzureEventhub.Sasl.TextSecret = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.TextSecret)
+			r.OutputAzureEventhub.Sasl.Username = types.StringPointerValue(resp.OutputAzureEventhub.Sasl.Username)
 		}
 		r.OutputAzureEventhub.Streamtags = make([]types.String, 0, len(resp.OutputAzureEventhub.Streamtags))
 		for _, v := range resp.OutputAzureEventhub.Streamtags {
@@ -417,19 +518,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputAzureEventhub.TLS == nil {
 			r.OutputAzureEventhub.TLS = nil
 		} else {
-			r.OutputAzureEventhub.TLS = &tfTypes.OutputAzureEventhubTLSSettingsClientSide{}
-			r.OutputAzureEventhub.TLS.Disabled = types.BoolPointerValue(resp.OutputAzureEventhub.TLS.Disabled)
+			r.OutputAzureEventhub.TLS = &tfTypes.TLSSettingsClientSideType{}
+			r.OutputAzureEventhub.TLS.Disabled = types.BoolValue(resp.OutputAzureEventhub.TLS.Disabled)
 			r.OutputAzureEventhub.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputAzureEventhub.TLS.RejectUnauthorized)
 		}
 		r.OutputAzureEventhub.Topic = types.StringValue(resp.OutputAzureEventhub.Topic)
-		if resp.OutputAzureEventhub.Type != nil {
-			r.OutputAzureEventhub.Type = types.StringValue(string(*resp.OutputAzureEventhub.Type))
-		} else {
-			r.OutputAzureEventhub.Type = types.StringNull()
-		}
+		r.OutputAzureEventhub.Type = types.StringValue(string(resp.OutputAzureEventhub.Type))
+		r.Type = r.OutputAzureEventhub.Type
 	}
 	if resp.OutputAzureLogs != nil {
 		r.OutputAzureLogs = &tfTypes.OutputAzureLogs{}
+		r.OutputAzureLogs.TemplateWorkspaceID = types.StringPointerValue(resp.OutputAzureLogs.TemplateWorkspaceID)
+		r.OutputAzureLogs.TemplateWorkspaceKey = types.StringPointerValue(resp.OutputAzureLogs.TemplateWorkspaceKey)
 		r.OutputAzureLogs.APIURL = types.StringPointerValue(resp.OutputAzureLogs.APIURL)
 		if resp.OutputAzureLogs.AuthType != nil {
 			r.OutputAzureLogs.AuthType = types.StringValue(string(*resp.OutputAzureLogs.AuthType))
@@ -440,10 +540,11 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureLogs.Concurrency = types.Float64PointerValue(resp.OutputAzureLogs.Concurrency)
 		r.OutputAzureLogs.Description = types.StringPointerValue(resp.OutputAzureLogs.Description)
 		r.OutputAzureLogs.Environment = types.StringPointerValue(resp.OutputAzureLogs.Environment)
-		r.OutputAzureLogs.ExtraHTTPHeaders = []tfTypes.OutputAzureLogsExtraHTTPHeader{}
+		r.Environment = r.OutputAzureLogs.Environment
+		r.OutputAzureLogs.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem := range resp.OutputAzureLogs.ExtraHTTPHeaders {
-			var extraHTTPHeaders tfTypes.OutputAzureLogsExtraHTTPHeader
+			var extraHTTPHeaders tfTypes.ItemsTypeExtraHTTPHeaders
 
 			extraHTTPHeaders.Name = types.StringPointerValue(extraHTTPHeadersItem.Name)
 			extraHTTPHeaders.Value = types.StringValue(extraHTTPHeadersItem.Value)
@@ -459,7 +560,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputAzureLogs.ID = types.StringPointerValue(resp.OutputAzureLogs.ID)
 		r.ID = r.OutputAzureLogs.ID
 		r.OutputAzureLogs.KeypairSecret = types.StringPointerValue(resp.OutputAzureLogs.KeypairSecret)
-		r.OutputAzureLogs.LogType = types.StringPointerValue(resp.OutputAzureLogs.LogType)
+		r.OutputAzureLogs.LogType = types.StringValue(resp.OutputAzureLogs.LogType)
 		r.OutputAzureLogs.MaxPayloadEvents = types.Float64PointerValue(resp.OutputAzureLogs.MaxPayloadEvents)
 		r.OutputAzureLogs.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputAzureLogs.MaxPayloadSizeKB)
 		if resp.OutputAzureLogs.OnBackpressure != nil {
@@ -468,6 +569,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureLogs.OnBackpressure = types.StringNull()
 		}
 		r.OutputAzureLogs.Pipeline = types.StringPointerValue(resp.OutputAzureLogs.Pipeline)
+		r.Pipeline = r.OutputAzureLogs.Pipeline
 		if resp.OutputAzureLogs.PqCompress != nil {
 			r.OutputAzureLogs.PqCompress = types.StringValue(string(*resp.OutputAzureLogs.PqCompress))
 		} else {
@@ -478,6 +580,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputAzureLogs.PqControls = &tfTypes.OutputAzureLogsPqControls{}
 		}
+		r.OutputAzureLogs.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputAzureLogs.PqMaxBackpressureSec)
+		r.OutputAzureLogs.PqMaxBufferSize = types.Float64PointerValue(resp.OutputAzureLogs.PqMaxBufferSize)
+		r.OutputAzureLogs.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputAzureLogs.PqMaxBufferSizeBytes)
 		r.OutputAzureLogs.PqMaxFileSize = types.StringPointerValue(resp.OutputAzureLogs.PqMaxFileSize)
 		r.OutputAzureLogs.PqMaxSize = types.StringPointerValue(resp.OutputAzureLogs.PqMaxSize)
 		if resp.OutputAzureLogs.PqMode != nil {
@@ -491,13 +596,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputAzureLogs.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputAzureLogs.PqPath = types.StringPointerValue(resp.OutputAzureLogs.PqPath)
+		r.OutputAzureLogs.PqRatePerSec = types.Float64PointerValue(resp.OutputAzureLogs.PqRatePerSec)
+		r.OutputAzureLogs.PqStrictOrdering = types.BoolPointerValue(resp.OutputAzureLogs.PqStrictOrdering)
 		r.OutputAzureLogs.RejectUnauthorized = types.BoolPointerValue(resp.OutputAzureLogs.RejectUnauthorized)
 		r.OutputAzureLogs.ResourceID = types.StringPointerValue(resp.OutputAzureLogs.ResourceID)
 		r.OutputAzureLogs.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputAzureLogs.ResponseHonorRetryAfterHeader)
-		r.OutputAzureLogs.ResponseRetrySettings = []tfTypes.OutputAzureLogsResponseRetrySetting{}
+		r.OutputAzureLogs.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 		for _, responseRetrySettingsItem1 := range resp.OutputAzureLogs.ResponseRetrySettings {
-			var responseRetrySettings1 tfTypes.OutputAzureLogsResponseRetrySetting
+			var responseRetrySettings1 tfTypes.ItemsTypeResponseRetrySettings
 
 			responseRetrySettings1.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem1.BackoffRate)
 			responseRetrySettings1.HTTPStatus = types.Float64Value(responseRetrySettingsItem1.HTTPStatus)
@@ -521,20 +628,23 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputAzureLogs.TimeoutRetrySettings == nil {
 			r.OutputAzureLogs.TimeoutRetrySettings = nil
 		} else {
-			r.OutputAzureLogs.TimeoutRetrySettings = &tfTypes.OutputAzureLogsTimeoutRetrySettings{}
+			r.OutputAzureLogs.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputAzureLogs.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputAzureLogs.TimeoutRetrySettings.BackoffRate)
 			r.OutputAzureLogs.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputAzureLogs.TimeoutRetrySettings.InitialBackoff)
 			r.OutputAzureLogs.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputAzureLogs.TimeoutRetrySettings.MaxBackoff)
-			r.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputAzureLogs.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputAzureLogs.TimeoutSec = types.Float64PointerValue(resp.OutputAzureLogs.TimeoutSec)
 		r.OutputAzureLogs.Type = types.StringValue(string(resp.OutputAzureLogs.Type))
+		r.Type = r.OutputAzureLogs.Type
 		r.OutputAzureLogs.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputAzureLogs.UseRoundRobinDNS)
 		r.OutputAzureLogs.WorkspaceID = types.StringPointerValue(resp.OutputAzureLogs.WorkspaceID)
 		r.OutputAzureLogs.WorkspaceKey = types.StringPointerValue(resp.OutputAzureLogs.WorkspaceKey)
 	}
 	if resp.OutputChronicle != nil {
 		r.OutputChronicle = &tfTypes.OutputChronicle{}
+		r.OutputChronicle.TemplateEndpoint = types.StringPointerValue(resp.OutputChronicle.TemplateEndpoint)
+		r.OutputChronicle.TemplateRegion = types.StringPointerValue(resp.OutputChronicle.TemplateRegion)
 		r.OutputChronicle.APIVersion = types.StringPointerValue(resp.OutputChronicle.APIVersion)
 		if resp.OutputChronicle.AuthenticationMethod != nil {
 			r.OutputChronicle.AuthenticationMethod = types.StringValue(string(*resp.OutputChronicle.AuthenticationMethod))
@@ -543,10 +653,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputChronicle.Compress = types.BoolPointerValue(resp.OutputChronicle.Compress)
 		r.OutputChronicle.Concurrency = types.Float64PointerValue(resp.OutputChronicle.Concurrency)
-		r.OutputChronicle.CustomLabels = []tfTypes.OutputChronicleCustomLabel{}
+		r.OutputChronicle.CustomLabels = []tfTypes.CustomLabel{}
 
 		for _, customLabelsItem := range resp.OutputChronicle.CustomLabels {
-			var customLabels tfTypes.OutputChronicleCustomLabel
+			var customLabels tfTypes.CustomLabel
 
 			customLabels.Key = types.StringValue(customLabelsItem.Key)
 			customLabels.RbacEnabled = types.BoolPointerValue(customLabelsItem.RbacEnabled)
@@ -555,11 +665,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputChronicle.CustomLabels = append(r.OutputChronicle.CustomLabels, customLabels)
 		}
 		r.OutputChronicle.Description = types.StringPointerValue(resp.OutputChronicle.Description)
+		r.OutputChronicle.Endpoint = types.StringPointerValue(resp.OutputChronicle.Endpoint)
 		r.OutputChronicle.Environment = types.StringPointerValue(resp.OutputChronicle.Environment)
-		r.OutputChronicle.ExtraHTTPHeaders = []tfTypes.OutputChronicleExtraHTTPHeader{}
+		r.Environment = r.OutputChronicle.Environment
+		r.OutputChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem1 := range resp.OutputChronicle.ExtraHTTPHeaders {
-			var extraHTTPHeaders1 tfTypes.OutputChronicleExtraHTTPHeader
+			var extraHTTPHeaders1 tfTypes.ItemsTypeExtraHTTPHeaders
 
 			extraHTTPHeaders1.Name = types.StringPointerValue(extraHTTPHeadersItem1.Name)
 			extraHTTPHeaders1.Value = types.StringValue(extraHTTPHeadersItem1.Value)
@@ -588,6 +700,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputChronicle.OnBackpressure = types.StringNull()
 		}
 		r.OutputChronicle.Pipeline = types.StringPointerValue(resp.OutputChronicle.Pipeline)
+		r.Pipeline = r.OutputChronicle.Pipeline
 		if resp.OutputChronicle.PqCompress != nil {
 			r.OutputChronicle.PqCompress = types.StringValue(string(*resp.OutputChronicle.PqCompress))
 		} else {
@@ -600,6 +713,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputChronicle.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputChronicle.PqMaxBackpressureSec)
 		r.OutputChronicle.PqMaxBufferSize = types.Float64PointerValue(resp.OutputChronicle.PqMaxBufferSize)
+		r.OutputChronicle.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputChronicle.PqMaxBufferSizeBytes)
 		r.OutputChronicle.PqMaxFileSize = types.StringPointerValue(resp.OutputChronicle.PqMaxFileSize)
 		r.OutputChronicle.PqMaxSize = types.StringPointerValue(resp.OutputChronicle.PqMaxSize)
 		if resp.OutputChronicle.PqMode != nil {
@@ -618,10 +732,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputChronicle.Region = types.StringValue(resp.OutputChronicle.Region)
 		r.OutputChronicle.RejectUnauthorized = types.BoolPointerValue(resp.OutputChronicle.RejectUnauthorized)
 		r.OutputChronicle.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputChronicle.ResponseHonorRetryAfterHeader)
-		r.OutputChronicle.ResponseRetrySettings = []tfTypes.OutputChronicleResponseRetrySetting{}
+		r.OutputChronicle.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 		for _, responseRetrySettingsItem2 := range resp.OutputChronicle.ResponseRetrySettings {
-			var responseRetrySettings2 tfTypes.OutputChronicleResponseRetrySetting
+			var responseRetrySettings2 tfTypes.ItemsTypeResponseRetrySettings
 
 			responseRetrySettings2.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem2.BackoffRate)
 			responseRetrySettings2.HTTPStatus = types.Float64Value(responseRetrySettingsItem2.HTTPStatus)
@@ -647,21 +761,30 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputChronicle.TimeoutRetrySettings == nil {
 			r.OutputChronicle.TimeoutRetrySettings = nil
 		} else {
-			r.OutputChronicle.TimeoutRetrySettings = &tfTypes.OutputChronicleTimeoutRetrySettings{}
+			r.OutputChronicle.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputChronicle.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputChronicle.TimeoutRetrySettings.BackoffRate)
 			r.OutputChronicle.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputChronicle.TimeoutRetrySettings.InitialBackoff)
 			r.OutputChronicle.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputChronicle.TimeoutRetrySettings.MaxBackoff)
-			r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputChronicle.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputChronicle.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputChronicle.TimeoutSec = types.Float64PointerValue(resp.OutputChronicle.TimeoutSec)
 		r.OutputChronicle.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputChronicle.TotalMemoryLimitKB)
 		r.OutputChronicle.Type = types.StringValue(string(resp.OutputChronicle.Type))
+		r.Type = r.OutputChronicle.Type
 		r.OutputChronicle.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputChronicle.UseRoundRobinDNS)
 	}
 	if resp.OutputClickHouse != nil {
 		r.OutputClickHouse = &tfTypes.OutputClickHouse{}
+		r.OutputClickHouse.TemplateDatabase = types.StringPointerValue(resp.OutputClickHouse.TemplateDatabase)
+		r.OutputClickHouse.TemplateTableName = types.StringPointerValue(resp.OutputClickHouse.TemplateTableName)
+		r.OutputClickHouse.TemplateURL = types.StringPointerValue(resp.OutputClickHouse.TemplateURL)
 		r.OutputClickHouse.AsyncInserts = types.BoolPointerValue(resp.OutputClickHouse.AsyncInserts)
-		r.OutputClickHouse.AuthHeaderExpr = types.StringPointerValue(resp.OutputClickHouse.AuthHeaderExpr)
+		if resp.OutputClickHouse.AuthHeaderExpr == nil {
+			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+		} else {
+			authHeaderExprResult, _ := json.Marshal(resp.OutputClickHouse.AuthHeaderExpr)
+			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
+		}
 		if resp.OutputClickHouse.AuthType != nil {
 			r.OutputClickHouse.AuthType = types.StringValue(string(*resp.OutputClickHouse.AuthType))
 		} else {
@@ -686,14 +809,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputClickHouse.Description = types.StringPointerValue(resp.OutputClickHouse.Description)
 		r.OutputClickHouse.DumpFormatErrorsToDisk = types.BoolPointerValue(resp.OutputClickHouse.DumpFormatErrorsToDisk)
 		r.OutputClickHouse.Environment = types.StringPointerValue(resp.OutputClickHouse.Environment)
+		r.Environment = r.OutputClickHouse.Environment
 		r.OutputClickHouse.ExcludeMappingFields = make([]types.String, 0, len(resp.OutputClickHouse.ExcludeMappingFields))
 		for _, v := range resp.OutputClickHouse.ExcludeMappingFields {
 			r.OutputClickHouse.ExcludeMappingFields = append(r.OutputClickHouse.ExcludeMappingFields, types.StringValue(v))
 		}
-		r.OutputClickHouse.ExtraHTTPHeaders = []tfTypes.OutputClickHouseExtraHTTPHeader{}
+		r.OutputClickHouse.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem2 := range resp.OutputClickHouse.ExtraHTTPHeaders {
-			var extraHTTPHeaders2 tfTypes.OutputClickHouseExtraHTTPHeader
+			var extraHTTPHeaders2 tfTypes.ItemsTypeExtraHTTPHeaders
 
 			extraHTTPHeaders2.Name = types.StringPointerValue(extraHTTPHeadersItem2.Name)
 			extraHTTPHeaders2.Value = types.StringValue(extraHTTPHeadersItem2.Value)
@@ -713,7 +837,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputClickHouse.ID = types.StringPointerValue(resp.OutputClickHouse.ID)
 		r.ID = r.OutputClickHouse.ID
-		r.OutputClickHouse.LoginURL = types.StringPointerValue(resp.OutputClickHouse.LoginURL)
+		if resp.OutputClickHouse.LoginURL == nil {
+			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedNull()
+		} else {
+			loginURLResult, _ := json.Marshal(resp.OutputClickHouse.LoginURL)
+			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
+		}
 		if resp.OutputClickHouse.MappingType != nil {
 			r.OutputClickHouse.MappingType = types.StringValue(string(*resp.OutputClickHouse.MappingType))
 		} else {
@@ -726,8 +855,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, oauthHeadersItem := range resp.OutputClickHouse.OauthHeaders {
 			var oauthHeaders tfTypes.OutputClickHouseOauthHeader
 
-			oauthHeaders.Name = types.StringValue(oauthHeadersItem.Name)
-			oauthHeaders.Value = types.StringValue(oauthHeadersItem.Value)
+			if oauthHeadersItem.Name == nil {
+				oauthHeaders.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult, _ := json.Marshal(oauthHeadersItem.Name)
+				oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
+			}
+			if oauthHeadersItem.Value == nil {
+				oauthHeaders.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult, _ := json.Marshal(oauthHeadersItem.Value)
+				oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
+			}
 
 			r.OutputClickHouse.OauthHeaders = append(r.OutputClickHouse.OauthHeaders, oauthHeaders)
 		}
@@ -736,8 +875,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, oauthParamsItem := range resp.OutputClickHouse.OauthParams {
 			var oauthParams tfTypes.OutputClickHouseOauthParam
 
-			oauthParams.Name = types.StringValue(oauthParamsItem.Name)
-			oauthParams.Value = types.StringValue(oauthParamsItem.Value)
+			if oauthParamsItem.Name == nil {
+				oauthParams.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult1, _ := json.Marshal(oauthParamsItem.Name)
+				oauthParams.Name = jsontypes.NewNormalizedValue(string(nameResult1))
+			}
+			if oauthParamsItem.Value == nil {
+				oauthParams.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult1, _ := json.Marshal(oauthParamsItem.Value)
+				oauthParams.Value = jsontypes.NewNormalizedValue(string(valueResult1))
+			}
 
 			r.OutputClickHouse.OauthParams = append(r.OutputClickHouse.OauthParams, oauthParams)
 		}
@@ -748,6 +897,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputClickHouse.Password = types.StringPointerValue(resp.OutputClickHouse.Password)
 		r.OutputClickHouse.Pipeline = types.StringPointerValue(resp.OutputClickHouse.Pipeline)
+		r.Pipeline = r.OutputClickHouse.Pipeline
 		if resp.OutputClickHouse.PqCompress != nil {
 			r.OutputClickHouse.PqCompress = types.StringValue(string(*resp.OutputClickHouse.PqCompress))
 		} else {
@@ -758,6 +908,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputClickHouse.PqControls = &tfTypes.OutputClickHousePqControls{}
 		}
+		r.OutputClickHouse.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputClickHouse.PqMaxBackpressureSec)
+		r.OutputClickHouse.PqMaxBufferSize = types.Float64PointerValue(resp.OutputClickHouse.PqMaxBufferSize)
+		r.OutputClickHouse.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputClickHouse.PqMaxBufferSizeBytes)
 		r.OutputClickHouse.PqMaxFileSize = types.StringPointerValue(resp.OutputClickHouse.PqMaxFileSize)
 		r.OutputClickHouse.PqMaxSize = types.StringPointerValue(resp.OutputClickHouse.PqMaxSize)
 		if resp.OutputClickHouse.PqMode != nil {
@@ -771,12 +924,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputClickHouse.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputClickHouse.PqPath = types.StringPointerValue(resp.OutputClickHouse.PqPath)
+		r.OutputClickHouse.PqRatePerSec = types.Float64PointerValue(resp.OutputClickHouse.PqRatePerSec)
+		r.OutputClickHouse.PqStrictOrdering = types.BoolPointerValue(resp.OutputClickHouse.PqStrictOrdering)
 		r.OutputClickHouse.RejectUnauthorized = types.BoolPointerValue(resp.OutputClickHouse.RejectUnauthorized)
 		r.OutputClickHouse.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputClickHouse.ResponseHonorRetryAfterHeader)
-		r.OutputClickHouse.ResponseRetrySettings = []tfTypes.OutputClickHouseResponseRetrySetting{}
+		r.OutputClickHouse.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 		for _, responseRetrySettingsItem3 := range resp.OutputClickHouse.ResponseRetrySettings {
-			var responseRetrySettings3 tfTypes.OutputClickHouseResponseRetrySetting
+			var responseRetrySettings3 tfTypes.ItemsTypeResponseRetrySettings
 
 			responseRetrySettings3.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem3.BackoffRate)
 			responseRetrySettings3.HTTPStatus = types.Float64Value(responseRetrySettingsItem3.HTTPStatus)
@@ -789,8 +944,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputClickHouse.SafeHeaders {
 			r.OutputClickHouse.SafeHeaders = append(r.OutputClickHouse.SafeHeaders, types.StringValue(v))
 		}
-		r.OutputClickHouse.Secret = types.StringPointerValue(resp.OutputClickHouse.Secret)
-		r.OutputClickHouse.SecretParamName = types.StringPointerValue(resp.OutputClickHouse.SecretParamName)
+		if resp.OutputClickHouse.Secret == nil {
+			r.OutputClickHouse.Secret = jsontypes.NewNormalizedNull()
+		} else {
+			secretResult, _ := json.Marshal(resp.OutputClickHouse.Secret)
+			r.OutputClickHouse.Secret = jsontypes.NewNormalizedValue(string(secretResult))
+		}
+		if resp.OutputClickHouse.SecretParamName == nil {
+			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedNull()
+		} else {
+			secretParamNameResult, _ := json.Marshal(resp.OutputClickHouse.SecretParamName)
+			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
+		}
 		r.OutputClickHouse.SQLUsername = types.StringPointerValue(resp.OutputClickHouse.SQLUsername)
 		r.OutputClickHouse.Streamtags = make([]types.String, 0, len(resp.OutputClickHouse.Streamtags))
 		for _, v := range resp.OutputClickHouse.Streamtags {
@@ -801,21 +966,26 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputClickHouse.SystemFields = append(r.OutputClickHouse.SystemFields, types.StringValue(v))
 		}
 		r.OutputClickHouse.TableName = types.StringValue(resp.OutputClickHouse.TableName)
-		r.OutputClickHouse.TextSecret = types.StringPointerValue(resp.OutputClickHouse.TextSecret)
+		if resp.OutputClickHouse.TextSecret == nil {
+			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedNull()
+		} else {
+			textSecretResult, _ := json.Marshal(resp.OutputClickHouse.TextSecret)
+			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedValue(string(textSecretResult))
+		}
 		if resp.OutputClickHouse.TimeoutRetrySettings == nil {
 			r.OutputClickHouse.TimeoutRetrySettings = nil
 		} else {
-			r.OutputClickHouse.TimeoutRetrySettings = &tfTypes.OutputClickHouseTimeoutRetrySettings{}
+			r.OutputClickHouse.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputClickHouse.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputClickHouse.TimeoutRetrySettings.BackoffRate)
 			r.OutputClickHouse.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputClickHouse.TimeoutRetrySettings.InitialBackoff)
 			r.OutputClickHouse.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputClickHouse.TimeoutRetrySettings.MaxBackoff)
-			r.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputClickHouse.TimeoutSec = types.Float64PointerValue(resp.OutputClickHouse.TimeoutSec)
 		if resp.OutputClickHouse.TLS == nil {
 			r.OutputClickHouse.TLS = nil
 		} else {
-			r.OutputClickHouse.TLS = &tfTypes.OutputClickHouseTLSSettingsClientSide{}
+			r.OutputClickHouse.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
 			r.OutputClickHouse.TLS.CaPath = types.StringPointerValue(resp.OutputClickHouse.TLS.CaPath)
 			r.OutputClickHouse.TLS.CertificateName = types.StringPointerValue(resp.OutputClickHouse.TLS.CertificateName)
 			r.OutputClickHouse.TLS.CertPath = types.StringPointerValue(resp.OutputClickHouse.TLS.CertPath)
@@ -834,14 +1004,26 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputClickHouse.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputClickHouse.TLS.PrivKeyPath)
 			r.OutputClickHouse.TLS.Servername = types.StringPointerValue(resp.OutputClickHouse.TLS.Servername)
 		}
-		r.OutputClickHouse.Token = types.StringPointerValue(resp.OutputClickHouse.Token)
-		r.OutputClickHouse.TokenAttributeName = types.StringPointerValue(resp.OutputClickHouse.TokenAttributeName)
-		r.OutputClickHouse.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputClickHouse.TokenTimeoutSecs)
-		if resp.OutputClickHouse.Type != nil {
-			r.OutputClickHouse.Type = types.StringValue(string(*resp.OutputClickHouse.Type))
+		if resp.OutputClickHouse.Token == nil {
+			r.OutputClickHouse.Token = jsontypes.NewNormalizedNull()
 		} else {
-			r.OutputClickHouse.Type = types.StringNull()
+			tokenResult, _ := json.Marshal(resp.OutputClickHouse.Token)
+			r.OutputClickHouse.Token = jsontypes.NewNormalizedValue(string(tokenResult))
 		}
+		if resp.OutputClickHouse.TokenAttributeName == nil {
+			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedNull()
+		} else {
+			tokenAttributeNameResult, _ := json.Marshal(resp.OutputClickHouse.TokenAttributeName)
+			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
+		}
+		if resp.OutputClickHouse.TokenTimeoutSecs == nil {
+			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+		} else {
+			tokenTimeoutSecsResult, _ := json.Marshal(resp.OutputClickHouse.TokenTimeoutSecs)
+			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
+		}
+		r.OutputClickHouse.Type = types.StringValue(string(resp.OutputClickHouse.Type))
+		r.Type = r.OutputClickHouse.Type
 		r.OutputClickHouse.URL = types.StringValue(resp.OutputClickHouse.URL)
 		r.OutputClickHouse.Username = types.StringPointerValue(resp.OutputClickHouse.Username)
 		r.OutputClickHouse.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputClickHouse.UseRoundRobinDNS)
@@ -849,9 +1031,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 	}
 	if resp.OutputCloudflareR2 != nil {
 		r.OutputCloudflareR2 = &tfTypes.OutputCloudflareR2{}
+		r.OutputCloudflareR2.TemplateBucket = types.StringPointerValue(resp.OutputCloudflareR2.TemplateBucket)
+		r.OutputCloudflareR2.TemplateFormat = types.StringPointerValue(resp.OutputCloudflareR2.TemplateFormat)
 		r.OutputCloudflareR2.AddIDToStagePath = types.BoolPointerValue(resp.OutputCloudflareR2.AddIDToStagePath)
 		r.OutputCloudflareR2.AutomaticSchema = types.BoolPointerValue(resp.OutputCloudflareR2.AutomaticSchema)
-		r.OutputCloudflareR2.AwsAPIKey = types.StringPointerValue(resp.OutputCloudflareR2.AwsAPIKey)
+		if resp.OutputCloudflareR2.AwsAPIKey == nil {
+			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedNull()
+		} else {
+			awsAPIKeyResult, _ := json.Marshal(resp.OutputCloudflareR2.AwsAPIKey)
+			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedValue(string(awsAPIKeyResult))
+		}
 		if resp.OutputCloudflareR2.AwsAuthenticationMethod != nil {
 			r.OutputCloudflareR2.AwsAuthenticationMethod = types.StringValue(string(*resp.OutputCloudflareR2.AwsAuthenticationMethod))
 		} else {
@@ -882,6 +1071,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCloudflareR2.EnableWritePageIndex = types.BoolPointerValue(resp.OutputCloudflareR2.EnableWritePageIndex)
 		r.OutputCloudflareR2.Endpoint = types.StringValue(resp.OutputCloudflareR2.Endpoint)
 		r.OutputCloudflareR2.Environment = types.StringPointerValue(resp.OutputCloudflareR2.Environment)
+		r.Environment = r.OutputCloudflareR2.Environment
 		r.OutputCloudflareR2.FileNameSuffix = types.StringPointerValue(resp.OutputCloudflareR2.FileNameSuffix)
 		r.OutputCloudflareR2.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputCloudflareR2.ForceCloseOnShutdown)
 		if resp.OutputCloudflareR2.Format != nil {
@@ -892,15 +1082,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCloudflareR2.HeaderLine = types.StringPointerValue(resp.OutputCloudflareR2.HeaderLine)
 		r.OutputCloudflareR2.ID = types.StringPointerValue(resp.OutputCloudflareR2.ID)
 		r.ID = r.OutputCloudflareR2.ID
-		r.OutputCloudflareR2.KeyValueMetadata = []tfTypes.OutputCloudflareR2KeyValueMetadatum{}
+		r.OutputCloudflareR2.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem1 := range resp.OutputCloudflareR2.KeyValueMetadata {
-			var keyValueMetadata1 tfTypes.OutputCloudflareR2KeyValueMetadatum
+		for _, keyValueMetadataItem2 := range resp.OutputCloudflareR2.KeyValueMetadata {
+			var keyValueMetadata2 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata1.Key = types.StringPointerValue(keyValueMetadataItem1.Key)
-			keyValueMetadata1.Value = types.StringValue(keyValueMetadataItem1.Value)
+			keyValueMetadata2.Key = types.StringValue(keyValueMetadataItem2.Key)
+			keyValueMetadata2.Value = types.StringValue(keyValueMetadataItem2.Value)
 
-			r.OutputCloudflareR2.KeyValueMetadata = append(r.OutputCloudflareR2.KeyValueMetadata, keyValueMetadata1)
+			r.OutputCloudflareR2.KeyValueMetadata = append(r.OutputCloudflareR2.KeyValueMetadata, keyValueMetadata2)
 		}
 		r.OutputCloudflareR2.MaxConcurrentFileParts = types.Float64PointerValue(resp.OutputCloudflareR2.MaxConcurrentFileParts)
 		r.OutputCloudflareR2.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputCloudflareR2.MaxFileIdleTimeSec)
@@ -939,6 +1129,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputCloudflareR2.PartitionExpr = types.StringPointerValue(resp.OutputCloudflareR2.PartitionExpr)
 		r.OutputCloudflareR2.Pipeline = types.StringPointerValue(resp.OutputCloudflareR2.Pipeline)
+		r.Pipeline = r.OutputCloudflareR2.Pipeline
 		if resp.OutputCloudflareR2.Region == nil {
 			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedNull()
 		} else {
@@ -947,6 +1138,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputCloudflareR2.RejectUnauthorized = types.BoolPointerValue(resp.OutputCloudflareR2.RejectUnauthorized)
 		r.OutputCloudflareR2.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputCloudflareR2.RemoveEmptyDirs)
+		if resp.OutputCloudflareR2.RetrySettings == nil {
+			r.OutputCloudflareR2.RetrySettings = nil
+		} else {
+			r.OutputCloudflareR2.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputCloudflareR2.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputCloudflareR2.RetrySettings.BackoffMultiplier)
+			r.OutputCloudflareR2.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputCloudflareR2.RetrySettings.Enabled)
+			r.OutputCloudflareR2.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputCloudflareR2.RetrySettings.InitialBackoffMs)
+			r.OutputCloudflareR2.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputCloudflareR2.RetrySettings.JitterPercent)
+			r.OutputCloudflareR2.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputCloudflareR2.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputCloudflareR2.ReuseConnections = types.BoolPointerValue(resp.OutputCloudflareR2.ReuseConnections)
 		if resp.OutputCloudflareR2.ServerSideEncryption != nil {
 			r.OutputCloudflareR2.ServerSideEncryption = types.StringValue(string(*resp.OutputCloudflareR2.ServerSideEncryption))
@@ -959,7 +1160,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputCloudflareR2.SignatureVersion = types.StringNull()
 		}
-		r.OutputCloudflareR2.StagePath = types.StringPointerValue(resp.OutputCloudflareR2.StagePath)
+		r.OutputCloudflareR2.StagePath = types.StringValue(resp.OutputCloudflareR2.StagePath)
 		if resp.OutputCloudflareR2.StorageClass != nil {
 			r.OutputCloudflareR2.StorageClass = types.StringValue(string(*resp.OutputCloudflareR2.StorageClass))
 		} else {
@@ -974,11 +1175,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCloudflareR2.SystemFields = append(r.OutputCloudflareR2.SystemFields, types.StringValue(v))
 		}
 		r.OutputCloudflareR2.Type = types.StringValue(string(resp.OutputCloudflareR2.Type))
+		r.Type = r.OutputCloudflareR2.Type
 		r.OutputCloudflareR2.VerifyPermissions = types.BoolPointerValue(resp.OutputCloudflareR2.VerifyPermissions)
 		r.OutputCloudflareR2.WriteHighWaterMark = types.Float64PointerValue(resp.OutputCloudflareR2.WriteHighWaterMark)
 	}
 	if resp.OutputCloudwatch != nil {
 		r.OutputCloudwatch = &tfTypes.OutputCloudwatch{}
+		r.OutputCloudwatch.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputCloudwatch.TemplateAssumeRoleArn)
+		r.OutputCloudwatch.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputCloudwatch.TemplateAssumeRoleExternalID)
+		r.OutputCloudwatch.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputCloudwatch.TemplateAwsAPIKey)
+		r.OutputCloudwatch.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputCloudwatch.TemplateAwsSecretKey)
+		r.OutputCloudwatch.TemplateRegion = types.StringPointerValue(resp.OutputCloudwatch.TemplateRegion)
 		r.OutputCloudwatch.AssumeRoleArn = types.StringPointerValue(resp.OutputCloudwatch.AssumeRoleArn)
 		r.OutputCloudwatch.AssumeRoleExternalID = types.StringPointerValue(resp.OutputCloudwatch.AssumeRoleExternalID)
 		r.OutputCloudwatch.AwsAPIKey = types.StringPointerValue(resp.OutputCloudwatch.AwsAPIKey)
@@ -994,6 +1201,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCloudwatch.EnableAssumeRole = types.BoolPointerValue(resp.OutputCloudwatch.EnableAssumeRole)
 		r.OutputCloudwatch.Endpoint = types.StringPointerValue(resp.OutputCloudwatch.Endpoint)
 		r.OutputCloudwatch.Environment = types.StringPointerValue(resp.OutputCloudwatch.Environment)
+		r.Environment = r.OutputCloudwatch.Environment
 		r.OutputCloudwatch.FlushPeriodSec = types.Float64PointerValue(resp.OutputCloudwatch.FlushPeriodSec)
 		r.OutputCloudwatch.ID = types.StringPointerValue(resp.OutputCloudwatch.ID)
 		r.ID = r.OutputCloudwatch.ID
@@ -1007,6 +1215,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCloudwatch.OnBackpressure = types.StringNull()
 		}
 		r.OutputCloudwatch.Pipeline = types.StringPointerValue(resp.OutputCloudwatch.Pipeline)
+		r.Pipeline = r.OutputCloudwatch.Pipeline
 		if resp.OutputCloudwatch.PqCompress != nil {
 			r.OutputCloudwatch.PqCompress = types.StringValue(string(*resp.OutputCloudwatch.PqCompress))
 		} else {
@@ -1017,6 +1226,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputCloudwatch.PqControls = &tfTypes.OutputCloudwatchPqControls{}
 		}
+		r.OutputCloudwatch.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputCloudwatch.PqMaxBackpressureSec)
+		r.OutputCloudwatch.PqMaxBufferSize = types.Float64PointerValue(resp.OutputCloudwatch.PqMaxBufferSize)
+		r.OutputCloudwatch.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputCloudwatch.PqMaxBufferSizeBytes)
 		r.OutputCloudwatch.PqMaxFileSize = types.StringPointerValue(resp.OutputCloudwatch.PqMaxFileSize)
 		r.OutputCloudwatch.PqMaxSize = types.StringPointerValue(resp.OutputCloudwatch.PqMaxSize)
 		if resp.OutputCloudwatch.PqMode != nil {
@@ -1030,6 +1242,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCloudwatch.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputCloudwatch.PqPath = types.StringPointerValue(resp.OutputCloudwatch.PqPath)
+		r.OutputCloudwatch.PqRatePerSec = types.Float64PointerValue(resp.OutputCloudwatch.PqRatePerSec)
+		r.OutputCloudwatch.PqStrictOrdering = types.BoolPointerValue(resp.OutputCloudwatch.PqStrictOrdering)
 		r.OutputCloudwatch.Region = types.StringValue(resp.OutputCloudwatch.Region)
 		r.OutputCloudwatch.RejectUnauthorized = types.BoolPointerValue(resp.OutputCloudwatch.RejectUnauthorized)
 		r.OutputCloudwatch.ReuseConnections = types.BoolPointerValue(resp.OutputCloudwatch.ReuseConnections)
@@ -1041,14 +1255,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputCloudwatch.SystemFields {
 			r.OutputCloudwatch.SystemFields = append(r.OutputCloudwatch.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputCloudwatch.Type != nil {
-			r.OutputCloudwatch.Type = types.StringValue(string(*resp.OutputCloudwatch.Type))
-		} else {
-			r.OutputCloudwatch.Type = types.StringNull()
-		}
+		r.OutputCloudwatch.Type = types.StringValue(string(resp.OutputCloudwatch.Type))
+		r.Type = r.OutputCloudwatch.Type
 	}
 	if resp.OutputConfluentCloud != nil {
 		r.OutputConfluentCloud = &tfTypes.OutputConfluentCloud{}
+		r.OutputConfluentCloud.TemplateTopic = types.StringPointerValue(resp.OutputConfluentCloud.TemplateTopic)
 		if resp.OutputConfluentCloud.Ack != nil {
 			r.OutputConfluentCloud.Ack = types.Int64Value(int64(*resp.OutputConfluentCloud.Ack))
 		} else {
@@ -1068,6 +1280,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputConfluentCloud.ConnectionTimeout = types.Float64PointerValue(resp.OutputConfluentCloud.ConnectionTimeout)
 		r.OutputConfluentCloud.Description = types.StringPointerValue(resp.OutputConfluentCloud.Description)
 		r.OutputConfluentCloud.Environment = types.StringPointerValue(resp.OutputConfluentCloud.Environment)
+		r.Environment = r.OutputConfluentCloud.Environment
 		r.OutputConfluentCloud.FlushEventCount = types.Float64PointerValue(resp.OutputConfluentCloud.FlushEventCount)
 		r.OutputConfluentCloud.FlushPeriodSec = types.Float64PointerValue(resp.OutputConfluentCloud.FlushPeriodSec)
 		if resp.OutputConfluentCloud.Format != nil {
@@ -1081,25 +1294,25 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputConfluentCloud.KafkaSchemaRegistry == nil {
 			r.OutputConfluentCloud.KafkaSchemaRegistry = nil
 		} else {
-			r.OutputConfluentCloud.KafkaSchemaRegistry = &tfTypes.OutputConfluentCloudKafkaSchemaRegistryAuthentication{}
+			r.OutputConfluentCloud.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 			if resp.OutputConfluentCloud.KafkaSchemaRegistry.Auth == nil {
 				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.OutputConfluentCloudAuth{}
+				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.Auth.CredentialsSecret)
-				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled)
+				r.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.Auth.Disabled)
 			}
 			r.OutputConfluentCloud.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.ConnectionTimeout)
 			r.OutputConfluentCloud.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.DefaultKeySchemaID)
 			r.OutputConfluentCloud.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.DefaultValueSchemaID)
-			r.OutputConfluentCloud.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.Disabled)
+			r.OutputConfluentCloud.KafkaSchemaRegistry.Disabled = types.BoolValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.Disabled)
 			r.OutputConfluentCloud.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.MaxRetries)
 			r.OutputConfluentCloud.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.RequestTimeout)
 			r.OutputConfluentCloud.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.SchemaRegistryURL)
 			if resp.OutputConfluentCloud.KafkaSchemaRegistry.TLS == nil {
 				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.OutputConfluentCloudKafkaSchemaRegistryTLSSettingsClientSide{}
+				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CaPath)
 				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertificateName)
 				r.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.OutputConfluentCloud.KafkaSchemaRegistry.TLS.CertPath)
@@ -1129,6 +1342,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputConfluentCloud.OnBackpressure = types.StringNull()
 		}
 		r.OutputConfluentCloud.Pipeline = types.StringPointerValue(resp.OutputConfluentCloud.Pipeline)
+		r.Pipeline = r.OutputConfluentCloud.Pipeline
 		if resp.OutputConfluentCloud.PqCompress != nil {
 			r.OutputConfluentCloud.PqCompress = types.StringValue(string(*resp.OutputConfluentCloud.PqCompress))
 		} else {
@@ -1139,6 +1353,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputConfluentCloud.PqControls = &tfTypes.OutputConfluentCloudPqControls{}
 		}
+		r.OutputConfluentCloud.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputConfluentCloud.PqMaxBackpressureSec)
+		r.OutputConfluentCloud.PqMaxBufferSize = types.Float64PointerValue(resp.OutputConfluentCloud.PqMaxBufferSize)
+		r.OutputConfluentCloud.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputConfluentCloud.PqMaxBufferSizeBytes)
 		r.OutputConfluentCloud.PqMaxFileSize = types.StringPointerValue(resp.OutputConfluentCloud.PqMaxFileSize)
 		r.OutputConfluentCloud.PqMaxSize = types.StringPointerValue(resp.OutputConfluentCloud.PqMaxSize)
 		if resp.OutputConfluentCloud.PqMode != nil {
@@ -1152,19 +1369,58 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputConfluentCloud.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputConfluentCloud.PqPath = types.StringPointerValue(resp.OutputConfluentCloud.PqPath)
+		r.OutputConfluentCloud.PqRatePerSec = types.Float64PointerValue(resp.OutputConfluentCloud.PqRatePerSec)
+		r.OutputConfluentCloud.PqStrictOrdering = types.BoolPointerValue(resp.OutputConfluentCloud.PqStrictOrdering)
+		r.OutputConfluentCloud.ProtobufEncodingID = types.StringPointerValue(resp.OutputConfluentCloud.ProtobufEncodingID)
 		r.OutputConfluentCloud.ProtobufLibraryID = types.StringPointerValue(resp.OutputConfluentCloud.ProtobufLibraryID)
 		r.OutputConfluentCloud.ReauthenticationThreshold = types.Float64PointerValue(resp.OutputConfluentCloud.ReauthenticationThreshold)
 		r.OutputConfluentCloud.RequestTimeout = types.Float64PointerValue(resp.OutputConfluentCloud.RequestTimeout)
 		if resp.OutputConfluentCloud.Sasl == nil {
 			r.OutputConfluentCloud.Sasl = nil
 		} else {
-			r.OutputConfluentCloud.Sasl = &tfTypes.OutputConfluentCloudAuthentication{}
-			r.OutputConfluentCloud.Sasl.Disabled = types.BoolPointerValue(resp.OutputConfluentCloud.Sasl.Disabled)
+			r.OutputConfluentCloud.Sasl = &tfTypes.AuthenticationType{}
+			if resp.OutputConfluentCloud.Sasl.AuthType != nil {
+				r.OutputConfluentCloud.Sasl.AuthType = types.StringValue(string(*resp.OutputConfluentCloud.Sasl.AuthType))
+			} else {
+				r.OutputConfluentCloud.Sasl.AuthType = types.StringNull()
+			}
+			r.OutputConfluentCloud.Sasl.BrokerServiceClass = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.BrokerServiceClass)
+			r.OutputConfluentCloud.Sasl.ClientID = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.ClientID)
+			r.OutputConfluentCloud.Sasl.ClientTextSecret = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.ClientTextSecret)
+			r.OutputConfluentCloud.Sasl.CredentialsSecret = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.CredentialsSecret)
+			r.OutputConfluentCloud.Sasl.Disabled = types.BoolValue(resp.OutputConfluentCloud.Sasl.Disabled)
+			r.OutputConfluentCloud.Sasl.KeytabLocation = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.KeytabLocation)
 			if resp.OutputConfluentCloud.Sasl.Mechanism != nil {
 				r.OutputConfluentCloud.Sasl.Mechanism = types.StringValue(string(*resp.OutputConfluentCloud.Sasl.Mechanism))
 			} else {
 				r.OutputConfluentCloud.Sasl.Mechanism = types.StringNull()
 			}
+			r.OutputConfluentCloud.Sasl.OauthEnabled = types.BoolPointerValue(resp.OutputConfluentCloud.Sasl.OauthEnabled)
+			r.OutputConfluentCloud.Sasl.OauthParams = []tfTypes.ItemsTypeSaslOauthParams{}
+
+			for _, oauthParamsItem1 := range resp.OutputConfluentCloud.Sasl.OauthParams {
+				var oauthParams1 tfTypes.ItemsTypeSaslOauthParams
+
+				oauthParams1.Name = types.StringValue(oauthParamsItem1.Name)
+				oauthParams1.Value = types.StringValue(oauthParamsItem1.Value)
+
+				r.OutputConfluentCloud.Sasl.OauthParams = append(r.OutputConfluentCloud.Sasl.OauthParams, oauthParams1)
+			}
+			r.OutputConfluentCloud.Sasl.OauthSecretType = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.OauthSecretType)
+			r.OutputConfluentCloud.Sasl.Password = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.Password)
+			r.OutputConfluentCloud.Sasl.Principal = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.Principal)
+			r.OutputConfluentCloud.Sasl.SaslExtensions = []tfTypes.ItemsTypeSaslSaslExtensions{}
+
+			for _, saslExtensionsItem := range resp.OutputConfluentCloud.Sasl.SaslExtensions {
+				var saslExtensions tfTypes.ItemsTypeSaslSaslExtensions
+
+				saslExtensions.Name = types.StringValue(saslExtensionsItem.Name)
+				saslExtensions.Value = types.StringValue(saslExtensionsItem.Value)
+
+				r.OutputConfluentCloud.Sasl.SaslExtensions = append(r.OutputConfluentCloud.Sasl.SaslExtensions, saslExtensions)
+			}
+			r.OutputConfluentCloud.Sasl.TokenURL = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.TokenURL)
+			r.OutputConfluentCloud.Sasl.Username = types.StringPointerValue(resp.OutputConfluentCloud.Sasl.Username)
 		}
 		r.OutputConfluentCloud.Streamtags = make([]types.String, 0, len(resp.OutputConfluentCloud.Streamtags))
 		for _, v := range resp.OutputConfluentCloud.Streamtags {
@@ -1177,7 +1433,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputConfluentCloud.TLS == nil {
 			r.OutputConfluentCloud.TLS = nil
 		} else {
-			r.OutputConfluentCloud.TLS = &tfTypes.OutputConfluentCloudTLSSettingsClientSide{}
+			r.OutputConfluentCloud.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputConfluentCloud.TLS.CaPath = types.StringPointerValue(resp.OutputConfluentCloud.TLS.CaPath)
 			r.OutputConfluentCloud.TLS.CertificateName = types.StringPointerValue(resp.OutputConfluentCloud.TLS.CertificateName)
 			r.OutputConfluentCloud.TLS.CertPath = types.StringPointerValue(resp.OutputConfluentCloud.TLS.CertPath)
@@ -1198,14 +1454,23 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputConfluentCloud.TLS.Servername = types.StringPointerValue(resp.OutputConfluentCloud.TLS.Servername)
 		}
 		r.OutputConfluentCloud.Topic = types.StringValue(resp.OutputConfluentCloud.Topic)
-		if resp.OutputConfluentCloud.Type != nil {
-			r.OutputConfluentCloud.Type = types.StringValue(string(*resp.OutputConfluentCloud.Type))
-		} else {
-			r.OutputConfluentCloud.Type = types.StringNull()
-		}
+		r.OutputConfluentCloud.Type = types.StringValue(string(resp.OutputConfluentCloud.Type))
+		r.Type = r.OutputConfluentCloud.Type
 	}
 	if resp.OutputCriblHTTP != nil {
 		r.OutputCriblHTTP = &tfTypes.OutputCriblHTTP{}
+		r.OutputCriblHTTP.TemplateURL = types.StringPointerValue(resp.OutputCriblHTTP.TemplateURL)
+		r.OutputCriblHTTP.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
+
+		for _, authTokensItem := range resp.OutputCriblHTTP.AuthTokens {
+			var authTokens tfTypes.ItemsTypeAuthTokensTokenSecret
+
+			authTokens.Description = types.StringPointerValue(authTokensItem.Description)
+			authTokens.Enabled = types.BoolPointerValue(authTokensItem.Enabled)
+			authTokens.TokenSecret = types.StringValue(authTokensItem.TokenSecret)
+
+			r.OutputCriblHTTP.AuthTokens = append(r.OutputCriblHTTP.AuthTokens, authTokens)
+		}
 		if resp.OutputCriblHTTP.Compression != nil {
 			r.OutputCriblHTTP.Compression = types.StringValue(string(*resp.OutputCriblHTTP.Compression))
 		} else {
@@ -1215,15 +1480,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCriblHTTP.Description = types.StringPointerValue(resp.OutputCriblHTTP.Description)
 		r.OutputCriblHTTP.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.DNSResolvePeriodSec)
 		r.OutputCriblHTTP.Environment = types.StringPointerValue(resp.OutputCriblHTTP.Environment)
+		r.Environment = r.OutputCriblHTTP.Environment
 		r.OutputCriblHTTP.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblHTTP.ExcludeFields))
 		for _, v := range resp.OutputCriblHTTP.ExcludeFields {
 			r.OutputCriblHTTP.ExcludeFields = append(r.OutputCriblHTTP.ExcludeFields, types.StringValue(v))
 		}
 		r.OutputCriblHTTP.ExcludeSelf = types.BoolPointerValue(resp.OutputCriblHTTP.ExcludeSelf)
-		r.OutputCriblHTTP.ExtraHTTPHeaders = []tfTypes.OutputCriblHTTPExtraHTTPHeader{}
+		r.OutputCriblHTTP.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem3 := range resp.OutputCriblHTTP.ExtraHTTPHeaders {
-			var extraHTTPHeaders3 tfTypes.OutputCriblHTTPExtraHTTPHeader
+			var extraHTTPHeaders3 tfTypes.ItemsTypeExtraHTTPHeaders
 
 			extraHTTPHeaders3.Name = types.StringPointerValue(extraHTTPHeadersItem3.Name)
 			extraHTTPHeaders3.Value = types.StringValue(extraHTTPHeadersItem3.Value)
@@ -1236,7 +1502,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCriblHTTP.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputCriblHTTP.FlushPeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.FlushPeriodSec)
-		r.OutputCriblHTTP.ID = types.StringValue(resp.OutputCriblHTTP.ID)
+		r.OutputCriblHTTP.ID = types.StringPointerValue(resp.OutputCriblHTTP.ID)
 		r.ID = r.OutputCriblHTTP.ID
 		r.OutputCriblHTTP.LoadBalanced = types.BoolPointerValue(resp.OutputCriblHTTP.LoadBalanced)
 		r.OutputCriblHTTP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.LoadBalanceStatsPeriodSec)
@@ -1248,6 +1514,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCriblHTTP.OnBackpressure = types.StringNull()
 		}
 		r.OutputCriblHTTP.Pipeline = types.StringPointerValue(resp.OutputCriblHTTP.Pipeline)
+		r.Pipeline = r.OutputCriblHTTP.Pipeline
 		if resp.OutputCriblHTTP.PqCompress != nil {
 			r.OutputCriblHTTP.PqCompress = types.StringValue(string(*resp.OutputCriblHTTP.PqCompress))
 		} else {
@@ -1258,6 +1525,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputCriblHTTP.PqControls = &tfTypes.OutputCriblHTTPPqControls{}
 		}
+		r.OutputCriblHTTP.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputCriblHTTP.PqMaxBackpressureSec)
+		r.OutputCriblHTTP.PqMaxBufferSize = types.Float64PointerValue(resp.OutputCriblHTTP.PqMaxBufferSize)
+		r.OutputCriblHTTP.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputCriblHTTP.PqMaxBufferSizeBytes)
 		r.OutputCriblHTTP.PqMaxFileSize = types.StringPointerValue(resp.OutputCriblHTTP.PqMaxFileSize)
 		r.OutputCriblHTTP.PqMaxSize = types.StringPointerValue(resp.OutputCriblHTTP.PqMaxSize)
 		if resp.OutputCriblHTTP.PqMode != nil {
@@ -1271,12 +1541,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCriblHTTP.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputCriblHTTP.PqPath = types.StringPointerValue(resp.OutputCriblHTTP.PqPath)
+		r.OutputCriblHTTP.PqRatePerSec = types.Float64PointerValue(resp.OutputCriblHTTP.PqRatePerSec)
+		r.OutputCriblHTTP.PqStrictOrdering = types.BoolPointerValue(resp.OutputCriblHTTP.PqStrictOrdering)
 		r.OutputCriblHTTP.RejectUnauthorized = types.BoolPointerValue(resp.OutputCriblHTTP.RejectUnauthorized)
 		r.OutputCriblHTTP.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputCriblHTTP.ResponseHonorRetryAfterHeader)
-		r.OutputCriblHTTP.ResponseRetrySettings = []tfTypes.OutputCriblHTTPResponseRetrySetting{}
+		r.OutputCriblHTTP.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
 		for _, responseRetrySettingsItem4 := range resp.OutputCriblHTTP.ResponseRetrySettings {
-			var responseRetrySettings4 tfTypes.OutputCriblHTTPResponseRetrySetting
+			var responseRetrySettings4 tfTypes.ItemsTypeResponseRetrySettings
 
 			responseRetrySettings4.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem4.BackoffRate)
 			responseRetrySettings4.HTTPStatus = types.Float64Value(responseRetrySettingsItem4.HTTPStatus)
@@ -1297,20 +1569,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputCriblHTTP.SystemFields {
 			r.OutputCriblHTTP.SystemFields = append(r.OutputCriblHTTP.SystemFields, types.StringValue(v))
 		}
+		r.OutputCriblHTTP.ThrottleRatePerSec = types.StringPointerValue(resp.OutputCriblHTTP.ThrottleRatePerSec)
 		if resp.OutputCriblHTTP.TimeoutRetrySettings == nil {
 			r.OutputCriblHTTP.TimeoutRetrySettings = nil
 		} else {
-			r.OutputCriblHTTP.TimeoutRetrySettings = &tfTypes.OutputCriblHTTPTimeoutRetrySettings{}
+			r.OutputCriblHTTP.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate)
 			r.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff)
 			r.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff)
-			r.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputCriblHTTP.TimeoutSec = types.Float64PointerValue(resp.OutputCriblHTTP.TimeoutSec)
 		if resp.OutputCriblHTTP.TLS == nil {
 			r.OutputCriblHTTP.TLS = nil
 		} else {
-			r.OutputCriblHTTP.TLS = &tfTypes.OutputCriblHTTPTLSSettingsClientSide{}
+			r.OutputCriblHTTP.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputCriblHTTP.TLS.CaPath = types.StringPointerValue(resp.OutputCriblHTTP.TLS.CaPath)
 			r.OutputCriblHTTP.TLS.CertificateName = types.StringPointerValue(resp.OutputCriblHTTP.TLS.CertificateName)
 			r.OutputCriblHTTP.TLS.CertPath = types.StringPointerValue(resp.OutputCriblHTTP.TLS.CertPath)
@@ -1332,12 +1605,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputCriblHTTP.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblHTTP.TokenTTLMinutes)
 		r.OutputCriblHTTP.Type = types.StringValue(string(resp.OutputCriblHTTP.Type))
+		r.Type = r.OutputCriblHTTP.Type
 		r.OutputCriblHTTP.URL = types.StringPointerValue(resp.OutputCriblHTTP.URL)
-		r.OutputCriblHTTP.Urls = []tfTypes.OutputCriblHTTPURL{}
+		r.OutputCriblHTTP.Urls = []tfTypes.ItemsTypeUrls{}
 
 		for _, urlsItem := range resp.OutputCriblHTTP.Urls {
-			var urls tfTypes.OutputCriblHTTPURL
+			var urls tfTypes.ItemsTypeUrls
 
+			urls.TemplateURL = types.StringPointerValue(urlsItem.TemplateURL)
 			urls.URL = types.StringValue(urlsItem.URL)
 			urls.Weight = types.Float64PointerValue(urlsItem.Weight)
 
@@ -1347,14 +1622,290 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 	}
 	if resp.OutputCriblLake != nil {
 		r.OutputCriblLake = &tfTypes.OutputCriblLake{}
+		r.OutputCriblLake.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputCriblLake.TemplateAssumeRoleArn)
+		r.OutputCriblLake.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputCriblLake.TemplateAssumeRoleExternalID)
+		r.OutputCriblLake.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputCriblLake.TemplateAwsSecretKey)
+		r.OutputCriblLake.TemplateBucket = types.StringPointerValue(resp.OutputCriblLake.TemplateBucket)
+		r.OutputCriblLake.TemplateDestPath = types.StringPointerValue(resp.OutputCriblLake.TemplateDestPath)
+		r.OutputCriblLake.TemplateRegion = types.StringPointerValue(resp.OutputCriblLake.TemplateRegion)
+		r.OutputCriblLake.AddIDToStagePath = types.BoolPointerValue(resp.OutputCriblLake.AddIDToStagePath)
+		r.OutputCriblLake.AssumeRoleArn = types.StringPointerValue(resp.OutputCriblLake.AssumeRoleArn)
+		r.OutputCriblLake.AssumeRoleExternalID = types.StringPointerValue(resp.OutputCriblLake.AssumeRoleExternalID)
+		if resp.OutputCriblLake.AwsAuthenticationMethod != nil {
+			r.OutputCriblLake.AwsAuthenticationMethod = types.StringValue(string(*resp.OutputCriblLake.AwsAuthenticationMethod))
+		} else {
+			r.OutputCriblLake.AwsAuthenticationMethod = types.StringNull()
+		}
+		r.OutputCriblLake.AwsSecretKey = types.StringPointerValue(resp.OutputCriblLake.AwsSecretKey)
+		r.OutputCriblLake.BaseFileName = types.StringPointerValue(resp.OutputCriblLake.BaseFileName)
+		r.OutputCriblLake.Bucket = types.StringPointerValue(resp.OutputCriblLake.Bucket)
+		r.OutputCriblLake.DeadletterEnabled = types.BoolPointerValue(resp.OutputCriblLake.DeadletterEnabled)
+		r.OutputCriblLake.DeadletterPath = types.StringPointerValue(resp.OutputCriblLake.DeadletterPath)
 		r.OutputCriblLake.Description = types.StringPointerValue(resp.OutputCriblLake.Description)
 		r.OutputCriblLake.DestPath = types.StringPointerValue(resp.OutputCriblLake.DestPath)
-		r.OutputCriblLake.ID = types.StringValue(resp.OutputCriblLake.ID)
+		r.OutputCriblLake.DirectoryBatchSize = types.Float64PointerValue(resp.OutputCriblLake.DirectoryBatchSize)
+		r.OutputCriblLake.DurationSeconds = types.Float64PointerValue(resp.OutputCriblLake.DurationSeconds)
+		r.OutputCriblLake.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputCriblLake.EmptyDirCleanupSec)
+		r.OutputCriblLake.EnableAssumeRole = types.BoolPointerValue(resp.OutputCriblLake.EnableAssumeRole)
+		r.OutputCriblLake.Endpoint = types.StringPointerValue(resp.OutputCriblLake.Endpoint)
+		r.OutputCriblLake.Environment = types.StringPointerValue(resp.OutputCriblLake.Environment)
+		r.Environment = r.OutputCriblLake.Environment
+		r.OutputCriblLake.FileNameSuffix = types.StringPointerValue(resp.OutputCriblLake.FileNameSuffix)
+		r.OutputCriblLake.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputCriblLake.ForceCloseOnShutdown)
+		if resp.OutputCriblLake.Format != nil {
+			r.OutputCriblLake.Format = types.StringValue(string(*resp.OutputCriblLake.Format))
+		} else {
+			r.OutputCriblLake.Format = types.StringNull()
+		}
+		r.OutputCriblLake.HeaderLine = types.StringPointerValue(resp.OutputCriblLake.HeaderLine)
+		r.OutputCriblLake.ID = types.StringPointerValue(resp.OutputCriblLake.ID)
 		r.ID = r.OutputCriblLake.ID
+		r.OutputCriblLake.KmsKeyID = types.StringPointerValue(resp.OutputCriblLake.KmsKeyID)
+		r.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64PointerValue(resp.OutputCriblLake.MaxClosingFilesToBackpressure)
+		r.OutputCriblLake.MaxConcurrentFileParts = types.Float64PointerValue(resp.OutputCriblLake.MaxConcurrentFileParts)
+		r.OutputCriblLake.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputCriblLake.MaxFileIdleTimeSec)
+		r.OutputCriblLake.MaxFileOpenTimeSec = types.Float64PointerValue(resp.OutputCriblLake.MaxFileOpenTimeSec)
+		r.OutputCriblLake.MaxFileSizeMB = types.Float64PointerValue(resp.OutputCriblLake.MaxFileSizeMB)
+		r.OutputCriblLake.MaxOpenFiles = types.Float64PointerValue(resp.OutputCriblLake.MaxOpenFiles)
+		r.OutputCriblLake.MaxRetryNum = types.Float64PointerValue(resp.OutputCriblLake.MaxRetryNum)
+		if resp.OutputCriblLake.ObjectACL != nil {
+			r.OutputCriblLake.ObjectACL = types.StringValue(string(*resp.OutputCriblLake.ObjectACL))
+		} else {
+			r.OutputCriblLake.ObjectACL = types.StringNull()
+		}
+		if resp.OutputCriblLake.OnBackpressure != nil {
+			r.OutputCriblLake.OnBackpressure = types.StringValue(string(*resp.OutputCriblLake.OnBackpressure))
+		} else {
+			r.OutputCriblLake.OnBackpressure = types.StringNull()
+		}
+		if resp.OutputCriblLake.OnDiskFullBackpressure != nil {
+			r.OutputCriblLake.OnDiskFullBackpressure = types.StringValue(string(*resp.OutputCriblLake.OnDiskFullBackpressure))
+		} else {
+			r.OutputCriblLake.OnDiskFullBackpressure = types.StringNull()
+		}
+		r.OutputCriblLake.Pipeline = types.StringPointerValue(resp.OutputCriblLake.Pipeline)
+		r.Pipeline = r.OutputCriblLake.Pipeline
+		r.OutputCriblLake.Region = types.StringPointerValue(resp.OutputCriblLake.Region)
+		r.OutputCriblLake.RejectUnauthorized = types.BoolPointerValue(resp.OutputCriblLake.RejectUnauthorized)
+		r.OutputCriblLake.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputCriblLake.RemoveEmptyDirs)
+		if resp.OutputCriblLake.RetrySettings == nil {
+			r.OutputCriblLake.RetrySettings = nil
+		} else {
+			r.OutputCriblLake.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputCriblLake.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputCriblLake.RetrySettings.BackoffMultiplier)
+			r.OutputCriblLake.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputCriblLake.RetrySettings.Enabled)
+			r.OutputCriblLake.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputCriblLake.RetrySettings.InitialBackoffMs)
+			r.OutputCriblLake.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputCriblLake.RetrySettings.JitterPercent)
+			r.OutputCriblLake.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputCriblLake.RetrySettings.MaxBackoffMs)
+		}
+		r.OutputCriblLake.ReuseConnections = types.BoolPointerValue(resp.OutputCriblLake.ReuseConnections)
+		if resp.OutputCriblLake.ServerSideEncryption != nil {
+			r.OutputCriblLake.ServerSideEncryption = types.StringValue(string(*resp.OutputCriblLake.ServerSideEncryption))
+		} else {
+			r.OutputCriblLake.ServerSideEncryption = types.StringNull()
+		}
+		if resp.OutputCriblLake.SignatureVersion != nil {
+			r.OutputCriblLake.SignatureVersion = types.StringValue(string(*resp.OutputCriblLake.SignatureVersion))
+		} else {
+			r.OutputCriblLake.SignatureVersion = types.StringNull()
+		}
+		r.OutputCriblLake.StagePath = types.StringPointerValue(resp.OutputCriblLake.StagePath)
+		if resp.OutputCriblLake.StorageClass != nil {
+			r.OutputCriblLake.StorageClass = types.StringValue(string(*resp.OutputCriblLake.StorageClass))
+		} else {
+			r.OutputCriblLake.StorageClass = types.StringNull()
+		}
+		r.OutputCriblLake.Streamtags = make([]types.String, 0, len(resp.OutputCriblLake.Streamtags))
+		for _, v := range resp.OutputCriblLake.Streamtags {
+			r.OutputCriblLake.Streamtags = append(r.OutputCriblLake.Streamtags, types.StringValue(v))
+		}
+		r.OutputCriblLake.SystemFields = make([]types.String, 0, len(resp.OutputCriblLake.SystemFields))
+		for _, v := range resp.OutputCriblLake.SystemFields {
+			r.OutputCriblLake.SystemFields = append(r.OutputCriblLake.SystemFields, types.StringValue(v))
+		}
 		r.OutputCriblLake.Type = types.StringValue(string(resp.OutputCriblLake.Type))
+		r.Type = r.OutputCriblLake.Type
+		r.OutputCriblLake.VerifyPermissions = types.BoolPointerValue(resp.OutputCriblLake.VerifyPermissions)
+		r.OutputCriblLake.WriteHighWaterMark = types.Float64PointerValue(resp.OutputCriblLake.WriteHighWaterMark)
+	}
+	if resp.OutputCriblSearchEngine != nil {
+		r.OutputCriblSearchEngine = &tfTypes.OutputCriblSearchEngine{}
+		r.OutputCriblSearchEngine.TemplateURL = types.StringPointerValue(resp.OutputCriblSearchEngine.TemplateURL)
+		r.OutputCriblSearchEngine.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
+
+		for _, authTokensItem1 := range resp.OutputCriblSearchEngine.AuthTokens {
+			var authTokens1 tfTypes.ItemsTypeAuthTokensTokenSecret
+
+			authTokens1.Description = types.StringPointerValue(authTokensItem1.Description)
+			authTokens1.Enabled = types.BoolPointerValue(authTokensItem1.Enabled)
+			authTokens1.TokenSecret = types.StringValue(authTokensItem1.TokenSecret)
+
+			r.OutputCriblSearchEngine.AuthTokens = append(r.OutputCriblSearchEngine.AuthTokens, authTokens1)
+		}
+		if resp.OutputCriblSearchEngine.Compression != nil {
+			r.OutputCriblSearchEngine.Compression = types.StringValue(string(*resp.OutputCriblSearchEngine.Compression))
+		} else {
+			r.OutputCriblSearchEngine.Compression = types.StringNull()
+		}
+		r.OutputCriblSearchEngine.Concurrency = types.Float64PointerValue(resp.OutputCriblSearchEngine.Concurrency)
+		r.OutputCriblSearchEngine.Description = types.StringPointerValue(resp.OutputCriblSearchEngine.Description)
+		r.OutputCriblSearchEngine.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.DNSResolvePeriodSec)
+		r.OutputCriblSearchEngine.Environment = types.StringPointerValue(resp.OutputCriblSearchEngine.Environment)
+		r.Environment = r.OutputCriblSearchEngine.Environment
+		r.OutputCriblSearchEngine.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblSearchEngine.ExcludeFields))
+		for _, v := range resp.OutputCriblSearchEngine.ExcludeFields {
+			r.OutputCriblSearchEngine.ExcludeFields = append(r.OutputCriblSearchEngine.ExcludeFields, types.StringValue(v))
+		}
+		r.OutputCriblSearchEngine.ExcludeSelf = types.BoolPointerValue(resp.OutputCriblSearchEngine.ExcludeSelf)
+		r.OutputCriblSearchEngine.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+		for _, extraHTTPHeadersItem4 := range resp.OutputCriblSearchEngine.ExtraHTTPHeaders {
+			var extraHTTPHeaders4 tfTypes.ItemsTypeExtraHTTPHeaders
+
+			extraHTTPHeaders4.Name = types.StringPointerValue(extraHTTPHeadersItem4.Name)
+			extraHTTPHeaders4.Value = types.StringValue(extraHTTPHeadersItem4.Value)
+
+			r.OutputCriblSearchEngine.ExtraHTTPHeaders = append(r.OutputCriblSearchEngine.ExtraHTTPHeaders, extraHTTPHeaders4)
+		}
+		if resp.OutputCriblSearchEngine.FailedRequestLoggingMode != nil {
+			r.OutputCriblSearchEngine.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputCriblSearchEngine.FailedRequestLoggingMode))
+		} else {
+			r.OutputCriblSearchEngine.FailedRequestLoggingMode = types.StringNull()
+		}
+		r.OutputCriblSearchEngine.FlushPeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.FlushPeriodSec)
+		r.OutputCriblSearchEngine.ID = types.StringPointerValue(resp.OutputCriblSearchEngine.ID)
+		r.ID = r.OutputCriblSearchEngine.ID
+		r.OutputCriblSearchEngine.LoadBalanced = types.BoolPointerValue(resp.OutputCriblSearchEngine.LoadBalanced)
+		r.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec)
+		r.OutputCriblSearchEngine.MaxPayloadEvents = types.Float64PointerValue(resp.OutputCriblSearchEngine.MaxPayloadEvents)
+		r.OutputCriblSearchEngine.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputCriblSearchEngine.MaxPayloadSizeKB)
+		if resp.OutputCriblSearchEngine.OnBackpressure != nil {
+			r.OutputCriblSearchEngine.OnBackpressure = types.StringValue(string(*resp.OutputCriblSearchEngine.OnBackpressure))
+		} else {
+			r.OutputCriblSearchEngine.OnBackpressure = types.StringNull()
+		}
+		r.OutputCriblSearchEngine.Pipeline = types.StringPointerValue(resp.OutputCriblSearchEngine.Pipeline)
+		r.Pipeline = r.OutputCriblSearchEngine.Pipeline
+		if resp.OutputCriblSearchEngine.PqCompress != nil {
+			r.OutputCriblSearchEngine.PqCompress = types.StringValue(string(*resp.OutputCriblSearchEngine.PqCompress))
+		} else {
+			r.OutputCriblSearchEngine.PqCompress = types.StringNull()
+		}
+		if resp.OutputCriblSearchEngine.PqControls == nil {
+			r.OutputCriblSearchEngine.PqControls = nil
+		} else {
+			r.OutputCriblSearchEngine.PqControls = &tfTypes.OutputCriblSearchEnginePqControls{}
+		}
+		r.OutputCriblSearchEngine.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.PqMaxBackpressureSec)
+		r.OutputCriblSearchEngine.PqMaxBufferSize = types.Float64PointerValue(resp.OutputCriblSearchEngine.PqMaxBufferSize)
+		r.OutputCriblSearchEngine.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputCriblSearchEngine.PqMaxBufferSizeBytes)
+		r.OutputCriblSearchEngine.PqMaxFileSize = types.StringPointerValue(resp.OutputCriblSearchEngine.PqMaxFileSize)
+		r.OutputCriblSearchEngine.PqMaxSize = types.StringPointerValue(resp.OutputCriblSearchEngine.PqMaxSize)
+		if resp.OutputCriblSearchEngine.PqMode != nil {
+			r.OutputCriblSearchEngine.PqMode = types.StringValue(string(*resp.OutputCriblSearchEngine.PqMode))
+		} else {
+			r.OutputCriblSearchEngine.PqMode = types.StringNull()
+		}
+		if resp.OutputCriblSearchEngine.PqOnBackpressure != nil {
+			r.OutputCriblSearchEngine.PqOnBackpressure = types.StringValue(string(*resp.OutputCriblSearchEngine.PqOnBackpressure))
+		} else {
+			r.OutputCriblSearchEngine.PqOnBackpressure = types.StringNull()
+		}
+		r.OutputCriblSearchEngine.PqPath = types.StringPointerValue(resp.OutputCriblSearchEngine.PqPath)
+		r.OutputCriblSearchEngine.PqRatePerSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.PqRatePerSec)
+		r.OutputCriblSearchEngine.PqStrictOrdering = types.BoolPointerValue(resp.OutputCriblSearchEngine.PqStrictOrdering)
+		r.OutputCriblSearchEngine.RejectUnauthorized = types.BoolPointerValue(resp.OutputCriblSearchEngine.RejectUnauthorized)
+		r.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader)
+		r.OutputCriblSearchEngine.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+		for _, responseRetrySettingsItem5 := range resp.OutputCriblSearchEngine.ResponseRetrySettings {
+			var responseRetrySettings5 tfTypes.ItemsTypeResponseRetrySettings
+
+			responseRetrySettings5.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem5.BackoffRate)
+			responseRetrySettings5.HTTPStatus = types.Float64Value(responseRetrySettingsItem5.HTTPStatus)
+			responseRetrySettings5.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem5.InitialBackoff)
+			responseRetrySettings5.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem5.MaxBackoff)
+
+			r.OutputCriblSearchEngine.ResponseRetrySettings = append(r.OutputCriblSearchEngine.ResponseRetrySettings, responseRetrySettings5)
+		}
+		r.OutputCriblSearchEngine.SafeHeaders = make([]types.String, 0, len(resp.OutputCriblSearchEngine.SafeHeaders))
+		for _, v := range resp.OutputCriblSearchEngine.SafeHeaders {
+			r.OutputCriblSearchEngine.SafeHeaders = append(r.OutputCriblSearchEngine.SafeHeaders, types.StringValue(v))
+		}
+		r.OutputCriblSearchEngine.Streamtags = make([]types.String, 0, len(resp.OutputCriblSearchEngine.Streamtags))
+		for _, v := range resp.OutputCriblSearchEngine.Streamtags {
+			r.OutputCriblSearchEngine.Streamtags = append(r.OutputCriblSearchEngine.Streamtags, types.StringValue(v))
+		}
+		r.OutputCriblSearchEngine.SystemFields = make([]types.String, 0, len(resp.OutputCriblSearchEngine.SystemFields))
+		for _, v := range resp.OutputCriblSearchEngine.SystemFields {
+			r.OutputCriblSearchEngine.SystemFields = append(r.OutputCriblSearchEngine.SystemFields, types.StringValue(v))
+		}
+		r.OutputCriblSearchEngine.ThrottleRatePerSec = types.StringPointerValue(resp.OutputCriblSearchEngine.ThrottleRatePerSec)
+		if resp.OutputCriblSearchEngine.TimeoutRetrySettings == nil {
+			r.OutputCriblSearchEngine.TimeoutRetrySettings = nil
+		} else {
+			r.OutputCriblSearchEngine.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+			r.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate)
+			r.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff)
+			r.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff)
+			r.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry)
+		}
+		r.OutputCriblSearchEngine.TimeoutSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.TimeoutSec)
+		if resp.OutputCriblSearchEngine.TLS == nil {
+			r.OutputCriblSearchEngine.TLS = nil
+		} else {
+			r.OutputCriblSearchEngine.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
+			r.OutputCriblSearchEngine.TLS.CaPath = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.CaPath)
+			r.OutputCriblSearchEngine.TLS.CertificateName = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.CertificateName)
+			r.OutputCriblSearchEngine.TLS.CertPath = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.CertPath)
+			r.OutputCriblSearchEngine.TLS.Disabled = types.BoolPointerValue(resp.OutputCriblSearchEngine.TLS.Disabled)
+			if resp.OutputCriblSearchEngine.TLS.MaxVersion != nil {
+				r.OutputCriblSearchEngine.TLS.MaxVersion = types.StringValue(string(*resp.OutputCriblSearchEngine.TLS.MaxVersion))
+			} else {
+				r.OutputCriblSearchEngine.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.OutputCriblSearchEngine.TLS.MinVersion != nil {
+				r.OutputCriblSearchEngine.TLS.MinVersion = types.StringValue(string(*resp.OutputCriblSearchEngine.TLS.MinVersion))
+			} else {
+				r.OutputCriblSearchEngine.TLS.MinVersion = types.StringNull()
+			}
+			r.OutputCriblSearchEngine.TLS.Passphrase = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.Passphrase)
+			r.OutputCriblSearchEngine.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.PrivKeyPath)
+			r.OutputCriblSearchEngine.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputCriblSearchEngine.TLS.RejectUnauthorized)
+			r.OutputCriblSearchEngine.TLS.Servername = types.StringPointerValue(resp.OutputCriblSearchEngine.TLS.Servername)
+		}
+		r.OutputCriblSearchEngine.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblSearchEngine.TokenTTLMinutes)
+		r.OutputCriblSearchEngine.Type = types.StringValue(string(resp.OutputCriblSearchEngine.Type))
+		r.Type = r.OutputCriblSearchEngine.Type
+		r.OutputCriblSearchEngine.URL = types.StringPointerValue(resp.OutputCriblSearchEngine.URL)
+		r.OutputCriblSearchEngine.Urls = []tfTypes.ItemsTypeUrls{}
+
+		for _, urlsItem1 := range resp.OutputCriblSearchEngine.Urls {
+			var urls1 tfTypes.ItemsTypeUrls
+
+			urls1.TemplateURL = types.StringPointerValue(urlsItem1.TemplateURL)
+			urls1.URL = types.StringValue(urlsItem1.URL)
+			urls1.Weight = types.Float64PointerValue(urlsItem1.Weight)
+
+			r.OutputCriblSearchEngine.Urls = append(r.OutputCriblSearchEngine.Urls, urls1)
+		}
+		r.OutputCriblSearchEngine.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputCriblSearchEngine.UseRoundRobinDNS)
 	}
 	if resp.OutputCriblTCP != nil {
 		r.OutputCriblTCP = &tfTypes.OutputCriblTCP{}
+		r.OutputCriblTCP.TemplateHost = types.StringPointerValue(resp.OutputCriblTCP.TemplateHost)
+		r.OutputCriblTCP.TemplatePort = types.StringPointerValue(resp.OutputCriblTCP.TemplatePort)
+		r.OutputCriblTCP.AuthTokens = []tfTypes.ItemsTypeAuthTokens{}
+
+		for _, authTokensItem2 := range resp.OutputCriblTCP.AuthTokens {
+			var authTokens2 tfTypes.ItemsTypeAuthTokens
+
+			authTokens2.Description = types.StringPointerValue(authTokensItem2.Description)
+			authTokens2.Enabled = types.BoolPointerValue(authTokensItem2.Enabled)
+			authTokens2.TokenSecret = types.StringValue(authTokensItem2.TokenSecret)
+
+			r.OutputCriblTCP.AuthTokens = append(r.OutputCriblTCP.AuthTokens, authTokens2)
+		}
 		if resp.OutputCriblTCP.Compression != nil {
 			r.OutputCriblTCP.Compression = types.StringValue(string(*resp.OutputCriblTCP.Compression))
 		} else {
@@ -1364,19 +1915,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCriblTCP.Description = types.StringPointerValue(resp.OutputCriblTCP.Description)
 		r.OutputCriblTCP.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblTCP.DNSResolvePeriodSec)
 		r.OutputCriblTCP.Environment = types.StringPointerValue(resp.OutputCriblTCP.Environment)
+		r.Environment = r.OutputCriblTCP.Environment
 		r.OutputCriblTCP.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblTCP.ExcludeFields))
 		for _, v := range resp.OutputCriblTCP.ExcludeFields {
 			r.OutputCriblTCP.ExcludeFields = append(r.OutputCriblTCP.ExcludeFields, types.StringValue(v))
 		}
 		r.OutputCriblTCP.ExcludeSelf = types.BoolPointerValue(resp.OutputCriblTCP.ExcludeSelf)
 		r.OutputCriblTCP.Host = types.StringPointerValue(resp.OutputCriblTCP.Host)
-		r.OutputCriblTCP.Hosts = []tfTypes.OutputCriblTCPHost{}
+		r.OutputCriblTCP.Hosts = []tfTypes.ItemsTypeHosts{}
 
 		for _, hostsItem := range resp.OutputCriblTCP.Hosts {
-			var hosts tfTypes.OutputCriblTCPHost
+			var hosts tfTypes.ItemsTypeHosts
 
+			hosts.TemplateHost = types.StringPointerValue(hostsItem.TemplateHost)
+			hosts.TemplatePort = types.StringPointerValue(hostsItem.TemplatePort)
 			hosts.Host = types.StringValue(hostsItem.Host)
-			hosts.Port = types.Float64PointerValue(hostsItem.Port)
+			hosts.Port = types.Float64Value(hostsItem.Port)
 			hosts.Servername = types.StringPointerValue(hostsItem.Servername)
 			if hostsItem.TLS != nil {
 				hosts.TLS = types.StringValue(string(*hostsItem.TLS))
@@ -1387,7 +1941,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 
 			r.OutputCriblTCP.Hosts = append(r.OutputCriblTCP.Hosts, hosts)
 		}
-		r.OutputCriblTCP.ID = types.StringValue(resp.OutputCriblTCP.ID)
+		r.OutputCriblTCP.ID = types.StringPointerValue(resp.OutputCriblTCP.ID)
 		r.ID = r.OutputCriblTCP.ID
 		r.OutputCriblTCP.LoadBalanced = types.BoolPointerValue(resp.OutputCriblTCP.LoadBalanced)
 		r.OutputCriblTCP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblTCP.LoadBalanceStatsPeriodSec)
@@ -1399,6 +1953,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCriblTCP.OnBackpressure = types.StringNull()
 		}
 		r.OutputCriblTCP.Pipeline = types.StringPointerValue(resp.OutputCriblTCP.Pipeline)
+		r.Pipeline = r.OutputCriblTCP.Pipeline
 		r.OutputCriblTCP.Port = types.Float64PointerValue(resp.OutputCriblTCP.Port)
 		if resp.OutputCriblTCP.PqCompress != nil {
 			r.OutputCriblTCP.PqCompress = types.StringValue(string(*resp.OutputCriblTCP.PqCompress))
@@ -1410,6 +1965,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputCriblTCP.PqControls = &tfTypes.OutputCriblTCPPqControls{}
 		}
+		r.OutputCriblTCP.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputCriblTCP.PqMaxBackpressureSec)
+		r.OutputCriblTCP.PqMaxBufferSize = types.Float64PointerValue(resp.OutputCriblTCP.PqMaxBufferSize)
+		r.OutputCriblTCP.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputCriblTCP.PqMaxBufferSizeBytes)
 		r.OutputCriblTCP.PqMaxFileSize = types.StringPointerValue(resp.OutputCriblTCP.PqMaxFileSize)
 		r.OutputCriblTCP.PqMaxSize = types.StringPointerValue(resp.OutputCriblTCP.PqMaxSize)
 		if resp.OutputCriblTCP.PqMode != nil {
@@ -1423,6 +1981,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCriblTCP.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputCriblTCP.PqPath = types.StringPointerValue(resp.OutputCriblTCP.PqPath)
+		r.OutputCriblTCP.PqRatePerSec = types.Float64PointerValue(resp.OutputCriblTCP.PqRatePerSec)
+		r.OutputCriblTCP.PqStrictOrdering = types.BoolPointerValue(resp.OutputCriblTCP.PqStrictOrdering)
 		r.OutputCriblTCP.Streamtags = make([]types.String, 0, len(resp.OutputCriblTCP.Streamtags))
 		for _, v := range resp.OutputCriblTCP.Streamtags {
 			r.OutputCriblTCP.Streamtags = append(r.OutputCriblTCP.Streamtags, types.StringValue(v))
@@ -1435,7 +1995,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputCriblTCP.TLS == nil {
 			r.OutputCriblTCP.TLS = nil
 		} else {
-			r.OutputCriblTCP.TLS = &tfTypes.OutputCriblTCPTLSSettingsClientSide{}
+			r.OutputCriblTCP.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputCriblTCP.TLS.CaPath = types.StringPointerValue(resp.OutputCriblTCP.TLS.CaPath)
 			r.OutputCriblTCP.TLS.CertificateName = types.StringPointerValue(resp.OutputCriblTCP.TLS.CertificateName)
 			r.OutputCriblTCP.TLS.CertPath = types.StringPointerValue(resp.OutputCriblTCP.TLS.CertPath)
@@ -1457,10 +2017,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputCriblTCP.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblTCP.TokenTTLMinutes)
 		r.OutputCriblTCP.Type = types.StringValue(string(resp.OutputCriblTCP.Type))
+		r.Type = r.OutputCriblTCP.Type
 		r.OutputCriblTCP.WriteTimeout = types.Float64PointerValue(resp.OutputCriblTCP.WriteTimeout)
 	}
 	if resp.OutputCrowdstrikeNextGenSiem != nil {
 		r.OutputCrowdstrikeNextGenSiem = &tfTypes.OutputCrowdstrikeNextGenSiem{}
+		r.OutputCrowdstrikeNextGenSiem.TemplateURL = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.TemplateURL)
 		if resp.OutputCrowdstrikeNextGenSiem.AuthType != nil {
 			r.OutputCrowdstrikeNextGenSiem.AuthType = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.AuthType))
 		} else {
@@ -1470,15 +2032,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputCrowdstrikeNextGenSiem.Concurrency = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.Concurrency)
 		r.OutputCrowdstrikeNextGenSiem.Description = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Description)
 		r.OutputCrowdstrikeNextGenSiem.Environment = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Environment)
-		r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = []tfTypes.OutputCrowdstrikeNextGenSiemExtraHTTPHeader{}
+		r.Environment = r.OutputCrowdstrikeNextGenSiem.Environment
+		r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem4 := range resp.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
-			var extraHTTPHeaders4 tfTypes.OutputCrowdstrikeNextGenSiemExtraHTTPHeader
+		for _, extraHTTPHeadersItem5 := range resp.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
+			var extraHTTPHeaders5 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders4.Name = types.StringPointerValue(extraHTTPHeadersItem4.Name)
-			extraHTTPHeaders4.Value = types.StringValue(extraHTTPHeadersItem4.Value)
+			extraHTTPHeaders5.Name = types.StringPointerValue(extraHTTPHeadersItem5.Name)
+			extraHTTPHeaders5.Value = types.StringValue(extraHTTPHeadersItem5.Value)
 
-			r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = append(r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders, extraHTTPHeaders4)
+			r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = append(r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders, extraHTTPHeaders5)
 		}
 		if resp.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode != nil {
 			r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode))
@@ -1486,11 +2049,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.FlushPeriodSec)
-		if resp.OutputCrowdstrikeNextGenSiem.Format != nil {
-			r.OutputCrowdstrikeNextGenSiem.Format = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.Format))
-		} else {
-			r.OutputCrowdstrikeNextGenSiem.Format = types.StringNull()
-		}
+		r.OutputCrowdstrikeNextGenSiem.Format = types.StringValue(string(resp.OutputCrowdstrikeNextGenSiem.Format))
 		r.OutputCrowdstrikeNextGenSiem.ID = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.ID)
 		r.ID = r.OutputCrowdstrikeNextGenSiem.ID
 		r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents)
@@ -1501,6 +2060,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCrowdstrikeNextGenSiem.OnBackpressure = types.StringNull()
 		}
 		r.OutputCrowdstrikeNextGenSiem.Pipeline = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Pipeline)
+		r.Pipeline = r.OutputCrowdstrikeNextGenSiem.Pipeline
 		if resp.OutputCrowdstrikeNextGenSiem.PqCompress != nil {
 			r.OutputCrowdstrikeNextGenSiem.PqCompress = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.PqCompress))
 		} else {
@@ -1511,6 +2071,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputCrowdstrikeNextGenSiem.PqControls = &tfTypes.OutputCrowdstrikeNextGenSiemPqControls{}
 		}
+		r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec)
+		r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize)
+		r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes)
 		r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.PqMaxFileSize)
 		r.OutputCrowdstrikeNextGenSiem.PqMaxSize = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.PqMaxSize)
 		if resp.OutputCrowdstrikeNextGenSiem.PqMode != nil {
@@ -1524,19 +2087,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputCrowdstrikeNextGenSiem.PqPath = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.PqPath)
+		r.OutputCrowdstrikeNextGenSiem.PqRatePerSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.PqRatePerSec)
+		r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.PqStrictOrdering)
 		r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.RejectUnauthorized)
 		r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader)
-		r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = []tfTypes.OutputCrowdstrikeNextGenSiemResponseRetrySetting{}
+		r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem5 := range resp.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
-			var responseRetrySettings5 tfTypes.OutputCrowdstrikeNextGenSiemResponseRetrySetting
+		for _, responseRetrySettingsItem6 := range resp.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
+			var responseRetrySettings6 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings5.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem5.BackoffRate)
-			responseRetrySettings5.HTTPStatus = types.Float64Value(responseRetrySettingsItem5.HTTPStatus)
-			responseRetrySettings5.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem5.InitialBackoff)
-			responseRetrySettings5.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem5.MaxBackoff)
+			responseRetrySettings6.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem6.BackoffRate)
+			responseRetrySettings6.HTTPStatus = types.Float64Value(responseRetrySettingsItem6.HTTPStatus)
+			responseRetrySettings6.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem6.InitialBackoff)
+			responseRetrySettings6.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem6.MaxBackoff)
 
-			r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = append(r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings, responseRetrySettings5)
+			r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings = append(r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings, responseRetrySettings6)
 		}
 		r.OutputCrowdstrikeNextGenSiem.SafeHeaders = make([]types.String, 0, len(resp.OutputCrowdstrikeNextGenSiem.SafeHeaders))
 		for _, v := range resp.OutputCrowdstrikeNextGenSiem.SafeHeaders {
@@ -1554,28 +2119,26 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings == nil {
 			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = nil
 		} else {
-			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = &tfTypes.OutputCrowdstrikeNextGenSiemTimeoutRetrySettings{}
+			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate)
 			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff)
 			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff)
-			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputCrowdstrikeNextGenSiem.TimeoutSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutSec)
 		r.OutputCrowdstrikeNextGenSiem.Token = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Token)
-		if resp.OutputCrowdstrikeNextGenSiem.Type != nil {
-			r.OutputCrowdstrikeNextGenSiem.Type = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.Type))
-		} else {
-			r.OutputCrowdstrikeNextGenSiem.Type = types.StringNull()
-		}
+		r.OutputCrowdstrikeNextGenSiem.Type = types.StringValue(string(resp.OutputCrowdstrikeNextGenSiem.Type))
+		r.Type = r.OutputCrowdstrikeNextGenSiem.Type
 		r.OutputCrowdstrikeNextGenSiem.URL = types.StringValue(resp.OutputCrowdstrikeNextGenSiem.URL)
 		r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS)
 	}
 	if resp.OutputDatabricks != nil {
 		r.OutputDatabricks = &tfTypes.OutputDatabricks{}
+		r.OutputDatabricks.TemplateFormat = types.StringPointerValue(resp.OutputDatabricks.TemplateFormat)
 		r.OutputDatabricks.AddIDToStagePath = types.BoolPointerValue(resp.OutputDatabricks.AddIDToStagePath)
 		r.OutputDatabricks.AutomaticSchema = types.BoolPointerValue(resp.OutputDatabricks.AutomaticSchema)
 		r.OutputDatabricks.BaseFileName = types.StringPointerValue(resp.OutputDatabricks.BaseFileName)
-		r.OutputDatabricks.Catalog = types.StringPointerValue(resp.OutputDatabricks.Catalog)
+		r.OutputDatabricks.Catalog = types.StringValue(resp.OutputDatabricks.Catalog)
 		r.OutputDatabricks.ClientID = types.StringValue(resp.OutputDatabricks.ClientID)
 		r.OutputDatabricks.ClientTextSecret = types.StringValue(resp.OutputDatabricks.ClientTextSecret)
 		if resp.OutputDatabricks.Compress != nil {
@@ -1598,7 +2161,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDatabricks.EnableStatistics = types.BoolPointerValue(resp.OutputDatabricks.EnableStatistics)
 		r.OutputDatabricks.EnableWritePageIndex = types.BoolPointerValue(resp.OutputDatabricks.EnableWritePageIndex)
 		r.OutputDatabricks.Environment = types.StringPointerValue(resp.OutputDatabricks.Environment)
-		r.OutputDatabricks.EventsVolumeName = types.StringPointerValue(resp.OutputDatabricks.EventsVolumeName)
+		r.Environment = r.OutputDatabricks.Environment
+		r.OutputDatabricks.EventsVolumeName = types.StringValue(resp.OutputDatabricks.EventsVolumeName)
 		r.OutputDatabricks.FileNameSuffix = types.StringPointerValue(resp.OutputDatabricks.FileNameSuffix)
 		r.OutputDatabricks.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputDatabricks.ForceCloseOnShutdown)
 		if resp.OutputDatabricks.Format != nil {
@@ -1609,15 +2173,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDatabricks.HeaderLine = types.StringPointerValue(resp.OutputDatabricks.HeaderLine)
 		r.OutputDatabricks.ID = types.StringPointerValue(resp.OutputDatabricks.ID)
 		r.ID = r.OutputDatabricks.ID
-		r.OutputDatabricks.KeyValueMetadata = []tfTypes.OutputDatabricksKeyValueMetadatum{}
+		r.OutputDatabricks.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem2 := range resp.OutputDatabricks.KeyValueMetadata {
-			var keyValueMetadata2 tfTypes.OutputDatabricksKeyValueMetadatum
+		for _, keyValueMetadataItem3 := range resp.OutputDatabricks.KeyValueMetadata {
+			var keyValueMetadata3 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata2.Key = types.StringPointerValue(keyValueMetadataItem2.Key)
-			keyValueMetadata2.Value = types.StringValue(keyValueMetadataItem2.Value)
+			keyValueMetadata3.Key = types.StringValue(keyValueMetadataItem3.Key)
+			keyValueMetadata3.Value = types.StringValue(keyValueMetadataItem3.Value)
 
-			r.OutputDatabricks.KeyValueMetadata = append(r.OutputDatabricks.KeyValueMetadata, keyValueMetadata2)
+			r.OutputDatabricks.KeyValueMetadata = append(r.OutputDatabricks.KeyValueMetadata, keyValueMetadata3)
 		}
 		r.OutputDatabricks.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputDatabricks.MaxFileIdleTimeSec)
 		r.OutputDatabricks.MaxFileOpenTimeSec = types.Float64PointerValue(resp.OutputDatabricks.MaxFileOpenTimeSec)
@@ -1649,9 +2213,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDatabricks.PartitionExpr = types.StringPointerValue(resp.OutputDatabricks.PartitionExpr)
 		r.OutputDatabricks.Pipeline = types.StringPointerValue(resp.OutputDatabricks.Pipeline)
+		r.Pipeline = r.OutputDatabricks.Pipeline
 		r.OutputDatabricks.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputDatabricks.RemoveEmptyDirs)
-		r.OutputDatabricks.Schema = types.StringPointerValue(resp.OutputDatabricks.Schema)
-		r.OutputDatabricks.Scope = types.StringPointerValue(resp.OutputDatabricks.Scope)
+		if resp.OutputDatabricks.RetrySettings == nil {
+			r.OutputDatabricks.RetrySettings = nil
+		} else {
+			r.OutputDatabricks.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputDatabricks.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputDatabricks.RetrySettings.BackoffMultiplier)
+			r.OutputDatabricks.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputDatabricks.RetrySettings.Enabled)
+			r.OutputDatabricks.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputDatabricks.RetrySettings.InitialBackoffMs)
+			r.OutputDatabricks.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputDatabricks.RetrySettings.JitterPercent)
+			r.OutputDatabricks.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputDatabricks.RetrySettings.MaxBackoffMs)
+		}
+		r.OutputDatabricks.Schema = types.StringValue(resp.OutputDatabricks.Schema)
+		r.OutputDatabricks.Scope = types.StringValue(resp.OutputDatabricks.Scope)
 		r.OutputDatabricks.ShouldLogInvalidRows = types.BoolPointerValue(resp.OutputDatabricks.ShouldLogInvalidRows)
 		r.OutputDatabricks.StagePath = types.StringPointerValue(resp.OutputDatabricks.StagePath)
 		r.OutputDatabricks.Streamtags = make([]types.String, 0, len(resp.OutputDatabricks.Streamtags))
@@ -1662,8 +2237,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputDatabricks.SystemFields {
 			r.OutputDatabricks.SystemFields = append(r.OutputDatabricks.SystemFields, types.StringValue(v))
 		}
-		r.OutputDatabricks.TimeoutSec = types.Float64PointerValue(resp.OutputDatabricks.TimeoutSec)
+		r.OutputDatabricks.TimeoutSec = types.Int64PointerValue(resp.OutputDatabricks.TimeoutSec)
 		r.OutputDatabricks.Type = types.StringValue(string(resp.OutputDatabricks.Type))
+		r.Type = r.OutputDatabricks.Type
 		r.OutputDatabricks.WorkspaceID = types.StringValue(resp.OutputDatabricks.WorkspaceID)
 		r.OutputDatabricks.WriteHighWaterMark = types.Float64PointerValue(resp.OutputDatabricks.WriteHighWaterMark)
 	}
@@ -1687,15 +2263,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDatadog.CustomURL = types.StringPointerValue(resp.OutputDatadog.CustomURL)
 		r.OutputDatadog.Description = types.StringPointerValue(resp.OutputDatadog.Description)
 		r.OutputDatadog.Environment = types.StringPointerValue(resp.OutputDatadog.Environment)
-		r.OutputDatadog.ExtraHTTPHeaders = []tfTypes.OutputDatadogExtraHTTPHeader{}
+		r.Environment = r.OutputDatadog.Environment
+		r.OutputDatadog.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem5 := range resp.OutputDatadog.ExtraHTTPHeaders {
-			var extraHTTPHeaders5 tfTypes.OutputDatadogExtraHTTPHeader
+		for _, extraHTTPHeadersItem6 := range resp.OutputDatadog.ExtraHTTPHeaders {
+			var extraHTTPHeaders6 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders5.Name = types.StringPointerValue(extraHTTPHeadersItem5.Name)
-			extraHTTPHeaders5.Value = types.StringValue(extraHTTPHeadersItem5.Value)
+			extraHTTPHeaders6.Name = types.StringPointerValue(extraHTTPHeadersItem6.Name)
+			extraHTTPHeaders6.Value = types.StringValue(extraHTTPHeadersItem6.Value)
 
-			r.OutputDatadog.ExtraHTTPHeaders = append(r.OutputDatadog.ExtraHTTPHeaders, extraHTTPHeaders5)
+			r.OutputDatadog.ExtraHTTPHeaders = append(r.OutputDatadog.ExtraHTTPHeaders, extraHTTPHeaders6)
 		}
 		if resp.OutputDatadog.FailedRequestLoggingMode != nil {
 			r.OutputDatadog.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputDatadog.FailedRequestLoggingMode))
@@ -1704,7 +2281,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDatadog.FlushPeriodSec = types.Float64PointerValue(resp.OutputDatadog.FlushPeriodSec)
 		r.OutputDatadog.Host = types.StringPointerValue(resp.OutputDatadog.Host)
-		r.OutputDatadog.ID = types.StringValue(resp.OutputDatadog.ID)
+		r.OutputDatadog.ID = types.StringPointerValue(resp.OutputDatadog.ID)
 		r.ID = r.OutputDatadog.ID
 		r.OutputDatadog.MaxPayloadEvents = types.Float64PointerValue(resp.OutputDatadog.MaxPayloadEvents)
 		r.OutputDatadog.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDatadog.MaxPayloadSizeKB)
@@ -1715,6 +2292,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDatadog.OnBackpressure = types.StringNull()
 		}
 		r.OutputDatadog.Pipeline = types.StringPointerValue(resp.OutputDatadog.Pipeline)
+		r.Pipeline = r.OutputDatadog.Pipeline
 		if resp.OutputDatadog.PqCompress != nil {
 			r.OutputDatadog.PqCompress = types.StringValue(string(*resp.OutputDatadog.PqCompress))
 		} else {
@@ -1725,6 +2303,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDatadog.PqControls = &tfTypes.OutputDatadogPqControls{}
 		}
+		r.OutputDatadog.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputDatadog.PqMaxBackpressureSec)
+		r.OutputDatadog.PqMaxBufferSize = types.Float64PointerValue(resp.OutputDatadog.PqMaxBufferSize)
+		r.OutputDatadog.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputDatadog.PqMaxBufferSizeBytes)
 		r.OutputDatadog.PqMaxFileSize = types.StringPointerValue(resp.OutputDatadog.PqMaxFileSize)
 		r.OutputDatadog.PqMaxSize = types.StringPointerValue(resp.OutputDatadog.PqMaxSize)
 		if resp.OutputDatadog.PqMode != nil {
@@ -1738,19 +2319,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDatadog.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputDatadog.PqPath = types.StringPointerValue(resp.OutputDatadog.PqPath)
+		r.OutputDatadog.PqRatePerSec = types.Float64PointerValue(resp.OutputDatadog.PqRatePerSec)
+		r.OutputDatadog.PqStrictOrdering = types.BoolPointerValue(resp.OutputDatadog.PqStrictOrdering)
 		r.OutputDatadog.RejectUnauthorized = types.BoolPointerValue(resp.OutputDatadog.RejectUnauthorized)
 		r.OutputDatadog.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputDatadog.ResponseHonorRetryAfterHeader)
-		r.OutputDatadog.ResponseRetrySettings = []tfTypes.OutputDatadogResponseRetrySetting{}
+		r.OutputDatadog.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem6 := range resp.OutputDatadog.ResponseRetrySettings {
-			var responseRetrySettings6 tfTypes.OutputDatadogResponseRetrySetting
+		for _, responseRetrySettingsItem7 := range resp.OutputDatadog.ResponseRetrySettings {
+			var responseRetrySettings7 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings6.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem6.BackoffRate)
-			responseRetrySettings6.HTTPStatus = types.Float64Value(responseRetrySettingsItem6.HTTPStatus)
-			responseRetrySettings6.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem6.InitialBackoff)
-			responseRetrySettings6.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem6.MaxBackoff)
+			responseRetrySettings7.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem7.BackoffRate)
+			responseRetrySettings7.HTTPStatus = types.Float64Value(responseRetrySettingsItem7.HTTPStatus)
+			responseRetrySettings7.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem7.InitialBackoff)
+			responseRetrySettings7.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem7.MaxBackoff)
 
-			r.OutputDatadog.ResponseRetrySettings = append(r.OutputDatadog.ResponseRetrySettings, responseRetrySettings6)
+			r.OutputDatadog.ResponseRetrySettings = append(r.OutputDatadog.ResponseRetrySettings, responseRetrySettings7)
 		}
 		r.OutputDatadog.SafeHeaders = make([]types.String, 0, len(resp.OutputDatadog.SafeHeaders))
 		for _, v := range resp.OutputDatadog.SafeHeaders {
@@ -1785,19 +2368,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputDatadog.TimeoutRetrySettings == nil {
 			r.OutputDatadog.TimeoutRetrySettings = nil
 		} else {
-			r.OutputDatadog.TimeoutRetrySettings = &tfTypes.OutputDatadogTimeoutRetrySettings{}
+			r.OutputDatadog.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputDatadog.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputDatadog.TimeoutRetrySettings.BackoffRate)
 			r.OutputDatadog.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputDatadog.TimeoutRetrySettings.InitialBackoff)
 			r.OutputDatadog.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputDatadog.TimeoutRetrySettings.MaxBackoff)
-			r.OutputDatadog.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputDatadog.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputDatadog.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputDatadog.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputDatadog.TimeoutSec = types.Float64PointerValue(resp.OutputDatadog.TimeoutSec)
 		r.OutputDatadog.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDatadog.TotalMemoryLimitKB)
 		r.OutputDatadog.Type = types.StringValue(string(resp.OutputDatadog.Type))
+		r.Type = r.OutputDatadog.Type
 		r.OutputDatadog.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDatadog.UseRoundRobinDNS)
 	}
 	if resp.OutputDataset != nil {
 		r.OutputDataset = &tfTypes.OutputDataset{}
+		r.OutputDataset.TemplateCustomURL = types.StringPointerValue(resp.OutputDataset.TemplateCustomURL)
 		r.OutputDataset.APIKey = types.StringPointerValue(resp.OutputDataset.APIKey)
 		if resp.OutputDataset.AuthType != nil {
 			r.OutputDataset.AuthType = types.StringValue(string(*resp.OutputDataset.AuthType))
@@ -1814,19 +2399,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDataset.Description = types.StringPointerValue(resp.OutputDataset.Description)
 		r.OutputDataset.Environment = types.StringPointerValue(resp.OutputDataset.Environment)
+		r.Environment = r.OutputDataset.Environment
 		r.OutputDataset.ExcludeFields = make([]types.String, 0, len(resp.OutputDataset.ExcludeFields))
 		for _, v := range resp.OutputDataset.ExcludeFields {
 			r.OutputDataset.ExcludeFields = append(r.OutputDataset.ExcludeFields, types.StringValue(v))
 		}
-		r.OutputDataset.ExtraHTTPHeaders = []tfTypes.OutputDatasetExtraHTTPHeader{}
+		r.OutputDataset.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem6 := range resp.OutputDataset.ExtraHTTPHeaders {
-			var extraHTTPHeaders6 tfTypes.OutputDatasetExtraHTTPHeader
+		for _, extraHTTPHeadersItem7 := range resp.OutputDataset.ExtraHTTPHeaders {
+			var extraHTTPHeaders7 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders6.Name = types.StringPointerValue(extraHTTPHeadersItem6.Name)
-			extraHTTPHeaders6.Value = types.StringValue(extraHTTPHeadersItem6.Value)
+			extraHTTPHeaders7.Name = types.StringPointerValue(extraHTTPHeadersItem7.Name)
+			extraHTTPHeaders7.Value = types.StringValue(extraHTTPHeadersItem7.Value)
 
-			r.OutputDataset.ExtraHTTPHeaders = append(r.OutputDataset.ExtraHTTPHeaders, extraHTTPHeaders6)
+			r.OutputDataset.ExtraHTTPHeaders = append(r.OutputDataset.ExtraHTTPHeaders, extraHTTPHeaders7)
 		}
 		if resp.OutputDataset.FailedRequestLoggingMode != nil {
 			r.OutputDataset.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputDataset.FailedRequestLoggingMode))
@@ -1834,7 +2420,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDataset.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputDataset.FlushPeriodSec = types.Float64PointerValue(resp.OutputDataset.FlushPeriodSec)
-		r.OutputDataset.ID = types.StringValue(resp.OutputDataset.ID)
+		r.OutputDataset.ID = types.StringPointerValue(resp.OutputDataset.ID)
 		r.ID = r.OutputDataset.ID
 		r.OutputDataset.MaxPayloadEvents = types.Float64PointerValue(resp.OutputDataset.MaxPayloadEvents)
 		r.OutputDataset.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDataset.MaxPayloadSizeKB)
@@ -1845,6 +2431,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDataset.OnBackpressure = types.StringNull()
 		}
 		r.OutputDataset.Pipeline = types.StringPointerValue(resp.OutputDataset.Pipeline)
+		r.Pipeline = r.OutputDataset.Pipeline
 		if resp.OutputDataset.PqCompress != nil {
 			r.OutputDataset.PqCompress = types.StringValue(string(*resp.OutputDataset.PqCompress))
 		} else {
@@ -1855,6 +2442,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDataset.PqControls = &tfTypes.OutputDatasetPqControls{}
 		}
+		r.OutputDataset.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputDataset.PqMaxBackpressureSec)
+		r.OutputDataset.PqMaxBufferSize = types.Float64PointerValue(resp.OutputDataset.PqMaxBufferSize)
+		r.OutputDataset.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputDataset.PqMaxBufferSizeBytes)
 		r.OutputDataset.PqMaxFileSize = types.StringPointerValue(resp.OutputDataset.PqMaxFileSize)
 		r.OutputDataset.PqMaxSize = types.StringPointerValue(resp.OutputDataset.PqMaxSize)
 		if resp.OutputDataset.PqMode != nil {
@@ -1868,19 +2458,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDataset.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputDataset.PqPath = types.StringPointerValue(resp.OutputDataset.PqPath)
+		r.OutputDataset.PqRatePerSec = types.Float64PointerValue(resp.OutputDataset.PqRatePerSec)
+		r.OutputDataset.PqStrictOrdering = types.BoolPointerValue(resp.OutputDataset.PqStrictOrdering)
 		r.OutputDataset.RejectUnauthorized = types.BoolPointerValue(resp.OutputDataset.RejectUnauthorized)
 		r.OutputDataset.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputDataset.ResponseHonorRetryAfterHeader)
-		r.OutputDataset.ResponseRetrySettings = []tfTypes.OutputDatasetResponseRetrySetting{}
+		r.OutputDataset.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem7 := range resp.OutputDataset.ResponseRetrySettings {
-			var responseRetrySettings7 tfTypes.OutputDatasetResponseRetrySetting
+		for _, responseRetrySettingsItem8 := range resp.OutputDataset.ResponseRetrySettings {
+			var responseRetrySettings8 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings7.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem7.BackoffRate)
-			responseRetrySettings7.HTTPStatus = types.Float64Value(responseRetrySettingsItem7.HTTPStatus)
-			responseRetrySettings7.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem7.InitialBackoff)
-			responseRetrySettings7.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem7.MaxBackoff)
+			responseRetrySettings8.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem8.BackoffRate)
+			responseRetrySettings8.HTTPStatus = types.Float64Value(responseRetrySettingsItem8.HTTPStatus)
+			responseRetrySettings8.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem8.InitialBackoff)
+			responseRetrySettings8.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem8.MaxBackoff)
 
-			r.OutputDataset.ResponseRetrySettings = append(r.OutputDataset.ResponseRetrySettings, responseRetrySettings7)
+			r.OutputDataset.ResponseRetrySettings = append(r.OutputDataset.ResponseRetrySettings, responseRetrySettings8)
 		}
 		r.OutputDataset.SafeHeaders = make([]types.String, 0, len(resp.OutputDataset.SafeHeaders))
 		for _, v := range resp.OutputDataset.SafeHeaders {
@@ -1904,25 +2496,28 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputDataset.TimeoutRetrySettings == nil {
 			r.OutputDataset.TimeoutRetrySettings = nil
 		} else {
-			r.OutputDataset.TimeoutRetrySettings = &tfTypes.OutputDatasetTimeoutRetrySettings{}
+			r.OutputDataset.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputDataset.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputDataset.TimeoutRetrySettings.BackoffRate)
 			r.OutputDataset.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputDataset.TimeoutRetrySettings.InitialBackoff)
 			r.OutputDataset.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputDataset.TimeoutRetrySettings.MaxBackoff)
-			r.OutputDataset.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputDataset.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputDataset.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputDataset.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputDataset.TimeoutSec = types.Float64PointerValue(resp.OutputDataset.TimeoutSec)
 		r.OutputDataset.TimestampField = types.StringPointerValue(resp.OutputDataset.TimestampField)
 		r.OutputDataset.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDataset.TotalMemoryLimitKB)
 		r.OutputDataset.Type = types.StringValue(string(resp.OutputDataset.Type))
+		r.Type = r.OutputDataset.Type
 		r.OutputDataset.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDataset.UseRoundRobinDNS)
 	}
 	if resp.OutputDefault != nil {
 		r.OutputDefault = &tfTypes.OutputDefault{}
-		r.OutputDefault.DefaultID = types.StringValue(resp.OutputDefault.DefaultID)
+		r.OutputDefault.DefaultID = types.StringPointerValue(resp.OutputDefault.DefaultID)
 		r.OutputDefault.Environment = types.StringPointerValue(resp.OutputDefault.Environment)
+		r.Environment = r.OutputDefault.Environment
 		r.OutputDefault.ID = types.StringPointerValue(resp.OutputDefault.ID)
 		r.ID = r.OutputDefault.ID
 		r.OutputDefault.Pipeline = types.StringPointerValue(resp.OutputDefault.Pipeline)
+		r.Pipeline = r.OutputDefault.Pipeline
 		r.OutputDefault.Streamtags = make([]types.String, 0, len(resp.OutputDefault.Streamtags))
 		for _, v := range resp.OutputDefault.Streamtags {
 			r.OutputDefault.Streamtags = append(r.OutputDefault.Streamtags, types.StringValue(v))
@@ -1932,13 +2527,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDefault.SystemFields = append(r.OutputDefault.SystemFields, types.StringValue(v))
 		}
 		r.OutputDefault.Type = types.StringValue(string(resp.OutputDefault.Type))
+		r.Type = r.OutputDefault.Type
 	}
 	if resp.OutputDevnull != nil {
 		r.OutputDevnull = &tfTypes.OutputDevnull{}
 		r.OutputDevnull.Environment = types.StringPointerValue(resp.OutputDevnull.Environment)
-		r.OutputDevnull.ID = types.StringValue(resp.OutputDevnull.ID)
+		r.Environment = r.OutputDevnull.Environment
+		r.OutputDevnull.ID = types.StringPointerValue(resp.OutputDevnull.ID)
 		r.ID = r.OutputDevnull.ID
 		r.OutputDevnull.Pipeline = types.StringPointerValue(resp.OutputDevnull.Pipeline)
+		r.Pipeline = r.OutputDevnull.Pipeline
 		r.OutputDevnull.Streamtags = make([]types.String, 0, len(resp.OutputDevnull.Streamtags))
 		for _, v := range resp.OutputDevnull.Streamtags {
 			r.OutputDevnull.Streamtags = append(r.OutputDevnull.Streamtags, types.StringValue(v))
@@ -1948,6 +2546,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDevnull.SystemFields = append(r.OutputDevnull.SystemFields, types.StringValue(v))
 		}
 		r.OutputDevnull.Type = types.StringValue(string(resp.OutputDevnull.Type))
+		r.Type = r.OutputDevnull.Type
 	}
 	if resp.OutputDiskSpool != nil {
 		r.OutputDiskSpool = &tfTypes.OutputDiskSpool{}
@@ -1958,12 +2557,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDiskSpool.Description = types.StringPointerValue(resp.OutputDiskSpool.Description)
 		r.OutputDiskSpool.Environment = types.StringPointerValue(resp.OutputDiskSpool.Environment)
-		r.OutputDiskSpool.ID = types.StringValue(resp.OutputDiskSpool.ID)
+		r.Environment = r.OutputDiskSpool.Environment
+		r.OutputDiskSpool.ID = types.StringPointerValue(resp.OutputDiskSpool.ID)
 		r.ID = r.OutputDiskSpool.ID
 		r.OutputDiskSpool.MaxDataSize = types.StringPointerValue(resp.OutputDiskSpool.MaxDataSize)
 		r.OutputDiskSpool.MaxDataTime = types.StringPointerValue(resp.OutputDiskSpool.MaxDataTime)
 		r.OutputDiskSpool.PartitionExpr = types.StringPointerValue(resp.OutputDiskSpool.PartitionExpr)
 		r.OutputDiskSpool.Pipeline = types.StringPointerValue(resp.OutputDiskSpool.Pipeline)
+		r.Pipeline = r.OutputDiskSpool.Pipeline
 		r.OutputDiskSpool.Streamtags = make([]types.String, 0, len(resp.OutputDiskSpool.Streamtags))
 		for _, v := range resp.OutputDiskSpool.Streamtags {
 			r.OutputDiskSpool.Streamtags = append(r.OutputDiskSpool.Streamtags, types.StringValue(v))
@@ -1974,9 +2575,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDiskSpool.TimeWindow = types.StringPointerValue(resp.OutputDiskSpool.TimeWindow)
 		r.OutputDiskSpool.Type = types.StringValue(string(resp.OutputDiskSpool.Type))
+		r.Type = r.OutputDiskSpool.Type
 	}
 	if resp.OutputDlS3 != nil {
 		r.OutputDlS3 = &tfTypes.OutputDlS3{}
+		r.OutputDlS3.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputDlS3.TemplateAssumeRoleArn)
+		r.OutputDlS3.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputDlS3.TemplateAssumeRoleExternalID)
+		r.OutputDlS3.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputDlS3.TemplateAwsAPIKey)
+		r.OutputDlS3.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputDlS3.TemplateAwsSecretKey)
+		r.OutputDlS3.TemplateBucket = types.StringPointerValue(resp.OutputDlS3.TemplateBucket)
+		r.OutputDlS3.TemplateFormat = types.StringPointerValue(resp.OutputDlS3.TemplateFormat)
+		r.OutputDlS3.TemplateRegion = types.StringPointerValue(resp.OutputDlS3.TemplateRegion)
 		r.OutputDlS3.AddIDToStagePath = types.BoolPointerValue(resp.OutputDlS3.AddIDToStagePath)
 		r.OutputDlS3.AssumeRoleArn = types.StringPointerValue(resp.OutputDlS3.AssumeRoleArn)
 		r.OutputDlS3.AssumeRoleExternalID = types.StringPointerValue(resp.OutputDlS3.AssumeRoleExternalID)
@@ -2005,6 +2614,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDlS3.DeadletterPath = types.StringPointerValue(resp.OutputDlS3.DeadletterPath)
 		r.OutputDlS3.Description = types.StringPointerValue(resp.OutputDlS3.Description)
 		r.OutputDlS3.DestPath = types.StringPointerValue(resp.OutputDlS3.DestPath)
+		r.OutputDlS3.DirectoryBatchSize = types.Float64PointerValue(resp.OutputDlS3.DirectoryBatchSize)
 		r.OutputDlS3.DurationSeconds = types.Float64PointerValue(resp.OutputDlS3.DurationSeconds)
 		r.OutputDlS3.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputDlS3.EmptyDirCleanupSec)
 		r.OutputDlS3.EnableAssumeRole = types.BoolPointerValue(resp.OutputDlS3.EnableAssumeRole)
@@ -2013,7 +2623,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDlS3.EnableWritePageIndex = types.BoolPointerValue(resp.OutputDlS3.EnableWritePageIndex)
 		r.OutputDlS3.Endpoint = types.StringPointerValue(resp.OutputDlS3.Endpoint)
 		r.OutputDlS3.Environment = types.StringPointerValue(resp.OutputDlS3.Environment)
+		r.Environment = r.OutputDlS3.Environment
 		r.OutputDlS3.FileNameSuffix = types.StringPointerValue(resp.OutputDlS3.FileNameSuffix)
+		r.OutputDlS3.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputDlS3.ForceCloseOnShutdown)
 		if resp.OutputDlS3.Format != nil {
 			r.OutputDlS3.Format = types.StringValue(string(*resp.OutputDlS3.Format))
 		} else {
@@ -2022,15 +2634,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDlS3.HeaderLine = types.StringPointerValue(resp.OutputDlS3.HeaderLine)
 		r.OutputDlS3.ID = types.StringPointerValue(resp.OutputDlS3.ID)
 		r.ID = r.OutputDlS3.ID
-		r.OutputDlS3.KeyValueMetadata = []tfTypes.OutputDlS3KeyValueMetadatum{}
+		r.OutputDlS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem3 := range resp.OutputDlS3.KeyValueMetadata {
-			var keyValueMetadata3 tfTypes.OutputDlS3KeyValueMetadatum
+		for _, keyValueMetadataItem4 := range resp.OutputDlS3.KeyValueMetadata {
+			var keyValueMetadata4 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata3.Key = types.StringPointerValue(keyValueMetadataItem3.Key)
-			keyValueMetadata3.Value = types.StringValue(keyValueMetadataItem3.Value)
+			keyValueMetadata4.Key = types.StringValue(keyValueMetadataItem4.Key)
+			keyValueMetadata4.Value = types.StringValue(keyValueMetadataItem4.Value)
 
-			r.OutputDlS3.KeyValueMetadata = append(r.OutputDlS3.KeyValueMetadata, keyValueMetadata3)
+			r.OutputDlS3.KeyValueMetadata = append(r.OutputDlS3.KeyValueMetadata, keyValueMetadata4)
 		}
 		r.OutputDlS3.KmsKeyID = types.StringPointerValue(resp.OutputDlS3.KmsKeyID)
 		r.OutputDlS3.MaxClosingFilesToBackpressure = types.Float64PointerValue(resp.OutputDlS3.MaxClosingFilesToBackpressure)
@@ -2045,6 +2657,11 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDlS3.ObjectACL = types.StringNull()
 		}
+		if resp.OutputDlS3.OnBackpressure != nil {
+			r.OutputDlS3.OnBackpressure = types.StringValue(string(*resp.OutputDlS3.OnBackpressure))
+		} else {
+			r.OutputDlS3.OnBackpressure = types.StringNull()
+		}
 		if resp.OutputDlS3.OnDiskFullBackpressure != nil {
 			r.OutputDlS3.OnDiskFullBackpressure = types.StringValue(string(*resp.OutputDlS3.OnDiskFullBackpressure))
 		} else {
@@ -2057,6 +2674,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputDlS3.ParquetPageSize = types.StringPointerValue(resp.OutputDlS3.ParquetPageSize)
 		r.OutputDlS3.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputDlS3.ParquetRowGroupLength)
+		r.OutputDlS3.ParquetSchema = types.StringPointerValue(resp.OutputDlS3.ParquetSchema)
 		if resp.OutputDlS3.ParquetVersion != nil {
 			r.OutputDlS3.ParquetVersion = types.StringValue(string(*resp.OutputDlS3.ParquetVersion))
 		} else {
@@ -2067,9 +2685,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDlS3.PartitioningFields = append(r.OutputDlS3.PartitioningFields, types.StringValue(v))
 		}
 		r.OutputDlS3.Pipeline = types.StringPointerValue(resp.OutputDlS3.Pipeline)
+		r.Pipeline = r.OutputDlS3.Pipeline
 		r.OutputDlS3.Region = types.StringPointerValue(resp.OutputDlS3.Region)
 		r.OutputDlS3.RejectUnauthorized = types.BoolPointerValue(resp.OutputDlS3.RejectUnauthorized)
 		r.OutputDlS3.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputDlS3.RemoveEmptyDirs)
+		if resp.OutputDlS3.RetrySettings == nil {
+			r.OutputDlS3.RetrySettings = nil
+		} else {
+			r.OutputDlS3.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputDlS3.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputDlS3.RetrySettings.BackoffMultiplier)
+			r.OutputDlS3.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputDlS3.RetrySettings.Enabled)
+			r.OutputDlS3.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputDlS3.RetrySettings.InitialBackoffMs)
+			r.OutputDlS3.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputDlS3.RetrySettings.JitterPercent)
+			r.OutputDlS3.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputDlS3.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputDlS3.ReuseConnections = types.BoolPointerValue(resp.OutputDlS3.ReuseConnections)
 		if resp.OutputDlS3.ServerSideEncryption != nil {
 			r.OutputDlS3.ServerSideEncryption = types.StringValue(string(*resp.OutputDlS3.ServerSideEncryption))
@@ -2082,7 +2711,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDlS3.SignatureVersion = types.StringNull()
 		}
-		r.OutputDlS3.StagePath = types.StringPointerValue(resp.OutputDlS3.StagePath)
+		r.OutputDlS3.StagePath = types.StringValue(resp.OutputDlS3.StagePath)
 		if resp.OutputDlS3.StorageClass != nil {
 			r.OutputDlS3.StorageClass = types.StringValue(string(*resp.OutputDlS3.StorageClass))
 		} else {
@@ -2096,16 +2725,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputDlS3.SystemFields {
 			r.OutputDlS3.SystemFields = append(r.OutputDlS3.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputDlS3.Type != nil {
-			r.OutputDlS3.Type = types.StringValue(string(*resp.OutputDlS3.Type))
-		} else {
-			r.OutputDlS3.Type = types.StringNull()
-		}
+		r.OutputDlS3.Type = types.StringValue(string(resp.OutputDlS3.Type))
+		r.Type = r.OutputDlS3.Type
 		r.OutputDlS3.VerifyPermissions = types.BoolPointerValue(resp.OutputDlS3.VerifyPermissions)
 		r.OutputDlS3.WriteHighWaterMark = types.Float64PointerValue(resp.OutputDlS3.WriteHighWaterMark)
 	}
 	if resp.OutputDynatraceHTTP != nil {
 		r.OutputDynatraceHTTP = &tfTypes.OutputDynatraceHTTP{}
+		r.OutputDynatraceHTTP.TemplateURL = types.StringPointerValue(resp.OutputDynatraceHTTP.TemplateURL)
 		r.OutputDynatraceHTTP.ActiveGateDomain = types.StringPointerValue(resp.OutputDynatraceHTTP.ActiveGateDomain)
 		if resp.OutputDynatraceHTTP.AuthType != nil {
 			r.OutputDynatraceHTTP.AuthType = types.StringValue(string(*resp.OutputDynatraceHTTP.AuthType))
@@ -2115,22 +2742,19 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDynatraceHTTP.Compress = types.BoolPointerValue(resp.OutputDynatraceHTTP.Compress)
 		r.OutputDynatraceHTTP.Concurrency = types.Float64PointerValue(resp.OutputDynatraceHTTP.Concurrency)
 		r.OutputDynatraceHTTP.Description = types.StringPointerValue(resp.OutputDynatraceHTTP.Description)
-		if resp.OutputDynatraceHTTP.Endpoint != nil {
-			r.OutputDynatraceHTTP.Endpoint = types.StringValue(string(*resp.OutputDynatraceHTTP.Endpoint))
-		} else {
-			r.OutputDynatraceHTTP.Endpoint = types.StringNull()
-		}
+		r.OutputDynatraceHTTP.Endpoint = types.StringValue(string(resp.OutputDynatraceHTTP.Endpoint))
 		r.OutputDynatraceHTTP.Environment = types.StringPointerValue(resp.OutputDynatraceHTTP.Environment)
+		r.Environment = r.OutputDynatraceHTTP.Environment
 		r.OutputDynatraceHTTP.EnvironmentID = types.StringPointerValue(resp.OutputDynatraceHTTP.EnvironmentID)
-		r.OutputDynatraceHTTP.ExtraHTTPHeaders = []tfTypes.OutputDynatraceHTTPExtraHTTPHeader{}
+		r.OutputDynatraceHTTP.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem7 := range resp.OutputDynatraceHTTP.ExtraHTTPHeaders {
-			var extraHTTPHeaders7 tfTypes.OutputDynatraceHTTPExtraHTTPHeader
+		for _, extraHTTPHeadersItem8 := range resp.OutputDynatraceHTTP.ExtraHTTPHeaders {
+			var extraHTTPHeaders8 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders7.Name = types.StringPointerValue(extraHTTPHeadersItem7.Name)
-			extraHTTPHeaders7.Value = types.StringValue(extraHTTPHeadersItem7.Value)
+			extraHTTPHeaders8.Name = types.StringPointerValue(extraHTTPHeadersItem8.Name)
+			extraHTTPHeaders8.Value = types.StringValue(extraHTTPHeadersItem8.Value)
 
-			r.OutputDynatraceHTTP.ExtraHTTPHeaders = append(r.OutputDynatraceHTTP.ExtraHTTPHeaders, extraHTTPHeaders7)
+			r.OutputDynatraceHTTP.ExtraHTTPHeaders = append(r.OutputDynatraceHTTP.ExtraHTTPHeaders, extraHTTPHeaders8)
 		}
 		if resp.OutputDynatraceHTTP.FailedRequestLoggingMode != nil {
 			r.OutputDynatraceHTTP.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputDynatraceHTTP.FailedRequestLoggingMode))
@@ -2138,11 +2762,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDynatraceHTTP.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputDynatraceHTTP.FlushPeriodSec = types.Float64PointerValue(resp.OutputDynatraceHTTP.FlushPeriodSec)
-		if resp.OutputDynatraceHTTP.Format != nil {
-			r.OutputDynatraceHTTP.Format = types.StringValue(string(*resp.OutputDynatraceHTTP.Format))
-		} else {
-			r.OutputDynatraceHTTP.Format = types.StringNull()
-		}
+		r.OutputDynatraceHTTP.Format = types.StringValue(string(resp.OutputDynatraceHTTP.Format))
 		r.OutputDynatraceHTTP.ID = types.StringPointerValue(resp.OutputDynatraceHTTP.ID)
 		r.ID = r.OutputDynatraceHTTP.ID
 		r.OutputDynatraceHTTP.KeepAlive = types.BoolPointerValue(resp.OutputDynatraceHTTP.KeepAlive)
@@ -2159,6 +2779,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDynatraceHTTP.OnBackpressure = types.StringNull()
 		}
 		r.OutputDynatraceHTTP.Pipeline = types.StringPointerValue(resp.OutputDynatraceHTTP.Pipeline)
+		r.Pipeline = r.OutputDynatraceHTTP.Pipeline
 		if resp.OutputDynatraceHTTP.PqCompress != nil {
 			r.OutputDynatraceHTTP.PqCompress = types.StringValue(string(*resp.OutputDynatraceHTTP.PqCompress))
 		} else {
@@ -2169,6 +2790,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDynatraceHTTP.PqControls = &tfTypes.OutputDynatraceHTTPPqControls{}
 		}
+		r.OutputDynatraceHTTP.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputDynatraceHTTP.PqMaxBackpressureSec)
+		r.OutputDynatraceHTTP.PqMaxBufferSize = types.Float64PointerValue(resp.OutputDynatraceHTTP.PqMaxBufferSize)
+		r.OutputDynatraceHTTP.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputDynatraceHTTP.PqMaxBufferSizeBytes)
 		r.OutputDynatraceHTTP.PqMaxFileSize = types.StringPointerValue(resp.OutputDynatraceHTTP.PqMaxFileSize)
 		r.OutputDynatraceHTTP.PqMaxSize = types.StringPointerValue(resp.OutputDynatraceHTTP.PqMaxSize)
 		if resp.OutputDynatraceHTTP.PqMode != nil {
@@ -2182,19 +2806,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDynatraceHTTP.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputDynatraceHTTP.PqPath = types.StringPointerValue(resp.OutputDynatraceHTTP.PqPath)
+		r.OutputDynatraceHTTP.PqRatePerSec = types.Float64PointerValue(resp.OutputDynatraceHTTP.PqRatePerSec)
+		r.OutputDynatraceHTTP.PqStrictOrdering = types.BoolPointerValue(resp.OutputDynatraceHTTP.PqStrictOrdering)
 		r.OutputDynatraceHTTP.RejectUnauthorized = types.BoolPointerValue(resp.OutputDynatraceHTTP.RejectUnauthorized)
 		r.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader)
-		r.OutputDynatraceHTTP.ResponseRetrySettings = []tfTypes.OutputDynatraceHTTPResponseRetrySetting{}
+		r.OutputDynatraceHTTP.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem8 := range resp.OutputDynatraceHTTP.ResponseRetrySettings {
-			var responseRetrySettings8 tfTypes.OutputDynatraceHTTPResponseRetrySetting
+		for _, responseRetrySettingsItem9 := range resp.OutputDynatraceHTTP.ResponseRetrySettings {
+			var responseRetrySettings9 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings8.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem8.BackoffRate)
-			responseRetrySettings8.HTTPStatus = types.Float64Value(responseRetrySettingsItem8.HTTPStatus)
-			responseRetrySettings8.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem8.InitialBackoff)
-			responseRetrySettings8.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem8.MaxBackoff)
+			responseRetrySettings9.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem9.BackoffRate)
+			responseRetrySettings9.HTTPStatus = types.Float64Value(responseRetrySettingsItem9.HTTPStatus)
+			responseRetrySettings9.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem9.InitialBackoff)
+			responseRetrySettings9.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem9.MaxBackoff)
 
-			r.OutputDynatraceHTTP.ResponseRetrySettings = append(r.OutputDynatraceHTTP.ResponseRetrySettings, responseRetrySettings8)
+			r.OutputDynatraceHTTP.ResponseRetrySettings = append(r.OutputDynatraceHTTP.ResponseRetrySettings, responseRetrySettings9)
 		}
 		r.OutputDynatraceHTTP.SafeHeaders = make([]types.String, 0, len(resp.OutputDynatraceHTTP.SafeHeaders))
 		for _, v := range resp.OutputDynatraceHTTP.SafeHeaders {
@@ -2208,29 +2834,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputDynatraceHTTP.SystemFields {
 			r.OutputDynatraceHTTP.SystemFields = append(r.OutputDynatraceHTTP.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputDynatraceHTTP.TelemetryType != nil {
-			r.OutputDynatraceHTTP.TelemetryType = types.StringValue(string(*resp.OutputDynatraceHTTP.TelemetryType))
-		} else {
-			r.OutputDynatraceHTTP.TelemetryType = types.StringNull()
-		}
+		r.OutputDynatraceHTTP.TelemetryType = types.StringValue(string(resp.OutputDynatraceHTTP.TelemetryType))
 		r.OutputDynatraceHTTP.TextSecret = types.StringPointerValue(resp.OutputDynatraceHTTP.TextSecret)
 		if resp.OutputDynatraceHTTP.TimeoutRetrySettings == nil {
 			r.OutputDynatraceHTTP.TimeoutRetrySettings = nil
 		} else {
-			r.OutputDynatraceHTTP.TimeoutRetrySettings = &tfTypes.OutputDynatraceHTTPTimeoutRetrySettings{}
+			r.OutputDynatraceHTTP.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate)
 			r.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff)
 			r.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff)
-			r.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputDynatraceHTTP.TimeoutSec = types.Float64PointerValue(resp.OutputDynatraceHTTP.TimeoutSec)
 		r.OutputDynatraceHTTP.Token = types.StringPointerValue(resp.OutputDynatraceHTTP.Token)
 		r.OutputDynatraceHTTP.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDynatraceHTTP.TotalMemoryLimitKB)
-		if resp.OutputDynatraceHTTP.Type != nil {
-			r.OutputDynatraceHTTP.Type = types.StringValue(string(*resp.OutputDynatraceHTTP.Type))
-		} else {
-			r.OutputDynatraceHTTP.Type = types.StringNull()
-		}
+		r.OutputDynatraceHTTP.Type = types.StringValue(string(resp.OutputDynatraceHTTP.Type))
+		r.Type = r.OutputDynatraceHTTP.Type
 		r.OutputDynatraceHTTP.URL = types.StringPointerValue(resp.OutputDynatraceHTTP.URL)
 		r.OutputDynatraceHTTP.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDynatraceHTTP.UseRoundRobinDNS)
 	}
@@ -2245,22 +2864,19 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDynatraceOtlp.Concurrency = types.Float64PointerValue(resp.OutputDynatraceOtlp.Concurrency)
 		r.OutputDynatraceOtlp.ConnectionTimeout = types.Float64PointerValue(resp.OutputDynatraceOtlp.ConnectionTimeout)
 		r.OutputDynatraceOtlp.Description = types.StringPointerValue(resp.OutputDynatraceOtlp.Description)
-		r.OutputDynatraceOtlp.Endpoint = types.StringPointerValue(resp.OutputDynatraceOtlp.Endpoint)
-		if resp.OutputDynatraceOtlp.EndpointType != nil {
-			r.OutputDynatraceOtlp.EndpointType = types.StringValue(string(*resp.OutputDynatraceOtlp.EndpointType))
-		} else {
-			r.OutputDynatraceOtlp.EndpointType = types.StringNull()
-		}
+		r.OutputDynatraceOtlp.Endpoint = types.StringValue(resp.OutputDynatraceOtlp.Endpoint)
+		r.OutputDynatraceOtlp.EndpointType = types.StringValue(string(resp.OutputDynatraceOtlp.EndpointType))
 		r.OutputDynatraceOtlp.Environment = types.StringPointerValue(resp.OutputDynatraceOtlp.Environment)
-		r.OutputDynatraceOtlp.ExtraHTTPHeaders = []tfTypes.OutputDynatraceOtlpExtraHTTPHeader{}
+		r.Environment = r.OutputDynatraceOtlp.Environment
+		r.OutputDynatraceOtlp.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem8 := range resp.OutputDynatraceOtlp.ExtraHTTPHeaders {
-			var extraHTTPHeaders8 tfTypes.OutputDynatraceOtlpExtraHTTPHeader
+		for _, extraHTTPHeadersItem9 := range resp.OutputDynatraceOtlp.ExtraHTTPHeaders {
+			var extraHTTPHeaders9 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders8.Name = types.StringPointerValue(extraHTTPHeadersItem8.Name)
-			extraHTTPHeaders8.Value = types.StringValue(extraHTTPHeadersItem8.Value)
+			extraHTTPHeaders9.Name = types.StringPointerValue(extraHTTPHeadersItem9.Name)
+			extraHTTPHeaders9.Value = types.StringValue(extraHTTPHeadersItem9.Value)
 
-			r.OutputDynatraceOtlp.ExtraHTTPHeaders = append(r.OutputDynatraceOtlp.ExtraHTTPHeaders, extraHTTPHeaders8)
+			r.OutputDynatraceOtlp.ExtraHTTPHeaders = append(r.OutputDynatraceOtlp.ExtraHTTPHeaders, extraHTTPHeaders9)
 		}
 		if resp.OutputDynatraceOtlp.FailedRequestLoggingMode != nil {
 			r.OutputDynatraceOtlp.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputDynatraceOtlp.FailedRequestLoggingMode))
@@ -2281,12 +2897,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputDynatraceOtlp.KeepAlive = types.BoolPointerValue(resp.OutputDynatraceOtlp.KeepAlive)
 		r.OutputDynatraceOtlp.KeepAliveTime = types.Float64PointerValue(resp.OutputDynatraceOtlp.KeepAliveTime)
 		r.OutputDynatraceOtlp.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDynatraceOtlp.MaxPayloadSizeKB)
-		r.OutputDynatraceOtlp.Metadata = []tfTypes.OutputDynatraceOtlpMetadatum{}
+		r.OutputDynatraceOtlp.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, metadataItem := range resp.OutputDynatraceOtlp.Metadata {
-			var metadata tfTypes.OutputDynatraceOtlpMetadatum
+			var metadata tfTypes.ItemsTypeKeyValueMetadata
 
-			metadata.Key = types.StringPointerValue(metadataItem.Key)
+			metadata.Key = types.StringValue(metadataItem.Key)
 			metadata.Value = types.StringValue(metadataItem.Value)
 
 			r.OutputDynatraceOtlp.Metadata = append(r.OutputDynatraceOtlp.Metadata, metadata)
@@ -2296,12 +2912,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDynatraceOtlp.OnBackpressure = types.StringNull()
 		}
-		if resp.OutputDynatraceOtlp.OtlpVersion != nil {
-			r.OutputDynatraceOtlp.OtlpVersion = types.StringValue(string(*resp.OutputDynatraceOtlp.OtlpVersion))
-		} else {
-			r.OutputDynatraceOtlp.OtlpVersion = types.StringNull()
-		}
+		r.OutputDynatraceOtlp.OtlpVersion = types.StringValue(string(resp.OutputDynatraceOtlp.OtlpVersion))
 		r.OutputDynatraceOtlp.Pipeline = types.StringPointerValue(resp.OutputDynatraceOtlp.Pipeline)
+		r.Pipeline = r.OutputDynatraceOtlp.Pipeline
 		if resp.OutputDynatraceOtlp.PqCompress != nil {
 			r.OutputDynatraceOtlp.PqCompress = types.StringValue(string(*resp.OutputDynatraceOtlp.PqCompress))
 		} else {
@@ -2312,6 +2925,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputDynatraceOtlp.PqControls = &tfTypes.OutputDynatraceOtlpPqControls{}
 		}
+		r.OutputDynatraceOtlp.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputDynatraceOtlp.PqMaxBackpressureSec)
+		r.OutputDynatraceOtlp.PqMaxBufferSize = types.Float64PointerValue(resp.OutputDynatraceOtlp.PqMaxBufferSize)
+		r.OutputDynatraceOtlp.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputDynatraceOtlp.PqMaxBufferSizeBytes)
 		r.OutputDynatraceOtlp.PqMaxFileSize = types.StringPointerValue(resp.OutputDynatraceOtlp.PqMaxFileSize)
 		r.OutputDynatraceOtlp.PqMaxSize = types.StringPointerValue(resp.OutputDynatraceOtlp.PqMaxSize)
 		if resp.OutputDynatraceOtlp.PqMode != nil {
@@ -2325,24 +2941,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputDynatraceOtlp.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputDynatraceOtlp.PqPath = types.StringPointerValue(resp.OutputDynatraceOtlp.PqPath)
-		if resp.OutputDynatraceOtlp.Protocol != nil {
-			r.OutputDynatraceOtlp.Protocol = types.StringValue(string(*resp.OutputDynatraceOtlp.Protocol))
-		} else {
-			r.OutputDynatraceOtlp.Protocol = types.StringNull()
-		}
+		r.OutputDynatraceOtlp.PqRatePerSec = types.Float64PointerValue(resp.OutputDynatraceOtlp.PqRatePerSec)
+		r.OutputDynatraceOtlp.PqStrictOrdering = types.BoolPointerValue(resp.OutputDynatraceOtlp.PqStrictOrdering)
+		r.OutputDynatraceOtlp.Protocol = types.StringValue(string(resp.OutputDynatraceOtlp.Protocol))
 		r.OutputDynatraceOtlp.RejectUnauthorized = types.BoolPointerValue(resp.OutputDynatraceOtlp.RejectUnauthorized)
 		r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader)
-		r.OutputDynatraceOtlp.ResponseRetrySettings = []tfTypes.OutputDynatraceOtlpResponseRetrySetting{}
+		r.OutputDynatraceOtlp.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem9 := range resp.OutputDynatraceOtlp.ResponseRetrySettings {
-			var responseRetrySettings9 tfTypes.OutputDynatraceOtlpResponseRetrySetting
+		for _, responseRetrySettingsItem10 := range resp.OutputDynatraceOtlp.ResponseRetrySettings {
+			var responseRetrySettings10 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings9.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem9.BackoffRate)
-			responseRetrySettings9.HTTPStatus = types.Float64Value(responseRetrySettingsItem9.HTTPStatus)
-			responseRetrySettings9.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem9.InitialBackoff)
-			responseRetrySettings9.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem9.MaxBackoff)
+			responseRetrySettings10.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem10.BackoffRate)
+			responseRetrySettings10.HTTPStatus = types.Float64Value(responseRetrySettingsItem10.HTTPStatus)
+			responseRetrySettings10.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem10.InitialBackoff)
+			responseRetrySettings10.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem10.MaxBackoff)
 
-			r.OutputDynatraceOtlp.ResponseRetrySettings = append(r.OutputDynatraceOtlp.ResponseRetrySettings, responseRetrySettings9)
+			r.OutputDynatraceOtlp.ResponseRetrySettings = append(r.OutputDynatraceOtlp.ResponseRetrySettings, responseRetrySettings10)
 		}
 		r.OutputDynatraceOtlp.SafeHeaders = make([]types.String, 0, len(resp.OutputDynatraceOtlp.SafeHeaders))
 		for _, v := range resp.OutputDynatraceOtlp.SafeHeaders {
@@ -2359,33 +2973,36 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputDynatraceOtlp.TimeoutRetrySettings == nil {
 			r.OutputDynatraceOtlp.TimeoutRetrySettings = nil
 		} else {
-			r.OutputDynatraceOtlp.TimeoutRetrySettings = &tfTypes.OutputDynatraceOtlpTimeoutRetrySettings{}
+			r.OutputDynatraceOtlp.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate)
 			r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff)
 			r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff)
-			r.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputDynatraceOtlp.TimeoutSec = types.Float64PointerValue(resp.OutputDynatraceOtlp.TimeoutSec)
 		r.OutputDynatraceOtlp.TokenSecret = types.StringValue(resp.OutputDynatraceOtlp.TokenSecret)
-		if resp.OutputDynatraceOtlp.Type != nil {
-			r.OutputDynatraceOtlp.Type = types.StringValue(string(*resp.OutputDynatraceOtlp.Type))
-		} else {
-			r.OutputDynatraceOtlp.Type = types.StringNull()
-		}
+		r.OutputDynatraceOtlp.Type = types.StringValue(string(resp.OutputDynatraceOtlp.Type))
+		r.Type = r.OutputDynatraceOtlp.Type
 		r.OutputDynatraceOtlp.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDynatraceOtlp.UseRoundRobinDNS)
 	}
 	if resp.OutputElastic != nil {
 		r.OutputElastic = &tfTypes.OutputElastic{}
+		r.OutputElastic.TemplateURL = types.StringPointerValue(resp.OutputElastic.TemplateURL)
 		if resp.OutputElastic.Auth == nil {
 			r.OutputElastic.Auth = nil
 		} else {
-			r.OutputElastic.Auth = &tfTypes.OutputElasticAuth{}
+			r.OutputElastic.Auth = &tfTypes.AuthTypeAuthTypeCredentialsSecret{}
 			if resp.OutputElastic.Auth.AuthType != nil {
 				r.OutputElastic.Auth.AuthType = types.StringValue(string(*resp.OutputElastic.Auth.AuthType))
 			} else {
 				r.OutputElastic.Auth.AuthType = types.StringNull()
 			}
-			r.OutputElastic.Auth.Disabled = types.BoolPointerValue(resp.OutputElastic.Auth.Disabled)
+			r.OutputElastic.Auth.CredentialsSecret = types.StringPointerValue(resp.OutputElastic.Auth.CredentialsSecret)
+			r.OutputElastic.Auth.Disabled = types.BoolValue(resp.OutputElastic.Auth.Disabled)
+			r.OutputElastic.Auth.ManualAPIKey = types.StringPointerValue(resp.OutputElastic.Auth.ManualAPIKey)
+			r.OutputElastic.Auth.Password = types.StringPointerValue(resp.OutputElastic.Auth.Password)
+			r.OutputElastic.Auth.TextSecret = types.StringPointerValue(resp.OutputElastic.Auth.TextSecret)
+			r.OutputElastic.Auth.Username = types.StringPointerValue(resp.OutputElastic.Auth.Username)
 		}
 		r.OutputElastic.Compress = types.BoolPointerValue(resp.OutputElastic.Compress)
 		r.OutputElastic.Concurrency = types.Float64PointerValue(resp.OutputElastic.Concurrency)
@@ -2399,21 +3016,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputElastic.ElasticVersion = types.StringNull()
 		}
 		r.OutputElastic.Environment = types.StringPointerValue(resp.OutputElastic.Environment)
+		r.Environment = r.OutputElastic.Environment
 		r.OutputElastic.ExcludeSelf = types.BoolPointerValue(resp.OutputElastic.ExcludeSelf)
-		r.OutputElastic.ExtraHTTPHeaders = []tfTypes.OutputElasticExtraHTTPHeader{}
+		r.OutputElastic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem9 := range resp.OutputElastic.ExtraHTTPHeaders {
-			var extraHTTPHeaders9 tfTypes.OutputElasticExtraHTTPHeader
+		for _, extraHTTPHeadersItem10 := range resp.OutputElastic.ExtraHTTPHeaders {
+			var extraHTTPHeaders10 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders9.Name = types.StringPointerValue(extraHTTPHeadersItem9.Name)
-			extraHTTPHeaders9.Value = types.StringValue(extraHTTPHeadersItem9.Value)
+			extraHTTPHeaders10.Name = types.StringPointerValue(extraHTTPHeadersItem10.Name)
+			extraHTTPHeaders10.Value = types.StringValue(extraHTTPHeadersItem10.Value)
 
-			r.OutputElastic.ExtraHTTPHeaders = append(r.OutputElastic.ExtraHTTPHeaders, extraHTTPHeaders9)
+			r.OutputElastic.ExtraHTTPHeaders = append(r.OutputElastic.ExtraHTTPHeaders, extraHTTPHeaders10)
 		}
-		r.OutputElastic.ExtraParams = []tfTypes.OutputElasticExtraParam{}
+		r.OutputElastic.ExtraParams = []tfTypes.ItemsTypeSaslSaslExtensions{}
 
 		for _, extraParamsItem := range resp.OutputElastic.ExtraParams {
-			var extraParams tfTypes.OutputElasticExtraParam
+			var extraParams tfTypes.ItemsTypeSaslSaslExtensions
 
 			extraParams.Name = types.StringValue(extraParamsItem.Name)
 			extraParams.Value = types.StringValue(extraParamsItem.Value)
@@ -2440,6 +3058,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputElastic.OnBackpressure = types.StringNull()
 		}
 		r.OutputElastic.Pipeline = types.StringPointerValue(resp.OutputElastic.Pipeline)
+		r.Pipeline = r.OutputElastic.Pipeline
 		if resp.OutputElastic.PqCompress != nil {
 			r.OutputElastic.PqCompress = types.StringValue(string(*resp.OutputElastic.PqCompress))
 		} else {
@@ -2450,6 +3069,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputElastic.PqControls = &tfTypes.OutputElasticPqControls{}
 		}
+		r.OutputElastic.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputElastic.PqMaxBackpressureSec)
+		r.OutputElastic.PqMaxBufferSize = types.Float64PointerValue(resp.OutputElastic.PqMaxBufferSize)
+		r.OutputElastic.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputElastic.PqMaxBufferSizeBytes)
 		r.OutputElastic.PqMaxFileSize = types.StringPointerValue(resp.OutputElastic.PqMaxFileSize)
 		r.OutputElastic.PqMaxSize = types.StringPointerValue(resp.OutputElastic.PqMaxSize)
 		if resp.OutputElastic.PqMode != nil {
@@ -2463,19 +3085,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputElastic.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputElastic.PqPath = types.StringPointerValue(resp.OutputElastic.PqPath)
+		r.OutputElastic.PqRatePerSec = types.Float64PointerValue(resp.OutputElastic.PqRatePerSec)
+		r.OutputElastic.PqStrictOrdering = types.BoolPointerValue(resp.OutputElastic.PqStrictOrdering)
 		r.OutputElastic.RejectUnauthorized = types.BoolPointerValue(resp.OutputElastic.RejectUnauthorized)
 		r.OutputElastic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputElastic.ResponseHonorRetryAfterHeader)
-		r.OutputElastic.ResponseRetrySettings = []tfTypes.OutputElasticResponseRetrySetting{}
+		r.OutputElastic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem10 := range resp.OutputElastic.ResponseRetrySettings {
-			var responseRetrySettings10 tfTypes.OutputElasticResponseRetrySetting
+		for _, responseRetrySettingsItem11 := range resp.OutputElastic.ResponseRetrySettings {
+			var responseRetrySettings11 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings10.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem10.BackoffRate)
-			responseRetrySettings10.HTTPStatus = types.Float64Value(responseRetrySettingsItem10.HTTPStatus)
-			responseRetrySettings10.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem10.InitialBackoff)
-			responseRetrySettings10.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem10.MaxBackoff)
+			responseRetrySettings11.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem11.BackoffRate)
+			responseRetrySettings11.HTTPStatus = types.Float64Value(responseRetrySettingsItem11.HTTPStatus)
+			responseRetrySettings11.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem11.InitialBackoff)
+			responseRetrySettings11.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem11.MaxBackoff)
 
-			r.OutputElastic.ResponseRetrySettings = append(r.OutputElastic.ResponseRetrySettings, responseRetrySettings10)
+			r.OutputElastic.ResponseRetrySettings = append(r.OutputElastic.ResponseRetrySettings, responseRetrySettings11)
 		}
 		r.OutputElastic.RetryPartialErrors = types.BoolPointerValue(resp.OutputElastic.RetryPartialErrors)
 		r.OutputElastic.SafeHeaders = make([]types.String, 0, len(resp.OutputElastic.SafeHeaders))
@@ -2493,24 +3117,26 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputElastic.TimeoutRetrySettings == nil {
 			r.OutputElastic.TimeoutRetrySettings = nil
 		} else {
-			r.OutputElastic.TimeoutRetrySettings = &tfTypes.OutputElasticTimeoutRetrySettings{}
+			r.OutputElastic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputElastic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputElastic.TimeoutRetrySettings.BackoffRate)
 			r.OutputElastic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputElastic.TimeoutRetrySettings.InitialBackoff)
 			r.OutputElastic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputElastic.TimeoutRetrySettings.MaxBackoff)
-			r.OutputElastic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputElastic.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputElastic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputElastic.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputElastic.TimeoutSec = types.Float64PointerValue(resp.OutputElastic.TimeoutSec)
 		r.OutputElastic.Type = types.StringValue(string(resp.OutputElastic.Type))
+		r.Type = r.OutputElastic.Type
 		r.OutputElastic.URL = types.StringPointerValue(resp.OutputElastic.URL)
 		r.OutputElastic.Urls = []tfTypes.OutputElasticURL{}
 
-		for _, urlsItem1 := range resp.OutputElastic.Urls {
-			var urls1 tfTypes.OutputElasticURL
+		for _, urlsItem2 := range resp.OutputElastic.Urls {
+			var urls2 tfTypes.OutputElasticURL
 
-			urls1.URL = types.StringValue(urlsItem1.URL)
-			urls1.Weight = types.Float64PointerValue(urlsItem1.Weight)
+			urls2.TemplateURL = types.StringPointerValue(urlsItem2.TemplateURL)
+			urls2.URL = types.StringValue(urlsItem2.URL)
+			urls2.Weight = types.Float64PointerValue(urlsItem2.Weight)
 
-			r.OutputElastic.Urls = append(r.OutputElastic.Urls, urls1)
+			r.OutputElastic.Urls = append(r.OutputElastic.Urls, urls2)
 		}
 		r.OutputElastic.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputElastic.UseRoundRobinDNS)
 		if resp.OutputElastic.WriteAction != nil {
@@ -2524,33 +3150,39 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputElasticCloud.Auth == nil {
 			r.OutputElasticCloud.Auth = nil
 		} else {
-			r.OutputElasticCloud.Auth = &tfTypes.OutputElasticCloudAuth{}
+			r.OutputElasticCloud.Auth = &tfTypes.AuthTypeAuthTypeCredentialsSecret{}
 			if resp.OutputElasticCloud.Auth.AuthType != nil {
 				r.OutputElasticCloud.Auth.AuthType = types.StringValue(string(*resp.OutputElasticCloud.Auth.AuthType))
 			} else {
 				r.OutputElasticCloud.Auth.AuthType = types.StringNull()
 			}
-			r.OutputElasticCloud.Auth.Disabled = types.BoolPointerValue(resp.OutputElasticCloud.Auth.Disabled)
+			r.OutputElasticCloud.Auth.CredentialsSecret = types.StringPointerValue(resp.OutputElasticCloud.Auth.CredentialsSecret)
+			r.OutputElasticCloud.Auth.Disabled = types.BoolValue(resp.OutputElasticCloud.Auth.Disabled)
+			r.OutputElasticCloud.Auth.ManualAPIKey = types.StringPointerValue(resp.OutputElasticCloud.Auth.ManualAPIKey)
+			r.OutputElasticCloud.Auth.Password = types.StringPointerValue(resp.OutputElasticCloud.Auth.Password)
+			r.OutputElasticCloud.Auth.TextSecret = types.StringPointerValue(resp.OutputElasticCloud.Auth.TextSecret)
+			r.OutputElasticCloud.Auth.Username = types.StringPointerValue(resp.OutputElasticCloud.Auth.Username)
 		}
 		r.OutputElasticCloud.Compress = types.BoolPointerValue(resp.OutputElasticCloud.Compress)
 		r.OutputElasticCloud.Concurrency = types.Float64PointerValue(resp.OutputElasticCloud.Concurrency)
 		r.OutputElasticCloud.Description = types.StringPointerValue(resp.OutputElasticCloud.Description)
 		r.OutputElasticCloud.ElasticPipeline = types.StringPointerValue(resp.OutputElasticCloud.ElasticPipeline)
 		r.OutputElasticCloud.Environment = types.StringPointerValue(resp.OutputElasticCloud.Environment)
-		r.OutputElasticCloud.ExtraHTTPHeaders = []tfTypes.OutputElasticCloudExtraHTTPHeader{}
+		r.Environment = r.OutputElasticCloud.Environment
+		r.OutputElasticCloud.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem10 := range resp.OutputElasticCloud.ExtraHTTPHeaders {
-			var extraHTTPHeaders10 tfTypes.OutputElasticCloudExtraHTTPHeader
+		for _, extraHTTPHeadersItem11 := range resp.OutputElasticCloud.ExtraHTTPHeaders {
+			var extraHTTPHeaders11 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders10.Name = types.StringPointerValue(extraHTTPHeadersItem10.Name)
-			extraHTTPHeaders10.Value = types.StringValue(extraHTTPHeadersItem10.Value)
+			extraHTTPHeaders11.Name = types.StringPointerValue(extraHTTPHeadersItem11.Name)
+			extraHTTPHeaders11.Value = types.StringValue(extraHTTPHeadersItem11.Value)
 
-			r.OutputElasticCloud.ExtraHTTPHeaders = append(r.OutputElasticCloud.ExtraHTTPHeaders, extraHTTPHeaders10)
+			r.OutputElasticCloud.ExtraHTTPHeaders = append(r.OutputElasticCloud.ExtraHTTPHeaders, extraHTTPHeaders11)
 		}
-		r.OutputElasticCloud.ExtraParams = []tfTypes.OutputElasticCloudExtraParam{}
+		r.OutputElasticCloud.ExtraParams = []tfTypes.ItemsTypeSaslSaslExtensions{}
 
 		for _, extraParamsItem1 := range resp.OutputElasticCloud.ExtraParams {
-			var extraParams1 tfTypes.OutputElasticCloudExtraParam
+			var extraParams1 tfTypes.ItemsTypeSaslSaslExtensions
 
 			extraParams1.Name = types.StringValue(extraParamsItem1.Name)
 			extraParams1.Value = types.StringValue(extraParamsItem1.Value)
@@ -2575,6 +3207,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputElasticCloud.OnBackpressure = types.StringNull()
 		}
 		r.OutputElasticCloud.Pipeline = types.StringPointerValue(resp.OutputElasticCloud.Pipeline)
+		r.Pipeline = r.OutputElasticCloud.Pipeline
 		if resp.OutputElasticCloud.PqCompress != nil {
 			r.OutputElasticCloud.PqCompress = types.StringValue(string(*resp.OutputElasticCloud.PqCompress))
 		} else {
@@ -2585,6 +3218,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputElasticCloud.PqControls = &tfTypes.OutputElasticCloudPqControls{}
 		}
+		r.OutputElasticCloud.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputElasticCloud.PqMaxBackpressureSec)
+		r.OutputElasticCloud.PqMaxBufferSize = types.Float64PointerValue(resp.OutputElasticCloud.PqMaxBufferSize)
+		r.OutputElasticCloud.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputElasticCloud.PqMaxBufferSizeBytes)
 		r.OutputElasticCloud.PqMaxFileSize = types.StringPointerValue(resp.OutputElasticCloud.PqMaxFileSize)
 		r.OutputElasticCloud.PqMaxSize = types.StringPointerValue(resp.OutputElasticCloud.PqMaxSize)
 		if resp.OutputElasticCloud.PqMode != nil {
@@ -2598,19 +3234,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputElasticCloud.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputElasticCloud.PqPath = types.StringPointerValue(resp.OutputElasticCloud.PqPath)
+		r.OutputElasticCloud.PqRatePerSec = types.Float64PointerValue(resp.OutputElasticCloud.PqRatePerSec)
+		r.OutputElasticCloud.PqStrictOrdering = types.BoolPointerValue(resp.OutputElasticCloud.PqStrictOrdering)
 		r.OutputElasticCloud.RejectUnauthorized = types.BoolPointerValue(resp.OutputElasticCloud.RejectUnauthorized)
 		r.OutputElasticCloud.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputElasticCloud.ResponseHonorRetryAfterHeader)
-		r.OutputElasticCloud.ResponseRetrySettings = []tfTypes.OutputElasticCloudResponseRetrySetting{}
+		r.OutputElasticCloud.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem11 := range resp.OutputElasticCloud.ResponseRetrySettings {
-			var responseRetrySettings11 tfTypes.OutputElasticCloudResponseRetrySetting
+		for _, responseRetrySettingsItem12 := range resp.OutputElasticCloud.ResponseRetrySettings {
+			var responseRetrySettings12 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings11.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem11.BackoffRate)
-			responseRetrySettings11.HTTPStatus = types.Float64Value(responseRetrySettingsItem11.HTTPStatus)
-			responseRetrySettings11.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem11.InitialBackoff)
-			responseRetrySettings11.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem11.MaxBackoff)
+			responseRetrySettings12.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem12.BackoffRate)
+			responseRetrySettings12.HTTPStatus = types.Float64Value(responseRetrySettingsItem12.HTTPStatus)
+			responseRetrySettings12.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem12.InitialBackoff)
+			responseRetrySettings12.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem12.MaxBackoff)
 
-			r.OutputElasticCloud.ResponseRetrySettings = append(r.OutputElasticCloud.ResponseRetrySettings, responseRetrySettings11)
+			r.OutputElasticCloud.ResponseRetrySettings = append(r.OutputElasticCloud.ResponseRetrySettings, responseRetrySettings12)
 		}
 		r.OutputElasticCloud.SafeHeaders = make([]types.String, 0, len(resp.OutputElasticCloud.SafeHeaders))
 		for _, v := range resp.OutputElasticCloud.SafeHeaders {
@@ -2627,22 +3265,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputElasticCloud.TimeoutRetrySettings == nil {
 			r.OutputElasticCloud.TimeoutRetrySettings = nil
 		} else {
-			r.OutputElasticCloud.TimeoutRetrySettings = &tfTypes.OutputElasticCloudTimeoutRetrySettings{}
+			r.OutputElasticCloud.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputElasticCloud.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputElasticCloud.TimeoutRetrySettings.BackoffRate)
 			r.OutputElasticCloud.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputElasticCloud.TimeoutRetrySettings.InitialBackoff)
 			r.OutputElasticCloud.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputElasticCloud.TimeoutRetrySettings.MaxBackoff)
-			r.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputElasticCloud.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputElasticCloud.TimeoutSec = types.Float64PointerValue(resp.OutputElasticCloud.TimeoutSec)
-		if resp.OutputElasticCloud.Type != nil {
-			r.OutputElasticCloud.Type = types.StringValue(string(*resp.OutputElasticCloud.Type))
-		} else {
-			r.OutputElasticCloud.Type = types.StringNull()
-		}
+		r.OutputElasticCloud.Type = types.StringValue(string(resp.OutputElasticCloud.Type))
+		r.Type = r.OutputElasticCloud.Type
 		r.OutputElasticCloud.URL = types.StringValue(resp.OutputElasticCloud.URL)
 	}
 	if resp.OutputExabeam != nil {
 		r.OutputExabeam = &tfTypes.OutputExabeam{}
+		r.OutputExabeam.TemplateRegion = types.StringPointerValue(resp.OutputExabeam.TemplateRegion)
 		r.OutputExabeam.AddIDToStagePath = types.BoolPointerValue(resp.OutputExabeam.AddIDToStagePath)
 		r.OutputExabeam.AwsAPIKey = types.StringPointerValue(resp.OutputExabeam.AwsAPIKey)
 		r.OutputExabeam.AwsSecretKey = types.StringPointerValue(resp.OutputExabeam.AwsSecretKey)
@@ -2651,10 +3287,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputExabeam.DeadletterEnabled = types.BoolPointerValue(resp.OutputExabeam.DeadletterEnabled)
 		r.OutputExabeam.DeadletterPath = types.StringPointerValue(resp.OutputExabeam.DeadletterPath)
 		r.OutputExabeam.Description = types.StringPointerValue(resp.OutputExabeam.Description)
+		r.OutputExabeam.DirectoryBatchSize = types.Float64PointerValue(resp.OutputExabeam.DirectoryBatchSize)
 		r.OutputExabeam.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputExabeam.EmptyDirCleanupSec)
 		r.OutputExabeam.EncodedConfiguration = types.StringPointerValue(resp.OutputExabeam.EncodedConfiguration)
-		r.OutputExabeam.Endpoint = types.StringPointerValue(resp.OutputExabeam.Endpoint)
+		r.OutputExabeam.Endpoint = types.StringValue(resp.OutputExabeam.Endpoint)
 		r.OutputExabeam.Environment = types.StringPointerValue(resp.OutputExabeam.Environment)
+		r.Environment = r.OutputExabeam.Environment
 		r.OutputExabeam.ID = types.StringPointerValue(resp.OutputExabeam.ID)
 		r.ID = r.OutputExabeam.ID
 		r.OutputExabeam.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputExabeam.MaxFileIdleTimeSec)
@@ -2678,9 +3316,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputExabeam.OnDiskFullBackpressure = types.StringNull()
 		}
 		r.OutputExabeam.Pipeline = types.StringPointerValue(resp.OutputExabeam.Pipeline)
+		r.Pipeline = r.OutputExabeam.Pipeline
 		r.OutputExabeam.Region = types.StringValue(resp.OutputExabeam.Region)
 		r.OutputExabeam.RejectUnauthorized = types.BoolPointerValue(resp.OutputExabeam.RejectUnauthorized)
 		r.OutputExabeam.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputExabeam.RemoveEmptyDirs)
+		if resp.OutputExabeam.RetrySettings == nil {
+			r.OutputExabeam.RetrySettings = nil
+		} else {
+			r.OutputExabeam.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputExabeam.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputExabeam.RetrySettings.BackoffMultiplier)
+			r.OutputExabeam.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputExabeam.RetrySettings.Enabled)
+			r.OutputExabeam.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputExabeam.RetrySettings.InitialBackoffMs)
+			r.OutputExabeam.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputExabeam.RetrySettings.JitterPercent)
+			r.OutputExabeam.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputExabeam.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputExabeam.ReuseConnections = types.BoolPointerValue(resp.OutputExabeam.ReuseConnections)
 		if resp.OutputExabeam.SignatureVersion != nil {
 			r.OutputExabeam.SignatureVersion = types.StringValue(string(*resp.OutputExabeam.SignatureVersion))
@@ -2689,7 +3338,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputExabeam.SiteID = types.StringPointerValue(resp.OutputExabeam.SiteID)
 		r.OutputExabeam.SiteName = types.StringPointerValue(resp.OutputExabeam.SiteName)
-		r.OutputExabeam.StagePath = types.StringPointerValue(resp.OutputExabeam.StagePath)
+		r.OutputExabeam.StagePath = types.StringValue(resp.OutputExabeam.StagePath)
 		if resp.OutputExabeam.StorageClass != nil {
 			r.OutputExabeam.StorageClass = types.StringValue(string(*resp.OutputExabeam.StorageClass))
 		} else {
@@ -2704,14 +3353,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputExabeam.SystemFields = append(r.OutputExabeam.SystemFields, types.StringValue(v))
 		}
 		r.OutputExabeam.TimezoneOffset = types.StringPointerValue(resp.OutputExabeam.TimezoneOffset)
-		if resp.OutputExabeam.Type != nil {
-			r.OutputExabeam.Type = types.StringValue(string(*resp.OutputExabeam.Type))
-		} else {
-			r.OutputExabeam.Type = types.StringNull()
-		}
+		r.OutputExabeam.Type = types.StringValue(string(resp.OutputExabeam.Type))
+		r.Type = r.OutputExabeam.Type
 	}
 	if resp.OutputFilesystem != nil {
 		r.OutputFilesystem = &tfTypes.OutputFilesystem{}
+		r.OutputFilesystem.TemplateFormat = types.StringPointerValue(resp.OutputFilesystem.TemplateFormat)
 		r.OutputFilesystem.AddIDToStagePath = types.BoolPointerValue(resp.OutputFilesystem.AddIDToStagePath)
 		r.OutputFilesystem.AutomaticSchema = types.BoolPointerValue(resp.OutputFilesystem.AutomaticSchema)
 		r.OutputFilesystem.BaseFileName = types.StringPointerValue(resp.OutputFilesystem.BaseFileName)
@@ -2729,12 +3376,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputFilesystem.DeadletterPath = types.StringPointerValue(resp.OutputFilesystem.DeadletterPath)
 		r.OutputFilesystem.Description = types.StringPointerValue(resp.OutputFilesystem.Description)
 		r.OutputFilesystem.DestPath = types.StringValue(resp.OutputFilesystem.DestPath)
+		r.OutputFilesystem.DirectoryBatchSize = types.Float64PointerValue(resp.OutputFilesystem.DirectoryBatchSize)
 		r.OutputFilesystem.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputFilesystem.EmptyDirCleanupSec)
 		r.OutputFilesystem.EnablePageChecksum = types.BoolPointerValue(resp.OutputFilesystem.EnablePageChecksum)
 		r.OutputFilesystem.EnableStatistics = types.BoolPointerValue(resp.OutputFilesystem.EnableStatistics)
 		r.OutputFilesystem.EnableWritePageIndex = types.BoolPointerValue(resp.OutputFilesystem.EnableWritePageIndex)
 		r.OutputFilesystem.Environment = types.StringPointerValue(resp.OutputFilesystem.Environment)
+		r.Environment = r.OutputFilesystem.Environment
 		r.OutputFilesystem.FileNameSuffix = types.StringPointerValue(resp.OutputFilesystem.FileNameSuffix)
+		r.OutputFilesystem.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputFilesystem.ForceCloseOnShutdown)
 		if resp.OutputFilesystem.Format != nil {
 			r.OutputFilesystem.Format = types.StringValue(string(*resp.OutputFilesystem.Format))
 		} else {
@@ -2743,15 +3393,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputFilesystem.HeaderLine = types.StringPointerValue(resp.OutputFilesystem.HeaderLine)
 		r.OutputFilesystem.ID = types.StringPointerValue(resp.OutputFilesystem.ID)
 		r.ID = r.OutputFilesystem.ID
-		r.OutputFilesystem.KeyValueMetadata = []tfTypes.OutputFilesystemKeyValueMetadatum{}
+		r.OutputFilesystem.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem4 := range resp.OutputFilesystem.KeyValueMetadata {
-			var keyValueMetadata4 tfTypes.OutputFilesystemKeyValueMetadatum
+		for _, keyValueMetadataItem5 := range resp.OutputFilesystem.KeyValueMetadata {
+			var keyValueMetadata5 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata4.Key = types.StringPointerValue(keyValueMetadataItem4.Key)
-			keyValueMetadata4.Value = types.StringValue(keyValueMetadataItem4.Value)
+			keyValueMetadata5.Key = types.StringValue(keyValueMetadataItem5.Key)
+			keyValueMetadata5.Value = types.StringValue(keyValueMetadataItem5.Value)
 
-			r.OutputFilesystem.KeyValueMetadata = append(r.OutputFilesystem.KeyValueMetadata, keyValueMetadata4)
+			r.OutputFilesystem.KeyValueMetadata = append(r.OutputFilesystem.KeyValueMetadata, keyValueMetadata5)
 		}
 		r.OutputFilesystem.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputFilesystem.MaxFileIdleTimeSec)
 		r.OutputFilesystem.MaxFileOpenTimeSec = types.Float64PointerValue(resp.OutputFilesystem.MaxFileOpenTimeSec)
@@ -2775,6 +3425,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputFilesystem.ParquetPageSize = types.StringPointerValue(resp.OutputFilesystem.ParquetPageSize)
 		r.OutputFilesystem.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputFilesystem.ParquetRowGroupLength)
+		r.OutputFilesystem.ParquetSchema = types.StringPointerValue(resp.OutputFilesystem.ParquetSchema)
 		if resp.OutputFilesystem.ParquetVersion != nil {
 			r.OutputFilesystem.ParquetVersion = types.StringValue(string(*resp.OutputFilesystem.ParquetVersion))
 		} else {
@@ -2782,7 +3433,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputFilesystem.PartitionExpr = types.StringPointerValue(resp.OutputFilesystem.PartitionExpr)
 		r.OutputFilesystem.Pipeline = types.StringPointerValue(resp.OutputFilesystem.Pipeline)
+		r.Pipeline = r.OutputFilesystem.Pipeline
 		r.OutputFilesystem.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputFilesystem.RemoveEmptyDirs)
+		if resp.OutputFilesystem.RetrySettings == nil {
+			r.OutputFilesystem.RetrySettings = nil
+		} else {
+			r.OutputFilesystem.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputFilesystem.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputFilesystem.RetrySettings.BackoffMultiplier)
+			r.OutputFilesystem.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputFilesystem.RetrySettings.Enabled)
+			r.OutputFilesystem.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputFilesystem.RetrySettings.InitialBackoffMs)
+			r.OutputFilesystem.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputFilesystem.RetrySettings.JitterPercent)
+			r.OutputFilesystem.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputFilesystem.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputFilesystem.ShouldLogInvalidRows = types.BoolPointerValue(resp.OutputFilesystem.ShouldLogInvalidRows)
 		r.OutputFilesystem.StagePath = types.StringPointerValue(resp.OutputFilesystem.StagePath)
 		r.OutputFilesystem.Streamtags = make([]types.String, 0, len(resp.OutputFilesystem.Streamtags))
@@ -2794,10 +3456,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputFilesystem.SystemFields = append(r.OutputFilesystem.SystemFields, types.StringValue(v))
 		}
 		r.OutputFilesystem.Type = types.StringValue(string(resp.OutputFilesystem.Type))
+		r.Type = r.OutputFilesystem.Type
 		r.OutputFilesystem.WriteHighWaterMark = types.Float64PointerValue(resp.OutputFilesystem.WriteHighWaterMark)
 	}
 	if resp.OutputGoogleChronicle != nil {
 		r.OutputGoogleChronicle = &tfTypes.OutputGoogleChronicle{}
+		r.OutputGoogleChronicle.TemplateAPIVersion = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateAPIVersion)
+		r.OutputGoogleChronicle.TemplateCustomerID = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateCustomerID)
+		r.OutputGoogleChronicle.TemplateRegion = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateRegion)
 		r.OutputGoogleChronicle.APIKey = types.StringPointerValue(resp.OutputGoogleChronicle.APIKey)
 		r.OutputGoogleChronicle.APIKeySecret = types.StringPointerValue(resp.OutputGoogleChronicle.APIKeySecret)
 		if resp.OutputGoogleChronicle.APIVersion != nil {
@@ -2813,10 +3479,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleChronicle.Compress = types.BoolPointerValue(resp.OutputGoogleChronicle.Compress)
 		r.OutputGoogleChronicle.Concurrency = types.Float64PointerValue(resp.OutputGoogleChronicle.Concurrency)
 		r.OutputGoogleChronicle.CustomerID = types.StringPointerValue(resp.OutputGoogleChronicle.CustomerID)
-		r.OutputGoogleChronicle.CustomLabels = []tfTypes.OutputGoogleChronicleCustomLabel{}
+		r.OutputGoogleChronicle.CustomLabels = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, customLabelsItem1 := range resp.OutputGoogleChronicle.CustomLabels {
-			var customLabels1 tfTypes.OutputGoogleChronicleCustomLabel
+			var customLabels1 tfTypes.ItemsTypeKeyValueMetadata
 
 			customLabels1.Key = types.StringValue(customLabelsItem1.Key)
 			customLabels1.Value = types.StringValue(customLabelsItem1.Value)
@@ -2825,15 +3491,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGoogleChronicle.Description = types.StringPointerValue(resp.OutputGoogleChronicle.Description)
 		r.OutputGoogleChronicle.Environment = types.StringPointerValue(resp.OutputGoogleChronicle.Environment)
-		r.OutputGoogleChronicle.ExtraHTTPHeaders = []tfTypes.OutputGoogleChronicleExtraHTTPHeader{}
+		r.Environment = r.OutputGoogleChronicle.Environment
+		r.OutputGoogleChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem11 := range resp.OutputGoogleChronicle.ExtraHTTPHeaders {
-			var extraHTTPHeaders11 tfTypes.OutputGoogleChronicleExtraHTTPHeader
+		for _, extraHTTPHeadersItem12 := range resp.OutputGoogleChronicle.ExtraHTTPHeaders {
+			var extraHTTPHeaders12 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders11.Name = types.StringPointerValue(extraHTTPHeadersItem11.Name)
-			extraHTTPHeaders11.Value = types.StringValue(extraHTTPHeadersItem11.Value)
+			extraHTTPHeaders12.Name = types.StringPointerValue(extraHTTPHeadersItem12.Name)
+			extraHTTPHeaders12.Value = types.StringValue(extraHTTPHeadersItem12.Value)
 
-			r.OutputGoogleChronicle.ExtraHTTPHeaders = append(r.OutputGoogleChronicle.ExtraHTTPHeaders, extraHTTPHeaders11)
+			r.OutputGoogleChronicle.ExtraHTTPHeaders = append(r.OutputGoogleChronicle.ExtraHTTPHeaders, extraHTTPHeaders12)
 		}
 		r.OutputGoogleChronicle.ExtraLogTypes = []tfTypes.ExtraLogType{}
 
@@ -2853,11 +3520,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleChronicle.FlushPeriodSec = types.Float64PointerValue(resp.OutputGoogleChronicle.FlushPeriodSec)
 		r.OutputGoogleChronicle.ID = types.StringPointerValue(resp.OutputGoogleChronicle.ID)
 		r.ID = r.OutputGoogleChronicle.ID
-		if resp.OutputGoogleChronicle.LogFormatType != nil {
-			r.OutputGoogleChronicle.LogFormatType = types.StringValue(string(*resp.OutputGoogleChronicle.LogFormatType))
-		} else {
-			r.OutputGoogleChronicle.LogFormatType = types.StringNull()
-		}
+		r.OutputGoogleChronicle.LogFormatType = types.StringValue(string(resp.OutputGoogleChronicle.LogFormatType))
 		r.OutputGoogleChronicle.LogTextField = types.StringPointerValue(resp.OutputGoogleChronicle.LogTextField)
 		r.OutputGoogleChronicle.LogType = types.StringPointerValue(resp.OutputGoogleChronicle.LogType)
 		r.OutputGoogleChronicle.MaxPayloadEvents = types.Float64PointerValue(resp.OutputGoogleChronicle.MaxPayloadEvents)
@@ -2869,6 +3532,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGoogleChronicle.OnBackpressure = types.StringNull()
 		}
 		r.OutputGoogleChronicle.Pipeline = types.StringPointerValue(resp.OutputGoogleChronicle.Pipeline)
+		r.Pipeline = r.OutputGoogleChronicle.Pipeline
 		if resp.OutputGoogleChronicle.PqCompress != nil {
 			r.OutputGoogleChronicle.PqCompress = types.StringValue(string(*resp.OutputGoogleChronicle.PqCompress))
 		} else {
@@ -2879,6 +3543,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputGoogleChronicle.PqControls = &tfTypes.OutputGoogleChroniclePqControls{}
 		}
+		r.OutputGoogleChronicle.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGoogleChronicle.PqMaxBackpressureSec)
+		r.OutputGoogleChronicle.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGoogleChronicle.PqMaxBufferSize)
+		r.OutputGoogleChronicle.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGoogleChronicle.PqMaxBufferSizeBytes)
 		r.OutputGoogleChronicle.PqMaxFileSize = types.StringPointerValue(resp.OutputGoogleChronicle.PqMaxFileSize)
 		r.OutputGoogleChronicle.PqMaxSize = types.StringPointerValue(resp.OutputGoogleChronicle.PqMaxSize)
 		if resp.OutputGoogleChronicle.PqMode != nil {
@@ -2892,20 +3559,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGoogleChronicle.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputGoogleChronicle.PqPath = types.StringPointerValue(resp.OutputGoogleChronicle.PqPath)
+		r.OutputGoogleChronicle.PqRatePerSec = types.Float64PointerValue(resp.OutputGoogleChronicle.PqRatePerSec)
+		r.OutputGoogleChronicle.PqStrictOrdering = types.BoolPointerValue(resp.OutputGoogleChronicle.PqStrictOrdering)
 		r.OutputGoogleChronicle.Region = types.StringPointerValue(resp.OutputGoogleChronicle.Region)
 		r.OutputGoogleChronicle.RejectUnauthorized = types.BoolPointerValue(resp.OutputGoogleChronicle.RejectUnauthorized)
 		r.OutputGoogleChronicle.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputGoogleChronicle.ResponseHonorRetryAfterHeader)
-		r.OutputGoogleChronicle.ResponseRetrySettings = []tfTypes.OutputGoogleChronicleResponseRetrySetting{}
+		r.OutputGoogleChronicle.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem12 := range resp.OutputGoogleChronicle.ResponseRetrySettings {
-			var responseRetrySettings12 tfTypes.OutputGoogleChronicleResponseRetrySetting
+		for _, responseRetrySettingsItem13 := range resp.OutputGoogleChronicle.ResponseRetrySettings {
+			var responseRetrySettings13 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings12.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem12.BackoffRate)
-			responseRetrySettings12.HTTPStatus = types.Float64Value(responseRetrySettingsItem12.HTTPStatus)
-			responseRetrySettings12.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem12.InitialBackoff)
-			responseRetrySettings12.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem12.MaxBackoff)
+			responseRetrySettings13.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem13.BackoffRate)
+			responseRetrySettings13.HTTPStatus = types.Float64Value(responseRetrySettingsItem13.HTTPStatus)
+			responseRetrySettings13.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem13.InitialBackoff)
+			responseRetrySettings13.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem13.MaxBackoff)
 
-			r.OutputGoogleChronicle.ResponseRetrySettings = append(r.OutputGoogleChronicle.ResponseRetrySettings, responseRetrySettings12)
+			r.OutputGoogleChronicle.ResponseRetrySettings = append(r.OutputGoogleChronicle.ResponseRetrySettings, responseRetrySettings13)
 		}
 		r.OutputGoogleChronicle.SafeHeaders = make([]types.String, 0, len(resp.OutputGoogleChronicle.SafeHeaders))
 		for _, v := range resp.OutputGoogleChronicle.SafeHeaders {
@@ -2924,15 +3593,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputGoogleChronicle.TimeoutRetrySettings == nil {
 			r.OutputGoogleChronicle.TimeoutRetrySettings = nil
 		} else {
-			r.OutputGoogleChronicle.TimeoutRetrySettings = &tfTypes.OutputGoogleChronicleTimeoutRetrySettings{}
+			r.OutputGoogleChronicle.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputGoogleChronicle.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputGoogleChronicle.TimeoutRetrySettings.BackoffRate)
 			r.OutputGoogleChronicle.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputGoogleChronicle.TimeoutRetrySettings.InitialBackoff)
 			r.OutputGoogleChronicle.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputGoogleChronicle.TimeoutRetrySettings.MaxBackoff)
-			r.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputGoogleChronicle.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputGoogleChronicle.TimeoutSec = types.Float64PointerValue(resp.OutputGoogleChronicle.TimeoutSec)
 		r.OutputGoogleChronicle.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputGoogleChronicle.TotalMemoryLimitKB)
 		r.OutputGoogleChronicle.Type = types.StringValue(string(resp.OutputGoogleChronicle.Type))
+		r.Type = r.OutputGoogleChronicle.Type
+		if resp.OutputGoogleChronicle.UdmType != nil {
+			r.OutputGoogleChronicle.UdmType = types.StringValue(string(*resp.OutputGoogleChronicle.UdmType))
+		} else {
+			r.OutputGoogleChronicle.UdmType = types.StringNull()
+		}
 		r.OutputGoogleChronicle.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputGoogleChronicle.UseRoundRobinDNS)
 	}
 	if resp.OutputGoogleCloudLogging != nil {
@@ -2945,6 +3620,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudLogging.ConnectionTimeout = types.Float64PointerValue(resp.OutputGoogleCloudLogging.ConnectionTimeout)
 		r.OutputGoogleCloudLogging.Description = types.StringPointerValue(resp.OutputGoogleCloudLogging.Description)
 		r.OutputGoogleCloudLogging.Environment = types.StringPointerValue(resp.OutputGoogleCloudLogging.Environment)
+		r.Environment = r.OutputGoogleCloudLogging.Environment
 		r.OutputGoogleCloudLogging.FileExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.FileExpression)
 		r.OutputGoogleCloudLogging.FirstExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.FirstExpression)
 		r.OutputGoogleCloudLogging.FlushPeriodSec = types.Float64PointerValue(resp.OutputGoogleCloudLogging.FlushPeriodSec)
@@ -2962,10 +3638,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudLogging.LastExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.LastExpression)
 		r.OutputGoogleCloudLogging.LatencyExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.LatencyExpression)
 		r.OutputGoogleCloudLogging.LineExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.LineExpression)
-		r.OutputGoogleCloudLogging.LogLabels = []tfTypes.LogLabel{}
+		r.OutputGoogleCloudLogging.LogLabels = []tfTypes.ItemsTypeLogLabels{}
 
 		for _, logLabelsItem := range resp.OutputGoogleCloudLogging.LogLabels {
-			var logLabels tfTypes.LogLabel
+			var logLabels tfTypes.ItemsTypeLogLabels
 
 			logLabels.Label = types.StringValue(logLabelsItem.Label)
 			logLabels.ValueExpression = types.StringValue(logLabelsItem.ValueExpression)
@@ -2989,6 +3665,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGoogleCloudLogging.PayloadFormat = types.StringNull()
 		}
 		r.OutputGoogleCloudLogging.Pipeline = types.StringPointerValue(resp.OutputGoogleCloudLogging.Pipeline)
+		r.Pipeline = r.OutputGoogleCloudLogging.Pipeline
 		if resp.OutputGoogleCloudLogging.PqCompress != nil {
 			r.OutputGoogleCloudLogging.PqCompress = types.StringValue(string(*resp.OutputGoogleCloudLogging.PqCompress))
 		} else {
@@ -2999,6 +3676,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputGoogleCloudLogging.PqControls = &tfTypes.OutputGoogleCloudLoggingPqControls{}
 		}
+		r.OutputGoogleCloudLogging.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGoogleCloudLogging.PqMaxBackpressureSec)
+		r.OutputGoogleCloudLogging.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGoogleCloudLogging.PqMaxBufferSize)
+		r.OutputGoogleCloudLogging.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGoogleCloudLogging.PqMaxBufferSizeBytes)
 		r.OutputGoogleCloudLogging.PqMaxFileSize = types.StringPointerValue(resp.OutputGoogleCloudLogging.PqMaxFileSize)
 		r.OutputGoogleCloudLogging.PqMaxSize = types.StringPointerValue(resp.OutputGoogleCloudLogging.PqMaxSize)
 		if resp.OutputGoogleCloudLogging.PqMode != nil {
@@ -3012,6 +3692,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGoogleCloudLogging.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputGoogleCloudLogging.PqPath = types.StringPointerValue(resp.OutputGoogleCloudLogging.PqPath)
+		r.OutputGoogleCloudLogging.PqRatePerSec = types.Float64PointerValue(resp.OutputGoogleCloudLogging.PqRatePerSec)
+		r.OutputGoogleCloudLogging.PqStrictOrdering = types.BoolPointerValue(resp.OutputGoogleCloudLogging.PqStrictOrdering)
 		r.OutputGoogleCloudLogging.ProducerExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.ProducerExpression)
 		r.OutputGoogleCloudLogging.ProtocolExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.ProtocolExpression)
 		r.OutputGoogleCloudLogging.RefererExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.RefererExpression)
@@ -3020,10 +3702,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudLogging.RequestSizeExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.RequestSizeExpression)
 		r.OutputGoogleCloudLogging.RequestURLExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.RequestURLExpression)
 		r.OutputGoogleCloudLogging.ResourceTypeExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.ResourceTypeExpression)
-		r.OutputGoogleCloudLogging.ResourceTypeLabels = []tfTypes.ResourceTypeLabel{}
+		r.OutputGoogleCloudLogging.ResourceTypeLabels = []tfTypes.ItemsTypeLogLabels{}
 
 		for _, resourceTypeLabelsItem := range resp.OutputGoogleCloudLogging.ResourceTypeLabels {
-			var resourceTypeLabels tfTypes.ResourceTypeLabel
+			var resourceTypeLabels tfTypes.ItemsTypeLogLabels
 
 			resourceTypeLabels.Label = types.StringValue(resourceTypeLabelsItem.Label)
 			resourceTypeLabels.ValueExpression = types.StringValue(resourceTypeLabelsItem.ValueExpression)
@@ -3031,6 +3713,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGoogleCloudLogging.ResourceTypeLabels = append(r.OutputGoogleCloudLogging.ResourceTypeLabels, resourceTypeLabels)
 		}
 		r.OutputGoogleCloudLogging.ResponseSizeExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.ResponseSizeExpression)
+		r.OutputGoogleCloudLogging.SanitizeLogNames = types.BoolPointerValue(resp.OutputGoogleCloudLogging.SanitizeLogNames)
 		r.OutputGoogleCloudLogging.Secret = types.StringPointerValue(resp.OutputGoogleCloudLogging.Secret)
 		r.OutputGoogleCloudLogging.ServerIPExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.ServerIPExpression)
 		r.OutputGoogleCloudLogging.ServiceAccountCredentials = types.StringPointerValue(resp.OutputGoogleCloudLogging.ServiceAccountCredentials)
@@ -3051,16 +3734,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudLogging.TotalSplitsExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.TotalSplitsExpression)
 		r.OutputGoogleCloudLogging.TraceExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.TraceExpression)
 		r.OutputGoogleCloudLogging.TraceSampledExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.TraceSampledExpression)
-		if resp.OutputGoogleCloudLogging.Type != nil {
-			r.OutputGoogleCloudLogging.Type = types.StringValue(string(*resp.OutputGoogleCloudLogging.Type))
-		} else {
-			r.OutputGoogleCloudLogging.Type = types.StringNull()
-		}
+		r.OutputGoogleCloudLogging.Type = types.StringValue(string(resp.OutputGoogleCloudLogging.Type))
+		r.Type = r.OutputGoogleCloudLogging.Type
 		r.OutputGoogleCloudLogging.UIDExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.UIDExpression)
 		r.OutputGoogleCloudLogging.UserAgentExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.UserAgentExpression)
 	}
 	if resp.OutputGoogleCloudStorage != nil {
 		r.OutputGoogleCloudStorage = &tfTypes.OutputGoogleCloudStorage{}
+		r.OutputGoogleCloudStorage.TemplateBucket = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateBucket)
+		r.OutputGoogleCloudStorage.TemplateFormat = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateFormat)
+		r.OutputGoogleCloudStorage.TemplateRegion = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateRegion)
 		r.OutputGoogleCloudStorage.AddIDToStagePath = types.BoolPointerValue(resp.OutputGoogleCloudStorage.AddIDToStagePath)
 		r.OutputGoogleCloudStorage.AutomaticSchema = types.BoolPointerValue(resp.OutputGoogleCloudStorage.AutomaticSchema)
 		r.OutputGoogleCloudStorage.AwsAPIKey = types.StringPointerValue(resp.OutputGoogleCloudStorage.AwsAPIKey)
@@ -3087,13 +3770,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudStorage.DeadletterPath = types.StringPointerValue(resp.OutputGoogleCloudStorage.DeadletterPath)
 		r.OutputGoogleCloudStorage.Description = types.StringPointerValue(resp.OutputGoogleCloudStorage.Description)
 		r.OutputGoogleCloudStorage.DestPath = types.StringPointerValue(resp.OutputGoogleCloudStorage.DestPath)
+		r.OutputGoogleCloudStorage.DirectoryBatchSize = types.Float64PointerValue(resp.OutputGoogleCloudStorage.DirectoryBatchSize)
 		r.OutputGoogleCloudStorage.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputGoogleCloudStorage.EmptyDirCleanupSec)
 		r.OutputGoogleCloudStorage.EnablePageChecksum = types.BoolPointerValue(resp.OutputGoogleCloudStorage.EnablePageChecksum)
 		r.OutputGoogleCloudStorage.EnableStatistics = types.BoolPointerValue(resp.OutputGoogleCloudStorage.EnableStatistics)
 		r.OutputGoogleCloudStorage.EnableWritePageIndex = types.BoolPointerValue(resp.OutputGoogleCloudStorage.EnableWritePageIndex)
-		r.OutputGoogleCloudStorage.Endpoint = types.StringPointerValue(resp.OutputGoogleCloudStorage.Endpoint)
+		r.OutputGoogleCloudStorage.Endpoint = types.StringValue(resp.OutputGoogleCloudStorage.Endpoint)
 		r.OutputGoogleCloudStorage.Environment = types.StringPointerValue(resp.OutputGoogleCloudStorage.Environment)
+		r.Environment = r.OutputGoogleCloudStorage.Environment
 		r.OutputGoogleCloudStorage.FileNameSuffix = types.StringPointerValue(resp.OutputGoogleCloudStorage.FileNameSuffix)
+		r.OutputGoogleCloudStorage.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputGoogleCloudStorage.ForceCloseOnShutdown)
 		if resp.OutputGoogleCloudStorage.Format != nil {
 			r.OutputGoogleCloudStorage.Format = types.StringValue(string(*resp.OutputGoogleCloudStorage.Format))
 		} else {
@@ -3102,15 +3788,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGoogleCloudStorage.HeaderLine = types.StringPointerValue(resp.OutputGoogleCloudStorage.HeaderLine)
 		r.OutputGoogleCloudStorage.ID = types.StringPointerValue(resp.OutputGoogleCloudStorage.ID)
 		r.ID = r.OutputGoogleCloudStorage.ID
-		r.OutputGoogleCloudStorage.KeyValueMetadata = []tfTypes.OutputGoogleCloudStorageKeyValueMetadatum{}
+		r.OutputGoogleCloudStorage.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem5 := range resp.OutputGoogleCloudStorage.KeyValueMetadata {
-			var keyValueMetadata5 tfTypes.OutputGoogleCloudStorageKeyValueMetadatum
+		for _, keyValueMetadataItem6 := range resp.OutputGoogleCloudStorage.KeyValueMetadata {
+			var keyValueMetadata6 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata5.Key = types.StringPointerValue(keyValueMetadataItem5.Key)
-			keyValueMetadata5.Value = types.StringValue(keyValueMetadataItem5.Value)
+			keyValueMetadata6.Key = types.StringValue(keyValueMetadataItem6.Key)
+			keyValueMetadata6.Value = types.StringValue(keyValueMetadataItem6.Value)
 
-			r.OutputGoogleCloudStorage.KeyValueMetadata = append(r.OutputGoogleCloudStorage.KeyValueMetadata, keyValueMetadata5)
+			r.OutputGoogleCloudStorage.KeyValueMetadata = append(r.OutputGoogleCloudStorage.KeyValueMetadata, keyValueMetadata6)
 		}
 		r.OutputGoogleCloudStorage.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputGoogleCloudStorage.MaxFileIdleTimeSec)
 		r.OutputGoogleCloudStorage.MaxFileOpenTimeSec = types.Float64PointerValue(resp.OutputGoogleCloudStorage.MaxFileOpenTimeSec)
@@ -3139,6 +3825,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGoogleCloudStorage.ParquetPageSize = types.StringPointerValue(resp.OutputGoogleCloudStorage.ParquetPageSize)
 		r.OutputGoogleCloudStorage.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputGoogleCloudStorage.ParquetRowGroupLength)
+		r.OutputGoogleCloudStorage.ParquetSchema = types.StringPointerValue(resp.OutputGoogleCloudStorage.ParquetSchema)
 		if resp.OutputGoogleCloudStorage.ParquetVersion != nil {
 			r.OutputGoogleCloudStorage.ParquetVersion = types.StringValue(string(*resp.OutputGoogleCloudStorage.ParquetVersion))
 		} else {
@@ -3146,9 +3833,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGoogleCloudStorage.PartitionExpr = types.StringPointerValue(resp.OutputGoogleCloudStorage.PartitionExpr)
 		r.OutputGoogleCloudStorage.Pipeline = types.StringPointerValue(resp.OutputGoogleCloudStorage.Pipeline)
+		r.Pipeline = r.OutputGoogleCloudStorage.Pipeline
 		r.OutputGoogleCloudStorage.Region = types.StringValue(resp.OutputGoogleCloudStorage.Region)
 		r.OutputGoogleCloudStorage.RejectUnauthorized = types.BoolPointerValue(resp.OutputGoogleCloudStorage.RejectUnauthorized)
 		r.OutputGoogleCloudStorage.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputGoogleCloudStorage.RemoveEmptyDirs)
+		if resp.OutputGoogleCloudStorage.RetrySettings == nil {
+			r.OutputGoogleCloudStorage.RetrySettings = nil
+		} else {
+			r.OutputGoogleCloudStorage.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputGoogleCloudStorage.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputGoogleCloudStorage.RetrySettings.BackoffMultiplier)
+			r.OutputGoogleCloudStorage.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputGoogleCloudStorage.RetrySettings.Enabled)
+			r.OutputGoogleCloudStorage.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputGoogleCloudStorage.RetrySettings.InitialBackoffMs)
+			r.OutputGoogleCloudStorage.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputGoogleCloudStorage.RetrySettings.JitterPercent)
+			r.OutputGoogleCloudStorage.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputGoogleCloudStorage.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputGoogleCloudStorage.ReuseConnections = types.BoolPointerValue(resp.OutputGoogleCloudStorage.ReuseConnections)
 		r.OutputGoogleCloudStorage.ShouldLogInvalidRows = types.BoolPointerValue(resp.OutputGoogleCloudStorage.ShouldLogInvalidRows)
 		if resp.OutputGoogleCloudStorage.SignatureVersion != nil {
@@ -3156,7 +3854,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputGoogleCloudStorage.SignatureVersion = types.StringNull()
 		}
-		r.OutputGoogleCloudStorage.StagePath = types.StringPointerValue(resp.OutputGoogleCloudStorage.StagePath)
+		r.OutputGoogleCloudStorage.StagePath = types.StringValue(resp.OutputGoogleCloudStorage.StagePath)
 		if resp.OutputGoogleCloudStorage.StorageClass != nil {
 			r.OutputGoogleCloudStorage.StorageClass = types.StringValue(string(*resp.OutputGoogleCloudStorage.StorageClass))
 		} else {
@@ -3170,22 +3868,28 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputGoogleCloudStorage.SystemFields {
 			r.OutputGoogleCloudStorage.SystemFields = append(r.OutputGoogleCloudStorage.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputGoogleCloudStorage.Type != nil {
-			r.OutputGoogleCloudStorage.Type = types.StringValue(string(*resp.OutputGoogleCloudStorage.Type))
-		} else {
-			r.OutputGoogleCloudStorage.Type = types.StringNull()
-		}
+		r.OutputGoogleCloudStorage.Type = types.StringValue(string(resp.OutputGoogleCloudStorage.Type))
+		r.Type = r.OutputGoogleCloudStorage.Type
 		r.OutputGoogleCloudStorage.VerifyPermissions = types.BoolPointerValue(resp.OutputGoogleCloudStorage.VerifyPermissions)
 		r.OutputGoogleCloudStorage.WriteHighWaterMark = types.Float64PointerValue(resp.OutputGoogleCloudStorage.WriteHighWaterMark)
 	}
 	if resp.OutputGooglePubsub != nil {
 		r.OutputGooglePubsub = &tfTypes.OutputGooglePubsub{}
+		r.OutputGooglePubsub.TemplateRegion = types.StringPointerValue(resp.OutputGooglePubsub.TemplateRegion)
+		r.OutputGooglePubsub.TemplateTopicName = types.StringPointerValue(resp.OutputGooglePubsub.TemplateTopicName)
 		r.OutputGooglePubsub.BatchSize = types.Float64PointerValue(resp.OutputGooglePubsub.BatchSize)
 		r.OutputGooglePubsub.BatchTimeout = types.Float64PointerValue(resp.OutputGooglePubsub.BatchTimeout)
 		r.OutputGooglePubsub.CreateTopic = types.BoolPointerValue(resp.OutputGooglePubsub.CreateTopic)
 		r.OutputGooglePubsub.Description = types.StringPointerValue(resp.OutputGooglePubsub.Description)
 		r.OutputGooglePubsub.Environment = types.StringPointerValue(resp.OutputGooglePubsub.Environment)
-		r.OutputGooglePubsub.FlushPeriodSec = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriodSec)
+		r.Environment = r.OutputGooglePubsub.Environment
+		r.OutputGooglePubsub.FlushPeriod = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriod)
+		if resp.OutputGooglePubsub.FlushPeriodSec == nil {
+			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedNull()
+		} else {
+			flushPeriodSecResult, _ := json.Marshal(resp.OutputGooglePubsub.FlushPeriodSec)
+			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedValue(string(flushPeriodSecResult))
+		}
 		if resp.OutputGooglePubsub.GoogleAuthMethod != nil {
 			r.OutputGooglePubsub.GoogleAuthMethod = types.StringValue(string(*resp.OutputGooglePubsub.GoogleAuthMethod))
 		} else {
@@ -3203,6 +3907,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGooglePubsub.OrderedDelivery = types.BoolPointerValue(resp.OutputGooglePubsub.OrderedDelivery)
 		r.OutputGooglePubsub.Pipeline = types.StringPointerValue(resp.OutputGooglePubsub.Pipeline)
+		r.Pipeline = r.OutputGooglePubsub.Pipeline
 		if resp.OutputGooglePubsub.PqCompress != nil {
 			r.OutputGooglePubsub.PqCompress = types.StringValue(string(*resp.OutputGooglePubsub.PqCompress))
 		} else {
@@ -3213,6 +3918,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputGooglePubsub.PqControls = &tfTypes.OutputGooglePubsubPqControls{}
 		}
+		r.OutputGooglePubsub.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGooglePubsub.PqMaxBackpressureSec)
+		r.OutputGooglePubsub.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGooglePubsub.PqMaxBufferSize)
+		r.OutputGooglePubsub.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGooglePubsub.PqMaxBufferSizeBytes)
 		r.OutputGooglePubsub.PqMaxFileSize = types.StringPointerValue(resp.OutputGooglePubsub.PqMaxFileSize)
 		r.OutputGooglePubsub.PqMaxSize = types.StringPointerValue(resp.OutputGooglePubsub.PqMaxSize)
 		if resp.OutputGooglePubsub.PqMode != nil {
@@ -3226,6 +3934,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGooglePubsub.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputGooglePubsub.PqPath = types.StringPointerValue(resp.OutputGooglePubsub.PqPath)
+		r.OutputGooglePubsub.PqRatePerSec = types.Float64PointerValue(resp.OutputGooglePubsub.PqRatePerSec)
+		r.OutputGooglePubsub.PqStrictOrdering = types.BoolPointerValue(resp.OutputGooglePubsub.PqStrictOrdering)
 		r.OutputGooglePubsub.Region = types.StringPointerValue(resp.OutputGooglePubsub.Region)
 		r.OutputGooglePubsub.Secret = types.StringPointerValue(resp.OutputGooglePubsub.Secret)
 		r.OutputGooglePubsub.ServiceAccountCredentials = types.StringPointerValue(resp.OutputGooglePubsub.ServiceAccountCredentials)
@@ -3239,6 +3949,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGooglePubsub.TopicName = types.StringValue(resp.OutputGooglePubsub.TopicName)
 		r.OutputGooglePubsub.Type = types.StringValue(string(resp.OutputGooglePubsub.Type))
+		r.Type = r.OutputGooglePubsub.Type
 	}
 	if resp.OutputGrafanaCloud != nil {
 		r.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
@@ -3246,15 +3957,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGrafanaCloud.Concurrency = types.Float64PointerValue(resp.OutputGrafanaCloud.Concurrency)
 		r.OutputGrafanaCloud.Description = types.StringPointerValue(resp.OutputGrafanaCloud.Description)
 		r.OutputGrafanaCloud.Environment = types.StringPointerValue(resp.OutputGrafanaCloud.Environment)
-		r.OutputGrafanaCloud.ExtraHTTPHeaders = []tfTypes.OutputGrafanaCloudExtraHTTPHeader{}
+		r.Environment = r.OutputGrafanaCloud.Environment
+		r.OutputGrafanaCloud.ExtraHTTPHeaders = []tfTypes.ExtraHTTPHeader{}
 
-		for _, extraHTTPHeadersItem12 := range resp.OutputGrafanaCloud.ExtraHTTPHeaders {
-			var extraHTTPHeaders12 tfTypes.OutputGrafanaCloudExtraHTTPHeader
+		for _, extraHTTPHeadersItem13 := range resp.OutputGrafanaCloud.ExtraHTTPHeaders {
+			var extraHTTPHeaders13 tfTypes.ExtraHTTPHeader
 
-			extraHTTPHeaders12.Name = types.StringPointerValue(extraHTTPHeadersItem12.Name)
-			extraHTTPHeaders12.Value = types.StringValue(extraHTTPHeadersItem12.Value)
+			extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
+			extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
 
-			r.OutputGrafanaCloud.ExtraHTTPHeaders = append(r.OutputGrafanaCloud.ExtraHTTPHeaders, extraHTTPHeaders12)
+			r.OutputGrafanaCloud.ExtraHTTPHeaders = append(r.OutputGrafanaCloud.ExtraHTTPHeaders, extraHTTPHeaders13)
 		}
 		if resp.OutputGrafanaCloud.FailedRequestLoggingMode != nil {
 			r.OutputGrafanaCloud.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputGrafanaCloud.FailedRequestLoggingMode))
@@ -3264,10 +3976,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGrafanaCloud.FlushPeriodSec = types.Float64PointerValue(resp.OutputGrafanaCloud.FlushPeriodSec)
 		r.OutputGrafanaCloud.ID = types.StringValue(resp.OutputGrafanaCloud.ID)
 		r.ID = r.OutputGrafanaCloud.ID
-		r.OutputGrafanaCloud.Labels = []tfTypes.OutputGrafanaCloudLabel{}
+		r.OutputGrafanaCloud.Labels = []tfTypes.Label{}
 
 		for _, labelsItem := range resp.OutputGrafanaCloud.Labels {
-			var labels tfTypes.OutputGrafanaCloudLabel
+			var labels tfTypes.Label
 
 			labels.Name = types.StringPointerValue(labelsItem.Name)
 			labels.Value = types.StringValue(labelsItem.Value)
@@ -3305,6 +4017,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGrafanaCloud.OnBackpressure = types.StringNull()
 		}
 		r.OutputGrafanaCloud.Pipeline = types.StringPointerValue(resp.OutputGrafanaCloud.Pipeline)
+		r.Pipeline = r.OutputGrafanaCloud.Pipeline
 		if resp.OutputGrafanaCloud.PqCompress != nil {
 			r.OutputGrafanaCloud.PqCompress = types.StringValue(string(*resp.OutputGrafanaCloud.PqCompress))
 		} else {
@@ -3346,17 +4059,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGrafanaCloud.PrometheusURL = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusURL)
 		r.OutputGrafanaCloud.RejectUnauthorized = types.BoolPointerValue(resp.OutputGrafanaCloud.RejectUnauthorized)
 		r.OutputGrafanaCloud.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputGrafanaCloud.ResponseHonorRetryAfterHeader)
-		r.OutputGrafanaCloud.ResponseRetrySettings = []tfTypes.OutputGrafanaCloudResponseRetrySetting{}
+		r.OutputGrafanaCloud.ResponseRetrySettings = []tfTypes.ResponseRetrySetting{}
 
-		for _, responseRetrySettingsItem13 := range resp.OutputGrafanaCloud.ResponseRetrySettings {
-			var responseRetrySettings13 tfTypes.OutputGrafanaCloudResponseRetrySetting
+		for _, responseRetrySettingsItem14 := range resp.OutputGrafanaCloud.ResponseRetrySettings {
+			var responseRetrySettings14 tfTypes.ResponseRetrySetting
 
-			responseRetrySettings13.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem13.BackoffRate)
-			responseRetrySettings13.HTTPStatus = types.Float64Value(responseRetrySettingsItem13.HTTPStatus)
-			responseRetrySettings13.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem13.InitialBackoff)
-			responseRetrySettings13.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem13.MaxBackoff)
+			responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
+			responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
+			responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
+			responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
 
-			r.OutputGrafanaCloud.ResponseRetrySettings = append(r.OutputGrafanaCloud.ResponseRetrySettings, responseRetrySettings13)
+			r.OutputGrafanaCloud.ResponseRetrySettings = append(r.OutputGrafanaCloud.ResponseRetrySettings, responseRetrySettings14)
 		}
 		r.OutputGrafanaCloud.SafeHeaders = make([]types.String, 0, len(resp.OutputGrafanaCloud.SafeHeaders))
 		for _, v := range resp.OutputGrafanaCloud.SafeHeaders {
@@ -3373,7 +4086,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputGrafanaCloud.TimeoutRetrySettings == nil {
 			r.OutputGrafanaCloud.TimeoutRetrySettings = nil
 		} else {
-			r.OutputGrafanaCloud.TimeoutRetrySettings = &tfTypes.OutputGrafanaCloudTimeoutRetrySettings{}
+			r.OutputGrafanaCloud.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettings{}
 			r.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate)
 			r.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff)
 			r.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff)
@@ -3381,6 +4094,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputGrafanaCloud.TimeoutSec = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutSec)
 		r.OutputGrafanaCloud.Type = types.StringValue(string(resp.OutputGrafanaCloud.Type))
+		r.Type = r.OutputGrafanaCloud.Type
 		r.OutputGrafanaCloud.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputGrafanaCloud.UseRoundRobinDNS)
 	}
 	if resp.OutputGraphite != nil {
@@ -3389,6 +4103,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputGraphite.Description = types.StringPointerValue(resp.OutputGraphite.Description)
 		r.OutputGraphite.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputGraphite.DNSResolvePeriodSec)
 		r.OutputGraphite.Environment = types.StringPointerValue(resp.OutputGraphite.Environment)
+		r.Environment = r.OutputGraphite.Environment
 		r.OutputGraphite.FlushPeriodSec = types.Float64PointerValue(resp.OutputGraphite.FlushPeriodSec)
 		r.OutputGraphite.Host = types.StringValue(resp.OutputGraphite.Host)
 		r.OutputGraphite.ID = types.StringPointerValue(resp.OutputGraphite.ID)
@@ -3400,7 +4115,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGraphite.OnBackpressure = types.StringNull()
 		}
 		r.OutputGraphite.Pipeline = types.StringPointerValue(resp.OutputGraphite.Pipeline)
-		r.OutputGraphite.Port = types.Float64PointerValue(resp.OutputGraphite.Port)
+		r.Pipeline = r.OutputGraphite.Pipeline
+		r.OutputGraphite.Port = types.Float64Value(resp.OutputGraphite.Port)
 		if resp.OutputGraphite.PqCompress != nil {
 			r.OutputGraphite.PqCompress = types.StringValue(string(*resp.OutputGraphite.PqCompress))
 		} else {
@@ -3411,6 +4127,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputGraphite.PqControls = &tfTypes.OutputGraphitePqControls{}
 		}
+		r.OutputGraphite.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGraphite.PqMaxBackpressureSec)
+		r.OutputGraphite.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGraphite.PqMaxBufferSize)
+		r.OutputGraphite.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGraphite.PqMaxBufferSizeBytes)
 		r.OutputGraphite.PqMaxFileSize = types.StringPointerValue(resp.OutputGraphite.PqMaxFileSize)
 		r.OutputGraphite.PqMaxSize = types.StringPointerValue(resp.OutputGraphite.PqMaxSize)
 		if resp.OutputGraphite.PqMode != nil {
@@ -3424,11 +4143,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGraphite.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputGraphite.PqPath = types.StringPointerValue(resp.OutputGraphite.PqPath)
-		if resp.OutputGraphite.Protocol != nil {
-			r.OutputGraphite.Protocol = types.StringValue(string(*resp.OutputGraphite.Protocol))
-		} else {
-			r.OutputGraphite.Protocol = types.StringNull()
-		}
+		r.OutputGraphite.PqRatePerSec = types.Float64PointerValue(resp.OutputGraphite.PqRatePerSec)
+		r.OutputGraphite.PqStrictOrdering = types.BoolPointerValue(resp.OutputGraphite.PqStrictOrdering)
+		r.OutputGraphite.Protocol = types.StringValue(string(resp.OutputGraphite.Protocol))
 		r.OutputGraphite.Streamtags = make([]types.String, 0, len(resp.OutputGraphite.Streamtags))
 		for _, v := range resp.OutputGraphite.Streamtags {
 			r.OutputGraphite.Streamtags = append(r.OutputGraphite.Streamtags, types.StringValue(v))
@@ -3438,11 +4155,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputGraphite.SystemFields = append(r.OutputGraphite.SystemFields, types.StringValue(v))
 		}
 		r.OutputGraphite.ThrottleRatePerSec = types.StringPointerValue(resp.OutputGraphite.ThrottleRatePerSec)
-		if resp.OutputGraphite.Type != nil {
-			r.OutputGraphite.Type = types.StringValue(string(*resp.OutputGraphite.Type))
-		} else {
-			r.OutputGraphite.Type = types.StringNull()
-		}
+		r.OutputGraphite.Type = types.StringValue(string(resp.OutputGraphite.Type))
+		r.Type = r.OutputGraphite.Type
 		r.OutputGraphite.WriteTimeout = types.Float64PointerValue(resp.OutputGraphite.WriteTimeout)
 	}
 	if resp.OutputHoneycomb != nil {
@@ -3457,15 +4171,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputHoneycomb.Dataset = types.StringValue(resp.OutputHoneycomb.Dataset)
 		r.OutputHoneycomb.Description = types.StringPointerValue(resp.OutputHoneycomb.Description)
 		r.OutputHoneycomb.Environment = types.StringPointerValue(resp.OutputHoneycomb.Environment)
-		r.OutputHoneycomb.ExtraHTTPHeaders = []tfTypes.OutputHoneycombExtraHTTPHeader{}
+		r.Environment = r.OutputHoneycomb.Environment
+		r.OutputHoneycomb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem13 := range resp.OutputHoneycomb.ExtraHTTPHeaders {
-			var extraHTTPHeaders13 tfTypes.OutputHoneycombExtraHTTPHeader
+		for _, extraHTTPHeadersItem14 := range resp.OutputHoneycomb.ExtraHTTPHeaders {
+			var extraHTTPHeaders14 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
-			extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
+			extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
+			extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
 
-			r.OutputHoneycomb.ExtraHTTPHeaders = append(r.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders13)
+			r.OutputHoneycomb.ExtraHTTPHeaders = append(r.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders14)
 		}
 		if resp.OutputHoneycomb.FailedRequestLoggingMode != nil {
 			r.OutputHoneycomb.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputHoneycomb.FailedRequestLoggingMode))
@@ -3483,6 +4198,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputHoneycomb.OnBackpressure = types.StringNull()
 		}
 		r.OutputHoneycomb.Pipeline = types.StringPointerValue(resp.OutputHoneycomb.Pipeline)
+		r.Pipeline = r.OutputHoneycomb.Pipeline
 		if resp.OutputHoneycomb.PqCompress != nil {
 			r.OutputHoneycomb.PqCompress = types.StringValue(string(*resp.OutputHoneycomb.PqCompress))
 		} else {
@@ -3493,6 +4209,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputHoneycomb.PqControls = &tfTypes.OutputHoneycombPqControls{}
 		}
+		r.OutputHoneycomb.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputHoneycomb.PqMaxBackpressureSec)
+		r.OutputHoneycomb.PqMaxBufferSize = types.Float64PointerValue(resp.OutputHoneycomb.PqMaxBufferSize)
+		r.OutputHoneycomb.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputHoneycomb.PqMaxBufferSizeBytes)
 		r.OutputHoneycomb.PqMaxFileSize = types.StringPointerValue(resp.OutputHoneycomb.PqMaxFileSize)
 		r.OutputHoneycomb.PqMaxSize = types.StringPointerValue(resp.OutputHoneycomb.PqMaxSize)
 		if resp.OutputHoneycomb.PqMode != nil {
@@ -3506,19 +4225,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputHoneycomb.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputHoneycomb.PqPath = types.StringPointerValue(resp.OutputHoneycomb.PqPath)
+		r.OutputHoneycomb.PqRatePerSec = types.Float64PointerValue(resp.OutputHoneycomb.PqRatePerSec)
+		r.OutputHoneycomb.PqStrictOrdering = types.BoolPointerValue(resp.OutputHoneycomb.PqStrictOrdering)
 		r.OutputHoneycomb.RejectUnauthorized = types.BoolPointerValue(resp.OutputHoneycomb.RejectUnauthorized)
 		r.OutputHoneycomb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputHoneycomb.ResponseHonorRetryAfterHeader)
-		r.OutputHoneycomb.ResponseRetrySettings = []tfTypes.OutputHoneycombResponseRetrySetting{}
+		r.OutputHoneycomb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem14 := range resp.OutputHoneycomb.ResponseRetrySettings {
-			var responseRetrySettings14 tfTypes.OutputHoneycombResponseRetrySetting
+		for _, responseRetrySettingsItem15 := range resp.OutputHoneycomb.ResponseRetrySettings {
+			var responseRetrySettings15 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
-			responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
-			responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
-			responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
+			responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
+			responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
+			responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
+			responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
 
-			r.OutputHoneycomb.ResponseRetrySettings = append(r.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings14)
+			r.OutputHoneycomb.ResponseRetrySettings = append(r.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings15)
 		}
 		r.OutputHoneycomb.SafeHeaders = make([]types.String, 0, len(resp.OutputHoneycomb.SafeHeaders))
 		for _, v := range resp.OutputHoneycomb.SafeHeaders {
@@ -3537,18 +4258,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputHoneycomb.TimeoutRetrySettings == nil {
 			r.OutputHoneycomb.TimeoutRetrySettings = nil
 		} else {
-			r.OutputHoneycomb.TimeoutRetrySettings = &tfTypes.OutputHoneycombTimeoutRetrySettings{}
+			r.OutputHoneycomb.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputHoneycomb.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputHoneycomb.TimeoutRetrySettings.BackoffRate)
 			r.OutputHoneycomb.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputHoneycomb.TimeoutRetrySettings.InitialBackoff)
 			r.OutputHoneycomb.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputHoneycomb.TimeoutRetrySettings.MaxBackoff)
-			r.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputHoneycomb.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputHoneycomb.TimeoutSec = types.Float64PointerValue(resp.OutputHoneycomb.TimeoutSec)
 		r.OutputHoneycomb.Type = types.StringValue(string(resp.OutputHoneycomb.Type))
+		r.Type = r.OutputHoneycomb.Type
 		r.OutputHoneycomb.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputHoneycomb.UseRoundRobinDNS)
 	}
 	if resp.OutputHumioHec != nil {
 		r.OutputHumioHec = &tfTypes.OutputHumioHec{}
+		r.OutputHumioHec.TemplateURL = types.StringPointerValue(resp.OutputHumioHec.TemplateURL)
 		if resp.OutputHumioHec.AuthType != nil {
 			r.OutputHumioHec.AuthType = types.StringValue(string(*resp.OutputHumioHec.AuthType))
 		} else {
@@ -3558,15 +4281,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputHumioHec.Concurrency = types.Float64PointerValue(resp.OutputHumioHec.Concurrency)
 		r.OutputHumioHec.Description = types.StringPointerValue(resp.OutputHumioHec.Description)
 		r.OutputHumioHec.Environment = types.StringPointerValue(resp.OutputHumioHec.Environment)
-		r.OutputHumioHec.ExtraHTTPHeaders = []tfTypes.OutputHumioHecExtraHTTPHeader{}
+		r.Environment = r.OutputHumioHec.Environment
+		r.OutputHumioHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem14 := range resp.OutputHumioHec.ExtraHTTPHeaders {
-			var extraHTTPHeaders14 tfTypes.OutputHumioHecExtraHTTPHeader
+		for _, extraHTTPHeadersItem15 := range resp.OutputHumioHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders15 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
-			extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
+			extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
+			extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
 
-			r.OutputHumioHec.ExtraHTTPHeaders = append(r.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders14)
+			r.OutputHumioHec.ExtraHTTPHeaders = append(r.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders15)
 		}
 		if resp.OutputHumioHec.FailedRequestLoggingMode != nil {
 			r.OutputHumioHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputHumioHec.FailedRequestLoggingMode))
@@ -3574,11 +4298,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputHumioHec.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputHumioHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputHumioHec.FlushPeriodSec)
-		if resp.OutputHumioHec.Format != nil {
-			r.OutputHumioHec.Format = types.StringValue(string(*resp.OutputHumioHec.Format))
-		} else {
-			r.OutputHumioHec.Format = types.StringNull()
-		}
+		r.OutputHumioHec.Format = types.StringValue(string(resp.OutputHumioHec.Format))
 		r.OutputHumioHec.ID = types.StringPointerValue(resp.OutputHumioHec.ID)
 		r.ID = r.OutputHumioHec.ID
 		r.OutputHumioHec.MaxPayloadEvents = types.Float64PointerValue(resp.OutputHumioHec.MaxPayloadEvents)
@@ -3589,6 +4309,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputHumioHec.OnBackpressure = types.StringNull()
 		}
 		r.OutputHumioHec.Pipeline = types.StringPointerValue(resp.OutputHumioHec.Pipeline)
+		r.Pipeline = r.OutputHumioHec.Pipeline
 		if resp.OutputHumioHec.PqCompress != nil {
 			r.OutputHumioHec.PqCompress = types.StringValue(string(*resp.OutputHumioHec.PqCompress))
 		} else {
@@ -3599,6 +4320,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputHumioHec.PqControls = &tfTypes.OutputHumioHecPqControls{}
 		}
+		r.OutputHumioHec.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputHumioHec.PqMaxBackpressureSec)
+		r.OutputHumioHec.PqMaxBufferSize = types.Float64PointerValue(resp.OutputHumioHec.PqMaxBufferSize)
+		r.OutputHumioHec.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputHumioHec.PqMaxBufferSizeBytes)
 		r.OutputHumioHec.PqMaxFileSize = types.StringPointerValue(resp.OutputHumioHec.PqMaxFileSize)
 		r.OutputHumioHec.PqMaxSize = types.StringPointerValue(resp.OutputHumioHec.PqMaxSize)
 		if resp.OutputHumioHec.PqMode != nil {
@@ -3612,19 +4336,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputHumioHec.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputHumioHec.PqPath = types.StringPointerValue(resp.OutputHumioHec.PqPath)
+		r.OutputHumioHec.PqRatePerSec = types.Float64PointerValue(resp.OutputHumioHec.PqRatePerSec)
+		r.OutputHumioHec.PqStrictOrdering = types.BoolPointerValue(resp.OutputHumioHec.PqStrictOrdering)
 		r.OutputHumioHec.RejectUnauthorized = types.BoolPointerValue(resp.OutputHumioHec.RejectUnauthorized)
 		r.OutputHumioHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputHumioHec.ResponseHonorRetryAfterHeader)
-		r.OutputHumioHec.ResponseRetrySettings = []tfTypes.OutputHumioHecResponseRetrySetting{}
+		r.OutputHumioHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem15 := range resp.OutputHumioHec.ResponseRetrySettings {
-			var responseRetrySettings15 tfTypes.OutputHumioHecResponseRetrySetting
+		for _, responseRetrySettingsItem16 := range resp.OutputHumioHec.ResponseRetrySettings {
+			var responseRetrySettings16 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
-			responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
-			responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
-			responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
+			responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
+			responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
+			responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
+			responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
 
-			r.OutputHumioHec.ResponseRetrySettings = append(r.OutputHumioHec.ResponseRetrySettings, responseRetrySettings15)
+			r.OutputHumioHec.ResponseRetrySettings = append(r.OutputHumioHec.ResponseRetrySettings, responseRetrySettings16)
 		}
 		r.OutputHumioHec.SafeHeaders = make([]types.String, 0, len(resp.OutputHumioHec.SafeHeaders))
 		for _, v := range resp.OutputHumioHec.SafeHeaders {
@@ -3642,25 +4368,30 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputHumioHec.TimeoutRetrySettings == nil {
 			r.OutputHumioHec.TimeoutRetrySettings = nil
 		} else {
-			r.OutputHumioHec.TimeoutRetrySettings = &tfTypes.OutputHumioHecTimeoutRetrySettings{}
+			r.OutputHumioHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputHumioHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputHumioHec.TimeoutRetrySettings.BackoffRate)
 			r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputHumioHec.TimeoutRetrySettings.InitialBackoff)
 			r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputHumioHec.TimeoutRetrySettings.MaxBackoff)
-			r.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputHumioHec.TimeoutSec = types.Float64PointerValue(resp.OutputHumioHec.TimeoutSec)
 		r.OutputHumioHec.Token = types.StringPointerValue(resp.OutputHumioHec.Token)
-		if resp.OutputHumioHec.Type != nil {
-			r.OutputHumioHec.Type = types.StringValue(string(*resp.OutputHumioHec.Type))
-		} else {
-			r.OutputHumioHec.Type = types.StringNull()
-		}
-		r.OutputHumioHec.URL = types.StringPointerValue(resp.OutputHumioHec.URL)
+		r.OutputHumioHec.Type = types.StringValue(string(resp.OutputHumioHec.Type))
+		r.Type = r.OutputHumioHec.Type
+		r.OutputHumioHec.URL = types.StringValue(resp.OutputHumioHec.URL)
 		r.OutputHumioHec.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputHumioHec.UseRoundRobinDNS)
 	}
 	if resp.OutputInfluxdb != nil {
 		r.OutputInfluxdb = &tfTypes.OutputInfluxdb{}
-		r.OutputInfluxdb.AuthHeaderExpr = types.StringPointerValue(resp.OutputInfluxdb.AuthHeaderExpr)
+		r.OutputInfluxdb.TemplateBucket = types.StringPointerValue(resp.OutputInfluxdb.TemplateBucket)
+		r.OutputInfluxdb.TemplateDatabase = types.StringPointerValue(resp.OutputInfluxdb.TemplateDatabase)
+		r.OutputInfluxdb.TemplateURL = types.StringPointerValue(resp.OutputInfluxdb.TemplateURL)
+		if resp.OutputInfluxdb.AuthHeaderExpr == nil {
+			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+		} else {
+			authHeaderExprResult1, _ := json.Marshal(resp.OutputInfluxdb.AuthHeaderExpr)
+			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
+		}
 		if resp.OutputInfluxdb.AuthType != nil {
 			r.OutputInfluxdb.AuthType = types.StringValue(string(*resp.OutputInfluxdb.AuthType))
 		} else {
@@ -3674,15 +4405,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputInfluxdb.Description = types.StringPointerValue(resp.OutputInfluxdb.Description)
 		r.OutputInfluxdb.DynamicValueFieldName = types.BoolPointerValue(resp.OutputInfluxdb.DynamicValueFieldName)
 		r.OutputInfluxdb.Environment = types.StringPointerValue(resp.OutputInfluxdb.Environment)
-		r.OutputInfluxdb.ExtraHTTPHeaders = []tfTypes.OutputInfluxdbExtraHTTPHeader{}
+		r.Environment = r.OutputInfluxdb.Environment
+		r.OutputInfluxdb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem15 := range resp.OutputInfluxdb.ExtraHTTPHeaders {
-			var extraHTTPHeaders15 tfTypes.OutputInfluxdbExtraHTTPHeader
+		for _, extraHTTPHeadersItem16 := range resp.OutputInfluxdb.ExtraHTTPHeaders {
+			var extraHTTPHeaders16 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
-			extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
+			extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
+			extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
 
-			r.OutputInfluxdb.ExtraHTTPHeaders = append(r.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders15)
+			r.OutputInfluxdb.ExtraHTTPHeaders = append(r.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders16)
 		}
 		if resp.OutputInfluxdb.FailedRequestLoggingMode != nil {
 			r.OutputInfluxdb.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputInfluxdb.FailedRequestLoggingMode))
@@ -3692,7 +4424,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputInfluxdb.FlushPeriodSec = types.Float64PointerValue(resp.OutputInfluxdb.FlushPeriodSec)
 		r.OutputInfluxdb.ID = types.StringPointerValue(resp.OutputInfluxdb.ID)
 		r.ID = r.OutputInfluxdb.ID
-		r.OutputInfluxdb.LoginURL = types.StringPointerValue(resp.OutputInfluxdb.LoginURL)
+		if resp.OutputInfluxdb.LoginURL == nil {
+			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedNull()
+		} else {
+			loginURLResult1, _ := json.Marshal(resp.OutputInfluxdb.LoginURL)
+			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
+		}
 		r.OutputInfluxdb.MaxPayloadEvents = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadEvents)
 		r.OutputInfluxdb.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadSizeKB)
 		r.OutputInfluxdb.OauthHeaders = []tfTypes.OutputInfluxdbOauthHeader{}
@@ -3700,20 +4437,40 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, oauthHeadersItem1 := range resp.OutputInfluxdb.OauthHeaders {
 			var oauthHeaders1 tfTypes.OutputInfluxdbOauthHeader
 
-			oauthHeaders1.Name = types.StringValue(oauthHeadersItem1.Name)
-			oauthHeaders1.Value = types.StringValue(oauthHeadersItem1.Value)
+			if oauthHeadersItem1.Name == nil {
+				oauthHeaders1.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
+				oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
+			}
+			if oauthHeadersItem1.Value == nil {
+				oauthHeaders1.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
+				oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
+			}
 
 			r.OutputInfluxdb.OauthHeaders = append(r.OutputInfluxdb.OauthHeaders, oauthHeaders1)
 		}
 		r.OutputInfluxdb.OauthParams = []tfTypes.OutputInfluxdbOauthParam{}
 
-		for _, oauthParamsItem1 := range resp.OutputInfluxdb.OauthParams {
-			var oauthParams1 tfTypes.OutputInfluxdbOauthParam
+		for _, oauthParamsItem2 := range resp.OutputInfluxdb.OauthParams {
+			var oauthParams2 tfTypes.OutputInfluxdbOauthParam
 
-			oauthParams1.Name = types.StringValue(oauthParamsItem1.Name)
-			oauthParams1.Value = types.StringValue(oauthParamsItem1.Value)
+			if oauthParamsItem2.Name == nil {
+				oauthParams2.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
+				oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
+			}
+			if oauthParamsItem2.Value == nil {
+				oauthParams2.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
+				oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
+			}
 
-			r.OutputInfluxdb.OauthParams = append(r.OutputInfluxdb.OauthParams, oauthParams1)
+			r.OutputInfluxdb.OauthParams = append(r.OutputInfluxdb.OauthParams, oauthParams2)
 		}
 		if resp.OutputInfluxdb.OnBackpressure != nil {
 			r.OutputInfluxdb.OnBackpressure = types.StringValue(string(*resp.OutputInfluxdb.OnBackpressure))
@@ -3723,6 +4480,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputInfluxdb.Org = types.StringPointerValue(resp.OutputInfluxdb.Org)
 		r.OutputInfluxdb.Password = types.StringPointerValue(resp.OutputInfluxdb.Password)
 		r.OutputInfluxdb.Pipeline = types.StringPointerValue(resp.OutputInfluxdb.Pipeline)
+		r.Pipeline = r.OutputInfluxdb.Pipeline
 		if resp.OutputInfluxdb.PqCompress != nil {
 			r.OutputInfluxdb.PqCompress = types.StringValue(string(*resp.OutputInfluxdb.PqCompress))
 		} else {
@@ -3733,6 +4491,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputInfluxdb.PqControls = &tfTypes.OutputInfluxdbPqControls{}
 		}
+		r.OutputInfluxdb.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputInfluxdb.PqMaxBackpressureSec)
+		r.OutputInfluxdb.PqMaxBufferSize = types.Float64PointerValue(resp.OutputInfluxdb.PqMaxBufferSize)
+		r.OutputInfluxdb.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputInfluxdb.PqMaxBufferSizeBytes)
 		r.OutputInfluxdb.PqMaxFileSize = types.StringPointerValue(resp.OutputInfluxdb.PqMaxFileSize)
 		r.OutputInfluxdb.PqMaxSize = types.StringPointerValue(resp.OutputInfluxdb.PqMaxSize)
 		if resp.OutputInfluxdb.PqMode != nil {
@@ -3746,26 +4507,38 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputInfluxdb.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputInfluxdb.PqPath = types.StringPointerValue(resp.OutputInfluxdb.PqPath)
+		r.OutputInfluxdb.PqRatePerSec = types.Float64PointerValue(resp.OutputInfluxdb.PqRatePerSec)
+		r.OutputInfluxdb.PqStrictOrdering = types.BoolPointerValue(resp.OutputInfluxdb.PqStrictOrdering)
 		r.OutputInfluxdb.RejectUnauthorized = types.BoolPointerValue(resp.OutputInfluxdb.RejectUnauthorized)
 		r.OutputInfluxdb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputInfluxdb.ResponseHonorRetryAfterHeader)
-		r.OutputInfluxdb.ResponseRetrySettings = []tfTypes.OutputInfluxdbResponseRetrySetting{}
+		r.OutputInfluxdb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem16 := range resp.OutputInfluxdb.ResponseRetrySettings {
-			var responseRetrySettings16 tfTypes.OutputInfluxdbResponseRetrySetting
+		for _, responseRetrySettingsItem17 := range resp.OutputInfluxdb.ResponseRetrySettings {
+			var responseRetrySettings17 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
-			responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
-			responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
-			responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
+			responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
+			responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
+			responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
+			responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
 
-			r.OutputInfluxdb.ResponseRetrySettings = append(r.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings16)
+			r.OutputInfluxdb.ResponseRetrySettings = append(r.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings17)
 		}
 		r.OutputInfluxdb.SafeHeaders = make([]types.String, 0, len(resp.OutputInfluxdb.SafeHeaders))
 		for _, v := range resp.OutputInfluxdb.SafeHeaders {
 			r.OutputInfluxdb.SafeHeaders = append(r.OutputInfluxdb.SafeHeaders, types.StringValue(v))
 		}
-		r.OutputInfluxdb.Secret = types.StringPointerValue(resp.OutputInfluxdb.Secret)
-		r.OutputInfluxdb.SecretParamName = types.StringPointerValue(resp.OutputInfluxdb.SecretParamName)
+		if resp.OutputInfluxdb.Secret == nil {
+			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedNull()
+		} else {
+			secretResult1, _ := json.Marshal(resp.OutputInfluxdb.Secret)
+			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
+		}
+		if resp.OutputInfluxdb.SecretParamName == nil {
+			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedNull()
+		} else {
+			secretParamNameResult1, _ := json.Marshal(resp.OutputInfluxdb.SecretParamName)
+			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
+		}
 		r.OutputInfluxdb.Streamtags = make([]types.String, 0, len(resp.OutputInfluxdb.Streamtags))
 		for _, v := range resp.OutputInfluxdb.Streamtags {
 			r.OutputInfluxdb.Streamtags = append(r.OutputInfluxdb.Streamtags, types.StringValue(v))
@@ -3778,11 +4551,11 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputInfluxdb.TimeoutRetrySettings == nil {
 			r.OutputInfluxdb.TimeoutRetrySettings = nil
 		} else {
-			r.OutputInfluxdb.TimeoutRetrySettings = &tfTypes.OutputInfluxdbTimeoutRetrySettings{}
+			r.OutputInfluxdb.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputInfluxdb.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputInfluxdb.TimeoutRetrySettings.BackoffRate)
 			r.OutputInfluxdb.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputInfluxdb.TimeoutRetrySettings.InitialBackoff)
 			r.OutputInfluxdb.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputInfluxdb.TimeoutRetrySettings.MaxBackoff)
-			r.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputInfluxdb.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputInfluxdb.TimeoutSec = types.Float64PointerValue(resp.OutputInfluxdb.TimeoutSec)
 		if resp.OutputInfluxdb.TimestampPrecision != nil {
@@ -3791,9 +4564,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputInfluxdb.TimestampPrecision = types.StringNull()
 		}
 		r.OutputInfluxdb.Token = types.StringPointerValue(resp.OutputInfluxdb.Token)
-		r.OutputInfluxdb.TokenAttributeName = types.StringPointerValue(resp.OutputInfluxdb.TokenAttributeName)
-		r.OutputInfluxdb.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputInfluxdb.TokenTimeoutSecs)
+		if resp.OutputInfluxdb.TokenAttributeName == nil {
+			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedNull()
+		} else {
+			tokenAttributeNameResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenAttributeName)
+			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
+		}
+		if resp.OutputInfluxdb.TokenTimeoutSecs == nil {
+			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+		} else {
+			tokenTimeoutSecsResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenTimeoutSecs)
+			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
+		}
 		r.OutputInfluxdb.Type = types.StringValue(string(resp.OutputInfluxdb.Type))
+		r.Type = r.OutputInfluxdb.Type
 		r.OutputInfluxdb.URL = types.StringValue(resp.OutputInfluxdb.URL)
 		r.OutputInfluxdb.Username = types.StringPointerValue(resp.OutputInfluxdb.Username)
 		r.OutputInfluxdb.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputInfluxdb.UseRoundRobinDNS)
@@ -3802,6 +4586,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 	}
 	if resp.OutputKafka != nil {
 		r.OutputKafka = &tfTypes.OutputKafka{}
+		r.OutputKafka.TemplateTopic = types.StringPointerValue(resp.OutputKafka.TemplateTopic)
 		if resp.OutputKafka.Ack != nil {
 			r.OutputKafka.Ack = types.Int64Value(int64(*resp.OutputKafka.Ack))
 		} else {
@@ -3821,6 +4606,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputKafka.ConnectionTimeout = types.Float64PointerValue(resp.OutputKafka.ConnectionTimeout)
 		r.OutputKafka.Description = types.StringPointerValue(resp.OutputKafka.Description)
 		r.OutputKafka.Environment = types.StringPointerValue(resp.OutputKafka.Environment)
+		r.Environment = r.OutputKafka.Environment
 		r.OutputKafka.FlushEventCount = types.Float64PointerValue(resp.OutputKafka.FlushEventCount)
 		r.OutputKafka.FlushPeriodSec = types.Float64PointerValue(resp.OutputKafka.FlushPeriodSec)
 		if resp.OutputKafka.Format != nil {
@@ -3834,25 +4620,25 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputKafka.KafkaSchemaRegistry == nil {
 			r.OutputKafka.KafkaSchemaRegistry = nil
 		} else {
-			r.OutputKafka.KafkaSchemaRegistry = &tfTypes.OutputKafkaKafkaSchemaRegistryAuthentication{}
+			r.OutputKafka.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 			if resp.OutputKafka.KafkaSchemaRegistry.Auth == nil {
 				r.OutputKafka.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.OutputKafka.KafkaSchemaRegistry.Auth = &tfTypes.OutputKafkaAuth{}
+				r.OutputKafka.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 				r.OutputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.OutputKafka.KafkaSchemaRegistry.Auth.CredentialsSecret)
-				r.OutputKafka.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.OutputKafka.KafkaSchemaRegistry.Auth.Disabled)
+				r.OutputKafka.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(resp.OutputKafka.KafkaSchemaRegistry.Auth.Disabled)
 			}
 			r.OutputKafka.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(resp.OutputKafka.KafkaSchemaRegistry.ConnectionTimeout)
 			r.OutputKafka.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(resp.OutputKafka.KafkaSchemaRegistry.DefaultKeySchemaID)
 			r.OutputKafka.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(resp.OutputKafka.KafkaSchemaRegistry.DefaultValueSchemaID)
-			r.OutputKafka.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(resp.OutputKafka.KafkaSchemaRegistry.Disabled)
+			r.OutputKafka.KafkaSchemaRegistry.Disabled = types.BoolValue(resp.OutputKafka.KafkaSchemaRegistry.Disabled)
 			r.OutputKafka.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(resp.OutputKafka.KafkaSchemaRegistry.MaxRetries)
 			r.OutputKafka.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(resp.OutputKafka.KafkaSchemaRegistry.RequestTimeout)
 			r.OutputKafka.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(resp.OutputKafka.KafkaSchemaRegistry.SchemaRegistryURL)
 			if resp.OutputKafka.KafkaSchemaRegistry.TLS == nil {
 				r.OutputKafka.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.OutputKafka.KafkaSchemaRegistry.TLS = &tfTypes.OutputKafkaKafkaSchemaRegistryTLSSettingsClientSide{}
+				r.OutputKafka.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 				r.OutputKafka.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.OutputKafka.KafkaSchemaRegistry.TLS.CaPath)
 				r.OutputKafka.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.OutputKafka.KafkaSchemaRegistry.TLS.CertificateName)
 				r.OutputKafka.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.OutputKafka.KafkaSchemaRegistry.TLS.CertPath)
@@ -3882,6 +4668,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputKafka.OnBackpressure = types.StringNull()
 		}
 		r.OutputKafka.Pipeline = types.StringPointerValue(resp.OutputKafka.Pipeline)
+		r.Pipeline = r.OutputKafka.Pipeline
 		if resp.OutputKafka.PqCompress != nil {
 			r.OutputKafka.PqCompress = types.StringValue(string(*resp.OutputKafka.PqCompress))
 		} else {
@@ -3892,6 +4679,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputKafka.PqControls = &tfTypes.OutputKafkaPqControls{}
 		}
+		r.OutputKafka.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputKafka.PqMaxBackpressureSec)
+		r.OutputKafka.PqMaxBufferSize = types.Float64PointerValue(resp.OutputKafka.PqMaxBufferSize)
+		r.OutputKafka.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputKafka.PqMaxBufferSizeBytes)
 		r.OutputKafka.PqMaxFileSize = types.StringPointerValue(resp.OutputKafka.PqMaxFileSize)
 		r.OutputKafka.PqMaxSize = types.StringPointerValue(resp.OutputKafka.PqMaxSize)
 		if resp.OutputKafka.PqMode != nil {
@@ -3905,19 +4695,58 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputKafka.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputKafka.PqPath = types.StringPointerValue(resp.OutputKafka.PqPath)
+		r.OutputKafka.PqRatePerSec = types.Float64PointerValue(resp.OutputKafka.PqRatePerSec)
+		r.OutputKafka.PqStrictOrdering = types.BoolPointerValue(resp.OutputKafka.PqStrictOrdering)
+		r.OutputKafka.ProtobufEncodingID = types.StringPointerValue(resp.OutputKafka.ProtobufEncodingID)
 		r.OutputKafka.ProtobufLibraryID = types.StringPointerValue(resp.OutputKafka.ProtobufLibraryID)
 		r.OutputKafka.ReauthenticationThreshold = types.Float64PointerValue(resp.OutputKafka.ReauthenticationThreshold)
 		r.OutputKafka.RequestTimeout = types.Float64PointerValue(resp.OutputKafka.RequestTimeout)
 		if resp.OutputKafka.Sasl == nil {
 			r.OutputKafka.Sasl = nil
 		} else {
-			r.OutputKafka.Sasl = &tfTypes.OutputKafkaAuthentication{}
-			r.OutputKafka.Sasl.Disabled = types.BoolPointerValue(resp.OutputKafka.Sasl.Disabled)
+			r.OutputKafka.Sasl = &tfTypes.AuthenticationType{}
+			if resp.OutputKafka.Sasl.AuthType != nil {
+				r.OutputKafka.Sasl.AuthType = types.StringValue(string(*resp.OutputKafka.Sasl.AuthType))
+			} else {
+				r.OutputKafka.Sasl.AuthType = types.StringNull()
+			}
+			r.OutputKafka.Sasl.BrokerServiceClass = types.StringPointerValue(resp.OutputKafka.Sasl.BrokerServiceClass)
+			r.OutputKafka.Sasl.ClientID = types.StringPointerValue(resp.OutputKafka.Sasl.ClientID)
+			r.OutputKafka.Sasl.ClientTextSecret = types.StringPointerValue(resp.OutputKafka.Sasl.ClientTextSecret)
+			r.OutputKafka.Sasl.CredentialsSecret = types.StringPointerValue(resp.OutputKafka.Sasl.CredentialsSecret)
+			r.OutputKafka.Sasl.Disabled = types.BoolValue(resp.OutputKafka.Sasl.Disabled)
+			r.OutputKafka.Sasl.KeytabLocation = types.StringPointerValue(resp.OutputKafka.Sasl.KeytabLocation)
 			if resp.OutputKafka.Sasl.Mechanism != nil {
 				r.OutputKafka.Sasl.Mechanism = types.StringValue(string(*resp.OutputKafka.Sasl.Mechanism))
 			} else {
 				r.OutputKafka.Sasl.Mechanism = types.StringNull()
 			}
+			r.OutputKafka.Sasl.OauthEnabled = types.BoolPointerValue(resp.OutputKafka.Sasl.OauthEnabled)
+			r.OutputKafka.Sasl.OauthParams = []tfTypes.ItemsTypeSaslOauthParams{}
+
+			for _, oauthParamsItem3 := range resp.OutputKafka.Sasl.OauthParams {
+				var oauthParams3 tfTypes.ItemsTypeSaslOauthParams
+
+				oauthParams3.Name = types.StringValue(oauthParamsItem3.Name)
+				oauthParams3.Value = types.StringValue(oauthParamsItem3.Value)
+
+				r.OutputKafka.Sasl.OauthParams = append(r.OutputKafka.Sasl.OauthParams, oauthParams3)
+			}
+			r.OutputKafka.Sasl.OauthSecretType = types.StringPointerValue(resp.OutputKafka.Sasl.OauthSecretType)
+			r.OutputKafka.Sasl.Password = types.StringPointerValue(resp.OutputKafka.Sasl.Password)
+			r.OutputKafka.Sasl.Principal = types.StringPointerValue(resp.OutputKafka.Sasl.Principal)
+			r.OutputKafka.Sasl.SaslExtensions = []tfTypes.ItemsTypeSaslSaslExtensions{}
+
+			for _, saslExtensionsItem1 := range resp.OutputKafka.Sasl.SaslExtensions {
+				var saslExtensions1 tfTypes.ItemsTypeSaslSaslExtensions
+
+				saslExtensions1.Name = types.StringValue(saslExtensionsItem1.Name)
+				saslExtensions1.Value = types.StringValue(saslExtensionsItem1.Value)
+
+				r.OutputKafka.Sasl.SaslExtensions = append(r.OutputKafka.Sasl.SaslExtensions, saslExtensions1)
+			}
+			r.OutputKafka.Sasl.TokenURL = types.StringPointerValue(resp.OutputKafka.Sasl.TokenURL)
+			r.OutputKafka.Sasl.Username = types.StringPointerValue(resp.OutputKafka.Sasl.Username)
 		}
 		r.OutputKafka.Streamtags = make([]types.String, 0, len(resp.OutputKafka.Streamtags))
 		for _, v := range resp.OutputKafka.Streamtags {
@@ -3930,7 +4759,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputKafka.TLS == nil {
 			r.OutputKafka.TLS = nil
 		} else {
-			r.OutputKafka.TLS = &tfTypes.OutputKafkaTLSSettingsClientSide{}
+			r.OutputKafka.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputKafka.TLS.CaPath = types.StringPointerValue(resp.OutputKafka.TLS.CaPath)
 			r.OutputKafka.TLS.CertificateName = types.StringPointerValue(resp.OutputKafka.TLS.CertificateName)
 			r.OutputKafka.TLS.CertPath = types.StringPointerValue(resp.OutputKafka.TLS.CertPath)
@@ -3951,14 +4780,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputKafka.TLS.Servername = types.StringPointerValue(resp.OutputKafka.TLS.Servername)
 		}
 		r.OutputKafka.Topic = types.StringValue(resp.OutputKafka.Topic)
-		if resp.OutputKafka.Type != nil {
-			r.OutputKafka.Type = types.StringValue(string(*resp.OutputKafka.Type))
-		} else {
-			r.OutputKafka.Type = types.StringNull()
-		}
+		r.OutputKafka.Type = types.StringValue(string(resp.OutputKafka.Type))
+		r.Type = r.OutputKafka.Type
 	}
 	if resp.OutputKinesis != nil {
 		r.OutputKinesis = &tfTypes.OutputKinesis{}
+		r.OutputKinesis.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputKinesis.TemplateAssumeRoleArn)
+		r.OutputKinesis.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputKinesis.TemplateAssumeRoleExternalID)
+		r.OutputKinesis.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputKinesis.TemplateAwsAPIKey)
+		r.OutputKinesis.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputKinesis.TemplateAwsSecretKey)
+		r.OutputKinesis.TemplateRegion = types.StringPointerValue(resp.OutputKinesis.TemplateRegion)
+		r.OutputKinesis.TemplateStreamName = types.StringPointerValue(resp.OutputKinesis.TemplateStreamName)
 		r.OutputKinesis.AsNdjson = types.BoolPointerValue(resp.OutputKinesis.AsNdjson)
 		r.OutputKinesis.AssumeRoleArn = types.StringPointerValue(resp.OutputKinesis.AssumeRoleArn)
 		r.OutputKinesis.AssumeRoleExternalID = types.StringPointerValue(resp.OutputKinesis.AssumeRoleExternalID)
@@ -3981,9 +4813,11 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputKinesis.EnableAssumeRole = types.BoolPointerValue(resp.OutputKinesis.EnableAssumeRole)
 		r.OutputKinesis.Endpoint = types.StringPointerValue(resp.OutputKinesis.Endpoint)
 		r.OutputKinesis.Environment = types.StringPointerValue(resp.OutputKinesis.Environment)
+		r.Environment = r.OutputKinesis.Environment
 		r.OutputKinesis.FlushPeriodSec = types.Float64PointerValue(resp.OutputKinesis.FlushPeriodSec)
 		r.OutputKinesis.ID = types.StringPointerValue(resp.OutputKinesis.ID)
 		r.ID = r.OutputKinesis.ID
+		r.OutputKinesis.MaxEventsPerFlush = types.Float64PointerValue(resp.OutputKinesis.MaxEventsPerFlush)
 		r.OutputKinesis.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputKinesis.MaxRecordSizeKB)
 		if resp.OutputKinesis.OnBackpressure != nil {
 			r.OutputKinesis.OnBackpressure = types.StringValue(string(*resp.OutputKinesis.OnBackpressure))
@@ -3991,6 +4825,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputKinesis.OnBackpressure = types.StringNull()
 		}
 		r.OutputKinesis.Pipeline = types.StringPointerValue(resp.OutputKinesis.Pipeline)
+		r.Pipeline = r.OutputKinesis.Pipeline
 		if resp.OutputKinesis.PqCompress != nil {
 			r.OutputKinesis.PqCompress = types.StringValue(string(*resp.OutputKinesis.PqCompress))
 		} else {
@@ -4001,6 +4836,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputKinesis.PqControls = &tfTypes.OutputKinesisPqControls{}
 		}
+		r.OutputKinesis.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputKinesis.PqMaxBackpressureSec)
+		r.OutputKinesis.PqMaxBufferSize = types.Float64PointerValue(resp.OutputKinesis.PqMaxBufferSize)
+		r.OutputKinesis.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputKinesis.PqMaxBufferSizeBytes)
 		r.OutputKinesis.PqMaxFileSize = types.StringPointerValue(resp.OutputKinesis.PqMaxFileSize)
 		r.OutputKinesis.PqMaxSize = types.StringPointerValue(resp.OutputKinesis.PqMaxSize)
 		if resp.OutputKinesis.PqMode != nil {
@@ -4014,6 +4852,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputKinesis.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputKinesis.PqPath = types.StringPointerValue(resp.OutputKinesis.PqPath)
+		r.OutputKinesis.PqRatePerSec = types.Float64PointerValue(resp.OutputKinesis.PqRatePerSec)
+		r.OutputKinesis.PqStrictOrdering = types.BoolPointerValue(resp.OutputKinesis.PqStrictOrdering)
 		r.OutputKinesis.Region = types.StringValue(resp.OutputKinesis.Region)
 		r.OutputKinesis.RejectUnauthorized = types.BoolPointerValue(resp.OutputKinesis.RejectUnauthorized)
 		r.OutputKinesis.ReuseConnections = types.BoolPointerValue(resp.OutputKinesis.ReuseConnections)
@@ -4031,12 +4871,189 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputKinesis.SystemFields {
 			r.OutputKinesis.SystemFields = append(r.OutputKinesis.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputKinesis.Type != nil {
-			r.OutputKinesis.Type = types.StringValue(string(*resp.OutputKinesis.Type))
-		} else {
-			r.OutputKinesis.Type = types.StringNull()
-		}
+		r.OutputKinesis.Type = types.StringValue(string(resp.OutputKinesis.Type))
+		r.Type = r.OutputKinesis.Type
 		r.OutputKinesis.UseListShards = types.BoolPointerValue(resp.OutputKinesis.UseListShards)
+	}
+	if resp.OutputLocalSearchStorage != nil {
+		r.OutputLocalSearchStorage = &tfTypes.OutputLocalSearchStorage{}
+		r.OutputLocalSearchStorage.TemplateDatabase = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateDatabase)
+		r.OutputLocalSearchStorage.TemplateTableName = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateTableName)
+		r.OutputLocalSearchStorage.TemplateURL = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateURL)
+		r.OutputLocalSearchStorage.AsyncInserts = types.BoolPointerValue(resp.OutputLocalSearchStorage.AsyncInserts)
+		if resp.OutputLocalSearchStorage.AuthType != nil {
+			r.OutputLocalSearchStorage.AuthType = types.StringValue(string(*resp.OutputLocalSearchStorage.AuthType))
+		} else {
+			r.OutputLocalSearchStorage.AuthType = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.ColumnMappings = []tfTypes.OutputLocalSearchStorageColumnMapping{}
+
+		for _, columnMappingsItem1 := range resp.OutputLocalSearchStorage.ColumnMappings {
+			var columnMappings1 tfTypes.OutputLocalSearchStorageColumnMapping
+
+			columnMappings1.ColumnName = types.StringValue(columnMappingsItem1.ColumnName)
+			columnMappings1.ColumnType = types.StringPointerValue(columnMappingsItem1.ColumnType)
+			columnMappings1.ColumnValueExpression = types.StringValue(columnMappingsItem1.ColumnValueExpression)
+
+			r.OutputLocalSearchStorage.ColumnMappings = append(r.OutputLocalSearchStorage.ColumnMappings, columnMappings1)
+		}
+		r.OutputLocalSearchStorage.Compress = types.BoolPointerValue(resp.OutputLocalSearchStorage.Compress)
+		r.OutputLocalSearchStorage.Concurrency = types.Float64PointerValue(resp.OutputLocalSearchStorage.Concurrency)
+		r.OutputLocalSearchStorage.CredentialsSecret = types.StringPointerValue(resp.OutputLocalSearchStorage.CredentialsSecret)
+		r.OutputLocalSearchStorage.Database = types.StringValue(resp.OutputLocalSearchStorage.Database)
+		r.OutputLocalSearchStorage.DescribeTable = types.StringPointerValue(resp.OutputLocalSearchStorage.DescribeTable)
+		r.OutputLocalSearchStorage.Description = types.StringPointerValue(resp.OutputLocalSearchStorage.Description)
+		r.OutputLocalSearchStorage.DumpFormatErrorsToDisk = types.BoolPointerValue(resp.OutputLocalSearchStorage.DumpFormatErrorsToDisk)
+		r.OutputLocalSearchStorage.Environment = types.StringPointerValue(resp.OutputLocalSearchStorage.Environment)
+		r.Environment = r.OutputLocalSearchStorage.Environment
+		r.OutputLocalSearchStorage.ExcludeMappingFields = make([]types.String, 0, len(resp.OutputLocalSearchStorage.ExcludeMappingFields))
+		for _, v := range resp.OutputLocalSearchStorage.ExcludeMappingFields {
+			r.OutputLocalSearchStorage.ExcludeMappingFields = append(r.OutputLocalSearchStorage.ExcludeMappingFields, types.StringValue(v))
+		}
+		r.OutputLocalSearchStorage.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+		for _, extraHTTPHeadersItem17 := range resp.OutputLocalSearchStorage.ExtraHTTPHeaders {
+			var extraHTTPHeaders17 tfTypes.ItemsTypeExtraHTTPHeaders
+
+			extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
+			extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
+
+			r.OutputLocalSearchStorage.ExtraHTTPHeaders = append(r.OutputLocalSearchStorage.ExtraHTTPHeaders, extraHTTPHeaders17)
+		}
+		if resp.OutputLocalSearchStorage.FailedRequestLoggingMode != nil {
+			r.OutputLocalSearchStorage.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputLocalSearchStorage.FailedRequestLoggingMode))
+		} else {
+			r.OutputLocalSearchStorage.FailedRequestLoggingMode = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.FlushPeriodSec = types.Float64PointerValue(resp.OutputLocalSearchStorage.FlushPeriodSec)
+		if resp.OutputLocalSearchStorage.Format != nil {
+			r.OutputLocalSearchStorage.Format = types.StringValue(string(*resp.OutputLocalSearchStorage.Format))
+		} else {
+			r.OutputLocalSearchStorage.Format = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.ID = types.StringPointerValue(resp.OutputLocalSearchStorage.ID)
+		r.ID = r.OutputLocalSearchStorage.ID
+		if resp.OutputLocalSearchStorage.MappingType != nil {
+			r.OutputLocalSearchStorage.MappingType = types.StringValue(string(*resp.OutputLocalSearchStorage.MappingType))
+		} else {
+			r.OutputLocalSearchStorage.MappingType = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.MaxPayloadEvents = types.Float64PointerValue(resp.OutputLocalSearchStorage.MaxPayloadEvents)
+		r.OutputLocalSearchStorage.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputLocalSearchStorage.MaxPayloadSizeKB)
+		if resp.OutputLocalSearchStorage.OnBackpressure != nil {
+			r.OutputLocalSearchStorage.OnBackpressure = types.StringValue(string(*resp.OutputLocalSearchStorage.OnBackpressure))
+		} else {
+			r.OutputLocalSearchStorage.OnBackpressure = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.Password = types.StringPointerValue(resp.OutputLocalSearchStorage.Password)
+		r.OutputLocalSearchStorage.Pipeline = types.StringPointerValue(resp.OutputLocalSearchStorage.Pipeline)
+		r.Pipeline = r.OutputLocalSearchStorage.Pipeline
+		if resp.OutputLocalSearchStorage.PqCompress != nil {
+			r.OutputLocalSearchStorage.PqCompress = types.StringValue(string(*resp.OutputLocalSearchStorage.PqCompress))
+		} else {
+			r.OutputLocalSearchStorage.PqCompress = types.StringNull()
+		}
+		if resp.OutputLocalSearchStorage.PqControls == nil {
+			r.OutputLocalSearchStorage.PqControls = nil
+		} else {
+			r.OutputLocalSearchStorage.PqControls = &tfTypes.OutputLocalSearchStoragePqControls{}
+		}
+		r.OutputLocalSearchStorage.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputLocalSearchStorage.PqMaxBackpressureSec)
+		r.OutputLocalSearchStorage.PqMaxBufferSize = types.Float64PointerValue(resp.OutputLocalSearchStorage.PqMaxBufferSize)
+		r.OutputLocalSearchStorage.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputLocalSearchStorage.PqMaxBufferSizeBytes)
+		r.OutputLocalSearchStorage.PqMaxFileSize = types.StringPointerValue(resp.OutputLocalSearchStorage.PqMaxFileSize)
+		r.OutputLocalSearchStorage.PqMaxSize = types.StringPointerValue(resp.OutputLocalSearchStorage.PqMaxSize)
+		if resp.OutputLocalSearchStorage.PqMode != nil {
+			r.OutputLocalSearchStorage.PqMode = types.StringValue(string(*resp.OutputLocalSearchStorage.PqMode))
+		} else {
+			r.OutputLocalSearchStorage.PqMode = types.StringNull()
+		}
+		if resp.OutputLocalSearchStorage.PqOnBackpressure != nil {
+			r.OutputLocalSearchStorage.PqOnBackpressure = types.StringValue(string(*resp.OutputLocalSearchStorage.PqOnBackpressure))
+		} else {
+			r.OutputLocalSearchStorage.PqOnBackpressure = types.StringNull()
+		}
+		r.OutputLocalSearchStorage.PqPath = types.StringPointerValue(resp.OutputLocalSearchStorage.PqPath)
+		r.OutputLocalSearchStorage.PqRatePerSec = types.Float64PointerValue(resp.OutputLocalSearchStorage.PqRatePerSec)
+		r.OutputLocalSearchStorage.PqStrictOrdering = types.BoolPointerValue(resp.OutputLocalSearchStorage.PqStrictOrdering)
+		r.OutputLocalSearchStorage.RejectUnauthorized = types.BoolPointerValue(resp.OutputLocalSearchStorage.RejectUnauthorized)
+		r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader)
+		r.OutputLocalSearchStorage.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+		for _, responseRetrySettingsItem18 := range resp.OutputLocalSearchStorage.ResponseRetrySettings {
+			var responseRetrySettings18 tfTypes.ItemsTypeResponseRetrySettings
+
+			responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
+			responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
+			responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
+			responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
+
+			r.OutputLocalSearchStorage.ResponseRetrySettings = append(r.OutputLocalSearchStorage.ResponseRetrySettings, responseRetrySettings18)
+		}
+		r.OutputLocalSearchStorage.SafeHeaders = make([]types.String, 0, len(resp.OutputLocalSearchStorage.SafeHeaders))
+		for _, v := range resp.OutputLocalSearchStorage.SafeHeaders {
+			r.OutputLocalSearchStorage.SafeHeaders = append(r.OutputLocalSearchStorage.SafeHeaders, types.StringValue(v))
+		}
+		r.OutputLocalSearchStorage.SQLUsername = types.StringPointerValue(resp.OutputLocalSearchStorage.SQLUsername)
+		if resp.OutputLocalSearchStorage.StatsDestination == nil {
+			r.OutputLocalSearchStorage.StatsDestination = nil
+		} else {
+			r.OutputLocalSearchStorage.StatsDestination = &tfTypes.StatsDestination{}
+			r.OutputLocalSearchStorage.StatsDestination.AuthType = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.AuthType)
+			r.OutputLocalSearchStorage.StatsDestination.Database = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.Database)
+			r.OutputLocalSearchStorage.StatsDestination.Password = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.Password)
+			r.OutputLocalSearchStorage.StatsDestination.SQLUsername = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.SQLUsername)
+			r.OutputLocalSearchStorage.StatsDestination.TableName = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.TableName)
+			r.OutputLocalSearchStorage.StatsDestination.URL = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.URL)
+			r.OutputLocalSearchStorage.StatsDestination.Username = types.StringPointerValue(resp.OutputLocalSearchStorage.StatsDestination.Username)
+		}
+		r.OutputLocalSearchStorage.Streamtags = make([]types.String, 0, len(resp.OutputLocalSearchStorage.Streamtags))
+		for _, v := range resp.OutputLocalSearchStorage.Streamtags {
+			r.OutputLocalSearchStorage.Streamtags = append(r.OutputLocalSearchStorage.Streamtags, types.StringValue(v))
+		}
+		r.OutputLocalSearchStorage.SystemFields = make([]types.String, 0, len(resp.OutputLocalSearchStorage.SystemFields))
+		for _, v := range resp.OutputLocalSearchStorage.SystemFields {
+			r.OutputLocalSearchStorage.SystemFields = append(r.OutputLocalSearchStorage.SystemFields, types.StringValue(v))
+		}
+		r.OutputLocalSearchStorage.TableName = types.StringValue(resp.OutputLocalSearchStorage.TableName)
+		if resp.OutputLocalSearchStorage.TimeoutRetrySettings == nil {
+			r.OutputLocalSearchStorage.TimeoutRetrySettings = nil
+		} else {
+			r.OutputLocalSearchStorage.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+			r.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate)
+			r.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff)
+			r.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff)
+			r.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry)
+		}
+		r.OutputLocalSearchStorage.TimeoutSec = types.Float64PointerValue(resp.OutputLocalSearchStorage.TimeoutSec)
+		if resp.OutputLocalSearchStorage.TLS == nil {
+			r.OutputLocalSearchStorage.TLS = nil
+		} else {
+			r.OutputLocalSearchStorage.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+			r.OutputLocalSearchStorage.TLS.CaPath = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.CaPath)
+			r.OutputLocalSearchStorage.TLS.CertificateName = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.CertificateName)
+			r.OutputLocalSearchStorage.TLS.CertPath = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.CertPath)
+			r.OutputLocalSearchStorage.TLS.Disabled = types.BoolPointerValue(resp.OutputLocalSearchStorage.TLS.Disabled)
+			if resp.OutputLocalSearchStorage.TLS.MaxVersion != nil {
+				r.OutputLocalSearchStorage.TLS.MaxVersion = types.StringValue(string(*resp.OutputLocalSearchStorage.TLS.MaxVersion))
+			} else {
+				r.OutputLocalSearchStorage.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.OutputLocalSearchStorage.TLS.MinVersion != nil {
+				r.OutputLocalSearchStorage.TLS.MinVersion = types.StringValue(string(*resp.OutputLocalSearchStorage.TLS.MinVersion))
+			} else {
+				r.OutputLocalSearchStorage.TLS.MinVersion = types.StringNull()
+			}
+			r.OutputLocalSearchStorage.TLS.Passphrase = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.Passphrase)
+			r.OutputLocalSearchStorage.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.PrivKeyPath)
+			r.OutputLocalSearchStorage.TLS.Servername = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.Servername)
+		}
+		r.OutputLocalSearchStorage.Type = types.StringValue(string(resp.OutputLocalSearchStorage.Type))
+		r.Type = r.OutputLocalSearchStorage.Type
+		r.OutputLocalSearchStorage.URL = types.StringValue(resp.OutputLocalSearchStorage.URL)
+		r.OutputLocalSearchStorage.Username = types.StringPointerValue(resp.OutputLocalSearchStorage.Username)
+		r.OutputLocalSearchStorage.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputLocalSearchStorage.UseRoundRobinDNS)
+		r.OutputLocalSearchStorage.WaitForAsyncInserts = types.BoolPointerValue(resp.OutputLocalSearchStorage.WaitForAsyncInserts)
 	}
 	if resp.OutputLoki != nil {
 		r.OutputLoki = &tfTypes.OutputLoki{}
@@ -4049,16 +5066,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputLoki.Concurrency = types.Float64PointerValue(resp.OutputLoki.Concurrency)
 		r.OutputLoki.CredentialsSecret = types.StringPointerValue(resp.OutputLoki.CredentialsSecret)
 		r.OutputLoki.Description = types.StringPointerValue(resp.OutputLoki.Description)
+		r.OutputLoki.EnableDynamicHeaders = types.BoolPointerValue(resp.OutputLoki.EnableDynamicHeaders)
 		r.OutputLoki.Environment = types.StringPointerValue(resp.OutputLoki.Environment)
-		r.OutputLoki.ExtraHTTPHeaders = []tfTypes.OutputLokiExtraHTTPHeader{}
+		r.Environment = r.OutputLoki.Environment
+		r.OutputLoki.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem16 := range resp.OutputLoki.ExtraHTTPHeaders {
-			var extraHTTPHeaders16 tfTypes.OutputLokiExtraHTTPHeader
+		for _, extraHTTPHeadersItem18 := range resp.OutputLoki.ExtraHTTPHeaders {
+			var extraHTTPHeaders18 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
-			extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
+			extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
+			extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
 
-			r.OutputLoki.ExtraHTTPHeaders = append(r.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders16)
+			r.OutputLoki.ExtraHTTPHeaders = append(r.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders18)
 		}
 		if resp.OutputLoki.FailedRequestLoggingMode != nil {
 			r.OutputLoki.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputLoki.FailedRequestLoggingMode))
@@ -4068,12 +5087,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputLoki.FlushPeriodSec = types.Float64PointerValue(resp.OutputLoki.FlushPeriodSec)
 		r.OutputLoki.ID = types.StringPointerValue(resp.OutputLoki.ID)
 		r.ID = r.OutputLoki.ID
-		r.OutputLoki.Labels = []tfTypes.OutputLokiLabel{}
+		r.OutputLoki.Labels = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
 
 		for _, labelsItem1 := range resp.OutputLoki.Labels {
-			var labels1 tfTypes.OutputLokiLabel
+			var labels1 tfTypes.ItemsTypeContentConfigItemsRequestParams
 
-			labels1.Name = types.StringPointerValue(labelsItem1.Name)
+			labels1.Name = types.StringValue(labelsItem1.Name)
 			labels1.Value = types.StringValue(labelsItem1.Value)
 
 			r.OutputLoki.Labels = append(r.OutputLoki.Labels, labels1)
@@ -4093,6 +5112,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputLoki.Password = types.StringPointerValue(resp.OutputLoki.Password)
 		r.OutputLoki.Pipeline = types.StringPointerValue(resp.OutputLoki.Pipeline)
+		r.Pipeline = r.OutputLoki.Pipeline
 		if resp.OutputLoki.PqCompress != nil {
 			r.OutputLoki.PqCompress = types.StringValue(string(*resp.OutputLoki.PqCompress))
 		} else {
@@ -4103,6 +5123,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputLoki.PqControls = &tfTypes.OutputLokiPqControls{}
 		}
+		r.OutputLoki.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputLoki.PqMaxBackpressureSec)
+		r.OutputLoki.PqMaxBufferSize = types.Float64PointerValue(resp.OutputLoki.PqMaxBufferSize)
+		r.OutputLoki.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputLoki.PqMaxBufferSizeBytes)
 		r.OutputLoki.PqMaxFileSize = types.StringPointerValue(resp.OutputLoki.PqMaxFileSize)
 		r.OutputLoki.PqMaxSize = types.StringPointerValue(resp.OutputLoki.PqMaxSize)
 		if resp.OutputLoki.PqMode != nil {
@@ -4116,19 +5139,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputLoki.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputLoki.PqPath = types.StringPointerValue(resp.OutputLoki.PqPath)
+		r.OutputLoki.PqRatePerSec = types.Float64PointerValue(resp.OutputLoki.PqRatePerSec)
+		r.OutputLoki.PqStrictOrdering = types.BoolPointerValue(resp.OutputLoki.PqStrictOrdering)
 		r.OutputLoki.RejectUnauthorized = types.BoolPointerValue(resp.OutputLoki.RejectUnauthorized)
 		r.OutputLoki.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputLoki.ResponseHonorRetryAfterHeader)
-		r.OutputLoki.ResponseRetrySettings = []tfTypes.OutputLokiResponseRetrySetting{}
+		r.OutputLoki.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem17 := range resp.OutputLoki.ResponseRetrySettings {
-			var responseRetrySettings17 tfTypes.OutputLokiResponseRetrySetting
+		for _, responseRetrySettingsItem19 := range resp.OutputLoki.ResponseRetrySettings {
+			var responseRetrySettings19 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
-			responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
-			responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
-			responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
+			responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
+			responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
+			responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
+			responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
 
-			r.OutputLoki.ResponseRetrySettings = append(r.OutputLoki.ResponseRetrySettings, responseRetrySettings17)
+			r.OutputLoki.ResponseRetrySettings = append(r.OutputLoki.ResponseRetrySettings, responseRetrySettings19)
 		}
 		r.OutputLoki.SafeHeaders = make([]types.String, 0, len(resp.OutputLoki.SafeHeaders))
 		for _, v := range resp.OutputLoki.SafeHeaders {
@@ -4146,22 +5171,25 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputLoki.TimeoutRetrySettings == nil {
 			r.OutputLoki.TimeoutRetrySettings = nil
 		} else {
-			r.OutputLoki.TimeoutRetrySettings = &tfTypes.OutputLokiTimeoutRetrySettings{}
+			r.OutputLoki.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputLoki.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputLoki.TimeoutRetrySettings.BackoffRate)
 			r.OutputLoki.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputLoki.TimeoutRetrySettings.InitialBackoff)
 			r.OutputLoki.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputLoki.TimeoutRetrySettings.MaxBackoff)
-			r.OutputLoki.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputLoki.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputLoki.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputLoki.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputLoki.TimeoutSec = types.Float64PointerValue(resp.OutputLoki.TimeoutSec)
 		r.OutputLoki.Token = types.StringPointerValue(resp.OutputLoki.Token)
 		r.OutputLoki.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputLoki.TotalMemoryLimitKB)
 		r.OutputLoki.Type = types.StringValue(string(resp.OutputLoki.Type))
+		r.Type = r.OutputLoki.Type
 		r.OutputLoki.URL = types.StringValue(resp.OutputLoki.URL)
 		r.OutputLoki.Username = types.StringPointerValue(resp.OutputLoki.Username)
 		r.OutputLoki.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputLoki.UseRoundRobinDNS)
 	}
 	if resp.OutputMicrosoftFabric != nil {
 		r.OutputMicrosoftFabric = &tfTypes.OutputMicrosoftFabric{}
+		r.OutputMicrosoftFabric.TemplateBootstrapServer = types.StringPointerValue(resp.OutputMicrosoftFabric.TemplateBootstrapServer)
+		r.OutputMicrosoftFabric.TemplateTopic = types.StringPointerValue(resp.OutputMicrosoftFabric.TemplateTopic)
 		if resp.OutputMicrosoftFabric.Ack != nil {
 			r.OutputMicrosoftFabric.Ack = types.Int64Value(int64(*resp.OutputMicrosoftFabric.Ack))
 		} else {
@@ -4173,6 +5201,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputMicrosoftFabric.ConnectionTimeout = types.Float64PointerValue(resp.OutputMicrosoftFabric.ConnectionTimeout)
 		r.OutputMicrosoftFabric.Description = types.StringPointerValue(resp.OutputMicrosoftFabric.Description)
 		r.OutputMicrosoftFabric.Environment = types.StringPointerValue(resp.OutputMicrosoftFabric.Environment)
+		r.Environment = r.OutputMicrosoftFabric.Environment
 		r.OutputMicrosoftFabric.FlushEventCount = types.Float64PointerValue(resp.OutputMicrosoftFabric.FlushEventCount)
 		r.OutputMicrosoftFabric.FlushPeriodSec = types.Float64PointerValue(resp.OutputMicrosoftFabric.FlushPeriodSec)
 		if resp.OutputMicrosoftFabric.Format != nil {
@@ -4192,6 +5221,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputMicrosoftFabric.OnBackpressure = types.StringNull()
 		}
 		r.OutputMicrosoftFabric.Pipeline = types.StringPointerValue(resp.OutputMicrosoftFabric.Pipeline)
+		r.Pipeline = r.OutputMicrosoftFabric.Pipeline
 		if resp.OutputMicrosoftFabric.PqCompress != nil {
 			r.OutputMicrosoftFabric.PqCompress = types.StringValue(string(*resp.OutputMicrosoftFabric.PqCompress))
 		} else {
@@ -4204,6 +5234,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputMicrosoftFabric.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputMicrosoftFabric.PqMaxBackpressureSec)
 		r.OutputMicrosoftFabric.PqMaxBufferSize = types.Float64PointerValue(resp.OutputMicrosoftFabric.PqMaxBufferSize)
+		r.OutputMicrosoftFabric.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputMicrosoftFabric.PqMaxBufferSizeBytes)
 		r.OutputMicrosoftFabric.PqMaxFileSize = types.StringPointerValue(resp.OutputMicrosoftFabric.PqMaxFileSize)
 		r.OutputMicrosoftFabric.PqMaxSize = types.StringPointerValue(resp.OutputMicrosoftFabric.PqMaxSize)
 		if resp.OutputMicrosoftFabric.PqMode != nil {
@@ -4234,7 +5265,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 				r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType = types.StringNull()
 			}
 			r.OutputMicrosoftFabric.Sasl.ClientTextSecret = types.StringPointerValue(resp.OutputMicrosoftFabric.Sasl.ClientTextSecret)
-			r.OutputMicrosoftFabric.Sasl.Disabled = types.BoolPointerValue(resp.OutputMicrosoftFabric.Sasl.Disabled)
+			r.OutputMicrosoftFabric.Sasl.Disabled = types.BoolValue(resp.OutputMicrosoftFabric.Sasl.Disabled)
 			if resp.OutputMicrosoftFabric.Sasl.Mechanism != nil {
 				r.OutputMicrosoftFabric.Sasl.Mechanism = types.StringValue(string(*resp.OutputMicrosoftFabric.Sasl.Mechanism))
 			} else {
@@ -4263,15 +5294,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputMicrosoftFabric.TLS == nil {
 			r.OutputMicrosoftFabric.TLS = nil
 		} else {
-			r.OutputMicrosoftFabric.TLS = &tfTypes.OutputMicrosoftFabricTLSSettingsClientSide{}
-			r.OutputMicrosoftFabric.TLS.Disabled = types.BoolPointerValue(resp.OutputMicrosoftFabric.TLS.Disabled)
+			r.OutputMicrosoftFabric.TLS = &tfTypes.TLSSettingsClientSideType{}
+			r.OutputMicrosoftFabric.TLS.Disabled = types.BoolValue(resp.OutputMicrosoftFabric.TLS.Disabled)
 			r.OutputMicrosoftFabric.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputMicrosoftFabric.TLS.RejectUnauthorized)
 		}
 		r.OutputMicrosoftFabric.Topic = types.StringValue(resp.OutputMicrosoftFabric.Topic)
 		r.OutputMicrosoftFabric.Type = types.StringValue(string(resp.OutputMicrosoftFabric.Type))
+		r.Type = r.OutputMicrosoftFabric.Type
 	}
 	if resp.OutputMinio != nil {
 		r.OutputMinio = &tfTypes.OutputMinio{}
+		r.OutputMinio.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputMinio.TemplateAwsAPIKey)
+		r.OutputMinio.TemplateBucket = types.StringPointerValue(resp.OutputMinio.TemplateBucket)
+		r.OutputMinio.TemplateFormat = types.StringPointerValue(resp.OutputMinio.TemplateFormat)
+		r.OutputMinio.TemplateRegion = types.StringPointerValue(resp.OutputMinio.TemplateRegion)
 		r.OutputMinio.AddIDToStagePath = types.BoolPointerValue(resp.OutputMinio.AddIDToStagePath)
 		r.OutputMinio.AutomaticSchema = types.BoolPointerValue(resp.OutputMinio.AutomaticSchema)
 		r.OutputMinio.AwsAPIKey = types.StringPointerValue(resp.OutputMinio.AwsAPIKey)
@@ -4298,13 +5334,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputMinio.DeadletterPath = types.StringPointerValue(resp.OutputMinio.DeadletterPath)
 		r.OutputMinio.Description = types.StringPointerValue(resp.OutputMinio.Description)
 		r.OutputMinio.DestPath = types.StringPointerValue(resp.OutputMinio.DestPath)
+		r.OutputMinio.DirectoryBatchSize = types.Float64PointerValue(resp.OutputMinio.DirectoryBatchSize)
 		r.OutputMinio.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputMinio.EmptyDirCleanupSec)
 		r.OutputMinio.EnablePageChecksum = types.BoolPointerValue(resp.OutputMinio.EnablePageChecksum)
 		r.OutputMinio.EnableStatistics = types.BoolPointerValue(resp.OutputMinio.EnableStatistics)
 		r.OutputMinio.EnableWritePageIndex = types.BoolPointerValue(resp.OutputMinio.EnableWritePageIndex)
 		r.OutputMinio.Endpoint = types.StringValue(resp.OutputMinio.Endpoint)
 		r.OutputMinio.Environment = types.StringPointerValue(resp.OutputMinio.Environment)
+		r.Environment = r.OutputMinio.Environment
 		r.OutputMinio.FileNameSuffix = types.StringPointerValue(resp.OutputMinio.FileNameSuffix)
+		r.OutputMinio.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputMinio.ForceCloseOnShutdown)
 		if resp.OutputMinio.Format != nil {
 			r.OutputMinio.Format = types.StringValue(string(*resp.OutputMinio.Format))
 		} else {
@@ -4313,15 +5352,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputMinio.HeaderLine = types.StringPointerValue(resp.OutputMinio.HeaderLine)
 		r.OutputMinio.ID = types.StringPointerValue(resp.OutputMinio.ID)
 		r.ID = r.OutputMinio.ID
-		r.OutputMinio.KeyValueMetadata = []tfTypes.OutputMinioKeyValueMetadatum{}
+		r.OutputMinio.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem6 := range resp.OutputMinio.KeyValueMetadata {
-			var keyValueMetadata6 tfTypes.OutputMinioKeyValueMetadatum
+		for _, keyValueMetadataItem7 := range resp.OutputMinio.KeyValueMetadata {
+			var keyValueMetadata7 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata6.Key = types.StringPointerValue(keyValueMetadataItem6.Key)
-			keyValueMetadata6.Value = types.StringValue(keyValueMetadataItem6.Value)
+			keyValueMetadata7.Key = types.StringValue(keyValueMetadataItem7.Key)
+			keyValueMetadata7.Value = types.StringValue(keyValueMetadataItem7.Value)
 
-			r.OutputMinio.KeyValueMetadata = append(r.OutputMinio.KeyValueMetadata, keyValueMetadata6)
+			r.OutputMinio.KeyValueMetadata = append(r.OutputMinio.KeyValueMetadata, keyValueMetadata7)
 		}
 		r.OutputMinio.MaxConcurrentFileParts = types.Float64PointerValue(resp.OutputMinio.MaxConcurrentFileParts)
 		r.OutputMinio.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputMinio.MaxFileIdleTimeSec)
@@ -4351,6 +5390,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputMinio.ParquetPageSize = types.StringPointerValue(resp.OutputMinio.ParquetPageSize)
 		r.OutputMinio.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputMinio.ParquetRowGroupLength)
+		r.OutputMinio.ParquetSchema = types.StringPointerValue(resp.OutputMinio.ParquetSchema)
 		if resp.OutputMinio.ParquetVersion != nil {
 			r.OutputMinio.ParquetVersion = types.StringValue(string(*resp.OutputMinio.ParquetVersion))
 		} else {
@@ -4358,9 +5398,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputMinio.PartitionExpr = types.StringPointerValue(resp.OutputMinio.PartitionExpr)
 		r.OutputMinio.Pipeline = types.StringPointerValue(resp.OutputMinio.Pipeline)
+		r.Pipeline = r.OutputMinio.Pipeline
 		r.OutputMinio.Region = types.StringPointerValue(resp.OutputMinio.Region)
 		r.OutputMinio.RejectUnauthorized = types.BoolPointerValue(resp.OutputMinio.RejectUnauthorized)
 		r.OutputMinio.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputMinio.RemoveEmptyDirs)
+		if resp.OutputMinio.RetrySettings == nil {
+			r.OutputMinio.RetrySettings = nil
+		} else {
+			r.OutputMinio.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputMinio.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputMinio.RetrySettings.BackoffMultiplier)
+			r.OutputMinio.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputMinio.RetrySettings.Enabled)
+			r.OutputMinio.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputMinio.RetrySettings.InitialBackoffMs)
+			r.OutputMinio.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputMinio.RetrySettings.JitterPercent)
+			r.OutputMinio.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputMinio.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputMinio.ReuseConnections = types.BoolPointerValue(resp.OutputMinio.ReuseConnections)
 		if resp.OutputMinio.ServerSideEncryption != nil {
 			r.OutputMinio.ServerSideEncryption = types.StringValue(string(*resp.OutputMinio.ServerSideEncryption))
@@ -4373,7 +5424,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputMinio.SignatureVersion = types.StringNull()
 		}
-		r.OutputMinio.StagePath = types.StringPointerValue(resp.OutputMinio.StagePath)
+		r.OutputMinio.StagePath = types.StringValue(resp.OutputMinio.StagePath)
 		if resp.OutputMinio.StorageClass != nil {
 			r.OutputMinio.StorageClass = types.StringValue(string(*resp.OutputMinio.StorageClass))
 		} else {
@@ -4387,16 +5438,19 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputMinio.SystemFields {
 			r.OutputMinio.SystemFields = append(r.OutputMinio.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputMinio.Type != nil {
-			r.OutputMinio.Type = types.StringValue(string(*resp.OutputMinio.Type))
-		} else {
-			r.OutputMinio.Type = types.StringNull()
-		}
+		r.OutputMinio.Type = types.StringValue(string(resp.OutputMinio.Type))
+		r.Type = r.OutputMinio.Type
 		r.OutputMinio.VerifyPermissions = types.BoolPointerValue(resp.OutputMinio.VerifyPermissions)
 		r.OutputMinio.WriteHighWaterMark = types.Float64PointerValue(resp.OutputMinio.WriteHighWaterMark)
 	}
 	if resp.OutputMsk != nil {
 		r.OutputMsk = &tfTypes.OutputMsk{}
+		r.OutputMsk.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputMsk.TemplateAssumeRoleArn)
+		r.OutputMsk.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputMsk.TemplateAssumeRoleExternalID)
+		r.OutputMsk.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputMsk.TemplateAwsAPIKey)
+		r.OutputMsk.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputMsk.TemplateAwsSecretKey)
+		r.OutputMsk.TemplateRegion = types.StringPointerValue(resp.OutputMsk.TemplateRegion)
+		r.OutputMsk.TemplateTopic = types.StringPointerValue(resp.OutputMsk.TemplateTopic)
 		if resp.OutputMsk.Ack != nil {
 			r.OutputMsk.Ack = types.Int64Value(int64(*resp.OutputMsk.Ack))
 		} else {
@@ -4406,11 +5460,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputMsk.AssumeRoleExternalID = types.StringPointerValue(resp.OutputMsk.AssumeRoleExternalID)
 		r.OutputMsk.AuthenticationTimeout = types.Float64PointerValue(resp.OutputMsk.AuthenticationTimeout)
 		r.OutputMsk.AwsAPIKey = types.StringPointerValue(resp.OutputMsk.AwsAPIKey)
-		if resp.OutputMsk.AwsAuthenticationMethod != nil {
-			r.OutputMsk.AwsAuthenticationMethod = types.StringValue(string(*resp.OutputMsk.AwsAuthenticationMethod))
-		} else {
-			r.OutputMsk.AwsAuthenticationMethod = types.StringNull()
-		}
+		r.OutputMsk.AwsAuthenticationMethod = types.StringValue(string(resp.OutputMsk.AwsAuthenticationMethod))
 		r.OutputMsk.AwsSecret = types.StringPointerValue(resp.OutputMsk.AwsSecret)
 		r.OutputMsk.AwsSecretKey = types.StringPointerValue(resp.OutputMsk.AwsSecretKey)
 		r.OutputMsk.BackoffRate = types.Float64PointerValue(resp.OutputMsk.BackoffRate)
@@ -4429,6 +5479,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputMsk.EnableAssumeRole = types.BoolPointerValue(resp.OutputMsk.EnableAssumeRole)
 		r.OutputMsk.Endpoint = types.StringPointerValue(resp.OutputMsk.Endpoint)
 		r.OutputMsk.Environment = types.StringPointerValue(resp.OutputMsk.Environment)
+		r.Environment = r.OutputMsk.Environment
 		r.OutputMsk.FlushEventCount = types.Float64PointerValue(resp.OutputMsk.FlushEventCount)
 		r.OutputMsk.FlushPeriodSec = types.Float64PointerValue(resp.OutputMsk.FlushPeriodSec)
 		if resp.OutputMsk.Format != nil {
@@ -4442,25 +5493,25 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputMsk.KafkaSchemaRegistry == nil {
 			r.OutputMsk.KafkaSchemaRegistry = nil
 		} else {
-			r.OutputMsk.KafkaSchemaRegistry = &tfTypes.OutputMskKafkaSchemaRegistryAuthentication{}
+			r.OutputMsk.KafkaSchemaRegistry = &tfTypes.KafkaSchemaRegistryAuthenticationTypeAuthConnectionTimeout{}
 			if resp.OutputMsk.KafkaSchemaRegistry.Auth == nil {
 				r.OutputMsk.KafkaSchemaRegistry.Auth = nil
 			} else {
-				r.OutputMsk.KafkaSchemaRegistry.Auth = &tfTypes.OutputMskAuth{}
+				r.OutputMsk.KafkaSchemaRegistry.Auth = &tfTypes.AuthType{}
 				r.OutputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret = types.StringPointerValue(resp.OutputMsk.KafkaSchemaRegistry.Auth.CredentialsSecret)
-				r.OutputMsk.KafkaSchemaRegistry.Auth.Disabled = types.BoolPointerValue(resp.OutputMsk.KafkaSchemaRegistry.Auth.Disabled)
+				r.OutputMsk.KafkaSchemaRegistry.Auth.Disabled = types.BoolValue(resp.OutputMsk.KafkaSchemaRegistry.Auth.Disabled)
 			}
 			r.OutputMsk.KafkaSchemaRegistry.ConnectionTimeout = types.Float64PointerValue(resp.OutputMsk.KafkaSchemaRegistry.ConnectionTimeout)
 			r.OutputMsk.KafkaSchemaRegistry.DefaultKeySchemaID = types.Float64PointerValue(resp.OutputMsk.KafkaSchemaRegistry.DefaultKeySchemaID)
 			r.OutputMsk.KafkaSchemaRegistry.DefaultValueSchemaID = types.Float64PointerValue(resp.OutputMsk.KafkaSchemaRegistry.DefaultValueSchemaID)
-			r.OutputMsk.KafkaSchemaRegistry.Disabled = types.BoolPointerValue(resp.OutputMsk.KafkaSchemaRegistry.Disabled)
+			r.OutputMsk.KafkaSchemaRegistry.Disabled = types.BoolValue(resp.OutputMsk.KafkaSchemaRegistry.Disabled)
 			r.OutputMsk.KafkaSchemaRegistry.MaxRetries = types.Float64PointerValue(resp.OutputMsk.KafkaSchemaRegistry.MaxRetries)
 			r.OutputMsk.KafkaSchemaRegistry.RequestTimeout = types.Float64PointerValue(resp.OutputMsk.KafkaSchemaRegistry.RequestTimeout)
 			r.OutputMsk.KafkaSchemaRegistry.SchemaRegistryURL = types.StringPointerValue(resp.OutputMsk.KafkaSchemaRegistry.SchemaRegistryURL)
 			if resp.OutputMsk.KafkaSchemaRegistry.TLS == nil {
 				r.OutputMsk.KafkaSchemaRegistry.TLS = nil
 			} else {
-				r.OutputMsk.KafkaSchemaRegistry.TLS = &tfTypes.OutputMskKafkaSchemaRegistryTLSSettingsClientSide{}
+				r.OutputMsk.KafkaSchemaRegistry.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 				r.OutputMsk.KafkaSchemaRegistry.TLS.CaPath = types.StringPointerValue(resp.OutputMsk.KafkaSchemaRegistry.TLS.CaPath)
 				r.OutputMsk.KafkaSchemaRegistry.TLS.CertificateName = types.StringPointerValue(resp.OutputMsk.KafkaSchemaRegistry.TLS.CertificateName)
 				r.OutputMsk.KafkaSchemaRegistry.TLS.CertPath = types.StringPointerValue(resp.OutputMsk.KafkaSchemaRegistry.TLS.CertPath)
@@ -4490,6 +5541,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputMsk.OnBackpressure = types.StringNull()
 		}
 		r.OutputMsk.Pipeline = types.StringPointerValue(resp.OutputMsk.Pipeline)
+		r.Pipeline = r.OutputMsk.Pipeline
 		if resp.OutputMsk.PqCompress != nil {
 			r.OutputMsk.PqCompress = types.StringValue(string(*resp.OutputMsk.PqCompress))
 		} else {
@@ -4500,6 +5552,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputMsk.PqControls = &tfTypes.OutputMskPqControls{}
 		}
+		r.OutputMsk.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputMsk.PqMaxBackpressureSec)
+		r.OutputMsk.PqMaxBufferSize = types.Float64PointerValue(resp.OutputMsk.PqMaxBufferSize)
+		r.OutputMsk.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputMsk.PqMaxBufferSizeBytes)
 		r.OutputMsk.PqMaxFileSize = types.StringPointerValue(resp.OutputMsk.PqMaxFileSize)
 		r.OutputMsk.PqMaxSize = types.StringPointerValue(resp.OutputMsk.PqMaxSize)
 		if resp.OutputMsk.PqMode != nil {
@@ -4513,6 +5568,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputMsk.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputMsk.PqPath = types.StringPointerValue(resp.OutputMsk.PqPath)
+		r.OutputMsk.PqRatePerSec = types.Float64PointerValue(resp.OutputMsk.PqRatePerSec)
+		r.OutputMsk.PqStrictOrdering = types.BoolPointerValue(resp.OutputMsk.PqStrictOrdering)
+		r.OutputMsk.ProtobufEncodingID = types.StringPointerValue(resp.OutputMsk.ProtobufEncodingID)
 		r.OutputMsk.ProtobufLibraryID = types.StringPointerValue(resp.OutputMsk.ProtobufLibraryID)
 		r.OutputMsk.ReauthenticationThreshold = types.Float64PointerValue(resp.OutputMsk.ReauthenticationThreshold)
 		r.OutputMsk.Region = types.StringValue(resp.OutputMsk.Region)
@@ -4535,7 +5593,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputMsk.TLS == nil {
 			r.OutputMsk.TLS = nil
 		} else {
-			r.OutputMsk.TLS = &tfTypes.OutputMskTLSSettingsClientSide{}
+			r.OutputMsk.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputMsk.TLS.CaPath = types.StringPointerValue(resp.OutputMsk.TLS.CaPath)
 			r.OutputMsk.TLS.CertificateName = types.StringPointerValue(resp.OutputMsk.TLS.CertificateName)
 			r.OutputMsk.TLS.CertPath = types.StringPointerValue(resp.OutputMsk.TLS.CertPath)
@@ -4556,30 +5614,33 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputMsk.TLS.Servername = types.StringPointerValue(resp.OutputMsk.TLS.Servername)
 		}
 		r.OutputMsk.Topic = types.StringValue(resp.OutputMsk.Topic)
-		if resp.OutputMsk.Type != nil {
-			r.OutputMsk.Type = types.StringValue(string(*resp.OutputMsk.Type))
-		} else {
-			r.OutputMsk.Type = types.StringNull()
-		}
+		r.OutputMsk.Type = types.StringValue(string(resp.OutputMsk.Type))
+		r.Type = r.OutputMsk.Type
 	}
 	if resp.OutputNetflow != nil {
 		r.OutputNetflow = &tfTypes.OutputNetflow{}
 		r.OutputNetflow.Description = types.StringPointerValue(resp.OutputNetflow.Description)
 		r.OutputNetflow.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputNetflow.DNSResolvePeriodSec)
+		r.OutputNetflow.EnableIPSpoofing = types.BoolPointerValue(resp.OutputNetflow.EnableIPSpoofing)
 		r.OutputNetflow.Environment = types.StringPointerValue(resp.OutputNetflow.Environment)
+		r.Environment = r.OutputNetflow.Environment
 		r.OutputNetflow.Hosts = []tfTypes.OutputNetflowHost{}
 
 		for _, hostsItem1 := range resp.OutputNetflow.Hosts {
 			var hosts1 tfTypes.OutputNetflowHost
 
+			hosts1.TemplateHost = types.StringPointerValue(hostsItem1.TemplateHost)
+			hosts1.TemplatePort = types.StringPointerValue(hostsItem1.TemplatePort)
 			hosts1.Host = types.StringValue(hostsItem1.Host)
-			hosts1.Port = types.Float64PointerValue(hostsItem1.Port)
+			hosts1.Port = types.Float64Value(hostsItem1.Port)
 
 			r.OutputNetflow.Hosts = append(r.OutputNetflow.Hosts, hosts1)
 		}
 		r.OutputNetflow.ID = types.StringPointerValue(resp.OutputNetflow.ID)
 		r.ID = r.OutputNetflow.ID
+		r.OutputNetflow.MaxRecordSize = types.Float64PointerValue(resp.OutputNetflow.MaxRecordSize)
 		r.OutputNetflow.Pipeline = types.StringPointerValue(resp.OutputNetflow.Pipeline)
+		r.Pipeline = r.OutputNetflow.Pipeline
 		r.OutputNetflow.Streamtags = make([]types.String, 0, len(resp.OutputNetflow.Streamtags))
 		for _, v := range resp.OutputNetflow.Streamtags {
 			r.OutputNetflow.Streamtags = append(r.OutputNetflow.Streamtags, types.StringValue(v))
@@ -4589,9 +5650,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNetflow.SystemFields = append(r.OutputNetflow.SystemFields, types.StringValue(v))
 		}
 		r.OutputNetflow.Type = types.StringValue(string(resp.OutputNetflow.Type))
+		r.Type = r.OutputNetflow.Type
 	}
 	if resp.OutputNewrelic != nil {
 		r.OutputNewrelic = &tfTypes.OutputNewrelic{}
+		r.OutputNewrelic.TemplateLogType = types.StringPointerValue(resp.OutputNewrelic.TemplateLogType)
+		r.OutputNewrelic.TemplateMessageField = types.StringPointerValue(resp.OutputNewrelic.TemplateMessageField)
+		r.OutputNewrelic.TemplateRegion = types.StringPointerValue(resp.OutputNewrelic.TemplateRegion)
 		r.OutputNewrelic.APIKey = types.StringPointerValue(resp.OutputNewrelic.APIKey)
 		if resp.OutputNewrelic.AuthType != nil {
 			r.OutputNewrelic.AuthType = types.StringValue(string(*resp.OutputNewrelic.AuthType))
@@ -4603,15 +5668,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputNewrelic.CustomURL = types.StringPointerValue(resp.OutputNewrelic.CustomURL)
 		r.OutputNewrelic.Description = types.StringPointerValue(resp.OutputNewrelic.Description)
 		r.OutputNewrelic.Environment = types.StringPointerValue(resp.OutputNewrelic.Environment)
-		r.OutputNewrelic.ExtraHTTPHeaders = []tfTypes.OutputNewrelicExtraHTTPHeader{}
+		r.Environment = r.OutputNewrelic.Environment
+		r.OutputNewrelic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem17 := range resp.OutputNewrelic.ExtraHTTPHeaders {
-			var extraHTTPHeaders17 tfTypes.OutputNewrelicExtraHTTPHeader
+		for _, extraHTTPHeadersItem19 := range resp.OutputNewrelic.ExtraHTTPHeaders {
+			var extraHTTPHeaders19 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
-			extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
+			extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
+			extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
 
-			r.OutputNewrelic.ExtraHTTPHeaders = append(r.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders17)
+			r.OutputNewrelic.ExtraHTTPHeaders = append(r.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders19)
 		}
 		if resp.OutputNewrelic.FailedRequestLoggingMode != nil {
 			r.OutputNewrelic.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputNewrelic.FailedRequestLoggingMode))
@@ -4619,7 +5685,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNewrelic.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputNewrelic.FlushPeriodSec = types.Float64PointerValue(resp.OutputNewrelic.FlushPeriodSec)
-		r.OutputNewrelic.ID = types.StringValue(resp.OutputNewrelic.ID)
+		r.OutputNewrelic.ID = types.StringPointerValue(resp.OutputNewrelic.ID)
 		r.ID = r.OutputNewrelic.ID
 		r.OutputNewrelic.LogType = types.StringPointerValue(resp.OutputNewrelic.LogType)
 		r.OutputNewrelic.MaxPayloadEvents = types.Float64PointerValue(resp.OutputNewrelic.MaxPayloadEvents)
@@ -4641,6 +5707,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNewrelic.OnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelic.Pipeline = types.StringPointerValue(resp.OutputNewrelic.Pipeline)
+		r.Pipeline = r.OutputNewrelic.Pipeline
 		if resp.OutputNewrelic.PqCompress != nil {
 			r.OutputNewrelic.PqCompress = types.StringValue(string(*resp.OutputNewrelic.PqCompress))
 		} else {
@@ -4651,6 +5718,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputNewrelic.PqControls = &tfTypes.OutputNewrelicPqControls{}
 		}
+		r.OutputNewrelic.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputNewrelic.PqMaxBackpressureSec)
+		r.OutputNewrelic.PqMaxBufferSize = types.Float64PointerValue(resp.OutputNewrelic.PqMaxBufferSize)
+		r.OutputNewrelic.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputNewrelic.PqMaxBufferSizeBytes)
 		r.OutputNewrelic.PqMaxFileSize = types.StringPointerValue(resp.OutputNewrelic.PqMaxFileSize)
 		r.OutputNewrelic.PqMaxSize = types.StringPointerValue(resp.OutputNewrelic.PqMaxSize)
 		if resp.OutputNewrelic.PqMode != nil {
@@ -4664,6 +5734,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNewrelic.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelic.PqPath = types.StringPointerValue(resp.OutputNewrelic.PqPath)
+		r.OutputNewrelic.PqRatePerSec = types.Float64PointerValue(resp.OutputNewrelic.PqRatePerSec)
+		r.OutputNewrelic.PqStrictOrdering = types.BoolPointerValue(resp.OutputNewrelic.PqStrictOrdering)
 		if resp.OutputNewrelic.Region != nil {
 			r.OutputNewrelic.Region = types.StringValue(string(*resp.OutputNewrelic.Region))
 		} else {
@@ -4671,17 +5743,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputNewrelic.RejectUnauthorized = types.BoolPointerValue(resp.OutputNewrelic.RejectUnauthorized)
 		r.OutputNewrelic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputNewrelic.ResponseHonorRetryAfterHeader)
-		r.OutputNewrelic.ResponseRetrySettings = []tfTypes.OutputNewrelicResponseRetrySetting{}
+		r.OutputNewrelic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem18 := range resp.OutputNewrelic.ResponseRetrySettings {
-			var responseRetrySettings18 tfTypes.OutputNewrelicResponseRetrySetting
+		for _, responseRetrySettingsItem20 := range resp.OutputNewrelic.ResponseRetrySettings {
+			var responseRetrySettings20 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
-			responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
-			responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
-			responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
+			responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
+			responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
+			responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
+			responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
 
-			r.OutputNewrelic.ResponseRetrySettings = append(r.OutputNewrelic.ResponseRetrySettings, responseRetrySettings18)
+			r.OutputNewrelic.ResponseRetrySettings = append(r.OutputNewrelic.ResponseRetrySettings, responseRetrySettings20)
 		}
 		r.OutputNewrelic.SafeHeaders = make([]types.String, 0, len(resp.OutputNewrelic.SafeHeaders))
 		for _, v := range resp.OutputNewrelic.SafeHeaders {
@@ -4699,19 +5771,24 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputNewrelic.TimeoutRetrySettings == nil {
 			r.OutputNewrelic.TimeoutRetrySettings = nil
 		} else {
-			r.OutputNewrelic.TimeoutRetrySettings = &tfTypes.OutputNewrelicTimeoutRetrySettings{}
+			r.OutputNewrelic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputNewrelic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputNewrelic.TimeoutRetrySettings.BackoffRate)
 			r.OutputNewrelic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputNewrelic.TimeoutRetrySettings.InitialBackoff)
 			r.OutputNewrelic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputNewrelic.TimeoutRetrySettings.MaxBackoff)
-			r.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputNewrelic.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputNewrelic.TimeoutSec = types.Float64PointerValue(resp.OutputNewrelic.TimeoutSec)
 		r.OutputNewrelic.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputNewrelic.TotalMemoryLimitKB)
 		r.OutputNewrelic.Type = types.StringValue(string(resp.OutputNewrelic.Type))
+		r.Type = r.OutputNewrelic.Type
 		r.OutputNewrelic.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputNewrelic.UseRoundRobinDNS)
 	}
 	if resp.OutputNewrelicEvents != nil {
 		r.OutputNewrelicEvents = &tfTypes.OutputNewrelicEvents{}
+		r.OutputNewrelicEvents.TemplateAccountID = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateAccountID)
+		r.OutputNewrelicEvents.TemplateCustomURL = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateCustomURL)
+		r.OutputNewrelicEvents.TemplateEventType = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateEventType)
+		r.OutputNewrelicEvents.TemplateRegion = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateRegion)
 		r.OutputNewrelicEvents.AccountID = types.StringValue(resp.OutputNewrelicEvents.AccountID)
 		r.OutputNewrelicEvents.APIKey = types.StringPointerValue(resp.OutputNewrelicEvents.APIKey)
 		if resp.OutputNewrelicEvents.AuthType != nil {
@@ -4724,16 +5801,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputNewrelicEvents.CustomURL = types.StringPointerValue(resp.OutputNewrelicEvents.CustomURL)
 		r.OutputNewrelicEvents.Description = types.StringPointerValue(resp.OutputNewrelicEvents.Description)
 		r.OutputNewrelicEvents.Environment = types.StringPointerValue(resp.OutputNewrelicEvents.Environment)
+		r.Environment = r.OutputNewrelicEvents.Environment
 		r.OutputNewrelicEvents.EventType = types.StringValue(resp.OutputNewrelicEvents.EventType)
-		r.OutputNewrelicEvents.ExtraHTTPHeaders = []tfTypes.OutputNewrelicEventsExtraHTTPHeader{}
+		r.OutputNewrelicEvents.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem18 := range resp.OutputNewrelicEvents.ExtraHTTPHeaders {
-			var extraHTTPHeaders18 tfTypes.OutputNewrelicEventsExtraHTTPHeader
+		for _, extraHTTPHeadersItem20 := range resp.OutputNewrelicEvents.ExtraHTTPHeaders {
+			var extraHTTPHeaders20 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
-			extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
+			extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
+			extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
 
-			r.OutputNewrelicEvents.ExtraHTTPHeaders = append(r.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders18)
+			r.OutputNewrelicEvents.ExtraHTTPHeaders = append(r.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders20)
 		}
 		if resp.OutputNewrelicEvents.FailedRequestLoggingMode != nil {
 			r.OutputNewrelicEvents.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputNewrelicEvents.FailedRequestLoggingMode))
@@ -4751,6 +5829,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNewrelicEvents.OnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelicEvents.Pipeline = types.StringPointerValue(resp.OutputNewrelicEvents.Pipeline)
+		r.Pipeline = r.OutputNewrelicEvents.Pipeline
 		if resp.OutputNewrelicEvents.PqCompress != nil {
 			r.OutputNewrelicEvents.PqCompress = types.StringValue(string(*resp.OutputNewrelicEvents.PqCompress))
 		} else {
@@ -4761,6 +5840,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputNewrelicEvents.PqControls = &tfTypes.OutputNewrelicEventsPqControls{}
 		}
+		r.OutputNewrelicEvents.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputNewrelicEvents.PqMaxBackpressureSec)
+		r.OutputNewrelicEvents.PqMaxBufferSize = types.Float64PointerValue(resp.OutputNewrelicEvents.PqMaxBufferSize)
+		r.OutputNewrelicEvents.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputNewrelicEvents.PqMaxBufferSizeBytes)
 		r.OutputNewrelicEvents.PqMaxFileSize = types.StringPointerValue(resp.OutputNewrelicEvents.PqMaxFileSize)
 		r.OutputNewrelicEvents.PqMaxSize = types.StringPointerValue(resp.OutputNewrelicEvents.PqMaxSize)
 		if resp.OutputNewrelicEvents.PqMode != nil {
@@ -4774,6 +5856,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputNewrelicEvents.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelicEvents.PqPath = types.StringPointerValue(resp.OutputNewrelicEvents.PqPath)
+		r.OutputNewrelicEvents.PqRatePerSec = types.Float64PointerValue(resp.OutputNewrelicEvents.PqRatePerSec)
+		r.OutputNewrelicEvents.PqStrictOrdering = types.BoolPointerValue(resp.OutputNewrelicEvents.PqStrictOrdering)
 		if resp.OutputNewrelicEvents.Region != nil {
 			r.OutputNewrelicEvents.Region = types.StringValue(string(*resp.OutputNewrelicEvents.Region))
 		} else {
@@ -4781,17 +5865,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputNewrelicEvents.RejectUnauthorized = types.BoolPointerValue(resp.OutputNewrelicEvents.RejectUnauthorized)
 		r.OutputNewrelicEvents.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputNewrelicEvents.ResponseHonorRetryAfterHeader)
-		r.OutputNewrelicEvents.ResponseRetrySettings = []tfTypes.OutputNewrelicEventsResponseRetrySetting{}
+		r.OutputNewrelicEvents.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem19 := range resp.OutputNewrelicEvents.ResponseRetrySettings {
-			var responseRetrySettings19 tfTypes.OutputNewrelicEventsResponseRetrySetting
+		for _, responseRetrySettingsItem21 := range resp.OutputNewrelicEvents.ResponseRetrySettings {
+			var responseRetrySettings21 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
-			responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
-			responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
-			responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
+			responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
+			responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
+			responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
+			responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
 
-			r.OutputNewrelicEvents.ResponseRetrySettings = append(r.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings19)
+			r.OutputNewrelicEvents.ResponseRetrySettings = append(r.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings21)
 		}
 		r.OutputNewrelicEvents.SafeHeaders = make([]types.String, 0, len(resp.OutputNewrelicEvents.SafeHeaders))
 		for _, v := range resp.OutputNewrelicEvents.SafeHeaders {
@@ -4809,23 +5893,25 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputNewrelicEvents.TimeoutRetrySettings == nil {
 			r.OutputNewrelicEvents.TimeoutRetrySettings = nil
 		} else {
-			r.OutputNewrelicEvents.TimeoutRetrySettings = &tfTypes.OutputNewrelicEventsTimeoutRetrySettings{}
+			r.OutputNewrelicEvents.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputNewrelicEvents.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputNewrelicEvents.TimeoutRetrySettings.BackoffRate)
 			r.OutputNewrelicEvents.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputNewrelicEvents.TimeoutRetrySettings.InitialBackoff)
 			r.OutputNewrelicEvents.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputNewrelicEvents.TimeoutRetrySettings.MaxBackoff)
-			r.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputNewrelicEvents.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputNewrelicEvents.TimeoutSec = types.Float64PointerValue(resp.OutputNewrelicEvents.TimeoutSec)
-		if resp.OutputNewrelicEvents.Type != nil {
-			r.OutputNewrelicEvents.Type = types.StringValue(string(*resp.OutputNewrelicEvents.Type))
-		} else {
-			r.OutputNewrelicEvents.Type = types.StringNull()
-		}
+		r.OutputNewrelicEvents.Type = types.StringValue(string(resp.OutputNewrelicEvents.Type))
+		r.Type = r.OutputNewrelicEvents.Type
 		r.OutputNewrelicEvents.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputNewrelicEvents.UseRoundRobinDNS)
 	}
 	if resp.OutputOpenTelemetry != nil {
 		r.OutputOpenTelemetry = &tfTypes.OutputOpenTelemetry{}
-		r.OutputOpenTelemetry.AuthHeaderExpr = types.StringPointerValue(resp.OutputOpenTelemetry.AuthHeaderExpr)
+		if resp.OutputOpenTelemetry.AuthHeaderExpr == nil {
+			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+		} else {
+			authHeaderExprResult2, _ := json.Marshal(resp.OutputOpenTelemetry.AuthHeaderExpr)
+			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
+		}
 		if resp.OutputOpenTelemetry.AuthType != nil {
 			r.OutputOpenTelemetry.AuthType = types.StringValue(string(*resp.OutputOpenTelemetry.AuthType))
 		} else {
@@ -4842,15 +5928,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputOpenTelemetry.Description = types.StringPointerValue(resp.OutputOpenTelemetry.Description)
 		r.OutputOpenTelemetry.Endpoint = types.StringValue(resp.OutputOpenTelemetry.Endpoint)
 		r.OutputOpenTelemetry.Environment = types.StringPointerValue(resp.OutputOpenTelemetry.Environment)
-		r.OutputOpenTelemetry.ExtraHTTPHeaders = []tfTypes.OutputOpenTelemetryExtraHTTPHeader{}
+		r.Environment = r.OutputOpenTelemetry.Environment
+		r.OutputOpenTelemetry.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem19 := range resp.OutputOpenTelemetry.ExtraHTTPHeaders {
-			var extraHTTPHeaders19 tfTypes.OutputOpenTelemetryExtraHTTPHeader
+		for _, extraHTTPHeadersItem21 := range resp.OutputOpenTelemetry.ExtraHTTPHeaders {
+			var extraHTTPHeaders21 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
-			extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
+			extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
+			extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
 
-			r.OutputOpenTelemetry.ExtraHTTPHeaders = append(r.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders19)
+			r.OutputOpenTelemetry.ExtraHTTPHeaders = append(r.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders21)
 		}
 		if resp.OutputOpenTelemetry.FailedRequestLoggingMode != nil {
 			r.OutputOpenTelemetry.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputOpenTelemetry.FailedRequestLoggingMode))
@@ -4870,14 +5957,19 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.ID = r.OutputOpenTelemetry.ID
 		r.OutputOpenTelemetry.KeepAlive = types.BoolPointerValue(resp.OutputOpenTelemetry.KeepAlive)
 		r.OutputOpenTelemetry.KeepAliveTime = types.Float64PointerValue(resp.OutputOpenTelemetry.KeepAliveTime)
-		r.OutputOpenTelemetry.LoginURL = types.StringPointerValue(resp.OutputOpenTelemetry.LoginURL)
+		if resp.OutputOpenTelemetry.LoginURL == nil {
+			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedNull()
+		} else {
+			loginURLResult2, _ := json.Marshal(resp.OutputOpenTelemetry.LoginURL)
+			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
+		}
 		r.OutputOpenTelemetry.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputOpenTelemetry.MaxPayloadSizeKB)
-		r.OutputOpenTelemetry.Metadata = []tfTypes.OutputOpenTelemetryMetadatum{}
+		r.OutputOpenTelemetry.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, metadataItem2 := range resp.OutputOpenTelemetry.Metadata {
-			var metadata2 tfTypes.OutputOpenTelemetryMetadatum
+			var metadata2 tfTypes.ItemsTypeKeyValueMetadata
 
-			metadata2.Key = types.StringPointerValue(metadataItem2.Key)
+			metadata2.Key = types.StringValue(metadataItem2.Key)
 			metadata2.Value = types.StringValue(metadataItem2.Value)
 
 			r.OutputOpenTelemetry.Metadata = append(r.OutputOpenTelemetry.Metadata, metadata2)
@@ -4887,20 +5979,40 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, oauthHeadersItem2 := range resp.OutputOpenTelemetry.OauthHeaders {
 			var oauthHeaders2 tfTypes.OutputOpenTelemetryOauthHeader
 
-			oauthHeaders2.Name = types.StringValue(oauthHeadersItem2.Name)
-			oauthHeaders2.Value = types.StringValue(oauthHeadersItem2.Value)
+			if oauthHeadersItem2.Name == nil {
+				oauthHeaders2.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
+				oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
+			}
+			if oauthHeadersItem2.Value == nil {
+				oauthHeaders2.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
+				oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
+			}
 
 			r.OutputOpenTelemetry.OauthHeaders = append(r.OutputOpenTelemetry.OauthHeaders, oauthHeaders2)
 		}
 		r.OutputOpenTelemetry.OauthParams = []tfTypes.OutputOpenTelemetryOauthParam{}
 
-		for _, oauthParamsItem2 := range resp.OutputOpenTelemetry.OauthParams {
-			var oauthParams2 tfTypes.OutputOpenTelemetryOauthParam
+		for _, oauthParamsItem4 := range resp.OutputOpenTelemetry.OauthParams {
+			var oauthParams4 tfTypes.OutputOpenTelemetryOauthParam
 
-			oauthParams2.Name = types.StringValue(oauthParamsItem2.Name)
-			oauthParams2.Value = types.StringValue(oauthParamsItem2.Value)
+			if oauthParamsItem4.Name == nil {
+				oauthParams4.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult5, _ := json.Marshal(oauthParamsItem4.Name)
+				oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult5))
+			}
+			if oauthParamsItem4.Value == nil {
+				oauthParams4.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult5, _ := json.Marshal(oauthParamsItem4.Value)
+				oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult5))
+			}
 
-			r.OutputOpenTelemetry.OauthParams = append(r.OutputOpenTelemetry.OauthParams, oauthParams2)
+			r.OutputOpenTelemetry.OauthParams = append(r.OutputOpenTelemetry.OauthParams, oauthParams4)
 		}
 		if resp.OutputOpenTelemetry.OnBackpressure != nil {
 			r.OutputOpenTelemetry.OnBackpressure = types.StringValue(string(*resp.OutputOpenTelemetry.OnBackpressure))
@@ -4914,6 +6026,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputOpenTelemetry.Password = types.StringPointerValue(resp.OutputOpenTelemetry.Password)
 		r.OutputOpenTelemetry.Pipeline = types.StringPointerValue(resp.OutputOpenTelemetry.Pipeline)
+		r.Pipeline = r.OutputOpenTelemetry.Pipeline
 		if resp.OutputOpenTelemetry.PqCompress != nil {
 			r.OutputOpenTelemetry.PqCompress = types.StringValue(string(*resp.OutputOpenTelemetry.PqCompress))
 		} else {
@@ -4924,6 +6037,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputOpenTelemetry.PqControls = &tfTypes.OutputOpenTelemetryPqControls{}
 		}
+		r.OutputOpenTelemetry.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputOpenTelemetry.PqMaxBackpressureSec)
+		r.OutputOpenTelemetry.PqMaxBufferSize = types.Float64PointerValue(resp.OutputOpenTelemetry.PqMaxBufferSize)
+		r.OutputOpenTelemetry.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputOpenTelemetry.PqMaxBufferSizeBytes)
 		r.OutputOpenTelemetry.PqMaxFileSize = types.StringPointerValue(resp.OutputOpenTelemetry.PqMaxFileSize)
 		r.OutputOpenTelemetry.PqMaxSize = types.StringPointerValue(resp.OutputOpenTelemetry.PqMaxSize)
 		if resp.OutputOpenTelemetry.PqMode != nil {
@@ -4937,6 +6053,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputOpenTelemetry.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputOpenTelemetry.PqPath = types.StringPointerValue(resp.OutputOpenTelemetry.PqPath)
+		r.OutputOpenTelemetry.PqRatePerSec = types.Float64PointerValue(resp.OutputOpenTelemetry.PqRatePerSec)
+		r.OutputOpenTelemetry.PqStrictOrdering = types.BoolPointerValue(resp.OutputOpenTelemetry.PqStrictOrdering)
 		if resp.OutputOpenTelemetry.Protocol != nil {
 			r.OutputOpenTelemetry.Protocol = types.StringValue(string(*resp.OutputOpenTelemetry.Protocol))
 		} else {
@@ -4944,24 +6062,34 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputOpenTelemetry.RejectUnauthorized = types.BoolPointerValue(resp.OutputOpenTelemetry.RejectUnauthorized)
 		r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputOpenTelemetry.ResponseHonorRetryAfterHeader)
-		r.OutputOpenTelemetry.ResponseRetrySettings = []tfTypes.OutputOpenTelemetryResponseRetrySetting{}
+		r.OutputOpenTelemetry.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem20 := range resp.OutputOpenTelemetry.ResponseRetrySettings {
-			var responseRetrySettings20 tfTypes.OutputOpenTelemetryResponseRetrySetting
+		for _, responseRetrySettingsItem22 := range resp.OutputOpenTelemetry.ResponseRetrySettings {
+			var responseRetrySettings22 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
-			responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
-			responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
-			responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
+			responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
+			responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
+			responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
+			responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
 
-			r.OutputOpenTelemetry.ResponseRetrySettings = append(r.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings20)
+			r.OutputOpenTelemetry.ResponseRetrySettings = append(r.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings22)
 		}
 		r.OutputOpenTelemetry.SafeHeaders = make([]types.String, 0, len(resp.OutputOpenTelemetry.SafeHeaders))
 		for _, v := range resp.OutputOpenTelemetry.SafeHeaders {
 			r.OutputOpenTelemetry.SafeHeaders = append(r.OutputOpenTelemetry.SafeHeaders, types.StringValue(v))
 		}
-		r.OutputOpenTelemetry.Secret = types.StringPointerValue(resp.OutputOpenTelemetry.Secret)
-		r.OutputOpenTelemetry.SecretParamName = types.StringPointerValue(resp.OutputOpenTelemetry.SecretParamName)
+		if resp.OutputOpenTelemetry.Secret == nil {
+			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedNull()
+		} else {
+			secretResult2, _ := json.Marshal(resp.OutputOpenTelemetry.Secret)
+			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
+		}
+		if resp.OutputOpenTelemetry.SecretParamName == nil {
+			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedNull()
+		} else {
+			secretParamNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.SecretParamName)
+			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
+		}
 		r.OutputOpenTelemetry.Streamtags = make([]types.String, 0, len(resp.OutputOpenTelemetry.Streamtags))
 		for _, v := range resp.OutputOpenTelemetry.Streamtags {
 			r.OutputOpenTelemetry.Streamtags = append(r.OutputOpenTelemetry.Streamtags, types.StringValue(v))
@@ -4974,17 +6102,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputOpenTelemetry.TimeoutRetrySettings == nil {
 			r.OutputOpenTelemetry.TimeoutRetrySettings = nil
 		} else {
-			r.OutputOpenTelemetry.TimeoutRetrySettings = &tfTypes.OutputOpenTelemetryTimeoutRetrySettings{}
+			r.OutputOpenTelemetry.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate)
 			r.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff)
 			r.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff)
-			r.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputOpenTelemetry.TimeoutSec = types.Float64PointerValue(resp.OutputOpenTelemetry.TimeoutSec)
 		if resp.OutputOpenTelemetry.TLS == nil {
 			r.OutputOpenTelemetry.TLS = nil
 		} else {
-			r.OutputOpenTelemetry.TLS = &tfTypes.OutputOpenTelemetryTLSSettingsClientSide{}
+			r.OutputOpenTelemetry.TLS = &tfTypes.TLSSettingsClientSideTypeExtended{}
 			r.OutputOpenTelemetry.TLS.CaPath = types.StringPointerValue(resp.OutputOpenTelemetry.TLS.CaPath)
 			r.OutputOpenTelemetry.TLS.CertificateName = types.StringPointerValue(resp.OutputOpenTelemetry.TLS.CertificateName)
 			r.OutputOpenTelemetry.TLS.CertPath = types.StringPointerValue(resp.OutputOpenTelemetry.TLS.CertPath)
@@ -5004,15 +6132,32 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputOpenTelemetry.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputOpenTelemetry.TLS.RejectUnauthorized)
 		}
 		r.OutputOpenTelemetry.Token = types.StringPointerValue(resp.OutputOpenTelemetry.Token)
-		r.OutputOpenTelemetry.TokenAttributeName = types.StringPointerValue(resp.OutputOpenTelemetry.TokenAttributeName)
-		r.OutputOpenTelemetry.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputOpenTelemetry.TokenTimeoutSecs)
+		if resp.OutputOpenTelemetry.TokenAttributeName == nil {
+			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedNull()
+		} else {
+			tokenAttributeNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenAttributeName)
+			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
+		}
+		if resp.OutputOpenTelemetry.TokenTimeoutSecs == nil {
+			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+		} else {
+			tokenTimeoutSecsResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenTimeoutSecs)
+			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
+		}
 		r.OutputOpenTelemetry.Type = types.StringValue(string(resp.OutputOpenTelemetry.Type))
+		r.Type = r.OutputOpenTelemetry.Type
 		r.OutputOpenTelemetry.Username = types.StringPointerValue(resp.OutputOpenTelemetry.Username)
 		r.OutputOpenTelemetry.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputOpenTelemetry.UseRoundRobinDNS)
 	}
 	if resp.OutputPrometheus != nil {
 		r.OutputPrometheus = &tfTypes.OutputPrometheus{}
-		r.OutputPrometheus.AuthHeaderExpr = types.StringPointerValue(resp.OutputPrometheus.AuthHeaderExpr)
+		r.OutputPrometheus.TemplateURL = types.StringPointerValue(resp.OutputPrometheus.TemplateURL)
+		if resp.OutputPrometheus.AuthHeaderExpr == nil {
+			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+		} else {
+			authHeaderExprResult3, _ := json.Marshal(resp.OutputPrometheus.AuthHeaderExpr)
+			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
+		}
 		if resp.OutputPrometheus.AuthType != nil {
 			r.OutputPrometheus.AuthType = types.StringValue(string(*resp.OutputPrometheus.AuthType))
 		} else {
@@ -5022,15 +6167,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputPrometheus.CredentialsSecret = types.StringPointerValue(resp.OutputPrometheus.CredentialsSecret)
 		r.OutputPrometheus.Description = types.StringPointerValue(resp.OutputPrometheus.Description)
 		r.OutputPrometheus.Environment = types.StringPointerValue(resp.OutputPrometheus.Environment)
-		r.OutputPrometheus.ExtraHTTPHeaders = []tfTypes.OutputPrometheusExtraHTTPHeader{}
+		r.Environment = r.OutputPrometheus.Environment
+		r.OutputPrometheus.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem20 := range resp.OutputPrometheus.ExtraHTTPHeaders {
-			var extraHTTPHeaders20 tfTypes.OutputPrometheusExtraHTTPHeader
+		for _, extraHTTPHeadersItem22 := range resp.OutputPrometheus.ExtraHTTPHeaders {
+			var extraHTTPHeaders22 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
-			extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
+			extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
+			extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
 
-			r.OutputPrometheus.ExtraHTTPHeaders = append(r.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders20)
+			r.OutputPrometheus.ExtraHTTPHeaders = append(r.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders22)
 		}
 		if resp.OutputPrometheus.FailedRequestLoggingMode != nil {
 			r.OutputPrometheus.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputPrometheus.FailedRequestLoggingMode))
@@ -5040,7 +6186,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputPrometheus.FlushPeriodSec = types.Float64PointerValue(resp.OutputPrometheus.FlushPeriodSec)
 		r.OutputPrometheus.ID = types.StringPointerValue(resp.OutputPrometheus.ID)
 		r.ID = r.OutputPrometheus.ID
-		r.OutputPrometheus.LoginURL = types.StringPointerValue(resp.OutputPrometheus.LoginURL)
+		if resp.OutputPrometheus.LoginURL == nil {
+			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedNull()
+		} else {
+			loginURLResult3, _ := json.Marshal(resp.OutputPrometheus.LoginURL)
+			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
+		}
 		r.OutputPrometheus.MaxPayloadEvents = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadEvents)
 		r.OutputPrometheus.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadSizeKB)
 		r.OutputPrometheus.MetricRenameExpr = types.StringPointerValue(resp.OutputPrometheus.MetricRenameExpr)
@@ -5050,20 +6201,40 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, oauthHeadersItem3 := range resp.OutputPrometheus.OauthHeaders {
 			var oauthHeaders3 tfTypes.OutputPrometheusOauthHeader
 
-			oauthHeaders3.Name = types.StringValue(oauthHeadersItem3.Name)
-			oauthHeaders3.Value = types.StringValue(oauthHeadersItem3.Value)
+			if oauthHeadersItem3.Name == nil {
+				oauthHeaders3.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
+				oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
+			}
+			if oauthHeadersItem3.Value == nil {
+				oauthHeaders3.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
+				oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
+			}
 
 			r.OutputPrometheus.OauthHeaders = append(r.OutputPrometheus.OauthHeaders, oauthHeaders3)
 		}
 		r.OutputPrometheus.OauthParams = []tfTypes.OutputPrometheusOauthParam{}
 
-		for _, oauthParamsItem3 := range resp.OutputPrometheus.OauthParams {
-			var oauthParams3 tfTypes.OutputPrometheusOauthParam
+		for _, oauthParamsItem5 := range resp.OutputPrometheus.OauthParams {
+			var oauthParams5 tfTypes.OutputPrometheusOauthParam
 
-			oauthParams3.Name = types.StringValue(oauthParamsItem3.Name)
-			oauthParams3.Value = types.StringValue(oauthParamsItem3.Value)
+			if oauthParamsItem5.Name == nil {
+				oauthParams5.Name = jsontypes.NewNormalizedNull()
+			} else {
+				nameResult7, _ := json.Marshal(oauthParamsItem5.Name)
+				oauthParams5.Name = jsontypes.NewNormalizedValue(string(nameResult7))
+			}
+			if oauthParamsItem5.Value == nil {
+				oauthParams5.Value = jsontypes.NewNormalizedNull()
+			} else {
+				valueResult7, _ := json.Marshal(oauthParamsItem5.Value)
+				oauthParams5.Value = jsontypes.NewNormalizedValue(string(valueResult7))
+			}
 
-			r.OutputPrometheus.OauthParams = append(r.OutputPrometheus.OauthParams, oauthParams3)
+			r.OutputPrometheus.OauthParams = append(r.OutputPrometheus.OauthParams, oauthParams5)
 		}
 		if resp.OutputPrometheus.OnBackpressure != nil {
 			r.OutputPrometheus.OnBackpressure = types.StringValue(string(*resp.OutputPrometheus.OnBackpressure))
@@ -5072,6 +6243,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputPrometheus.Password = types.StringPointerValue(resp.OutputPrometheus.Password)
 		r.OutputPrometheus.Pipeline = types.StringPointerValue(resp.OutputPrometheus.Pipeline)
+		r.Pipeline = r.OutputPrometheus.Pipeline
 		if resp.OutputPrometheus.PqCompress != nil {
 			r.OutputPrometheus.PqCompress = types.StringValue(string(*resp.OutputPrometheus.PqCompress))
 		} else {
@@ -5082,6 +6254,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputPrometheus.PqControls = &tfTypes.OutputPrometheusPqControls{}
 		}
+		r.OutputPrometheus.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputPrometheus.PqMaxBackpressureSec)
+		r.OutputPrometheus.PqMaxBufferSize = types.Float64PointerValue(resp.OutputPrometheus.PqMaxBufferSize)
+		r.OutputPrometheus.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputPrometheus.PqMaxBufferSizeBytes)
 		r.OutputPrometheus.PqMaxFileSize = types.StringPointerValue(resp.OutputPrometheus.PqMaxFileSize)
 		r.OutputPrometheus.PqMaxSize = types.StringPointerValue(resp.OutputPrometheus.PqMaxSize)
 		if resp.OutputPrometheus.PqMode != nil {
@@ -5095,26 +6270,38 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputPrometheus.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputPrometheus.PqPath = types.StringPointerValue(resp.OutputPrometheus.PqPath)
+		r.OutputPrometheus.PqRatePerSec = types.Float64PointerValue(resp.OutputPrometheus.PqRatePerSec)
+		r.OutputPrometheus.PqStrictOrdering = types.BoolPointerValue(resp.OutputPrometheus.PqStrictOrdering)
 		r.OutputPrometheus.RejectUnauthorized = types.BoolPointerValue(resp.OutputPrometheus.RejectUnauthorized)
 		r.OutputPrometheus.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputPrometheus.ResponseHonorRetryAfterHeader)
-		r.OutputPrometheus.ResponseRetrySettings = []tfTypes.OutputPrometheusResponseRetrySetting{}
+		r.OutputPrometheus.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem21 := range resp.OutputPrometheus.ResponseRetrySettings {
-			var responseRetrySettings21 tfTypes.OutputPrometheusResponseRetrySetting
+		for _, responseRetrySettingsItem23 := range resp.OutputPrometheus.ResponseRetrySettings {
+			var responseRetrySettings23 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
-			responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
-			responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
-			responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
+			responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
+			responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
+			responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
+			responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
 
-			r.OutputPrometheus.ResponseRetrySettings = append(r.OutputPrometheus.ResponseRetrySettings, responseRetrySettings21)
+			r.OutputPrometheus.ResponseRetrySettings = append(r.OutputPrometheus.ResponseRetrySettings, responseRetrySettings23)
 		}
 		r.OutputPrometheus.SafeHeaders = make([]types.String, 0, len(resp.OutputPrometheus.SafeHeaders))
 		for _, v := range resp.OutputPrometheus.SafeHeaders {
 			r.OutputPrometheus.SafeHeaders = append(r.OutputPrometheus.SafeHeaders, types.StringValue(v))
 		}
-		r.OutputPrometheus.Secret = types.StringPointerValue(resp.OutputPrometheus.Secret)
-		r.OutputPrometheus.SecretParamName = types.StringPointerValue(resp.OutputPrometheus.SecretParamName)
+		if resp.OutputPrometheus.Secret == nil {
+			r.OutputPrometheus.Secret = jsontypes.NewNormalizedNull()
+		} else {
+			secretResult3, _ := json.Marshal(resp.OutputPrometheus.Secret)
+			r.OutputPrometheus.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
+		}
+		if resp.OutputPrometheus.SecretParamName == nil {
+			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedNull()
+		} else {
+			secretParamNameResult3, _ := json.Marshal(resp.OutputPrometheus.SecretParamName)
+			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
+		}
 		r.OutputPrometheus.SendMetadata = types.BoolPointerValue(resp.OutputPrometheus.SendMetadata)
 		r.OutputPrometheus.Streamtags = make([]types.String, 0, len(resp.OutputPrometheus.Streamtags))
 		for _, v := range resp.OutputPrometheus.Streamtags {
@@ -5128,17 +6315,28 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputPrometheus.TimeoutRetrySettings == nil {
 			r.OutputPrometheus.TimeoutRetrySettings = nil
 		} else {
-			r.OutputPrometheus.TimeoutRetrySettings = &tfTypes.OutputPrometheusTimeoutRetrySettings{}
+			r.OutputPrometheus.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputPrometheus.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputPrometheus.TimeoutRetrySettings.BackoffRate)
 			r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputPrometheus.TimeoutRetrySettings.InitialBackoff)
 			r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputPrometheus.TimeoutRetrySettings.MaxBackoff)
-			r.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputPrometheus.TimeoutSec = types.Float64PointerValue(resp.OutputPrometheus.TimeoutSec)
 		r.OutputPrometheus.Token = types.StringPointerValue(resp.OutputPrometheus.Token)
-		r.OutputPrometheus.TokenAttributeName = types.StringPointerValue(resp.OutputPrometheus.TokenAttributeName)
-		r.OutputPrometheus.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputPrometheus.TokenTimeoutSecs)
+		if resp.OutputPrometheus.TokenAttributeName == nil {
+			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedNull()
+		} else {
+			tokenAttributeNameResult3, _ := json.Marshal(resp.OutputPrometheus.TokenAttributeName)
+			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
+		}
+		if resp.OutputPrometheus.TokenTimeoutSecs == nil {
+			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+		} else {
+			tokenTimeoutSecsResult3, _ := json.Marshal(resp.OutputPrometheus.TokenTimeoutSecs)
+			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
+		}
 		r.OutputPrometheus.Type = types.StringValue(string(resp.OutputPrometheus.Type))
+		r.Type = r.OutputPrometheus.Type
 		r.OutputPrometheus.URL = types.StringValue(resp.OutputPrometheus.URL)
 		r.OutputPrometheus.Username = types.StringPointerValue(resp.OutputPrometheus.Username)
 		r.OutputPrometheus.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputPrometheus.UseRoundRobinDNS)
@@ -5153,12 +6351,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputRing.Description = types.StringPointerValue(resp.OutputRing.Description)
 		r.OutputRing.DestPath = types.StringPointerValue(resp.OutputRing.DestPath)
 		r.OutputRing.Environment = types.StringPointerValue(resp.OutputRing.Environment)
+		r.Environment = r.OutputRing.Environment
 		if resp.OutputRing.Format != nil {
 			r.OutputRing.Format = types.StringValue(string(*resp.OutputRing.Format))
 		} else {
 			r.OutputRing.Format = types.StringNull()
 		}
-		r.OutputRing.ID = types.StringValue(resp.OutputRing.ID)
+		r.OutputRing.ID = types.StringPointerValue(resp.OutputRing.ID)
 		r.ID = r.OutputRing.ID
 		r.OutputRing.MaxDataSize = types.StringPointerValue(resp.OutputRing.MaxDataSize)
 		r.OutputRing.MaxDataTime = types.StringPointerValue(resp.OutputRing.MaxDataTime)
@@ -5169,6 +6368,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputRing.PartitionExpr = types.StringPointerValue(resp.OutputRing.PartitionExpr)
 		r.OutputRing.Pipeline = types.StringPointerValue(resp.OutputRing.Pipeline)
+		r.Pipeline = r.OutputRing.Pipeline
 		r.OutputRing.Streamtags = make([]types.String, 0, len(resp.OutputRing.Streamtags))
 		for _, v := range resp.OutputRing.Streamtags {
 			r.OutputRing.Streamtags = append(r.OutputRing.Streamtags, types.StringValue(v))
@@ -5178,14 +6378,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputRing.SystemFields = append(r.OutputRing.SystemFields, types.StringValue(v))
 		}
 		r.OutputRing.Type = types.StringValue(string(resp.OutputRing.Type))
+		r.Type = r.OutputRing.Type
 	}
 	if resp.OutputRouter != nil {
 		r.OutputRouter = &tfTypes.OutputRouter{}
 		r.OutputRouter.Description = types.StringPointerValue(resp.OutputRouter.Description)
 		r.OutputRouter.Environment = types.StringPointerValue(resp.OutputRouter.Environment)
+		r.Environment = r.OutputRouter.Environment
 		r.OutputRouter.ID = types.StringPointerValue(resp.OutputRouter.ID)
 		r.ID = r.OutputRouter.ID
 		r.OutputRouter.Pipeline = types.StringPointerValue(resp.OutputRouter.Pipeline)
+		r.Pipeline = r.OutputRouter.Pipeline
 		r.OutputRouter.Rules = []tfTypes.OutputRouterRule{}
 
 		for _, rulesItem := range resp.OutputRouter.Rules {
@@ -5207,9 +6410,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputRouter.SystemFields = append(r.OutputRouter.SystemFields, types.StringValue(v))
 		}
 		r.OutputRouter.Type = types.StringValue(string(resp.OutputRouter.Type))
+		r.Type = r.OutputRouter.Type
 	}
 	if resp.OutputS3 != nil {
 		r.OutputS3 = &tfTypes.OutputS3{}
+		r.OutputS3.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputS3.TemplateAssumeRoleArn)
+		r.OutputS3.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputS3.TemplateAssumeRoleExternalID)
+		r.OutputS3.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputS3.TemplateAwsAPIKey)
+		r.OutputS3.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputS3.TemplateAwsSecretKey)
+		r.OutputS3.TemplateBucket = types.StringPointerValue(resp.OutputS3.TemplateBucket)
+		r.OutputS3.TemplateFormat = types.StringPointerValue(resp.OutputS3.TemplateFormat)
+		r.OutputS3.TemplateRegion = types.StringPointerValue(resp.OutputS3.TemplateRegion)
 		r.OutputS3.AddIDToStagePath = types.BoolPointerValue(resp.OutputS3.AddIDToStagePath)
 		r.OutputS3.AssumeRoleArn = types.StringPointerValue(resp.OutputS3.AssumeRoleArn)
 		r.OutputS3.AssumeRoleExternalID = types.StringPointerValue(resp.OutputS3.AssumeRoleExternalID)
@@ -5238,6 +6449,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputS3.DeadletterPath = types.StringPointerValue(resp.OutputS3.DeadletterPath)
 		r.OutputS3.Description = types.StringPointerValue(resp.OutputS3.Description)
 		r.OutputS3.DestPath = types.StringPointerValue(resp.OutputS3.DestPath)
+		r.OutputS3.DirectoryBatchSize = types.Float64PointerValue(resp.OutputS3.DirectoryBatchSize)
 		r.OutputS3.DurationSeconds = types.Float64PointerValue(resp.OutputS3.DurationSeconds)
 		r.OutputS3.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputS3.EmptyDirCleanupSec)
 		r.OutputS3.EnableAssumeRole = types.BoolPointerValue(resp.OutputS3.EnableAssumeRole)
@@ -5246,7 +6458,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputS3.EnableWritePageIndex = types.BoolPointerValue(resp.OutputS3.EnableWritePageIndex)
 		r.OutputS3.Endpoint = types.StringPointerValue(resp.OutputS3.Endpoint)
 		r.OutputS3.Environment = types.StringPointerValue(resp.OutputS3.Environment)
+		r.Environment = r.OutputS3.Environment
 		r.OutputS3.FileNameSuffix = types.StringPointerValue(resp.OutputS3.FileNameSuffix)
+		r.OutputS3.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputS3.ForceCloseOnShutdown)
 		if resp.OutputS3.Format != nil {
 			r.OutputS3.Format = types.StringValue(string(*resp.OutputS3.Format))
 		} else {
@@ -5255,15 +6469,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputS3.HeaderLine = types.StringPointerValue(resp.OutputS3.HeaderLine)
 		r.OutputS3.ID = types.StringPointerValue(resp.OutputS3.ID)
 		r.ID = r.OutputS3.ID
-		r.OutputS3.KeyValueMetadata = []tfTypes.OutputS3KeyValueMetadatum{}
+		r.OutputS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem7 := range resp.OutputS3.KeyValueMetadata {
-			var keyValueMetadata7 tfTypes.OutputS3KeyValueMetadatum
+		for _, keyValueMetadataItem8 := range resp.OutputS3.KeyValueMetadata {
+			var keyValueMetadata8 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata7.Key = types.StringPointerValue(keyValueMetadataItem7.Key)
-			keyValueMetadata7.Value = types.StringValue(keyValueMetadataItem7.Value)
+			keyValueMetadata8.Key = types.StringValue(keyValueMetadataItem8.Key)
+			keyValueMetadata8.Value = types.StringValue(keyValueMetadataItem8.Value)
 
-			r.OutputS3.KeyValueMetadata = append(r.OutputS3.KeyValueMetadata, keyValueMetadata7)
+			r.OutputS3.KeyValueMetadata = append(r.OutputS3.KeyValueMetadata, keyValueMetadata8)
 		}
 		r.OutputS3.KmsKeyID = types.StringPointerValue(resp.OutputS3.KmsKeyID)
 		r.OutputS3.MaxClosingFilesToBackpressure = types.Float64PointerValue(resp.OutputS3.MaxClosingFilesToBackpressure)
@@ -5295,6 +6509,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputS3.ParquetPageSize = types.StringPointerValue(resp.OutputS3.ParquetPageSize)
 		r.OutputS3.ParquetRowGroupLength = types.Float64PointerValue(resp.OutputS3.ParquetRowGroupLength)
+		r.OutputS3.ParquetSchema = types.StringPointerValue(resp.OutputS3.ParquetSchema)
 		if resp.OutputS3.ParquetVersion != nil {
 			r.OutputS3.ParquetVersion = types.StringValue(string(*resp.OutputS3.ParquetVersion))
 		} else {
@@ -5302,9 +6517,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputS3.PartitionExpr = types.StringPointerValue(resp.OutputS3.PartitionExpr)
 		r.OutputS3.Pipeline = types.StringPointerValue(resp.OutputS3.Pipeline)
+		r.Pipeline = r.OutputS3.Pipeline
 		r.OutputS3.Region = types.StringPointerValue(resp.OutputS3.Region)
 		r.OutputS3.RejectUnauthorized = types.BoolPointerValue(resp.OutputS3.RejectUnauthorized)
 		r.OutputS3.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputS3.RemoveEmptyDirs)
+		if resp.OutputS3.RetrySettings == nil {
+			r.OutputS3.RetrySettings = nil
+		} else {
+			r.OutputS3.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputS3.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputS3.RetrySettings.BackoffMultiplier)
+			r.OutputS3.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputS3.RetrySettings.Enabled)
+			r.OutputS3.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputS3.RetrySettings.InitialBackoffMs)
+			r.OutputS3.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputS3.RetrySettings.JitterPercent)
+			r.OutputS3.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputS3.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputS3.ReuseConnections = types.BoolPointerValue(resp.OutputS3.ReuseConnections)
 		if resp.OutputS3.ServerSideEncryption != nil {
 			r.OutputS3.ServerSideEncryption = types.StringValue(string(*resp.OutputS3.ServerSideEncryption))
@@ -5317,7 +6543,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputS3.SignatureVersion = types.StringNull()
 		}
-		r.OutputS3.StagePath = types.StringPointerValue(resp.OutputS3.StagePath)
+		r.OutputS3.StagePath = types.StringValue(resp.OutputS3.StagePath)
 		if resp.OutputS3.StorageClass != nil {
 			r.OutputS3.StorageClass = types.StringValue(string(*resp.OutputS3.StorageClass))
 		} else {
@@ -5331,16 +6557,19 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputS3.SystemFields {
 			r.OutputS3.SystemFields = append(r.OutputS3.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputS3.Type != nil {
-			r.OutputS3.Type = types.StringValue(string(*resp.OutputS3.Type))
-		} else {
-			r.OutputS3.Type = types.StringNull()
-		}
+		r.OutputS3.Type = types.StringValue(string(resp.OutputS3.Type))
+		r.Type = r.OutputS3.Type
 		r.OutputS3.VerifyPermissions = types.BoolPointerValue(resp.OutputS3.VerifyPermissions)
 		r.OutputS3.WriteHighWaterMark = types.Float64PointerValue(resp.OutputS3.WriteHighWaterMark)
 	}
 	if resp.OutputSecurityLake != nil {
 		r.OutputSecurityLake = &tfTypes.OutputSecurityLake{}
+		r.OutputSecurityLake.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSecurityLake.TemplateAssumeRoleArn)
+		r.OutputSecurityLake.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSecurityLake.TemplateAssumeRoleExternalID)
+		r.OutputSecurityLake.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSecurityLake.TemplateAwsAPIKey)
+		r.OutputSecurityLake.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSecurityLake.TemplateAwsSecretKey)
+		r.OutputSecurityLake.TemplateBucket = types.StringPointerValue(resp.OutputSecurityLake.TemplateBucket)
+		r.OutputSecurityLake.TemplateRegion = types.StringPointerValue(resp.OutputSecurityLake.TemplateRegion)
 		r.OutputSecurityLake.AccountID = types.StringValue(resp.OutputSecurityLake.AccountID)
 		r.OutputSecurityLake.AddIDToStagePath = types.BoolPointerValue(resp.OutputSecurityLake.AddIDToStagePath)
 		r.OutputSecurityLake.AssumeRoleArn = types.StringValue(resp.OutputSecurityLake.AssumeRoleArn)
@@ -5360,6 +6589,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSecurityLake.DeadletterEnabled = types.BoolPointerValue(resp.OutputSecurityLake.DeadletterEnabled)
 		r.OutputSecurityLake.DeadletterPath = types.StringPointerValue(resp.OutputSecurityLake.DeadletterPath)
 		r.OutputSecurityLake.Description = types.StringPointerValue(resp.OutputSecurityLake.Description)
+		r.OutputSecurityLake.DirectoryBatchSize = types.Float64PointerValue(resp.OutputSecurityLake.DirectoryBatchSize)
 		r.OutputSecurityLake.DurationSeconds = types.Float64PointerValue(resp.OutputSecurityLake.DurationSeconds)
 		r.OutputSecurityLake.EmptyDirCleanupSec = types.Float64PointerValue(resp.OutputSecurityLake.EmptyDirCleanupSec)
 		r.OutputSecurityLake.EnableAssumeRole = types.BoolPointerValue(resp.OutputSecurityLake.EnableAssumeRole)
@@ -5368,18 +6598,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSecurityLake.EnableWritePageIndex = types.BoolPointerValue(resp.OutputSecurityLake.EnableWritePageIndex)
 		r.OutputSecurityLake.Endpoint = types.StringPointerValue(resp.OutputSecurityLake.Endpoint)
 		r.OutputSecurityLake.Environment = types.StringPointerValue(resp.OutputSecurityLake.Environment)
+		r.Environment = r.OutputSecurityLake.Environment
+		r.OutputSecurityLake.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputSecurityLake.ForceCloseOnShutdown)
 		r.OutputSecurityLake.HeaderLine = types.StringPointerValue(resp.OutputSecurityLake.HeaderLine)
 		r.OutputSecurityLake.ID = types.StringPointerValue(resp.OutputSecurityLake.ID)
 		r.ID = r.OutputSecurityLake.ID
-		r.OutputSecurityLake.KeyValueMetadata = []tfTypes.OutputSecurityLakeKeyValueMetadatum{}
+		r.OutputSecurityLake.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
-		for _, keyValueMetadataItem8 := range resp.OutputSecurityLake.KeyValueMetadata {
-			var keyValueMetadata8 tfTypes.OutputSecurityLakeKeyValueMetadatum
+		for _, keyValueMetadataItem9 := range resp.OutputSecurityLake.KeyValueMetadata {
+			var keyValueMetadata9 tfTypes.ItemsTypeKeyValueMetadata
 
-			keyValueMetadata8.Key = types.StringPointerValue(keyValueMetadataItem8.Key)
-			keyValueMetadata8.Value = types.StringValue(keyValueMetadataItem8.Value)
+			keyValueMetadata9.Key = types.StringValue(keyValueMetadataItem9.Key)
+			keyValueMetadata9.Value = types.StringValue(keyValueMetadataItem9.Value)
 
-			r.OutputSecurityLake.KeyValueMetadata = append(r.OutputSecurityLake.KeyValueMetadata, keyValueMetadata8)
+			r.OutputSecurityLake.KeyValueMetadata = append(r.OutputSecurityLake.KeyValueMetadata, keyValueMetadata9)
 		}
 		r.OutputSecurityLake.KmsKeyID = types.StringPointerValue(resp.OutputSecurityLake.KmsKeyID)
 		r.OutputSecurityLake.MaxClosingFilesToBackpressure = types.Float64PointerValue(resp.OutputSecurityLake.MaxClosingFilesToBackpressure)
@@ -5418,9 +6650,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSecurityLake.ParquetVersion = types.StringNull()
 		}
 		r.OutputSecurityLake.Pipeline = types.StringPointerValue(resp.OutputSecurityLake.Pipeline)
+		r.Pipeline = r.OutputSecurityLake.Pipeline
 		r.OutputSecurityLake.Region = types.StringValue(resp.OutputSecurityLake.Region)
 		r.OutputSecurityLake.RejectUnauthorized = types.BoolPointerValue(resp.OutputSecurityLake.RejectUnauthorized)
 		r.OutputSecurityLake.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputSecurityLake.RemoveEmptyDirs)
+		if resp.OutputSecurityLake.RetrySettings == nil {
+			r.OutputSecurityLake.RetrySettings = nil
+		} else {
+			r.OutputSecurityLake.RetrySettings = &tfTypes.RetrySettingsType{}
+			r.OutputSecurityLake.RetrySettings.BackoffMultiplier = types.Float64PointerValue(resp.OutputSecurityLake.RetrySettings.BackoffMultiplier)
+			r.OutputSecurityLake.RetrySettings.Enabled = types.BoolPointerValue(resp.OutputSecurityLake.RetrySettings.Enabled)
+			r.OutputSecurityLake.RetrySettings.InitialBackoffMs = types.Float64PointerValue(resp.OutputSecurityLake.RetrySettings.InitialBackoffMs)
+			r.OutputSecurityLake.RetrySettings.JitterPercent = types.Float64PointerValue(resp.OutputSecurityLake.RetrySettings.JitterPercent)
+			r.OutputSecurityLake.RetrySettings.MaxBackoffMs = types.Float64PointerValue(resp.OutputSecurityLake.RetrySettings.MaxBackoffMs)
+		}
 		r.OutputSecurityLake.ReuseConnections = types.BoolPointerValue(resp.OutputSecurityLake.ReuseConnections)
 		if resp.OutputSecurityLake.ServerSideEncryption != nil {
 			r.OutputSecurityLake.ServerSideEncryption = types.StringValue(string(*resp.OutputSecurityLake.ServerSideEncryption))
@@ -5433,7 +6676,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSecurityLake.SignatureVersion = types.StringNull()
 		}
-		r.OutputSecurityLake.StagePath = types.StringPointerValue(resp.OutputSecurityLake.StagePath)
+		r.OutputSecurityLake.StagePath = types.StringValue(resp.OutputSecurityLake.StagePath)
 		if resp.OutputSecurityLake.StorageClass != nil {
 			r.OutputSecurityLake.StorageClass = types.StringValue(string(*resp.OutputSecurityLake.StorageClass))
 		} else {
@@ -5447,16 +6690,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputSecurityLake.SystemFields {
 			r.OutputSecurityLake.SystemFields = append(r.OutputSecurityLake.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputSecurityLake.Type != nil {
-			r.OutputSecurityLake.Type = types.StringValue(string(*resp.OutputSecurityLake.Type))
-		} else {
-			r.OutputSecurityLake.Type = types.StringNull()
-		}
+		r.OutputSecurityLake.Type = types.StringValue(string(resp.OutputSecurityLake.Type))
+		r.Type = r.OutputSecurityLake.Type
 		r.OutputSecurityLake.VerifyPermissions = types.BoolPointerValue(resp.OutputSecurityLake.VerifyPermissions)
 		r.OutputSecurityLake.WriteHighWaterMark = types.Float64PointerValue(resp.OutputSecurityLake.WriteHighWaterMark)
 	}
 	if resp.OutputSentinel != nil {
 		r.OutputSentinel = &tfTypes.OutputSentinel{}
+		r.OutputSentinel.TemplateClientID = types.StringPointerValue(resp.OutputSentinel.TemplateClientID)
+		r.OutputSentinel.TemplateDceEndpoint = types.StringPointerValue(resp.OutputSentinel.TemplateDceEndpoint)
+		r.OutputSentinel.TemplateDcrID = types.StringPointerValue(resp.OutputSentinel.TemplateDcrID)
+		r.OutputSentinel.TemplateLoginURL = types.StringPointerValue(resp.OutputSentinel.TemplateLoginURL)
+		r.OutputSentinel.TemplateScope = types.StringPointerValue(resp.OutputSentinel.TemplateScope)
+		r.OutputSentinel.TemplateSecret = types.StringPointerValue(resp.OutputSentinel.TemplateSecret)
+		r.OutputSentinel.TemplateStreamName = types.StringPointerValue(resp.OutputSentinel.TemplateStreamName)
+		r.OutputSentinel.TemplateURL = types.StringPointerValue(resp.OutputSentinel.TemplateURL)
 		r.OutputSentinel.AdvancedContentType = types.StringPointerValue(resp.OutputSentinel.AdvancedContentType)
 		if resp.OutputSentinel.AuthType != nil {
 			r.OutputSentinel.AuthType = types.StringValue(string(*resp.OutputSentinel.AuthType))
@@ -5474,21 +6722,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSentinel.DceEndpoint = types.StringPointerValue(resp.OutputSentinel.DceEndpoint)
 		r.OutputSentinel.DcrID = types.StringPointerValue(resp.OutputSentinel.DcrID)
 		r.OutputSentinel.Description = types.StringPointerValue(resp.OutputSentinel.Description)
-		if resp.OutputSentinel.EndpointURLConfiguration != nil {
-			r.OutputSentinel.EndpointURLConfiguration = types.StringValue(string(*resp.OutputSentinel.EndpointURLConfiguration))
-		} else {
-			r.OutputSentinel.EndpointURLConfiguration = types.StringNull()
-		}
+		r.OutputSentinel.EndpointURLConfiguration = types.StringValue(string(resp.OutputSentinel.EndpointURLConfiguration))
 		r.OutputSentinel.Environment = types.StringPointerValue(resp.OutputSentinel.Environment)
-		r.OutputSentinel.ExtraHTTPHeaders = []tfTypes.OutputSentinelExtraHTTPHeader{}
+		r.Environment = r.OutputSentinel.Environment
+		r.OutputSentinel.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem21 := range resp.OutputSentinel.ExtraHTTPHeaders {
-			var extraHTTPHeaders21 tfTypes.OutputSentinelExtraHTTPHeader
+		for _, extraHTTPHeadersItem23 := range resp.OutputSentinel.ExtraHTTPHeaders {
+			var extraHTTPHeaders23 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
-			extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
+			extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
+			extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
 
-			r.OutputSentinel.ExtraHTTPHeaders = append(r.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders21)
+			r.OutputSentinel.ExtraHTTPHeaders = append(r.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders23)
 		}
 		if resp.OutputSentinel.FailedRequestLoggingMode != nil {
 			r.OutputSentinel.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSentinel.FailedRequestLoggingMode))
@@ -5515,6 +6760,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSentinel.OnBackpressure = types.StringNull()
 		}
 		r.OutputSentinel.Pipeline = types.StringPointerValue(resp.OutputSentinel.Pipeline)
+		r.Pipeline = r.OutputSentinel.Pipeline
 		if resp.OutputSentinel.PqCompress != nil {
 			r.OutputSentinel.PqCompress = types.StringValue(string(*resp.OutputSentinel.PqCompress))
 		} else {
@@ -5525,6 +6771,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSentinel.PqControls = &tfTypes.OutputSentinelPqControls{}
 		}
+		r.OutputSentinel.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSentinel.PqMaxBackpressureSec)
+		r.OutputSentinel.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSentinel.PqMaxBufferSize)
+		r.OutputSentinel.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSentinel.PqMaxBufferSizeBytes)
 		r.OutputSentinel.PqMaxFileSize = types.StringPointerValue(resp.OutputSentinel.PqMaxFileSize)
 		r.OutputSentinel.PqMaxSize = types.StringPointerValue(resp.OutputSentinel.PqMaxSize)
 		if resp.OutputSentinel.PqMode != nil {
@@ -5538,19 +6787,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSentinel.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSentinel.PqPath = types.StringPointerValue(resp.OutputSentinel.PqPath)
+		r.OutputSentinel.PqRatePerSec = types.Float64PointerValue(resp.OutputSentinel.PqRatePerSec)
+		r.OutputSentinel.PqStrictOrdering = types.BoolPointerValue(resp.OutputSentinel.PqStrictOrdering)
 		r.OutputSentinel.RejectUnauthorized = types.BoolPointerValue(resp.OutputSentinel.RejectUnauthorized)
 		r.OutputSentinel.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSentinel.ResponseHonorRetryAfterHeader)
-		r.OutputSentinel.ResponseRetrySettings = []tfTypes.OutputSentinelResponseRetrySetting{}
+		r.OutputSentinel.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem22 := range resp.OutputSentinel.ResponseRetrySettings {
-			var responseRetrySettings22 tfTypes.OutputSentinelResponseRetrySetting
+		for _, responseRetrySettingsItem24 := range resp.OutputSentinel.ResponseRetrySettings {
+			var responseRetrySettings24 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
-			responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
-			responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
-			responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
+			responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
+			responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
+			responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
+			responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
 
-			r.OutputSentinel.ResponseRetrySettings = append(r.OutputSentinel.ResponseRetrySettings, responseRetrySettings22)
+			r.OutputSentinel.ResponseRetrySettings = append(r.OutputSentinel.ResponseRetrySettings, responseRetrySettings24)
 		}
 		r.OutputSentinel.SafeHeaders = make([]types.String, 0, len(resp.OutputSentinel.SafeHeaders))
 		for _, v := range resp.OutputSentinel.SafeHeaders {
@@ -5570,19 +6821,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSentinel.TimeoutRetrySettings == nil {
 			r.OutputSentinel.TimeoutRetrySettings = nil
 		} else {
-			r.OutputSentinel.TimeoutRetrySettings = &tfTypes.OutputSentinelTimeoutRetrySettings{}
+			r.OutputSentinel.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputSentinel.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputSentinel.TimeoutRetrySettings.BackoffRate)
 			r.OutputSentinel.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputSentinel.TimeoutRetrySettings.InitialBackoff)
 			r.OutputSentinel.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputSentinel.TimeoutRetrySettings.MaxBackoff)
-			r.OutputSentinel.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputSentinel.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputSentinel.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputSentinel.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputSentinel.TimeoutSec = types.Float64PointerValue(resp.OutputSentinel.TimeoutSec)
 		r.OutputSentinel.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputSentinel.TotalMemoryLimitKB)
-		if resp.OutputSentinel.Type != nil {
-			r.OutputSentinel.Type = types.StringValue(string(*resp.OutputSentinel.Type))
-		} else {
-			r.OutputSentinel.Type = types.StringNull()
-		}
+		r.OutputSentinel.Type = types.StringValue(string(resp.OutputSentinel.Type))
+		r.Type = r.OutputSentinel.Type
 		r.OutputSentinel.URL = types.StringPointerValue(resp.OutputSentinel.URL)
 		r.OutputSentinel.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSentinel.UseRoundRobinDNS)
 	}
@@ -5603,23 +6851,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSentinelOneAiSiem.DataSourceVendor = types.StringPointerValue(resp.OutputSentinelOneAiSiem.DataSourceVendor)
 		r.OutputSentinelOneAiSiem.DataSourceVendorExpression = types.StringPointerValue(resp.OutputSentinelOneAiSiem.DataSourceVendorExpression)
 		r.OutputSentinelOneAiSiem.Description = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Description)
-		if resp.OutputSentinelOneAiSiem.Endpoint != nil {
-			r.OutputSentinelOneAiSiem.Endpoint = types.StringValue(string(*resp.OutputSentinelOneAiSiem.Endpoint))
-		} else {
-			r.OutputSentinelOneAiSiem.Endpoint = types.StringNull()
-		}
+		r.OutputSentinelOneAiSiem.Endpoint = types.StringValue(string(resp.OutputSentinelOneAiSiem.Endpoint))
 		r.OutputSentinelOneAiSiem.Environment = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Environment)
+		r.Environment = r.OutputSentinelOneAiSiem.Environment
 		r.OutputSentinelOneAiSiem.EventType = types.StringPointerValue(resp.OutputSentinelOneAiSiem.EventType)
 		r.OutputSentinelOneAiSiem.EventTypeExpression = types.StringPointerValue(resp.OutputSentinelOneAiSiem.EventTypeExpression)
-		r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = []tfTypes.OutputSentinelOneAiSiemExtraHTTPHeader{}
+		r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem22 := range resp.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
-			var extraHTTPHeaders22 tfTypes.OutputSentinelOneAiSiemExtraHTTPHeader
+		for _, extraHTTPHeadersItem24 := range resp.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
+			var extraHTTPHeaders24 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
-			extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
+			extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
+			extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
 
-			r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders22)
+			r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders24)
 		}
 		if resp.OutputSentinelOneAiSiem.FailedRequestLoggingMode != nil {
 			r.OutputSentinelOneAiSiem.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSentinelOneAiSiem.FailedRequestLoggingMode))
@@ -5639,6 +6884,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSentinelOneAiSiem.OnBackpressure = types.StringNull()
 		}
 		r.OutputSentinelOneAiSiem.Pipeline = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Pipeline)
+		r.Pipeline = r.OutputSentinelOneAiSiem.Pipeline
 		if resp.OutputSentinelOneAiSiem.PqCompress != nil {
 			r.OutputSentinelOneAiSiem.PqCompress = types.StringValue(string(*resp.OutputSentinelOneAiSiem.PqCompress))
 		} else {
@@ -5651,6 +6897,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputSentinelOneAiSiem.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.PqMaxBackpressureSec)
 		r.OutputSentinelOneAiSiem.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.PqMaxBufferSize)
+		r.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes)
 		r.OutputSentinelOneAiSiem.PqMaxFileSize = types.StringPointerValue(resp.OutputSentinelOneAiSiem.PqMaxFileSize)
 		r.OutputSentinelOneAiSiem.PqMaxSize = types.StringPointerValue(resp.OutputSentinelOneAiSiem.PqMaxSize)
 		if resp.OutputSentinelOneAiSiem.PqMode != nil {
@@ -5666,24 +6913,20 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSentinelOneAiSiem.PqPath = types.StringPointerValue(resp.OutputSentinelOneAiSiem.PqPath)
 		r.OutputSentinelOneAiSiem.PqRatePerSec = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.PqRatePerSec)
 		r.OutputSentinelOneAiSiem.PqStrictOrdering = types.BoolPointerValue(resp.OutputSentinelOneAiSiem.PqStrictOrdering)
-		if resp.OutputSentinelOneAiSiem.Region != nil {
-			r.OutputSentinelOneAiSiem.Region = types.StringValue(string(*resp.OutputSentinelOneAiSiem.Region))
-		} else {
-			r.OutputSentinelOneAiSiem.Region = types.StringNull()
-		}
+		r.OutputSentinelOneAiSiem.Region = types.StringValue(string(resp.OutputSentinelOneAiSiem.Region))
 		r.OutputSentinelOneAiSiem.RejectUnauthorized = types.BoolPointerValue(resp.OutputSentinelOneAiSiem.RejectUnauthorized)
 		r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader)
-		r.OutputSentinelOneAiSiem.ResponseRetrySettings = []tfTypes.OutputSentinelOneAiSiemResponseRetrySetting{}
+		r.OutputSentinelOneAiSiem.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem23 := range resp.OutputSentinelOneAiSiem.ResponseRetrySettings {
-			var responseRetrySettings23 tfTypes.OutputSentinelOneAiSiemResponseRetrySetting
+		for _, responseRetrySettingsItem25 := range resp.OutputSentinelOneAiSiem.ResponseRetrySettings {
+			var responseRetrySettings25 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
-			responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
-			responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
-			responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
+			responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
+			responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
+			responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
+			responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
 
-			r.OutputSentinelOneAiSiem.ResponseRetrySettings = append(r.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings23)
+			r.OutputSentinelOneAiSiem.ResponseRetrySettings = append(r.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings25)
 		}
 		r.OutputSentinelOneAiSiem.SafeHeaders = make([]types.String, 0, len(resp.OutputSentinelOneAiSiem.SafeHeaders))
 		for _, v := range resp.OutputSentinelOneAiSiem.SafeHeaders {
@@ -5705,15 +6948,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSentinelOneAiSiem.TimeoutRetrySettings == nil {
 			r.OutputSentinelOneAiSiem.TimeoutRetrySettings = nil
 		} else {
-			r.OutputSentinelOneAiSiem.TimeoutRetrySettings = &tfTypes.OutputSentinelOneAiSiemTimeoutRetrySettings{}
+			r.OutputSentinelOneAiSiem.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate)
 			r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff)
 			r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff)
-			r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputSentinelOneAiSiem.TimeoutSec = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.TimeoutSec)
 		r.OutputSentinelOneAiSiem.Token = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Token)
 		r.OutputSentinelOneAiSiem.Type = types.StringValue(string(resp.OutputSentinelOneAiSiem.Type))
+		r.Type = r.OutputSentinelOneAiSiem.Type
 	}
 	if resp.OutputServiceNow != nil {
 		r.OutputServiceNow = &tfTypes.OutputServiceNow{}
@@ -5726,17 +6970,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputServiceNow.Concurrency = types.Float64PointerValue(resp.OutputServiceNow.Concurrency)
 		r.OutputServiceNow.ConnectionTimeout = types.Float64PointerValue(resp.OutputServiceNow.ConnectionTimeout)
 		r.OutputServiceNow.Description = types.StringPointerValue(resp.OutputServiceNow.Description)
-		r.OutputServiceNow.Endpoint = types.StringPointerValue(resp.OutputServiceNow.Endpoint)
+		r.OutputServiceNow.Endpoint = types.StringValue(resp.OutputServiceNow.Endpoint)
 		r.OutputServiceNow.Environment = types.StringPointerValue(resp.OutputServiceNow.Environment)
-		r.OutputServiceNow.ExtraHTTPHeaders = []tfTypes.OutputServiceNowExtraHTTPHeader{}
+		r.Environment = r.OutputServiceNow.Environment
+		r.OutputServiceNow.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem23 := range resp.OutputServiceNow.ExtraHTTPHeaders {
-			var extraHTTPHeaders23 tfTypes.OutputServiceNowExtraHTTPHeader
+		for _, extraHTTPHeadersItem25 := range resp.OutputServiceNow.ExtraHTTPHeaders {
+			var extraHTTPHeaders25 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
-			extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
+			extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
+			extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
 
-			r.OutputServiceNow.ExtraHTTPHeaders = append(r.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders23)
+			r.OutputServiceNow.ExtraHTTPHeaders = append(r.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders25)
 		}
 		if resp.OutputServiceNow.FailedRequestLoggingMode != nil {
 			r.OutputServiceNow.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputServiceNow.FailedRequestLoggingMode))
@@ -5757,12 +7002,12 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputServiceNow.KeepAlive = types.BoolPointerValue(resp.OutputServiceNow.KeepAlive)
 		r.OutputServiceNow.KeepAliveTime = types.Float64PointerValue(resp.OutputServiceNow.KeepAliveTime)
 		r.OutputServiceNow.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputServiceNow.MaxPayloadSizeKB)
-		r.OutputServiceNow.Metadata = []tfTypes.OutputServiceNowMetadatum{}
+		r.OutputServiceNow.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, metadataItem3 := range resp.OutputServiceNow.Metadata {
-			var metadata3 tfTypes.OutputServiceNowMetadatum
+			var metadata3 tfTypes.ItemsTypeKeyValueMetadata
 
-			metadata3.Key = types.StringPointerValue(metadataItem3.Key)
+			metadata3.Key = types.StringValue(metadataItem3.Key)
 			metadata3.Value = types.StringValue(metadataItem3.Value)
 
 			r.OutputServiceNow.Metadata = append(r.OutputServiceNow.Metadata, metadata3)
@@ -5772,12 +7017,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputServiceNow.OnBackpressure = types.StringNull()
 		}
-		if resp.OutputServiceNow.OtlpVersion != nil {
-			r.OutputServiceNow.OtlpVersion = types.StringValue(string(*resp.OutputServiceNow.OtlpVersion))
-		} else {
-			r.OutputServiceNow.OtlpVersion = types.StringNull()
-		}
+		r.OutputServiceNow.OtlpVersion = types.StringValue(string(resp.OutputServiceNow.OtlpVersion))
 		r.OutputServiceNow.Pipeline = types.StringPointerValue(resp.OutputServiceNow.Pipeline)
+		r.Pipeline = r.OutputServiceNow.Pipeline
 		if resp.OutputServiceNow.PqCompress != nil {
 			r.OutputServiceNow.PqCompress = types.StringValue(string(*resp.OutputServiceNow.PqCompress))
 		} else {
@@ -5788,6 +7030,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputServiceNow.PqControls = &tfTypes.OutputServiceNowPqControls{}
 		}
+		r.OutputServiceNow.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputServiceNow.PqMaxBackpressureSec)
+		r.OutputServiceNow.PqMaxBufferSize = types.Float64PointerValue(resp.OutputServiceNow.PqMaxBufferSize)
+		r.OutputServiceNow.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputServiceNow.PqMaxBufferSizeBytes)
 		r.OutputServiceNow.PqMaxFileSize = types.StringPointerValue(resp.OutputServiceNow.PqMaxFileSize)
 		r.OutputServiceNow.PqMaxSize = types.StringPointerValue(resp.OutputServiceNow.PqMaxSize)
 		if resp.OutputServiceNow.PqMode != nil {
@@ -5801,24 +7046,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputServiceNow.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputServiceNow.PqPath = types.StringPointerValue(resp.OutputServiceNow.PqPath)
-		if resp.OutputServiceNow.Protocol != nil {
-			r.OutputServiceNow.Protocol = types.StringValue(string(*resp.OutputServiceNow.Protocol))
-		} else {
-			r.OutputServiceNow.Protocol = types.StringNull()
-		}
+		r.OutputServiceNow.PqRatePerSec = types.Float64PointerValue(resp.OutputServiceNow.PqRatePerSec)
+		r.OutputServiceNow.PqStrictOrdering = types.BoolPointerValue(resp.OutputServiceNow.PqStrictOrdering)
+		r.OutputServiceNow.Protocol = types.StringValue(string(resp.OutputServiceNow.Protocol))
 		r.OutputServiceNow.RejectUnauthorized = types.BoolPointerValue(resp.OutputServiceNow.RejectUnauthorized)
 		r.OutputServiceNow.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputServiceNow.ResponseHonorRetryAfterHeader)
-		r.OutputServiceNow.ResponseRetrySettings = []tfTypes.OutputServiceNowResponseRetrySetting{}
+		r.OutputServiceNow.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem24 := range resp.OutputServiceNow.ResponseRetrySettings {
-			var responseRetrySettings24 tfTypes.OutputServiceNowResponseRetrySetting
+		for _, responseRetrySettingsItem26 := range resp.OutputServiceNow.ResponseRetrySettings {
+			var responseRetrySettings26 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
-			responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
-			responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
-			responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
+			responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
+			responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
+			responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
+			responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
 
-			r.OutputServiceNow.ResponseRetrySettings = append(r.OutputServiceNow.ResponseRetrySettings, responseRetrySettings24)
+			r.OutputServiceNow.ResponseRetrySettings = append(r.OutputServiceNow.ResponseRetrySettings, responseRetrySettings26)
 		}
 		r.OutputServiceNow.SafeHeaders = make([]types.String, 0, len(resp.OutputServiceNow.SafeHeaders))
 		for _, v := range resp.OutputServiceNow.SafeHeaders {
@@ -5835,17 +7078,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputServiceNow.TimeoutRetrySettings == nil {
 			r.OutputServiceNow.TimeoutRetrySettings = nil
 		} else {
-			r.OutputServiceNow.TimeoutRetrySettings = &tfTypes.OutputServiceNowTimeoutRetrySettings{}
+			r.OutputServiceNow.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputServiceNow.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputServiceNow.TimeoutRetrySettings.BackoffRate)
 			r.OutputServiceNow.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputServiceNow.TimeoutRetrySettings.InitialBackoff)
 			r.OutputServiceNow.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputServiceNow.TimeoutRetrySettings.MaxBackoff)
-			r.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputServiceNow.TimeoutSec = types.Float64PointerValue(resp.OutputServiceNow.TimeoutSec)
 		if resp.OutputServiceNow.TLS == nil {
 			r.OutputServiceNow.TLS = nil
 		} else {
-			r.OutputServiceNow.TLS = &tfTypes.OutputServiceNowTLSSettingsClientSide{}
+			r.OutputServiceNow.TLS = &tfTypes.TLSSettingsClientSideTypeExtended{}
 			r.OutputServiceNow.TLS.CaPath = types.StringPointerValue(resp.OutputServiceNow.TLS.CaPath)
 			r.OutputServiceNow.TLS.CertificateName = types.StringPointerValue(resp.OutputServiceNow.TLS.CertificateName)
 			r.OutputServiceNow.TLS.CertPath = types.StringPointerValue(resp.OutputServiceNow.TLS.CertPath)
@@ -5865,11 +7108,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputServiceNow.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputServiceNow.TLS.RejectUnauthorized)
 		}
 		r.OutputServiceNow.TokenSecret = types.StringValue(resp.OutputServiceNow.TokenSecret)
-		if resp.OutputServiceNow.Type != nil {
-			r.OutputServiceNow.Type = types.StringValue(string(*resp.OutputServiceNow.Type))
-		} else {
-			r.OutputServiceNow.Type = types.StringNull()
-		}
+		r.OutputServiceNow.Type = types.StringValue(string(resp.OutputServiceNow.Type))
+		r.Type = r.OutputServiceNow.Type
 		r.OutputServiceNow.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputServiceNow.UseRoundRobinDNS)
 	}
 	if resp.OutputSignalfx != nil {
@@ -5883,15 +7123,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSignalfx.Concurrency = types.Float64PointerValue(resp.OutputSignalfx.Concurrency)
 		r.OutputSignalfx.Description = types.StringPointerValue(resp.OutputSignalfx.Description)
 		r.OutputSignalfx.Environment = types.StringPointerValue(resp.OutputSignalfx.Environment)
-		r.OutputSignalfx.ExtraHTTPHeaders = []tfTypes.OutputSignalfxExtraHTTPHeader{}
+		r.Environment = r.OutputSignalfx.Environment
+		r.OutputSignalfx.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem24 := range resp.OutputSignalfx.ExtraHTTPHeaders {
-			var extraHTTPHeaders24 tfTypes.OutputSignalfxExtraHTTPHeader
+		for _, extraHTTPHeadersItem26 := range resp.OutputSignalfx.ExtraHTTPHeaders {
+			var extraHTTPHeaders26 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
-			extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
+			extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
+			extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
 
-			r.OutputSignalfx.ExtraHTTPHeaders = append(r.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders24)
+			r.OutputSignalfx.ExtraHTTPHeaders = append(r.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders26)
 		}
 		if resp.OutputSignalfx.FailedRequestLoggingMode != nil {
 			r.OutputSignalfx.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSignalfx.FailedRequestLoggingMode))
@@ -5909,6 +7150,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSignalfx.OnBackpressure = types.StringNull()
 		}
 		r.OutputSignalfx.Pipeline = types.StringPointerValue(resp.OutputSignalfx.Pipeline)
+		r.Pipeline = r.OutputSignalfx.Pipeline
 		if resp.OutputSignalfx.PqCompress != nil {
 			r.OutputSignalfx.PqCompress = types.StringValue(string(*resp.OutputSignalfx.PqCompress))
 		} else {
@@ -5919,6 +7161,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSignalfx.PqControls = &tfTypes.OutputSignalfxPqControls{}
 		}
+		r.OutputSignalfx.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSignalfx.PqMaxBackpressureSec)
+		r.OutputSignalfx.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSignalfx.PqMaxBufferSize)
+		r.OutputSignalfx.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSignalfx.PqMaxBufferSizeBytes)
 		r.OutputSignalfx.PqMaxFileSize = types.StringPointerValue(resp.OutputSignalfx.PqMaxFileSize)
 		r.OutputSignalfx.PqMaxSize = types.StringPointerValue(resp.OutputSignalfx.PqMaxSize)
 		if resp.OutputSignalfx.PqMode != nil {
@@ -5932,20 +7177,22 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSignalfx.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSignalfx.PqPath = types.StringPointerValue(resp.OutputSignalfx.PqPath)
-		r.OutputSignalfx.Realm = types.StringPointerValue(resp.OutputSignalfx.Realm)
+		r.OutputSignalfx.PqRatePerSec = types.Float64PointerValue(resp.OutputSignalfx.PqRatePerSec)
+		r.OutputSignalfx.PqStrictOrdering = types.BoolPointerValue(resp.OutputSignalfx.PqStrictOrdering)
+		r.OutputSignalfx.Realm = types.StringValue(resp.OutputSignalfx.Realm)
 		r.OutputSignalfx.RejectUnauthorized = types.BoolPointerValue(resp.OutputSignalfx.RejectUnauthorized)
 		r.OutputSignalfx.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSignalfx.ResponseHonorRetryAfterHeader)
-		r.OutputSignalfx.ResponseRetrySettings = []tfTypes.OutputSignalfxResponseRetrySetting{}
+		r.OutputSignalfx.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem25 := range resp.OutputSignalfx.ResponseRetrySettings {
-			var responseRetrySettings25 tfTypes.OutputSignalfxResponseRetrySetting
+		for _, responseRetrySettingsItem27 := range resp.OutputSignalfx.ResponseRetrySettings {
+			var responseRetrySettings27 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
-			responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
-			responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
-			responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
+			responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
+			responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
+			responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
+			responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
 
-			r.OutputSignalfx.ResponseRetrySettings = append(r.OutputSignalfx.ResponseRetrySettings, responseRetrySettings25)
+			r.OutputSignalfx.ResponseRetrySettings = append(r.OutputSignalfx.ResponseRetrySettings, responseRetrySettings27)
 		}
 		r.OutputSignalfx.SafeHeaders = make([]types.String, 0, len(resp.OutputSignalfx.SafeHeaders))
 		for _, v := range resp.OutputSignalfx.SafeHeaders {
@@ -5963,15 +7210,16 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSignalfx.TimeoutRetrySettings == nil {
 			r.OutputSignalfx.TimeoutRetrySettings = nil
 		} else {
-			r.OutputSignalfx.TimeoutRetrySettings = &tfTypes.OutputSignalfxTimeoutRetrySettings{}
+			r.OutputSignalfx.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputSignalfx.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputSignalfx.TimeoutRetrySettings.BackoffRate)
 			r.OutputSignalfx.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputSignalfx.TimeoutRetrySettings.InitialBackoff)
 			r.OutputSignalfx.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputSignalfx.TimeoutRetrySettings.MaxBackoff)
-			r.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputSignalfx.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputSignalfx.TimeoutSec = types.Float64PointerValue(resp.OutputSignalfx.TimeoutSec)
 		r.OutputSignalfx.Token = types.StringPointerValue(resp.OutputSignalfx.Token)
 		r.OutputSignalfx.Type = types.StringValue(string(resp.OutputSignalfx.Type))
+		r.Type = r.OutputSignalfx.Type
 		r.OutputSignalfx.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSignalfx.UseRoundRobinDNS)
 	}
 	if resp.OutputSnmp != nil {
@@ -5979,19 +7227,23 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSnmp.Description = types.StringPointerValue(resp.OutputSnmp.Description)
 		r.OutputSnmp.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSnmp.DNSResolvePeriodSec)
 		r.OutputSnmp.Environment = types.StringPointerValue(resp.OutputSnmp.Environment)
+		r.Environment = r.OutputSnmp.Environment
 		r.OutputSnmp.Hosts = []tfTypes.OutputSnmpHost{}
 
 		for _, hostsItem2 := range resp.OutputSnmp.Hosts {
 			var hosts2 tfTypes.OutputSnmpHost
 
+			hosts2.TemplateHost = types.StringPointerValue(hostsItem2.TemplateHost)
+			hosts2.TemplatePort = types.StringPointerValue(hostsItem2.TemplatePort)
 			hosts2.Host = types.StringValue(hostsItem2.Host)
-			hosts2.Port = types.Float64PointerValue(hostsItem2.Port)
+			hosts2.Port = types.Float64Value(hostsItem2.Port)
 
 			r.OutputSnmp.Hosts = append(r.OutputSnmp.Hosts, hosts2)
 		}
 		r.OutputSnmp.ID = types.StringPointerValue(resp.OutputSnmp.ID)
 		r.ID = r.OutputSnmp.ID
 		r.OutputSnmp.Pipeline = types.StringPointerValue(resp.OutputSnmp.Pipeline)
+		r.Pipeline = r.OutputSnmp.Pipeline
 		r.OutputSnmp.Streamtags = make([]types.String, 0, len(resp.OutputSnmp.Streamtags))
 		for _, v := range resp.OutputSnmp.Streamtags {
 			r.OutputSnmp.Streamtags = append(r.OutputSnmp.Streamtags, types.StringValue(v))
@@ -6001,9 +7253,15 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSnmp.SystemFields = append(r.OutputSnmp.SystemFields, types.StringValue(v))
 		}
 		r.OutputSnmp.Type = types.StringValue(string(resp.OutputSnmp.Type))
+		r.Type = r.OutputSnmp.Type
 	}
 	if resp.OutputSns != nil {
 		r.OutputSns = &tfTypes.OutputSns{}
+		r.OutputSns.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSns.TemplateAssumeRoleArn)
+		r.OutputSns.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSns.TemplateAssumeRoleExternalID)
+		r.OutputSns.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSns.TemplateAwsAPIKey)
+		r.OutputSns.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSns.TemplateAwsSecretKey)
+		r.OutputSns.TemplateRegion = types.StringPointerValue(resp.OutputSns.TemplateRegion)
 		r.OutputSns.AssumeRoleArn = types.StringPointerValue(resp.OutputSns.AssumeRoleArn)
 		r.OutputSns.AssumeRoleExternalID = types.StringPointerValue(resp.OutputSns.AssumeRoleExternalID)
 		r.OutputSns.AwsAPIKey = types.StringPointerValue(resp.OutputSns.AwsAPIKey)
@@ -6019,6 +7277,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSns.EnableAssumeRole = types.BoolPointerValue(resp.OutputSns.EnableAssumeRole)
 		r.OutputSns.Endpoint = types.StringPointerValue(resp.OutputSns.Endpoint)
 		r.OutputSns.Environment = types.StringPointerValue(resp.OutputSns.Environment)
+		r.Environment = r.OutputSns.Environment
 		r.OutputSns.ID = types.StringPointerValue(resp.OutputSns.ID)
 		r.ID = r.OutputSns.ID
 		r.OutputSns.MaxRetries = types.Float64PointerValue(resp.OutputSns.MaxRetries)
@@ -6029,6 +7288,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSns.OnBackpressure = types.StringNull()
 		}
 		r.OutputSns.Pipeline = types.StringPointerValue(resp.OutputSns.Pipeline)
+		r.Pipeline = r.OutputSns.Pipeline
 		if resp.OutputSns.PqCompress != nil {
 			r.OutputSns.PqCompress = types.StringValue(string(*resp.OutputSns.PqCompress))
 		} else {
@@ -6039,6 +7299,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSns.PqControls = &tfTypes.OutputSnsPqControls{}
 		}
+		r.OutputSns.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSns.PqMaxBackpressureSec)
+		r.OutputSns.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSns.PqMaxBufferSize)
+		r.OutputSns.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSns.PqMaxBufferSizeBytes)
 		r.OutputSns.PqMaxFileSize = types.StringPointerValue(resp.OutputSns.PqMaxFileSize)
 		r.OutputSns.PqMaxSize = types.StringPointerValue(resp.OutputSns.PqMaxSize)
 		if resp.OutputSns.PqMode != nil {
@@ -6052,6 +7315,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSns.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSns.PqPath = types.StringPointerValue(resp.OutputSns.PqPath)
+		r.OutputSns.PqRatePerSec = types.Float64PointerValue(resp.OutputSns.PqRatePerSec)
+		r.OutputSns.PqStrictOrdering = types.BoolPointerValue(resp.OutputSns.PqStrictOrdering)
 		r.OutputSns.Region = types.StringPointerValue(resp.OutputSns.Region)
 		r.OutputSns.RejectUnauthorized = types.BoolPointerValue(resp.OutputSns.RejectUnauthorized)
 		r.OutputSns.ReuseConnections = types.BoolPointerValue(resp.OutputSns.ReuseConnections)
@@ -6069,14 +7334,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSns.SystemFields = append(r.OutputSns.SystemFields, types.StringValue(v))
 		}
 		r.OutputSns.TopicArn = types.StringValue(resp.OutputSns.TopicArn)
-		if resp.OutputSns.Type != nil {
-			r.OutputSns.Type = types.StringValue(string(*resp.OutputSns.Type))
-		} else {
-			r.OutputSns.Type = types.StringNull()
-		}
+		r.OutputSns.Type = types.StringValue(string(resp.OutputSns.Type))
+		r.Type = r.OutputSns.Type
 	}
 	if resp.OutputSplunk != nil {
 		r.OutputSplunk = &tfTypes.OutputSplunk{}
+		r.OutputSplunk.TemplateHost = types.StringPointerValue(resp.OutputSplunk.TemplateHost)
+		r.OutputSplunk.TemplatePort = types.StringPointerValue(resp.OutputSplunk.TemplatePort)
 		r.OutputSplunk.AuthToken = types.StringPointerValue(resp.OutputSplunk.AuthToken)
 		if resp.OutputSplunk.AuthType != nil {
 			r.OutputSplunk.AuthType = types.StringValue(string(*resp.OutputSplunk.AuthType))
@@ -6093,6 +7357,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSplunk.EnableACK = types.BoolPointerValue(resp.OutputSplunk.EnableACK)
 		r.OutputSplunk.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunk.EnableMultiMetrics)
 		r.OutputSplunk.Environment = types.StringPointerValue(resp.OutputSplunk.Environment)
+		r.Environment = r.OutputSplunk.Environment
 		r.OutputSplunk.Host = types.StringValue(resp.OutputSplunk.Host)
 		r.OutputSplunk.ID = types.StringPointerValue(resp.OutputSplunk.ID)
 		r.ID = r.OutputSplunk.ID
@@ -6114,7 +7379,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunk.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunk.Pipeline = types.StringPointerValue(resp.OutputSplunk.Pipeline)
-		r.OutputSplunk.Port = types.Float64PointerValue(resp.OutputSplunk.Port)
+		r.Pipeline = r.OutputSplunk.Pipeline
+		r.OutputSplunk.Port = types.Float64Value(resp.OutputSplunk.Port)
 		if resp.OutputSplunk.PqCompress != nil {
 			r.OutputSplunk.PqCompress = types.StringValue(string(*resp.OutputSplunk.PqCompress))
 		} else {
@@ -6125,6 +7391,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSplunk.PqControls = &tfTypes.OutputSplunkPqControls{}
 		}
+		r.OutputSplunk.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSplunk.PqMaxBackpressureSec)
+		r.OutputSplunk.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSplunk.PqMaxBufferSize)
+		r.OutputSplunk.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSplunk.PqMaxBufferSizeBytes)
 		r.OutputSplunk.PqMaxFileSize = types.StringPointerValue(resp.OutputSplunk.PqMaxFileSize)
 		r.OutputSplunk.PqMaxSize = types.StringPointerValue(resp.OutputSplunk.PqMaxSize)
 		if resp.OutputSplunk.PqMode != nil {
@@ -6138,6 +7407,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunk.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSplunk.PqPath = types.StringPointerValue(resp.OutputSplunk.PqPath)
+		r.OutputSplunk.PqRatePerSec = types.Float64PointerValue(resp.OutputSplunk.PqRatePerSec)
+		r.OutputSplunk.PqStrictOrdering = types.BoolPointerValue(resp.OutputSplunk.PqStrictOrdering)
 		r.OutputSplunk.Streamtags = make([]types.String, 0, len(resp.OutputSplunk.Streamtags))
 		for _, v := range resp.OutputSplunk.Streamtags {
 			r.OutputSplunk.Streamtags = append(r.OutputSplunk.Streamtags, types.StringValue(v))
@@ -6151,7 +7422,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSplunk.TLS == nil {
 			r.OutputSplunk.TLS = nil
 		} else {
-			r.OutputSplunk.TLS = &tfTypes.OutputSplunkTLSSettingsClientSide{}
+			r.OutputSplunk.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputSplunk.TLS.CaPath = types.StringPointerValue(resp.OutputSplunk.TLS.CaPath)
 			r.OutputSplunk.TLS.CertificateName = types.StringPointerValue(resp.OutputSplunk.TLS.CertificateName)
 			r.OutputSplunk.TLS.CertPath = types.StringPointerValue(resp.OutputSplunk.TLS.CertPath)
@@ -6171,15 +7442,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunk.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputSplunk.TLS.RejectUnauthorized)
 			r.OutputSplunk.TLS.Servername = types.StringPointerValue(resp.OutputSplunk.TLS.Servername)
 		}
-		if resp.OutputSplunk.Type != nil {
-			r.OutputSplunk.Type = types.StringValue(string(*resp.OutputSplunk.Type))
-		} else {
-			r.OutputSplunk.Type = types.StringNull()
-		}
+		r.OutputSplunk.Type = types.StringValue(string(resp.OutputSplunk.Type))
+		r.Type = r.OutputSplunk.Type
 		r.OutputSplunk.WriteTimeout = types.Float64PointerValue(resp.OutputSplunk.WriteTimeout)
 	}
 	if resp.OutputSplunkHec != nil {
 		r.OutputSplunkHec = &tfTypes.OutputSplunkHec{}
+		r.OutputSplunkHec.TemplateURL = types.StringPointerValue(resp.OutputSplunkHec.TemplateURL)
 		if resp.OutputSplunkHec.AuthType != nil {
 			r.OutputSplunkHec.AuthType = types.StringValue(string(*resp.OutputSplunkHec.AuthType))
 		} else {
@@ -6191,16 +7460,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSplunkHec.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.DNSResolvePeriodSec)
 		r.OutputSplunkHec.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunkHec.EnableMultiMetrics)
 		r.OutputSplunkHec.Environment = types.StringPointerValue(resp.OutputSplunkHec.Environment)
+		r.Environment = r.OutputSplunkHec.Environment
 		r.OutputSplunkHec.ExcludeSelf = types.BoolPointerValue(resp.OutputSplunkHec.ExcludeSelf)
-		r.OutputSplunkHec.ExtraHTTPHeaders = []tfTypes.OutputSplunkHecExtraHTTPHeader{}
+		r.OutputSplunkHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem25 := range resp.OutputSplunkHec.ExtraHTTPHeaders {
-			var extraHTTPHeaders25 tfTypes.OutputSplunkHecExtraHTTPHeader
+		for _, extraHTTPHeadersItem27 := range resp.OutputSplunkHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders27 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
-			extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
+			extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
+			extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
 
-			r.OutputSplunkHec.ExtraHTTPHeaders = append(r.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders25)
+			r.OutputSplunkHec.ExtraHTTPHeaders = append(r.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders27)
 		}
 		if resp.OutputSplunkHec.FailedRequestLoggingMode != nil {
 			r.OutputSplunkHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSplunkHec.FailedRequestLoggingMode))
@@ -6208,7 +7478,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkHec.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputSplunkHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.FlushPeriodSec)
-		r.OutputSplunkHec.ID = types.StringValue(resp.OutputSplunkHec.ID)
+		r.OutputSplunkHec.ID = types.StringPointerValue(resp.OutputSplunkHec.ID)
 		r.ID = r.OutputSplunkHec.ID
 		r.OutputSplunkHec.LoadBalanced = types.BoolPointerValue(resp.OutputSplunkHec.LoadBalanced)
 		r.OutputSplunkHec.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.LoadBalanceStatsPeriodSec)
@@ -6221,6 +7491,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkHec.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkHec.Pipeline = types.StringPointerValue(resp.OutputSplunkHec.Pipeline)
+		r.Pipeline = r.OutputSplunkHec.Pipeline
 		if resp.OutputSplunkHec.PqCompress != nil {
 			r.OutputSplunkHec.PqCompress = types.StringValue(string(*resp.OutputSplunkHec.PqCompress))
 		} else {
@@ -6231,6 +7502,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSplunkHec.PqControls = &tfTypes.OutputSplunkHecPqControls{}
 		}
+		r.OutputSplunkHec.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSplunkHec.PqMaxBackpressureSec)
+		r.OutputSplunkHec.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSplunkHec.PqMaxBufferSize)
+		r.OutputSplunkHec.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSplunkHec.PqMaxBufferSizeBytes)
 		r.OutputSplunkHec.PqMaxFileSize = types.StringPointerValue(resp.OutputSplunkHec.PqMaxFileSize)
 		r.OutputSplunkHec.PqMaxSize = types.StringPointerValue(resp.OutputSplunkHec.PqMaxSize)
 		if resp.OutputSplunkHec.PqMode != nil {
@@ -6244,19 +7518,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkHec.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkHec.PqPath = types.StringPointerValue(resp.OutputSplunkHec.PqPath)
+		r.OutputSplunkHec.PqRatePerSec = types.Float64PointerValue(resp.OutputSplunkHec.PqRatePerSec)
+		r.OutputSplunkHec.PqStrictOrdering = types.BoolPointerValue(resp.OutputSplunkHec.PqStrictOrdering)
 		r.OutputSplunkHec.RejectUnauthorized = types.BoolPointerValue(resp.OutputSplunkHec.RejectUnauthorized)
 		r.OutputSplunkHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSplunkHec.ResponseHonorRetryAfterHeader)
-		r.OutputSplunkHec.ResponseRetrySettings = []tfTypes.OutputSplunkHecResponseRetrySetting{}
+		r.OutputSplunkHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem26 := range resp.OutputSplunkHec.ResponseRetrySettings {
-			var responseRetrySettings26 tfTypes.OutputSplunkHecResponseRetrySetting
+		for _, responseRetrySettingsItem28 := range resp.OutputSplunkHec.ResponseRetrySettings {
+			var responseRetrySettings28 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
-			responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
-			responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
-			responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
+			responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
+			responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
+			responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
+			responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
 
-			r.OutputSplunkHec.ResponseRetrySettings = append(r.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings26)
+			r.OutputSplunkHec.ResponseRetrySettings = append(r.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings28)
 		}
 		r.OutputSplunkHec.SafeHeaders = make([]types.String, 0, len(resp.OutputSplunkHec.SafeHeaders))
 		for _, v := range resp.OutputSplunkHec.SafeHeaders {
@@ -6275,25 +7551,49 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSplunkHec.TimeoutRetrySettings == nil {
 			r.OutputSplunkHec.TimeoutRetrySettings = nil
 		} else {
-			r.OutputSplunkHec.TimeoutRetrySettings = &tfTypes.OutputSplunkHecTimeoutRetrySettings{}
+			r.OutputSplunkHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputSplunkHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputSplunkHec.TimeoutRetrySettings.BackoffRate)
 			r.OutputSplunkHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputSplunkHec.TimeoutRetrySettings.InitialBackoff)
 			r.OutputSplunkHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputSplunkHec.TimeoutRetrySettings.MaxBackoff)
-			r.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputSplunkHec.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputSplunkHec.TimeoutSec = types.Float64PointerValue(resp.OutputSplunkHec.TimeoutSec)
+		if resp.OutputSplunkHec.TLS == nil {
+			r.OutputSplunkHec.TLS = nil
+		} else {
+			r.OutputSplunkHec.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+			r.OutputSplunkHec.TLS.CaPath = types.StringPointerValue(resp.OutputSplunkHec.TLS.CaPath)
+			r.OutputSplunkHec.TLS.CertificateName = types.StringPointerValue(resp.OutputSplunkHec.TLS.CertificateName)
+			r.OutputSplunkHec.TLS.CertPath = types.StringPointerValue(resp.OutputSplunkHec.TLS.CertPath)
+			r.OutputSplunkHec.TLS.Disabled = types.BoolPointerValue(resp.OutputSplunkHec.TLS.Disabled)
+			if resp.OutputSplunkHec.TLS.MaxVersion != nil {
+				r.OutputSplunkHec.TLS.MaxVersion = types.StringValue(string(*resp.OutputSplunkHec.TLS.MaxVersion))
+			} else {
+				r.OutputSplunkHec.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.OutputSplunkHec.TLS.MinVersion != nil {
+				r.OutputSplunkHec.TLS.MinVersion = types.StringValue(string(*resp.OutputSplunkHec.TLS.MinVersion))
+			} else {
+				r.OutputSplunkHec.TLS.MinVersion = types.StringNull()
+			}
+			r.OutputSplunkHec.TLS.Passphrase = types.StringPointerValue(resp.OutputSplunkHec.TLS.Passphrase)
+			r.OutputSplunkHec.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputSplunkHec.TLS.PrivKeyPath)
+			r.OutputSplunkHec.TLS.Servername = types.StringPointerValue(resp.OutputSplunkHec.TLS.Servername)
+		}
 		r.OutputSplunkHec.Token = types.StringPointerValue(resp.OutputSplunkHec.Token)
 		r.OutputSplunkHec.Type = types.StringValue(string(resp.OutputSplunkHec.Type))
+		r.Type = r.OutputSplunkHec.Type
 		r.OutputSplunkHec.URL = types.StringPointerValue(resp.OutputSplunkHec.URL)
 		r.OutputSplunkHec.Urls = []tfTypes.OutputSplunkHecURL{}
 
-		for _, urlsItem2 := range resp.OutputSplunkHec.Urls {
-			var urls2 tfTypes.OutputSplunkHecURL
+		for _, urlsItem3 := range resp.OutputSplunkHec.Urls {
+			var urls3 tfTypes.OutputSplunkHecURL
 
-			urls2.URL = types.StringPointerValue(urlsItem2.URL)
-			urls2.Weight = types.Float64PointerValue(urlsItem2.Weight)
+			urls3.TemplateURL = types.StringPointerValue(urlsItem3.TemplateURL)
+			urls3.URL = types.StringValue(urlsItem3.URL)
+			urls3.Weight = types.Float64PointerValue(urlsItem3.Weight)
 
-			r.OutputSplunkHec.Urls = append(r.OutputSplunkHec.Urls, urls2)
+			r.OutputSplunkHec.Urls = append(r.OutputSplunkHec.Urls, urls3)
 		}
 		r.OutputSplunkHec.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSplunkHec.UseRoundRobinDNS)
 	}
@@ -6316,14 +7616,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSplunkLb.EnableACK = types.BoolPointerValue(resp.OutputSplunkLb.EnableACK)
 		r.OutputSplunkLb.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunkLb.EnableMultiMetrics)
 		r.OutputSplunkLb.Environment = types.StringPointerValue(resp.OutputSplunkLb.Environment)
+		r.Environment = r.OutputSplunkLb.Environment
 		r.OutputSplunkLb.ExcludeSelf = types.BoolPointerValue(resp.OutputSplunkLb.ExcludeSelf)
-		r.OutputSplunkLb.Hosts = []tfTypes.OutputSplunkLbHost{}
+		r.OutputSplunkLb.Hosts = []tfTypes.ItemsTypeHosts{}
 
 		for _, hostsItem3 := range resp.OutputSplunkLb.Hosts {
-			var hosts3 tfTypes.OutputSplunkLbHost
+			var hosts3 tfTypes.ItemsTypeHosts
 
+			hosts3.TemplateHost = types.StringPointerValue(hostsItem3.TemplateHost)
+			hosts3.TemplatePort = types.StringPointerValue(hostsItem3.TemplatePort)
 			hosts3.Host = types.StringValue(hostsItem3.Host)
-			hosts3.Port = types.Float64PointerValue(hostsItem3.Port)
+			hosts3.Port = types.Float64Value(hostsItem3.Port)
 			hosts3.Servername = types.StringPointerValue(hostsItem3.Servername)
 			if hostsItem3.TLS != nil {
 				hosts3.TLS = types.StringValue(string(*hostsItem3.TLS))
@@ -6344,16 +7647,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthToken = types.StringPointerValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.AuthToken)
 			r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = []tfTypes.OutputSplunkLbAuthToken{}
 
-			for _, authTokensItem := range resp.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
-				var authTokens tfTypes.OutputSplunkLbAuthToken
+			for _, authTokensItem3 := range resp.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens {
+				var authTokens3 tfTypes.OutputSplunkLbAuthToken
 
-				if authTokensItem.AuthType != nil {
-					authTokens.AuthType = types.StringValue(string(*authTokensItem.AuthType))
+				authTokens3.AuthToken = types.StringPointerValue(authTokensItem3.AuthToken)
+				if authTokensItem3.AuthType != nil {
+					authTokens3.AuthType = types.StringValue(string(*authTokensItem3.AuthType))
 				} else {
-					authTokens.AuthType = types.StringNull()
+					authTokens3.AuthType = types.StringNull()
 				}
+				authTokens3.TextSecret = types.StringPointerValue(authTokensItem3.TextSecret)
 
-				r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = append(r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens, authTokens)
+				r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens = append(r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthTokens, authTokens3)
 			}
 			if resp.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType != nil {
 				r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType = types.StringValue(string(*resp.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType))
@@ -6361,9 +7666,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 				r.OutputSplunkLb.IndexerDiscoveryConfigs.AuthType = types.StringNull()
 			}
 			r.OutputSplunkLb.IndexerDiscoveryConfigs.MasterURI = types.StringValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.MasterURI)
-			r.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec = types.Float64PointerValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec)
+			r.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec = types.Float64Value(resp.OutputSplunkLb.IndexerDiscoveryConfigs.RefreshIntervalSec)
 			r.OutputSplunkLb.IndexerDiscoveryConfigs.RejectUnauthorized = types.BoolPointerValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.RejectUnauthorized)
-			r.OutputSplunkLb.IndexerDiscoveryConfigs.Site = types.StringPointerValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.Site)
+			r.OutputSplunkLb.IndexerDiscoveryConfigs.Site = types.StringValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.Site)
 			r.OutputSplunkLb.IndexerDiscoveryConfigs.TextSecret = types.StringPointerValue(resp.OutputSplunkLb.IndexerDiscoveryConfigs.TextSecret)
 		}
 		r.OutputSplunkLb.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputSplunkLb.LoadBalanceStatsPeriodSec)
@@ -6386,6 +7691,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkLb.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkLb.Pipeline = types.StringPointerValue(resp.OutputSplunkLb.Pipeline)
+		r.Pipeline = r.OutputSplunkLb.Pipeline
 		if resp.OutputSplunkLb.PqCompress != nil {
 			r.OutputSplunkLb.PqCompress = types.StringValue(string(*resp.OutputSplunkLb.PqCompress))
 		} else {
@@ -6396,6 +7702,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSplunkLb.PqControls = &tfTypes.OutputSplunkLbPqControls{}
 		}
+		r.OutputSplunkLb.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSplunkLb.PqMaxBackpressureSec)
+		r.OutputSplunkLb.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSplunkLb.PqMaxBufferSize)
+		r.OutputSplunkLb.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSplunkLb.PqMaxBufferSizeBytes)
 		r.OutputSplunkLb.PqMaxFileSize = types.StringPointerValue(resp.OutputSplunkLb.PqMaxFileSize)
 		r.OutputSplunkLb.PqMaxSize = types.StringPointerValue(resp.OutputSplunkLb.PqMaxSize)
 		if resp.OutputSplunkLb.PqMode != nil {
@@ -6409,6 +7718,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkLb.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkLb.PqPath = types.StringPointerValue(resp.OutputSplunkLb.PqPath)
+		r.OutputSplunkLb.PqRatePerSec = types.Float64PointerValue(resp.OutputSplunkLb.PqRatePerSec)
+		r.OutputSplunkLb.PqStrictOrdering = types.BoolPointerValue(resp.OutputSplunkLb.PqStrictOrdering)
 		r.OutputSplunkLb.SenderUnhealthyTimeAllowance = types.Float64PointerValue(resp.OutputSplunkLb.SenderUnhealthyTimeAllowance)
 		r.OutputSplunkLb.Streamtags = make([]types.String, 0, len(resp.OutputSplunkLb.Streamtags))
 		for _, v := range resp.OutputSplunkLb.Streamtags {
@@ -6423,7 +7734,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSplunkLb.TLS == nil {
 			r.OutputSplunkLb.TLS = nil
 		} else {
-			r.OutputSplunkLb.TLS = &tfTypes.OutputSplunkLbTLSSettingsClientSide{}
+			r.OutputSplunkLb.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputSplunkLb.TLS.CaPath = types.StringPointerValue(resp.OutputSplunkLb.TLS.CaPath)
 			r.OutputSplunkLb.TLS.CertificateName = types.StringPointerValue(resp.OutputSplunkLb.TLS.CertificateName)
 			r.OutputSplunkLb.TLS.CertPath = types.StringPointerValue(resp.OutputSplunkLb.TLS.CertPath)
@@ -6444,10 +7755,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSplunkLb.TLS.Servername = types.StringPointerValue(resp.OutputSplunkLb.TLS.Servername)
 		}
 		r.OutputSplunkLb.Type = types.StringValue(string(resp.OutputSplunkLb.Type))
+		r.Type = r.OutputSplunkLb.Type
 		r.OutputSplunkLb.WriteTimeout = types.Float64PointerValue(resp.OutputSplunkLb.WriteTimeout)
 	}
 	if resp.OutputSqs != nil {
 		r.OutputSqs = &tfTypes.OutputSqs{}
+		r.OutputSqs.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSqs.TemplateAssumeRoleArn)
+		r.OutputSqs.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSqs.TemplateAssumeRoleExternalID)
+		r.OutputSqs.TemplateAwsAccountID = types.StringPointerValue(resp.OutputSqs.TemplateAwsAccountID)
+		r.OutputSqs.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSqs.TemplateAwsAPIKey)
+		r.OutputSqs.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSqs.TemplateAwsSecretKey)
+		r.OutputSqs.TemplateQueueName = types.StringPointerValue(resp.OutputSqs.TemplateQueueName)
+		r.OutputSqs.TemplateRegion = types.StringPointerValue(resp.OutputSqs.TemplateRegion)
 		r.OutputSqs.AssumeRoleArn = types.StringPointerValue(resp.OutputSqs.AssumeRoleArn)
 		r.OutputSqs.AssumeRoleExternalID = types.StringPointerValue(resp.OutputSqs.AssumeRoleExternalID)
 		r.OutputSqs.AwsAccountID = types.StringPointerValue(resp.OutputSqs.AwsAccountID)
@@ -6465,6 +7784,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputSqs.EnableAssumeRole = types.BoolPointerValue(resp.OutputSqs.EnableAssumeRole)
 		r.OutputSqs.Endpoint = types.StringPointerValue(resp.OutputSqs.Endpoint)
 		r.OutputSqs.Environment = types.StringPointerValue(resp.OutputSqs.Environment)
+		r.Environment = r.OutputSqs.Environment
 		r.OutputSqs.FlushPeriodSec = types.Float64PointerValue(resp.OutputSqs.FlushPeriodSec)
 		r.OutputSqs.ID = types.StringPointerValue(resp.OutputSqs.ID)
 		r.ID = r.OutputSqs.ID
@@ -6478,6 +7798,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSqs.OnBackpressure = types.StringNull()
 		}
 		r.OutputSqs.Pipeline = types.StringPointerValue(resp.OutputSqs.Pipeline)
+		r.Pipeline = r.OutputSqs.Pipeline
 		if resp.OutputSqs.PqCompress != nil {
 			r.OutputSqs.PqCompress = types.StringValue(string(*resp.OutputSqs.PqCompress))
 		} else {
@@ -6488,6 +7809,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSqs.PqControls = &tfTypes.OutputSqsPqControls{}
 		}
+		r.OutputSqs.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSqs.PqMaxBackpressureSec)
+		r.OutputSqs.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSqs.PqMaxBufferSize)
+		r.OutputSqs.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSqs.PqMaxBufferSizeBytes)
 		r.OutputSqs.PqMaxFileSize = types.StringPointerValue(resp.OutputSqs.PqMaxFileSize)
 		r.OutputSqs.PqMaxSize = types.StringPointerValue(resp.OutputSqs.PqMaxSize)
 		if resp.OutputSqs.PqMode != nil {
@@ -6501,12 +7825,10 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSqs.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSqs.PqPath = types.StringPointerValue(resp.OutputSqs.PqPath)
+		r.OutputSqs.PqRatePerSec = types.Float64PointerValue(resp.OutputSqs.PqRatePerSec)
+		r.OutputSqs.PqStrictOrdering = types.BoolPointerValue(resp.OutputSqs.PqStrictOrdering)
 		r.OutputSqs.QueueName = types.StringValue(resp.OutputSqs.QueueName)
-		if resp.OutputSqs.QueueType != nil {
-			r.OutputSqs.QueueType = types.StringValue(string(*resp.OutputSqs.QueueType))
-		} else {
-			r.OutputSqs.QueueType = types.StringNull()
-		}
+		r.OutputSqs.QueueType = types.StringValue(string(resp.OutputSqs.QueueType))
 		r.OutputSqs.Region = types.StringPointerValue(resp.OutputSqs.Region)
 		r.OutputSqs.RejectUnauthorized = types.BoolPointerValue(resp.OutputSqs.RejectUnauthorized)
 		r.OutputSqs.ReuseConnections = types.BoolPointerValue(resp.OutputSqs.ReuseConnections)
@@ -6523,11 +7845,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		for _, v := range resp.OutputSqs.SystemFields {
 			r.OutputSqs.SystemFields = append(r.OutputSqs.SystemFields, types.StringValue(v))
 		}
-		if resp.OutputSqs.Type != nil {
-			r.OutputSqs.Type = types.StringValue(string(*resp.OutputSqs.Type))
-		} else {
-			r.OutputSqs.Type = types.StringNull()
-		}
+		r.OutputSqs.Type = types.StringValue(string(resp.OutputSqs.Type))
+		r.Type = r.OutputSqs.Type
 	}
 	if resp.OutputStatsd != nil {
 		r.OutputStatsd = &tfTypes.OutputStatsd{}
@@ -6535,6 +7854,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputStatsd.Description = types.StringPointerValue(resp.OutputStatsd.Description)
 		r.OutputStatsd.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputStatsd.DNSResolvePeriodSec)
 		r.OutputStatsd.Environment = types.StringPointerValue(resp.OutputStatsd.Environment)
+		r.Environment = r.OutputStatsd.Environment
 		r.OutputStatsd.FlushPeriodSec = types.Float64PointerValue(resp.OutputStatsd.FlushPeriodSec)
 		r.OutputStatsd.Host = types.StringValue(resp.OutputStatsd.Host)
 		r.OutputStatsd.ID = types.StringPointerValue(resp.OutputStatsd.ID)
@@ -6546,7 +7866,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsd.OnBackpressure = types.StringNull()
 		}
 		r.OutputStatsd.Pipeline = types.StringPointerValue(resp.OutputStatsd.Pipeline)
-		r.OutputStatsd.Port = types.Float64PointerValue(resp.OutputStatsd.Port)
+		r.Pipeline = r.OutputStatsd.Pipeline
+		r.OutputStatsd.Port = types.Float64Value(resp.OutputStatsd.Port)
 		if resp.OutputStatsd.PqCompress != nil {
 			r.OutputStatsd.PqCompress = types.StringValue(string(*resp.OutputStatsd.PqCompress))
 		} else {
@@ -6557,6 +7878,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputStatsd.PqControls = &tfTypes.OutputStatsdPqControls{}
 		}
+		r.OutputStatsd.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputStatsd.PqMaxBackpressureSec)
+		r.OutputStatsd.PqMaxBufferSize = types.Float64PointerValue(resp.OutputStatsd.PqMaxBufferSize)
+		r.OutputStatsd.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputStatsd.PqMaxBufferSizeBytes)
 		r.OutputStatsd.PqMaxFileSize = types.StringPointerValue(resp.OutputStatsd.PqMaxFileSize)
 		r.OutputStatsd.PqMaxSize = types.StringPointerValue(resp.OutputStatsd.PqMaxSize)
 		if resp.OutputStatsd.PqMode != nil {
@@ -6570,11 +7894,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsd.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputStatsd.PqPath = types.StringPointerValue(resp.OutputStatsd.PqPath)
-		if resp.OutputStatsd.Protocol != nil {
-			r.OutputStatsd.Protocol = types.StringValue(string(*resp.OutputStatsd.Protocol))
-		} else {
-			r.OutputStatsd.Protocol = types.StringNull()
-		}
+		r.OutputStatsd.PqRatePerSec = types.Float64PointerValue(resp.OutputStatsd.PqRatePerSec)
+		r.OutputStatsd.PqStrictOrdering = types.BoolPointerValue(resp.OutputStatsd.PqStrictOrdering)
+		r.OutputStatsd.Protocol = types.StringValue(string(resp.OutputStatsd.Protocol))
 		r.OutputStatsd.Streamtags = make([]types.String, 0, len(resp.OutputStatsd.Streamtags))
 		for _, v := range resp.OutputStatsd.Streamtags {
 			r.OutputStatsd.Streamtags = append(r.OutputStatsd.Streamtags, types.StringValue(v))
@@ -6584,11 +7906,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsd.SystemFields = append(r.OutputStatsd.SystemFields, types.StringValue(v))
 		}
 		r.OutputStatsd.ThrottleRatePerSec = types.StringPointerValue(resp.OutputStatsd.ThrottleRatePerSec)
-		if resp.OutputStatsd.Type != nil {
-			r.OutputStatsd.Type = types.StringValue(string(*resp.OutputStatsd.Type))
-		} else {
-			r.OutputStatsd.Type = types.StringNull()
-		}
+		r.OutputStatsd.Type = types.StringValue(string(resp.OutputStatsd.Type))
+		r.Type = r.OutputStatsd.Type
 		r.OutputStatsd.WriteTimeout = types.Float64PointerValue(resp.OutputStatsd.WriteTimeout)
 	}
 	if resp.OutputStatsdExt != nil {
@@ -6597,6 +7916,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputStatsdExt.Description = types.StringPointerValue(resp.OutputStatsdExt.Description)
 		r.OutputStatsdExt.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputStatsdExt.DNSResolvePeriodSec)
 		r.OutputStatsdExt.Environment = types.StringPointerValue(resp.OutputStatsdExt.Environment)
+		r.Environment = r.OutputStatsdExt.Environment
 		r.OutputStatsdExt.FlushPeriodSec = types.Float64PointerValue(resp.OutputStatsdExt.FlushPeriodSec)
 		r.OutputStatsdExt.Host = types.StringValue(resp.OutputStatsdExt.Host)
 		r.OutputStatsdExt.ID = types.StringPointerValue(resp.OutputStatsdExt.ID)
@@ -6608,7 +7928,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsdExt.OnBackpressure = types.StringNull()
 		}
 		r.OutputStatsdExt.Pipeline = types.StringPointerValue(resp.OutputStatsdExt.Pipeline)
-		r.OutputStatsdExt.Port = types.Float64PointerValue(resp.OutputStatsdExt.Port)
+		r.Pipeline = r.OutputStatsdExt.Pipeline
+		r.OutputStatsdExt.Port = types.Float64Value(resp.OutputStatsdExt.Port)
 		if resp.OutputStatsdExt.PqCompress != nil {
 			r.OutputStatsdExt.PqCompress = types.StringValue(string(*resp.OutputStatsdExt.PqCompress))
 		} else {
@@ -6619,6 +7940,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputStatsdExt.PqControls = &tfTypes.OutputStatsdExtPqControls{}
 		}
+		r.OutputStatsdExt.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputStatsdExt.PqMaxBackpressureSec)
+		r.OutputStatsdExt.PqMaxBufferSize = types.Float64PointerValue(resp.OutputStatsdExt.PqMaxBufferSize)
+		r.OutputStatsdExt.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputStatsdExt.PqMaxBufferSizeBytes)
 		r.OutputStatsdExt.PqMaxFileSize = types.StringPointerValue(resp.OutputStatsdExt.PqMaxFileSize)
 		r.OutputStatsdExt.PqMaxSize = types.StringPointerValue(resp.OutputStatsdExt.PqMaxSize)
 		if resp.OutputStatsdExt.PqMode != nil {
@@ -6632,11 +7956,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsdExt.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputStatsdExt.PqPath = types.StringPointerValue(resp.OutputStatsdExt.PqPath)
-		if resp.OutputStatsdExt.Protocol != nil {
-			r.OutputStatsdExt.Protocol = types.StringValue(string(*resp.OutputStatsdExt.Protocol))
-		} else {
-			r.OutputStatsdExt.Protocol = types.StringNull()
-		}
+		r.OutputStatsdExt.PqRatePerSec = types.Float64PointerValue(resp.OutputStatsdExt.PqRatePerSec)
+		r.OutputStatsdExt.PqStrictOrdering = types.BoolPointerValue(resp.OutputStatsdExt.PqStrictOrdering)
+		r.OutputStatsdExt.Protocol = types.StringValue(string(resp.OutputStatsdExt.Protocol))
 		r.OutputStatsdExt.Streamtags = make([]types.String, 0, len(resp.OutputStatsdExt.Streamtags))
 		for _, v := range resp.OutputStatsdExt.Streamtags {
 			r.OutputStatsdExt.Streamtags = append(r.OutputStatsdExt.Streamtags, types.StringValue(v))
@@ -6646,30 +7968,29 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputStatsdExt.SystemFields = append(r.OutputStatsdExt.SystemFields, types.StringValue(v))
 		}
 		r.OutputStatsdExt.ThrottleRatePerSec = types.StringPointerValue(resp.OutputStatsdExt.ThrottleRatePerSec)
-		if resp.OutputStatsdExt.Type != nil {
-			r.OutputStatsdExt.Type = types.StringValue(string(*resp.OutputStatsdExt.Type))
-		} else {
-			r.OutputStatsdExt.Type = types.StringNull()
-		}
+		r.OutputStatsdExt.Type = types.StringValue(string(resp.OutputStatsdExt.Type))
+		r.Type = r.OutputStatsdExt.Type
 		r.OutputStatsdExt.WriteTimeout = types.Float64PointerValue(resp.OutputStatsdExt.WriteTimeout)
 	}
 	if resp.OutputSumoLogic != nil {
 		r.OutputSumoLogic = &tfTypes.OutputSumoLogic{}
+		r.OutputSumoLogic.TemplateURL = types.StringPointerValue(resp.OutputSumoLogic.TemplateURL)
 		r.OutputSumoLogic.Compress = types.BoolPointerValue(resp.OutputSumoLogic.Compress)
 		r.OutputSumoLogic.Concurrency = types.Float64PointerValue(resp.OutputSumoLogic.Concurrency)
 		r.OutputSumoLogic.CustomCategory = types.StringPointerValue(resp.OutputSumoLogic.CustomCategory)
 		r.OutputSumoLogic.CustomSource = types.StringPointerValue(resp.OutputSumoLogic.CustomSource)
 		r.OutputSumoLogic.Description = types.StringPointerValue(resp.OutputSumoLogic.Description)
 		r.OutputSumoLogic.Environment = types.StringPointerValue(resp.OutputSumoLogic.Environment)
-		r.OutputSumoLogic.ExtraHTTPHeaders = []tfTypes.OutputSumoLogicExtraHTTPHeader{}
+		r.Environment = r.OutputSumoLogic.Environment
+		r.OutputSumoLogic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem26 := range resp.OutputSumoLogic.ExtraHTTPHeaders {
-			var extraHTTPHeaders26 tfTypes.OutputSumoLogicExtraHTTPHeader
+		for _, extraHTTPHeadersItem28 := range resp.OutputSumoLogic.ExtraHTTPHeaders {
+			var extraHTTPHeaders28 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
-			extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
+			extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
+			extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
 
-			r.OutputSumoLogic.ExtraHTTPHeaders = append(r.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders26)
+			r.OutputSumoLogic.ExtraHTTPHeaders = append(r.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders28)
 		}
 		if resp.OutputSumoLogic.FailedRequestLoggingMode != nil {
 			r.OutputSumoLogic.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSumoLogic.FailedRequestLoggingMode))
@@ -6692,6 +8013,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSumoLogic.OnBackpressure = types.StringNull()
 		}
 		r.OutputSumoLogic.Pipeline = types.StringPointerValue(resp.OutputSumoLogic.Pipeline)
+		r.Pipeline = r.OutputSumoLogic.Pipeline
 		if resp.OutputSumoLogic.PqCompress != nil {
 			r.OutputSumoLogic.PqCompress = types.StringValue(string(*resp.OutputSumoLogic.PqCompress))
 		} else {
@@ -6702,6 +8024,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSumoLogic.PqControls = &tfTypes.OutputSumoLogicPqControls{}
 		}
+		r.OutputSumoLogic.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSumoLogic.PqMaxBackpressureSec)
+		r.OutputSumoLogic.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSumoLogic.PqMaxBufferSize)
+		r.OutputSumoLogic.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSumoLogic.PqMaxBufferSizeBytes)
 		r.OutputSumoLogic.PqMaxFileSize = types.StringPointerValue(resp.OutputSumoLogic.PqMaxFileSize)
 		r.OutputSumoLogic.PqMaxSize = types.StringPointerValue(resp.OutputSumoLogic.PqMaxSize)
 		if resp.OutputSumoLogic.PqMode != nil {
@@ -6715,19 +8040,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSumoLogic.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSumoLogic.PqPath = types.StringPointerValue(resp.OutputSumoLogic.PqPath)
+		r.OutputSumoLogic.PqRatePerSec = types.Float64PointerValue(resp.OutputSumoLogic.PqRatePerSec)
+		r.OutputSumoLogic.PqStrictOrdering = types.BoolPointerValue(resp.OutputSumoLogic.PqStrictOrdering)
 		r.OutputSumoLogic.RejectUnauthorized = types.BoolPointerValue(resp.OutputSumoLogic.RejectUnauthorized)
 		r.OutputSumoLogic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSumoLogic.ResponseHonorRetryAfterHeader)
-		r.OutputSumoLogic.ResponseRetrySettings = []tfTypes.OutputSumoLogicResponseRetrySetting{}
+		r.OutputSumoLogic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem27 := range resp.OutputSumoLogic.ResponseRetrySettings {
-			var responseRetrySettings27 tfTypes.OutputSumoLogicResponseRetrySetting
+		for _, responseRetrySettingsItem29 := range resp.OutputSumoLogic.ResponseRetrySettings {
+			var responseRetrySettings29 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
-			responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
-			responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
-			responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
+			responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
+			responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
+			responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
+			responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
 
-			r.OutputSumoLogic.ResponseRetrySettings = append(r.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings27)
+			r.OutputSumoLogic.ResponseRetrySettings = append(r.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings29)
 		}
 		r.OutputSumoLogic.SafeHeaders = make([]types.String, 0, len(resp.OutputSumoLogic.SafeHeaders))
 		for _, v := range resp.OutputSumoLogic.SafeHeaders {
@@ -6744,34 +8071,62 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSumoLogic.TimeoutRetrySettings == nil {
 			r.OutputSumoLogic.TimeoutRetrySettings = nil
 		} else {
-			r.OutputSumoLogic.TimeoutRetrySettings = &tfTypes.OutputSumoLogicTimeoutRetrySettings{}
+			r.OutputSumoLogic.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputSumoLogic.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputSumoLogic.TimeoutRetrySettings.BackoffRate)
 			r.OutputSumoLogic.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputSumoLogic.TimeoutRetrySettings.InitialBackoff)
 			r.OutputSumoLogic.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputSumoLogic.TimeoutRetrySettings.MaxBackoff)
-			r.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputSumoLogic.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputSumoLogic.TimeoutSec = types.Float64PointerValue(resp.OutputSumoLogic.TimeoutSec)
 		r.OutputSumoLogic.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputSumoLogic.TotalMemoryLimitKB)
 		r.OutputSumoLogic.Type = types.StringValue(string(resp.OutputSumoLogic.Type))
+		r.Type = r.OutputSumoLogic.Type
 		r.OutputSumoLogic.URL = types.StringValue(resp.OutputSumoLogic.URL)
 		r.OutputSumoLogic.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSumoLogic.UseRoundRobinDNS)
 	}
 	if resp.OutputSyslog != nil {
 		r.OutputSyslog = &tfTypes.OutputSyslog{}
+		r.OutputSyslog.TemplateHost = types.StringPointerValue(resp.OutputSyslog.TemplateHost)
+		r.OutputSyslog.TemplatePort = types.StringPointerValue(resp.OutputSyslog.TemplatePort)
 		r.OutputSyslog.AppName = types.StringPointerValue(resp.OutputSyslog.AppName)
 		r.OutputSyslog.ConnectionTimeout = types.Float64PointerValue(resp.OutputSyslog.ConnectionTimeout)
 		r.OutputSyslog.Description = types.StringPointerValue(resp.OutputSyslog.Description)
+		r.OutputSyslog.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSyslog.DNSResolvePeriodSec)
+		r.OutputSyslog.EnableIPSpoofing = types.BoolPointerValue(resp.OutputSyslog.EnableIPSpoofing)
 		r.OutputSyslog.Environment = types.StringPointerValue(resp.OutputSyslog.Environment)
+		r.Environment = r.OutputSyslog.Environment
+		r.OutputSyslog.ExcludeSelf = types.BoolPointerValue(resp.OutputSyslog.ExcludeSelf)
 		if resp.OutputSyslog.Facility != nil {
 			r.OutputSyslog.Facility = types.Int64Value(int64(*resp.OutputSyslog.Facility))
 		} else {
 			r.OutputSyslog.Facility = types.Int64Null()
 		}
 		r.OutputSyslog.Host = types.StringPointerValue(resp.OutputSyslog.Host)
-		r.OutputSyslog.ID = types.StringValue(resp.OutputSyslog.ID)
+		r.OutputSyslog.Hosts = []tfTypes.ItemsTypeHosts{}
+
+		for _, hostsItem4 := range resp.OutputSyslog.Hosts {
+			var hosts4 tfTypes.ItemsTypeHosts
+
+			hosts4.TemplateHost = types.StringPointerValue(hostsItem4.TemplateHost)
+			hosts4.TemplatePort = types.StringPointerValue(hostsItem4.TemplatePort)
+			hosts4.Host = types.StringValue(hostsItem4.Host)
+			hosts4.Port = types.Float64Value(hostsItem4.Port)
+			hosts4.Servername = types.StringPointerValue(hostsItem4.Servername)
+			if hostsItem4.TLS != nil {
+				hosts4.TLS = types.StringValue(string(*hostsItem4.TLS))
+			} else {
+				hosts4.TLS = types.StringNull()
+			}
+			hosts4.Weight = types.Float64PointerValue(hostsItem4.Weight)
+
+			r.OutputSyslog.Hosts = append(r.OutputSyslog.Hosts, hosts4)
+		}
+		r.OutputSyslog.ID = types.StringPointerValue(resp.OutputSyslog.ID)
 		r.ID = r.OutputSyslog.ID
 		r.OutputSyslog.LoadBalanced = types.BoolPointerValue(resp.OutputSyslog.LoadBalanced)
+		r.OutputSyslog.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputSyslog.LoadBalanceStatsPeriodSec)
 		r.OutputSyslog.LogFailedRequests = types.BoolPointerValue(resp.OutputSyslog.LogFailedRequests)
+		r.OutputSyslog.MaxConcurrentSenders = types.Float64PointerValue(resp.OutputSyslog.MaxConcurrentSenders)
 		r.OutputSyslog.MaxRecordSize = types.Float64PointerValue(resp.OutputSyslog.MaxRecordSize)
 		if resp.OutputSyslog.MessageFormat != nil {
 			r.OutputSyslog.MessageFormat = types.StringValue(string(*resp.OutputSyslog.MessageFormat))
@@ -6785,6 +8140,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSyslog.OnBackpressure = types.StringNull()
 		}
 		r.OutputSyslog.Pipeline = types.StringPointerValue(resp.OutputSyslog.Pipeline)
+		r.Pipeline = r.OutputSyslog.Pipeline
 		r.OutputSyslog.Port = types.Float64PointerValue(resp.OutputSyslog.Port)
 		if resp.OutputSyslog.PqCompress != nil {
 			r.OutputSyslog.PqCompress = types.StringValue(string(*resp.OutputSyslog.PqCompress))
@@ -6796,6 +8152,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputSyslog.PqControls = &tfTypes.OutputSyslogPqControls{}
 		}
+		r.OutputSyslog.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputSyslog.PqMaxBackpressureSec)
+		r.OutputSyslog.PqMaxBufferSize = types.Float64PointerValue(resp.OutputSyslog.PqMaxBufferSize)
+		r.OutputSyslog.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputSyslog.PqMaxBufferSizeBytes)
 		r.OutputSyslog.PqMaxFileSize = types.StringPointerValue(resp.OutputSyslog.PqMaxFileSize)
 		r.OutputSyslog.PqMaxSize = types.StringPointerValue(resp.OutputSyslog.PqMaxSize)
 		if resp.OutputSyslog.PqMode != nil {
@@ -6809,6 +8168,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSyslog.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputSyslog.PqPath = types.StringPointerValue(resp.OutputSyslog.PqPath)
+		r.OutputSyslog.PqRatePerSec = types.Float64PointerValue(resp.OutputSyslog.PqRatePerSec)
+		r.OutputSyslog.PqStrictOrdering = types.BoolPointerValue(resp.OutputSyslog.PqStrictOrdering)
 		if resp.OutputSyslog.Protocol != nil {
 			r.OutputSyslog.Protocol = types.StringValue(string(*resp.OutputSyslog.Protocol))
 		} else {
@@ -6836,7 +8197,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputSyslog.TLS == nil {
 			r.OutputSyslog.TLS = nil
 		} else {
-			r.OutputSyslog.TLS = &tfTypes.OutputSyslogTLSSettingsClientSide{}
+			r.OutputSyslog.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputSyslog.TLS.CaPath = types.StringPointerValue(resp.OutputSyslog.TLS.CaPath)
 			r.OutputSyslog.TLS.CertificateName = types.StringPointerValue(resp.OutputSyslog.TLS.CertificateName)
 			r.OutputSyslog.TLS.CertPath = types.StringPointerValue(resp.OutputSyslog.TLS.CertPath)
@@ -6857,11 +8218,14 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputSyslog.TLS.Servername = types.StringPointerValue(resp.OutputSyslog.TLS.Servername)
 		}
 		r.OutputSyslog.Type = types.StringValue(string(resp.OutputSyslog.Type))
+		r.Type = r.OutputSyslog.Type
 		r.OutputSyslog.UDPDNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSyslog.UDPDNSResolvePeriodSec)
 		r.OutputSyslog.WriteTimeout = types.Float64PointerValue(resp.OutputSyslog.WriteTimeout)
 	}
 	if resp.OutputTcpjson != nil {
 		r.OutputTcpjson = &tfTypes.OutputTcpjson{}
+		r.OutputTcpjson.TemplateHost = types.StringPointerValue(resp.OutputTcpjson.TemplateHost)
+		r.OutputTcpjson.TemplatePort = types.StringPointerValue(resp.OutputTcpjson.TemplatePort)
 		r.OutputTcpjson.AuthToken = types.StringPointerValue(resp.OutputTcpjson.AuthToken)
 		if resp.OutputTcpjson.AuthType != nil {
 			r.OutputTcpjson.AuthType = types.StringValue(string(*resp.OutputTcpjson.AuthType))
@@ -6877,26 +8241,29 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputTcpjson.Description = types.StringPointerValue(resp.OutputTcpjson.Description)
 		r.OutputTcpjson.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputTcpjson.DNSResolvePeriodSec)
 		r.OutputTcpjson.Environment = types.StringPointerValue(resp.OutputTcpjson.Environment)
+		r.Environment = r.OutputTcpjson.Environment
 		r.OutputTcpjson.ExcludeSelf = types.BoolPointerValue(resp.OutputTcpjson.ExcludeSelf)
 		r.OutputTcpjson.Host = types.StringPointerValue(resp.OutputTcpjson.Host)
-		r.OutputTcpjson.Hosts = []tfTypes.OutputTcpjsonHost{}
+		r.OutputTcpjson.Hosts = []tfTypes.ItemsTypeHosts{}
 
-		for _, hostsItem4 := range resp.OutputTcpjson.Hosts {
-			var hosts4 tfTypes.OutputTcpjsonHost
+		for _, hostsItem5 := range resp.OutputTcpjson.Hosts {
+			var hosts5 tfTypes.ItemsTypeHosts
 
-			hosts4.Host = types.StringValue(hostsItem4.Host)
-			hosts4.Port = types.Float64Value(hostsItem4.Port)
-			hosts4.Servername = types.StringPointerValue(hostsItem4.Servername)
-			if hostsItem4.TLS != nil {
-				hosts4.TLS = types.StringValue(string(*hostsItem4.TLS))
+			hosts5.TemplateHost = types.StringPointerValue(hostsItem5.TemplateHost)
+			hosts5.TemplatePort = types.StringPointerValue(hostsItem5.TemplatePort)
+			hosts5.Host = types.StringValue(hostsItem5.Host)
+			hosts5.Port = types.Float64Value(hostsItem5.Port)
+			hosts5.Servername = types.StringPointerValue(hostsItem5.Servername)
+			if hostsItem5.TLS != nil {
+				hosts5.TLS = types.StringValue(string(*hostsItem5.TLS))
 			} else {
-				hosts4.TLS = types.StringNull()
+				hosts5.TLS = types.StringNull()
 			}
-			hosts4.Weight = types.Float64PointerValue(hostsItem4.Weight)
+			hosts5.Weight = types.Float64PointerValue(hostsItem5.Weight)
 
-			r.OutputTcpjson.Hosts = append(r.OutputTcpjson.Hosts, hosts4)
+			r.OutputTcpjson.Hosts = append(r.OutputTcpjson.Hosts, hosts5)
 		}
-		r.OutputTcpjson.ID = types.StringValue(resp.OutputTcpjson.ID)
+		r.OutputTcpjson.ID = types.StringPointerValue(resp.OutputTcpjson.ID)
 		r.ID = r.OutputTcpjson.ID
 		r.OutputTcpjson.LoadBalanced = types.BoolPointerValue(resp.OutputTcpjson.LoadBalanced)
 		r.OutputTcpjson.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputTcpjson.LoadBalanceStatsPeriodSec)
@@ -6908,6 +8275,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputTcpjson.OnBackpressure = types.StringNull()
 		}
 		r.OutputTcpjson.Pipeline = types.StringPointerValue(resp.OutputTcpjson.Pipeline)
+		r.Pipeline = r.OutputTcpjson.Pipeline
 		r.OutputTcpjson.Port = types.Float64PointerValue(resp.OutputTcpjson.Port)
 		if resp.OutputTcpjson.PqCompress != nil {
 			r.OutputTcpjson.PqCompress = types.StringValue(string(*resp.OutputTcpjson.PqCompress))
@@ -6919,6 +8287,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputTcpjson.PqControls = &tfTypes.OutputTcpjsonPqControls{}
 		}
+		r.OutputTcpjson.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputTcpjson.PqMaxBackpressureSec)
+		r.OutputTcpjson.PqMaxBufferSize = types.Float64PointerValue(resp.OutputTcpjson.PqMaxBufferSize)
+		r.OutputTcpjson.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputTcpjson.PqMaxBufferSizeBytes)
 		r.OutputTcpjson.PqMaxFileSize = types.StringPointerValue(resp.OutputTcpjson.PqMaxFileSize)
 		r.OutputTcpjson.PqMaxSize = types.StringPointerValue(resp.OutputTcpjson.PqMaxSize)
 		if resp.OutputTcpjson.PqMode != nil {
@@ -6932,6 +8303,8 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputTcpjson.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputTcpjson.PqPath = types.StringPointerValue(resp.OutputTcpjson.PqPath)
+		r.OutputTcpjson.PqRatePerSec = types.Float64PointerValue(resp.OutputTcpjson.PqRatePerSec)
+		r.OutputTcpjson.PqStrictOrdering = types.BoolPointerValue(resp.OutputTcpjson.PqStrictOrdering)
 		r.OutputTcpjson.SendHeader = types.BoolPointerValue(resp.OutputTcpjson.SendHeader)
 		r.OutputTcpjson.Streamtags = make([]types.String, 0, len(resp.OutputTcpjson.Streamtags))
 		for _, v := range resp.OutputTcpjson.Streamtags {
@@ -6946,7 +8319,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputTcpjson.TLS == nil {
 			r.OutputTcpjson.TLS = nil
 		} else {
-			r.OutputTcpjson.TLS = &tfTypes.OutputTcpjsonTLSSettingsClientSide{}
+			r.OutputTcpjson.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPath{}
 			r.OutputTcpjson.TLS.CaPath = types.StringPointerValue(resp.OutputTcpjson.TLS.CaPath)
 			r.OutputTcpjson.TLS.CertificateName = types.StringPointerValue(resp.OutputTcpjson.TLS.CertificateName)
 			r.OutputTcpjson.TLS.CertPath = types.StringPointerValue(resp.OutputTcpjson.TLS.CertPath)
@@ -6968,6 +8341,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputTcpjson.TokenTTLMinutes = types.Float64PointerValue(resp.OutputTcpjson.TokenTTLMinutes)
 		r.OutputTcpjson.Type = types.StringValue(string(resp.OutputTcpjson.Type))
+		r.Type = r.OutputTcpjson.Type
 		r.OutputTcpjson.WriteTimeout = types.Float64PointerValue(resp.OutputTcpjson.WriteTimeout)
 	}
 	if resp.OutputWavefront != nil {
@@ -6980,17 +8354,18 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputWavefront.Compress = types.BoolPointerValue(resp.OutputWavefront.Compress)
 		r.OutputWavefront.Concurrency = types.Float64PointerValue(resp.OutputWavefront.Concurrency)
 		r.OutputWavefront.Description = types.StringPointerValue(resp.OutputWavefront.Description)
-		r.OutputWavefront.Domain = types.StringPointerValue(resp.OutputWavefront.Domain)
+		r.OutputWavefront.Domain = types.StringValue(resp.OutputWavefront.Domain)
 		r.OutputWavefront.Environment = types.StringPointerValue(resp.OutputWavefront.Environment)
-		r.OutputWavefront.ExtraHTTPHeaders = []tfTypes.OutputWavefrontExtraHTTPHeader{}
+		r.Environment = r.OutputWavefront.Environment
+		r.OutputWavefront.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem27 := range resp.OutputWavefront.ExtraHTTPHeaders {
-			var extraHTTPHeaders27 tfTypes.OutputWavefrontExtraHTTPHeader
+		for _, extraHTTPHeadersItem29 := range resp.OutputWavefront.ExtraHTTPHeaders {
+			var extraHTTPHeaders29 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
-			extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
+			extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
+			extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
 
-			r.OutputWavefront.ExtraHTTPHeaders = append(r.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders27)
+			r.OutputWavefront.ExtraHTTPHeaders = append(r.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders29)
 		}
 		if resp.OutputWavefront.FailedRequestLoggingMode != nil {
 			r.OutputWavefront.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWavefront.FailedRequestLoggingMode))
@@ -7008,6 +8383,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputWavefront.OnBackpressure = types.StringNull()
 		}
 		r.OutputWavefront.Pipeline = types.StringPointerValue(resp.OutputWavefront.Pipeline)
+		r.Pipeline = r.OutputWavefront.Pipeline
 		if resp.OutputWavefront.PqCompress != nil {
 			r.OutputWavefront.PqCompress = types.StringValue(string(*resp.OutputWavefront.PqCompress))
 		} else {
@@ -7018,6 +8394,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputWavefront.PqControls = &tfTypes.OutputWavefrontPqControls{}
 		}
+		r.OutputWavefront.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputWavefront.PqMaxBackpressureSec)
+		r.OutputWavefront.PqMaxBufferSize = types.Float64PointerValue(resp.OutputWavefront.PqMaxBufferSize)
+		r.OutputWavefront.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputWavefront.PqMaxBufferSizeBytes)
 		r.OutputWavefront.PqMaxFileSize = types.StringPointerValue(resp.OutputWavefront.PqMaxFileSize)
 		r.OutputWavefront.PqMaxSize = types.StringPointerValue(resp.OutputWavefront.PqMaxSize)
 		if resp.OutputWavefront.PqMode != nil {
@@ -7031,19 +8410,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputWavefront.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputWavefront.PqPath = types.StringPointerValue(resp.OutputWavefront.PqPath)
+		r.OutputWavefront.PqRatePerSec = types.Float64PointerValue(resp.OutputWavefront.PqRatePerSec)
+		r.OutputWavefront.PqStrictOrdering = types.BoolPointerValue(resp.OutputWavefront.PqStrictOrdering)
 		r.OutputWavefront.RejectUnauthorized = types.BoolPointerValue(resp.OutputWavefront.RejectUnauthorized)
 		r.OutputWavefront.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWavefront.ResponseHonorRetryAfterHeader)
-		r.OutputWavefront.ResponseRetrySettings = []tfTypes.OutputWavefrontResponseRetrySetting{}
+		r.OutputWavefront.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem28 := range resp.OutputWavefront.ResponseRetrySettings {
-			var responseRetrySettings28 tfTypes.OutputWavefrontResponseRetrySetting
+		for _, responseRetrySettingsItem30 := range resp.OutputWavefront.ResponseRetrySettings {
+			var responseRetrySettings30 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
-			responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
-			responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
-			responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
+			responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
+			responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
+			responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
+			responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
 
-			r.OutputWavefront.ResponseRetrySettings = append(r.OutputWavefront.ResponseRetrySettings, responseRetrySettings28)
+			r.OutputWavefront.ResponseRetrySettings = append(r.OutputWavefront.ResponseRetrySettings, responseRetrySettings30)
 		}
 		r.OutputWavefront.SafeHeaders = make([]types.String, 0, len(resp.OutputWavefront.SafeHeaders))
 		for _, v := range resp.OutputWavefront.SafeHeaders {
@@ -7061,19 +8442,23 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputWavefront.TimeoutRetrySettings == nil {
 			r.OutputWavefront.TimeoutRetrySettings = nil
 		} else {
-			r.OutputWavefront.TimeoutRetrySettings = &tfTypes.OutputWavefrontTimeoutRetrySettings{}
+			r.OutputWavefront.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputWavefront.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputWavefront.TimeoutRetrySettings.BackoffRate)
 			r.OutputWavefront.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputWavefront.TimeoutRetrySettings.InitialBackoff)
 			r.OutputWavefront.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputWavefront.TimeoutRetrySettings.MaxBackoff)
-			r.OutputWavefront.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputWavefront.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputWavefront.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputWavefront.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputWavefront.TimeoutSec = types.Float64PointerValue(resp.OutputWavefront.TimeoutSec)
 		r.OutputWavefront.Token = types.StringPointerValue(resp.OutputWavefront.Token)
 		r.OutputWavefront.Type = types.StringValue(string(resp.OutputWavefront.Type))
+		r.Type = r.OutputWavefront.Type
 		r.OutputWavefront.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputWavefront.UseRoundRobinDNS)
 	}
 	if resp.OutputWebhook != nil {
 		r.OutputWebhook = &tfTypes.OutputWebhook{}
+		r.OutputWebhook.TemplateLoginURL = types.StringPointerValue(resp.OutputWebhook.TemplateLoginURL)
+		r.OutputWebhook.TemplateSecret = types.StringPointerValue(resp.OutputWebhook.TemplateSecret)
+		r.OutputWebhook.TemplateURL = types.StringPointerValue(resp.OutputWebhook.TemplateURL)
 		r.OutputWebhook.AdvancedContentType = types.StringPointerValue(resp.OutputWebhook.AdvancedContentType)
 		r.OutputWebhook.AuthHeaderExpr = types.StringPointerValue(resp.OutputWebhook.AuthHeaderExpr)
 		if resp.OutputWebhook.AuthType != nil {
@@ -7092,16 +8477,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputWebhook.Description = types.StringPointerValue(resp.OutputWebhook.Description)
 		r.OutputWebhook.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputWebhook.DNSResolvePeriodSec)
 		r.OutputWebhook.Environment = types.StringPointerValue(resp.OutputWebhook.Environment)
+		r.Environment = r.OutputWebhook.Environment
 		r.OutputWebhook.ExcludeSelf = types.BoolPointerValue(resp.OutputWebhook.ExcludeSelf)
-		r.OutputWebhook.ExtraHTTPHeaders = []tfTypes.OutputWebhookExtraHTTPHeader{}
+		r.OutputWebhook.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem28 := range resp.OutputWebhook.ExtraHTTPHeaders {
-			var extraHTTPHeaders28 tfTypes.OutputWebhookExtraHTTPHeader
+		for _, extraHTTPHeadersItem30 := range resp.OutputWebhook.ExtraHTTPHeaders {
+			var extraHTTPHeaders30 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
-			extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
+			extraHTTPHeaders30.Name = types.StringPointerValue(extraHTTPHeadersItem30.Name)
+			extraHTTPHeaders30.Value = types.StringValue(extraHTTPHeadersItem30.Value)
 
-			r.OutputWebhook.ExtraHTTPHeaders = append(r.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders28)
+			r.OutputWebhook.ExtraHTTPHeaders = append(r.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders30)
 		}
 		if resp.OutputWebhook.FailedRequestLoggingMode != nil {
 			r.OutputWebhook.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWebhook.FailedRequestLoggingMode))
@@ -7116,7 +8502,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputWebhook.FormatEventCode = types.StringPointerValue(resp.OutputWebhook.FormatEventCode)
 		r.OutputWebhook.FormatPayloadCode = types.StringPointerValue(resp.OutputWebhook.FormatPayloadCode)
-		r.OutputWebhook.ID = types.StringValue(resp.OutputWebhook.ID)
+		r.OutputWebhook.ID = types.StringPointerValue(resp.OutputWebhook.ID)
 		r.ID = r.OutputWebhook.ID
 		r.OutputWebhook.KeepAlive = types.BoolPointerValue(resp.OutputWebhook.KeepAlive)
 		r.OutputWebhook.LoadBalanced = types.BoolPointerValue(resp.OutputWebhook.LoadBalanced)
@@ -7141,13 +8527,13 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputWebhook.OauthParams = []tfTypes.OutputWebhookOauthParam{}
 
-		for _, oauthParamsItem4 := range resp.OutputWebhook.OauthParams {
-			var oauthParams4 tfTypes.OutputWebhookOauthParam
+		for _, oauthParamsItem6 := range resp.OutputWebhook.OauthParams {
+			var oauthParams6 tfTypes.OutputWebhookOauthParam
 
-			oauthParams4.Name = types.StringValue(oauthParamsItem4.Name)
-			oauthParams4.Value = types.StringValue(oauthParamsItem4.Value)
+			oauthParams6.Name = types.StringValue(oauthParamsItem6.Name)
+			oauthParams6.Value = types.StringValue(oauthParamsItem6.Value)
 
-			r.OutputWebhook.OauthParams = append(r.OutputWebhook.OauthParams, oauthParams4)
+			r.OutputWebhook.OauthParams = append(r.OutputWebhook.OauthParams, oauthParams6)
 		}
 		if resp.OutputWebhook.OnBackpressure != nil {
 			r.OutputWebhook.OnBackpressure = types.StringValue(string(*resp.OutputWebhook.OnBackpressure))
@@ -7156,6 +8542,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		}
 		r.OutputWebhook.Password = types.StringPointerValue(resp.OutputWebhook.Password)
 		r.OutputWebhook.Pipeline = types.StringPointerValue(resp.OutputWebhook.Pipeline)
+		r.Pipeline = r.OutputWebhook.Pipeline
 		if resp.OutputWebhook.PqCompress != nil {
 			r.OutputWebhook.PqCompress = types.StringValue(string(*resp.OutputWebhook.PqCompress))
 		} else {
@@ -7166,6 +8553,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputWebhook.PqControls = &tfTypes.OutputWebhookPqControls{}
 		}
+		r.OutputWebhook.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputWebhook.PqMaxBackpressureSec)
+		r.OutputWebhook.PqMaxBufferSize = types.Float64PointerValue(resp.OutputWebhook.PqMaxBufferSize)
+		r.OutputWebhook.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputWebhook.PqMaxBufferSizeBytes)
 		r.OutputWebhook.PqMaxFileSize = types.StringPointerValue(resp.OutputWebhook.PqMaxFileSize)
 		r.OutputWebhook.PqMaxSize = types.StringPointerValue(resp.OutputWebhook.PqMaxSize)
 		if resp.OutputWebhook.PqMode != nil {
@@ -7179,19 +8569,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputWebhook.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputWebhook.PqPath = types.StringPointerValue(resp.OutputWebhook.PqPath)
+		r.OutputWebhook.PqRatePerSec = types.Float64PointerValue(resp.OutputWebhook.PqRatePerSec)
+		r.OutputWebhook.PqStrictOrdering = types.BoolPointerValue(resp.OutputWebhook.PqStrictOrdering)
 		r.OutputWebhook.RejectUnauthorized = types.BoolPointerValue(resp.OutputWebhook.RejectUnauthorized)
 		r.OutputWebhook.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWebhook.ResponseHonorRetryAfterHeader)
-		r.OutputWebhook.ResponseRetrySettings = []tfTypes.OutputWebhookResponseRetrySetting{}
+		r.OutputWebhook.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem29 := range resp.OutputWebhook.ResponseRetrySettings {
-			var responseRetrySettings29 tfTypes.OutputWebhookResponseRetrySetting
+		for _, responseRetrySettingsItem31 := range resp.OutputWebhook.ResponseRetrySettings {
+			var responseRetrySettings31 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
-			responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
-			responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
-			responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
+			responseRetrySettings31.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem31.BackoffRate)
+			responseRetrySettings31.HTTPStatus = types.Float64Value(responseRetrySettingsItem31.HTTPStatus)
+			responseRetrySettings31.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem31.InitialBackoff)
+			responseRetrySettings31.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem31.MaxBackoff)
 
-			r.OutputWebhook.ResponseRetrySettings = append(r.OutputWebhook.ResponseRetrySettings, responseRetrySettings29)
+			r.OutputWebhook.ResponseRetrySettings = append(r.OutputWebhook.ResponseRetrySettings, responseRetrySettings31)
 		}
 		r.OutputWebhook.SafeHeaders = make([]types.String, 0, len(resp.OutputWebhook.SafeHeaders))
 		for _, v := range resp.OutputWebhook.SafeHeaders {
@@ -7211,17 +8603,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputWebhook.TimeoutRetrySettings == nil {
 			r.OutputWebhook.TimeoutRetrySettings = nil
 		} else {
-			r.OutputWebhook.TimeoutRetrySettings = &tfTypes.OutputWebhookTimeoutRetrySettings{}
+			r.OutputWebhook.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputWebhook.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputWebhook.TimeoutRetrySettings.BackoffRate)
 			r.OutputWebhook.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputWebhook.TimeoutRetrySettings.InitialBackoff)
 			r.OutputWebhook.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputWebhook.TimeoutRetrySettings.MaxBackoff)
-			r.OutputWebhook.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputWebhook.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputWebhook.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputWebhook.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputWebhook.TimeoutSec = types.Float64PointerValue(resp.OutputWebhook.TimeoutSec)
 		if resp.OutputWebhook.TLS == nil {
 			r.OutputWebhook.TLS = nil
 		} else {
-			r.OutputWebhook.TLS = &tfTypes.OutputWebhookTLSSettingsClientSide{}
+			r.OutputWebhook.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
 			r.OutputWebhook.TLS.CaPath = types.StringPointerValue(resp.OutputWebhook.TLS.CaPath)
 			r.OutputWebhook.TLS.CertificateName = types.StringPointerValue(resp.OutputWebhook.TLS.CertificateName)
 			r.OutputWebhook.TLS.CertPath = types.StringPointerValue(resp.OutputWebhook.TLS.CertPath)
@@ -7245,22 +8637,164 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputWebhook.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputWebhook.TokenTimeoutSecs)
 		r.OutputWebhook.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputWebhook.TotalMemoryLimitKB)
 		r.OutputWebhook.Type = types.StringValue(string(resp.OutputWebhook.Type))
+		r.Type = r.OutputWebhook.Type
 		r.OutputWebhook.URL = types.StringPointerValue(resp.OutputWebhook.URL)
 		r.OutputWebhook.Urls = []tfTypes.OutputWebhookURL{}
 
-		for _, urlsItem3 := range resp.OutputWebhook.Urls {
-			var urls3 tfTypes.OutputWebhookURL
+		for _, urlsItem4 := range resp.OutputWebhook.Urls {
+			var urls4 tfTypes.OutputWebhookURL
 
-			urls3.URL = types.StringValue(urlsItem3.URL)
-			urls3.Weight = types.Float64PointerValue(urlsItem3.Weight)
+			urls4.TemplateURL = types.StringPointerValue(urlsItem4.TemplateURL)
+			urls4.URL = types.StringValue(urlsItem4.URL)
+			urls4.Weight = types.Float64PointerValue(urlsItem4.Weight)
 
-			r.OutputWebhook.Urls = append(r.OutputWebhook.Urls, urls3)
+			r.OutputWebhook.Urls = append(r.OutputWebhook.Urls, urls4)
 		}
 		r.OutputWebhook.Username = types.StringPointerValue(resp.OutputWebhook.Username)
 		r.OutputWebhook.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputWebhook.UseRoundRobinDNS)
 	}
+	if resp.OutputWizHec != nil {
+		r.OutputWizHec = &tfTypes.OutputWizHec{}
+		r.OutputWizHec.TemplateDataCenter = types.StringPointerValue(resp.OutputWizHec.TemplateDataCenter)
+		r.OutputWizHec.TemplateWizEnvironment = types.StringPointerValue(resp.OutputWizHec.TemplateWizEnvironment)
+		r.OutputWizHec.TemplateWizSourcetype = types.StringPointerValue(resp.OutputWizHec.TemplateWizSourcetype)
+		if resp.OutputWizHec.AuthType != nil {
+			r.OutputWizHec.AuthType = types.StringValue(string(*resp.OutputWizHec.AuthType))
+		} else {
+			r.OutputWizHec.AuthType = types.StringNull()
+		}
+		r.OutputWizHec.Compress = types.BoolPointerValue(resp.OutputWizHec.Compress)
+		r.OutputWizHec.Concurrency = types.Float64PointerValue(resp.OutputWizHec.Concurrency)
+		r.OutputWizHec.DataCenter = types.StringValue(resp.OutputWizHec.DataCenter)
+		r.OutputWizHec.Description = types.StringPointerValue(resp.OutputWizHec.Description)
+		r.OutputWizHec.Environment = types.StringPointerValue(resp.OutputWizHec.Environment)
+		r.Environment = r.OutputWizHec.Environment
+		r.OutputWizHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+
+		for _, extraHTTPHeadersItem31 := range resp.OutputWizHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders31 tfTypes.ItemsTypeExtraHTTPHeaders
+
+			extraHTTPHeaders31.Name = types.StringPointerValue(extraHTTPHeadersItem31.Name)
+			extraHTTPHeaders31.Value = types.StringValue(extraHTTPHeadersItem31.Value)
+
+			r.OutputWizHec.ExtraHTTPHeaders = append(r.OutputWizHec.ExtraHTTPHeaders, extraHTTPHeaders31)
+		}
+		if resp.OutputWizHec.FailedRequestLoggingMode != nil {
+			r.OutputWizHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWizHec.FailedRequestLoggingMode))
+		} else {
+			r.OutputWizHec.FailedRequestLoggingMode = types.StringNull()
+		}
+		r.OutputWizHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputWizHec.FlushPeriodSec)
+		r.OutputWizHec.ID = types.StringPointerValue(resp.OutputWizHec.ID)
+		r.ID = r.OutputWizHec.ID
+		r.OutputWizHec.MaxPayloadEvents = types.Float64PointerValue(resp.OutputWizHec.MaxPayloadEvents)
+		r.OutputWizHec.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputWizHec.MaxPayloadSizeKB)
+		r.OutputWizHec.NextQueue = types.StringPointerValue(resp.OutputWizHec.NextQueue)
+		if resp.OutputWizHec.OnBackpressure != nil {
+			r.OutputWizHec.OnBackpressure = types.StringValue(string(*resp.OutputWizHec.OnBackpressure))
+		} else {
+			r.OutputWizHec.OnBackpressure = types.StringNull()
+		}
+		r.OutputWizHec.Pipeline = types.StringPointerValue(resp.OutputWizHec.Pipeline)
+		r.Pipeline = r.OutputWizHec.Pipeline
+		if resp.OutputWizHec.PqCompress != nil {
+			r.OutputWizHec.PqCompress = types.StringValue(string(*resp.OutputWizHec.PqCompress))
+		} else {
+			r.OutputWizHec.PqCompress = types.StringNull()
+		}
+		if resp.OutputWizHec.PqControls == nil {
+			r.OutputWizHec.PqControls = nil
+		} else {
+			r.OutputWizHec.PqControls = &tfTypes.OutputWizHecPqControls{}
+		}
+		r.OutputWizHec.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputWizHec.PqMaxBackpressureSec)
+		r.OutputWizHec.PqMaxBufferSize = types.Float64PointerValue(resp.OutputWizHec.PqMaxBufferSize)
+		r.OutputWizHec.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputWizHec.PqMaxBufferSizeBytes)
+		r.OutputWizHec.PqMaxFileSize = types.StringPointerValue(resp.OutputWizHec.PqMaxFileSize)
+		r.OutputWizHec.PqMaxSize = types.StringPointerValue(resp.OutputWizHec.PqMaxSize)
+		if resp.OutputWizHec.PqMode != nil {
+			r.OutputWizHec.PqMode = types.StringValue(string(*resp.OutputWizHec.PqMode))
+		} else {
+			r.OutputWizHec.PqMode = types.StringNull()
+		}
+		if resp.OutputWizHec.PqOnBackpressure != nil {
+			r.OutputWizHec.PqOnBackpressure = types.StringValue(string(*resp.OutputWizHec.PqOnBackpressure))
+		} else {
+			r.OutputWizHec.PqOnBackpressure = types.StringNull()
+		}
+		r.OutputWizHec.PqPath = types.StringPointerValue(resp.OutputWizHec.PqPath)
+		r.OutputWizHec.PqRatePerSec = types.Float64PointerValue(resp.OutputWizHec.PqRatePerSec)
+		r.OutputWizHec.PqStrictOrdering = types.BoolPointerValue(resp.OutputWizHec.PqStrictOrdering)
+		r.OutputWizHec.RejectUnauthorized = types.BoolPointerValue(resp.OutputWizHec.RejectUnauthorized)
+		r.OutputWizHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWizHec.ResponseHonorRetryAfterHeader)
+		r.OutputWizHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
+
+		for _, responseRetrySettingsItem32 := range resp.OutputWizHec.ResponseRetrySettings {
+			var responseRetrySettings32 tfTypes.ItemsTypeResponseRetrySettings
+
+			responseRetrySettings32.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem32.BackoffRate)
+			responseRetrySettings32.HTTPStatus = types.Float64Value(responseRetrySettingsItem32.HTTPStatus)
+			responseRetrySettings32.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem32.InitialBackoff)
+			responseRetrySettings32.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem32.MaxBackoff)
+
+			r.OutputWizHec.ResponseRetrySettings = append(r.OutputWizHec.ResponseRetrySettings, responseRetrySettings32)
+		}
+		r.OutputWizHec.SafeHeaders = make([]types.String, 0, len(resp.OutputWizHec.SafeHeaders))
+		for _, v := range resp.OutputWizHec.SafeHeaders {
+			r.OutputWizHec.SafeHeaders = append(r.OutputWizHec.SafeHeaders, types.StringValue(v))
+		}
+		r.OutputWizHec.Streamtags = make([]types.String, 0, len(resp.OutputWizHec.Streamtags))
+		for _, v := range resp.OutputWizHec.Streamtags {
+			r.OutputWizHec.Streamtags = append(r.OutputWizHec.Streamtags, types.StringValue(v))
+		}
+		r.OutputWizHec.SystemFields = make([]types.String, 0, len(resp.OutputWizHec.SystemFields))
+		for _, v := range resp.OutputWizHec.SystemFields {
+			r.OutputWizHec.SystemFields = append(r.OutputWizHec.SystemFields, types.StringValue(v))
+		}
+		r.OutputWizHec.TCPRouting = types.StringPointerValue(resp.OutputWizHec.TCPRouting)
+		r.OutputWizHec.TextSecret = types.StringPointerValue(resp.OutputWizHec.TextSecret)
+		if resp.OutputWizHec.TimeoutRetrySettings == nil {
+			r.OutputWizHec.TimeoutRetrySettings = nil
+		} else {
+			r.OutputWizHec.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
+			r.OutputWizHec.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputWizHec.TimeoutRetrySettings.BackoffRate)
+			r.OutputWizHec.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputWizHec.TimeoutRetrySettings.InitialBackoff)
+			r.OutputWizHec.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputWizHec.TimeoutRetrySettings.MaxBackoff)
+			r.OutputWizHec.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputWizHec.TimeoutRetrySettings.TimeoutRetry)
+		}
+		r.OutputWizHec.TimeoutSec = types.Float64PointerValue(resp.OutputWizHec.TimeoutSec)
+		if resp.OutputWizHec.TLS == nil {
+			r.OutputWizHec.TLS = nil
+		} else {
+			r.OutputWizHec.TLS = &tfTypes.TLSSettingsClientSideTypeCaPathCertPathExtended{}
+			r.OutputWizHec.TLS.CaPath = types.StringPointerValue(resp.OutputWizHec.TLS.CaPath)
+			r.OutputWizHec.TLS.CertificateName = types.StringPointerValue(resp.OutputWizHec.TLS.CertificateName)
+			r.OutputWizHec.TLS.CertPath = types.StringPointerValue(resp.OutputWizHec.TLS.CertPath)
+			r.OutputWizHec.TLS.Disabled = types.BoolPointerValue(resp.OutputWizHec.TLS.Disabled)
+			if resp.OutputWizHec.TLS.MaxVersion != nil {
+				r.OutputWizHec.TLS.MaxVersion = types.StringValue(string(*resp.OutputWizHec.TLS.MaxVersion))
+			} else {
+				r.OutputWizHec.TLS.MaxVersion = types.StringNull()
+			}
+			if resp.OutputWizHec.TLS.MinVersion != nil {
+				r.OutputWizHec.TLS.MinVersion = types.StringValue(string(*resp.OutputWizHec.TLS.MinVersion))
+			} else {
+				r.OutputWizHec.TLS.MinVersion = types.StringNull()
+			}
+			r.OutputWizHec.TLS.Passphrase = types.StringPointerValue(resp.OutputWizHec.TLS.Passphrase)
+			r.OutputWizHec.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputWizHec.TLS.PrivKeyPath)
+			r.OutputWizHec.TLS.Servername = types.StringPointerValue(resp.OutputWizHec.TLS.Servername)
+		}
+		r.OutputWizHec.Token = types.StringPointerValue(resp.OutputWizHec.Token)
+		r.OutputWizHec.Type = types.StringValue(string(resp.OutputWizHec.Type))
+		r.Type = r.OutputWizHec.Type
+		r.OutputWizHec.WizConnectorID = types.StringValue(resp.OutputWizHec.WizConnectorID)
+		r.OutputWizHec.WizEnvironment = types.StringValue(resp.OutputWizHec.WizEnvironment)
+		r.OutputWizHec.WizSourcetype = types.StringValue(resp.OutputWizHec.WizSourcetype)
+	}
 	if resp.OutputXsiam != nil {
 		r.OutputXsiam = &tfTypes.OutputXsiam{}
+		r.OutputXsiam.TemplateURL = types.StringPointerValue(resp.OutputXsiam.TemplateURL)
 		if resp.OutputXsiam.AuthType != nil {
 			r.OutputXsiam.AuthType = types.StringValue(string(*resp.OutputXsiam.AuthType))
 		} else {
@@ -7270,16 +8804,17 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		r.OutputXsiam.Description = types.StringPointerValue(resp.OutputXsiam.Description)
 		r.OutputXsiam.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputXsiam.DNSResolvePeriodSec)
 		r.OutputXsiam.Environment = types.StringPointerValue(resp.OutputXsiam.Environment)
+		r.Environment = r.OutputXsiam.Environment
 		r.OutputXsiam.ExcludeSelf = types.BoolPointerValue(resp.OutputXsiam.ExcludeSelf)
-		r.OutputXsiam.ExtraHTTPHeaders = []tfTypes.OutputXsiamExtraHTTPHeader{}
+		r.OutputXsiam.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem29 := range resp.OutputXsiam.ExtraHTTPHeaders {
-			var extraHTTPHeaders29 tfTypes.OutputXsiamExtraHTTPHeader
+		for _, extraHTTPHeadersItem32 := range resp.OutputXsiam.ExtraHTTPHeaders {
+			var extraHTTPHeaders32 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
-			extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
+			extraHTTPHeaders32.Name = types.StringPointerValue(extraHTTPHeadersItem32.Name)
+			extraHTTPHeaders32.Value = types.StringValue(extraHTTPHeadersItem32.Value)
 
-			r.OutputXsiam.ExtraHTTPHeaders = append(r.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders29)
+			r.OutputXsiam.ExtraHTTPHeaders = append(r.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders32)
 		}
 		if resp.OutputXsiam.FailedRequestLoggingMode != nil {
 			r.OutputXsiam.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputXsiam.FailedRequestLoggingMode))
@@ -7287,7 +8822,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputXsiam.FailedRequestLoggingMode = types.StringNull()
 		}
 		r.OutputXsiam.FlushPeriodSec = types.Float64PointerValue(resp.OutputXsiam.FlushPeriodSec)
-		r.OutputXsiam.ID = types.StringValue(resp.OutputXsiam.ID)
+		r.OutputXsiam.ID = types.StringPointerValue(resp.OutputXsiam.ID)
 		r.ID = r.OutputXsiam.ID
 		r.OutputXsiam.LoadBalanced = types.BoolPointerValue(resp.OutputXsiam.LoadBalanced)
 		r.OutputXsiam.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputXsiam.LoadBalanceStatsPeriodSec)
@@ -7299,6 +8834,7 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputXsiam.OnBackpressure = types.StringNull()
 		}
 		r.OutputXsiam.Pipeline = types.StringPointerValue(resp.OutputXsiam.Pipeline)
+		r.Pipeline = r.OutputXsiam.Pipeline
 		if resp.OutputXsiam.PqCompress != nil {
 			r.OutputXsiam.PqCompress = types.StringValue(string(*resp.OutputXsiam.PqCompress))
 		} else {
@@ -7309,6 +8845,9 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		} else {
 			r.OutputXsiam.PqControls = &tfTypes.OutputXsiamPqControls{}
 		}
+		r.OutputXsiam.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputXsiam.PqMaxBackpressureSec)
+		r.OutputXsiam.PqMaxBufferSize = types.Float64PointerValue(resp.OutputXsiam.PqMaxBufferSize)
+		r.OutputXsiam.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputXsiam.PqMaxBufferSizeBytes)
 		r.OutputXsiam.PqMaxFileSize = types.StringPointerValue(resp.OutputXsiam.PqMaxFileSize)
 		r.OutputXsiam.PqMaxSize = types.StringPointerValue(resp.OutputXsiam.PqMaxSize)
 		if resp.OutputXsiam.PqMode != nil {
@@ -7322,19 +8861,21 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 			r.OutputXsiam.PqOnBackpressure = types.StringNull()
 		}
 		r.OutputXsiam.PqPath = types.StringPointerValue(resp.OutputXsiam.PqPath)
+		r.OutputXsiam.PqRatePerSec = types.Float64PointerValue(resp.OutputXsiam.PqRatePerSec)
+		r.OutputXsiam.PqStrictOrdering = types.BoolPointerValue(resp.OutputXsiam.PqStrictOrdering)
 		r.OutputXsiam.RejectUnauthorized = types.BoolPointerValue(resp.OutputXsiam.RejectUnauthorized)
 		r.OutputXsiam.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputXsiam.ResponseHonorRetryAfterHeader)
-		r.OutputXsiam.ResponseRetrySettings = []tfTypes.OutputXsiamResponseRetrySetting{}
+		r.OutputXsiam.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem30 := range resp.OutputXsiam.ResponseRetrySettings {
-			var responseRetrySettings30 tfTypes.OutputXsiamResponseRetrySetting
+		for _, responseRetrySettingsItem33 := range resp.OutputXsiam.ResponseRetrySettings {
+			var responseRetrySettings33 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
-			responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
-			responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
-			responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
+			responseRetrySettings33.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem33.BackoffRate)
+			responseRetrySettings33.HTTPStatus = types.Float64Value(responseRetrySettingsItem33.HTTPStatus)
+			responseRetrySettings33.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem33.InitialBackoff)
+			responseRetrySettings33.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem33.MaxBackoff)
 
-			r.OutputXsiam.ResponseRetrySettings = append(r.OutputXsiam.ResponseRetrySettings, responseRetrySettings30)
+			r.OutputXsiam.ResponseRetrySettings = append(r.OutputXsiam.ResponseRetrySettings, responseRetrySettings33)
 		}
 		r.OutputXsiam.SafeHeaders = make([]types.String, 0, len(resp.OutputXsiam.SafeHeaders))
 		for _, v := range resp.OutputXsiam.SafeHeaders {
@@ -7353,27 +8894,32 @@ func (r *DestinationDataSourceModel) RefreshFromSharedOutput(ctx context.Context
 		if resp.OutputXsiam.TimeoutRetrySettings == nil {
 			r.OutputXsiam.TimeoutRetrySettings = nil
 		} else {
-			r.OutputXsiam.TimeoutRetrySettings = &tfTypes.OutputXsiamTimeoutRetrySettings{}
+			r.OutputXsiam.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
 			r.OutputXsiam.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputXsiam.TimeoutRetrySettings.BackoffRate)
 			r.OutputXsiam.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputXsiam.TimeoutRetrySettings.InitialBackoff)
 			r.OutputXsiam.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputXsiam.TimeoutRetrySettings.MaxBackoff)
-			r.OutputXsiam.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputXsiam.TimeoutRetrySettings.TimeoutRetry)
+			r.OutputXsiam.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputXsiam.TimeoutRetrySettings.TimeoutRetry)
 		}
 		r.OutputXsiam.TimeoutSec = types.Float64PointerValue(resp.OutputXsiam.TimeoutSec)
 		r.OutputXsiam.Token = types.StringPointerValue(resp.OutputXsiam.Token)
 		r.OutputXsiam.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputXsiam.TotalMemoryLimitKB)
 		r.OutputXsiam.Type = types.StringValue(string(resp.OutputXsiam.Type))
+		r.Type = r.OutputXsiam.Type
 		r.OutputXsiam.URL = types.StringPointerValue(resp.OutputXsiam.URL)
 		r.OutputXsiam.Urls = []tfTypes.OutputXsiamURL{}
 
-		for _, urlsItem4 := range resp.OutputXsiam.Urls {
-			var urls4 tfTypes.OutputXsiamURL
+		for _, urlsItem5 := range resp.OutputXsiam.Urls {
+			var urls5 tfTypes.OutputXsiamURL
 
-			urlResult, _ := json.Marshal(urlsItem4.URL)
-			urls4.URL = jsontypes.NewNormalizedValue(string(urlResult))
-			urls4.Weight = types.Float64PointerValue(urlsItem4.Weight)
+			if urlsItem5.URL == nil {
+				urls5.URL = jsontypes.NewNormalizedNull()
+			} else {
+				urlResult, _ := json.Marshal(urlsItem5.URL)
+				urls5.URL = jsontypes.NewNormalizedValue(string(urlResult))
+			}
+			urls5.Weight = types.Float64PointerValue(urlsItem5.Weight)
 
-			r.OutputXsiam.Urls = append(r.OutputXsiam.Urls, urls4)
+			r.OutputXsiam.Urls = append(r.OutputXsiam.Urls, urls5)
 		}
 		r.OutputXsiam.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputXsiam.UseRoundRobinDNS)
 	}

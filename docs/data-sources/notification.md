@@ -23,7 +23,7 @@ data "criblio_notification" "my_notification" {
 
 ### Required
 
-- `id` (String) Unique ID to GET
+- `id` (String) Unique identifier for the notification
 
 ### Read-Only
 

@@ -3,21 +3,24 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputWefSubscription struct {
-	BatchTimeout       types.Float64           `tfsdk:"batch_timeout"`
-	Compress           types.Bool              `tfsdk:"compress"`
-	ContentFormat      types.String            `tfsdk:"content_format"`
-	HeartbeatInterval  types.Float64           `tfsdk:"heartbeat_interval"`
-	ID                 types.String            `tfsdk:"id"`
-	Locale             types.String            `tfsdk:"locale"`
-	Metadata           []SubscriptionMetadatum `tfsdk:"metadata"`
-	QuerySelector      types.String            `tfsdk:"query_selector"`
-	ReadExistingEvents types.Bool              `tfsdk:"read_existing_events"`
-	SendBookmarks      types.Bool              `tfsdk:"send_bookmarks"`
-	SubscriptionName   types.String            `tfsdk:"subscription_name"`
-	Targets            []types.String          `tfsdk:"targets"`
-	Version            types.String            `tfsdk:"version"`
+	BatchTimeout       types.Float64        `tfsdk:"batch_timeout"`
+	Compress           types.Bool           `tfsdk:"compress"`
+	ContentFormat      types.String         `tfsdk:"content_format"`
+	HeartbeatInterval  types.Float64        `tfsdk:"heartbeat_interval"`
+	ID                 jsontypes.Normalized `tfsdk:"id"`
+	Locale             types.String         `tfsdk:"locale"`
+	Metadata           []ItemsTypeMetadata  `tfsdk:"metadata"`
+	Queries            []Query              `tfsdk:"queries"`
+	QuerySelector      types.String         `tfsdk:"query_selector"`
+	ReadExistingEvents types.Bool           `tfsdk:"read_existing_events"`
+	SendBookmarks      types.Bool           `tfsdk:"send_bookmarks"`
+	SubscriptionName   types.String         `tfsdk:"subscription_name"`
+	Targets            []types.String       `tfsdk:"targets"`
+	Version            types.String         `tfsdk:"version"`
+	XMLQuery           types.String         `tfsdk:"xml_query"`
 }

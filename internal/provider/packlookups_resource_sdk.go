@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"strings"
-
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -17,27 +15,35 @@ func (r *PackLookupsResourceModel) RefreshFromOperationsCreateSystemLookupsByPac
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		itemsPriorSlice := r.Items
 		r.Items = []tfTypes.LookupFile{}
 
-		for _, itemsItem := range resp.Items {
+		for itemsIdx, itemsItem := range resp.Items {
 			var items tfTypes.LookupFile
 
-			itemsPriorData := items
-			itemsPriorData1 := items
+			var itemsPriorItem *tfTypes.LookupFile
+			if itemsIdx < len(itemsPriorSlice) {
+				itemsPriorItem = &itemsPriorSlice[itemsIdx]
+			}
+
 			items.Description = types.StringPointerValue(itemsItem.Conf.Description)
-			items.Content = itemsPriorData1.Content
-			items.ID = itemsPriorData1.ID
-			items.Mode = itemsPriorData1.Mode
-			items.PendingTask = itemsPriorData1.PendingTask
-			items.Tags = itemsPriorData1.Tags
-			items.Version = itemsPriorData1.Version
+			if itemsPriorItem != nil {
+				items.Content = itemsPriorItem.Content
+				items.ID = itemsPriorItem.ID
+				items.Mode = itemsPriorItem.Mode
+				items.PendingTask = itemsPriorItem.PendingTask
+				items.Tags = itemsPriorItem.Tags
+				items.Version = itemsPriorItem.Version
+			}
 			items.ID = types.StringValue(itemsItem.ID)
-			items.Content = itemsPriorData.Content
-			items.Description = itemsPriorData.Description
-			items.Mode = itemsPriorData.Mode
-			items.PendingTask = itemsPriorData.PendingTask
-			items.Tags = itemsPriorData.Tags
-			items.Version = itemsPriorData.Version
+			if itemsPriorItem != nil {
+				items.Content = itemsPriorItem.Content
+				items.Description = itemsPriorItem.Description
+				items.Mode = itemsPriorItem.Mode
+				items.PendingTask = itemsPriorItem.PendingTask
+				items.Tags = itemsPriorItem.Tags
+				items.Version = itemsPriorItem.Version
+			}
 
 			r.Items = append(r.Items, items)
 		}
@@ -131,7 +137,7 @@ func (r *PackLookupsResourceModel) ToOperationsCreateSystemLookupsByPackAndIDReq
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -157,7 +163,7 @@ func (r *PackLookupsResourceModel) ToOperationsCreateSystemLookupsByPackRequest(
 	var diags diag.Diagnostics
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -185,7 +191,7 @@ func (r *PackLookupsResourceModel) ToOperationsDeleteSystemLookupsByPackAndIDReq
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()
@@ -206,7 +212,7 @@ func (r *PackLookupsResourceModel) ToOperationsGetSystemLookupsByPackAndIDReques
 	id = r.ID.ValueString()
 
 	var pack string
-	pack = strings.ToLower(r.Pack.ValueString())
+	pack = r.Pack.ValueString()
 
 	var groupID string
 	groupID = r.GroupID.ValueString()

@@ -10,7 +10,7 @@ import (
 type CreateOutputRequest struct {
 	// The consumer group to which this instance belongs. Defaults to 'Cribl'.
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
-	// The consumer group id to create
+	// Unique identifier for this destination instance. Must match the `id` property within the Output object in the request body.
 	ID string `queryParam:"style=form,explode=true,name=id"`
 	// New Output object
 	Output shared.Output `request:"mediaType=application/json"`

@@ -25,9 +25,9 @@ const (
 )
 
 var (
-	jsonEncodingRegex       = regexp.MustCompile(`(application|text)\/.*?\+*json.*`)
-	multipartEncodingRegex  = regexp.MustCompile(`multipart\/.*`)
-	urlEncodedEncodingRegex = regexp.MustCompile(`application\/x-www-form-urlencoded.*`)
+	jsonEncodingRegex       = regexp.MustCompile(`^(application|text)\/([^+]+\+)*json.*`)
+	multipartEncodingRegex  = regexp.MustCompile(`^multipart\/.*`)
+	urlEncodedEncodingRegex = regexp.MustCompile(`^application\/x-www-form-urlencoded.*`)
 )
 
 func SerializeRequestBody(_ context.Context, request interface{}, nullable, optional bool, requestFieldName, serializationMethod, tag string) (io.Reader, string, error) {
@@ -176,7 +176,7 @@ func encodeMultipartFormData(w io.Writer, data interface{}) (string, error) {
 				for i := 0; i < valType.Len(); i++ {
 					arrayVal := valType.Index(i)
 
-					if err := encodeMultipartFormDataFile(writer, tag.Name+"[]", arrayVal.Type(), arrayVal); err != nil {
+					if err := encodeMultipartFormDataFile(writer, tag.Name, arrayVal.Type(), arrayVal); err != nil {
 						writer.Close()
 						return "", err
 					}
@@ -207,7 +207,7 @@ func encodeMultipartFormData(w io.Writer, data interface{}) (string, error) {
 			case reflect.Slice, reflect.Array:
 				values := parseDelimitedArray(true, valType, ",")
 				for _, v := range values {
-					if err := writer.WriteField(tag.Name+"[]", v); err != nil {
+					if err := writer.WriteField(tag.Name, v); err != nil {
 						writer.Close()
 						return "", err
 					}
@@ -281,7 +281,9 @@ func encodeMultipartFormDataFile(w *multipart.Writer, fieldName string, fieldTyp
 
 	// Reset seek position to 0 if the reader supports seeking
 	if seeker, ok := reader.(io.Seeker); ok {
-		_, _ = seeker.Seek(0, io.SeekStart)
+		if _, err := seeker.Seek(0, io.SeekStart); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -325,7 +327,7 @@ func encodeFormData(fieldName string, w io.Writer, data interface{}) error {
 				switch tag.Style {
 				// TODO: support other styles
 				case "form":
-					values := populateForm(tag.Name, tag.Explode, fieldType, valType, ",", nil, func(sf reflect.StructField) string {
+					values := populateForm(tag.Name, tag.Explode, fieldType, valType, ",", nil, nil, func(sf reflect.StructField) string {
 						tag := parseFormTag(field)
 						if tag == nil {
 							return ""

@@ -39,7 +39,7 @@ func (m MasterSchemaTLS) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MasterSchemaTLS) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"disabled"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -148,7 +148,7 @@ func (m MasterSchema) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MasterSchema) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"host", "port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil

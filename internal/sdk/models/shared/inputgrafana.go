@@ -31,383 +31,9 @@ func (e *InputGrafanaType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputGrafanaConnection struct {
-	Pipeline *string `json:"pipeline,omitempty"`
-	Output   string  `json:"output"`
-}
-
-func (i InputGrafanaConnection) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputGrafanaConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"output"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputGrafanaConnection) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputGrafanaConnection) GetOutput() string {
-	if i == nil {
-		return ""
-	}
-	return i.Output
-}
-
-// InputGrafanaMode - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-type InputGrafanaMode string
-
-const (
-	InputGrafanaModeSmart  InputGrafanaMode = "smart"
-	InputGrafanaModeAlways InputGrafanaMode = "always"
-)
-
-func (e InputGrafanaMode) ToPointer() *InputGrafanaMode {
-	return &e
-}
-func (e *InputGrafanaMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = InputGrafanaMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaMode: %v", v)
-	}
-}
-
-// InputGrafanaCompression - Codec to use to compress the persisted data
-type InputGrafanaCompression string
-
-const (
-	InputGrafanaCompressionNone InputGrafanaCompression = "none"
-	InputGrafanaCompressionGzip InputGrafanaCompression = "gzip"
-)
-
-func (e InputGrafanaCompression) ToPointer() *InputGrafanaCompression {
-	return &e
-}
-func (e *InputGrafanaCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = InputGrafanaCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaCompression: %v", v)
-	}
-}
-
-type InputGrafanaPq struct {
-	// With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-	Mode *InputGrafanaMode `default:"always" json:"mode"`
-	// The maximum number of events to hold in memory before writing the events to disk
-	MaxBufferSize *float64 `default:"1000" json:"maxBufferSize"`
-	// The number of events to send downstream before committing that Stream has read them
-	CommitFrequency *float64 `default:"42" json:"commitFrequency"`
-	// The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-	MaxFileSize *string `default:"1 MB" json:"maxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	MaxSize *string `default:"5GB" json:"maxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-	Path *string `default:"$CRIBL_HOME/state/queues" json:"path"`
-	// Codec to use to compress the persisted data
-	Compress *InputGrafanaCompression `default:"none" json:"compress"`
-}
-
-func (i InputGrafanaPq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputGrafanaPq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputGrafanaPq) GetMode() *InputGrafanaMode {
-	if i == nil {
-		return nil
-	}
-	return i.Mode
-}
-
-func (i *InputGrafanaPq) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputGrafanaPq) GetCommitFrequency() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.CommitFrequency
-}
-
-func (i *InputGrafanaPq) GetMaxFileSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxFileSize
-}
-
-func (i *InputGrafanaPq) GetMaxSize() *string {
-	if i == nil {
-		return nil
-	}
-	return i.MaxSize
-}
-
-func (i *InputGrafanaPq) GetPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Path
-}
-
-func (i *InputGrafanaPq) GetCompress() *InputGrafanaCompression {
-	if i == nil {
-		return nil
-	}
-	return i.Compress
-}
-
-type InputGrafanaMinimumTLSVersion string
-
-const (
-	InputGrafanaMinimumTLSVersionTlSv1  InputGrafanaMinimumTLSVersion = "TLSv1"
-	InputGrafanaMinimumTLSVersionTlSv11 InputGrafanaMinimumTLSVersion = "TLSv1.1"
-	InputGrafanaMinimumTLSVersionTlSv12 InputGrafanaMinimumTLSVersion = "TLSv1.2"
-	InputGrafanaMinimumTLSVersionTlSv13 InputGrafanaMinimumTLSVersion = "TLSv1.3"
-)
-
-func (e InputGrafanaMinimumTLSVersion) ToPointer() *InputGrafanaMinimumTLSVersion {
-	return &e
-}
-func (e *InputGrafanaMinimumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputGrafanaMinimumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaMinimumTLSVersion: %v", v)
-	}
-}
-
-type InputGrafanaMaximumTLSVersion string
-
-const (
-	InputGrafanaMaximumTLSVersionTlSv1  InputGrafanaMaximumTLSVersion = "TLSv1"
-	InputGrafanaMaximumTLSVersionTlSv11 InputGrafanaMaximumTLSVersion = "TLSv1.1"
-	InputGrafanaMaximumTLSVersionTlSv12 InputGrafanaMaximumTLSVersion = "TLSv1.2"
-	InputGrafanaMaximumTLSVersionTlSv13 InputGrafanaMaximumTLSVersion = "TLSv1.3"
-)
-
-func (e InputGrafanaMaximumTLSVersion) ToPointer() *InputGrafanaMaximumTLSVersion {
-	return &e
-}
-func (e *InputGrafanaMaximumTLSVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = InputGrafanaMaximumTLSVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaMaximumTLSVersion: %v", v)
-	}
-}
-
-type InputGrafanaTLSSettingsServerSide struct {
-	Disabled *bool `default:"true" json:"disabled"`
-	// The name of the predefined certificate
-	CertificateName *string `json:"certificateName,omitempty"`
-	// Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-	// Passphrase to use to decrypt private key
-	Passphrase *string `json:"passphrase,omitempty"`
-	// Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-	CertPath *string `json:"certPath,omitempty"`
-	// Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-	CaPath *string `json:"caPath,omitempty"`
-	// Require clients to present their certificates. Used to perform client authentication using SSL certs.
-	RequestCert        *bool                          `default:"false" json:"requestCert"`
-	RejectUnauthorized any                            `json:"rejectUnauthorized,omitempty"`
-	CommonNameRegex    any                            `json:"commonNameRegex,omitempty"`
-	MinVersion         *InputGrafanaMinimumTLSVersion `json:"minVersion,omitempty"`
-	MaxVersion         *InputGrafanaMaximumTLSVersion `json:"maxVersion,omitempty"`
-}
-
-func (i InputGrafanaTLSSettingsServerSide) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetDisabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.Disabled
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetCertificateName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertificateName
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetPrivKeyPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.PrivKeyPath
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetPassphrase() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Passphrase
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetCertPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CertPath
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetCaPath() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CaPath
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetRequestCert() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.RequestCert
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetRejectUnauthorized() any {
-	if i == nil {
-		return nil
-	}
-	return i.RejectUnauthorized
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetCommonNameRegex() any {
-	if i == nil {
-		return nil
-	}
-	return i.CommonNameRegex
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetMinVersion() *InputGrafanaMinimumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MinVersion
-}
-
-func (i *InputGrafanaTLSSettingsServerSide) GetMaxVersion() *InputGrafanaMaximumTLSVersion {
-	if i == nil {
-		return nil
-	}
-	return i.MaxVersion
-}
-
-// InputGrafanaPrometheusAuthAuthenticationType - Remote Write authentication type
-type InputGrafanaPrometheusAuthAuthenticationType string
-
-const (
-	InputGrafanaPrometheusAuthAuthenticationTypeNone              InputGrafanaPrometheusAuthAuthenticationType = "none"
-	InputGrafanaPrometheusAuthAuthenticationTypeBasic             InputGrafanaPrometheusAuthAuthenticationType = "basic"
-	InputGrafanaPrometheusAuthAuthenticationTypeCredentialsSecret InputGrafanaPrometheusAuthAuthenticationType = "credentialsSecret"
-	InputGrafanaPrometheusAuthAuthenticationTypeToken             InputGrafanaPrometheusAuthAuthenticationType = "token"
-	InputGrafanaPrometheusAuthAuthenticationTypeTextSecret        InputGrafanaPrometheusAuthAuthenticationType = "textSecret"
-	InputGrafanaPrometheusAuthAuthenticationTypeOauth             InputGrafanaPrometheusAuthAuthenticationType = "oauth"
-)
-
-func (e InputGrafanaPrometheusAuthAuthenticationType) ToPointer() *InputGrafanaPrometheusAuthAuthenticationType {
-	return &e
-}
-func (e *InputGrafanaPrometheusAuthAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "oauth":
-		*e = InputGrafanaPrometheusAuthAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaPrometheusAuthAuthenticationType: %v", v)
-	}
-}
-
 type PrometheusAuthOauthParam struct {
-	// OAuth parameter name
-	Name string `json:"name"`
-	// OAuth parameter value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (p PrometheusAuthOauthParam) MarshalJSON() ([]byte, error) {
@@ -415,31 +41,29 @@ func (p PrometheusAuthOauthParam) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PrometheusAuthOauthParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *PrometheusAuthOauthParam) GetName() string {
+func (p *PrometheusAuthOauthParam) GetName() any {
 	if p == nil {
-		return ""
+		return nil
 	}
 	return p.Name
 }
 
-func (p *PrometheusAuthOauthParam) GetValue() string {
+func (p *PrometheusAuthOauthParam) GetValue() any {
 	if p == nil {
-		return ""
+		return nil
 	}
 	return p.Value
 }
 
 type PrometheusAuthOauthHeader struct {
-	// OAuth header name
-	Name string `json:"name"`
-	// OAuth header value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (p PrometheusAuthOauthHeader) MarshalJSON() ([]byte, error) {
@@ -447,53 +71,45 @@ func (p PrometheusAuthOauthHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PrometheusAuthOauthHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *PrometheusAuthOauthHeader) GetName() string {
+func (p *PrometheusAuthOauthHeader) GetName() any {
 	if p == nil {
-		return ""
+		return nil
 	}
 	return p.Name
 }
 
-func (p *PrometheusAuthOauthHeader) GetValue() string {
+func (p *PrometheusAuthOauthHeader) GetValue() any {
 	if p == nil {
-		return ""
+		return nil
 	}
 	return p.Value
 }
 
 type InputGrafanaPrometheusAuth struct {
 	// Remote Write authentication type
-	AuthType *InputGrafanaPrometheusAuthAuthenticationType `default:"none" json:"authType"`
-	Username *string                                       `json:"username,omitempty"`
-	Password *string                                       `json:"password,omitempty"`
+	AuthType *AuthenticationTypeOptionsPrometheusAuth `json:"authType,omitempty"`
+	Username *string                                  `json:"username,omitempty"`
+	Password *string                                  `json:"password,omitempty"`
 	// Bearer token to include in the authorization header
 	Token *string `json:"token,omitempty"`
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
-	TextSecret *string `json:"textSecret,omitempty"`
-	// URL for OAuth
-	LoginURL *string `json:"loginUrl,omitempty"`
-	// Secret parameter name to pass in request body
-	SecretParamName *string `json:"secretParamName,omitempty"`
-	// Secret parameter value to pass in request body
-	Secret *string `json:"secret,omitempty"`
-	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
-	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
-	AuthHeaderExpr *string `default:"Bearer \\${token}" json:"authHeaderExpr"`
-	// How often the OAuth token should be refreshed.
-	TokenTimeoutSecs *float64 `default:"3600" json:"tokenTimeoutSecs"`
-	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthParams []PrometheusAuthOauthParam `json:"oauthParams,omitempty"`
-	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthHeaders []PrometheusAuthOauthHeader `json:"oauthHeaders,omitempty"`
+	TextSecret         *string                     `json:"textSecret,omitempty"`
+	LoginURL           any                         `json:"loginUrl,omitempty"`
+	SecretParamName    any                         `json:"secretParamName,omitempty"`
+	Secret             any                         `json:"secret,omitempty"`
+	TokenAttributeName any                         `json:"tokenAttributeName,omitempty"`
+	AuthHeaderExpr     any                         `json:"authHeaderExpr,omitempty"`
+	TokenTimeoutSecs   any                         `json:"tokenTimeoutSecs,omitempty"`
+	OauthParams        []PrometheusAuthOauthParam  `json:"oauthParams,omitempty"`
+	OauthHeaders       []PrometheusAuthOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputGrafanaPrometheusAuth) MarshalJSON() ([]byte, error) {
@@ -507,7 +123,7 @@ func (i *InputGrafanaPrometheusAuth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputGrafanaPrometheusAuth) GetAuthType() *InputGrafanaPrometheusAuthAuthenticationType {
+func (i *InputGrafanaPrometheusAuth) GetAuthType() *AuthenticationTypeOptionsPrometheusAuth {
 	if i == nil {
 		return nil
 	}
@@ -549,42 +165,42 @@ func (i *InputGrafanaPrometheusAuth) GetTextSecret() *string {
 	return i.TextSecret
 }
 
-func (i *InputGrafanaPrometheusAuth) GetLoginURL() *string {
+func (i *InputGrafanaPrometheusAuth) GetLoginURL() any {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputGrafanaPrometheusAuth) GetSecretParamName() *string {
+func (i *InputGrafanaPrometheusAuth) GetSecretParamName() any {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputGrafanaPrometheusAuth) GetSecret() *string {
+func (i *InputGrafanaPrometheusAuth) GetSecret() any {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputGrafanaPrometheusAuth) GetTokenAttributeName() *string {
+func (i *InputGrafanaPrometheusAuth) GetTokenAttributeName() any {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputGrafanaPrometheusAuth) GetAuthHeaderExpr() *string {
+func (i *InputGrafanaPrometheusAuth) GetAuthHeaderExpr() any {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputGrafanaPrometheusAuth) GetTokenTimeoutSecs() *float64 {
+func (i *InputGrafanaPrometheusAuth) GetTokenTimeoutSecs() any {
 	if i == nil {
 		return nil
 	}
@@ -605,50 +221,9 @@ func (i *InputGrafanaPrometheusAuth) GetOauthHeaders() []PrometheusAuthOauthHead
 	return i.OauthHeaders
 }
 
-// InputGrafanaLokiAuthAuthenticationType - Loki logs authentication type
-type InputGrafanaLokiAuthAuthenticationType string
-
-const (
-	InputGrafanaLokiAuthAuthenticationTypeNone              InputGrafanaLokiAuthAuthenticationType = "none"
-	InputGrafanaLokiAuthAuthenticationTypeBasic             InputGrafanaLokiAuthAuthenticationType = "basic"
-	InputGrafanaLokiAuthAuthenticationTypeCredentialsSecret InputGrafanaLokiAuthAuthenticationType = "credentialsSecret"
-	InputGrafanaLokiAuthAuthenticationTypeToken             InputGrafanaLokiAuthAuthenticationType = "token"
-	InputGrafanaLokiAuthAuthenticationTypeTextSecret        InputGrafanaLokiAuthAuthenticationType = "textSecret"
-	InputGrafanaLokiAuthAuthenticationTypeOauth             InputGrafanaLokiAuthAuthenticationType = "oauth"
-)
-
-func (e InputGrafanaLokiAuthAuthenticationType) ToPointer() *InputGrafanaLokiAuthAuthenticationType {
-	return &e
-}
-func (e *InputGrafanaLokiAuthAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "oauth":
-		*e = InputGrafanaLokiAuthAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputGrafanaLokiAuthAuthenticationType: %v", v)
-	}
-}
-
 type LokiAuthOauthParam struct {
-	// OAuth parameter name
-	Name string `json:"name"`
-	// OAuth parameter value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (l LokiAuthOauthParam) MarshalJSON() ([]byte, error) {
@@ -656,31 +231,29 @@ func (l LokiAuthOauthParam) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LokiAuthOauthParam) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (l *LokiAuthOauthParam) GetName() string {
+func (l *LokiAuthOauthParam) GetName() any {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Name
 }
 
-func (l *LokiAuthOauthParam) GetValue() string {
+func (l *LokiAuthOauthParam) GetValue() any {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Value
 }
 
 type LokiAuthOauthHeader struct {
-	// OAuth header name
-	Name string `json:"name"`
-	// OAuth header value
-	Value string `json:"value"`
+	Name  any `json:"name,omitempty"`
+	Value any `json:"value,omitempty"`
 }
 
 func (l LokiAuthOauthHeader) MarshalJSON() ([]byte, error) {
@@ -688,53 +261,45 @@ func (l LokiAuthOauthHeader) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LokiAuthOauthHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (l *LokiAuthOauthHeader) GetName() string {
+func (l *LokiAuthOauthHeader) GetName() any {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Name
 }
 
-func (l *LokiAuthOauthHeader) GetValue() string {
+func (l *LokiAuthOauthHeader) GetValue() any {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Value
 }
 
 type InputGrafanaLokiAuth struct {
 	// Loki logs authentication type
-	AuthType *InputGrafanaLokiAuthAuthenticationType `default:"none" json:"authType"`
-	Username *string                                 `json:"username,omitempty"`
-	Password *string                                 `json:"password,omitempty"`
+	AuthType *AuthenticationTypeOptionsLokiAuth `json:"authType,omitempty"`
+	Username *string                            `json:"username,omitempty"`
+	Password *string                            `json:"password,omitempty"`
 	// Bearer token to include in the authorization header
 	Token *string `json:"token,omitempty"`
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
-	TextSecret *string `json:"textSecret,omitempty"`
-	// URL for OAuth
-	LoginURL *string `json:"loginUrl,omitempty"`
-	// Secret parameter name to pass in request body
-	SecretParamName *string `json:"secretParamName,omitempty"`
-	// Secret parameter value to pass in request body
-	Secret *string `json:"secret,omitempty"`
-	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
-	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
-	AuthHeaderExpr *string `default:"Bearer \\${token}" json:"authHeaderExpr"`
-	// How often the OAuth token should be refreshed.
-	TokenTimeoutSecs *float64 `default:"3600" json:"tokenTimeoutSecs"`
-	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthParams []LokiAuthOauthParam `json:"oauthParams,omitempty"`
-	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
-	OauthHeaders []LokiAuthOauthHeader `json:"oauthHeaders,omitempty"`
+	TextSecret         *string               `json:"textSecret,omitempty"`
+	LoginURL           any                   `json:"loginUrl,omitempty"`
+	SecretParamName    any                   `json:"secretParamName,omitempty"`
+	Secret             any                   `json:"secret,omitempty"`
+	TokenAttributeName any                   `json:"tokenAttributeName,omitempty"`
+	AuthHeaderExpr     any                   `json:"authHeaderExpr,omitempty"`
+	TokenTimeoutSecs   any                   `json:"tokenTimeoutSecs,omitempty"`
+	OauthParams        []LokiAuthOauthParam  `json:"oauthParams,omitempty"`
+	OauthHeaders       []LokiAuthOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputGrafanaLokiAuth) MarshalJSON() ([]byte, error) {
@@ -748,7 +313,7 @@ func (i *InputGrafanaLokiAuth) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputGrafanaLokiAuth) GetAuthType() *InputGrafanaLokiAuthAuthenticationType {
+func (i *InputGrafanaLokiAuth) GetAuthType() *AuthenticationTypeOptionsLokiAuth {
 	if i == nil {
 		return nil
 	}
@@ -790,42 +355,42 @@ func (i *InputGrafanaLokiAuth) GetTextSecret() *string {
 	return i.TextSecret
 }
 
-func (i *InputGrafanaLokiAuth) GetLoginURL() *string {
+func (i *InputGrafanaLokiAuth) GetLoginURL() any {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputGrafanaLokiAuth) GetSecretParamName() *string {
+func (i *InputGrafanaLokiAuth) GetSecretParamName() any {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputGrafanaLokiAuth) GetSecret() *string {
+func (i *InputGrafanaLokiAuth) GetSecret() any {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputGrafanaLokiAuth) GetTokenAttributeName() *string {
+func (i *InputGrafanaLokiAuth) GetTokenAttributeName() any {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputGrafanaLokiAuth) GetAuthHeaderExpr() *string {
+func (i *InputGrafanaLokiAuth) GetAuthHeaderExpr() any {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputGrafanaLokiAuth) GetTokenTimeoutSecs() *float64 {
+func (i *InputGrafanaLokiAuth) GetTokenTimeoutSecs() any {
 	if i == nil {
 		return nil
 	}
@@ -846,91 +411,64 @@ func (i *InputGrafanaLokiAuth) GetOauthHeaders() []LokiAuthOauthHeader {
 	return i.OauthHeaders
 }
 
-type InputGrafanaMetadatum struct {
-	Name string `json:"name"`
-	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-	Value string `json:"value"`
-}
-
-func (i InputGrafanaMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputGrafanaMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputGrafanaMetadatum) GetName() string {
-	if i == nil {
-		return ""
-	}
-	return i.Name
-}
-
-func (i *InputGrafanaMetadatum) GetValue() string {
-	if i == nil {
-		return ""
-	}
-	return i.Value
-}
-
 type InputGrafana struct {
 	// Unique ID for this input
-	ID       *string           `json:"id,omitempty"`
-	Type     *InputGrafanaType `json:"type,omitempty"`
-	Disabled *bool             `default:"false" json:"disabled"`
+	ID       *string          `json:"id,omitempty"`
+	Type     InputGrafanaType `json:"type"`
+	Disabled *bool            `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `default:"true" json:"sendToRoutes"`
+	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
 	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 	Environment *string `json:"environment,omitempty"`
 	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `default:"false" json:"pqEnabled"`
+	PqEnabled *bool `json:"pqEnabled,omitempty"`
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []InputGrafanaConnection `json:"connections,omitempty"`
-	Pq          *InputGrafanaPq          `json:"pq,omitempty"`
+	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
+	Pq          *PqType                        `json:"pq,omitempty"`
 	// Address to bind on. Defaults to 0.0.0.0 (all addresses).
-	Host *string `default:"0.0.0.0" json:"host"`
+	Host string `json:"host"`
 	// Port to listen on
-	Port float64                            `json:"port"`
-	TLS  *InputGrafanaTLSSettingsServerSide `json:"tls,omitempty"`
+	Port float64                    `json:"port"`
+	TLS  *TLSSettingsServerSideType `json:"tls,omitempty"`
 	// Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
-	MaxActiveReq *float64 `default:"256" json:"maxActiveReq"`
+	MaxActiveReq *float64 `json:"maxActiveReq,omitempty"`
 	// Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-	MaxRequestsPerSocket *int64 `default:"0" json:"maxRequestsPerSocket"`
+	MaxRequestsPerSocket *int64 `json:"maxRequestsPerSocket,omitempty"`
 	// Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
-	EnableProxyHeader *bool `default:"false" json:"enableProxyHeader"`
+	EnableProxyHeader *bool `json:"enableProxyHeader,omitempty"`
 	// Add request headers to events, in the __headers field
-	CaptureHeaders *bool `default:"false" json:"captureHeaders"`
+	CaptureHeaders *bool `json:"captureHeaders,omitempty"`
 	// How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-	ActivityLogSampleRate *float64 `default:"100" json:"activityLogSampleRate"`
+	ActivityLogSampleRate *float64 `json:"activityLogSampleRate,omitempty"`
 	// How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-	RequestTimeout *float64 `default:"0" json:"requestTimeout"`
+	RequestTimeout *float64 `json:"requestTimeout,omitempty"`
 	// How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-	SocketTimeout *float64 `default:"0" json:"socketTimeout"`
+	SocketTimeout *float64 `json:"socketTimeout,omitempty"`
 	// Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
-	KeepAliveTimeout *float64 `default:"5" json:"keepAliveTimeout"`
+	KeepAliveTimeout *float64 `json:"keepAliveTimeout,omitempty"`
 	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-	EnableHealthCheck *bool `default:"false" json:"enableHealthCheck"`
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 	// Messages from matched IP addresses will be processed, unless also matched by the denylist
-	IPAllowlistRegex *string `default:"/.*/" json:"ipAllowlistRegex"`
+	IPAllowlistRegex *string `json:"ipAllowlistRegex,omitempty"`
 	// Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-	IPDenylistRegex *string `default:"/^\\$/" json:"ipDenylistRegex"`
-	// Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' (Loki) must be configured.
-	PrometheusAPI *string `default:"/api/prom/push" json:"prometheusAPI"`
-	// Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' (Prometheus) must be configured.
-	LokiAPI        *string                     `default:"/loki/api/v1/push" json:"lokiAPI"`
+	IPDenylistRegex *string `json:"ipDenylistRegex,omitempty"`
+	// Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+	PrometheusAPI *string `json:"prometheusAPI,omitempty"`
+	// Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+	LokiAPI        *string                     `json:"lokiAPI,omitempty"`
 	PrometheusAuth *InputGrafanaPrometheusAuth `json:"prometheusAuth,omitempty"`
 	LokiAuth       *InputGrafanaLokiAuth       `json:"lokiAuth,omitempty"`
 	// Fields to add to events from this input
-	Metadata    []InputGrafanaMetadatum `json:"metadata,omitempty"`
-	Description *string                 `json:"description,omitempty"`
+	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
+	Description *string             `json:"description,omitempty"`
+	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+	TemplateHost *string `json:"__template_host,omitempty"`
+	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (i InputGrafana) MarshalJSON() ([]byte, error) {
@@ -938,7 +476,7 @@ func (i InputGrafana) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputGrafana) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"port"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -951,9 +489,9 @@ func (i *InputGrafana) GetID() *string {
 	return i.ID
 }
 
-func (i *InputGrafana) GetType() *InputGrafanaType {
+func (i *InputGrafana) GetType() InputGrafanaType {
 	if i == nil {
-		return nil
+		return InputGrafanaType("")
 	}
 	return i.Type
 }
@@ -1000,23 +538,23 @@ func (i *InputGrafana) GetStreamtags() []string {
 	return i.Streamtags
 }
 
-func (i *InputGrafana) GetConnections() []InputGrafanaConnection {
+func (i *InputGrafana) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputGrafana) GetPq() *InputGrafanaPq {
+func (i *InputGrafana) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputGrafana) GetHost() *string {
+func (i *InputGrafana) GetHost() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Host
 }
@@ -1028,7 +566,7 @@ func (i *InputGrafana) GetPort() float64 {
 	return i.Port
 }
 
-func (i *InputGrafana) GetTLS() *InputGrafanaTLSSettingsServerSide {
+func (i *InputGrafana) GetTLS() *TLSSettingsServerSideType {
 	if i == nil {
 		return nil
 	}
@@ -1140,7 +678,7 @@ func (i *InputGrafana) GetLokiAuth() *InputGrafanaLokiAuth {
 	return i.LokiAuth
 }
 
-func (i *InputGrafana) GetMetadata() []InputGrafanaMetadatum {
+func (i *InputGrafana) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
@@ -1152,4 +690,18 @@ func (i *InputGrafana) GetDescription() *string {
 		return nil
 	}
 	return i.Description
+}
+
+func (i *InputGrafana) GetTemplateHost() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplateHost
+}
+
+func (i *InputGrafana) GetTemplatePort() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TemplatePort
 }

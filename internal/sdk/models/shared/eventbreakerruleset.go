@@ -217,7 +217,7 @@ func (e EventBreakerRulesetRule) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventBreakerRulesetRule) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"name", "timestamp"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -379,7 +379,7 @@ func (e EventBreakerRuleset) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventBreakerRuleset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -36,15 +36,16 @@ func TestConvertFromResponseBody_source(t *testing.T) {
 	e, ok := reg.ByTypeName("criblio_source")
 	require.True(t, ok, "registry must contain criblio_source")
 
-	// RefreshFrom* requires at least one item; use minimal Input.
-	typ := shared.InputCriblHTTPTypeCriblHTTP
+	// RefreshFrom* requires at least one item; use minimal InputUnion1 (Cribl HTTP).
 	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.Input{{
-			InputCriblHTTP: &shared.InputCriblHTTP{
+		Items: []shared.InputUnion1{
+			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
 				ID:   stringPtr("test"),
-				Type: &typ,
-			},
-		}},
+				Type: shared.InputCriblHTTPTypeCriblHTTP,
+				Host: "0.0.0.0",
+				Port: 10200,
+			}),
+		},
 	}
 	model, err := ConvertFromResponseBody(ctx, e, body)
 	require.NoError(t, err)
@@ -113,12 +114,12 @@ func TestConvertFromResponseBody_destination(t *testing.T) {
 
 	// RefreshFrom* requires at least one item; use minimal Output.
 	body := &operations.GetOutputByIDResponseBody{
-		Items: []shared.Output{{
-			OutputDevnull: &shared.OutputDevnull{
-				ID:   "test",
+		Items: []shared.Output{
+			shared.CreateOutputOutputDevnull(shared.OutputDevnull{
+				ID:   stringPtr("test"),
 				Type: shared.OutputDevnullTypeDevnull,
-			},
-		}},
+			}),
+		},
 	}
 	model, err := ConvertFromResponseBody(ctx, e, body)
 	require.NoError(t, err)
@@ -133,14 +134,15 @@ func TestConvertFromResponseBodyWithIdentifiers_injects_required_fields(t *testi
 	e, ok := reg.ByTypeName("criblio_source")
 	require.True(t, ok)
 
-	typ := shared.InputCriblHTTPTypeCriblHTTP
 	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.Input{{
-			InputCriblHTTP: &shared.InputCriblHTTP{
+		Items: []shared.InputUnion1{
+			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
 				ID:   stringPtr("test"),
-				Type: &typ,
-			},
-		}},
+				Type: shared.InputCriblHTTPTypeCriblHTTP,
+				Host: "0.0.0.0",
+				Port: 10200,
+			}),
+		},
 	}
 	identifiers := map[string]string{"GroupID": "default", "ID": "input-hec-1"}
 	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, identifiers)
@@ -156,14 +158,15 @@ func TestConvertFromResponseBodyWithIdentifiers_nil_identifiers_ok(t *testing.T)
 	ctx := context.Background()
 	reg := buildTestRegistry(t)
 	e, _ := reg.ByTypeName("criblio_source")
-	typ := shared.InputCriblHTTPTypeCriblHTTP
 	body := &operations.GetInputByIDResponseBody{
-		Items: []shared.Input{{
-			InputCriblHTTP: &shared.InputCriblHTTP{
+		Items: []shared.InputUnion1{
+			shared.CreateInputUnion1InputCriblHTTP(shared.InputCriblHTTP{
 				ID:   stringPtr("test"),
-				Type: &typ,
-			},
-		}},
+				Type: shared.InputCriblHTTPTypeCriblHTTP,
+				Host: "0.0.0.0",
+				Port: 10200,
+			}),
+		},
 	}
 	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, nil)
 	require.NoError(t, err)

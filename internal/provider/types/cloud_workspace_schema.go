@@ -12,8 +12,8 @@ type CloudWorkspaceSchema struct {
 	ConfigBundles         *ConfigBundles           `tfsdk:"config_bundles"`
 	ConfigHelperSocketDir types.String             `tfsdk:"config_helper_socket_dir"`
 	ConnectionTimeout     types.Float64            `tfsdk:"connection_timeout"`
-	Disabled              types.Bool               `tfsdk:"disabled"`
 	DisableSNIRouting     types.Bool               `tfsdk:"disable_sni_routing"`
+	Disabled              types.Bool               `tfsdk:"disabled"`
 	Failover              *FailoverConfigs         `tfsdk:"failover"`
 	ForwardToLeaderAPI    types.Bool               `tfsdk:"forward_to_leader_api"`
 	Host                  types.String             `tfsdk:"host"`

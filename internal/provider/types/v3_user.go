@@ -3,13 +3,13 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type V3User struct {
-	AuthKey      jsontypes.Normalized `tfsdk:"auth_key"`
-	AuthProtocol types.String         `tfsdk:"auth_protocol"`
-	Name         types.String         `tfsdk:"name"`
-	PrivProtocol jsontypes.Normalized `tfsdk:"priv_protocol"`
+	AuthKey      types.String `tfsdk:"auth_key"`
+	AuthProtocol types.String `tfsdk:"auth_protocol"`
+	Name         types.String `tfsdk:"name"`
+	PrivKey      types.String `tfsdk:"priv_key"`
+	PrivProtocol types.String `tfsdk:"priv_protocol"`
 }

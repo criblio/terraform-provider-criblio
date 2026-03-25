@@ -31,195 +31,6 @@ func (e *OutputSentinelType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type OutputSentinelExtraHTTPHeader struct {
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
-}
-
-func (o OutputSentinelExtraHTTPHeader) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputSentinelExtraHTTPHeader) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputSentinelExtraHTTPHeader) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OutputSentinelExtraHTTPHeader) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
-// OutputSentinelFailedRequestLoggingMode - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-type OutputSentinelFailedRequestLoggingMode string
-
-const (
-	OutputSentinelFailedRequestLoggingModePayload           OutputSentinelFailedRequestLoggingMode = "payload"
-	OutputSentinelFailedRequestLoggingModePayloadAndHeaders OutputSentinelFailedRequestLoggingMode = "payloadAndHeaders"
-	OutputSentinelFailedRequestLoggingModeNone              OutputSentinelFailedRequestLoggingMode = "none"
-)
-
-func (e OutputSentinelFailedRequestLoggingMode) ToPointer() *OutputSentinelFailedRequestLoggingMode {
-	return &e
-}
-func (e *OutputSentinelFailedRequestLoggingMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = OutputSentinelFailedRequestLoggingMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelFailedRequestLoggingMode: %v", v)
-	}
-}
-
-type OutputSentinelResponseRetrySetting struct {
-	// The HTTP response status code that will trigger retries
-	HTTPStatus float64 `json:"httpStatus"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputSentinelResponseRetrySetting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputSentinelResponseRetrySetting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"httpStatus"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputSentinelResponseRetrySetting) GetHTTPStatus() float64 {
-	if o == nil {
-		return 0.0
-	}
-	return o.HTTPStatus
-}
-
-func (o *OutputSentinelResponseRetrySetting) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputSentinelResponseRetrySetting) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputSentinelResponseRetrySetting) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-type OutputSentinelTimeoutRetrySettings struct {
-	TimeoutRetry *bool `default:"false" json:"timeoutRetry"`
-	// How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-	InitialBackoff *float64 `default:"1000" json:"initialBackoff"`
-	// Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-	BackoffRate *float64 `default:"2" json:"backoffRate"`
-	// The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-	MaxBackoff *float64 `default:"10000" json:"maxBackoff"`
-}
-
-func (o OutputSentinelTimeoutRetrySettings) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputSentinelTimeoutRetrySettings) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputSentinelTimeoutRetrySettings) GetTimeoutRetry() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.TimeoutRetry
-}
-
-func (o *OutputSentinelTimeoutRetrySettings) GetInitialBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.InitialBackoff
-}
-
-func (o *OutputSentinelTimeoutRetrySettings) GetBackoffRate() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.BackoffRate
-}
-
-func (o *OutputSentinelTimeoutRetrySettings) GetMaxBackoff() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxBackoff
-}
-
-// OutputSentinelBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputSentinelBackpressureBehavior string
-
-const (
-	OutputSentinelBackpressureBehaviorBlock OutputSentinelBackpressureBehavior = "block"
-	OutputSentinelBackpressureBehaviorDrop  OutputSentinelBackpressureBehavior = "drop"
-	OutputSentinelBackpressureBehaviorQueue OutputSentinelBackpressureBehavior = "queue"
-)
-
-func (e OutputSentinelBackpressureBehavior) ToPointer() *OutputSentinelBackpressureBehavior {
-	return &e
-}
-func (e *OutputSentinelBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputSentinelBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelBackpressureBehavior: %v", v)
-	}
-}
-
 type OutputSentinelAuthType string
 
 const (
@@ -247,8 +58,10 @@ func (e *OutputSentinelAuthType) UnmarshalJSON(data []byte) error {
 type EndpointConfiguration string
 
 const (
+	// EndpointConfigurationURL URL
 	EndpointConfigurationURL EndpointConfiguration = "url"
-	EndpointConfigurationID  EndpointConfiguration = "ID"
+	// EndpointConfigurationID ID
+	EndpointConfigurationID EndpointConfiguration = "ID"
 )
 
 func (e EndpointConfiguration) ToPointer() *EndpointConfiguration {
@@ -302,90 +115,6 @@ func (e *OutputSentinelFormat) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputSentinelCompression - Codec to use to compress the persisted data
-type OutputSentinelCompression string
-
-const (
-	OutputSentinelCompressionNone OutputSentinelCompression = "none"
-	OutputSentinelCompressionGzip OutputSentinelCompression = "gzip"
-)
-
-func (e OutputSentinelCompression) ToPointer() *OutputSentinelCompression {
-	return &e
-}
-func (e *OutputSentinelCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputSentinelCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelCompression: %v", v)
-	}
-}
-
-// OutputSentinelQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputSentinelQueueFullBehavior string
-
-const (
-	OutputSentinelQueueFullBehaviorBlock OutputSentinelQueueFullBehavior = "block"
-	OutputSentinelQueueFullBehaviorDrop  OutputSentinelQueueFullBehavior = "drop"
-)
-
-func (e OutputSentinelQueueFullBehavior) ToPointer() *OutputSentinelQueueFullBehavior {
-	return &e
-}
-func (e *OutputSentinelQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputSentinelQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputSentinelMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputSentinelMode string
-
-const (
-	OutputSentinelModeError        OutputSentinelMode = "error"
-	OutputSentinelModeBackpressure OutputSentinelMode = "backpressure"
-	OutputSentinelModeAlways       OutputSentinelMode = "always"
-)
-
-func (e OutputSentinelMode) ToPointer() *OutputSentinelMode {
-	return &e
-}
-func (e *OutputSentinelMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputSentinelMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelMode: %v", v)
-	}
-}
-
 type OutputSentinelPqControls struct {
 }
 
@@ -402,8 +131,8 @@ func (o *OutputSentinelPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputSentinel struct {
 	// Unique ID for this output
-	ID   *string             `json:"id,omitempty"`
-	Type *OutputSentinelType `json:"type,omitempty"`
+	ID   *string            `json:"id,omitempty"`
+	Type OutputSentinelType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -413,39 +142,39 @@ type OutputSentinel struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Disable to close the connection immediately after sending the outgoing request
-	KeepAlive *bool `default:"true" json:"keepAlive"`
+	KeepAlive *bool `json:"keepAlive,omitempty"`
 	// Maximum number of ongoing requests before blocking
-	Concurrency *float64 `default:"5" json:"concurrency"`
+	Concurrency *float64 `json:"concurrency,omitempty"`
 	// Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)
-	MaxPayloadSizeKB *float64 `default:"1000" json:"maxPayloadSizeKB"`
+	MaxPayloadSizeKB *float64 `json:"maxPayloadSizeKB,omitempty"`
 	// Maximum number of events to include in the request body. Default is 0 (unlimited).
-	MaxPayloadEvents *float64 `default:"0" json:"maxPayloadEvents"`
+	MaxPayloadEvents *float64 `json:"maxPayloadEvents,omitempty"`
 	// Compress the payload body before sending
-	Compress *bool `default:"true" json:"compress"`
+	Compress *bool `json:"compress,omitempty"`
 	// Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's).
 	//         Enabled by default. When this setting is also present in TLS Settings (Client Side),
 	//         that value will take precedence.
-	RejectUnauthorized *bool `default:"true" json:"rejectUnauthorized"`
+	RejectUnauthorized *bool `json:"rejectUnauthorized,omitempty"`
 	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec *float64 `default:"30" json:"timeoutSec"`
+	TimeoutSec *float64 `json:"timeoutSec,omitempty"`
 	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
-	// Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field.
-	ExtraHTTPHeaders []OutputSentinelExtraHTTPHeader `json:"extraHttpHeaders,omitempty"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
+	// Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields).
+	ExtraHTTPHeaders []ItemsTypeExtraHTTPHeaders `json:"extraHttpHeaders,omitempty"`
 	// Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-	UseRoundRobinDNS *bool `default:"false" json:"useRoundRobinDns"`
+	UseRoundRobinDNS *bool `json:"useRoundRobinDns,omitempty"`
 	// Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-	FailedRequestLoggingMode *OutputSentinelFailedRequestLoggingMode `default:"none" json:"failedRequestLoggingMode"`
+	FailedRequestLoggingMode *FailedRequestLoggingModeOptions `json:"failedRequestLoggingMode,omitempty"`
 	// List of headers that are safe to log in plain text
 	SafeHeaders []string `json:"safeHeaders,omitempty"`
 	// Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
-	ResponseRetrySettings []OutputSentinelResponseRetrySetting `json:"responseRetrySettings,omitempty"`
-	TimeoutRetrySettings  *OutputSentinelTimeoutRetrySettings  `json:"timeoutRetrySettings,omitempty"`
+	ResponseRetrySettings []ItemsTypeResponseRetrySettings `json:"responseRetrySettings,omitempty"`
+	TimeoutRetrySettings  *TimeoutRetrySettingsType        `json:"timeoutRetrySettings,omitempty"`
 	// Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-	ResponseHonorRetryAfterHeader *bool `default:"false" json:"responseHonorRetryAfterHeader"`
+	ResponseHonorRetryAfterHeader *bool `json:"responseHonorRetryAfterHeader,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputSentinelBackpressureBehavior `default:"block" json:"onBackpressure"`
-	AuthType       *OutputSentinelAuthType             `json:"authType,omitempty"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	AuthType       *OutputSentinelAuthType      `json:"authType,omitempty"`
 	// URL for OAuth
 	LoginURL string `json:"loginUrl"`
 	// Secret parameter value to pass in request body
@@ -453,42 +182,52 @@ type OutputSentinel struct {
 	// JavaScript expression to compute the Client ID for the Azure application. Can be a constant.
 	ClientID string `json:"client_id"`
 	// Scope to pass in the OAuth request
-	Scope *string `default:"https://monitor.azure.com/.default" json:"scope"`
+	Scope *string `json:"scope,omitempty"`
 	// Enter the data collection endpoint URL or the individual ID
-	EndpointURLConfiguration *EndpointConfiguration `default:"url" json:"endpointURLConfiguration"`
+	EndpointURLConfiguration EndpointConfiguration `json:"endpointURLConfiguration"`
 	// Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
 	TotalMemoryLimitKB *float64              `json:"totalMemoryLimitKB,omitempty"`
 	Description        *string               `json:"description,omitempty"`
 	Format             *OutputSentinelFormat `json:"format,omitempty"`
 	// Expression to evaluate on events to generate output. Example: `raw=${_raw}`. See [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook#custom-format) for other examples. If empty, the full event is sent as stringified JSON.
-	CustomSourceExpression *string `default:"__httpOut" json:"customSourceExpression"`
+	CustomSourceExpression *string `json:"customSourceExpression,omitempty"`
 	// Whether to drop events when the source expression evaluates to null
-	CustomDropWhenNull *bool `default:"false" json:"customDropWhenNull"`
+	CustomDropWhenNull *bool `json:"customDropWhenNull,omitempty"`
 	// Delimiter string to insert between individual events. Defaults to newline character.
-	CustomEventDelimiter *string `default:"\n" json:"customEventDelimiter"`
+	CustomEventDelimiter *string `json:"customEventDelimiter,omitempty"`
 	// Content type to use for request. Defaults to application/x-ndjson. Any content types set in Advanced Settings > Extra HTTP headers will override this entry.
-	CustomContentType *string `default:"application/x-ndjson" json:"customContentType"`
+	CustomContentType *string `json:"customContentType,omitempty"`
 	// Expression specifying how to format the payload for each batch. To reference the events to send, use the `${events}` variable. Example expression: `{ "items" : [${events}] }` would send the batch inside a JSON object.
-	CustomPayloadExpression *string `default:"\\${events}" json:"customPayloadExpression"`
+	CustomPayloadExpression *string `json:"customPayloadExpression,omitempty"`
 	// HTTP content-type header value
-	AdvancedContentType *string `default:"application/json" json:"advancedContentType"`
+	AdvancedContentType *string `json:"advancedContentType,omitempty"`
 	// Custom JavaScript code to format incoming event data accessible through the __e variable. The formatted content is added to (__e['__eventOut']) if available. Otherwise, the original event is serialized as JSON. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 	FormatEventCode *string `json:"formatEventCode,omitempty"`
 	// Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 	FormatPayloadCode *string `json:"formatPayloadCode,omitempty"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputSentinelCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputSentinelQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputSentinelMode       `default:"error" json:"pqMode"`
-	PqControls *OutputSentinelPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                   `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputSentinelPqControls `json:"pqControls,omitempty"`
 	// URL to send events to. Can be overwritten by an event's __url field.
 	URL *string `json:"url,omitempty"`
 	// Immutable ID for the Data Collection Rule (DCR)
@@ -497,6 +236,22 @@ type OutputSentinel struct {
 	DceEndpoint *string `json:"dceEndpoint,omitempty"`
 	// The name of the stream (Sentinel table) in which to store the events
 	StreamName *string `json:"streamName,omitempty"`
+	// Binds 'loginUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'loginUrl' at runtime.
+	TemplateLoginURL *string `json:"__template_loginUrl,omitempty"`
+	// Binds 'secret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'secret' at runtime.
+	TemplateSecret *string `json:"__template_secret,omitempty"`
+	// Binds 'client_id' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'client_id' at runtime.
+	TemplateClientID *string `json:"__template_client_id,omitempty"`
+	// Binds 'scope' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'scope' at runtime.
+	TemplateScope *string `json:"__template_scope,omitempty"`
+	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+	TemplateURL *string `json:"__template_url,omitempty"`
+	// Binds 'dcrID' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dcrID' at runtime.
+	TemplateDcrID *string `json:"__template_dcrID,omitempty"`
+	// Binds 'dceEndpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dceEndpoint' at runtime.
+	TemplateDceEndpoint *string `json:"__template_dceEndpoint,omitempty"`
+	// Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
+	TemplateStreamName *string `json:"__template_streamName,omitempty"`
 }
 
 func (o OutputSentinel) MarshalJSON() ([]byte, error) {
@@ -504,7 +259,7 @@ func (o OutputSentinel) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputSentinel) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"loginUrl", "secret", "client_id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -517,9 +272,9 @@ func (o *OutputSentinel) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputSentinel) GetType() *OutputSentinelType {
+func (o *OutputSentinel) GetType() OutputSentinelType {
 	if o == nil {
-		return nil
+		return OutputSentinelType("")
 	}
 	return o.Type
 }
@@ -608,7 +363,7 @@ func (o *OutputSentinel) GetFlushPeriodSec() *float64 {
 	return o.FlushPeriodSec
 }
 
-func (o *OutputSentinel) GetExtraHTTPHeaders() []OutputSentinelExtraHTTPHeader {
+func (o *OutputSentinel) GetExtraHTTPHeaders() []ItemsTypeExtraHTTPHeaders {
 	if o == nil {
 		return nil
 	}
@@ -622,7 +377,7 @@ func (o *OutputSentinel) GetUseRoundRobinDNS() *bool {
 	return o.UseRoundRobinDNS
 }
 
-func (o *OutputSentinel) GetFailedRequestLoggingMode() *OutputSentinelFailedRequestLoggingMode {
+func (o *OutputSentinel) GetFailedRequestLoggingMode() *FailedRequestLoggingModeOptions {
 	if o == nil {
 		return nil
 	}
@@ -636,14 +391,14 @@ func (o *OutputSentinel) GetSafeHeaders() []string {
 	return o.SafeHeaders
 }
 
-func (o *OutputSentinel) GetResponseRetrySettings() []OutputSentinelResponseRetrySetting {
+func (o *OutputSentinel) GetResponseRetrySettings() []ItemsTypeResponseRetrySettings {
 	if o == nil {
 		return nil
 	}
 	return o.ResponseRetrySettings
 }
 
-func (o *OutputSentinel) GetTimeoutRetrySettings() *OutputSentinelTimeoutRetrySettings {
+func (o *OutputSentinel) GetTimeoutRetrySettings() *TimeoutRetrySettingsType {
 	if o == nil {
 		return nil
 	}
@@ -657,7 +412,7 @@ func (o *OutputSentinel) GetResponseHonorRetryAfterHeader() *bool {
 	return o.ResponseHonorRetryAfterHeader
 }
 
-func (o *OutputSentinel) GetOnBackpressure() *OutputSentinelBackpressureBehavior {
+func (o *OutputSentinel) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
@@ -699,9 +454,9 @@ func (o *OutputSentinel) GetScope() *string {
 	return o.Scope
 }
 
-func (o *OutputSentinel) GetEndpointURLConfiguration() *EndpointConfiguration {
+func (o *OutputSentinel) GetEndpointURLConfiguration() EndpointConfiguration {
 	if o == nil {
-		return nil
+		return EndpointConfiguration("")
 	}
 	return o.EndpointURLConfiguration
 }
@@ -783,6 +538,41 @@ func (o *OutputSentinel) GetFormatPayloadCode() *string {
 	return o.FormatPayloadCode
 }
 
+func (o *OutputSentinel) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputSentinel) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputSentinel) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputSentinel) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputSentinel) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
+}
+
 func (o *OutputSentinel) GetPqMaxFileSize() *string {
 	if o == nil {
 		return nil
@@ -804,25 +594,25 @@ func (o *OutputSentinel) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputSentinel) GetPqCompress() *OutputSentinelCompression {
+func (o *OutputSentinel) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputSentinel) GetPqOnBackpressure() *OutputSentinelQueueFullBehavior {
+func (o *OutputSentinel) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputSentinel) GetPqMode() *OutputSentinelMode {
+func (o *OutputSentinel) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputSentinel) GetPqControls() *OutputSentinelPqControls {
@@ -858,4 +648,60 @@ func (o *OutputSentinel) GetStreamName() *string {
 		return nil
 	}
 	return o.StreamName
+}
+
+func (o *OutputSentinel) GetTemplateLoginURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateLoginURL
+}
+
+func (o *OutputSentinel) GetTemplateSecret() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateSecret
+}
+
+func (o *OutputSentinel) GetTemplateClientID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateClientID
+}
+
+func (o *OutputSentinel) GetTemplateScope() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateScope
+}
+
+func (o *OutputSentinel) GetTemplateURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateURL
+}
+
+func (o *OutputSentinel) GetTemplateDcrID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateDcrID
+}
+
+func (o *OutputSentinel) GetTemplateDceEndpoint() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateDceEndpoint
+}
+
+func (o *OutputSentinel) GetTemplateStreamName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateStreamName
 }

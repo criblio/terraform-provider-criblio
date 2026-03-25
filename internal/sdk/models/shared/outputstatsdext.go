@@ -31,147 +31,6 @@ func (e *OutputStatsdExtType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputStatsdExtDestinationProtocol - Protocol to use when communicating with the destination.
-type OutputStatsdExtDestinationProtocol string
-
-const (
-	OutputStatsdExtDestinationProtocolUDP OutputStatsdExtDestinationProtocol = "udp"
-	OutputStatsdExtDestinationProtocolTCP OutputStatsdExtDestinationProtocol = "tcp"
-)
-
-func (e OutputStatsdExtDestinationProtocol) ToPointer() *OutputStatsdExtDestinationProtocol {
-	return &e
-}
-func (e *OutputStatsdExtDestinationProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "udp":
-		fallthrough
-	case "tcp":
-		*e = OutputStatsdExtDestinationProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputStatsdExtDestinationProtocol: %v", v)
-	}
-}
-
-// OutputStatsdExtBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputStatsdExtBackpressureBehavior string
-
-const (
-	OutputStatsdExtBackpressureBehaviorBlock OutputStatsdExtBackpressureBehavior = "block"
-	OutputStatsdExtBackpressureBehaviorDrop  OutputStatsdExtBackpressureBehavior = "drop"
-	OutputStatsdExtBackpressureBehaviorQueue OutputStatsdExtBackpressureBehavior = "queue"
-)
-
-func (e OutputStatsdExtBackpressureBehavior) ToPointer() *OutputStatsdExtBackpressureBehavior {
-	return &e
-}
-func (e *OutputStatsdExtBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = OutputStatsdExtBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputStatsdExtBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputStatsdExtCompression - Codec to use to compress the persisted data
-type OutputStatsdExtCompression string
-
-const (
-	OutputStatsdExtCompressionNone OutputStatsdExtCompression = "none"
-	OutputStatsdExtCompressionGzip OutputStatsdExtCompression = "gzip"
-)
-
-func (e OutputStatsdExtCompression) ToPointer() *OutputStatsdExtCompression {
-	return &e
-}
-func (e *OutputStatsdExtCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputStatsdExtCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputStatsdExtCompression: %v", v)
-	}
-}
-
-// OutputStatsdExtQueueFullBehavior - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-type OutputStatsdExtQueueFullBehavior string
-
-const (
-	OutputStatsdExtQueueFullBehaviorBlock OutputStatsdExtQueueFullBehavior = "block"
-	OutputStatsdExtQueueFullBehaviorDrop  OutputStatsdExtQueueFullBehavior = "drop"
-)
-
-func (e OutputStatsdExtQueueFullBehavior) ToPointer() *OutputStatsdExtQueueFullBehavior {
-	return &e
-}
-func (e *OutputStatsdExtQueueFullBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputStatsdExtQueueFullBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputStatsdExtQueueFullBehavior: %v", v)
-	}
-}
-
-// OutputStatsdExtMode - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-type OutputStatsdExtMode string
-
-const (
-	OutputStatsdExtModeError        OutputStatsdExtMode = "error"
-	OutputStatsdExtModeBackpressure OutputStatsdExtMode = "backpressure"
-	OutputStatsdExtModeAlways       OutputStatsdExtMode = "always"
-)
-
-func (e OutputStatsdExtMode) ToPointer() *OutputStatsdExtMode {
-	return &e
-}
-func (e *OutputStatsdExtMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "error":
-		fallthrough
-	case "backpressure":
-		fallthrough
-	case "always":
-		*e = OutputStatsdExtMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputStatsdExtMode: %v", v)
-	}
-}
-
 type OutputStatsdExtPqControls struct {
 }
 
@@ -188,8 +47,8 @@ func (o *OutputStatsdExtPqControls) UnmarshalJSON(data []byte) error {
 
 type OutputStatsdExt struct {
 	// Unique ID for this output
-	ID   *string              `json:"id,omitempty"`
-	Type *OutputStatsdExtType `json:"type,omitempty"`
+	ID   *string             `json:"id,omitempty"`
+	Type OutputStatsdExtType `json:"type"`
 	// Pipeline to process data before sending out to this output
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -199,39 +58,49 @@ type OutputStatsdExt struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Protocol to use when communicating with the destination.
-	Protocol *OutputStatsdExtDestinationProtocol `default:"udp" json:"protocol"`
+	Protocol DestinationProtocolOptions `json:"protocol"`
 	// The hostname of the destination.
 	Host string `json:"host"`
 	// Destination port.
-	Port *float64 `default:"8125" json:"port"`
+	Port float64 `json:"port"`
 	// When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
-	Mtu *float64 `default:"512" json:"mtu"`
+	Mtu *float64 `json:"mtu,omitempty"`
 	// When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
-	FlushPeriodSec *float64 `default:"1" json:"flushPeriodSec"`
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 	// How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
-	DNSResolvePeriodSec *float64 `default:"0" json:"dnsResolvePeriodSec"`
+	DNSResolvePeriodSec *float64 `json:"dnsResolvePeriodSec,omitempty"`
 	Description         *string  `json:"description,omitempty"`
 	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-	ThrottleRatePerSec *string `default:"0" json:"throttleRatePerSec"`
+	ThrottleRatePerSec *string `json:"throttleRatePerSec,omitempty"`
 	// Amount of time (milliseconds) to wait for the connection to establish before retrying
-	ConnectionTimeout *float64 `default:"10000" json:"connectionTimeout"`
+	ConnectionTimeout *float64 `json:"connectionTimeout,omitempty"`
 	// Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
-	WriteTimeout *float64 `default:"60000" json:"writeTimeout"`
+	WriteTimeout *float64 `json:"writeTimeout,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputStatsdExtBackpressureBehavior `default:"block" json:"onBackpressure"`
-	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-	PqMaxFileSize *string `default:"1 MB" json:"pqMaxFileSize"`
-	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-	PqMaxSize *string `default:"5GB" json:"pqMaxSize"`
-	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-	PqPath *string `default:"$CRIBL_HOME/state/queues" json:"pqPath"`
-	// Codec to use to compress the persisted data
-	PqCompress *OutputStatsdExtCompression `default:"none" json:"pqCompress"`
-	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-	PqOnBackpressure *OutputStatsdExtQueueFullBehavior `default:"block" json:"pqOnBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptions `json:"onBackpressure,omitempty"`
+	// Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
+	PqStrictOrdering *bool `json:"pqStrictOrdering,omitempty"`
+	// Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
+	PqRatePerSec *float64 `json:"pqRatePerSec,omitempty"`
 	// In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-	PqMode     *OutputStatsdExtMode       `default:"error" json:"pqMode"`
-	PqControls *OutputStatsdExtPqControls `json:"pqControls,omitempty"`
+	PqMode *ModeOptions `json:"pqMode,omitempty"`
+	// Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
+	PqMaxBufferSize *float64 `json:"pqMaxBufferSize,omitempty"`
+	// How long (in seconds) to wait for backpressure to resolve before engaging the queue
+	PqMaxBackpressureSec *float64 `json:"pqMaxBackpressureSec,omitempty"`
+	// The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+	PqMaxFileSize *string `json:"pqMaxFileSize,omitempty"`
+	// The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+	PqMaxSize *string `json:"pqMaxSize,omitempty"`
+	// The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
+	PqPath *string `json:"pqPath,omitempty"`
+	// Codec to use to compress the persisted data
+	PqCompress *CompressionOptionsPq `json:"pqCompress,omitempty"`
+	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
+	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
+	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+	PqMaxBufferSizeBytes *string                    `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputStatsdExtPqControls `json:"pqControls,omitempty"`
 }
 
 func (o OutputStatsdExt) MarshalJSON() ([]byte, error) {
@@ -239,7 +108,7 @@ func (o OutputStatsdExt) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputStatsdExt) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -252,9 +121,9 @@ func (o *OutputStatsdExt) GetID() *string {
 	return o.ID
 }
 
-func (o *OutputStatsdExt) GetType() *OutputStatsdExtType {
+func (o *OutputStatsdExt) GetType() OutputStatsdExtType {
 	if o == nil {
-		return nil
+		return OutputStatsdExtType("")
 	}
 	return o.Type
 }
@@ -287,9 +156,9 @@ func (o *OutputStatsdExt) GetStreamtags() []string {
 	return o.Streamtags
 }
 
-func (o *OutputStatsdExt) GetProtocol() *OutputStatsdExtDestinationProtocol {
+func (o *OutputStatsdExt) GetProtocol() DestinationProtocolOptions {
 	if o == nil {
-		return nil
+		return DestinationProtocolOptions("")
 	}
 	return o.Protocol
 }
@@ -301,9 +170,9 @@ func (o *OutputStatsdExt) GetHost() string {
 	return o.Host
 }
 
-func (o *OutputStatsdExt) GetPort() *float64 {
+func (o *OutputStatsdExt) GetPort() float64 {
 	if o == nil {
-		return nil
+		return 0.0
 	}
 	return o.Port
 }
@@ -357,11 +226,46 @@ func (o *OutputStatsdExt) GetWriteTimeout() *float64 {
 	return o.WriteTimeout
 }
 
-func (o *OutputStatsdExt) GetOnBackpressure() *OutputStatsdExtBackpressureBehavior {
+func (o *OutputStatsdExt) GetOnBackpressure() *BackpressureBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.OnBackpressure
+}
+
+func (o *OutputStatsdExt) GetPqStrictOrdering() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.PqStrictOrdering
+}
+
+func (o *OutputStatsdExt) GetPqRatePerSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqRatePerSec
+}
+
+func (o *OutputStatsdExt) GetPqMode() *ModeOptions {
+	if o == nil {
+		return nil
+	}
+	return o.PqMode
+}
+
+func (o *OutputStatsdExt) GetPqMaxBufferSize() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBufferSize
+}
+
+func (o *OutputStatsdExt) GetPqMaxBackpressureSec() *float64 {
+	if o == nil {
+		return nil
+	}
+	return o.PqMaxBackpressureSec
 }
 
 func (o *OutputStatsdExt) GetPqMaxFileSize() *string {
@@ -385,25 +289,25 @@ func (o *OutputStatsdExt) GetPqPath() *string {
 	return o.PqPath
 }
 
-func (o *OutputStatsdExt) GetPqCompress() *OutputStatsdExtCompression {
+func (o *OutputStatsdExt) GetPqCompress() *CompressionOptionsPq {
 	if o == nil {
 		return nil
 	}
 	return o.PqCompress
 }
 
-func (o *OutputStatsdExt) GetPqOnBackpressure() *OutputStatsdExtQueueFullBehavior {
+func (o *OutputStatsdExt) GetPqOnBackpressure() *QueueFullBehaviorOptions {
 	if o == nil {
 		return nil
 	}
 	return o.PqOnBackpressure
 }
 
-func (o *OutputStatsdExt) GetPqMode() *OutputStatsdExtMode {
+func (o *OutputStatsdExt) GetPqMaxBufferSizeBytes() *string {
 	if o == nil {
 		return nil
 	}
-	return o.PqMode
+	return o.PqMaxBufferSizeBytes
 }
 
 func (o *OutputStatsdExt) GetPqControls() *OutputStatsdExtPqControls {

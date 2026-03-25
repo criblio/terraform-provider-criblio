@@ -14,8 +14,8 @@ type UpdateSystemInputsByPackRequest struct {
 	// group Id
 	GroupID string `pathParam:"style=simple,explode=false,name=groupId"`
 	// Unique ID to PATCH for pack source
-	ID    string       `pathParam:"style=simple,explode=false,name=id"`
-	Input shared.Input `request:"mediaType=application/json"`
+	ID    string             `pathParam:"style=simple,explode=false,name=id"`
+	Input shared.InputUnion2 `request:"mediaType=application/json"`
 }
 
 func (u *UpdateSystemInputsByPackRequest) GetPack() string {
@@ -46,19 +46,19 @@ func (u *UpdateSystemInputsByPackRequest) GetID() string {
 	return u.ID
 }
 
-func (u *UpdateSystemInputsByPackRequest) GetInput() shared.Input {
+func (u *UpdateSystemInputsByPackRequest) GetInput() shared.InputUnion2 {
 	if u == nil {
-		return shared.Input{}
+		return shared.InputUnion2{}
 	}
 	return u.Input
 }
 
 // UpdateSystemInputsByPackResponseBody - a list of Input objects
 type UpdateSystemInputsByPackResponseBody struct {
-	Items []shared.Input `json:"items,omitempty"`
+	Items []shared.InputUnion1 `json:"items,omitempty"`
 }
 
-func (u *UpdateSystemInputsByPackResponseBody) GetItems() []shared.Input {
+func (u *UpdateSystemInputsByPackResponseBody) GetItems() []shared.InputUnion1 {
 	if u == nil {
 		return nil
 	}

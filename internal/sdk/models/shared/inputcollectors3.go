@@ -46,6 +46,9 @@ func (i *InputCollectorS3SavedState) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// #region class-body-inputcollectors3savedstate
+// #endregion class-body-inputcollectors3savedstate
+
 // InputCollectorS3LogLevel - Level at which to set task logging
 type InputCollectorS3LogLevel string
 
@@ -153,6 +156,9 @@ func (i *InputCollectorS3TimeWarning) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// #region class-body-inputcollectors3timewarning
+// #endregion class-body-inputcollectors3timewarning
+
 // InputCollectorS3StateTracking - State tracking configuration
 type InputCollectorS3StateTracking struct {
 	StateUpdateExpression *string `json:"stateUpdateExpression,omitempty"`
@@ -191,6 +197,9 @@ func (i *InputCollectorS3StateTracking) GetEnabled() *bool {
 	}
 	return i.Enabled
 }
+
+// #region class-body-inputcollectors3statetracking
+// #endregion class-body-inputcollectors3statetracking
 
 type InputCollectorS3RunSettings struct {
 	// Reschedule tasks that failed with non-fatal errors
@@ -322,6 +331,9 @@ func (i *InputCollectorS3RunSettings) GetStateTracking() *InputCollectorS3StateT
 	return i.StateTracking
 }
 
+// #region class-body-inputcollectors3runsettings
+// #endregion class-body-inputcollectors3runsettings
+
 // InputCollectorS3Schedule - Configuration for a scheduled job
 type InputCollectorS3Schedule struct {
 	// Enable to configure scheduling for this Collector
@@ -390,6 +402,9 @@ func (i *InputCollectorS3Schedule) GetRun() *InputCollectorS3RunSettings {
 	return i.Run
 }
 
+// #region class-body-inputcollectors3schedule
+// #endregion class-body-inputcollectors3schedule
+
 type InputCollectorS3TypeCollection2 string
 
 const (
@@ -453,6 +468,9 @@ func (i *InputCollectorS3Preprocess) GetArgs() []string {
 	return i.Args
 }
 
+// #region class-body-inputcollectors3preprocess
+// #endregion class-body-inputcollectors3preprocess
+
 type InputCollectorS3Metadatum struct {
 	Name string `json:"name"`
 	// JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
@@ -464,7 +482,7 @@ func (i InputCollectorS3Metadatum) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorS3Metadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"name", "value"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -483,6 +501,9 @@ func (i *InputCollectorS3Metadatum) GetValue() string {
 	}
 	return i.Value
 }
+
+// #region class-body-inputcollectors3metadatum
+// #endregion class-body-inputcollectors3metadatum
 
 type InputCollectorS3Input struct {
 	Type *InputCollectorS3TypeCollection2 `default:"collection" json:"type"`
@@ -577,6 +598,9 @@ func (i *InputCollectorS3Input) GetOutput() *string {
 	return i.Output
 }
 
+// #region class-body-inputcollectors3input
+// #endregion class-body-inputcollectors3input
+
 type InputCollectorS3TypeS3 string
 
 const (
@@ -669,6 +693,9 @@ func (i *InputCollectorS3Extractor) GetPattern() *string {
 	}
 	return i.Pattern
 }
+
+// #region class-body-inputcollectors3extractor
+// #endregion class-body-inputcollectors3extractor
 
 type InputCollectorS3Conf struct {
 	// S3 Bucket from which to collect data
@@ -767,6 +794,9 @@ func (i *InputCollectorS3Conf) GetMaxBatchSize() *int64 {
 	return i.MaxBatchSize
 }
 
+// #region class-body-inputcollectors3conf
+// #endregion class-body-inputcollectors3conf
+
 type InputCollectorS3Collector struct {
 	Type InputCollectorS3TypeS3 `json:"type"`
 	Conf *InputCollectorS3Conf  `json:"conf,omitempty"`
@@ -777,7 +807,7 @@ func (i InputCollectorS3Collector) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorS3Collector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -796,6 +826,9 @@ func (i *InputCollectorS3Collector) GetConf() *InputCollectorS3Conf {
 	}
 	return i.Conf
 }
+
+// #region class-body-inputcollectors3collector
+// #endregion class-body-inputcollectors3collector
 
 type InputCollectorS3 struct {
 	ID                   string                           `json:"id"`
@@ -822,7 +855,7 @@ func (i InputCollectorS3) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InputCollectorS3) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "collector"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -918,3 +951,6 @@ func (i *InputCollectorS3) GetCollector() InputCollectorS3Collector {
 	}
 	return i.Collector
 }
+
+// #region class-body-inputcollectors3
+// #endregion class-body-inputcollectors3

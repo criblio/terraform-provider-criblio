@@ -74,10 +74,7 @@ func (r *LookupFileResourceModel) RefreshFromOperationsUpdateLookupFileByIDRespo
 func (r *LookupFileResourceModel) RefreshFromSharedLookupFile(ctx context.Context, resp *shared.LookupFile) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	// Preserve content when API returns null (e.g. for security); avoids refresh plan drift
-	if resp.Content != nil {
-		r.Content = types.StringPointerValue(resp.Content)
-	}
+	r.Content = types.StringPointerValue(resp.Content)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
 	if resp.Mode != nil {

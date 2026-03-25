@@ -7,6 +7,8 @@ import (
 )
 
 type OutputSnmpHost struct {
-	Host types.String  `tfsdk:"host"`
-	Port types.Float64 `tfsdk:"port"`
+	TemplateHost types.String  `tfsdk:"template_host"`
+	TemplatePort types.String  `tfsdk:"template_port"`
+	Host         types.String  `tfsdk:"host"`
+	Port         types.Float64 `tfsdk:"port"`
 }

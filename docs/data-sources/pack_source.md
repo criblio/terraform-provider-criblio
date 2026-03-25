@@ -31,91 +31,100 @@ data "criblio_pack_source" "my_packsource" {
 
 ### Read-Only
 
-- `input_appscope` (Attributes) (see [below for nested schema](#nestedatt--input_appscope))
-- `input_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob))
-- `input_cloudflare_hec` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec))
-- `input_collection` (Attributes) (see [below for nested schema](#nestedatt--input_collection))
-- `input_confluent_cloud` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud))
-- `input_cribl` (Attributes) (see [below for nested schema](#nestedatt--input_cribl))
-- `input_cribl_http` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http))
-- `input_cribl_lake_http` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http))
-- `input_cribl_tcp` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp))
-- `input_criblmetrics` (Attributes) (see [below for nested schema](#nestedatt--input_criblmetrics))
-- `input_crowdstrike` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike))
-- `input_datadog_agent` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent))
-- `input_datagen` (Attributes) (see [below for nested schema](#nestedatt--input_datagen))
-- `input_edge_prometheus` (Attributes) (see [below for nested schema](#nestedatt--input_edge_prometheus))
-- `input_elastic` (Attributes) (see [below for nested schema](#nestedatt--input_elastic))
-- `input_eventhub` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub))
-- `input_exec` (Attributes) (see [below for nested schema](#nestedatt--input_exec))
-- `input_file` (Attributes) (see [below for nested schema](#nestedatt--input_file))
-- `input_firehose` (Attributes) (see [below for nested schema](#nestedatt--input_firehose))
-- `input_google_pubsub` (Attributes) (see [below for nested schema](#nestedatt--input_google_pubsub))
-- `input_grafana` (Attributes) (see [below for nested schema](#nestedatt--input_grafana))
-- `input_http` (Attributes) (see [below for nested schema](#nestedatt--input_http))
-- `input_http_raw` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw))
-- `input_journal_files` (Attributes) (see [below for nested schema](#nestedatt--input_journal_files))
-- `input_kafka` (Attributes) (see [below for nested schema](#nestedatt--input_kafka))
-- `input_kinesis` (Attributes) (see [below for nested schema](#nestedatt--input_kinesis))
-- `input_kube_events` (Attributes) (see [below for nested schema](#nestedatt--input_kube_events))
-- `input_kube_logs` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs))
-- `input_kube_metrics` (Attributes) (see [below for nested schema](#nestedatt--input_kube_metrics))
-- `input_loki` (Attributes) (see [below for nested schema](#nestedatt--input_loki))
-- `input_metrics` (Attributes) (see [below for nested schema](#nestedatt--input_metrics))
-- `input_model_driven_telemetry` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry))
-- `input_msk` (Attributes) (see [below for nested schema](#nestedatt--input_msk))
-- `input_netflow` (Attributes) (see [below for nested schema](#nestedatt--input_netflow))
-- `input_office365_mgmt` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt))
-- `input_office365_msg_trace` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace))
-- `input_office365_service` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service))
-- `input_open_telemetry` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry))
-- `input_prometheus` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus))
-- `input_prometheus_rw` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw))
-- `input_raw_udp` (Attributes) (see [below for nested schema](#nestedatt--input_raw_udp))
-- `input_s3` (Attributes) (see [below for nested schema](#nestedatt--input_s3))
-- `input_s3_inventory` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory))
-- `input_security_lake` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake))
-- `input_snmp` (Attributes) (see [below for nested schema](#nestedatt--input_snmp))
-- `input_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_splunk))
-- `input_splunk_hec` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec))
-- `input_splunk_search` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search))
-- `input_sqs` (Attributes) (see [below for nested schema](#nestedatt--input_sqs))
-- `input_syslog` (Attributes) (see [below for nested schema](#nestedatt--input_syslog))
-- `input_system_metrics` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics))
-- `input_system_state` (Attributes) (see [below for nested schema](#nestedatt--input_system_state))
-- `input_tcp` (Attributes) (see [below for nested schema](#nestedatt--input_tcp))
-- `input_tcpjson` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson))
-- `input_wef` (Attributes) (see [below for nested schema](#nestedatt--input_wef))
-- `input_win_event_logs` (Attributes) (see [below for nested schema](#nestedatt--input_win_event_logs))
-- `input_windows_metrics` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics))
-- `input_wiz` (Attributes) (see [below for nested schema](#nestedatt--input_wiz))
-- `input_wiz_webhook` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook))
-- `input_zscaler_hec` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec))
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
 
-<a id="nestedatt--input_appscope"></a>
-### Nested Schema for `input_appscope`
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `input_appscope` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope))
+- `input_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--items--input_azure_blob))
+- `input_cloudflare_hec` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec))
+- `input_collection` (Attributes) (see [below for nested schema](#nestedatt--items--input_collection))
+- `input_confluent_cloud` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud))
+- `input_cribl` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl))
+- `input_cribl_http` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http))
+- `input_cribl_lake_http` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http))
+- `input_cribl_tcp` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp))
+- `input_criblmetrics` (Attributes) (see [below for nested schema](#nestedatt--items--input_criblmetrics))
+- `input_crowdstrike` (Attributes) (see [below for nested schema](#nestedatt--items--input_crowdstrike))
+- `input_datadog_agent` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent))
+- `input_datagen` (Attributes) (see [below for nested schema](#nestedatt--items--input_datagen))
+- `input_edge_prometheus` (Attributes) (see [below for nested schema](#nestedatt--items--input_edge_prometheus))
+- `input_elastic` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic))
+- `input_eventhub` (Attributes) (see [below for nested schema](#nestedatt--items--input_eventhub))
+- `input_exec` (Attributes) (see [below for nested schema](#nestedatt--items--input_exec))
+- `input_file` (Attributes) (see [below for nested schema](#nestedatt--items--input_file))
+- `input_firehose` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose))
+- `input_google_pubsub` (Attributes) (see [below for nested schema](#nestedatt--items--input_google_pubsub))
+- `input_grafana` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana))
+- `input_http` (Attributes) (see [below for nested schema](#nestedatt--items--input_http))
+- `input_http_raw` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw))
+- `input_journal_files` (Attributes) (see [below for nested schema](#nestedatt--items--input_journal_files))
+- `input_kafka` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka))
+- `input_kinesis` (Attributes) (see [below for nested schema](#nestedatt--items--input_kinesis))
+- `input_kube_events` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_events))
+- `input_kube_logs` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_logs))
+- `input_kube_metrics` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_metrics))
+- `input_loki` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki))
+- `input_metrics` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics))
+- `input_microsoft_graph` (Attributes) (see [below for nested schema](#nestedatt--items--input_microsoft_graph))
+- `input_model_driven_telemetry` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry))
+- `input_msk` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk))
+- `input_netflow` (Attributes) (see [below for nested schema](#nestedatt--items--input_netflow))
+- `input_office365_mgmt` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_mgmt))
+- `input_office365_msg_trace` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_msg_trace))
+- `input_office365_service` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_service))
+- `input_open_telemetry` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry))
+- `input_openai` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai))
+- `input_prometheus` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus))
+- `input_prometheus_rw` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw))
+- `input_raw_udp` (Attributes) (see [below for nested schema](#nestedatt--items--input_raw_udp))
+- `input_s3` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3))
+- `input_s3_inventory` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3_inventory))
+- `input_security_lake` (Attributes) (see [below for nested schema](#nestedatt--items--input_security_lake))
+- `input_snmp` (Attributes) (see [below for nested schema](#nestedatt--items--input_snmp))
+- `input_splunk` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk))
+- `input_splunk_hec` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec))
+- `input_splunk_search` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search))
+- `input_sqs` (Attributes) (see [below for nested schema](#nestedatt--items--input_sqs))
+- `input_syslog` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog))
+- `input_system_metrics` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics))
+- `input_system_state` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_state))
+- `input_tcp` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp))
+- `input_tcpjson` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson))
+- `input_wef` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef))
+- `input_win_event_logs` (Attributes) (see [below for nested schema](#nestedatt--items--input_win_event_logs))
+- `input_windows_metrics` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics))
+- `input_wiz` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz))
+- `input_wiz_webhook` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook))
+- `input_zscaler_hec` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec))
+
+<a id="nestedatt--items--input_appscope"></a>
+### Nested Schema for `items.input_appscope`
 
 Read-Only:
 
 - `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_appscope--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_appscope--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports proxy protocol v1 or v2
 - `enable_unix_path` (Boolean) Toggle to Yes to specify a file-backed UNIX domain socket connection, instead of a network host and port.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `filter` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--filter))
+- `filter` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--filter))
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to establish a connection
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_appscope--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_appscope--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
@@ -123,14 +132,16 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_appscope--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--tls))
 - `type` (String)
 - `unix_socket_path` (String) Path to the UNIX domain socket to listen on.
 - `unix_socket_perms` (String) Permissions to set for socket e.g., 777. If empty, falls back to the runtime user's default permissions.
 
-<a id="nestedatt--input_appscope--connections"></a>
-### Nested Schema for `input_appscope.connections`
+<a id="nestedatt--items--input_appscope--connections"></a>
+### Nested Schema for `items.input_appscope.connections`
 
 Read-Only:
 
@@ -138,16 +149,16 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_appscope--filter"></a>
-### Nested Schema for `input_appscope.filter`
+<a id="nestedatt--items--input_appscope--filter"></a>
+### Nested Schema for `items.input_appscope.filter`
 
 Read-Only:
 
-- `allow` (Attributes List) Specify processes that AppScope should be loaded into, and the config to use. (see [below for nested schema](#nestedatt--input_appscope--filter--allow))
+- `allow` (Attributes List) Specify processes that AppScope should be loaded into, and the config to use. (see [below for nested schema](#nestedatt--items--input_appscope--filter--allow))
 - `transport_url` (String) To override the UNIX domain socket or address/port specified in General Settings (while leaving Authentication settings as is), enter a URL.
 
-<a id="nestedatt--input_appscope--filter--allow"></a>
-### Nested Schema for `input_appscope.filter.allow`
+<a id="nestedatt--items--input_appscope--filter--allow"></a>
+### Nested Schema for `items.input_appscope.filter.allow`
 
 Read-Only:
 
@@ -157,8 +168,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_appscope--metadata"></a>
-### Nested Schema for `input_appscope.metadata`
+<a id="nestedatt--items--input_appscope--metadata"></a>
+### Nested Schema for `items.input_appscope.metadata`
 
 Read-Only:
 
@@ -166,8 +177,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_appscope--persistence"></a>
-### Nested Schema for `input_appscope.persistence`
+<a id="nestedatt--items--input_appscope--persistence"></a>
+### Nested Schema for `items.input_appscope.persistence`
 
 Read-Only:
 
@@ -179,221 +190,28 @@ Read-Only:
 - `time_window` (String) Time span for each file bucket
 
 
-<a id="nestedatt--input_appscope--pq"></a>
-### Nested Schema for `input_appscope.pq`
+<a id="nestedatt--items--input_appscope--pq"></a>
+### Nested Schema for `items.input_appscope.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
-- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-<a id="nestedatt--input_appscope--tls"></a>
-### Nested Schema for `input_appscope.tls`
-
-Read-Only:
-
-- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
-- `disabled` (Boolean)
-- `max_version` (String)
-- `min_version` (String)
-- `passphrase` (String) Passphrase to use to decrypt private key
-- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
-- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
-
-
-
-<a id="nestedatt--input_azure_blob"></a>
-### Nested Schema for `input_azure_blob`
-
-Read-Only:
-
-- `auth_type` (String)
-- `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
-- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `certificate` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--certificate))
-- `client_id` (String) The service principal's client ID
-- `client_text_secret` (String) Select or create a stored text secret
-- `connection_string` (String) Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_azure_blob--connections))
-- `description` (String)
-- `disabled` (Boolean)
-- `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
-- `id` (String) Unique ID for this input
-- `max_messages` (Number) The maximum number of messages to return in a poll request. Azure storage queues never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 32.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_azure_blob--metadata))
-- `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
-- `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
-- `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
-- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_azure_blob--pq))
-- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`
-- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `service_period_secs` (Number) The duration (in seconds) which pollers should be validated and restarted if exited
-- `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
-- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `storage_account_name` (String) The name of your Azure storage account
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tenant_id` (String) The service principal's tenant ID
-- `text_secret` (String) Select or create a stored text secret
-- `type` (String)
-- `visibility_timeout` (Number) The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request.
-
-<a id="nestedatt--input_azure_blob--certificate"></a>
-### Nested Schema for `input_azure_blob.certificate`
-
-Read-Only:
-
-- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
-
-
-<a id="nestedatt--input_azure_blob--connections"></a>
-### Nested Schema for `input_azure_blob.connections`
-
-Read-Only:
-
-- `output` (String)
-- `pipeline` (String)
-
-
-<a id="nestedatt--input_azure_blob--metadata"></a>
-### Nested Schema for `input_azure_blob.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
-<a id="nestedatt--input_azure_blob--pq"></a>
-### Nested Schema for `input_azure_blob.pq`
-
-Read-Only:
-
-- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
-- `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
-- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-
-
-
-<a id="nestedatt--input_cloudflare_hec"></a>
-### Nested Schema for `input_cloudflare_hec`
-
-Read-Only:
-
-- `access_control_allow_headers` (List of String) HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
-- `access_control_allow_origin` (List of String) HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.
-- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `allowed_indexes` (List of String) List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_cloudflare_hec--auth_tokens))
-- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cloudflare_hec--connections))
-- `description` (String)
-- `disabled` (Boolean)
-- `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
-- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
-- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
-- `id` (String) Unique ID for this input
-- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
-- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
-- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_cloudflare_hec--metadata))
-- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--pq))
-- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--tls))
-- `type` (String)
-
-<a id="nestedatt--input_cloudflare_hec--auth_tokens"></a>
-### Nested Schema for `input_cloudflare_hec.auth_tokens`
-
-Read-Only:
-
-- `allowed_indexes_at_token` (List of String) Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.
-- `auth_type` (String) Select Secret to use a text secret to authenticate
-- `description` (String)
-- `enabled` (Boolean)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_cloudflare_hec--auth_tokens--metadata))
-- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
-- `token_secret` (String) Select or create a stored text secret
-
-<a id="nestedatt--input_cloudflare_hec--auth_tokens--metadata"></a>
-### Nested Schema for `input_cloudflare_hec.auth_tokens.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
-
-<a id="nestedatt--input_cloudflare_hec--connections"></a>
-### Nested Schema for `input_cloudflare_hec.connections`
-
-Read-Only:
-
-- `output` (String)
-- `pipeline` (String)
-
-
-<a id="nestedatt--input_cloudflare_hec--metadata"></a>
-### Nested Schema for `input_cloudflare_hec.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
-<a id="nestedatt--input_cloudflare_hec--pq"></a>
-### Nested Schema for `input_cloudflare_hec.pq`
-
-Read-Only:
-
-- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
-- `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--input_cloudflare_hec--pq--pq_controls))
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--pq--pq_controls))
 
-<a id="nestedatt--input_cloudflare_hec--pq--pq_controls"></a>
-### Nested Schema for `input_cloudflare_hec.pq.pq_controls`
+<a id="nestedatt--items--input_appscope--pq--pq_controls"></a>
+### Nested Schema for `items.input_appscope.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_cloudflare_hec--tls"></a>
-### Nested Schema for `input_cloudflare_hec.tls`
+<a id="nestedatt--items--input_appscope--tls"></a>
+### Nested Schema for `items.input_appscope.tls`
 
 Read-Only:
 
@@ -411,30 +229,59 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_collection"></a>
-### Nested Schema for `input_collection`
+<a id="nestedatt--items--input_azure_blob"></a>
+### Nested Schema for `items.input_azure_blob`
 
 Read-Only:
 
+- `auth_type` (String)
+- `azure_cloud` (String) The Azure cloud to use. Defaults to Azure Public Cloud.
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_collection--connections))
+- `certificate` (Attributes) (see [below for nested schema](#nestedatt--items--input_azure_blob--certificate))
+- `client_id` (String) The service principal's client ID
+- `client_text_secret` (String) Select or create a stored text secret
+- `connection_string` (String) Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_azure_blob--connections))
+- `description` (String)
 - `disabled` (Boolean)
+- `endpoint_suffix` (String) Endpoint suffix for the service URL. Takes precedence over the Azure Cloud setting. Defaults to core.windows.net.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_collection--metadata))
-- `output` (String) Destination to send results to
-- `pipeline` (String) Pipeline to process results
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_collection--pq))
+- `max_messages` (Number) The maximum number of messages to return in a poll request. Azure storage queues never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 32.
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_azure_blob--metadata))
+- `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
+- `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
+- `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_azure_blob--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_collection--preprocess))
-- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `queue_name` (String) The storage account queue name blob notifications will be read from. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myQueue-${C.vars.myVar}`
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `service_period_secs` (Number) The duration (in seconds) which pollers should be validated and restarted if exited
+- `skip_on_error` (Boolean) Skip files that trigger a processing error. Disabled by default, which allows retries after processing errors.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `storage_account_name` (String) The name of your Azure storage account
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+- `template_connection_string` (String) Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
+- `tenant_id` (String) The service principal's tenant ID
+- `text_secret` (String) Select or create a stored text secret
 - `type` (String)
+- `visibility_timeout` (Number) The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request.
 
-<a id="nestedatt--input_collection--connections"></a>
-### Nested Schema for `input_collection.connections`
+<a id="nestedatt--items--input_azure_blob--certificate"></a>
+### Nested Schema for `items.input_azure_blob.certificate`
+
+Read-Only:
+
+- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
+
+
+<a id="nestedatt--items--input_azure_blob--connections"></a>
+### Nested Schema for `items.input_azure_blob.connections`
 
 Read-Only:
 
@@ -442,8 +289,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_collection--metadata"></a>
-### Nested Schema for `input_collection.metadata`
+<a id="nestedatt--items--input_azure_blob--metadata"></a>
+### Nested Schema for `items.input_azure_blob.metadata`
 
 Read-Only:
 
@@ -451,22 +298,211 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_collection--pq"></a>
-### Nested Schema for `input_collection.pq`
+<a id="nestedatt--items--input_azure_blob--pq"></a>
+### Nested Schema for `items.input_azure_blob.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_azure_blob--pq--pq_controls))
+
+<a id="nestedatt--items--input_azure_blob--pq--pq_controls"></a>
+### Nested Schema for `items.input_azure_blob.pq.pq_controls`
 
 
-<a id="nestedatt--input_collection--preprocess"></a>
-### Nested Schema for `input_collection.preprocess`
+
+
+<a id="nestedatt--items--input_cloudflare_hec"></a>
+### Nested Schema for `items.input_cloudflare_hec`
+
+Read-Only:
+
+- `access_control_allow_headers` (List of String) HTTP headers that @{product} will send to allowed origins as "Access-Control-Allow-Headers" in a CORS preflight response. Use "*" to allow all headers.
+- `access_control_allow_origin` (List of String) HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+- `allowed_indexes` (List of String) List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--auth_tokens))
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--connections))
+- `description` (String)
+- `disabled` (Boolean)
+- `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
+- `enable_health_check` (String) Parsed as JSON.
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
+- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
+- `id` (String) Unique ID for this input
+- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
+- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
+- `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
+- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
+- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
+- `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--metadata))
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `port` (Number) Port to listen on
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--tls))
+- `type` (String)
+
+<a id="nestedatt--items--input_cloudflare_hec--auth_tokens"></a>
+### Nested Schema for `items.input_cloudflare_hec.auth_tokens`
+
+Read-Only:
+
+- `allowed_indexes_at_token` (List of String) Enter the values you want to allow in the HEC event index field at the token level. Supports wildcards. To skip validation, leave blank.
+- `auth_type` (String) Select Secret to use a text secret to authenticate
+- `description` (String)
+- `enabled` (Boolean)
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--auth_tokens--metadata))
+- `token` (String) Parsed as JSON.
+- `token_secret` (String) Select or create a stored text secret
+
+<a id="nestedatt--items--input_cloudflare_hec--auth_tokens--metadata"></a>
+### Nested Schema for `items.input_cloudflare_hec.auth_tokens.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+
+<a id="nestedatt--items--input_cloudflare_hec--connections"></a>
+### Nested Schema for `items.input_cloudflare_hec.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_cloudflare_hec--metadata"></a>
+### Nested Schema for `items.input_cloudflare_hec.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_cloudflare_hec--pq"></a>
+### Nested Schema for `items.input_cloudflare_hec.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--pq--pq_controls))
+
+<a id="nestedatt--items--input_cloudflare_hec--pq--pq_controls"></a>
+### Nested Schema for `items.input_cloudflare_hec.pq.pq_controls`
+
+
+
+<a id="nestedatt--items--input_cloudflare_hec--tls"></a>
+### Nested Schema for `items.input_cloudflare_hec.tls`
+
+Read-Only:
+
+- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl certificate when TLS is enabled.
+- `certificate_name` (String) The name of the predefined certificate
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
+- `disabled` (Boolean) Enable or disable TLS. Defaults to enabled for Cloudflare sources.
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS. Defaults to the built-in Cribl private key when TLS is enabled.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
+- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
+
+
+
+<a id="nestedatt--items--input_collection"></a>
+### Nested Schema for `items.input_collection`
+
+Read-Only:
+
+- `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_collection--connections))
+- `disabled` (Boolean)
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_collection--metadata))
+- `output` (String) Destination to send results to
+- `pipeline` (String) Pipeline to process results
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_collection--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_collection--preprocess))
+- `send_to_routes` (Boolean) Send events to normal routing and event processing. Disable to select a specific Pipeline/Destination combination.
+- `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
+- `type` (String)
+
+<a id="nestedatt--items--input_collection--connections"></a>
+### Nested Schema for `items.input_collection.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_collection--metadata"></a>
+### Nested Schema for `items.input_collection.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_collection--pq"></a>
+### Nested Schema for `items.input_collection.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_collection--pq--pq_controls))
+
+<a id="nestedatt--items--input_collection--pq--pq_controls"></a>
+### Nested Schema for `items.input_collection.pq.pq_controls`
+
+
+
+<a id="nestedatt--items--input_collection--preprocess"></a>
+### Nested Schema for `items.input_collection.preprocess`
 
 Read-Only:
 
@@ -476,8 +512,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_confluent_cloud"></a>
-### Nested Schema for `input_confluent_cloud`
+<a id="nestedatt--items--input_confluent_cloud"></a>
+### Nested Schema for `items.input_confluent_cloud`
 
 Read-Only:
 
@@ -487,7 +523,7 @@ Read-Only:
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_confluent_cloud--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_confluent_cloud--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -498,35 +534,35 @@ Read-Only:
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
-- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--kafka_schema_registry))
+- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud--kafka_schema_registry))
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
 - `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_confluent_cloud--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_confluent_cloud--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
-- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_confluent_cloud--sasl))
+- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--items--input_confluent_cloud--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-      If the client sends no heartbeats to the broker before the timeout expires,
+      If the client sends no heartbeats to the broker before the timeout expires, 
       the broker will remove the client from the group and initiate a rebalance.
       Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud--tls))
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
-<a id="nestedatt--input_confluent_cloud--connections"></a>
-### Nested Schema for `input_confluent_cloud.connections`
+<a id="nestedatt--items--input_confluent_cloud--connections"></a>
+### Nested Schema for `items.input_confluent_cloud.connections`
 
 Read-Only:
 
@@ -534,21 +570,21 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_confluent_cloud--kafka_schema_registry"></a>
-### Nested Schema for `input_confluent_cloud.kafka_schema_registry`
+<a id="nestedatt--items--input_confluent_cloud--kafka_schema_registry"></a>
+### Nested Schema for `items.input_confluent_cloud.kafka_schema_registry`
 
 Read-Only:
 
-- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_confluent_cloud--kafka_schema_registry--auth))
+- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--items--input_confluent_cloud--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_confluent_cloud--kafka_schema_registry--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud--kafka_schema_registry--tls))
 
-<a id="nestedatt--input_confluent_cloud--kafka_schema_registry--auth"></a>
-### Nested Schema for `input_confluent_cloud.kafka_schema_registry.auth`
+<a id="nestedatt--items--input_confluent_cloud--kafka_schema_registry--auth"></a>
+### Nested Schema for `items.input_confluent_cloud.kafka_schema_registry.auth`
 
 Read-Only:
 
@@ -556,8 +592,8 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_confluent_cloud--kafka_schema_registry--tls"></a>
-### Nested Schema for `input_confluent_cloud.kafka_schema_registry.tls`
+<a id="nestedatt--items--input_confluent_cloud--kafka_schema_registry--tls"></a>
+### Nested Schema for `items.input_confluent_cloud.kafka_schema_registry.tls`
 
 Read-Only:
 
@@ -575,8 +611,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_confluent_cloud--metadata"></a>
-### Nested Schema for `input_confluent_cloud.metadata`
+<a id="nestedatt--items--input_confluent_cloud--metadata"></a>
+### Nested Schema for `items.input_confluent_cloud.metadata`
 
 Read-Only:
 
@@ -584,31 +620,69 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_confluent_cloud--pq"></a>
-### Nested Schema for `input_confluent_cloud.pq`
+<a id="nestedatt--items--input_confluent_cloud--pq"></a>
+### Nested Schema for `items.input_confluent_cloud.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_confluent_cloud--pq--pq_controls))
+
+<a id="nestedatt--items--input_confluent_cloud--pq--pq_controls"></a>
+### Nested Schema for `items.input_confluent_cloud.pq.pq_controls`
 
 
-<a id="nestedatt--input_confluent_cloud--sasl"></a>
-### Nested Schema for `input_confluent_cloud.sasl`
+
+<a id="nestedatt--items--input_confluent_cloud--sasl"></a>
+### Nested Schema for `items.input_confluent_cloud.sasl`
 
 Read-Only:
 
+- `auth_type` (String) Enter credentials directly, or select a stored secret
+- `broker_service_class` (String) Kerberos service class for Kafka brokers, such as `kafka`
+- `client_id` (String) Client ID to use for OAuth authentication
+- `client_text_secret` (String) Select or create a stored text secret
+- `credentials_secret` (String) Select or create a secret that references your credentials
 - `disabled` (Boolean)
+- `keytab_location` (String) Location of keytab file for authentication principal
 - `mechanism` (String)
+- `oauth_enabled` (Boolean) Enable OAuth authentication
+- `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--items--input_confluent_cloud--sasl--oauth_params))
+- `oauth_secret_type` (String)
+- `password` (String)
+- `principal` (String) Authentication principal, such as `kafka_user@example.com`
+- `sasl_extensions` (Attributes List) Additional SASL extension fields, such as Confluent's logicalCluster or identityPoolId (see [below for nested schema](#nestedatt--items--input_confluent_cloud--sasl--sasl_extensions))
+- `token_url` (String) URL of the token endpoint to use for OAuth authentication
+- `username` (String)
+
+<a id="nestedatt--items--input_confluent_cloud--sasl--oauth_params"></a>
+### Nested Schema for `items.input_confluent_cloud.sasl.oauth_params`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
 
 
-<a id="nestedatt--input_confluent_cloud--tls"></a>
-### Nested Schema for `input_confluent_cloud.tls`
+<a id="nestedatt--items--input_confluent_cloud--sasl--sasl_extensions"></a>
+### Nested Schema for `items.input_confluent_cloud.sasl.sasl_extensions`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+
+<a id="nestedatt--items--input_confluent_cloud--tls"></a>
+### Nested Schema for `items.input_confluent_cloud.tls`
 
 Read-Only:
 
@@ -626,27 +700,27 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_cribl"></a>
-### Nested Schema for `input_cribl`
+<a id="nestedatt--items--input_cribl"></a>
+### Nested Schema for `items.input_cribl`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_cribl--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `filter` (String)
 - `id` (String) Unique ID for this input
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_cribl--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_cribl--connections"></a>
-### Nested Schema for `input_cribl.connections`
+<a id="nestedatt--items--input_cribl--connections"></a>
+### Nested Schema for `items.input_cribl.connections`
 
 Read-Only:
 
@@ -654,8 +728,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_cribl--metadata"></a>
-### Nested Schema for `input_cribl.metadata`
+<a id="nestedatt--items--input_cribl--metadata"></a>
+### Nested Schema for `items.input_cribl.metadata`
 
 Read-Only:
 
@@ -663,30 +737,36 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_cribl--pq"></a>
-### Nested Schema for `input_cribl.pq`
+<a id="nestedatt--items--input_cribl--pq"></a>
+### Nested Schema for `items.input_cribl.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl--pq--pq_controls))
+
+<a id="nestedatt--items--input_cribl--pq--pq_controls"></a>
+### Nested Schema for `items.input_cribl.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_cribl_http"></a>
-### Nested Schema for `input_cribl_http`
+
+<a id="nestedatt--items--input_cribl_http"></a>
+### Nested Schema for `items.input_cribl_http`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
+- `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should be installed in Cribl HTTP destinations in connected environments. (see [below for nested schema](#nestedatt--items--input_cribl_http--auth_tokens))
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_http--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_cribl_http--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -699,20 +779,32 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_http--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_cribl_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_http--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http--tls))
 - `type` (String)
 
-<a id="nestedatt--input_cribl_http--connections"></a>
-### Nested Schema for `input_cribl_http.connections`
+<a id="nestedatt--items--input_cribl_http--auth_tokens"></a>
+### Nested Schema for `items.input_cribl_http.auth_tokens`
+
+Read-Only:
+
+- `description` (String) Optional token description
+- `enabled` (Boolean)
+- `token_secret` (String) Select or create a stored text secret
+
+
+<a id="nestedatt--items--input_cribl_http--connections"></a>
+### Nested Schema for `items.input_cribl_http.connections`
 
 Read-Only:
 
@@ -720,8 +812,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_cribl_http--metadata"></a>
-### Nested Schema for `input_cribl_http.metadata`
+<a id="nestedatt--items--input_cribl_http--metadata"></a>
+### Nested Schema for `items.input_cribl_http.metadata`
 
 Read-Only:
 
@@ -729,50 +821,59 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_cribl_http--pq"></a>
-### Nested Schema for `input_cribl_http.pq`
+<a id="nestedatt--items--input_cribl_http--pq"></a>
+### Nested Schema for `items.input_cribl_http.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http--pq--pq_controls))
+
+<a id="nestedatt--items--input_cribl_http--pq--pq_controls"></a>
+### Nested Schema for `items.input_cribl_http.pq.pq_controls`
 
 
-<a id="nestedatt--input_cribl_http--tls"></a>
-### Nested Schema for `input_cribl_http.tls`
+
+<a id="nestedatt--items--input_cribl_http--tls"></a>
+### Nested Schema for `items.input_cribl_http.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_cribl_lake_http"></a>
-### Nested Schema for `input_cribl_lake_http`
+<a id="nestedatt--items--input_cribl_lake_http"></a>
+### Nested Schema for `items.input_cribl_lake_http`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
+- `auth_tokens_ext` (Attributes List) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--auth_tokens_ext))
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_lake_http--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--connections))
+- `cribl_api` (String) Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.
 - `description` (String)
 - `disabled` (Boolean)
+- `elastic_api` (String) Absolute path on which to listen for the Elasticsearch API requests. Only _bulk (default /elastic/_bulk) is available. Use empty string to disable.
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -783,29 +884,45 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_lake_http--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
+- `splunk_hec_acks` (Boolean)
+- `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_lake_http--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--tls))
 - `type` (String)
 
-<a id="nestedatt--input_cribl_lake_http--connections"></a>
-### Nested Schema for `input_cribl_lake_http.connections`
+<a id="nestedatt--items--input_cribl_lake_http--auth_tokens_ext"></a>
+### Nested Schema for `items.input_cribl_lake_http.auth_tokens_ext`
 
 Read-Only:
 
-- `output` (String)
-- `pipeline` (String)
+- `description` (String)
+- `elasticsearch_metadata` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--auth_tokens_ext--elasticsearch_metadata))
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--auth_tokens_ext--metadata))
+- `splunk_hec_metadata` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--auth_tokens_ext--splunk_hec_metadata))
+- `token` (String)
+
+<a id="nestedatt--items--input_cribl_lake_http--auth_tokens_ext--elasticsearch_metadata"></a>
+### Nested Schema for `items.input_cribl_lake_http.auth_tokens_ext.elasticsearch_metadata`
+
+Read-Only:
+
+- `default_dataset` (String)
+- `enabled` (Boolean)
 
 
-<a id="nestedatt--input_cribl_lake_http--metadata"></a>
-### Nested Schema for `input_cribl_lake_http.metadata`
+<a id="nestedatt--items--input_cribl_lake_http--auth_tokens_ext--metadata"></a>
+### Nested Schema for `items.input_cribl_lake_http.auth_tokens_ext.metadata`
 
 Read-Only:
 
@@ -813,45 +930,81 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_cribl_lake_http--pq"></a>
-### Nested Schema for `input_cribl_lake_http.pq`
+<a id="nestedatt--items--input_cribl_lake_http--auth_tokens_ext--splunk_hec_metadata"></a>
+### Nested Schema for `items.input_cribl_lake_http.auth_tokens_ext.splunk_hec_metadata`
+
+Read-Only:
+
+- `allowed_indexes_at_token` (List of String)
+- `default_dataset` (String)
+- `enabled` (Boolean)
+
+
+
+<a id="nestedatt--items--input_cribl_lake_http--connections"></a>
+### Nested Schema for `items.input_cribl_lake_http.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_cribl_lake_http--metadata"></a>
+### Nested Schema for `items.input_cribl_lake_http.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_cribl_lake_http--pq"></a>
+### Nested Schema for `items.input_cribl_lake_http.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--pq--pq_controls))
+
+<a id="nestedatt--items--input_cribl_lake_http--pq--pq_controls"></a>
+### Nested Schema for `items.input_cribl_lake_http.pq.pq_controls`
 
 
-<a id="nestedatt--input_cribl_lake_http--tls"></a>
-### Nested Schema for `input_cribl_lake_http.tls`
+
+<a id="nestedatt--items--input_cribl_lake_http--tls"></a>
+### Nested Schema for `items.input_cribl_lake_http.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_cribl_tcp"></a>
-### Nested Schema for `input_cribl_tcp`
+<a id="nestedatt--items--input_cribl_tcp"></a>
+### Nested Schema for `items.input_cribl_tcp`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_cribl_tcp--connections))
+- `auth_tokens` (Attributes List) Shared secrets to be used by connected environments to authorize connections. These tokens should be installed in Cribl TCP destinations in connected environments. (see [below for nested schema](#nestedatt--items--input_cribl_tcp--auth_tokens))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_cribl_tcp--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
@@ -860,21 +1013,33 @@ Read-Only:
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_cribl_tcp--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_cribl_tcp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_cribl_tcp--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp--tls))
 - `type` (String)
 
-<a id="nestedatt--input_cribl_tcp--connections"></a>
-### Nested Schema for `input_cribl_tcp.connections`
+<a id="nestedatt--items--input_cribl_tcp--auth_tokens"></a>
+### Nested Schema for `items.input_cribl_tcp.auth_tokens`
+
+Read-Only:
+
+- `description` (String) Optional token description
+- `enabled` (Boolean)
+- `token_secret` (String) Select or create a stored text secret
+
+
+<a id="nestedatt--items--input_cribl_tcp--connections"></a>
+### Nested Schema for `items.input_cribl_tcp.connections`
 
 Read-Only:
 
@@ -882,8 +1047,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_cribl_tcp--metadata"></a>
-### Nested Schema for `input_cribl_tcp.metadata`
+<a id="nestedatt--items--input_cribl_tcp--metadata"></a>
+### Nested Schema for `items.input_cribl_tcp.metadata`
 
 Read-Only:
 
@@ -891,61 +1056,67 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_cribl_tcp--pq"></a>
-### Nested Schema for `input_cribl_tcp.pq`
+<a id="nestedatt--items--input_cribl_tcp--pq"></a>
+### Nested Schema for `items.input_cribl_tcp.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp--pq--pq_controls))
+
+<a id="nestedatt--items--input_cribl_tcp--pq--pq_controls"></a>
+### Nested Schema for `items.input_cribl_tcp.pq.pq_controls`
 
 
-<a id="nestedatt--input_cribl_tcp--tls"></a>
-### Nested Schema for `input_cribl_tcp.tls`
+
+<a id="nestedatt--items--input_cribl_tcp--tls"></a>
+### Nested Schema for `items.input_cribl_tcp.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_criblmetrics"></a>
-### Nested Schema for `input_criblmetrics`
+<a id="nestedatt--items--input_criblmetrics"></a>
+### Nested Schema for `items.input_criblmetrics`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_criblmetrics--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_criblmetrics--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `full_fidelity` (Boolean) Include granular metrics. Disabling this will drop the following metrics events: `cribl.logstream.host.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.index.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.source.(in_bytes,in_events,out_bytes,out_events)`, `cribl.logstream.sourcetype.(in_bytes,in_events,out_bytes,out_events)`.
 - `id` (String) Unique ID for this input
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_criblmetrics--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_criblmetrics--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_criblmetrics--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_criblmetrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `prefix` (String) A prefix that is applied to the metrics provided by Cribl Stream
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_criblmetrics--connections"></a>
-### Nested Schema for `input_criblmetrics.connections`
+<a id="nestedatt--items--input_criblmetrics--connections"></a>
+### Nested Schema for `items.input_criblmetrics.connections`
 
 Read-Only:
 
@@ -953,8 +1124,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_criblmetrics--metadata"></a>
-### Nested Schema for `input_criblmetrics.metadata`
+<a id="nestedatt--items--input_criblmetrics--metadata"></a>
+### Nested Schema for `items.input_criblmetrics.metadata`
 
 Read-Only:
 
@@ -962,23 +1133,29 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_criblmetrics--pq"></a>
-### Nested Schema for `input_criblmetrics.pq`
+<a id="nestedatt--items--input_criblmetrics--pq"></a>
+### Nested Schema for `items.input_criblmetrics.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_criblmetrics--pq--pq_controls))
+
+<a id="nestedatt--items--input_criblmetrics--pq--pq_controls"></a>
+### Nested Schema for `items.input_criblmetrics.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_crowdstrike"></a>
-### Nested Schema for `input_crowdstrike`
+
+<a id="nestedatt--items--input_crowdstrike"></a>
+### Nested Schema for `items.input_crowdstrike`
 
 Read-Only:
 
@@ -990,8 +1167,8 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--checkpointing))
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_crowdstrike--connections))
+- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--items--input_crowdstrike--checkpointing))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_crowdstrike--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -1002,14 +1179,15 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
+- `include_sqs_metadata` (Boolean) Attach SQS notification metadata to a __sqsMetadata field on each event
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_crowdstrike--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_crowdstrike--metadata))
 - `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_crowdstrike--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_crowdstrike--preprocess))
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_crowdstrike--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
@@ -1023,11 +1201,18 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
-<a id="nestedatt--input_crowdstrike--checkpointing"></a>
-### Nested Schema for `input_crowdstrike.checkpointing`
+<a id="nestedatt--items--input_crowdstrike--checkpointing"></a>
+### Nested Schema for `items.input_crowdstrike.checkpointing`
 
 Read-Only:
 
@@ -1035,8 +1220,8 @@ Read-Only:
 - `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
-<a id="nestedatt--input_crowdstrike--connections"></a>
-### Nested Schema for `input_crowdstrike.connections`
+<a id="nestedatt--items--input_crowdstrike--connections"></a>
+### Nested Schema for `items.input_crowdstrike.connections`
 
 Read-Only:
 
@@ -1044,8 +1229,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_crowdstrike--metadata"></a>
-### Nested Schema for `input_crowdstrike.metadata`
+<a id="nestedatt--items--input_crowdstrike--metadata"></a>
+### Nested Schema for `items.input_crowdstrike.metadata`
 
 Read-Only:
 
@@ -1053,22 +1238,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_crowdstrike--pq"></a>
-### Nested Schema for `input_crowdstrike.pq`
+<a id="nestedatt--items--input_crowdstrike--pq"></a>
+### Nested Schema for `items.input_crowdstrike.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_crowdstrike--pq--pq_controls))
+
+<a id="nestedatt--items--input_crowdstrike--pq--pq_controls"></a>
+### Nested Schema for `items.input_crowdstrike.pq.pq_controls`
 
 
-<a id="nestedatt--input_crowdstrike--preprocess"></a>
-### Nested Schema for `input_crowdstrike.preprocess`
+
+<a id="nestedatt--items--input_crowdstrike--preprocess"></a>
+### Nested Schema for `items.input_crowdstrike.preprocess`
 
 Read-Only:
 
@@ -1078,14 +1269,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_datadog_agent"></a>
-### Nested Schema for `input_datadog_agent`
+<a id="nestedatt--items--input_datadog_agent"></a>
+### Nested Schema for `items.input_datadog_agent`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_datadog_agent--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_datadog_agent--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -1099,21 +1290,23 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_datadog_agent--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_datadog_agent--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--proxy_mode))
+- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--proxy_mode))
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_datadog_agent--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--tls))
 - `type` (String)
 
-<a id="nestedatt--input_datadog_agent--connections"></a>
-### Nested Schema for `input_datadog_agent.connections`
+<a id="nestedatt--items--input_datadog_agent--connections"></a>
+### Nested Schema for `items.input_datadog_agent.connections`
 
 Read-Only:
 
@@ -1121,8 +1314,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_datadog_agent--metadata"></a>
-### Nested Schema for `input_datadog_agent.metadata`
+<a id="nestedatt--items--input_datadog_agent--metadata"></a>
+### Nested Schema for `items.input_datadog_agent.metadata`
 
 Read-Only:
 
@@ -1130,22 +1323,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_datadog_agent--pq"></a>
-### Nested Schema for `input_datadog_agent.pq`
+<a id="nestedatt--items--input_datadog_agent--pq"></a>
+### Nested Schema for `items.input_datadog_agent.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--pq--pq_controls))
+
+<a id="nestedatt--items--input_datadog_agent--pq--pq_controls"></a>
+### Nested Schema for `items.input_datadog_agent.pq.pq_controls`
 
 
-<a id="nestedatt--input_datadog_agent--proxy_mode"></a>
-### Nested Schema for `input_datadog_agent.proxy_mode`
+
+<a id="nestedatt--items--input_datadog_agent--proxy_mode"></a>
+### Nested Schema for `items.input_datadog_agent.proxy_mode`
 
 Read-Only:
 
@@ -1153,46 +1352,46 @@ Read-Only:
 - `reject_unauthorized` (Boolean) Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).
 
 
-<a id="nestedatt--input_datadog_agent--tls"></a>
-### Nested Schema for `input_datadog_agent.tls`
+<a id="nestedatt--items--input_datadog_agent--tls"></a>
+### Nested Schema for `items.input_datadog_agent.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_datagen"></a>
-### Nested Schema for `input_datagen`
+<a id="nestedatt--items--input_datagen"></a>
+### Nested Schema for `items.input_datagen`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_datagen--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_datagen--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_datagen--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_datagen--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_datagen--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_datagen--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `samples` (Attributes List) (see [below for nested schema](#nestedatt--input_datagen--samples))
+- `samples` (Attributes List) (see [below for nested schema](#nestedatt--items--input_datagen--samples))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_datagen--connections"></a>
-### Nested Schema for `input_datagen.connections`
+<a id="nestedatt--items--input_datagen--connections"></a>
+### Nested Schema for `items.input_datagen.connections`
 
 Read-Only:
 
@@ -1200,8 +1399,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_datagen--metadata"></a>
-### Nested Schema for `input_datagen.metadata`
+<a id="nestedatt--items--input_datagen--metadata"></a>
+### Nested Schema for `items.input_datagen.metadata`
 
 Read-Only:
 
@@ -1209,22 +1408,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_datagen--pq"></a>
-### Nested Schema for `input_datagen.pq`
+<a id="nestedatt--items--input_datagen--pq"></a>
+### Nested Schema for `items.input_datagen.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_datagen--pq--pq_controls))
+
+<a id="nestedatt--items--input_datagen--pq--pq_controls"></a>
+### Nested Schema for `items.input_datagen.pq.pq_controls`
 
 
-<a id="nestedatt--input_datagen--samples"></a>
-### Nested Schema for `input_datagen.samples`
+
+<a id="nestedatt--items--input_datagen--samples"></a>
+### Nested Schema for `items.input_datagen.samples`
 
 Read-Only:
 
@@ -1233,17 +1438,19 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_edge_prometheus"></a>
-### Nested Schema for `input_edge_prometheus`
+<a id="nestedatt--items--input_edge_prometheus"></a>
+### Nested Schema for `items.input_edge_prometheus`
 
 Read-Only:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `auth_type` (String) Enter credentials directly, or select a stored secret
+- `aws_api_key` (String)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_edge_prometheus--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_edge_prometheus--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `dimension_list` (List of String) Other dimensions to include in events
@@ -1255,17 +1462,17 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) How often in seconds to scrape targets for metrics.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_edge_prometheus--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_edge_prometheus--metadata))
 - `name_list` (List of String) List of DNS names to resolve
 - `password` (String) Password for Prometheus Basic authentication
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_edge_prometheus--persistence))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_edge_prometheus--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `pod_filter` (Attributes List) Add rules to decide which pods to discover for metrics.
   Pods are searched if no rules are given or of all the rules'
-  expressions evaluate to true. (see [below for nested schema](#nestedatt--input_edge_prometheus--pod_filter))
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_edge_prometheus--pq))
+  expressions evaluate to true. (see [below for nested schema](#nestedatt--items--input_edge_prometheus--pod_filter))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_edge_prometheus--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `record_type` (String) DNS Record type to resolve
+- `record_type` (String) DNS record type to resolve
 - `region` (String) Region where the EC2 is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -1275,18 +1482,23 @@ Read-Only:
 - `scrape_port_expr` (String) The port number in the metrics URL for discovered targets.
 - `scrape_protocol` (String) Protocol to use when collecting metrics
 - `scrape_protocol_expr` (String) Protocol to use when collecting metrics
-- `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_edge_prometheus--search_filter))
+- `search_filter` (Attributes List) Filter to apply when searching for EC2 instances (see [below for nested schema](#nestedatt--items--input_edge_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing EC2 requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `targets` (Attributes List) (see [below for nested schema](#nestedatt--input_edge_prometheus--targets))
+- `targets` (Attributes List) (see [below for nested schema](#nestedatt--items--input_edge_prometheus--targets))
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `timeout` (Number) Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable
 - `type` (String)
-- `use_public_ip` (Boolean) Use public IP address for discovered targets. Set to false if the private IP address should be used.
+- `use_public_ip` (Boolean) Use public IP address for discovered targets. Disable to use the private IP address.
 - `username` (String) Username for Prometheus Basic authentication
 
-<a id="nestedatt--input_edge_prometheus--connections"></a>
-### Nested Schema for `input_edge_prometheus.connections`
+<a id="nestedatt--items--input_edge_prometheus--connections"></a>
+### Nested Schema for `items.input_edge_prometheus.connections`
 
 Read-Only:
 
@@ -1294,8 +1506,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_edge_prometheus--metadata"></a>
-### Nested Schema for `input_edge_prometheus.metadata`
+<a id="nestedatt--items--input_edge_prometheus--metadata"></a>
+### Nested Schema for `items.input_edge_prometheus.metadata`
 
 Read-Only:
 
@@ -1303,8 +1515,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_edge_prometheus--persistence"></a>
-### Nested Schema for `input_edge_prometheus.persistence`
+<a id="nestedatt--items--input_edge_prometheus--persistence"></a>
+### Nested Schema for `items.input_edge_prometheus.persistence`
 
 Read-Only:
 
@@ -1315,8 +1527,8 @@ Read-Only:
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
 
 
-<a id="nestedatt--input_edge_prometheus--pod_filter"></a>
-### Nested Schema for `input_edge_prometheus.pod_filter`
+<a id="nestedatt--items--input_edge_prometheus--pod_filter"></a>
+### Nested Schema for `items.input_edge_prometheus.pod_filter`
 
 Read-Only:
 
@@ -1324,31 +1536,37 @@ Read-Only:
 - `filter` (String) JavaScript expression applied to pods objects. Return 'true' to include it.
 
 
-<a id="nestedatt--input_edge_prometheus--pq"></a>
-### Nested Schema for `input_edge_prometheus.pq`
+<a id="nestedatt--items--input_edge_prometheus--pq"></a>
+### Nested Schema for `items.input_edge_prometheus.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_edge_prometheus--pq--pq_controls))
+
+<a id="nestedatt--items--input_edge_prometheus--pq--pq_controls"></a>
+### Nested Schema for `items.input_edge_prometheus.pq.pq_controls`
 
 
-<a id="nestedatt--input_edge_prometheus--search_filter"></a>
-### Nested Schema for `input_edge_prometheus.search_filter`
+
+<a id="nestedatt--items--input_edge_prometheus--search_filter"></a>
+### Nested Schema for `items.input_edge_prometheus.search_filter`
 
 Read-Only:
 
-- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
-- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
+- `name` (String) See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for information. Attributes can be manually entered if not present in the list.
+- `values` (List of String) Values to match within this row's attribute. If empty, search will return only running EC2 instances.
 
 
-<a id="nestedatt--input_edge_prometheus--targets"></a>
-### Nested Schema for `input_edge_prometheus.targets`
+<a id="nestedatt--items--input_edge_prometheus--targets"></a>
+### Nested Schema for `items.input_edge_prometheus.targets`
 
 Read-Only:
 
@@ -1359,8 +1577,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_elastic"></a>
-### Nested Schema for `input_elastic`
+<a id="nestedatt--items--input_elastic"></a>
+### Nested Schema for `items.input_elastic`
 
 Read-Only:
 
@@ -1369,7 +1587,7 @@ Read-Only:
 - `auth_tokens` (List of String) Bearer tokens to include in the authorization header
 - `auth_type` (String)
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_elastic--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_elastic--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `custom_api_version` (String) Custom version information to respond to requests
 - `description` (String)
@@ -1378,7 +1596,7 @@ Read-Only:
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--input_elastic--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--items--input_elastic--extra_http_headers))
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
@@ -1386,23 +1604,25 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_elastic--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_elastic--metadata))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--proxy_mode))
+- `proxy_mode` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--proxy_mode))
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_elastic--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--tls))
 - `type` (String)
 - `username` (String)
 
-<a id="nestedatt--input_elastic--connections"></a>
-### Nested Schema for `input_elastic.connections`
+<a id="nestedatt--items--input_elastic--connections"></a>
+### Nested Schema for `items.input_elastic.connections`
 
 Read-Only:
 
@@ -1410,8 +1630,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_elastic--extra_http_headers"></a>
-### Nested Schema for `input_elastic.extra_http_headers`
+<a id="nestedatt--items--input_elastic--extra_http_headers"></a>
+### Nested Schema for `items.input_elastic.extra_http_headers`
 
 Read-Only:
 
@@ -1419,8 +1639,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--input_elastic--metadata"></a>
-### Nested Schema for `input_elastic.metadata`
+<a id="nestedatt--items--input_elastic--metadata"></a>
+### Nested Schema for `items.input_elastic.metadata`
 
 Read-Only:
 
@@ -1428,54 +1648,64 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_elastic--pq"></a>
-### Nested Schema for `input_elastic.pq`
+<a id="nestedatt--items--input_elastic--pq"></a>
+### Nested Schema for `items.input_elastic.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--pq--pq_controls))
+
+<a id="nestedatt--items--input_elastic--pq--pq_controls"></a>
+### Nested Schema for `items.input_elastic.pq.pq_controls`
 
 
-<a id="nestedatt--input_elastic--proxy_mode"></a>
-### Nested Schema for `input_elastic.proxy_mode`
+
+<a id="nestedatt--items--input_elastic--proxy_mode"></a>
+### Nested Schema for `items.input_elastic.proxy_mode`
 
 Read-Only:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret
+- `credentials_secret` (String) Select or create a secret that references your credentials
 - `enabled` (Boolean) Enable proxying of non-bulk API requests to an external Elastic server. Enable this only if you understand the implications. See [Cribl Docs](https://docs.cribl.io/stream/sources-elastic/#proxy-mode) for more details.
+- `password` (String)
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
 - `remove_headers` (List of String) List of headers to remove from the request to proxy
+- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a proxy request to complete before canceling it
 - `url` (String) URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200
+- `username` (String)
 
 
-<a id="nestedatt--input_elastic--tls"></a>
-### Nested Schema for `input_elastic.tls`
+<a id="nestedatt--items--input_elastic--tls"></a>
+### Nested Schema for `items.input_elastic.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_eventhub"></a>
-### Nested Schema for `input_eventhub`
+<a id="nestedatt--items--input_eventhub"></a>
+### Nested Schema for `items.input_eventhub`
 
 Read-Only:
 
@@ -1485,7 +1715,7 @@ Read-Only:
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) List of Event Hubs Kafka brokers to connect to (example: yourdomain.servicebus.windows.net:9093). The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_eventhub--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_eventhub--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -1501,29 +1731,29 @@ Read-Only:
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
 - `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_eventhub--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_eventhub--metadata))
 - `minimize_duplicates` (Boolean) Minimize duplicate events by starting only one consumer for each topic partition
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_eventhub--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `rebalance_timeout` (Number) Maximum allowed time (rebalance.timeout.ms in Kafka domain) for each worker to join the group after a rebalance begins.
       If the timeout is exceeded, the coordinator broker will remove the worker from the group.
       See [Recommended configurations](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
-- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_eventhub--sasl))
+- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--items--input_eventhub--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `session_timeout` (Number) Timeout (session.timeout.ms in Kafka domain) used to detect client failures when using Kafka's group-management facilities.
       If the client sends no heartbeats to the broker before the timeout expires, the broker will remove the client from the group and initiate a rebalance.
       Value must be lower than rebalanceTimeout.
       See details [here](https://github.com/Azure/azure-event-hubs-for-kafka/blob/master/CONFIGURATION.md).
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_eventhub--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_eventhub--tls))
 - `topics` (List of String) The name of the Event Hub (Kafka topic) to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Event Hubs Source to only a single topic.
 - `type` (String)
 
-<a id="nestedatt--input_eventhub--connections"></a>
-### Nested Schema for `input_eventhub.connections`
+<a id="nestedatt--items--input_eventhub--connections"></a>
+### Nested Schema for `items.input_eventhub.connections`
 
 Read-Only:
 
@@ -1531,8 +1761,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_eventhub--metadata"></a>
-### Nested Schema for `input_eventhub.metadata`
+<a id="nestedatt--items--input_eventhub--metadata"></a>
+### Nested Schema for `items.input_eventhub.metadata`
 
 Read-Only:
 
@@ -1540,31 +1770,52 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_eventhub--pq"></a>
-### Nested Schema for `input_eventhub.pq`
+<a id="nestedatt--items--input_eventhub--pq"></a>
+### Nested Schema for `items.input_eventhub.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_eventhub--pq--pq_controls))
+
+<a id="nestedatt--items--input_eventhub--pq--pq_controls"></a>
+### Nested Schema for `items.input_eventhub.pq.pq_controls`
 
 
-<a id="nestedatt--input_eventhub--sasl"></a>
-### Nested Schema for `input_eventhub.sasl`
+
+<a id="nestedatt--items--input_eventhub--sasl"></a>
+### Nested Schema for `items.input_eventhub.sasl`
 
 Read-Only:
 
+- `auth_type` (String) Enter password directly, or select a stored secret
+- `cert_path` (String)
+- `certificate_name` (String) Select or create a stored certificate
+- `client_id` (String) client_id to pass in the OAuth request parameter
+- `client_secret` (String) client_secret to pass in the OAuth request parameter
+- `client_secret_auth_type` (String)
+- `client_text_secret` (String) Select or create a stored text secret
 - `disabled` (Boolean)
 - `mechanism` (String)
+- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure
+- `passphrase` (String)
+- `password` (String) Connection-string primary key, or connection-string secondary key, from the Event Hubs workspace
+- `priv_key_path` (String)
+- `scope` (String) Scope to pass in the OAuth request parameter
+- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
+- `text_secret` (String) Select or create a stored text secret
+- `username` (String) The username for authentication. For Event Hubs, this should always be $ConnectionString.
 
 
-<a id="nestedatt--input_eventhub--tls"></a>
-### Nested Schema for `input_eventhub.tls`
+<a id="nestedatt--items--input_eventhub--tls"></a>
+### Nested Schema for `items.input_eventhub.tls`
 
 Read-Only:
 
@@ -1573,33 +1824,34 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_exec"></a>
-### Nested Schema for `input_exec`
+<a id="nestedatt--items--input_exec"></a>
+### Nested Schema for `items.input_exec`
 
 Read-Only:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `command` (String) Command to execute; supports Bourne shell (or CMD on Windows) syntax
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_exec--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_exec--connections))
 - `cron_schedule` (String) Cron schedule to execute the command on.
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) Interval between command executions in seconds.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_exec--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_exec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_exec--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_exec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `retries` (Number) Maximum number of retry attempts in the event that the command fails
 - `schedule_type` (String) Select a schedule type; either an interval (in seconds) or a cron-style schedule.
+- `script` (String) Optional script content to pipe into the command's stdin. The stdin stream is closed after the script is written.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_exec--connections"></a>
-### Nested Schema for `input_exec.connections`
+<a id="nestedatt--items--input_exec--connections"></a>
+### Nested Schema for `items.input_exec.connections`
 
 Read-Only:
 
@@ -1607,8 +1859,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_exec--metadata"></a>
-### Nested Schema for `input_exec.metadata`
+<a id="nestedatt--items--input_exec--metadata"></a>
+### Nested Schema for `items.input_exec.metadata`
 
 Read-Only:
 
@@ -1616,48 +1868,57 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_exec--pq"></a>
-### Nested Schema for `input_exec.pq`
+<a id="nestedatt--items--input_exec--pq"></a>
+### Nested Schema for `items.input_exec.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_exec--pq--pq_controls))
+
+<a id="nestedatt--items--input_exec--pq--pq_controls"></a>
+### Nested Schema for `items.input_exec.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_file"></a>
-### Nested Schema for `input_file`
+
+<a id="nestedatt--items--input_file"></a>
+### Nested Schema for `items.input_file`
 
 Read-Only:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `check_file_mod_time` (Boolean) Skip files with modification times earlier than the maximum age duration
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_file--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_file--connections))
 - `delete_files` (Boolean) Delete files after they have been collected
 - `depth` (Number) Set how many subdirectories deep to search. Use 0 to search only files in the given path, 1 to also look in its immediate subdirectories, etc. Leave it empty for unlimited depth.
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `filenames` (List of String) The full path of discovered files are matched against this wildcard list
+- `filter_archived_files` (Boolean) Apply filename allowlist to file entries in archive file types, like tar or zip.
 - `force_text` (Boolean) Forces files containing binary data to be streamed as text
 - `hash_len` (Number) Length of file header bytes to use in hash for unique file identification
 - `id` (String) Unique ID for this input
 - `idle_timeout` (Number) Time, in seconds, before an idle file is closed
 - `include_unidentifiable_binary` (Boolean) Stream binary files as Base64-encoded chunks.
 - `interval` (Number) Time, in seconds, between scanning for files
-- `max_age_dur` (String) The maximum age of files to monitor. Format examples: 60s, 4h, 3d, 1w. Age is relative to file modification time. Leave empty to apply no age filters.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_file--metadata))
+- `max_age_dur` (String) The maximum age of event timestamps to collect. Format examples: 60s, 4h, 3d, 1w. Can be used in conjuction with "Check file modification times". Leave empty to apply no age filters.
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_file--metadata))
+- `min_age_dur` (String) The minimum age of files to monitor. Format examples: 30s, 15m, 1h. Age is relative to file modification time. Leave empty to apply no age filters.
 - `mode` (String) Choose how to discover files to monitor
 - `path` (String) Directory path to search for files. Environment variables will be resolved, e.g. $CRIBL_HOME/log/.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_file--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_file--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `salt_hash` (Boolean) Salt the file hash with the Source file path. Ensures that all files with the same header hash, such as CSV files, are ingested. Moving or renaming the file, or toggling this after starting the Source will cause re-ingestion.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -1665,8 +1926,8 @@ Read-Only:
 - `tail_only` (Boolean) Read only new entries at the end of all files discovered at next startup. @{product} will then read newly discovered files from the head. Disable this to resume reading all files from head.
 - `type` (String)
 
-<a id="nestedatt--input_file--connections"></a>
-### Nested Schema for `input_file.connections`
+<a id="nestedatt--items--input_file--connections"></a>
+### Nested Schema for `items.input_file.connections`
 
 Read-Only:
 
@@ -1674,8 +1935,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_file--metadata"></a>
-### Nested Schema for `input_file.metadata`
+<a id="nestedatt--items--input_file--metadata"></a>
+### Nested Schema for `items.input_file.metadata`
 
 Read-Only:
 
@@ -1683,30 +1944,36 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_file--pq"></a>
-### Nested Schema for `input_file.pq`
+<a id="nestedatt--items--input_file--pq"></a>
+### Nested Schema for `items.input_file.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_file--pq--pq_controls))
+
+<a id="nestedatt--items--input_file--pq--pq_controls"></a>
+### Nested Schema for `items.input_file.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_firehose"></a>
-### Nested Schema for `input_firehose`
+
+<a id="nestedatt--items--input_firehose"></a>
+### Nested Schema for `items.input_firehose`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_firehose--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_firehose--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -1719,20 +1986,22 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_firehose--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_firehose--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_firehose--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose--tls))
 - `type` (String)
 
-<a id="nestedatt--input_firehose--connections"></a>
-### Nested Schema for `input_firehose.connections`
+<a id="nestedatt--items--input_firehose--connections"></a>
+### Nested Schema for `items.input_firehose.connections`
 
 Read-Only:
 
@@ -1740,8 +2009,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_firehose--metadata"></a>
-### Nested Schema for `input_firehose.metadata`
+<a id="nestedatt--items--input_firehose--metadata"></a>
+### Nested Schema for `items.input_firehose.metadata`
 
 Read-Only:
 
@@ -1749,46 +2018,52 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_firehose--pq"></a>
-### Nested Schema for `input_firehose.pq`
+<a id="nestedatt--items--input_firehose--pq"></a>
+### Nested Schema for `items.input_firehose.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose--pq--pq_controls))
+
+<a id="nestedatt--items--input_firehose--pq--pq_controls"></a>
+### Nested Schema for `items.input_firehose.pq.pq_controls`
 
 
-<a id="nestedatt--input_firehose--tls"></a>
-### Nested Schema for `input_firehose.tls`
+
+<a id="nestedatt--items--input_firehose--tls"></a>
+### Nested Schema for `items.input_firehose.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_google_pubsub"></a>
-### Nested Schema for `input_google_pubsub`
+<a id="nestedatt--items--input_google_pubsub"></a>
+### Nested Schema for `items.input_google_pubsub`
 
 Read-Only:
 
 - `concurrency` (Number) How many streams to pull messages from at one time. Doubling the value doubles the number of messages this Source pulls from the topic (if available), while consuming more CPU and memory. Defaults to 5.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_google_pubsub--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_google_pubsub--connections))
 - `create_subscription` (Boolean) Create subscription if it does not exist
 - `create_topic` (Boolean) Create topic if it does not exist
 - `description` (String)
@@ -1797,10 +2072,11 @@ Read-Only:
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 - `id` (String) Unique ID for this input
 - `max_backlog` (Number) If Destination exerts backpressure, this setting limits how many inbound events Stream will queue for processing before it stops retrieving events
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_google_pubsub--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_google_pubsub--metadata))
+- `monitor_subscription` (Boolean) Use when the subscription is not created by this Source and topic is not known
 - `ordered_delivery` (Boolean) Receive events in the order they were added to the queue. The process sending events must have ordering enabled.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_google_pubsub--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_google_pubsub--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `region` (String) Region to retrieve messages from. Select 'default' to allow Google to auto-select the nearest region. When using ordered delivery, the selected region must be allowed by message storage policy.
 - `request_timeout` (Number) Pull request timeout, in milliseconds
@@ -1808,12 +2084,15 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `subscription_name` (String) ID of the subscription to use when receiving events
-- `topic_name` (String) ID of the topic to receive events from
+- `subscription_name` (String) ID of the subscription to use when receiving events. When Monitor subscription is enabled, the fully qualified subscription name must be entered. Example: projects/myProject/subscriptions/mySubscription
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+- `template_subscription_name` (String) Binds 'subscriptionName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'subscriptionName' at runtime.
+- `template_topic_name` (String) Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.
+- `topic_name` (String) ID of the topic to receive events from. When Monitor subscription is enabled, any value may be entered.
 - `type` (String)
 
-<a id="nestedatt--input_google_pubsub--connections"></a>
-### Nested Schema for `input_google_pubsub.connections`
+<a id="nestedatt--items--input_google_pubsub--connections"></a>
+### Nested Schema for `items.input_google_pubsub.connections`
 
 Read-Only:
 
@@ -1821,8 +2100,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_google_pubsub--metadata"></a>
-### Nested Schema for `input_google_pubsub.metadata`
+<a id="nestedatt--items--input_google_pubsub--metadata"></a>
+### Nested Schema for `items.input_google_pubsub.metadata`
 
 Read-Only:
 
@@ -1830,29 +2109,35 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_google_pubsub--pq"></a>
-### Nested Schema for `input_google_pubsub.pq`
+<a id="nestedatt--items--input_google_pubsub--pq"></a>
+### Nested Schema for `items.input_google_pubsub.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_google_pubsub--pq--pq_controls))
+
+<a id="nestedatt--items--input_google_pubsub--pq--pq_controls"></a>
+### Nested Schema for `items.input_google_pubsub.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_grafana"></a>
-### Nested Schema for `input_grafana`
+
+<a id="nestedatt--items--input_grafana"></a>
+### Nested Schema for `items.input_grafana`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_grafana--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_grafana--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -1863,26 +2148,28 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
-- `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' (Prometheus) must be configured.
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--loki_auth))
+- `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth))
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_grafana--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_grafana--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' (Loki) must be configured.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--prometheus_auth))
+- `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth))
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_grafana--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--tls))
 - `type` (String)
 
-<a id="nestedatt--input_grafana--connections"></a>
-### Nested Schema for `input_grafana.connections`
+<a id="nestedatt--items--input_grafana--connections"></a>
+### Nested Schema for `items.input_grafana.connections`
 
 Read-Only:
 
@@ -1890,47 +2177,47 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_grafana--loki_auth"></a>
-### Nested Schema for `input_grafana.loki_auth`
+<a id="nestedatt--items--input_grafana--loki_auth"></a>
+### Nested Schema for `items.input_grafana.loki_auth`
 
 Read-Only:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Loki logs authentication type
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `login_url` (String) URL for OAuth
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_grafana--loki_auth--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_grafana--loki_auth--oauth_params))
+- `login_url` (String) Parsed as JSON.
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth--oauth_params))
 - `password` (String)
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `username` (String)
 
-<a id="nestedatt--input_grafana--loki_auth--oauth_headers"></a>
-### Nested Schema for `input_grafana.loki_auth.oauth_headers`
+<a id="nestedatt--items--input_grafana--loki_auth--oauth_headers"></a>
+### Nested Schema for `items.input_grafana.loki_auth.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_grafana--loki_auth--oauth_params"></a>
-### Nested Schema for `input_grafana.loki_auth.oauth_params`
+<a id="nestedatt--items--input_grafana--loki_auth--oauth_params"></a>
+### Nested Schema for `items.input_grafana.loki_auth.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 
-<a id="nestedatt--input_grafana--metadata"></a>
-### Nested Schema for `input_grafana.metadata`
+<a id="nestedatt--items--input_grafana--metadata"></a>
+### Nested Schema for `items.input_grafana.metadata`
 
 Read-Only:
 
@@ -1938,88 +2225,94 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_grafana--pq"></a>
-### Nested Schema for `input_grafana.pq`
+<a id="nestedatt--items--input_grafana--pq"></a>
+### Nested Schema for `items.input_grafana.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--pq--pq_controls))
+
+<a id="nestedatt--items--input_grafana--pq--pq_controls"></a>
+### Nested Schema for `items.input_grafana.pq.pq_controls`
 
 
-<a id="nestedatt--input_grafana--prometheus_auth"></a>
-### Nested Schema for `input_grafana.prometheus_auth`
+
+<a id="nestedatt--items--input_grafana--prometheus_auth"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth`
 
 Read-Only:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Remote Write authentication type
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `login_url` (String) URL for OAuth
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_grafana--prometheus_auth--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_grafana--prometheus_auth--oauth_params))
+- `login_url` (String) Parsed as JSON.
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth--oauth_params))
 - `password` (String)
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `username` (String)
 
-<a id="nestedatt--input_grafana--prometheus_auth--oauth_headers"></a>
-### Nested Schema for `input_grafana.prometheus_auth.oauth_headers`
+<a id="nestedatt--items--input_grafana--prometheus_auth--oauth_headers"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_grafana--prometheus_auth--oauth_params"></a>
-### Nested Schema for `input_grafana.prometheus_auth.oauth_params`
+<a id="nestedatt--items--input_grafana--prometheus_auth--oauth_params"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 
-<a id="nestedatt--input_grafana--tls"></a>
-### Nested Schema for `input_grafana.tls`
+<a id="nestedatt--items--input_grafana--tls"></a>
+### Nested Schema for `items.input_grafana.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_http"></a>
-### Nested Schema for `input_http`
+<a id="nestedatt--items--input_http"></a>
+### Nested Schema for `items.input_http`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
-- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_http--auth_tokens_ext))
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_http--auth_tokens_ext))
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_http--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_http--connections))
 - `cribl_api` (String) Absolute path on which to listen for the Cribl HTTP API requests. Only _bulk (default /cribl/_bulk) is available. Use empty string to disable.
 - `description` (String)
 - `disabled` (Boolean)
@@ -2034,10 +2327,10 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_http--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_http--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -2045,20 +2338,23 @@ Read-Only:
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http--tls))
 - `type` (String)
 
-<a id="nestedatt--input_http--auth_tokens_ext"></a>
-### Nested Schema for `input_http.auth_tokens_ext`
+<a id="nestedatt--items--input_http--auth_tokens_ext"></a>
+### Nested Schema for `items.input_http.auth_tokens_ext`
 
 Read-Only:
 
 - `description` (String)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_http--auth_tokens_ext--metadata))
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_http--auth_tokens_ext--metadata))
 - `token` (String) Shared secret to be provided by any client (Authorization: <token>)
 
-<a id="nestedatt--input_http--auth_tokens_ext--metadata"></a>
-### Nested Schema for `input_http.auth_tokens_ext.metadata`
+<a id="nestedatt--items--input_http--auth_tokens_ext--metadata"></a>
+### Nested Schema for `items.input_http.auth_tokens_ext.metadata`
 
 Read-Only:
 
@@ -2067,8 +2363,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_http--connections"></a>
-### Nested Schema for `input_http.connections`
+<a id="nestedatt--items--input_http--connections"></a>
+### Nested Schema for `items.input_http.connections`
 
 Read-Only:
 
@@ -2076,8 +2372,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_http--metadata"></a>
-### Nested Schema for `input_http.metadata`
+<a id="nestedatt--items--input_http--metadata"></a>
+### Nested Schema for `items.input_http.metadata`
 
 Read-Only:
 
@@ -2085,41 +2381,47 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_http--pq"></a>
-### Nested Schema for `input_http.pq`
+<a id="nestedatt--items--input_http--pq"></a>
+### Nested Schema for `items.input_http.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http--pq--pq_controls))
+
+<a id="nestedatt--items--input_http--pq--pq_controls"></a>
+### Nested Schema for `items.input_http.pq.pq_controls`
 
 
-<a id="nestedatt--input_http--tls"></a>
-### Nested Schema for `input_http.tls`
+
+<a id="nestedatt--items--input_http--tls"></a>
+### Nested Schema for `items.input_http.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_http_raw"></a>
-### Nested Schema for `input_http_raw`
+<a id="nestedatt--items--input_http_raw"></a>
+### Nested Schema for `items.input_http_raw`
 
 Read-Only:
 
@@ -2127,10 +2429,10 @@ Read-Only:
 - `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
 - `allowed_paths` (List of String) List of URI paths accepted by this input, wildcards are supported, e.g /api/v*/hook. Defaults to allow all.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
-- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext))
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_http_raw--auth_tokens_ext))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_http_raw--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_http_raw--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -2143,30 +2445,32 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_http_raw--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_http_raw--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_http_raw--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw--tls))
 - `type` (String)
 
-<a id="nestedatt--input_http_raw--auth_tokens_ext"></a>
-### Nested Schema for `input_http_raw.auth_tokens_ext`
+<a id="nestedatt--items--input_http_raw--auth_tokens_ext"></a>
+### Nested Schema for `items.input_http_raw.auth_tokens_ext`
 
 Read-Only:
 
 - `description` (String)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_http_raw--auth_tokens_ext--metadata))
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_http_raw--auth_tokens_ext--metadata))
 - `token` (String) Shared secret to be provided by any client (Authorization: <token>)
 
-<a id="nestedatt--input_http_raw--auth_tokens_ext--metadata"></a>
-### Nested Schema for `input_http_raw.auth_tokens_ext.metadata`
+<a id="nestedatt--items--input_http_raw--auth_tokens_ext--metadata"></a>
+### Nested Schema for `items.input_http_raw.auth_tokens_ext.metadata`
 
 Read-Only:
 
@@ -2175,8 +2479,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_http_raw--connections"></a>
-### Nested Schema for `input_http_raw.connections`
+<a id="nestedatt--items--input_http_raw--connections"></a>
+### Nested Schema for `items.input_http_raw.connections`
 
 Read-Only:
 
@@ -2184,8 +2488,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_http_raw--metadata"></a>
-### Nested Schema for `input_http_raw.metadata`
+<a id="nestedatt--items--input_http_raw--metadata"></a>
+### Nested Schema for `items.input_http_raw.metadata`
 
 Read-Only:
 
@@ -2193,45 +2497,51 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_http_raw--pq"></a>
-### Nested Schema for `input_http_raw.pq`
+<a id="nestedatt--items--input_http_raw--pq"></a>
+### Nested Schema for `items.input_http_raw.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw--pq--pq_controls))
+
+<a id="nestedatt--items--input_http_raw--pq--pq_controls"></a>
+### Nested Schema for `items.input_http_raw.pq.pq_controls`
 
 
-<a id="nestedatt--input_http_raw--tls"></a>
-### Nested Schema for `input_http_raw.tls`
+
+<a id="nestedatt--items--input_http_raw--tls"></a>
+### Nested Schema for `items.input_http_raw.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_journal_files"></a>
-### Nested Schema for `input_journal_files`
+<a id="nestedatt--items--input_journal_files"></a>
+### Nested Schema for `items.input_journal_files`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_journal_files--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_journal_files--connections))
 - `current_boot` (Boolean) Skip log messages that are not part of the current boot session.
 - `description` (String)
 - `disabled` (Boolean)
@@ -2240,18 +2550,18 @@ Read-Only:
 - `interval` (Number) Time, in seconds, between scanning for journals.
 - `journals` (List of String) The full path of discovered journals are matched against this wildcard list.
 - `max_age_dur` (String) The maximum log message age, in duration form (e.g,: 60s, 4h, 3d, 1w).  Default of no value will apply no max age filters.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_journal_files--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_journal_files--metadata))
 - `path` (String) Directory path to search for journals. Environment variables will be resolved, e.g. $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_journal_files--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_journal_files--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `rules` (Attributes List) Add rules to decide which journal objects to allow. Events are generated if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_journal_files--rules))
+- `rules` (Attributes List) Add rules to decide which journal objects to allow. Events are generated if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--items--input_journal_files--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_journal_files--connections"></a>
-### Nested Schema for `input_journal_files.connections`
+<a id="nestedatt--items--input_journal_files--connections"></a>
+### Nested Schema for `items.input_journal_files.connections`
 
 Read-Only:
 
@@ -2259,8 +2569,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_journal_files--metadata"></a>
-### Nested Schema for `input_journal_files.metadata`
+<a id="nestedatt--items--input_journal_files--metadata"></a>
+### Nested Schema for `items.input_journal_files.metadata`
 
 Read-Only:
 
@@ -2268,22 +2578,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_journal_files--pq"></a>
-### Nested Schema for `input_journal_files.pq`
+<a id="nestedatt--items--input_journal_files--pq"></a>
+### Nested Schema for `items.input_journal_files.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_journal_files--pq--pq_controls))
+
+<a id="nestedatt--items--input_journal_files--pq--pq_controls"></a>
+### Nested Schema for `items.input_journal_files.pq.pq_controls`
 
 
-<a id="nestedatt--input_journal_files--rules"></a>
-### Nested Schema for `input_journal_files.rules`
+
+<a id="nestedatt--items--input_journal_files--rules"></a>
+### Nested Schema for `items.input_journal_files.rules`
 
 Read-Only:
 
@@ -2292,8 +2608,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_kafka"></a>
-### Nested Schema for `input_kafka`
+<a id="nestedatt--items--input_kafka"></a>
+### Nested Schema for `items.input_kafka`
 
 Read-Only:
 
@@ -2303,46 +2619,46 @@ Read-Only:
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kafka--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_kafka--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
-- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry))
+- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka--kafka_schema_registry))
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
 - `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kafka--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_kafka--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
-    If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+      If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
-- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--input_kafka--sasl))
+- `sasl` (Attributes) Authentication parameters to use when connecting to brokers. Using TLS is highly recommended. (see [below for nested schema](#nestedatt--items--input_kafka--sasl))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-    If the client sends no heartbeats to the broker before the timeout expires, 
-    the broker will remove the client from the group and initiate a rebalance.
-    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+      If the client sends no heartbeats to the broker before the timeout expires, 
+      the broker will remove the client from the group and initiate a rebalance.
+      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka--tls))
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
-<a id="nestedatt--input_kafka--connections"></a>
-### Nested Schema for `input_kafka.connections`
+<a id="nestedatt--items--input_kafka--connections"></a>
+### Nested Schema for `items.input_kafka.connections`
 
 Read-Only:
 
@@ -2350,21 +2666,21 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_kafka--kafka_schema_registry"></a>
-### Nested Schema for `input_kafka.kafka_schema_registry`
+<a id="nestedatt--items--input_kafka--kafka_schema_registry"></a>
+### Nested Schema for `items.input_kafka.kafka_schema_registry`
 
 Read-Only:
 
-- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry--auth))
+- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--items--input_kafka--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_kafka--kafka_schema_registry--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka--kafka_schema_registry--tls))
 
-<a id="nestedatt--input_kafka--kafka_schema_registry--auth"></a>
-### Nested Schema for `input_kafka.kafka_schema_registry.auth`
+<a id="nestedatt--items--input_kafka--kafka_schema_registry--auth"></a>
+### Nested Schema for `items.input_kafka.kafka_schema_registry.auth`
 
 Read-Only:
 
@@ -2372,8 +2688,8 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_kafka--kafka_schema_registry--tls"></a>
-### Nested Schema for `input_kafka.kafka_schema_registry.tls`
+<a id="nestedatt--items--input_kafka--kafka_schema_registry--tls"></a>
+### Nested Schema for `items.input_kafka.kafka_schema_registry.tls`
 
 Read-Only:
 
@@ -2391,8 +2707,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_kafka--metadata"></a>
-### Nested Schema for `input_kafka.metadata`
+<a id="nestedatt--items--input_kafka--metadata"></a>
+### Nested Schema for `items.input_kafka.metadata`
 
 Read-Only:
 
@@ -2400,31 +2716,69 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_kafka--pq"></a>
-### Nested Schema for `input_kafka.pq`
+<a id="nestedatt--items--input_kafka--pq"></a>
+### Nested Schema for `items.input_kafka.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kafka--pq--pq_controls))
+
+<a id="nestedatt--items--input_kafka--pq--pq_controls"></a>
+### Nested Schema for `items.input_kafka.pq.pq_controls`
 
 
-<a id="nestedatt--input_kafka--sasl"></a>
-### Nested Schema for `input_kafka.sasl`
+
+<a id="nestedatt--items--input_kafka--sasl"></a>
+### Nested Schema for `items.input_kafka.sasl`
 
 Read-Only:
 
+- `auth_type` (String) Enter credentials directly, or select a stored secret
+- `broker_service_class` (String) Kerberos service class for Kafka brokers, such as `kafka`
+- `client_id` (String) Client ID to use for OAuth authentication
+- `client_text_secret` (String) Select or create a stored text secret
+- `credentials_secret` (String) Select or create a secret that references your credentials
 - `disabled` (Boolean)
+- `keytab_location` (String) Location of keytab file for authentication principal
 - `mechanism` (String)
+- `oauth_enabled` (Boolean) Enable OAuth authentication
+- `oauth_params` (Attributes List) Additional fields to send to the token endpoint, such as scope or audience (see [below for nested schema](#nestedatt--items--input_kafka--sasl--oauth_params))
+- `oauth_secret_type` (String)
+- `password` (String)
+- `principal` (String) Authentication principal, such as `kafka_user@example.com`
+- `sasl_extensions` (Attributes List) Additional SASL extension fields, such as Confluent's logicalCluster or identityPoolId (see [below for nested schema](#nestedatt--items--input_kafka--sasl--sasl_extensions))
+- `token_url` (String) URL of the token endpoint to use for OAuth authentication
+- `username` (String)
+
+<a id="nestedatt--items--input_kafka--sasl--oauth_params"></a>
+### Nested Schema for `items.input_kafka.sasl.oauth_params`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
 
 
-<a id="nestedatt--input_kafka--tls"></a>
-### Nested Schema for `input_kafka.tls`
+<a id="nestedatt--items--input_kafka--sasl--sasl_extensions"></a>
+### Nested Schema for `items.input_kafka.sasl.sasl_extensions`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+
+<a id="nestedatt--items--input_kafka--tls"></a>
+### Nested Schema for `items.input_kafka.tls`
 
 Read-Only:
 
@@ -2442,8 +2796,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_kinesis"></a>
-### Nested Schema for `input_kinesis`
+<a id="nestedatt--items--input_kinesis"></a>
+### Nested Schema for `items.input_kinesis`
 
 Read-Only:
 
@@ -2454,7 +2808,7 @@ Read-Only:
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kinesis--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_kinesis--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -2465,10 +2819,10 @@ Read-Only:
 - `get_records_limit_total` (Number) Maximum number of records, across all shards, to pull down at once per Worker Process
 - `id` (String) Unique ID for this input
 - `load_balancing_algorithm` (String) The load-balancing algorithm to use for spreading out shards across Workers and Worker Processes
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kinesis--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_kinesis--metadata))
 - `payload_format` (String) Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kinesis--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_kinesis--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `region` (String) Region where the Kinesis stream is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
@@ -2480,11 +2834,17 @@ Read-Only:
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests
 - `stream_name` (String) Kinesis Data Stream to read data from
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+- `template_stream_name` (String) Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
 - `type` (String)
 - `verify_kpl_check_sums` (Boolean) Verify Kinesis Producer Library (KPL) event checksums
 
-<a id="nestedatt--input_kinesis--connections"></a>
-### Nested Schema for `input_kinesis.connections`
+<a id="nestedatt--items--input_kinesis--connections"></a>
+### Nested Schema for `items.input_kinesis.connections`
 
 Read-Only:
 
@@ -2492,8 +2852,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_kinesis--metadata"></a>
-### Nested Schema for `input_kinesis.metadata`
+<a id="nestedatt--items--input_kinesis--metadata"></a>
+### Nested Schema for `items.input_kinesis.metadata`
 
 Read-Only:
 
@@ -2501,42 +2861,48 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_kinesis--pq"></a>
-### Nested Schema for `input_kinesis.pq`
+<a id="nestedatt--items--input_kinesis--pq"></a>
+### Nested Schema for `items.input_kinesis.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kinesis--pq--pq_controls))
+
+<a id="nestedatt--items--input_kinesis--pq--pq_controls"></a>
+### Nested Schema for `items.input_kinesis.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_kube_events"></a>
-### Nested Schema for `input_kube_events`
+
+<a id="nestedatt--items--input_kube_events"></a>
+### Nested Schema for `items.input_kube_events`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kube_events--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_kube_events--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_events--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_kube_events--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kube_events--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_events--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `rules` (Attributes List) Filtering on event fields (see [below for nested schema](#nestedatt--input_kube_events--rules))
+- `rules` (Attributes List) Filtering on event fields (see [below for nested schema](#nestedatt--items--input_kube_events--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_kube_events--connections"></a>
-### Nested Schema for `input_kube_events.connections`
+<a id="nestedatt--items--input_kube_events--connections"></a>
+### Nested Schema for `items.input_kube_events.connections`
 
 Read-Only:
 
@@ -2544,8 +2910,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_kube_events--metadata"></a>
-### Nested Schema for `input_kube_events.metadata`
+<a id="nestedatt--items--input_kube_events--metadata"></a>
+### Nested Schema for `items.input_kube_events.metadata`
 
 Read-Only:
 
@@ -2553,22 +2919,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_kube_events--pq"></a>
-### Nested Schema for `input_kube_events.pq`
+<a id="nestedatt--items--input_kube_events--pq"></a>
+### Nested Schema for `items.input_kube_events.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_events--pq--pq_controls))
+
+<a id="nestedatt--items--input_kube_events--pq--pq_controls"></a>
+### Nested Schema for `items.input_kube_events.pq.pq_controls`
 
 
-<a id="nestedatt--input_kube_events--rules"></a>
-### Nested Schema for `input_kube_events.rules`
+
+<a id="nestedatt--items--input_kube_events--rules"></a>
+### Nested Schema for `items.input_kube_events.rules`
 
 Read-Only:
 
@@ -2577,33 +2949,33 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_kube_logs"></a>
-### Nested Schema for `input_kube_logs`
+<a id="nestedatt--items--input_kube_logs"></a>
+### Nested Schema for `items.input_kube_logs`
 
 Read-Only:
 
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kube_logs--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_kube_logs--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between checks for new containers. Default is 15 secs.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_logs--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_kube_logs--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_logs--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kube_logs--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_logs--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `rules` (Attributes List) Add rules to decide which Pods to collect logs from. Logs are collected if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_logs--rules))
+- `rules` (Attributes List) Add rules to decide which Pods to collect logs from. Logs are collected if no rules are given or if all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--items--input_kube_logs--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `timestamps` (Boolean) For use when containers do not emit a timestamp, prefix each line of output with a timestamp. If you enable this setting, you can use the Kubernetes Logs Event Breaker and the kubernetes_logs Pre-processing Pipeline to remove them from the events after the timestamps are extracted.
 - `type` (String)
 
-<a id="nestedatt--input_kube_logs--connections"></a>
-### Nested Schema for `input_kube_logs.connections`
+<a id="nestedatt--items--input_kube_logs--connections"></a>
+### Nested Schema for `items.input_kube_logs.connections`
 
 Read-Only:
 
@@ -2611,8 +2983,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_kube_logs--metadata"></a>
-### Nested Schema for `input_kube_logs.metadata`
+<a id="nestedatt--items--input_kube_logs--metadata"></a>
+### Nested Schema for `items.input_kube_logs.metadata`
 
 Read-Only:
 
@@ -2620,8 +2992,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_kube_logs--persistence"></a>
-### Nested Schema for `input_kube_logs.persistence`
+<a id="nestedatt--items--input_kube_logs--persistence"></a>
+### Nested Schema for `items.input_kube_logs.persistence`
 
 Read-Only:
 
@@ -2632,22 +3004,28 @@ Read-Only:
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
 
 
-<a id="nestedatt--input_kube_logs--pq"></a>
-### Nested Schema for `input_kube_logs.pq`
+<a id="nestedatt--items--input_kube_logs--pq"></a>
+### Nested Schema for `items.input_kube_logs.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_logs--pq--pq_controls))
+
+<a id="nestedatt--items--input_kube_logs--pq--pq_controls"></a>
+### Nested Schema for `items.input_kube_logs.pq.pq_controls`
 
 
-<a id="nestedatt--input_kube_logs--rules"></a>
-### Nested Schema for `input_kube_logs.rules`
+
+<a id="nestedatt--items--input_kube_logs--rules"></a>
+### Nested Schema for `items.input_kube_logs.rules`
 
 Read-Only:
 
@@ -2656,29 +3034,29 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_kube_metrics"></a>
-### Nested Schema for `input_kube_metrics`
+<a id="nestedatt--items--input_kube_metrics"></a>
+### Nested Schema for `items.input_kube_metrics`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_kube_metrics--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_kube_metrics--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between consecutive metrics collections. Default is 15 secs.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_kube_metrics--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_kube_metrics--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_kube_metrics--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_metrics--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_kube_metrics--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `rules` (Attributes List) Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--input_kube_metrics--rules))
+- `rules` (Attributes List) Add rules to decide which Kubernetes objects to generate metrics for. Events are generated if no rules are given or of all the rules' expressions evaluate to true. (see [below for nested schema](#nestedatt--items--input_kube_metrics--rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_kube_metrics--connections"></a>
-### Nested Schema for `input_kube_metrics.connections`
+<a id="nestedatt--items--input_kube_metrics--connections"></a>
+### Nested Schema for `items.input_kube_metrics.connections`
 
 Read-Only:
 
@@ -2686,8 +3064,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_kube_metrics--metadata"></a>
-### Nested Schema for `input_kube_metrics.metadata`
+<a id="nestedatt--items--input_kube_metrics--metadata"></a>
+### Nested Schema for `items.input_kube_metrics.metadata`
 
 Read-Only:
 
@@ -2695,8 +3073,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_kube_metrics--persistence"></a>
-### Nested Schema for `input_kube_metrics.persistence`
+<a id="nestedatt--items--input_kube_metrics--persistence"></a>
+### Nested Schema for `items.input_kube_metrics.persistence`
 
 Read-Only:
 
@@ -2708,22 +3086,28 @@ Read-Only:
 - `time_window` (String) Time span for each file bucket
 
 
-<a id="nestedatt--input_kube_metrics--pq"></a>
-### Nested Schema for `input_kube_metrics.pq`
+<a id="nestedatt--items--input_kube_metrics--pq"></a>
+### Nested Schema for `items.input_kube_metrics.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_kube_metrics--pq--pq_controls))
+
+<a id="nestedatt--items--input_kube_metrics--pq--pq_controls"></a>
+### Nested Schema for `items.input_kube_metrics.pq.pq_controls`
 
 
-<a id="nestedatt--input_kube_metrics--rules"></a>
-### Nested Schema for `input_kube_metrics.rules`
+
+<a id="nestedatt--items--input_kube_metrics--rules"></a>
+### Nested Schema for `items.input_kube_metrics.rules`
 
 Read-Only:
 
@@ -2732,16 +3116,16 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_loki"></a>
-### Nested Schema for `input_loki`
+<a id="nestedatt--items--input_loki"></a>
+### Nested Schema for `items.input_loki`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Loki logs authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_loki--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_loki--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
@@ -2753,34 +3137,36 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_loki--metadata))
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_loki--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_loki--oauth_params))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_loki--metadata))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_loki--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_loki--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `type` (String)
 - `username` (String)
 
-<a id="nestedatt--input_loki--connections"></a>
-### Nested Schema for `input_loki.connections`
+<a id="nestedatt--items--input_loki--connections"></a>
+### Nested Schema for `items.input_loki.connections`
 
 Read-Only:
 
@@ -2788,8 +3174,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_loki--metadata"></a>
-### Nested Schema for `input_loki.metadata`
+<a id="nestedatt--items--input_loki--metadata"></a>
+### Nested Schema for `items.input_loki.metadata`
 
 Read-Only:
 
@@ -2797,63 +3183,69 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_loki--oauth_headers"></a>
-### Nested Schema for `input_loki.oauth_headers`
+<a id="nestedatt--items--input_loki--oauth_headers"></a>
+### Nested Schema for `items.input_loki.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_loki--oauth_params"></a>
-### Nested Schema for `input_loki.oauth_params`
+<a id="nestedatt--items--input_loki--oauth_params"></a>
+### Nested Schema for `items.input_loki.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_loki--pq"></a>
-### Nested Schema for `input_loki.pq`
+<a id="nestedatt--items--input_loki--pq"></a>
+### Nested Schema for `items.input_loki.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--pq--pq_controls))
+
+<a id="nestedatt--items--input_loki--pq--pq_controls"></a>
+### Nested Schema for `items.input_loki.pq.pq_controls`
 
 
-<a id="nestedatt--input_loki--tls"></a>
-### Nested Schema for `input_loki.tls`
+
+<a id="nestedatt--items--input_loki--tls"></a>
+### Nested Schema for `items.input_loki.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_metrics"></a>
-### Nested Schema for `input_metrics`
+<a id="nestedatt--items--input_metrics"></a>
+### Nested Schema for `items.input_metrics`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_metrics--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_metrics--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
@@ -2862,20 +3254,23 @@ Read-Only:
 - `id` (String) Unique ID for this input
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_metrics--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_metrics--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
+- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--tls))
 - `type` (String)
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--input_metrics--connections"></a>
-### Nested Schema for `input_metrics.connections`
+<a id="nestedatt--items--input_metrics--connections"></a>
+### Nested Schema for `items.input_metrics.connections`
 
 Read-Only:
 
@@ -2883,8 +3278,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_metrics--metadata"></a>
-### Nested Schema for `input_metrics.metadata`
+<a id="nestedatt--items--input_metrics--metadata"></a>
+### Nested Schema for `items.input_metrics.metadata`
 
 Read-Only:
 
@@ -2892,64 +3287,185 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_metrics--pq"></a>
-### Nested Schema for `input_metrics.pq`
+<a id="nestedatt--items--input_metrics--pq"></a>
+### Nested Schema for `items.input_metrics.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--pq--pq_controls))
+
+<a id="nestedatt--items--input_metrics--pq--pq_controls"></a>
+### Nested Schema for `items.input_metrics.pq.pq_controls`
 
 
-<a id="nestedatt--input_metrics--tls"></a>
-### Nested Schema for `input_metrics.tls`
+
+<a id="nestedatt--items--input_metrics--tls"></a>
+### Nested Schema for `items.input_metrics.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_model_driven_telemetry"></a>
-### Nested Schema for `input_model_driven_telemetry`
+<a id="nestedatt--items--input_microsoft_graph"></a>
+### Nested Schema for `items.input_microsoft_graph`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_model_driven_telemetry--connections))
+- `auth_type` (String) Select authentication method.
+- `cert_options` (Attributes) (see [below for nested schema](#nestedatt--items--input_microsoft_graph--cert_options))
+- `client_id` (String) client_id to pass in the OAuth request parameter.
+- `client_secret` (String) client_secret to pass in the OAuth request parameter.
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_microsoft_graph--connections))
+- `credentials_secret` (String) Select or create a secret that references your credentials.
+- `description` (String)
+- `disable_time_filter` (Boolean) Disables time filtering of events when a date range is specified.
+- `disabled` (Boolean)
+- `end_date` (String) Backward offset for the search range's tail. (E.g.: -2h@h) Microsoft Graph data is delayed; this parameter (with Date range start) compensates for delay and gaps.
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `interval` (Number) How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
+- `log_level` (String) Log Level (verbosity) for collection runtime behavior.
+- `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
+- `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_microsoft_graph--metadata))
+- `password` (String) Password to run Microsoft Graph API call.
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `plan_type` (String) Office 365 subscription plan for your organization, typically Office 365 Enterprise
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_microsoft_graph--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
+- `resource` (String) Resource to pass in the OAuth request parameter.
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_microsoft_graph--retry_rules))
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Microsoft Graph data is delayed; this parameter (with Date range end) compensates for delay and gaps.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+- `template_resource` (String) Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
+- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
+- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
+- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
+- `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
+- `timeout` (Number) HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `type` (String)
+- `url` (String) Microsoft Graph API endpoint URL. (ex. https://graph.microsoft.com/v1.0/admin/exchange/tracing/messageTraces)
+- `username` (String) Username to run Microsoft Graph API call.
+
+<a id="nestedatt--items--input_microsoft_graph--cert_options"></a>
+### Nested Schema for `items.input_microsoft_graph.cert_options`
+
+Read-Only:
+
+- `cert_path` (String) Path to the certificate to use. Certificate should be in PEM format. Can reference $ENV_VARS.
+- `certificate_name` (String) The name of the predefined certificate.
+- `passphrase` (String) Passphrase to use to decrypt the private key.
+- `priv_key_path` (String) Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS.
+
+
+<a id="nestedatt--items--input_microsoft_graph--connections"></a>
+### Nested Schema for `items.input_microsoft_graph.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_microsoft_graph--metadata"></a>
+### Nested Schema for `items.input_microsoft_graph.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_microsoft_graph--pq"></a>
+### Nested Schema for `items.input_microsoft_graph.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_microsoft_graph--pq--pq_controls))
+
+<a id="nestedatt--items--input_microsoft_graph--pq--pq_controls"></a>
+### Nested Schema for `items.input_microsoft_graph.pq.pq_controls`
+
+
+
+<a id="nestedatt--items--input_microsoft_graph--retry_rules"></a>
+### Nested Schema for `items.input_microsoft_graph.retry_rules`
+
+Read-Only:
+
+- `codes` (List of Number) List of http codes that trigger a retry. Leave empty to use the default list of 429, 500, and 503.
+- `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
+- `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).
+- `limit` (Number) The maximum number of times to retry a failed HTTP request
+- `multiplier` (Number) Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on
+- `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
+- `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
+- `type` (String) The algorithm to use when performing HTTP retries
+
+
+
+<a id="nestedatt--items--input_model_driven_telemetry"></a>
+### Nested Schema for `items.input_model_driven_telemetry`
+
+Read-Only:
+
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_model_driven_telemetry--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `shutdown_timeout_ms` (Number) Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_model_driven_telemetry--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--tls))
 - `type` (String)
 
-<a id="nestedatt--input_model_driven_telemetry--connections"></a>
-### Nested Schema for `input_model_driven_telemetry.connections`
+<a id="nestedatt--items--input_model_driven_telemetry--connections"></a>
+### Nested Schema for `items.input_model_driven_telemetry.connections`
 
 Read-Only:
 
@@ -2957,8 +3473,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_model_driven_telemetry--metadata"></a>
-### Nested Schema for `input_model_driven_telemetry.metadata`
+<a id="nestedatt--items--input_model_driven_telemetry--metadata"></a>
+### Nested Schema for `items.input_model_driven_telemetry.metadata`
 
 Read-Only:
 
@@ -2966,40 +3482,47 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_model_driven_telemetry--pq"></a>
-### Nested Schema for `input_model_driven_telemetry.pq`
+<a id="nestedatt--items--input_model_driven_telemetry--pq"></a>
+### Nested Schema for `items.input_model_driven_telemetry.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--pq--pq_controls))
+
+<a id="nestedatt--items--input_model_driven_telemetry--pq--pq_controls"></a>
+### Nested Schema for `items.input_model_driven_telemetry.pq.pq_controls`
 
 
-<a id="nestedatt--input_model_driven_telemetry--tls"></a>
-### Nested Schema for `input_model_driven_telemetry.tls`
+
+<a id="nestedatt--items--input_model_driven_telemetry--tls"></a>
+### Nested Schema for `items.input_model_driven_telemetry.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_msk"></a>
-### Nested Schema for `input_msk`
+<a id="nestedatt--items--input_msk"></a>
+### Nested Schema for `items.input_msk`
 
 Read-Only:
 
@@ -3015,7 +3538,7 @@ Read-Only:
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
 - `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify the hostname and port (such as mykafkabroker:9092) or just the hostname (in which case @{product} will assign port 9092).
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_msk--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_msk--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -3025,42 +3548,47 @@ Read-Only:
 - `from_beginning` (Boolean) Leave enabled if you want the Source, upon first subscribing to a topic, to read starting with the earliest available message
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
 - `heartbeat_interval` (Number) Expected time between heartbeats to the consumer coordinator when using Kafka's group-management facilities.
-    Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
+      Value must be lower than sessionTimeout and typically should not exceed 1/3 of the sessionTimeout value.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms) for details.
 - `id` (String) Unique ID for this input
 - `initial_backoff` (Number) Initial value used to calculate the retry, in milliseconds. Maximum is 600,000 ms (10 minutes).
-- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--input_msk--kafka_schema_registry))
+- `kafka_schema_registry` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--kafka_schema_registry))
 - `max_back_off` (Number) The maximum wait time for a retry, in milliseconds. Default (and minimum) is 30,000 ms (30 seconds); maximum is 180,000 ms (180 seconds).
 - `max_bytes` (Number) Maximum number of bytes that Kafka will return per fetch request. Defaults to 10485760 (10 MB).
 - `max_bytes_per_partition` (Number) Maximum amount of data that Kafka will return per partition, per fetch request. Must equal or exceed the maximum message size (maxBytesPerPartition) that Kafka is configured to allow. Otherwise, @{product} can get stuck trying to retrieve messages. Defaults to 1048576 (1 MB).
 - `max_retries` (Number) If messages are failing, you can set the maximum number of retries as high as 100 to prevent loss of data
 - `max_socket_errors` (Number) Maximum number of network errors before the consumer re-creates a socket
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_msk--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_msk--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_msk--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
 - `rebalance_timeout` (Number) Maximum allowed time for each worker to join the group after a rebalance begins.
-    If the timeout is exceeded, the coordinator broker will remove the worker from the group.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
+      If the timeout is exceeded, the coordinator broker will remove the worker from the group.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#connectconfigs_rebalance.timeout.ms) for details.
 - `region` (String) Region where the MSK cluster is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `session_timeout` (Number) Timeout used to detect client failures when using Kafka's group-management facilities.
-    If the client sends no heartbeats to the broker before the timeout expires, 
-    the broker will remove the client from the group and initiate a rebalance.
-    Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
-    See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
+      If the client sends no heartbeats to the broker before the timeout expires, 
+      the broker will remove the client from the group and initiate a rebalance.
+      Value must be between the broker's configured group.min.session.timeout.ms and group.max.session.timeout.ms.
+      See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `signature_version` (String) Signature version to use for signing MSK cluster requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_msk--tls))
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--tls))
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
 
-<a id="nestedatt--input_msk--connections"></a>
-### Nested Schema for `input_msk.connections`
+<a id="nestedatt--items--input_msk--connections"></a>
+### Nested Schema for `items.input_msk.connections`
 
 Read-Only:
 
@@ -3068,21 +3596,21 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_msk--kafka_schema_registry"></a>
-### Nested Schema for `input_msk.kafka_schema_registry`
+<a id="nestedatt--items--input_msk--kafka_schema_registry"></a>
+### Nested Schema for `items.input_msk.kafka_schema_registry`
 
 Read-Only:
 
-- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--input_msk--kafka_schema_registry--auth))
+- `auth` (Attributes) Credentials to use when authenticating with the schema registry using basic HTTP authentication (see [below for nested schema](#nestedatt--items--input_msk--kafka_schema_registry--auth))
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `disabled` (Boolean)
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_msk--kafka_schema_registry--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--kafka_schema_registry--tls))
 
-<a id="nestedatt--input_msk--kafka_schema_registry--auth"></a>
-### Nested Schema for `input_msk.kafka_schema_registry.auth`
+<a id="nestedatt--items--input_msk--kafka_schema_registry--auth"></a>
+### Nested Schema for `items.input_msk.kafka_schema_registry.auth`
 
 Read-Only:
 
@@ -3090,8 +3618,8 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_msk--kafka_schema_registry--tls"></a>
-### Nested Schema for `input_msk.kafka_schema_registry.tls`
+<a id="nestedatt--items--input_msk--kafka_schema_registry--tls"></a>
+### Nested Schema for `items.input_msk.kafka_schema_registry.tls`
 
 Read-Only:
 
@@ -3109,8 +3637,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_msk--metadata"></a>
-### Nested Schema for `input_msk.metadata`
+<a id="nestedatt--items--input_msk--metadata"></a>
+### Nested Schema for `items.input_msk.metadata`
 
 Read-Only:
 
@@ -3118,22 +3646,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_msk--pq"></a>
-### Nested Schema for `input_msk.pq`
+<a id="nestedatt--items--input_msk--pq"></a>
+### Nested Schema for `items.input_msk.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--pq--pq_controls))
+
+<a id="nestedatt--items--input_msk--pq--pq_controls"></a>
+### Nested Schema for `items.input_msk.pq.pq_controls`
 
 
-<a id="nestedatt--input_msk--tls"></a>
-### Nested Schema for `input_msk.tls`
+
+<a id="nestedatt--items--input_msk--tls"></a>
+### Nested Schema for `items.input_msk.tls`
 
 Read-Only:
 
@@ -3145,20 +3679,18 @@ Read-Only:
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on client in which to find the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another
-
-
+- `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another 
                     trusted CA (such as the system's). Defaults to Enabled. Overrides the toggle from Advanced Settings, when also present.
 - `servername` (String) Server name for the SNI (Server Name Indication) TLS extension. It must be a host name, and not an IP address.
 
 
 
-<a id="nestedatt--input_netflow"></a>
-### Nested Schema for `input_netflow`
+<a id="nestedatt--items--input_netflow"></a>
+### Nested Schema for `items.input_netflow`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_netflow--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_netflow--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_pass_through` (Boolean) Allow forwarding of events to a NetFlow destination. Enabling this feature will generate an extra event containing __netflowRaw which can be routed to a NetFlow destination. Note that these events will not count against ingest quota.
@@ -3168,21 +3700,23 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist.
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `ipfix_enabled` (Boolean) Accept messages in IPFIX format.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_netflow--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_netflow--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_netflow--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_netflow--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_cache_minutes` (Number) Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `v5_enabled` (Boolean) Accept messages in Netflow V5 format.
 - `v9_enabled` (Boolean) Accept messages in Netflow V9 format.
 
-<a id="nestedatt--input_netflow--connections"></a>
-### Nested Schema for `input_netflow.connections`
+<a id="nestedatt--items--input_netflow--connections"></a>
+### Nested Schema for `items.input_netflow.connections`
 
 Read-Only:
 
@@ -3190,8 +3724,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_netflow--metadata"></a>
-### Nested Schema for `input_netflow.metadata`
+<a id="nestedatt--items--input_netflow--metadata"></a>
+### Nested Schema for `items.input_netflow.metadata`
 
 Read-Only:
 
@@ -3199,31 +3733,37 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_netflow--pq"></a>
-### Nested Schema for `input_netflow.pq`
+<a id="nestedatt--items--input_netflow--pq"></a>
+### Nested Schema for `items.input_netflow.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_netflow--pq--pq_controls))
+
+<a id="nestedatt--items--input_netflow--pq--pq_controls"></a>
+### Nested Schema for `items.input_netflow.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_office365_mgmt"></a>
-### Nested Schema for `input_office365_mgmt`
+
+<a id="nestedatt--items--input_office365_mgmt"></a>
+### Nested Schema for `items.input_office365_mgmt`
 
 Read-Only:
 
 - `app_id` (String) Office 365 Azure Application ID
 - `auth_type` (String) Enter client secret directly, or select a stored secret
 - `client_secret` (String) Office 365 Azure client secret
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_office365_mgmt--connections))
-- `content_config` (Attributes List) Enable Office 365 Management Activity API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered must be evenly divisible by 60 to give a predictable schedule. (see [below for nested schema](#nestedatt--input_office365_mgmt--content_config))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_office365_mgmt--connections))
+- `content_config` (Attributes List) Enable Office 365 Management Activity API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered must be evenly divisible by 60 to give a predictable schedule. (see [below for nested schema](#nestedatt--items--input_office365_mgmt--content_config))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -3233,23 +3773,27 @@ Read-Only:
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_office365_mgmt--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_office365_mgmt--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `plan_type` (String) Office 365 subscription plan for your organization, typically Office 365 Enterprise
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_mgmt--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `publisher_identifier` (String) Optional Publisher Identifier to use in API requests, defaults to tenant id if not defined. For more information see [here](https://docs.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-reference#start-a-subscription)
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_mgmt--retry_rules))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_mgmt--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_app_id` (String) Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
+- `template_client_secret` (String) Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
+- `template_publisher_identifier` (String) Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.
+- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 
-<a id="nestedatt--input_office365_mgmt--connections"></a>
-### Nested Schema for `input_office365_mgmt.connections`
+<a id="nestedatt--items--input_office365_mgmt--connections"></a>
+### Nested Schema for `items.input_office365_mgmt.connections`
 
 Read-Only:
 
@@ -3257,20 +3801,20 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_office365_mgmt--content_config"></a>
-### Nested Schema for `input_office365_mgmt.content_config`
+<a id="nestedatt--items--input_office365_mgmt--content_config"></a>
+### Nested Schema for `items.input_office365_mgmt.content_config`
 
 Read-Only:
 
 - `content_type` (String) Office 365 Management Activity API Content Type
 - `description` (String) If interval type is minutes the value entered must evenly divisible by 60 or save will fail
 - `enabled` (Boolean)
-- `interval` (Number) Interval, in minutes, between polls
-- `log_level` (String)
+- `interval` (Number)
+- `log_level` (String) Collector runtime Log Level
 
 
-<a id="nestedatt--input_office365_mgmt--metadata"></a>
-### Nested Schema for `input_office365_mgmt.metadata`
+<a id="nestedatt--items--input_office365_mgmt--metadata"></a>
+### Nested Schema for `items.input_office365_mgmt.metadata`
 
 Read-Only:
 
@@ -3278,22 +3822,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_office365_mgmt--pq"></a>
-### Nested Schema for `input_office365_mgmt.pq`
+<a id="nestedatt--items--input_office365_mgmt--pq"></a>
+### Nested Schema for `items.input_office365_mgmt.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_mgmt--pq--pq_controls))
+
+<a id="nestedatt--items--input_office365_mgmt--pq--pq_controls"></a>
+### Nested Schema for `items.input_office365_mgmt.pq.pq_controls`
 
 
-<a id="nestedatt--input_office365_mgmt--retry_rules"></a>
-### Nested Schema for `input_office365_mgmt.retry_rules`
+
+<a id="nestedatt--items--input_office365_mgmt--retry_rules"></a>
+### Nested Schema for `items.input_office365_mgmt.retry_rules`
 
 Read-Only:
 
@@ -3308,16 +3858,16 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_office365_msg_trace"></a>
-### Nested Schema for `input_office365_msg_trace`
+<a id="nestedatt--items--input_office365_msg_trace"></a>
+### Nested Schema for `items.input_office365_msg_trace`
 
 Read-Only:
 
 - `auth_type` (String) Select authentication method.
-- `cert_options` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--cert_options))
+- `cert_options` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--cert_options))
 - `client_id` (String) client_id to pass in the OAuth request parameter.
 - `client_secret` (String) client_secret to pass in the OAuth request parameter.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_office365_msg_trace--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials.
 - `description` (String)
 - `disable_time_filter` (Boolean) Disables time filtering of events when a date range is specified.
@@ -3327,23 +3877,27 @@ Read-Only:
 - `id` (String) Unique ID for this input
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `interval` (Number) How often (in minutes) to run the report. Must divide evenly into 60 minutes to create a predictable schedule, or Save will fail.
-- `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
+- `job_timeout` (String) Maximum time the job is allowed to run. Time unit defaults to seconds if not specified (examples: 30, 45s, 15m). Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `log_level` (String) Log Level (verbosity) for collection runtime behavior.
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
 - `max_task_reschedule` (Number) Maximum number of times a task can be rescheduled
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_office365_msg_trace--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--metadata))
 - `password` (String) Password to run Message Trace API call.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `plan_type` (String) Office 365 subscription plan for your organization, typically Office 365 Enterprise
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reschedule_dropped_tasks` (Boolean) Reschedule tasks that failed with non-fatal errors
 - `resource` (String) Resource to pass in the OAuth request parameter.
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_msg_trace--retry_rules))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+- `template_resource` (String) Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
+- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
+- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 - `timeout` (Number) HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.
@@ -3352,8 +3906,8 @@ Read-Only:
 - `url` (String) URL to use when retrieving report data.
 - `username` (String) Username to run Message Trace API call.
 
-<a id="nestedatt--input_office365_msg_trace--cert_options"></a>
-### Nested Schema for `input_office365_msg_trace.cert_options`
+<a id="nestedatt--items--input_office365_msg_trace--cert_options"></a>
+### Nested Schema for `items.input_office365_msg_trace.cert_options`
 
 Read-Only:
 
@@ -3363,8 +3917,8 @@ Read-Only:
 - `priv_key_path` (String) Path to the private key to use. Key should be in PEM format. Can reference $ENV_VARS.
 
 
-<a id="nestedatt--input_office365_msg_trace--connections"></a>
-### Nested Schema for `input_office365_msg_trace.connections`
+<a id="nestedatt--items--input_office365_msg_trace--connections"></a>
+### Nested Schema for `items.input_office365_msg_trace.connections`
 
 Read-Only:
 
@@ -3372,8 +3926,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_office365_msg_trace--metadata"></a>
-### Nested Schema for `input_office365_msg_trace.metadata`
+<a id="nestedatt--items--input_office365_msg_trace--metadata"></a>
+### Nested Schema for `items.input_office365_msg_trace.metadata`
 
 Read-Only:
 
@@ -3381,22 +3935,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_office365_msg_trace--pq"></a>
-### Nested Schema for `input_office365_msg_trace.pq`
+<a id="nestedatt--items--input_office365_msg_trace--pq"></a>
+### Nested Schema for `items.input_office365_msg_trace.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_msg_trace--pq--pq_controls))
+
+<a id="nestedatt--items--input_office365_msg_trace--pq--pq_controls"></a>
+### Nested Schema for `items.input_office365_msg_trace.pq.pq_controls`
 
 
-<a id="nestedatt--input_office365_msg_trace--retry_rules"></a>
-### Nested Schema for `input_office365_msg_trace.retry_rules`
+
+<a id="nestedatt--items--input_office365_msg_trace--retry_rules"></a>
+### Nested Schema for `items.input_office365_msg_trace.retry_rules`
 
 Read-Only:
 
@@ -3411,16 +3971,16 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_office365_service"></a>
-### Nested Schema for `input_office365_service`
+<a id="nestedatt--items--input_office365_service"></a>
+### Nested Schema for `items.input_office365_service`
 
 Read-Only:
 
 - `app_id` (String) Office 365 Azure Application ID
 - `auth_type` (String) Enter client secret directly, or select a stored secret
 - `client_secret` (String) Office 365 Azure client secret
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_office365_service--connections))
-- `content_config` (Attributes List) Enable Office 365 Service Communication API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered for current and historical status must be evenly divisible by 60 to give a predictable schedule. (see [below for nested schema](#nestedatt--input_office365_service--content_config))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_office365_service--connections))
+- `content_config` (Attributes List) Enable Office 365 Service Communication API content types and polling intervals. Polling intervals are used to set up search date range and cron schedule, e.g.: */${interval} * * * *. Because of this, intervals entered for current and historical status must be evenly divisible by 60 to give a predictable schedule. (see [below for nested schema](#nestedatt--items--input_office365_service--content_config))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -3429,22 +3989,25 @@ Read-Only:
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_office365_service--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_office365_service--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `plan_type` (String) Office 365 subscription plan for your organization, typically Office 365 Enterprise
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_service--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_office365_service--retry_rules))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_service--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_app_id` (String) Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
+- `template_client_secret` (String) Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
+- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 
-<a id="nestedatt--input_office365_service--connections"></a>
-### Nested Schema for `input_office365_service.connections`
+<a id="nestedatt--items--input_office365_service--connections"></a>
+### Nested Schema for `items.input_office365_service.connections`
 
 Read-Only:
 
@@ -3452,8 +4015,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_office365_service--content_config"></a>
-### Nested Schema for `input_office365_service.content_config`
+<a id="nestedatt--items--input_office365_service--content_config"></a>
+### Nested Schema for `items.input_office365_service.content_config`
 
 Read-Only:
 
@@ -3464,8 +4027,8 @@ Read-Only:
 - `log_level` (String) Collector runtime Log Level
 
 
-<a id="nestedatt--input_office365_service--metadata"></a>
-### Nested Schema for `input_office365_service.metadata`
+<a id="nestedatt--items--input_office365_service--metadata"></a>
+### Nested Schema for `items.input_office365_service.metadata`
 
 Read-Only:
 
@@ -3473,22 +4036,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_office365_service--pq"></a>
-### Nested Schema for `input_office365_service.pq`
+<a id="nestedatt--items--input_office365_service--pq"></a>
+### Nested Schema for `items.input_office365_service.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_service--pq--pq_controls))
+
+<a id="nestedatt--items--input_office365_service--pq--pq_controls"></a>
+### Nested Schema for `items.input_office365_service.pq.pq_controls`
 
 
-<a id="nestedatt--input_office365_service--retry_rules"></a>
-### Nested Schema for `input_office365_service.retry_rules`
+
+<a id="nestedatt--items--input_office365_service--retry_rules"></a>
+### Nested Schema for `items.input_office365_service.retry_rules`
 
 Read-Only:
 
@@ -3503,20 +4072,20 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_open_telemetry"></a>
-### Nested Schema for `input_open_telemetry`
+<a id="nestedatt--items--input_open_telemetry"></a>
+### Nested Schema for `items.input_open_telemetry`
 
 Read-Only:
 
 - `activity_log_sample_rate` (String) Parsed as JSON.
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) OpenTelemetry authentication type
 - `capture_headers` (String) Parsed as JSON.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_open_telemetry--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_open_telemetry--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
-- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+- `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (String) Parsed as JSON.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_logs` (Boolean) Enable to extract each incoming log record to a separate event
@@ -3527,36 +4096,38 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist.
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_open_telemetry--metadata))
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_open_telemetry--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_open_telemetry--oauth_params))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_open_telemetry--metadata))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_params))
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when interpreting received data
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `protocol` (String) Select whether to leverage gRPC or HTTP for OpenTelemetry
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_open_telemetry--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `type` (String)
 - `username` (String)
 
-<a id="nestedatt--input_open_telemetry--connections"></a>
-### Nested Schema for `input_open_telemetry.connections`
+<a id="nestedatt--items--input_open_telemetry--connections"></a>
+### Nested Schema for `items.input_open_telemetry.connections`
 
 Read-Only:
 
@@ -3564,8 +4135,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_open_telemetry--metadata"></a>
-### Nested Schema for `input_open_telemetry.metadata`
+<a id="nestedatt--items--input_open_telemetry--metadata"></a>
+### Nested Schema for `items.input_open_telemetry.metadata`
 
 Read-Only:
 
@@ -3573,68 +4144,212 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_open_telemetry--oauth_headers"></a>
-### Nested Schema for `input_open_telemetry.oauth_headers`
+<a id="nestedatt--items--input_open_telemetry--oauth_headers"></a>
+### Nested Schema for `items.input_open_telemetry.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_open_telemetry--oauth_params"></a>
-### Nested Schema for `input_open_telemetry.oauth_params`
+<a id="nestedatt--items--input_open_telemetry--oauth_params"></a>
+### Nested Schema for `items.input_open_telemetry.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_open_telemetry--pq"></a>
-### Nested Schema for `input_open_telemetry.pq`
+<a id="nestedatt--items--input_open_telemetry--pq"></a>
+### Nested Schema for `items.input_open_telemetry.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--pq--pq_controls))
+
+<a id="nestedatt--items--input_open_telemetry--pq--pq_controls"></a>
+### Nested Schema for `items.input_open_telemetry.pq.pq_controls`
 
 
-<a id="nestedatt--input_open_telemetry--tls"></a>
-### Nested Schema for `input_open_telemetry.tls`
+
+<a id="nestedatt--items--input_open_telemetry--tls"></a>
+### Nested Schema for `items.input_open_telemetry.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_prometheus"></a>
-### Nested Schema for `input_prometheus`
+<a id="nestedatt--items--input_openai"></a>
+### Nested Schema for `items.input_openai`
+
+Read-Only:
+
+- `api_key` (String)
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_openai--connections))
+- `content_config` (Attributes List) (see [below for nested schema](#nestedatt--items--input_openai--content_config))
+- `description` (String)
+- `disabled` (Boolean)
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `id` (String) Unique ID for this input
+- `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
+- `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
+- `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_openai--metadata))
+- `openai_organization` (String) Optional `OpenAI-Organization` request header value, typically `org-xxxxxxxxxxxxxxxxxxxxxxxx`
+- `openai_project` (String) Optional `OpenAI-Project` request header value, typically `proj_xxxxxxxxxxxxxxxxxxxxxxxx`
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `request_timeout` (Number) HTTP request inactivity timeout. Use 0 to disable.
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai--retry_rules))
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_openai_organization` (String) Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.
+- `template_openai_project` (String) Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.
+- `text_secret` (String) Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.
+- `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
+- `type` (String)
+
+<a id="nestedatt--items--input_openai--connections"></a>
+### Nested Schema for `items.input_openai.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_openai--content_config"></a>
+### Nested Schema for `items.input_openai.content_config`
+
+Read-Only:
+
+- `collect_path` (String) OpenAI Organization API path
+- `content_description` (String)
+- `content_type` (String)
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `disabled` (Boolean)
+- `docs_url` (String)
+- `earliest` (String) Relative to the current time
+- `endpoint_metadata` (Attributes List) Fields automatically added to events from this Content Type (see [below for nested schema](#nestedatt--items--input_openai--content_config--endpoint_metadata))
+- `job_timeout` (String) Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.
+- `latest` (String) Relative to the current time
+- `log_level` (String) Collector runtime log level.
+- `manage_state` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai--content_config--manage_state))
+- `max_pages` (Number) Maximum number of pages to retrieve per collection task. Set to 0 only when unlimited pagination is required.
+- `pagination_attribute` (List of String)
+- `pagination_cur_relation_attribute` (String) Optional relation that represents the current page
+- `pagination_last_page_expr` (String)
+- `pagination_next_relation_attribute` (String) Used only for RFC 5988 link-header pagination
+- `pagination_type` (String)
+- `request_params` (Attributes List) Query-string parameters to send with this endpoint (see [below for nested schema](#nestedatt--items--input_openai--content_config--request_params))
+- `state_merge_expression` (String) JavaScript expression that defines which state to keep when merging task state
+- `state_tracking` (Boolean) Track collection progress between consecutive scheduled executions.
+- `state_update_expression` (String) JavaScript expression that defines how to update the state from an event
+
+<a id="nestedatt--items--input_openai--content_config--endpoint_metadata"></a>
+### Nested Schema for `items.input_openai.content_config.endpoint_metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_openai--content_config--manage_state"></a>
+### Nested Schema for `items.input_openai.content_config.manage_state`
+
+
+<a id="nestedatt--items--input_openai--content_config--request_params"></a>
+### Nested Schema for `items.input_openai.content_config.request_params`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
+
+
+<a id="nestedatt--items--input_openai--metadata"></a>
+### Nested Schema for `items.input_openai.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_openai--pq"></a>
+### Nested Schema for `items.input_openai.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai--pq--pq_controls))
+
+<a id="nestedatt--items--input_openai--pq--pq_controls"></a>
+### Nested Schema for `items.input_openai.pq.pq_controls`
+
+
+
+<a id="nestedatt--items--input_openai--retry_rules"></a>
+### Nested Schema for `items.input_openai.retry_rules`
+
+Read-Only:
+
+- `codes` (List of Number) List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.
+- `enable_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.
+- `interval` (Number) Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).
+- `limit` (Number) The maximum number of times to retry a failed HTTP request
+- `multiplier` (Number) Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on
+- `retry_connect_reset` (Boolean) Retry request when a connection reset (ECONNRESET) error occurs
+- `retry_connect_timeout` (Boolean) Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs
+- `type` (String) The algorithm to use when performing HTTP retries
+
+
+
+<a id="nestedatt--items--input_prometheus"></a>
+### Nested Schema for `items.input_prometheus`
 
 Read-Only:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `auth_type` (String) Enter credentials directly, or select a stored secret
+- `aws_api_key` (String)
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
+- `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_prometheus--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_prometheus--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `dimension_list` (List of String) Other dimensions to include in events
@@ -3646,36 +4361,46 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
-- `interval` (Number) How often in minutes to scrape targets for metrics, 60 must be evenly divisible by the value or save will fail.
+- `interval` (Number) How often, in minutes, to scrape targets for metrics. Maximum of 60 minutes. 60 must be evenly divisible by the value you enter.
 - `job_timeout` (String) Maximum time the job is allowed to run (e.g., 30, 45s or 15m). Units are seconds, if not specified. Enter 0 for unlimited time.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
-- `log_level` (String) Collector runtime Log Level
+- `log_level` (String) Collector runtime log level
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_prometheus--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_prometheus--metadata))
 - `name_list` (List of String) List of DNS names to resolve
 - `password` (String) Password for Prometheus Basic authentication
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `record_type` (String) DNS Record type to resolve
+- `record_type` (String) DNS record type to resolve
 - `region` (String) Region where the EC2 is located
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `scrape_path` (String) Path to use when collecting metrics from discovered targets
-- `scrape_port` (Number) The port number in the metrics URL for discovered targets.
+- `scrape_port` (Number) The port number in the metrics URL for discovered targets
 - `scrape_protocol` (String) Protocol to use when collecting metrics
-- `search_filter` (Attributes List) EC2 Instance Search Filter (see [below for nested schema](#nestedatt--input_prometheus--search_filter))
+- `search_filter` (Attributes List) Filter to apply when searching for EC2 instances (see [below for nested schema](#nestedatt--items--input_prometheus--search_filter))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing EC2 requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `target_list` (List of String) List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_discovery_type` (String) Binds 'discoveryType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'discoveryType' at runtime.
+- `template_log_level` (String) Binds 'logLevel' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logLevel' at runtime.
+- `template_password` (String) Binds 'password' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'password' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
+- `template_username` (String) Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
+- `timeout` (Number) Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
-- `use_public_ip` (Boolean) Use public IP address for discovered targets. Set to false if the private IP address should be used.
+- `use_public_ip` (Boolean) Use public IP address for discovered targets. Disable to use the private IP address.
 - `username` (String) Username for Prometheus Basic authentication
 
-<a id="nestedatt--input_prometheus--connections"></a>
-### Nested Schema for `input_prometheus.connections`
+<a id="nestedatt--items--input_prometheus--connections"></a>
+### Nested Schema for `items.input_prometheus.connections`
 
 Read-Only:
 
@@ -3683,8 +4408,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_prometheus--metadata"></a>
-### Nested Schema for `input_prometheus.metadata`
+<a id="nestedatt--items--input_prometheus--metadata"></a>
+### Nested Schema for `items.input_prometheus.metadata`
 
 Read-Only:
 
@@ -3692,40 +4417,46 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_prometheus--pq"></a>
-### Nested Schema for `input_prometheus.pq`
+<a id="nestedatt--items--input_prometheus--pq"></a>
+### Nested Schema for `items.input_prometheus.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus--pq--pq_controls))
+
+<a id="nestedatt--items--input_prometheus--pq--pq_controls"></a>
+### Nested Schema for `items.input_prometheus.pq.pq_controls`
 
 
-<a id="nestedatt--input_prometheus--search_filter"></a>
-### Nested Schema for `input_prometheus.search_filter`
+
+<a id="nestedatt--items--input_prometheus--search_filter"></a>
+### Nested Schema for `items.input_prometheus.search_filter`
 
 Read-Only:
 
-- `name` (String) Search filter attribute name, see: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for more information. Attributes can be manually entered if not present in the drop down list
-- `values` (List of String) Search Filter Values, if empty only "running" EC2 instances will be returned
+- `name` (String) See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html for information. Attributes can be manually entered if not present in the list.
+- `values` (List of String) Values to match within this row's attribute. If empty, search will return only running EC2 instances.
 
 
 
-<a id="nestedatt--input_prometheus_rw"></a>
-### Nested Schema for `input_prometheus_rw`
+<a id="nestedatt--items--input_prometheus_rw"></a>
+### Nested Schema for `items.input_prometheus_rw`
 
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Remote Write authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_prometheus_rw--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_prometheus_rw--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
@@ -3737,34 +4468,38 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_prometheus_rw--metadata))
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_prometheus_rw--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_prometheus_rw--oauth_params))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_prometheus_rw--metadata))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `prometheus_api` (String) Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `template_prometheus_api` (String) Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.
+- `template_username` (String) Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
 - `text_secret` (String) Select or create a stored text secret
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_prometheus_rw--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `type` (String)
 - `username` (String)
 
-<a id="nestedatt--input_prometheus_rw--connections"></a>
-### Nested Schema for `input_prometheus_rw.connections`
+<a id="nestedatt--items--input_prometheus_rw--connections"></a>
+### Nested Schema for `items.input_prometheus_rw.connections`
 
 Read-Only:
 
@@ -3772,8 +4507,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_prometheus_rw--metadata"></a>
-### Nested Schema for `input_prometheus_rw.metadata`
+<a id="nestedatt--items--input_prometheus_rw--metadata"></a>
+### Nested Schema for `items.input_prometheus_rw.metadata`
 
 Read-Only:
 
@@ -3781,63 +4516,69 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_prometheus_rw--oauth_headers"></a>
-### Nested Schema for `input_prometheus_rw.oauth_headers`
+<a id="nestedatt--items--input_prometheus_rw--oauth_headers"></a>
+### Nested Schema for `items.input_prometheus_rw.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_prometheus_rw--oauth_params"></a>
-### Nested Schema for `input_prometheus_rw.oauth_params`
+<a id="nestedatt--items--input_prometheus_rw--oauth_params"></a>
+### Nested Schema for `items.input_prometheus_rw.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_prometheus_rw--pq"></a>
-### Nested Schema for `input_prometheus_rw.pq`
+<a id="nestedatt--items--input_prometheus_rw--pq"></a>
+### Nested Schema for `items.input_prometheus_rw.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--pq--pq_controls))
+
+<a id="nestedatt--items--input_prometheus_rw--pq--pq_controls"></a>
+### Nested Schema for `items.input_prometheus_rw.pq.pq_controls`
 
 
-<a id="nestedatt--input_prometheus_rw--tls"></a>
-### Nested Schema for `input_prometheus_rw.tls`
+
+<a id="nestedatt--items--input_prometheus_rw--tls"></a>
+### Nested Schema for `items.input_prometheus_rw.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_raw_udp"></a>
-### Nested Schema for `input_raw_udp`
+<a id="nestedatt--items--input_raw_udp"></a>
+### Nested Schema for `items.input_raw_udp`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_raw_udp--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_raw_udp--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -3845,20 +4586,22 @@ Read-Only:
 - `id` (String) Unique ID for this input
 - `ingest_raw_bytes` (Boolean) If true, a __rawBytes field will be added to each event containing the raw bytes of the datagram.
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data
-- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_raw_udp--metadata))
+- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking.
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_raw_udp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_raw_udp--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_raw_udp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--input_raw_udp--connections"></a>
-### Nested Schema for `input_raw_udp.connections`
+<a id="nestedatt--items--input_raw_udp--connections"></a>
+### Nested Schema for `items.input_raw_udp.connections`
 
 Read-Only:
 
@@ -3866,8 +4609,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_raw_udp--metadata"></a>
-### Nested Schema for `input_raw_udp.metadata`
+<a id="nestedatt--items--input_raw_udp--metadata"></a>
+### Nested Schema for `items.input_raw_udp.metadata`
 
 Read-Only:
 
@@ -3875,23 +4618,29 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_raw_udp--pq"></a>
-### Nested Schema for `input_raw_udp.pq`
+<a id="nestedatt--items--input_raw_udp--pq"></a>
+### Nested Schema for `items.input_raw_udp.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_raw_udp--pq--pq_controls))
+
+<a id="nestedatt--items--input_raw_udp--pq--pq_controls"></a>
+### Nested Schema for `items.input_raw_udp.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_s3"></a>
-### Nested Schema for `input_s3`
+
+<a id="nestedatt--items--input_s3"></a>
+### Nested Schema for `items.input_s3`
 
 Read-Only:
 
@@ -3903,8 +4652,8 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_s3--checkpointing))
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_s3--connections))
+- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3--checkpointing))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_s3--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -3915,16 +4664,17 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
+- `include_sqs_metadata` (Boolean) Attach SQS notification metadata to a __sqsMetadata field on each event
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_s3--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_s3--metadata))
 - `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
 - `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
 - `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_s3--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3--preprocess))
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
@@ -3938,11 +4688,18 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
-<a id="nestedatt--input_s3--checkpointing"></a>
-### Nested Schema for `input_s3.checkpointing`
+<a id="nestedatt--items--input_s3--checkpointing"></a>
+### Nested Schema for `items.input_s3.checkpointing`
 
 Read-Only:
 
@@ -3950,8 +4707,8 @@ Read-Only:
 - `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
-<a id="nestedatt--input_s3--connections"></a>
-### Nested Schema for `input_s3.connections`
+<a id="nestedatt--items--input_s3--connections"></a>
+### Nested Schema for `items.input_s3.connections`
 
 Read-Only:
 
@@ -3959,8 +4716,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_s3--metadata"></a>
-### Nested Schema for `input_s3.metadata`
+<a id="nestedatt--items--input_s3--metadata"></a>
+### Nested Schema for `items.input_s3.metadata`
 
 Read-Only:
 
@@ -3968,22 +4725,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_s3--pq"></a>
-### Nested Schema for `input_s3.pq`
+<a id="nestedatt--items--input_s3--pq"></a>
+### Nested Schema for `items.input_s3.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3--pq--pq_controls))
+
+<a id="nestedatt--items--input_s3--pq--pq_controls"></a>
+### Nested Schema for `items.input_s3.pq.pq_controls`
 
 
-<a id="nestedatt--input_s3--preprocess"></a>
-### Nested Schema for `input_s3.preprocess`
+
+<a id="nestedatt--items--input_s3--preprocess"></a>
+### Nested Schema for `items.input_s3.preprocess`
 
 Read-Only:
 
@@ -3993,8 +4756,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_s3_inventory"></a>
-### Nested Schema for `input_s3_inventory`
+<a id="nestedatt--items--input_s3_inventory"></a>
+### Nested Schema for `items.input_s3_inventory`
 
 Read-Only:
 
@@ -4006,9 +4769,9 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--checkpointing))
+- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3_inventory--checkpointing))
 - `checksum_suffix` (String) Filename suffix of the manifest checksum file. If a filename matching this suffix is received        in the queue, the matching manifest file will be downloaded and validated against its value. Defaults to "checksum"
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_s3_inventory--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_s3_inventory--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -4018,17 +4781,18 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
+- `include_sqs_metadata` (Boolean) Attach SQS notification metadata to a __sqsMetadata field on each event
 - `max_manifest_size_kb` (Number) Maximum download size (KB) of each manifest or checksum file. Manifest files larger than this size will not be read.        Defaults to 4096.
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_s3_inventory--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_s3_inventory--metadata))
 - `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
 - `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
 - `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3_inventory--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_s3_inventory--preprocess))
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3_inventory--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
@@ -4042,12 +4806,19 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
-<a id="nestedatt--input_s3_inventory--checkpointing"></a>
-### Nested Schema for `input_s3_inventory.checkpointing`
+<a id="nestedatt--items--input_s3_inventory--checkpointing"></a>
+### Nested Schema for `items.input_s3_inventory.checkpointing`
 
 Read-Only:
 
@@ -4055,8 +4826,8 @@ Read-Only:
 - `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
-<a id="nestedatt--input_s3_inventory--connections"></a>
-### Nested Schema for `input_s3_inventory.connections`
+<a id="nestedatt--items--input_s3_inventory--connections"></a>
+### Nested Schema for `items.input_s3_inventory.connections`
 
 Read-Only:
 
@@ -4064,8 +4835,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_s3_inventory--metadata"></a>
-### Nested Schema for `input_s3_inventory.metadata`
+<a id="nestedatt--items--input_s3_inventory--metadata"></a>
+### Nested Schema for `items.input_s3_inventory.metadata`
 
 Read-Only:
 
@@ -4073,22 +4844,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_s3_inventory--pq"></a>
-### Nested Schema for `input_s3_inventory.pq`
+<a id="nestedatt--items--input_s3_inventory--pq"></a>
+### Nested Schema for `items.input_s3_inventory.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_s3_inventory--pq--pq_controls))
+
+<a id="nestedatt--items--input_s3_inventory--pq--pq_controls"></a>
+### Nested Schema for `items.input_s3_inventory.pq.pq_controls`
 
 
-<a id="nestedatt--input_s3_inventory--preprocess"></a>
-### Nested Schema for `input_s3_inventory.preprocess`
+
+<a id="nestedatt--items--input_s3_inventory--preprocess"></a>
+### Nested Schema for `items.input_s3_inventory.preprocess`
 
 Read-Only:
 
@@ -4098,8 +4875,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_security_lake"></a>
-### Nested Schema for `input_security_lake`
+<a id="nestedatt--items--input_security_lake"></a>
+### Nested Schema for `items.input_security_lake`
 
 Read-Only:
 
@@ -4111,8 +4888,8 @@ Read-Only:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--checkpointing))
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_security_lake--connections))
+- `checkpointing` (Attributes) (see [below for nested schema](#nestedatt--items--input_security_lake--checkpointing))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_security_lake--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `duration_seconds` (Number) Duration of the assumed role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).
@@ -4123,16 +4900,17 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_filter` (String) Regex matching file names to download and process. Defaults to: .*
 - `id` (String) Unique ID for this input
+- `include_sqs_metadata` (Boolean) Attach SQS notification metadata to a __sqsMetadata field on each event
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_security_lake--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_security_lake--metadata))
 - `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
 - `parquet_chunk_download_timeout` (Number) The maximum time allowed for downloading a Parquet chunk. Processing will stop if a chunk cannot be downloaded within the time specified.
 - `parquet_chunk_size_mb` (Number) Maximum file size for each Parquet chunk
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_security_lake--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_security_lake--preprocess))
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_security_lake--preprocess))
 - `processed_tag_key` (String) The key for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `processed_tag_value` (String) The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read notifications from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
@@ -4146,11 +4924,18 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
-<a id="nestedatt--input_security_lake--checkpointing"></a>
-### Nested Schema for `input_security_lake.checkpointing`
+<a id="nestedatt--items--input_security_lake--checkpointing"></a>
+### Nested Schema for `items.input_security_lake.checkpointing`
 
 Read-Only:
 
@@ -4158,8 +4943,8 @@ Read-Only:
 - `retries` (Number) The number of times to retry processing when a processing error occurs. If Skip file on error is enabled, this setting is ignored.
 
 
-<a id="nestedatt--input_security_lake--connections"></a>
-### Nested Schema for `input_security_lake.connections`
+<a id="nestedatt--items--input_security_lake--connections"></a>
+### Nested Schema for `items.input_security_lake.connections`
 
 Read-Only:
 
@@ -4167,8 +4952,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_security_lake--metadata"></a>
-### Nested Schema for `input_security_lake.metadata`
+<a id="nestedatt--items--input_security_lake--metadata"></a>
+### Nested Schema for `items.input_security_lake.metadata`
 
 Read-Only:
 
@@ -4176,22 +4961,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_security_lake--pq"></a>
-### Nested Schema for `input_security_lake.pq`
+<a id="nestedatt--items--input_security_lake--pq"></a>
+### Nested Schema for `items.input_security_lake.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_security_lake--pq--pq_controls))
+
+<a id="nestedatt--items--input_security_lake--pq--pq_controls"></a>
+### Nested Schema for `items.input_security_lake.pq.pq_controls`
 
 
-<a id="nestedatt--input_security_lake--preprocess"></a>
-### Nested Schema for `input_security_lake.preprocess`
+
+<a id="nestedatt--items--input_security_lake--preprocess"></a>
+### Nested Schema for `items.input_security_lake.preprocess`
 
 Read-Only:
 
@@ -4201,13 +4992,13 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_snmp"></a>
-### Nested Schema for `input_snmp`
+<a id="nestedatt--items--input_snmp"></a>
+### Nested Schema for `items.input_snmp`
 
 Read-Only:
 
 - `best_effort_parsing` (Boolean) If enabled, the parser will attempt to parse varbind octet strings as UTF-8, first, otherwise will fallback to other methods
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_snmp--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_snmp--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -4215,20 +5006,22 @@ Read-Only:
 - `id` (String) Unique ID for this input
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_snmp--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_snmp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) UDP port to receive SNMP traps on. Defaults to 162.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_snmp--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_snmp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--input_snmp--snmp_v3_auth))
+- `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--items--input_snmp--snmp_v3_auth))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `varbinds_with_types` (Boolean) If enabled, parses varbinds as an array of objects that include OID, value, and type
 
-<a id="nestedatt--input_snmp--connections"></a>
-### Nested Schema for `input_snmp.connections`
+<a id="nestedatt--items--input_snmp--connections"></a>
+### Nested Schema for `items.input_snmp.connections`
 
 Read-Only:
 
@@ -4236,8 +5029,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_snmp--metadata"></a>
-### Nested Schema for `input_snmp.metadata`
+<a id="nestedatt--items--input_snmp--metadata"></a>
+### Nested Schema for `items.input_snmp.metadata`
 
 Read-Only:
 
@@ -4245,51 +5038,58 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_snmp--pq"></a>
-### Nested Schema for `input_snmp.pq`
+<a id="nestedatt--items--input_snmp--pq"></a>
+### Nested Schema for `items.input_snmp.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_snmp--pq--pq_controls))
+
+<a id="nestedatt--items--input_snmp--pq--pq_controls"></a>
+### Nested Schema for `items.input_snmp.pq.pq_controls`
 
 
-<a id="nestedatt--input_snmp--snmp_v3_auth"></a>
-### Nested Schema for `input_snmp.snmp_v3_auth`
+
+<a id="nestedatt--items--input_snmp--snmp_v3_auth"></a>
+### Nested Schema for `items.input_snmp.snmp_v3_auth`
 
 Read-Only:
 
 - `allow_unmatched_trap` (Boolean) Pass through traps that don't match any of the configured users. @{product} will not attempt to decrypt these traps.
 - `v3_auth_enabled` (Boolean)
-- `v3_users` (Attributes List) User credentials for receiving v3 traps (see [below for nested schema](#nestedatt--input_snmp--snmp_v3_auth--v3_users))
+- `v3_users` (Attributes List) User credentials for receiving v3 traps (see [below for nested schema](#nestedatt--items--input_snmp--snmp_v3_auth--v3_users))
 
-<a id="nestedatt--input_snmp--snmp_v3_auth--v3_users"></a>
-### Nested Schema for `input_snmp.snmp_v3_auth.v3_users`
+<a id="nestedatt--items--input_snmp--snmp_v3_auth--v3_users"></a>
+### Nested Schema for `items.input_snmp.snmp_v3_auth.v3_users`
 
 Read-Only:
 
-- `auth_key` (String) Parsed as JSON.
+- `auth_key` (String)
 - `auth_protocol` (String)
 - `name` (String)
-- `priv_protocol` (String) Parsed as JSON.
+- `priv_key` (String)
+- `priv_protocol` (String)
 
 
 
 
-<a id="nestedatt--input_splunk"></a>
-### Nested Schema for `input_splunk`
+<a id="nestedatt--items--input_splunk"></a>
+### Nested Schema for `items.input_splunk`
 
 Read-Only:
 
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk--auth_tokens))
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_splunk--auth_tokens))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `compress` (String) Controls whether to support reading compressed data from a forwarder. Select 'Automatic' to match the forwarder's configuration, or 'Disabled' to reject compressed connections.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_splunk--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`.
@@ -4301,10 +5101,10 @@ Read-Only:
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to establish a connection
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
 - `max_s2_sversion` (String) The highest S2S protocol version to advertise during handshake
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_splunk--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_splunk--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
@@ -4312,21 +5112,23 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk--tls))
 - `type` (String)
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event
 
-<a id="nestedatt--input_splunk--auth_tokens"></a>
-### Nested Schema for `input_splunk.auth_tokens`
+<a id="nestedatt--items--input_splunk--auth_tokens"></a>
+### Nested Schema for `items.input_splunk.auth_tokens`
 
 Read-Only:
 
 - `description` (String)
-- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
+- `token` (String) Shared secrets to be provided by any Splunk forwarder. If empty, unauthorized access is permitted.
 
 
-<a id="nestedatt--input_splunk--connections"></a>
-### Nested Schema for `input_splunk.connections`
+<a id="nestedatt--items--input_splunk--connections"></a>
+### Nested Schema for `items.input_splunk.connections`
 
 Read-Only:
 
@@ -4334,8 +5136,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_splunk--metadata"></a>
-### Nested Schema for `input_splunk.metadata`
+<a id="nestedatt--items--input_splunk--metadata"></a>
+### Nested Schema for `items.input_splunk.metadata`
 
 Read-Only:
 
@@ -4343,41 +5145,47 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_splunk--pq"></a>
-### Nested Schema for `input_splunk.pq`
+<a id="nestedatt--items--input_splunk--pq"></a>
+### Nested Schema for `items.input_splunk.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk--pq--pq_controls))
+
+<a id="nestedatt--items--input_splunk--pq--pq_controls"></a>
+### Nested Schema for `items.input_splunk.pq.pq_controls`
 
 
-<a id="nestedatt--input_splunk--tls"></a>
-### Nested Schema for `input_splunk.tls`
+
+<a id="nestedatt--items--input_splunk--tls"></a>
+### Nested Schema for `items.input_splunk.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_splunk_hec"></a>
-### Nested Schema for `input_splunk_hec`
+<a id="nestedatt--items--input_splunk_hec"></a>
+### Nested Schema for `items.input_splunk_hec`
 
 Read-Only:
 
@@ -4385,10 +5193,10 @@ Read-Only:
 - `access_control_allow_origin` (List of String) Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `allowed_indexes` (List of String) List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_splunk_hec--auth_tokens))
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_splunk_hec--auth_tokens))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk_hec--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_splunk_hec--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`.
@@ -4404,10 +5212,10 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to every event. Overrides fields added at the token or request level. See [the Source documentation](https://docs.cribl.io/stream/sources-splunk-hec/#fields) for more info. (see [below for nested schema](#nestedatt--input_splunk_hec--metadata))
+- `metadata` (Attributes List) Fields to add to every event. Overrides fields added at the token or request level. See [the Source documentation](https://docs.cribl.io/stream/sources-splunk-hec/#fields) for more info. (see [below for nested schema](#nestedatt--items--input_splunk_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
@@ -4416,12 +5224,15 @@ Read-Only:
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_hec--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec--tls))
 - `type` (String)
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event
 
-<a id="nestedatt--input_splunk_hec--auth_tokens"></a>
-### Nested Schema for `input_splunk_hec.auth_tokens`
+<a id="nestedatt--items--input_splunk_hec--auth_tokens"></a>
+### Nested Schema for `items.input_splunk_hec.auth_tokens`
 
 Read-Only:
 
@@ -4429,12 +5240,12 @@ Read-Only:
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 - `description` (String) Optional token description
 - `enabled` (Boolean)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_splunk_hec--auth_tokens--metadata))
-- `token` (String) Parsed as JSON.
-- `token_secret` (String) Parsed as JSON.
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_splunk_hec--auth_tokens--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
+- `token_secret` (String) Select or create a stored text secret
 
-<a id="nestedatt--input_splunk_hec--auth_tokens--metadata"></a>
-### Nested Schema for `input_splunk_hec.auth_tokens.metadata`
+<a id="nestedatt--items--input_splunk_hec--auth_tokens--metadata"></a>
+### Nested Schema for `items.input_splunk_hec.auth_tokens.metadata`
 
 Read-Only:
 
@@ -4443,8 +5254,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_splunk_hec--connections"></a>
-### Nested Schema for `input_splunk_hec.connections`
+<a id="nestedatt--items--input_splunk_hec--connections"></a>
+### Nested Schema for `items.input_splunk_hec.connections`
 
 Read-Only:
 
@@ -4452,8 +5263,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_splunk_hec--metadata"></a>
-### Nested Schema for `input_splunk_hec.metadata`
+<a id="nestedatt--items--input_splunk_hec--metadata"></a>
+### Nested Schema for `items.input_splunk_hec.metadata`
 
 Read-Only:
 
@@ -4461,48 +5272,54 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_splunk_hec--pq"></a>
-### Nested Schema for `input_splunk_hec.pq`
+<a id="nestedatt--items--input_splunk_hec--pq"></a>
+### Nested Schema for `items.input_splunk_hec.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec--pq--pq_controls))
+
+<a id="nestedatt--items--input_splunk_hec--pq--pq_controls"></a>
+### Nested Schema for `items.input_splunk_hec.pq.pq_controls`
 
 
-<a id="nestedatt--input_splunk_hec--tls"></a>
-### Nested Schema for `input_splunk_hec.tls`
+
+<a id="nestedatt--items--input_splunk_hec--tls"></a>
+### Nested Schema for `items.input_splunk_hec.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_splunk_search"></a>
-### Nested Schema for `input_splunk_search`
+<a id="nestedatt--items--input_splunk_search"></a>
+### Nested Schema for `items.input_splunk_search`
 
 Read-Only:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Splunk Search authentication type
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_splunk_search--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_splunk_search--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `cron_schedule` (String) A cron schedule on which to run this job
 - `description` (String)
@@ -4510,8 +5327,8 @@ Read-Only:
 - `earliest` (String) The earliest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-16m@m'
 - `encoding` (String) Character encoding to use when parsing ingested data. When not set, @{product} will default to UTF-8 but may incorrectly interpret multi-byte characters.
 - `endpoint` (String) REST API used to create a search
-- `endpoint_headers` (Attributes List) Optional request headers to send to the endpoint (see [below for nested schema](#nestedatt--input_splunk_search--endpoint_headers))
-- `endpoint_params` (Attributes List) Optional request parameters to send to the endpoint (see [below for nested schema](#nestedatt--input_splunk_search--endpoint_params))
+- `endpoint_headers` (Attributes List) Optional request headers to send to the endpoint (see [below for nested schema](#nestedatt--items--input_splunk_search--endpoint_headers))
+- `endpoint_params` (Attributes List) Optional request parameters to send to the endpoint (see [below for nested schema](#nestedatt--items--input_splunk_search--endpoint_params))
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
@@ -4519,37 +5336,37 @@ Read-Only:
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `latest` (String) The latest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-1m@m'
 - `log_level` (String) Collector runtime log level (verbosity)
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_splunk_search--metadata))
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_splunk_search--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--input_splunk_search--oauth_params))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_splunk_search--metadata))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_params))
 - `output_mode` (String) Format of the returned output
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
 - `request_timeout` (Number) HTTP request inactivity timeout. Use 0 for no timeout.
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_splunk_search--retry_rules))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search--retry_rules))
 - `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'
 - `search_head` (String) Search head base URL. Can be an expression. Default is https://localhost:8089.
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 - `use_round_robin_dns` (Boolean) When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned
 - `username` (String)
 
-<a id="nestedatt--input_splunk_search--connections"></a>
-### Nested Schema for `input_splunk_search.connections`
+<a id="nestedatt--items--input_splunk_search--connections"></a>
+### Nested Schema for `items.input_splunk_search.connections`
 
 Read-Only:
 
@@ -4557,26 +5374,26 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_splunk_search--endpoint_headers"></a>
-### Nested Schema for `input_splunk_search.endpoint_headers`
+<a id="nestedatt--items--input_splunk_search--endpoint_headers"></a>
+### Nested Schema for `items.input_splunk_search.endpoint_headers`
 
 Read-Only:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
-<a id="nestedatt--input_splunk_search--endpoint_params"></a>
-### Nested Schema for `input_splunk_search.endpoint_params`
+<a id="nestedatt--items--input_splunk_search--endpoint_params"></a>
+### Nested Schema for `items.input_splunk_search.endpoint_params`
 
 Read-Only:
 
 - `name` (String)
-- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
+- `value` (String) JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.
 
 
-<a id="nestedatt--input_splunk_search--metadata"></a>
-### Nested Schema for `input_splunk_search.metadata`
+<a id="nestedatt--items--input_splunk_search--metadata"></a>
+### Nested Schema for `items.input_splunk_search.metadata`
 
 Read-Only:
 
@@ -4584,40 +5401,46 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_splunk_search--oauth_headers"></a>
-### Nested Schema for `input_splunk_search.oauth_headers`
+<a id="nestedatt--items--input_splunk_search--oauth_headers"></a>
+### Nested Schema for `items.input_splunk_search.oauth_headers`
 
 Read-Only:
 
-- `name` (String) OAuth header name
-- `value` (String) OAuth header value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_splunk_search--oauth_params"></a>
-### Nested Schema for `input_splunk_search.oauth_params`
+<a id="nestedatt--items--input_splunk_search--oauth_params"></a>
+### Nested Schema for `items.input_splunk_search.oauth_params`
 
 Read-Only:
 
-- `name` (String) OAuth parameter name
-- `value` (String) OAuth parameter value
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--input_splunk_search--pq"></a>
-### Nested Schema for `input_splunk_search.pq`
+<a id="nestedatt--items--input_splunk_search--pq"></a>
+### Nested Schema for `items.input_splunk_search.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search--pq--pq_controls))
+
+<a id="nestedatt--items--input_splunk_search--pq--pq_controls"></a>
+### Nested Schema for `items.input_splunk_search.pq.pq_controls`
 
 
-<a id="nestedatt--input_splunk_search--retry_rules"></a>
-### Nested Schema for `input_splunk_search.retry_rules`
+
+<a id="nestedatt--items--input_splunk_search--retry_rules"></a>
+### Nested Schema for `items.input_splunk_search.retry_rules`
 
 Read-Only:
 
@@ -4632,8 +5455,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_sqs"></a>
-### Nested Schema for `input_sqs`
+<a id="nestedatt--items--input_sqs"></a>
+### Nested Schema for `items.input_sqs`
 
 Read-Only:
 
@@ -4644,7 +5467,7 @@ Read-Only:
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_sqs--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_sqs--connections))
 - `create_queue` (Boolean) Create queue if it does not exist
 - `description` (String)
 - `disabled` (Boolean)
@@ -4654,11 +5477,11 @@ Read-Only:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `max_messages` (Number) The maximum number of messages SQS should return in a poll request. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_sqs--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_sqs--metadata))
 - `num_receivers` (Number) How many receiver processes to run. The higher the number, the better the throughput - at the expense of CPU overhead.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `poll_timeout` (Number) How long to wait for events before trying polling again. The lower the number the higher the AWS bill. The higher the number the longer it will take for the source to react to configuration changes and system restarts.
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_sqs--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_sqs--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `queue_name` (String) The name, URL, or ARN of the SQS queue to read events from. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Value must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can only be evaluated at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
 - `queue_type` (String) The queue type used (or created)
@@ -4668,11 +5491,18 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing SQS requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
+- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
+- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
+- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
+- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
+- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
+- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
-<a id="nestedatt--input_sqs--connections"></a>
-### Nested Schema for `input_sqs.connections`
+<a id="nestedatt--items--input_sqs--connections"></a>
+### Nested Schema for `items.input_sqs.connections`
 
 Read-Only:
 
@@ -4680,8 +5510,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_sqs--metadata"></a>
-### Nested Schema for `input_sqs.metadata`
+<a id="nestedatt--items--input_sqs--metadata"></a>
+### Nested Schema for `items.input_sqs.metadata`
 
 Read-Only:
 
@@ -4689,36 +5519,42 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_sqs--pq"></a>
-### Nested Schema for `input_sqs.pq`
+<a id="nestedatt--items--input_sqs--pq"></a>
+### Nested Schema for `items.input_sqs.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_sqs--pq--pq_controls))
+
+<a id="nestedatt--items--input_sqs--pq--pq_controls"></a>
+### Nested Schema for `items.input_sqs.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_syslog"></a>
-### Nested Schema for `input_syslog`
+
+<a id="nestedatt--items--input_syslog"></a>
+### Nested Schema for `items.input_syslog`
 
 Read-Only:
 
-- `input_syslog_syslog1` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1))
-- `input_syslog_syslog2` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2))
+- `input_syslog_syslog1` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1))
+- `input_syslog_syslog2` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2))
 
-<a id="nestedatt--input_syslog--input_syslog_syslog1"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1`
 
 Read-Only:
 
 - `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
@@ -4732,10 +5568,10 @@ Read-Only:
 - `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--metadata))
 - `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
@@ -4745,14 +5581,17 @@ Read-Only:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
+- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog1--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--tls))
 - `type` (String)
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--input_syslog--input_syslog_syslog1--connections"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1.connections`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--connections"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.connections`
 
 Read-Only:
 
@@ -4760,8 +5599,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog1--metadata"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1.metadata`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--metadata"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.metadata`
 
 Read-Only:
 
@@ -4769,46 +5608,52 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog1--pq"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1.pq`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls))
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq.pq_controls`
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog1--tls"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog1.tls`
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--tls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog2"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2`
 
 Read-Only:
 
 - `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
@@ -4822,10 +5667,10 @@ Read-Only:
 - `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--metadata))
 - `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
@@ -4835,14 +5680,17 @@ Read-Only:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
+- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--input_syslog_syslog2--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--tls))
 - `type` (String)
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--input_syslog--input_syslog_syslog2--connections"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2.connections`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--connections"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.connections`
 
 Read-Only:
 
@@ -4850,8 +5698,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog2--metadata"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2.metadata`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--metadata"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.metadata`
 
 Read-Only:
 
@@ -4859,65 +5707,71 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog2--pq"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2.pq`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls))
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq.pq_controls`
 
 
-<a id="nestedatt--input_syslog--input_syslog_syslog2--tls"></a>
-### Nested Schema for `input_syslog.input_syslog_syslog2.tls`
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--tls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
 
-<a id="nestedatt--input_system_metrics"></a>
-### Nested Schema for `input_system_metrics`
+<a id="nestedatt--items--input_system_metrics"></a>
+### Nested Schema for `items.input_system_metrics`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_system_metrics--connections))
-- `container` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--container))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_system_metrics--connections))
+- `container` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--container))
 - `description` (String)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `host` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host))
+- `host` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host))
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between consecutive metric collections. Default is 10 seconds.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_system_metrics--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_system_metrics--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `process` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--process))
+- `process` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_system_metrics--connections"></a>
-### Nested Schema for `input_system_metrics.connections`
+<a id="nestedatt--items--input_system_metrics--connections"></a>
+### Nested Schema for `items.input_system_metrics.connections`
 
 Read-Only:
 
@@ -4925,8 +5779,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_system_metrics--container"></a>
-### Nested Schema for `input_system_metrics.container`
+<a id="nestedatt--items--input_system_metrics--container"></a>
+### Nested Schema for `items.input_system_metrics.container`
 
 Read-Only:
 
@@ -4934,12 +5788,12 @@ Read-Only:
 - `detail` (Boolean) Generate full container metrics
 - `docker_socket` (List of String) Full paths for Docker's UNIX-domain socket
 - `docker_timeout` (Number) Timeout, in seconds, for the Docker API
-- `filters` (Attributes List) Containers matching any of these will be included. All are included if no filters are added. (see [below for nested schema](#nestedatt--input_system_metrics--container--filters))
+- `filters` (Attributes List) Containers matching any of these will be included. All are included if no filters are added. (see [below for nested schema](#nestedatt--items--input_system_metrics--container--filters))
 - `mode` (String) Select the level of detail for container metrics
 - `per_device` (Boolean) Generate separate metrics for each device
 
-<a id="nestedatt--input_system_metrics--container--filters"></a>
-### Nested Schema for `input_system_metrics.container.filters`
+<a id="nestedatt--items--input_system_metrics--container--filters"></a>
+### Nested Schema for `items.input_system_metrics.container.filters`
 
 Read-Only:
 
@@ -4947,27 +5801,27 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_system_metrics--host"></a>
-### Nested Schema for `input_system_metrics.host`
+<a id="nestedatt--items--input_system_metrics--host"></a>
+### Nested Schema for `items.input_system_metrics.host`
 
 Read-Only:
 
-- `custom` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom))
+- `custom` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom))
 - `mode` (String) Select level of detail for host metrics
 
-<a id="nestedatt--input_system_metrics--host--custom"></a>
-### Nested Schema for `input_system_metrics.host.custom`
+<a id="nestedatt--items--input_system_metrics--host--custom"></a>
+### Nested Schema for `items.input_system_metrics.host.custom`
 
 Read-Only:
 
-- `cpu` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--cpu))
-- `disk` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--disk))
-- `memory` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--memory))
-- `network` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--network))
-- `system` (Attributes) (see [below for nested schema](#nestedatt--input_system_metrics--host--custom--system))
+- `cpu` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom--cpu))
+- `disk` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom--disk))
+- `memory` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom--memory))
+- `network` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom--network))
+- `system` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--host--custom--system))
 
-<a id="nestedatt--input_system_metrics--host--custom--cpu"></a>
-### Nested Schema for `input_system_metrics.host.custom.cpu`
+<a id="nestedatt--items--input_system_metrics--host--custom--cpu"></a>
+### Nested Schema for `items.input_system_metrics.host.custom.cpu`
 
 Read-Only:
 
@@ -4977,21 +5831,22 @@ Read-Only:
 - `time` (Boolean) Generate raw, monotonic CPU time counters
 
 
-<a id="nestedatt--input_system_metrics--host--custom--disk"></a>
-### Nested Schema for `input_system_metrics.host.custom.disk`
+<a id="nestedatt--items--input_system_metrics--host--custom--disk"></a>
+### Nested Schema for `items.input_system_metrics.host.custom.disk`
 
 Read-Only:
 
 - `detail` (Boolean) Generate full disk metrics
 - `devices` (List of String) Block devices to include/exclude. Examples: sda*, !loop*. Wildcards and ! (not) operators are supported. All devices are included if this list is empty.
 - `fstypes` (List of String) Filesystem types to include/exclude. Examples: ext4, !*tmpfs, !squashfs. Wildcards and ! (not) operators are supported. All types are included if this list is empty.
+- `inodes` (Boolean) Generate filesystem inode metrics
 - `mode` (String) Select the level of detail for disk metrics
 - `mountpoints` (List of String) Filesystem mountpoints to include/exclude. Examples: /, /home, !/proc*, !/tmp. Wildcards and ! (not) operators are supported. All mountpoints are included if this list is empty.
 - `per_device` (Boolean) Generate separate metrics for each device
 
 
-<a id="nestedatt--input_system_metrics--host--custom--memory"></a>
-### Nested Schema for `input_system_metrics.host.custom.memory`
+<a id="nestedatt--items--input_system_metrics--host--custom--memory"></a>
+### Nested Schema for `items.input_system_metrics.host.custom.memory`
 
 Read-Only:
 
@@ -4999,8 +5854,8 @@ Read-Only:
 - `mode` (String) Select the level of detail for memory metrics
 
 
-<a id="nestedatt--input_system_metrics--host--custom--network"></a>
-### Nested Schema for `input_system_metrics.host.custom.network`
+<a id="nestedatt--items--input_system_metrics--host--custom--network"></a>
+### Nested Schema for `items.input_system_metrics.host.custom.network`
 
 Read-Only:
 
@@ -5008,10 +5863,11 @@ Read-Only:
 - `devices` (List of String) Network interfaces to include/exclude. Examples: eth0, !lo. All interfaces are included if this list is empty.
 - `mode` (String) Select the level of detail for network metrics
 - `per_interface` (Boolean) Generate separate metrics for each interface
+- `protocols` (Boolean) Generate protocol metrics for ICMP, ICMPMsg, IP, TCP, UDP and UDPLite
 
 
-<a id="nestedatt--input_system_metrics--host--custom--system"></a>
-### Nested Schema for `input_system_metrics.host.custom.system`
+<a id="nestedatt--items--input_system_metrics--host--custom--system"></a>
+### Nested Schema for `items.input_system_metrics.host.custom.system`
 
 Read-Only:
 
@@ -5021,8 +5877,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_system_metrics--metadata"></a>
-### Nested Schema for `input_system_metrics.metadata`
+<a id="nestedatt--items--input_system_metrics--metadata"></a>
+### Nested Schema for `items.input_system_metrics.metadata`
 
 Read-Only:
 
@@ -5030,8 +5886,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_system_metrics--persistence"></a>
-### Nested Schema for `input_system_metrics.persistence`
+<a id="nestedatt--items--input_system_metrics--persistence"></a>
+### Nested Schema for `items.input_system_metrics.persistence`
 
 Read-Only:
 
@@ -5043,29 +5899,35 @@ Read-Only:
 - `time_window` (String) Time span for each file bucket
 
 
-<a id="nestedatt--input_system_metrics--pq"></a>
-### Nested Schema for `input_system_metrics.pq`
+<a id="nestedatt--items--input_system_metrics--pq"></a>
+### Nested Schema for `items.input_system_metrics.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_metrics--pq--pq_controls))
+
+<a id="nestedatt--items--input_system_metrics--pq--pq_controls"></a>
+### Nested Schema for `items.input_system_metrics.pq.pq_controls`
 
 
-<a id="nestedatt--input_system_metrics--process"></a>
-### Nested Schema for `input_system_metrics.process`
+
+<a id="nestedatt--items--input_system_metrics--process"></a>
+### Nested Schema for `items.input_system_metrics.process`
 
 Read-Only:
 
-- `sets` (Attributes List) Configure sets to collect process metrics (see [below for nested schema](#nestedatt--input_system_metrics--process--sets))
+- `sets` (Attributes List) Configure sets to collect process metrics (see [below for nested schema](#nestedatt--items--input_system_metrics--process--sets))
 
-<a id="nestedatt--input_system_metrics--process--sets"></a>
-### Nested Schema for `input_system_metrics.process.sets`
+<a id="nestedatt--items--input_system_metrics--process--sets"></a>
+### Nested Schema for `items.input_system_metrics.process.sets`
 
 Read-Only:
 
@@ -5076,127 +5938,128 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_system_state"></a>
-### Nested Schema for `input_system_state`
+<a id="nestedatt--items--input_system_state"></a>
+### Nested Schema for `items.input_system_state`
 
 Read-Only:
 
-- `collectors` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--collectors))
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_system_state--connections))
+- `collectors` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_state--collectors))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_system_state--connections))
 - `description` (String)
+- `disable_native_last_log_module` (Boolean) Enable only to collect LastLog data via legacy implementation. This option will be removed in a future release. Please contact Support before enabling. [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)
 - `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell) to collect events instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-system-state/#advanced-tab)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between consecutive state collections. Default is 300 seconds (5 minutes).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_system_state--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_system_state--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_state--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_system_state--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_state--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_system_state--collectors"></a>
-### Nested Schema for `input_system_state.collectors`
+<a id="nestedatt--items--input_system_state--collectors"></a>
+### Nested Schema for `items.input_system_state.collectors`
 
 Read-Only:
 
-- `disk` (Attributes) Creates events for physical disks, partitions, and file systems (see [below for nested schema](#nestedatt--input_system_state--collectors--disk))
-- `dns` (Attributes) Creates events for DNS resolvers and search entries (see [below for nested schema](#nestedatt--input_system_state--collectors--dns))
-- `firewall` (Attributes) Creates events for Firewall rules entries (see [below for nested schema](#nestedatt--input_system_state--collectors--firewall))
-- `hostsfile` (Attributes) Creates events based on entries collected from the hosts file (see [below for nested schema](#nestedatt--input_system_state--collectors--hostsfile))
-- `interfaces` (Attributes) Creates events for each of the host’s network interfaces (see [below for nested schema](#nestedatt--input_system_state--collectors--interfaces))
-- `login_users` (Attributes) Creates events for logged-in users (see [below for nested schema](#nestedatt--input_system_state--collectors--login_users))
-- `metadata` (Attributes) Creates events based on the host system’s current state (see [below for nested schema](#nestedatt--input_system_state--collectors--metadata))
-- `ports` (Attributes) Creates events from list of listening ports (see [below for nested schema](#nestedatt--input_system_state--collectors--ports))
-- `routes` (Attributes) Creates events based on entries collected from the host’s network routes (see [below for nested schema](#nestedatt--input_system_state--collectors--routes))
-- `services` (Attributes) Creates events from the list of services (see [below for nested schema](#nestedatt--input_system_state--collectors--services))
-- `user` (Attributes) Creates events for local users and groups (see [below for nested schema](#nestedatt--input_system_state--collectors--user))
+- `disk` (Attributes) Creates events for physical disks, partitions, and file systems (see [below for nested schema](#nestedatt--items--input_system_state--collectors--disk))
+- `dns` (Attributes) Creates events for DNS resolvers and search entries (see [below for nested schema](#nestedatt--items--input_system_state--collectors--dns))
+- `firewall` (Attributes) Creates events for Firewall rules entries (see [below for nested schema](#nestedatt--items--input_system_state--collectors--firewall))
+- `hostsfile` (Attributes) Creates events based on entries collected from the hosts file (see [below for nested schema](#nestedatt--items--input_system_state--collectors--hostsfile))
+- `interfaces` (Attributes) Creates events for each of the host’s network interfaces (see [below for nested schema](#nestedatt--items--input_system_state--collectors--interfaces))
+- `login_users` (Attributes) Creates events from list of logged-in users (see [below for nested schema](#nestedatt--items--input_system_state--collectors--login_users))
+- `metadata` (Attributes) Creates events based on the host system’s current state (see [below for nested schema](#nestedatt--items--input_system_state--collectors--metadata))
+- `ports` (Attributes) Creates events from list of listening ports (see [below for nested schema](#nestedatt--items--input_system_state--collectors--ports))
+- `routes` (Attributes) Creates events based on entries collected from the host’s network routes (see [below for nested schema](#nestedatt--items--input_system_state--collectors--routes))
+- `services` (Attributes) Creates events from the list of services (see [below for nested schema](#nestedatt--items--input_system_state--collectors--services))
+- `user` (Attributes) Creates events for local users and groups (see [below for nested schema](#nestedatt--items--input_system_state--collectors--user))
 
-<a id="nestedatt--input_system_state--collectors--disk"></a>
-### Nested Schema for `input_system_state.collectors.disk`
-
-Read-Only:
-
-- `enable` (Boolean)
-
-
-<a id="nestedatt--input_system_state--collectors--dns"></a>
-### Nested Schema for `input_system_state.collectors.dns`
+<a id="nestedatt--items--input_system_state--collectors--disk"></a>
+### Nested Schema for `items.input_system_state.collectors.disk`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--firewall"></a>
-### Nested Schema for `input_system_state.collectors.firewall`
+<a id="nestedatt--items--input_system_state--collectors--dns"></a>
+### Nested Schema for `items.input_system_state.collectors.dns`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--hostsfile"></a>
-### Nested Schema for `input_system_state.collectors.hostsfile`
+<a id="nestedatt--items--input_system_state--collectors--firewall"></a>
+### Nested Schema for `items.input_system_state.collectors.firewall`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--interfaces"></a>
-### Nested Schema for `input_system_state.collectors.interfaces`
+<a id="nestedatt--items--input_system_state--collectors--hostsfile"></a>
+### Nested Schema for `items.input_system_state.collectors.hostsfile`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--login_users"></a>
-### Nested Schema for `input_system_state.collectors.login_users`
+<a id="nestedatt--items--input_system_state--collectors--interfaces"></a>
+### Nested Schema for `items.input_system_state.collectors.interfaces`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--metadata"></a>
-### Nested Schema for `input_system_state.collectors.metadata`
+<a id="nestedatt--items--input_system_state--collectors--login_users"></a>
+### Nested Schema for `items.input_system_state.collectors.login_users`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--ports"></a>
-### Nested Schema for `input_system_state.collectors.ports`
+<a id="nestedatt--items--input_system_state--collectors--metadata"></a>
+### Nested Schema for `items.input_system_state.collectors.metadata`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--routes"></a>
-### Nested Schema for `input_system_state.collectors.routes`
+<a id="nestedatt--items--input_system_state--collectors--ports"></a>
+### Nested Schema for `items.input_system_state.collectors.ports`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--services"></a>
-### Nested Schema for `input_system_state.collectors.services`
+<a id="nestedatt--items--input_system_state--collectors--routes"></a>
+### Nested Schema for `items.input_system_state.collectors.routes`
 
 Read-Only:
 
 - `enable` (Boolean)
 
 
-<a id="nestedatt--input_system_state--collectors--user"></a>
-### Nested Schema for `input_system_state.collectors.user`
+<a id="nestedatt--items--input_system_state--collectors--services"></a>
+### Nested Schema for `items.input_system_state.collectors.services`
+
+Read-Only:
+
+- `enable` (Boolean)
+
+
+<a id="nestedatt--items--input_system_state--collectors--user"></a>
+### Nested Schema for `items.input_system_state.collectors.user`
 
 Read-Only:
 
@@ -5204,8 +6067,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_system_state--connections"></a>
-### Nested Schema for `input_system_state.connections`
+<a id="nestedatt--items--input_system_state--connections"></a>
+### Nested Schema for `items.input_system_state.connections`
 
 Read-Only:
 
@@ -5213,8 +6076,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_system_state--metadata"></a>
-### Nested Schema for `input_system_state.metadata`
+<a id="nestedatt--items--input_system_state--metadata"></a>
+### Nested Schema for `items.input_system_state.metadata`
 
 Read-Only:
 
@@ -5222,8 +6085,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_system_state--persistence"></a>
-### Nested Schema for `input_system_state.persistence`
+<a id="nestedatt--items--input_system_state--persistence"></a>
+### Nested Schema for `items.input_system_state.persistence`
 
 Read-Only:
 
@@ -5235,55 +6098,65 @@ Read-Only:
 - `time_window` (String) Time span for each file bucket
 
 
-<a id="nestedatt--input_system_state--pq"></a>
-### Nested Schema for `input_system_state.pq`
+<a id="nestedatt--items--input_system_state--pq"></a>
+### Nested Schema for `items.input_system_state.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_system_state--pq--pq_controls))
+
+<a id="nestedatt--items--input_system_state--pq--pq_controls"></a>
+### Nested Schema for `items.input_system_state.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_tcp"></a>
-### Nested Schema for `input_tcp`
+
+<a id="nestedatt--items--input_tcp"></a>
+### Nested Schema for `items.input_tcp`
 
 Read-Only:
 
+- `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_tcp--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_tcp--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_header` (Boolean) Client will pass the header record with every new connection. The header can contain an authToken, and an object with a list of fields and values to add to every event. These fields can be used to simplify Event Breaker selection, routing, etc. Header has this format, and must be followed by a newline: { "authToken" : "myToken", "fields": { "field1": "value1", "field2": "value2" } }
-- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
+- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports proxy protocol v1 or v2
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
 - `id` (String) Unique ID for this input
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to establish a connection
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_tcp--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_tcp--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--preprocess))
+- `preprocess` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--preprocess))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcp--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `text_secret` (String) Select or create a stored text secret
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--tls))
 - `type` (String)
 
-<a id="nestedatt--input_tcp--connections"></a>
-### Nested Schema for `input_tcp.connections`
+<a id="nestedatt--items--input_tcp--connections"></a>
+### Nested Schema for `items.input_tcp.connections`
 
 Read-Only:
 
@@ -5291,8 +6164,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_tcp--metadata"></a>
-### Nested Schema for `input_tcp.metadata`
+<a id="nestedatt--items--input_tcp--metadata"></a>
+### Nested Schema for `items.input_tcp.metadata`
 
 Read-Only:
 
@@ -5300,22 +6173,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_tcp--pq"></a>
-### Nested Schema for `input_tcp.pq`
+<a id="nestedatt--items--input_tcp--pq"></a>
+### Nested Schema for `items.input_tcp.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--pq--pq_controls))
+
+<a id="nestedatt--items--input_tcp--pq--pq_controls"></a>
+### Nested Schema for `items.input_tcp.pq.pq_controls`
 
 
-<a id="nestedatt--input_tcp--preprocess"></a>
-### Nested Schema for `input_tcp.preprocess`
+
+<a id="nestedatt--items--input_tcp--preprocess"></a>
+### Nested Schema for `items.input_tcp.preprocess`
 
 Read-Only:
 
@@ -5324,33 +6203,33 @@ Read-Only:
 - `disabled` (Boolean)
 
 
-<a id="nestedatt--input_tcp--tls"></a>
-### Nested Schema for `input_tcp.tls`
+<a id="nestedatt--items--input_tcp--tls"></a>
+### Nested Schema for `items.input_tcp.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_tcpjson"></a>
-### Nested Schema for `input_tcpjson`
+<a id="nestedatt--items--input_tcpjson"></a>
+### Nested Schema for `items.input_tcpjson`
 
 Read-Only:
 
 - `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_tcpjson--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_tcpjson--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
@@ -5360,22 +6239,24 @@ Read-Only:
 - `id` (String) Unique ID for this input
 - `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to establish a connection
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_tcpjson--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_tcpjson--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_tcpjson--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson--tls))
 - `type` (String)
 
-<a id="nestedatt--input_tcpjson--connections"></a>
-### Nested Schema for `input_tcpjson.connections`
+<a id="nestedatt--items--input_tcpjson--connections"></a>
+### Nested Schema for `items.input_tcpjson.connections`
 
 Read-Only:
 
@@ -5383,8 +6264,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_tcpjson--metadata"></a>
-### Nested Schema for `input_tcpjson.metadata`
+<a id="nestedatt--items--input_tcpjson--metadata"></a>
+### Nested Schema for `items.input_tcpjson.metadata`
 
 Read-Only:
 
@@ -5392,41 +6273,47 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_tcpjson--pq"></a>
-### Nested Schema for `input_tcpjson.pq`
+<a id="nestedatt--items--input_tcpjson--pq"></a>
+### Nested Schema for `items.input_tcpjson.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson--pq--pq_controls))
+
+<a id="nestedatt--items--input_tcpjson--pq--pq_controls"></a>
+### Nested Schema for `items.input_tcpjson.pq.pq_controls`
 
 
-<a id="nestedatt--input_tcpjson--tls"></a>
-### Nested Schema for `input_tcpjson.tls`
+
+<a id="nestedatt--items--input_tcpjson--tls"></a>
+### Nested Schema for `items.input_tcpjson.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
 
 
 
-<a id="nestedatt--input_wef"></a>
-### Nested Schema for `input_wef`
+<a id="nestedatt--items--input_wef"></a>
+### Nested Schema for `items.input_wef`
 
 Read-Only:
 
@@ -5434,7 +6321,7 @@ Read-Only:
 - `auth_method` (String) How to authenticate incoming client connections
 - `ca_fingerprint` (String) SHA1 fingerprint expected by the client, if it does not match the first certificate in the configured CA chain
 - `capture_headers` (Boolean) Add request headers to events in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wef--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_wef--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -5449,21 +6336,23 @@ Read-Only:
 - `log_fingerprint_mismatch` (Boolean) Log a warning if the client certificate authority (CA) fingerprint does not match the expected value. A mismatch prevents Cribl from receiving events from the Windows Event Forwarder.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wef--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_wef--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wef--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `principal` (String) Kerberos principal used for authentication, typically in the form HTTP/<hostname>@<REALM>
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--input_wef--subscriptions))
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wef--tls))
+- `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--items--input_wef--subscriptions))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef--tls))
 - `type` (String)
 
-<a id="nestedatt--input_wef--connections"></a>
-### Nested Schema for `input_wef.connections`
+<a id="nestedatt--items--input_wef--connections"></a>
+### Nested Schema for `items.input_wef.connections`
 
 Read-Only:
 
@@ -5471,8 +6360,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_wef--metadata"></a>
-### Nested Schema for `input_wef.metadata`
+<a id="nestedatt--items--input_wef--metadata"></a>
+### Nested Schema for `items.input_wef.metadata`
 
 Read-Only:
 
@@ -5480,22 +6369,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_wef--pq"></a>
-### Nested Schema for `input_wef.pq`
+<a id="nestedatt--items--input_wef--pq"></a>
+### Nested Schema for `items.input_wef.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef--pq--pq_controls))
+
+<a id="nestedatt--items--input_wef--pq--pq_controls"></a>
+### Nested Schema for `items.input_wef.pq.pq_controls`
 
 
-<a id="nestedatt--input_wef--subscriptions"></a>
-### Nested Schema for `input_wef.subscriptions`
+
+<a id="nestedatt--items--input_wef--subscriptions"></a>
+### Nested Schema for `items.input_wef.subscriptions`
 
 Read-Only:
 
@@ -5503,18 +6398,20 @@ Read-Only:
 - `compress` (Boolean) Receive compressed events from the source
 - `content_format` (String) Content format in which the endpoint should deliver events
 - `heartbeat_interval` (Number) Maximum time (in seconds) between endpoint checkins before considering it unavailable
-- `id` (String)
+- `id` (String) Parsed as JSON.
 - `locale` (String) The RFC-3066 locale the Windows clients should use when sending events. Defaults to "en-US".
-- `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--input_wef--subscriptions--metadata))
+- `metadata` (Attributes List) Fields to add to events ingested under this subscription (see [below for nested schema](#nestedatt--items--input_wef--subscriptions--metadata))
+- `queries` (Attributes List) (see [below for nested schema](#nestedatt--items--input_wef--subscriptions--queries))
 - `query_selector` (String)
 - `read_existing_events` (Boolean) Newly subscribed endpoints will send previously existing events. Disable to receive new events only.
 - `send_bookmarks` (Boolean) Keep track of which events have been received, resuming from that point after a re-subscription. This setting takes precedence over 'Read existing events'. See [Cribl Docs](https://docs.cribl.io/stream/sources-wef/#subscriptions) for more details.
 - `subscription_name` (String)
 - `targets` (List of String) The DNS names of the endpoints that should forward these events. You may use wildcards, such as *.mydomain.com
 - `version` (String) Version UUID for this subscription. If any subscription parameters are modified, this value will change.
+- `xml_query` (String) The XPath query to use for selecting events
 
-<a id="nestedatt--input_wef--subscriptions--metadata"></a>
-### Nested Schema for `input_wef.subscriptions.metadata`
+<a id="nestedatt--items--input_wef--subscriptions--metadata"></a>
+### Nested Schema for `items.input_wef.subscriptions.metadata`
 
 Read-Only:
 
@@ -5522,9 +6419,18 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
+<a id="nestedatt--items--input_wef--subscriptions--queries"></a>
+### Nested Schema for `items.input_wef.subscriptions.queries`
 
-<a id="nestedatt--input_wef--tls"></a>
-### Nested Schema for `input_wef.tls`
+Read-Only:
+
+- `path` (String) The Path attribute from the relevant XML Select element
+- `query_expression` (String) The XPath query inside the relevant XML Select element
+
+
+
+<a id="nestedatt--items--input_wef--tls"></a>
+### Nested Schema for `items.input_wef.tls`
 
 Read-Only:
 
@@ -5546,15 +6452,17 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_win_event_logs"></a>
-### Nested Schema for `input_win_event_logs`
+<a id="nestedatt--items--input_win_event_logs"></a>
+### Nested Schema for `items.input_win_event_logs`
 
 Read-Only:
 
 - `batch_size` (Number) The maximum number of events to read in one polling interval. A batch size higher than 500 can cause delays when pulling from multiple event logs. (Applicable for pre-4.8.0 nodes that use Windows Tools)
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_win_event_logs--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_win_event_logs--connections))
 - `description` (String)
+- `disable_json_rendering` (Boolean) Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)
 - `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell for JSON, wevtutil for XML) to collect event logs instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-event-logs/#advanced-settings)
+- `disable_xml_rendering` (Boolean) Enable/disable the rendering of localized event message strings (Applicable for 4.8.0 nodes and newer that use the Native API)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `event_format` (String) Format of individual events
@@ -5562,17 +6470,17 @@ Read-Only:
 - `interval` (Number) Time, in seconds, between checking for new entries (Applicable for pre-4.8.0 nodes that use Windows Tools)
 - `log_names` (List of String) Enter the event logs to collect. Run "Get-WinEvent -ListLog *" in PowerShell to see the available logs.
 - `max_event_bytes` (Number) The maximum number of bytes in an event before it is flushed to the pipelines
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_win_event_logs--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_win_event_logs--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_win_event_logs--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_win_event_logs--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `read_mode` (String) Read all stored and future event logs, or only future events
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_win_event_logs--connections"></a>
-### Nested Schema for `input_win_event_logs.connections`
+<a id="nestedatt--items--input_win_event_logs--connections"></a>
+### Nested Schema for `items.input_win_event_logs.connections`
 
 Read-Only:
 
@@ -5580,8 +6488,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_win_event_logs--metadata"></a>
-### Nested Schema for `input_win_event_logs.metadata`
+<a id="nestedatt--items--input_win_event_logs--metadata"></a>
+### Nested Schema for `items.input_win_event_logs.metadata`
 
 Read-Only:
 
@@ -5589,46 +6497,52 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_win_event_logs--pq"></a>
-### Nested Schema for `input_win_event_logs.pq`
+<a id="nestedatt--items--input_win_event_logs--pq"></a>
+### Nested Schema for `items.input_win_event_logs.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_win_event_logs--pq--pq_controls))
+
+<a id="nestedatt--items--input_win_event_logs--pq--pq_controls"></a>
+### Nested Schema for `items.input_win_event_logs.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_windows_metrics"></a>
-### Nested Schema for `input_windows_metrics`
+
+<a id="nestedatt--items--input_windows_metrics"></a>
+### Nested Schema for `items.input_windows_metrics`
 
 Read-Only:
 
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_windows_metrics--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_windows_metrics--connections))
 - `description` (String)
 - `disable_native_module` (Boolean) Enable to use built-in tools (PowerShell) to collect metrics instead of native API (default) [Learn more](https://docs.cribl.io/edge/sources-windows-metrics/#advanced-tab)
 - `disabled` (Boolean)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `host` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host))
+- `host` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host))
 - `id` (String) Unique ID for this input
 - `interval` (Number) Time, in seconds, between consecutive metric collections. Default is 10 seconds.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_windows_metrics--metadata))
-- `persistence` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--persistence))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_windows_metrics--metadata))
+- `persistence` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--persistence))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `process` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--process))
+- `process` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--process))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `type` (String)
 
-<a id="nestedatt--input_windows_metrics--connections"></a>
-### Nested Schema for `input_windows_metrics.connections`
+<a id="nestedatt--items--input_windows_metrics--connections"></a>
+### Nested Schema for `items.input_windows_metrics.connections`
 
 Read-Only:
 
@@ -5636,27 +6550,27 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_windows_metrics--host"></a>
-### Nested Schema for `input_windows_metrics.host`
+<a id="nestedatt--items--input_windows_metrics--host"></a>
+### Nested Schema for `items.input_windows_metrics.host`
 
 Read-Only:
 
-- `custom` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom))
+- `custom` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom))
 - `mode` (String) Select level of detail for host metrics
 
-<a id="nestedatt--input_windows_metrics--host--custom"></a>
-### Nested Schema for `input_windows_metrics.host.custom`
+<a id="nestedatt--items--input_windows_metrics--host--custom"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom`
 
 Read-Only:
 
-- `cpu` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--cpu))
-- `disk` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--disk))
-- `memory` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--memory))
-- `network` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--network))
-- `system` (Attributes) (see [below for nested schema](#nestedatt--input_windows_metrics--host--custom--system))
+- `cpu` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom--cpu))
+- `disk` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom--disk))
+- `memory` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom--memory))
+- `network` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom--network))
+- `system` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--host--custom--system))
 
-<a id="nestedatt--input_windows_metrics--host--custom--cpu"></a>
-### Nested Schema for `input_windows_metrics.host.custom.cpu`
+<a id="nestedatt--items--input_windows_metrics--host--custom--cpu"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom.cpu`
 
 Read-Only:
 
@@ -5666,18 +6580,19 @@ Read-Only:
 - `time` (Boolean) Generate raw, monotonic CPU time counters
 
 
-<a id="nestedatt--input_windows_metrics--host--custom--disk"></a>
-### Nested Schema for `input_windows_metrics.host.custom.disk`
+<a id="nestedatt--items--input_windows_metrics--host--custom--disk"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom.disk`
 
 Read-Only:
 
+- `detail` (Boolean) Generate full disk metrics
 - `mode` (String) Select the level of details for disk metrics
 - `per_volume` (Boolean) Generate separate metrics for each volume
 - `volumes` (List of String) Windows volumes to include/exclude. E.g.: C:, !E:, etc. Wildcards and ! (not) operators are supported. All volumes are included if this list is empty.
 
 
-<a id="nestedatt--input_windows_metrics--host--custom--memory"></a>
-### Nested Schema for `input_windows_metrics.host.custom.memory`
+<a id="nestedatt--items--input_windows_metrics--host--custom--memory"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom.memory`
 
 Read-Only:
 
@@ -5685,8 +6600,8 @@ Read-Only:
 - `mode` (String) Select the level of details for memory metrics
 
 
-<a id="nestedatt--input_windows_metrics--host--custom--network"></a>
-### Nested Schema for `input_windows_metrics.host.custom.network`
+<a id="nestedatt--items--input_windows_metrics--host--custom--network"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom.network`
 
 Read-Only:
 
@@ -5694,10 +6609,11 @@ Read-Only:
 - `devices` (List of String) Network interfaces to include/exclude. All interfaces are included if this list is empty.
 - `mode` (String) Select the level of details for network metrics
 - `per_interface` (Boolean) Generate separate metrics for each interface
+- `protocols` (Boolean) Generate protocol metrics for ICMP, ICMPMsg, IP, TCP, UDP and UDPLite
 
 
-<a id="nestedatt--input_windows_metrics--host--custom--system"></a>
-### Nested Schema for `input_windows_metrics.host.custom.system`
+<a id="nestedatt--items--input_windows_metrics--host--custom--system"></a>
+### Nested Schema for `items.input_windows_metrics.host.custom.system`
 
 Read-Only:
 
@@ -5707,8 +6623,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_windows_metrics--metadata"></a>
-### Nested Schema for `input_windows_metrics.metadata`
+<a id="nestedatt--items--input_windows_metrics--metadata"></a>
+### Nested Schema for `items.input_windows_metrics.metadata`
 
 Read-Only:
 
@@ -5716,8 +6632,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_windows_metrics--persistence"></a>
-### Nested Schema for `input_windows_metrics.persistence`
+<a id="nestedatt--items--input_windows_metrics--persistence"></a>
+### Nested Schema for `items.input_windows_metrics.persistence`
 
 Read-Only:
 
@@ -5729,29 +6645,35 @@ Read-Only:
 - `time_window` (String) Time span for each file bucket
 
 
-<a id="nestedatt--input_windows_metrics--pq"></a>
-### Nested Schema for `input_windows_metrics.pq`
+<a id="nestedatt--items--input_windows_metrics--pq"></a>
+### Nested Schema for `items.input_windows_metrics.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_windows_metrics--pq--pq_controls))
+
+<a id="nestedatt--items--input_windows_metrics--pq--pq_controls"></a>
+### Nested Schema for `items.input_windows_metrics.pq.pq_controls`
 
 
-<a id="nestedatt--input_windows_metrics--process"></a>
-### Nested Schema for `input_windows_metrics.process`
+
+<a id="nestedatt--items--input_windows_metrics--process"></a>
+### Nested Schema for `items.input_windows_metrics.process`
 
 Read-Only:
 
-- `sets` (Attributes List) Configure sets to collect process metrics (see [below for nested schema](#nestedatt--input_windows_metrics--process--sets))
+- `sets` (Attributes List) Configure sets to collect process metrics (see [below for nested schema](#nestedatt--items--input_windows_metrics--process--sets))
 
-<a id="nestedatt--input_windows_metrics--process--sets"></a>
-### Nested Schema for `input_windows_metrics.process.sets`
+<a id="nestedatt--items--input_windows_metrics--process--sets"></a>
+### Nested Schema for `items.input_windows_metrics.process.sets`
 
 Read-Only:
 
@@ -5762,8 +6684,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_wiz"></a>
-### Nested Schema for `input_wiz`
+<a id="nestedatt--items--input_wiz"></a>
+### Nested Schema for `items.input_wiz`
 
 Read-Only:
 
@@ -5772,8 +6694,8 @@ Read-Only:
 - `auth_url` (String) The authentication URL to generate an OAuth token
 - `client_id` (String) The client ID of the Wiz application
 - `client_secret` (String) The client secret of the Wiz application
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wiz--connections))
-- `content_config` (Attributes List) (see [below for nested schema](#nestedatt--input_wiz--content_config))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_wiz--connections))
+- `content_config` (Attributes List) (see [below for nested schema](#nestedatt--items--input_wiz--content_config))
 - `description` (String)
 - `disabled` (Boolean)
 - `endpoint` (String) The Wiz GraphQL API endpoint. Example: https://api.us1.app.wiz.io/graphql
@@ -5782,20 +6704,23 @@ Read-Only:
 - `ignore_group_jobs_limit` (Boolean) When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wiz--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_wiz--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) HTTP request inactivity timeout. Use 0 to disable.
-- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_wiz--retry_rules))
+- `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `template_auth_url` (String) Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.
+- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
+- `template_endpoint` (String) Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 
-<a id="nestedatt--input_wiz--connections"></a>
-### Nested Schema for `input_wiz.connections`
+<a id="nestedatt--items--input_wiz--connections"></a>
+### Nested Schema for `items.input_wiz.connections`
 
 Read-Only:
 
@@ -5803,18 +6728,33 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_wiz--content_config"></a>
-### Nested Schema for `input_wiz.content_config`
+<a id="nestedatt--items--input_wiz--content_config"></a>
+### Nested Schema for `items.input_wiz.content_config`
 
 Read-Only:
 
 - `content_description` (String)
+- `content_query` (String) Template for POST body to send with the Collect request. Reference global variables, or functions using template params: `${C.vars.myVar}`, or `${Date.now()}`, `${param}`.
 - `content_type` (String) The name of the Wiz query
+- `cron_schedule` (String) A cron schedule on which to run this job
+- `earliest` (String) Earliest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)
 - `enabled` (Boolean)
+- `job_timeout` (String) Maximum time the job is allowed to run (examples: 30, 45s, 15m). Units default to seconds if not specified. Enter 0 for unlimited time.
+- `latest` (String) Latest time, relative to now. Format supported: [+|-]<time_integer><time_unit>@<snap-to_time_unit> (ex: -1hr, -42m, -42m@h)
+- `log_level` (String) Collector runtime log level
+- `manage_state` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz--content_config--manage_state))
+- `max_pages` (Number) Maximum number of pages to retrieve per collection task. Defaults to 0. Set to 0 to retrieve all pages.
+- `state_merge_expression` (String) JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.
+- `state_tracking` (Boolean) Track collection progress between consecutive scheduled executions
+- `state_update_expression` (String) JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.
+
+<a id="nestedatt--items--input_wiz--content_config--manage_state"></a>
+### Nested Schema for `items.input_wiz.content_config.manage_state`
 
 
-<a id="nestedatt--input_wiz--metadata"></a>
-### Nested Schema for `input_wiz.metadata`
+
+<a id="nestedatt--items--input_wiz--metadata"></a>
+### Nested Schema for `items.input_wiz.metadata`
 
 Read-Only:
 
@@ -5822,22 +6762,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_wiz--pq"></a>
-### Nested Schema for `input_wiz.pq`
+<a id="nestedatt--items--input_wiz--pq"></a>
+### Nested Schema for `items.input_wiz.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz--pq--pq_controls))
+
+<a id="nestedatt--items--input_wiz--pq--pq_controls"></a>
+### Nested Schema for `items.input_wiz.pq.pq_controls`
 
 
-<a id="nestedatt--input_wiz--retry_rules"></a>
-### Nested Schema for `input_wiz.retry_rules`
+
+<a id="nestedatt--items--input_wiz--retry_rules"></a>
+### Nested Schema for `items.input_wiz.retry_rules`
 
 Read-Only:
 
@@ -5852,8 +6798,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_wiz_webhook"></a>
-### Nested Schema for `input_wiz_webhook`
+<a id="nestedatt--items--input_wiz_webhook"></a>
+### Nested Schema for `items.input_wiz_webhook`
 
 Read-Only:
 
@@ -5861,10 +6807,10 @@ Read-Only:
 - `allowed_methods` (List of String) List of HTTP methods accepted by this input. Wildcards are supported (such as P*, GET). Defaults to allow all.
 - `allowed_paths` (List of String) List of URI paths accepted by this input. Wildcards are supported (such as /api/v*/hook). Defaults to allow all.
 - `auth_tokens` (List of String) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
-- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext))
+- `auth_tokens_ext` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_wiz_webhook--auth_tokens_ext))
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_wiz_webhook--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_wiz_webhook--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -5877,30 +6823,32 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--input_wiz_webhook--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_wiz_webhook--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--tls))
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook--tls))
 - `type` (String)
 
-<a id="nestedatt--input_wiz_webhook--auth_tokens_ext"></a>
-### Nested Schema for `input_wiz_webhook.auth_tokens_ext`
+<a id="nestedatt--items--input_wiz_webhook--auth_tokens_ext"></a>
+### Nested Schema for `items.input_wiz_webhook.auth_tokens_ext`
 
 Read-Only:
 
 - `description` (String)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_wiz_webhook--auth_tokens_ext--metadata))
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_wiz_webhook--auth_tokens_ext--metadata))
 - `token` (String) Shared secret to be provided by any client (Authorization: <token>)
 
-<a id="nestedatt--input_wiz_webhook--auth_tokens_ext--metadata"></a>
-### Nested Schema for `input_wiz_webhook.auth_tokens_ext.metadata`
+<a id="nestedatt--items--input_wiz_webhook--auth_tokens_ext--metadata"></a>
+### Nested Schema for `items.input_wiz_webhook.auth_tokens_ext.metadata`
 
 Read-Only:
 
@@ -5909,8 +6857,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_wiz_webhook--connections"></a>
-### Nested Schema for `input_wiz_webhook.connections`
+<a id="nestedatt--items--input_wiz_webhook--connections"></a>
+### Nested Schema for `items.input_wiz_webhook.connections`
 
 Read-Only:
 
@@ -5918,8 +6866,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_wiz_webhook--metadata"></a>
-### Nested Schema for `input_wiz_webhook.metadata`
+<a id="nestedatt--items--input_wiz_webhook--metadata"></a>
+### Nested Schema for `items.input_wiz_webhook.metadata`
 
 Read-Only:
 
@@ -5927,27 +6875,28 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_wiz_webhook--pq"></a>
-### Nested Schema for `input_wiz_webhook.pq`
+<a id="nestedatt--items--input_wiz_webhook--pq"></a>
+### Nested Schema for `items.input_wiz_webhook.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--input_wiz_webhook--pq--pq_controls))
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook--pq--pq_controls))
 
-<a id="nestedatt--input_wiz_webhook--pq--pq_controls"></a>
-### Nested Schema for `input_wiz_webhook.pq.pq_controls`
+<a id="nestedatt--items--input_wiz_webhook--pq--pq_controls"></a>
+### Nested Schema for `items.input_wiz_webhook.pq.pq_controls`
 
 
 
-<a id="nestedatt--input_wiz_webhook--tls"></a>
-### Nested Schema for `input_wiz_webhook.tls`
+<a id="nestedatt--items--input_wiz_webhook--tls"></a>
+### Nested Schema for `items.input_wiz_webhook.tls`
 
 Read-Only:
 
@@ -5965,8 +6914,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_zscaler_hec"></a>
-### Nested Schema for `input_zscaler_hec`
+<a id="nestedatt--items--input_zscaler_hec"></a>
+### Nested Schema for `items.input_zscaler_hec`
 
 Read-Only:
 
@@ -5974,9 +6923,9 @@ Read-Only:
 - `access_control_allow_origin` (List of String) Optionally, list HTTP origins to which @{product} should send CORS (cross-origin resource sharing) Access-Control-Allow-* headers. Supports wildcards.
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `allowed_indexes` (List of String) List values allowed in HEC event index field. Leave blank to skip validation. Supports wildcards. The values here can expand index validation at the token level.
-- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--input_zscaler_hec--auth_tokens))
+- `auth_tokens` (Attributes List) Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted. (see [below for nested schema](#nestedatt--items--input_zscaler_hec--auth_tokens))
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--input_zscaler_hec--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_zscaler_hec--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
@@ -5992,20 +6941,23 @@ Read-Only:
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--input_zscaler_hec--metadata))
+- `metadata` (Attributes List) Fields to add to every event. May be overridden by fields added at the token or request level. (see [below for nested schema](#nestedatt--items--input_zscaler_hec--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--input_zscaler_hec--tls))
+- `template_hec_api` (String) Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec--tls))
 - `type` (String)
 
-<a id="nestedatt--input_zscaler_hec--auth_tokens"></a>
-### Nested Schema for `input_zscaler_hec.auth_tokens`
+<a id="nestedatt--items--input_zscaler_hec--auth_tokens"></a>
+### Nested Schema for `items.input_zscaler_hec.auth_tokens`
 
 Read-Only:
 
@@ -6013,12 +6965,12 @@ Read-Only:
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 - `description` (String)
 - `enabled` (Boolean)
-- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--input_zscaler_hec--auth_tokens--metadata))
-- `token` (String) Parsed as JSON.
-- `token_secret` (String) Parsed as JSON.
+- `metadata` (Attributes List) Fields to add to events referencing this token (see [below for nested schema](#nestedatt--items--input_zscaler_hec--auth_tokens--metadata))
+- `token` (String) Shared secret to be provided by any client (Authorization: <token>)
+- `token_secret` (String) Select or create a stored text secret
 
-<a id="nestedatt--input_zscaler_hec--auth_tokens--metadata"></a>
-### Nested Schema for `input_zscaler_hec.auth_tokens.metadata`
+<a id="nestedatt--items--input_zscaler_hec--auth_tokens--metadata"></a>
+### Nested Schema for `items.input_zscaler_hec.auth_tokens.metadata`
 
 Read-Only:
 
@@ -6027,8 +6979,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--input_zscaler_hec--connections"></a>
-### Nested Schema for `input_zscaler_hec.connections`
+<a id="nestedatt--items--input_zscaler_hec--connections"></a>
+### Nested Schema for `items.input_zscaler_hec.connections`
 
 Read-Only:
 
@@ -6036,8 +6988,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--input_zscaler_hec--metadata"></a>
-### Nested Schema for `input_zscaler_hec.metadata`
+<a id="nestedatt--items--input_zscaler_hec--metadata"></a>
+### Nested Schema for `items.input_zscaler_hec.metadata`
 
 Read-Only:
 
@@ -6045,33 +6997,39 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--input_zscaler_hec--pq"></a>
-### Nested Schema for `input_zscaler_hec.pq`
+<a id="nestedatt--items--input_zscaler_hec--pq"></a>
+### Nested Schema for `items.input_zscaler_hec.pq`
 
 Read-Only:
 
 - `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
 - `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) The maximum number of events to hold in memory before writing the events to disk
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 - `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec--pq--pq_controls))
+
+<a id="nestedatt--items--input_zscaler_hec--pq--pq_controls"></a>
+### Nested Schema for `items.input_zscaler_hec.pq.pq_controls`
 
 
-<a id="nestedatt--input_zscaler_hec--tls"></a>
-### Nested Schema for `input_zscaler_hec.tls`
+
+<a id="nestedatt--items--input_zscaler_hec--tls"></a>
+### Nested Schema for `items.input_zscaler_hec.tls`
 
 Read-Only:
 
 - `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
 - `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
 - `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Parsed as JSON.
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
 - `disabled` (Boolean)
 - `max_version` (String)
 - `min_version` (String)
 - `passphrase` (String) Passphrase to use to decrypt private key
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (String) Parsed as JSON.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.

@@ -30,7 +30,7 @@ data "criblio_key" "my_key" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
+- `group_id` (String) Name of the Group/Fleet that created this key
 - `id` (String) The id of this key metadata entity instance
 
 ### Optional

@@ -70,6 +70,7 @@ func (r *EventBreakerRulesetDataSourceModel) RefreshFromSharedEventBreakerRulese
 		rules.ParserEnabled = types.BoolPointerValue(rulesItem.ParserEnabled)
 		rules.QuoteChar = types.StringPointerValue(rulesItem.QuoteChar)
 		rules.ShouldUseDataRaw = types.BoolPointerValue(rulesItem.ShouldUseDataRaw)
+		rules.Timestamp = &tfTypes.EventBreakerRulesetTimestampFormat{}
 		rules.Timestamp.Format = types.StringPointerValue(rulesItem.Timestamp.Format)
 		rules.Timestamp.Length = types.Float64PointerValue(rulesItem.Timestamp.Length)
 		if rulesItem.Timestamp.Type != nil {

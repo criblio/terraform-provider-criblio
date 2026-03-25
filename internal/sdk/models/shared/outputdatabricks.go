@@ -31,249 +31,6 @@ func (e *OutputDatabricksType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// OutputDatabricksDataFormat - Format of the output data
-type OutputDatabricksDataFormat string
-
-const (
-	// OutputDatabricksDataFormatJSON JSON
-	OutputDatabricksDataFormatJSON OutputDatabricksDataFormat = "json"
-	// OutputDatabricksDataFormatRaw Raw
-	OutputDatabricksDataFormatRaw OutputDatabricksDataFormat = "raw"
-	// OutputDatabricksDataFormatParquet Parquet
-	OutputDatabricksDataFormatParquet OutputDatabricksDataFormat = "parquet"
-)
-
-func (e OutputDatabricksDataFormat) ToPointer() *OutputDatabricksDataFormat {
-	return &e
-}
-func (e *OutputDatabricksDataFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "json":
-		fallthrough
-	case "raw":
-		fallthrough
-	case "parquet":
-		*e = OutputDatabricksDataFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksDataFormat: %v", v)
-	}
-}
-
-// OutputDatabricksBackpressureBehavior - How to handle events when all receivers are exerting backpressure
-type OutputDatabricksBackpressureBehavior string
-
-const (
-	// OutputDatabricksBackpressureBehaviorBlock Block
-	OutputDatabricksBackpressureBehaviorBlock OutputDatabricksBackpressureBehavior = "block"
-	// OutputDatabricksBackpressureBehaviorDrop Drop
-	OutputDatabricksBackpressureBehaviorDrop OutputDatabricksBackpressureBehavior = "drop"
-)
-
-func (e OutputDatabricksBackpressureBehavior) ToPointer() *OutputDatabricksBackpressureBehavior {
-	return &e
-}
-func (e *OutputDatabricksBackpressureBehavior) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputDatabricksBackpressureBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksBackpressureBehavior: %v", v)
-	}
-}
-
-// OutputDatabricksDiskSpaceProtection - How to handle events when disk space is below the global 'Min free disk space' limit
-type OutputDatabricksDiskSpaceProtection string
-
-const (
-	// OutputDatabricksDiskSpaceProtectionBlock Block
-	OutputDatabricksDiskSpaceProtectionBlock OutputDatabricksDiskSpaceProtection = "block"
-	// OutputDatabricksDiskSpaceProtectionDrop Drop
-	OutputDatabricksDiskSpaceProtectionDrop OutputDatabricksDiskSpaceProtection = "drop"
-)
-
-func (e OutputDatabricksDiskSpaceProtection) ToPointer() *OutputDatabricksDiskSpaceProtection {
-	return &e
-}
-func (e *OutputDatabricksDiskSpaceProtection) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = OutputDatabricksDiskSpaceProtection(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksDiskSpaceProtection: %v", v)
-	}
-}
-
-// OutputDatabricksCompression - Data compression format to apply to HTTP content before it is delivered
-type OutputDatabricksCompression string
-
-const (
-	OutputDatabricksCompressionNone OutputDatabricksCompression = "none"
-	OutputDatabricksCompressionGzip OutputDatabricksCompression = "gzip"
-)
-
-func (e OutputDatabricksCompression) ToPointer() *OutputDatabricksCompression {
-	return &e
-}
-func (e *OutputDatabricksCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputDatabricksCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksCompression: %v", v)
-	}
-}
-
-// OutputDatabricksCompressionLevel - Compression level to apply before moving files to final destination
-type OutputDatabricksCompressionLevel string
-
-const (
-	// OutputDatabricksCompressionLevelBestSpeed Best Speed
-	OutputDatabricksCompressionLevelBestSpeed OutputDatabricksCompressionLevel = "best_speed"
-	// OutputDatabricksCompressionLevelNormal Normal
-	OutputDatabricksCompressionLevelNormal OutputDatabricksCompressionLevel = "normal"
-	// OutputDatabricksCompressionLevelBestCompression Best Compression
-	OutputDatabricksCompressionLevelBestCompression OutputDatabricksCompressionLevel = "best_compression"
-)
-
-func (e OutputDatabricksCompressionLevel) ToPointer() *OutputDatabricksCompressionLevel {
-	return &e
-}
-func (e *OutputDatabricksCompressionLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "best_speed":
-		fallthrough
-	case "normal":
-		fallthrough
-	case "best_compression":
-		*e = OutputDatabricksCompressionLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksCompressionLevel: %v", v)
-	}
-}
-
-// OutputDatabricksParquetVersion - Determines which data types are supported and how they are represented
-type OutputDatabricksParquetVersion string
-
-const (
-	// OutputDatabricksParquetVersionParquet10 1.0
-	OutputDatabricksParquetVersionParquet10 OutputDatabricksParquetVersion = "PARQUET_1_0"
-	// OutputDatabricksParquetVersionParquet24 2.4
-	OutputDatabricksParquetVersionParquet24 OutputDatabricksParquetVersion = "PARQUET_2_4"
-	// OutputDatabricksParquetVersionParquet26 2.6
-	OutputDatabricksParquetVersionParquet26 OutputDatabricksParquetVersion = "PARQUET_2_6"
-)
-
-func (e OutputDatabricksParquetVersion) ToPointer() *OutputDatabricksParquetVersion {
-	return &e
-}
-func (e *OutputDatabricksParquetVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "PARQUET_1_0":
-		fallthrough
-	case "PARQUET_2_4":
-		fallthrough
-	case "PARQUET_2_6":
-		*e = OutputDatabricksParquetVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksParquetVersion: %v", v)
-	}
-}
-
-// OutputDatabricksDataPageVersion - Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
-type OutputDatabricksDataPageVersion string
-
-const (
-	// OutputDatabricksDataPageVersionDataPageV1 V1
-	OutputDatabricksDataPageVersionDataPageV1 OutputDatabricksDataPageVersion = "DATA_PAGE_V1"
-	// OutputDatabricksDataPageVersionDataPageV2 V2
-	OutputDatabricksDataPageVersionDataPageV2 OutputDatabricksDataPageVersion = "DATA_PAGE_V2"
-)
-
-func (e OutputDatabricksDataPageVersion) ToPointer() *OutputDatabricksDataPageVersion {
-	return &e
-}
-func (e *OutputDatabricksDataPageVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "DATA_PAGE_V1":
-		fallthrough
-	case "DATA_PAGE_V2":
-		*e = OutputDatabricksDataPageVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatabricksDataPageVersion: %v", v)
-	}
-}
-
-type OutputDatabricksKeyValueMetadatum struct {
-	Key   *string `default:"" json:"key"`
-	Value string  `json:"value"`
-}
-
-func (o OutputDatabricksKeyValueMetadatum) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(o, "", false)
-}
-
-func (o *OutputDatabricksKeyValueMetadatum) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"value"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (o *OutputDatabricksKeyValueMetadatum) GetKey() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Key
-}
-
-func (o *OutputDatabricksKeyValueMetadatum) GetValue() string {
-	if o == nil {
-		return ""
-	}
-	return o.Value
-}
-
 type OutputDatabricks struct {
 	// Unique ID for this output
 	ID   *string              `json:"id,omitempty"`
@@ -287,92 +44,95 @@ type OutputDatabricks struct {
 	// Tags for filtering and grouping in @{product}
 	Streamtags []string `json:"streamtags,omitempty"`
 	// Optional path to prepend to files before uploading.
-	DestPath *string `default:"" json:"destPath"`
+	DestPath *string `json:"destPath,omitempty"`
 	// Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
-	StagePath *string `default:"$CRIBL_HOME/state/outputs/staging" json:"stagePath"`
+	StagePath *string `json:"stagePath,omitempty"`
 	// Add the Output ID value to staging location
-	AddIDToStagePath *bool `default:"true" json:"addIdToStagePath"`
+	AddIDToStagePath *bool `json:"addIdToStagePath,omitempty"`
 	// Remove empty staging directories after moving files
-	RemoveEmptyDirs *bool `default:"true" json:"removeEmptyDirs"`
+	RemoveEmptyDirs *bool `json:"removeEmptyDirs,omitempty"`
 	// JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
-	PartitionExpr *string `default:"C.Time.strftime(_time ? _time : Date.now()/1000, '%Y/%m/%d')" json:"partitionExpr"`
+	PartitionExpr *string `json:"partitionExpr,omitempty"`
 	// Format of the output data
-	Format *OutputDatabricksDataFormat `default:"json" json:"format"`
+	Format *DataFormatOptions `json:"format,omitempty"`
 	// JavaScript expression to define the output filename prefix (can be constant)
-	BaseFileName *string `default:"CriblOut" json:"baseFileName"`
+	BaseFileName *string `json:"baseFileName,omitempty"`
 	// JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
-	FileNameSuffix *string `default:".\\${C.env[\"CRIBL_WORKER_ID\"]}.\\${__format}\\${__compression === \"gzip\" ? \".gz\" : \"\"}" json:"fileNameSuffix"`
+	FileNameSuffix *string `json:"fileNameSuffix,omitempty"`
 	// Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
-	MaxFileSizeMB *float64 `default:"32" json:"maxFileSizeMB"`
+	MaxFileSizeMB *float64 `json:"maxFileSizeMB,omitempty"`
 	// Maximum amount of time to write to a file. Files open for longer than this will be closed and moved to final output location.
-	MaxFileOpenTimeSec *float64 `default:"300" json:"maxFileOpenTimeSec"`
+	MaxFileOpenTimeSec *float64 `json:"maxFileOpenTimeSec,omitempty"`
 	// Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
-	MaxFileIdleTimeSec *float64 `default:"30" json:"maxFileIdleTimeSec"`
+	MaxFileIdleTimeSec *float64 `json:"maxFileIdleTimeSec,omitempty"`
 	// Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
-	MaxOpenFiles *float64 `default:"100" json:"maxOpenFiles"`
+	MaxOpenFiles *float64 `json:"maxOpenFiles,omitempty"`
 	// If set, this line will be written to the beginning of each output file
-	HeaderLine *string `default:"" json:"headerLine"`
+	HeaderLine *string `json:"headerLine,omitempty"`
 	// Buffer size used to write to a file
-	WriteHighWaterMark *float64 `default:"64" json:"writeHighWaterMark"`
+	WriteHighWaterMark *float64 `json:"writeHighWaterMark,omitempty"`
 	// How to handle events when all receivers are exerting backpressure
-	OnBackpressure *OutputDatabricksBackpressureBehavior `default:"block" json:"onBackpressure"`
+	OnBackpressure *BackpressureBehaviorOptionsBlockDrop `json:"onBackpressure,omitempty"`
 	// If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
-	DeadletterEnabled *bool `default:"false" json:"deadletterEnabled"`
+	DeadletterEnabled *bool `json:"deadletterEnabled,omitempty"`
 	// How to handle events when disk space is below the global 'Min free disk space' limit
-	OnDiskFullBackpressure *OutputDatabricksDiskSpaceProtection `default:"block" json:"onDiskFullBackpressure"`
+	OnDiskFullBackpressure *DiskSpaceProtectionOptions `json:"onDiskFullBackpressure,omitempty"`
 	// Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
-	ForceCloseOnShutdown *bool `default:"false" json:"forceCloseOnShutdown"`
-	// Databricks workspace ID
+	ForceCloseOnShutdown *bool              `json:"forceCloseOnShutdown,omitempty"`
+	RetrySettings        *RetrySettingsType `json:"retrySettings,omitempty"`
+	// Unique identifier for the Databricks workspace. Used to construct the OAuth login URL and API base URL.
 	WorkspaceID string `json:"workspaceId"`
 	// OAuth scope for Unity Catalog authentication
-	Scope *string `default:"all-apis" json:"scope"`
+	Scope string `json:"scope"`
 	// OAuth client ID for Unity Catalog authentication
 	ClientID string `json:"clientId"`
-	// Name of the catalog to use for the output
-	Catalog *string `default:"main" json:"catalog"`
-	// Name of the catalog schema to use for the output
-	Schema *string `default:"external" json:"schema"`
-	// Name of the events volume in Databricks
-	EventsVolumeName *string `default:"events" json:"eventsVolumeName"`
+	// Name of the Unity Catalog catalog to use for the Destination.
+	Catalog string `json:"catalog"`
+	// Name of the Unity Catalog schema to use for the Destination.
+	Schema string `json:"schema"`
+	// Name of the Unity Catalog volume where event data is written.
+	EventsVolumeName string `json:"eventsVolumeName"`
 	// OAuth client secret for Unity Catalog authentication
 	ClientTextSecret string `json:"clientTextSecret"`
-	// Amount of time, in seconds, to wait for a request to complete before canceling it
-	TimeoutSec  *float64 `default:"60" json:"timeoutSec"`
-	Description *string  `json:"description,omitempty"`
+	// Amount of time, in seconds, to wait for a request to complete before canceling it.
+	TimeoutSec  *int64  `json:"timeoutSec,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// Data compression format to apply to HTTP content before it is delivered
-	Compress *OutputDatabricksCompression `default:"gzip" json:"compress"`
+	Compress *CompressionOptionsHTTP `json:"compress,omitempty"`
 	// Compression level to apply before moving files to final destination
-	CompressionLevel *OutputDatabricksCompressionLevel `default:"best_speed" json:"compressionLevel"`
+	CompressionLevel *CompressionLevelOptions `json:"compressionLevel,omitempty"`
 	// Automatically calculate the schema based on the events of each Parquet file generated
-	AutomaticSchema *bool `default:"false" json:"automaticSchema"`
+	AutomaticSchema *bool `json:"automaticSchema,omitempty"`
 	// To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
 	ParquetSchema *string `json:"parquetSchema,omitempty"`
 	// Determines which data types are supported and how they are represented
-	ParquetVersion *OutputDatabricksParquetVersion `default:"PARQUET_2_6" json:"parquetVersion"`
+	ParquetVersion *ParquetVersionOptions `json:"parquetVersion,omitempty"`
 	// Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
-	ParquetDataPageVersion *OutputDatabricksDataPageVersion `default:"DATA_PAGE_V2" json:"parquetDataPageVersion"`
+	ParquetDataPageVersion *DataPageVersionOptions `json:"parquetDataPageVersion,omitempty"`
 	// The number of rows that every group will contain. The final group can contain a smaller number of rows.
-	ParquetRowGroupLength *float64 `default:"10000" json:"parquetRowGroupLength"`
+	ParquetRowGroupLength *float64 `json:"parquetRowGroupLength,omitempty"`
 	// Target memory size for page segments, such as 1MB or 128MB. Generally, lower values improve reading speed, while higher values improve compression.
-	ParquetPageSize *string `default:"1MB" json:"parquetPageSize"`
+	ParquetPageSize *string `json:"parquetPageSize,omitempty"`
 	// Log up to 3 rows that @{product} skips due to data mismatch
 	ShouldLogInvalidRows *bool `json:"shouldLogInvalidRows,omitempty"`
 	// The metadata of files the Destination writes will include the properties you add here as key-value pairs. Useful for tagging. Examples: "key":"OCSF Event Class", "value":"9001"
-	KeyValueMetadata []OutputDatabricksKeyValueMetadatum `json:"keyValueMetadata,omitempty"`
+	KeyValueMetadata []ItemsTypeKeyValueMetadata `json:"keyValueMetadata,omitempty"`
 	// Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
-	EnableStatistics *bool `default:"true" json:"enableStatistics"`
+	EnableStatistics *bool `json:"enableStatistics,omitempty"`
 	// One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-	EnableWritePageIndex *bool `default:"true" json:"enableWritePageIndex"`
+	EnableWritePageIndex *bool `json:"enableWritePageIndex,omitempty"`
 	// Parquet tools can use the checksum of a Parquet page to verify data integrity
-	EnablePageChecksum *bool `default:"false" json:"enablePageChecksum"`
+	EnablePageChecksum *bool `json:"enablePageChecksum,omitempty"`
 	// How frequently, in seconds, to clean up empty directories
-	EmptyDirCleanupSec *float64 `default:"300" json:"emptyDirCleanupSec"`
+	EmptyDirCleanupSec *float64 `json:"emptyDirCleanupSec,omitempty"`
 	// Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
-	DirectoryBatchSize *float64 `default:"1000" json:"directoryBatchSize"`
+	DirectoryBatchSize *float64 `json:"directoryBatchSize,omitempty"`
 	// Storage location for files that fail to reach their final destination after maximum retries are exceeded
-	DeadletterPath *string `default:"$CRIBL_HOME/state/outputs/dead-letter" json:"deadletterPath"`
+	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-	MaxRetryNum *float64 `default:"20" json:"maxRetryNum"`
+	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
+	// Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
+	TemplateFormat *string `json:"__template_format,omitempty"`
 }
 
 func (o OutputDatabricks) MarshalJSON() ([]byte, error) {
@@ -380,7 +140,7 @@ func (o OutputDatabricks) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OutputDatabricks) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &o, "", false, []string{"type", "workspaceId", "clientId", "clientTextSecret"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -463,7 +223,7 @@ func (o *OutputDatabricks) GetPartitionExpr() *string {
 	return o.PartitionExpr
 }
 
-func (o *OutputDatabricks) GetFormat() *OutputDatabricksDataFormat {
+func (o *OutputDatabricks) GetFormat() *DataFormatOptions {
 	if o == nil {
 		return nil
 	}
@@ -526,7 +286,7 @@ func (o *OutputDatabricks) GetWriteHighWaterMark() *float64 {
 	return o.WriteHighWaterMark
 }
 
-func (o *OutputDatabricks) GetOnBackpressure() *OutputDatabricksBackpressureBehavior {
+func (o *OutputDatabricks) GetOnBackpressure() *BackpressureBehaviorOptionsBlockDrop {
 	if o == nil {
 		return nil
 	}
@@ -540,7 +300,7 @@ func (o *OutputDatabricks) GetDeadletterEnabled() *bool {
 	return o.DeadletterEnabled
 }
 
-func (o *OutputDatabricks) GetOnDiskFullBackpressure() *OutputDatabricksDiskSpaceProtection {
+func (o *OutputDatabricks) GetOnDiskFullBackpressure() *DiskSpaceProtectionOptions {
 	if o == nil {
 		return nil
 	}
@@ -554,6 +314,13 @@ func (o *OutputDatabricks) GetForceCloseOnShutdown() *bool {
 	return o.ForceCloseOnShutdown
 }
 
+func (o *OutputDatabricks) GetRetrySettings() *RetrySettingsType {
+	if o == nil {
+		return nil
+	}
+	return o.RetrySettings
+}
+
 func (o *OutputDatabricks) GetWorkspaceID() string {
 	if o == nil {
 		return ""
@@ -561,9 +328,9 @@ func (o *OutputDatabricks) GetWorkspaceID() string {
 	return o.WorkspaceID
 }
 
-func (o *OutputDatabricks) GetScope() *string {
+func (o *OutputDatabricks) GetScope() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Scope
 }
@@ -575,23 +342,23 @@ func (o *OutputDatabricks) GetClientID() string {
 	return o.ClientID
 }
 
-func (o *OutputDatabricks) GetCatalog() *string {
+func (o *OutputDatabricks) GetCatalog() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Catalog
 }
 
-func (o *OutputDatabricks) GetSchema() *string {
+func (o *OutputDatabricks) GetSchema() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Schema
 }
 
-func (o *OutputDatabricks) GetEventsVolumeName() *string {
+func (o *OutputDatabricks) GetEventsVolumeName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.EventsVolumeName
 }
@@ -603,7 +370,7 @@ func (o *OutputDatabricks) GetClientTextSecret() string {
 	return o.ClientTextSecret
 }
 
-func (o *OutputDatabricks) GetTimeoutSec() *float64 {
+func (o *OutputDatabricks) GetTimeoutSec() *int64 {
 	if o == nil {
 		return nil
 	}
@@ -617,14 +384,14 @@ func (o *OutputDatabricks) GetDescription() *string {
 	return o.Description
 }
 
-func (o *OutputDatabricks) GetCompress() *OutputDatabricksCompression {
+func (o *OutputDatabricks) GetCompress() *CompressionOptionsHTTP {
 	if o == nil {
 		return nil
 	}
 	return o.Compress
 }
 
-func (o *OutputDatabricks) GetCompressionLevel() *OutputDatabricksCompressionLevel {
+func (o *OutputDatabricks) GetCompressionLevel() *CompressionLevelOptions {
 	if o == nil {
 		return nil
 	}
@@ -645,14 +412,14 @@ func (o *OutputDatabricks) GetParquetSchema() *string {
 	return o.ParquetSchema
 }
 
-func (o *OutputDatabricks) GetParquetVersion() *OutputDatabricksParquetVersion {
+func (o *OutputDatabricks) GetParquetVersion() *ParquetVersionOptions {
 	if o == nil {
 		return nil
 	}
 	return o.ParquetVersion
 }
 
-func (o *OutputDatabricks) GetParquetDataPageVersion() *OutputDatabricksDataPageVersion {
+func (o *OutputDatabricks) GetParquetDataPageVersion() *DataPageVersionOptions {
 	if o == nil {
 		return nil
 	}
@@ -680,7 +447,7 @@ func (o *OutputDatabricks) GetShouldLogInvalidRows() *bool {
 	return o.ShouldLogInvalidRows
 }
 
-func (o *OutputDatabricks) GetKeyValueMetadata() []OutputDatabricksKeyValueMetadatum {
+func (o *OutputDatabricks) GetKeyValueMetadata() []ItemsTypeKeyValueMetadata {
 	if o == nil {
 		return nil
 	}
@@ -734,4 +501,11 @@ func (o *OutputDatabricks) GetMaxRetryNum() *float64 {
 		return nil
 	}
 	return o.MaxRetryNum
+}
+
+func (o *OutputDatabricks) GetTemplateFormat() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TemplateFormat
 }
