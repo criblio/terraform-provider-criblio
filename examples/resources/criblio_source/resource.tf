@@ -1494,127 +1494,125 @@ resource "criblio_source" "my_source" {
     type                       = "google_pubsub"
   }
   input_grafana = {
-    input_grafana_grafana2 = {
-      activity_log_sample_rate = 10
-      capture_headers          = true
-      connections = [
+    activity_log_sample_rate = 10
+    capture_headers          = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
+      }
+    ]
+    description         = "Grafana listener supporting Prom remote write and Loki logs"
+    disabled            = false
+    enable_health_check = true
+    enable_proxy_header = false
+    environment         = "main"
+    host                = "0.0.0.0"
+    id                  = "grafana-listener"
+    ip_allowlist_regex  = "^10\\."
+    ip_denylist_regex   = "^192\\.168\\.0\\."
+    keep_alive_timeout  = 30
+    loki_api            = "/loki/api/v1/push"
+    loki_auth = {
+      auth_header_expr   = "`Bearer ${token}`"
+      auth_type          = "none"
+      credentials_secret = "loki-credentials"
+      login_url          = "https://loki.example.com/oauth/token"
+      oauth_headers = [
         {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
+          name  = "Accept"
+          value = "application/json"
         }
       ]
-      description         = "Grafana listener supporting Prom remote write and Loki logs"
-      disabled            = false
-      enable_health_check = true
-      enable_proxy_header = false
-      environment         = "main"
-      host                = "0.0.0.0"
-      id                  = "grafana-listener"
-      ip_allowlist_regex  = "^10\\."
-      ip_denylist_regex   = "^192\\.168\\.0\\."
-      keep_alive_timeout  = 30
-      loki_api            = "/loki/api/v1/push"
-      loki_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "basic"
-        credentials_secret = "loki-credentials"
-        login_url          = "https://loki.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:loki_password}"
-        secret               = "$${{secret:loki_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "loki-token-secret"
-        token                = "$${{secret:loki_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "loki_user"
-      }
-      max_active_req          = 512
-      max_requests_per_socket = 1000
-      metadata = [
+      oauth_params = [
         {
-          name  = "...my_name..."
-          value = "...my_value..."
+          name  = "grant_type"
+          value = "client_credentials"
         }
       ]
-      pipeline = "default"
-      port     = 4318
-      pq = {
-        commit_frequency      = 4.6
-        compress              = "gzip"
-        max_buffer_size       = 43.36
-        max_buffer_size_bytes = "...my_max_buffer_size_bytes..."
-        max_file_size         = "...my_max_file_size..."
-        max_size              = "...my_max_size..."
-        mode                  = "always"
-        path                  = "...my_path..."
-        pq_controls = {
-          # ...
-        }
-      }
-      pq_enabled     = false
-      prometheus_api = "/api/prom/push"
-      prometheus_auth = {
-        auth_header_expr   = "`Bearer ${token}`"
-        auth_type          = "textSecret"
-        credentials_secret = "prom-credentials"
-        login_url          = "https://grafana.example.com/oauth/token"
-        oauth_headers = [
-          {
-            name  = "Accept"
-            value = "application/json"
-          }
-        ]
-        oauth_params = [
-          {
-            name  = "grant_type"
-            value = "client_credentials"
-          }
-        ]
-        password             = "$${{secret:prom_password}"
-        secret               = "$${{secret:prom_oauth_secret}"
-        secret_param_name    = "client_secret"
-        text_secret          = "prom-token-secret"
-        token                = "$${{secret:prom_token}"
-        token_attribute_name = "access_token"
-        token_timeout_secs   = 3600
-        username             = "grafana"
-      }
-      request_timeout = 30
-      send_to_routes  = true
-      socket_timeout  = 60
-      streamtags = [
-        "prod",
-        "grafana",
-      ]
-      template_host = "...my_template_host..."
-      template_port = "...my_template_port..."
-      tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        common_name_regex   = "...my_common_name_regex..."
-        disabled            = true
-        max_version         = "TLSv1"
-        min_version         = "TLSv1.3"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = false
-        request_cert        = false
-      }
-      type = "grafana"
+      password             = "$${{secret:loki_password}"
+      secret               = "$${{secret:loki_oauth_secret}"
+      secret_param_name    = "client_secret"
+      text_secret          = "loki-token-secret"
+      token                = "$${{secret:loki_token}"
+      token_attribute_name = "access_token"
+      token_timeout_secs   = 3600
+      username             = "loki_user"
     }
+    max_active_req          = 512
+    max_requests_per_socket = 1000
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
+      }
+    ]
+    pipeline = "default"
+    port     = 4318
+    pq = {
+      commit_frequency      = 2.34
+      compress              = "gzip"
+      max_buffer_size       = 48.78
+      max_buffer_size_bytes = "...my_max_buffer_size_bytes..."
+      max_file_size         = "...my_max_file_size..."
+      max_size              = "...my_max_size..."
+      mode                  = "smart"
+      path                  = "...my_path..."
+      pq_controls = {
+        # ...
+      }
+    }
+    pq_enabled     = false
+    prometheus_api = "/api/prom/push"
+    prometheus_auth = {
+      auth_header_expr   = "`Bearer ${token}`"
+      auth_type          = "none"
+      credentials_secret = "prom-credentials"
+      login_url          = "https://grafana.example.com/oauth/token"
+      oauth_headers = [
+        {
+          name  = "Accept"
+          value = "application/json"
+        }
+      ]
+      oauth_params = [
+        {
+          name  = "grant_type"
+          value = "client_credentials"
+        }
+      ]
+      password             = "$${{secret:prom_password}"
+      secret               = "$${{secret:prom_oauth_secret}"
+      secret_param_name    = "client_secret"
+      text_secret          = "prom-token-secret"
+      token                = "$${{secret:prom_token}"
+      token_attribute_name = "access_token"
+      token_timeout_secs   = 3600
+      username             = "grafana"
+    }
+    request_timeout = 30
+    send_to_routes  = true
+    socket_timeout  = 60
+    streamtags = [
+      "prod",
+      "grafana",
+    ]
+    template_host = "...my_template_host..."
+    template_port = "...my_template_port..."
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.1"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = true
+      request_cert        = true
+    }
+    type = "grafana"
   }
   input_http = {
     activity_log_sample_rate = 10
@@ -4045,84 +4043,82 @@ resource "criblio_source" "my_source" {
     visibility_timeout               = 300
   }
   input_syslog = {
-    input_syslog_syslog2 = {
-      allow_non_standard_app_name = true
-      connections = [
-        {
-          output   = "...my_output..."
-          pipeline = "...my_pipeline..."
-        }
-      ]
-      description                          = "Receive syslog over UDP/TCP with framing detection"
-      disabled                             = false
-      enable_enhanced_proxy_header_parsing = true
-      enable_load_balancing                = true
-      enable_proxy_header                  = false
-      environment                          = "main"
-      host                                 = "0.0.0.0"
-      id                                   = "syslog-listener"
-      infer_framing                        = true
-      ip_whitelist_regex                   = "^10\\."
-      keep_fields_list = [
-        "host",
-        "app",
-      ]
-      max_active_cxn  = 2000
-      max_buffer_size = 20000
-      metadata = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
-      octet_counting = false
-      pipeline       = "default"
-      pq = {
-        commit_frequency      = 6.96
-        compress              = "none"
-        max_buffer_size       = 45.65
-        max_buffer_size_bytes = "...my_max_buffer_size_bytes..."
-        max_file_size         = "...my_max_file_size..."
-        max_size              = "...my_max_size..."
-        mode                  = "always"
-        path                  = "...my_path..."
-        pq_controls = {
-          # ...
-        }
+    allow_non_standard_app_name = true
+    connections = [
+      {
+        output   = "...my_output..."
+        pipeline = "...my_pipeline..."
       }
-      pq_enabled             = false
-      send_to_routes         = true
-      single_msg_udp_packets = true
-      socket_ending_max_wait = 30
-      socket_idle_timeout    = 60
-      socket_max_lifespan    = 3600
-      streamtags = [
-        "syslog",
-        "network",
-      ]
-      strictly_infer_octet_counting = true
-      tcp_port                      = 514
-      template_host                 = "...my_template_host..."
-      template_tcp_port             = "...my_template_tcp_port..."
-      template_udp_port             = "...my_template_udp_port..."
-      timestamp_timezone            = "UTC"
-      tls = {
-        ca_path             = "...my_ca_path..."
-        cert_path           = "...my_cert_path..."
-        certificate_name    = "...my_certificate_name..."
-        common_name_regex   = "...my_common_name_regex..."
-        disabled            = true
-        max_version         = "TLSv1.2"
-        min_version         = "TLSv1.2"
-        passphrase          = "...my_passphrase..."
-        priv_key_path       = "...my_priv_key_path..."
-        reject_unauthorized = true
-        request_cert        = true
+    ]
+    description                          = "Receive syslog over UDP/TCP with framing detection"
+    disabled                             = false
+    enable_enhanced_proxy_header_parsing = true
+    enable_load_balancing                = true
+    enable_proxy_header                  = false
+    environment                          = "main"
+    host                                 = "0.0.0.0"
+    id                                   = "syslog-listener"
+    infer_framing                        = true
+    ip_whitelist_regex                   = "^10\\."
+    keep_fields_list = [
+      "host",
+      "app",
+    ]
+    max_active_cxn  = 2000
+    max_buffer_size = 20000
+    metadata = [
+      {
+        name  = "...my_name..."
+        value = "...my_value..."
       }
-      type                   = "syslog"
-      udp_port               = 514
-      udp_socket_rx_buf_size = 4194304
+    ]
+    octet_counting = false
+    pipeline       = "default"
+    pq = {
+      commit_frequency      = 7.21
+      compress              = "none"
+      max_buffer_size       = 47.49
+      max_buffer_size_bytes = "...my_max_buffer_size_bytes..."
+      max_file_size         = "...my_max_file_size..."
+      max_size              = "...my_max_size..."
+      mode                  = "always"
+      path                  = "...my_path..."
+      pq_controls = {
+        # ...
+      }
     }
+    pq_enabled             = false
+    send_to_routes         = true
+    single_msg_udp_packets = true
+    socket_ending_max_wait = 30
+    socket_idle_timeout    = 60
+    socket_max_lifespan    = 3600
+    streamtags = [
+      "syslog",
+      "network",
+    ]
+    strictly_infer_octet_counting = true
+    tcp_port                      = 514
+    template_host                 = "...my_template_host..."
+    template_tcp_port             = "...my_template_tcp_port..."
+    template_udp_port             = "...my_template_udp_port..."
+    timestamp_timezone            = "UTC"
+    tls = {
+      ca_path             = "...my_ca_path..."
+      cert_path           = "...my_cert_path..."
+      certificate_name    = "...my_certificate_name..."
+      common_name_regex   = "...my_common_name_regex..."
+      disabled            = true
+      max_version         = "TLSv1"
+      min_version         = "TLSv1.1"
+      passphrase          = "...my_passphrase..."
+      priv_key_path       = "...my_priv_key_path..."
+      reject_unauthorized = true
+      request_cert        = false
+    }
+    type                   = "syslog"
+    udp_port               = 514
+    udp_socket_rx_buf_size = 4194304
   }
   input_system_metrics = {
     connections = [

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type InputElementConfigLatest struct {
-	Str    types.String  `queryParam:"inline" tfsdk:"str"`
-	Number types.Float64 `queryParam:"inline" tfsdk:"number"`
+type Label struct {
+	Name  types.String `tfsdk:"name"`
+	Value types.String `tfsdk:"value"`
 }

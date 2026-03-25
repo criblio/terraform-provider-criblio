@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 )
 
-type PrometheusAuthOauthParam2 struct {
+type LokiAuthOauthParam struct {
 	Name  jsontypes.Normalized `tfsdk:"name"`
 	Value jsontypes.Normalized `tfsdk:"value"`
 }

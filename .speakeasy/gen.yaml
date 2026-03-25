@@ -23,13 +23,14 @@ generation:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
   versioningStrategy: automatic
-  persistentEdits: {}
+  persistentEdits:
+    enabled: never
   tests:
     generateTests: true
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.22.0
+  version: 1.21.0
   additionalActions: []
   additionalDataSources: []
   additionalDependencies:

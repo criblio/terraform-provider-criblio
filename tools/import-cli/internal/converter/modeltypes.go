@@ -102,7 +102,6 @@ func ResourceModelTypes() map[string]reflect.Type {
 		"SearchDatasetProviderResourceModel":      reflect.TypeOf((*provider.SearchDatasetProviderResourceModel)(nil)).Elem(),
 		"SearchMacroResourceModel":                reflect.TypeOf((*provider.SearchMacroResourceModel)(nil)).Elem(),
 		"SearchSavedQueryResourceModel":           reflect.TypeOf((*provider.SearchSavedQueryResourceModel)(nil)).Elem(),
-		"SearchUsageGroupResourceModel":           reflect.TypeOf((*provider.SearchUsageGroupResourceModel)(nil)).Elem(),
 		"SecretResourceModel":                     reflect.TypeOf((*provider.SecretResourceModel)(nil)).Elem(),
 		"SourceResourceModel":                     reflect.TypeOf((*provider.SourceResourceModel)(nil)).Elem(),
 		"SubscriptionResourceModel":               reflect.TypeOf((*provider.SubscriptionResourceModel)(nil)).Elem(),

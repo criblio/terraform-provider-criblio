@@ -34,16 +34,15 @@ func (r *CertificateDataSourceModel) RefreshFromSharedCertificate(ctx context.Co
 	var diags diag.Diagnostics
 
 	r.Ca = types.StringPointerValue(resp.Ca)
-	r.CaPath = types.StringPointerValue(resp.CaPath)
 	r.Cert = types.StringValue(resp.Cert)
-	r.CertExpiryDate = types.StringPointerValue(resp.CertExpiryDate)
-	r.CertPath = types.StringPointerValue(resp.CertPath)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
+	r.InUse = make([]types.String, 0, len(resp.InUse))
+	for _, v := range resp.InUse {
+		r.InUse = append(r.InUse, types.StringValue(v))
+	}
 	r.Passphrase = types.StringPointerValue(resp.Passphrase)
-	r.PassphrasePath = types.StringPointerValue(resp.PassphrasePath)
 	r.PrivKey = types.StringValue(resp.PrivKey)
-	r.PrivKeyPath = types.StringPointerValue(resp.PrivKeyPath)
 
 	return diags
 }

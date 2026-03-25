@@ -200,20 +200,20 @@ func (e *OutputSyslogSeverity) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// MessageFormat - The syslog message format depending on the receiver's support
-type MessageFormat string
+// OutputSyslogMessageFormat - The syslog message format depending on the receiver's support
+type OutputSyslogMessageFormat string
 
 const (
-	// MessageFormatRfc3164 RFC3164
-	MessageFormatRfc3164 MessageFormat = "rfc3164"
-	// MessageFormatRfc5424 RFC5424
-	MessageFormatRfc5424 MessageFormat = "rfc5424"
+	// OutputSyslogMessageFormatRfc3164 RFC3164
+	OutputSyslogMessageFormatRfc3164 OutputSyslogMessageFormat = "rfc3164"
+	// OutputSyslogMessageFormatRfc5424 RFC5424
+	OutputSyslogMessageFormatRfc5424 OutputSyslogMessageFormat = "rfc5424"
 )
 
-func (e MessageFormat) ToPointer() *MessageFormat {
+func (e OutputSyslogMessageFormat) ToPointer() *OutputSyslogMessageFormat {
 	return &e
 }
-func (e *MessageFormat) UnmarshalJSON(data []byte) error {
+func (e *OutputSyslogMessageFormat) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -222,10 +222,10 @@ func (e *MessageFormat) UnmarshalJSON(data []byte) error {
 	case "rfc3164":
 		fallthrough
 	case "rfc5424":
-		*e = MessageFormat(v)
+		*e = OutputSyslogMessageFormat(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for MessageFormat: %v", v)
+		return fmt.Errorf("invalid value for OutputSyslogMessageFormat: %v", v)
 	}
 }
 
@@ -293,7 +293,7 @@ type OutputSyslog struct {
 	// Default name for device or application that originated the message. Defaults to Cribl, but will be overwritten by value of __appname if set.
 	AppName *string `json:"appName,omitempty"`
 	// The syslog message format depending on the receiver's support
-	MessageFormat *MessageFormat `json:"messageFormat,omitempty"`
+	MessageFormat *OutputSyslogMessageFormat `json:"messageFormat,omitempty"`
 	// Timestamp format to use when serializing event's time field
 	TimestampFormat *TimestampFormatEnum `json:"timestampFormat,omitempty"`
 	// Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
@@ -442,7 +442,7 @@ func (o *OutputSyslog) GetAppName() *string {
 	return o.AppName
 }
 
-func (o *OutputSyslog) GetMessageFormat() *MessageFormat {
+func (o *OutputSyslog) GetMessageFormat() *OutputSyslogMessageFormat {
 	if o == nil {
 		return nil
 	}

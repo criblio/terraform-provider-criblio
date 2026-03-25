@@ -6,8 +6,11 @@ import (
 	"context"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
+	"github.com/hashicorp/terraform-plugin-framework/function"
+	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -17,7 +20,9 @@ import (
 )
 
 var _ provider.Provider = (*CriblioProvider)(nil)
+var _ provider.ProviderWithActions = (*CriblioProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*CriblioProvider)(nil)
+var _ provider.ProviderWithFunctions = (*CriblioProvider)(nil)
 
 type CriblioProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -83,7 +88,7 @@ func (p *CriblioProvider) Schema(ctx context.Context, req provider.SchemaRequest
 				Optional:            true,
 			},
 		},
-		MarkdownDescription: `Cribl Terraform Provider: The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.` + "\n" +
+		MarkdownDescription: `The Cribl Terraform provider offers a streamlined, repeatable approach for configuring end-to-end infrastructure as code (IaC) and managing resources consistently across Cribl Organizations and Workspaces.` + "\n" +
 			`` + "\n" +
 			`This Preview feature is still being developed. We do not recommend using it in a production environment, because the feature might not be fully tested or optimized for performance, and related documentation could be incomplete.` + "\n" +
 			`` + "\n" +
@@ -176,30 +181,6 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		security.ClientOauth = clientOauth
 	}
 
-	if !data.OrganizationID.IsUnknown() {
-		security.OrganizationID = data.OrganizationID.ValueStringPointer()
-	}
-
-	if organizationIDEnvVar := os.Getenv("CRIBL_ORGANIZATION_ID"); security.OrganizationID == nil && organizationIDEnvVar != "" {
-		security.OrganizationID = &organizationIDEnvVar
-	}
-
-	if !data.WorkspaceID.IsUnknown() {
-		security.WorkspaceID = data.WorkspaceID.ValueStringPointer()
-	}
-
-	if workspaceIDEnvVar := os.Getenv("CRIBL_WORKSPACE_ID"); security.WorkspaceID == nil && workspaceIDEnvVar != "" {
-		security.WorkspaceID = &workspaceIDEnvVar
-	}
-
-	if !data.CloudDomain.IsUnknown() {
-		security.CloudDomain = data.CloudDomain.ValueStringPointer()
-	}
-
-	if cloudDomainEnvVar := os.Getenv("CRIBL_CLOUD_DOMAIN"); security.CloudDomain == nil && cloudDomainEnvVar != "" {
-		security.CloudDomain = &cloudDomainEnvVar
-	}
-
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
 		Transport:  http.DefaultTransport,
@@ -215,9 +196,19 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	client := sdk.New(opts...)
+	resp.ActionData = client
 	resp.DataSourceData = client
 	resp.EphemeralResourceData = client
+	resp.ListResourceData = client
 	resp.ResourceData = client
+}
+
+func (p *CriblioProvider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{}
+}
+
+func (p *CriblioProvider) Actions(_ context.Context) []func() action.Action {
+	return []func() action.Action{}
 }
 
 func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resource {
@@ -264,7 +255,6 @@ func (p *CriblioProvider) Resources(ctx context.Context) []func() resource.Resou
 		NewSearchDatasetProviderResource,
 		NewSearchMacroResource,
 		NewSearchSavedQueryResource,
-		NewSearchUsageGroupResource,
 		NewSecretResource,
 		NewSourceResource,
 		NewSubscriptionResource,
@@ -321,7 +311,6 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchDatasetProviderDataSource,
 		NewSearchMacroDataSource,
 		NewSearchSavedQueryDataSource,
-		NewSearchUsageGroupDataSource,
 		NewSecretDataSource,
 		NewSourceDataSource,
 		NewSourcesDataSource,
@@ -334,6 +323,10 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 
 func (p *CriblioProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
 	return []func() ephemeral.EphemeralResource{}
+}
+
+func (p *CriblioProvider) ListResources(ctx context.Context) []func() list.ListResource {
+	return []func() list.ListResource{}
 }
 
 func New(version string) func() provider.Provider {

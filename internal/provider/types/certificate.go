@@ -7,15 +7,11 @@ import (
 )
 
 type Certificate struct {
-	Ca             types.String `tfsdk:"ca"`
-	CaPath         types.String `tfsdk:"ca_path"`
-	Cert           types.String `tfsdk:"cert"`
-	CertExpiryDate types.String `tfsdk:"cert_expiry_date"`
-	CertPath       types.String `tfsdk:"cert_path"`
-	Description    types.String `tfsdk:"description"`
-	ID             types.String `tfsdk:"id"`
-	Passphrase     types.String `tfsdk:"passphrase"`
-	PassphrasePath types.String `tfsdk:"passphrase_path"`
-	PrivKey        types.String `tfsdk:"priv_key"`
-	PrivKeyPath    types.String `tfsdk:"priv_key_path"`
+	Ca          types.String   `tfsdk:"ca"`
+	Cert        types.String   `tfsdk:"cert"`
+	Description types.String   `tfsdk:"description"`
+	ID          types.String   `tfsdk:"id"`
+	InUse       []types.String `tfsdk:"in_use"`
+	Passphrase  types.String   `tfsdk:"passphrase"`
+	PrivKey     types.String   `tfsdk:"priv_key"`
 }

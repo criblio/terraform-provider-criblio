@@ -125,6 +125,7 @@ func Struct(ctx context.Context, typ attr.Type, object tftypes.Value, target ref
 	} else {
 		result = reflect.New(target.Type()).Elem()
 	}
+	structType := trueReflectValue(target).Type()
 
 	for field, structFieldPos := range targetFields {
 		attrType, ok := attrTypes[field]
@@ -135,6 +136,12 @@ func Struct(ctx context.Context, typ attr.Type, object tftypes.Value, target ref
 				Err:        fmt.Errorf("could not find type information for attribute in supplied attr.Type %T", typ),
 			}))
 			return target, diags
+		}
+
+		fieldReflected := structType.Field(structFieldPos)
+		if opts.SourceType == SourceTypeState && fieldReflected.Tag.Get(`tfPlanOnly`) == "true" {
+			// skip explicitly excluded fields when merging prior state (Update); plan pass fills them.
+			continue
 		}
 
 		structField := result.Field(structFieldPos)

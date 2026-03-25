@@ -2,7 +2,45 @@
 
 package types
 
+import (
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
 type InputSyslog struct {
-	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline" tfsdk:"input_syslog_syslog1"`
-	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline" tfsdk:"input_syslog_syslog2"`
+	TemplateHost                     types.String                   `tfsdk:"template_host"`
+	TemplateTCPPort                  types.String                   `tfsdk:"template_tcp_port"`
+	TemplateUDPPort                  types.String                   `tfsdk:"template_udp_port"`
+	AllowNonStandardAppName          types.Bool                     `tfsdk:"allow_non_standard_app_name"`
+	Connections                      []ItemsTypeConnectionsOptional `tfsdk:"connections"`
+	Description                      types.String                   `tfsdk:"description"`
+	Disabled                         types.Bool                     `tfsdk:"disabled"`
+	EnableEnhancedProxyHeaderParsing types.Bool                     `tfsdk:"enable_enhanced_proxy_header_parsing"`
+	EnableLoadBalancing              types.Bool                     `tfsdk:"enable_load_balancing"`
+	EnableProxyHeader                types.Bool                     `tfsdk:"enable_proxy_header"`
+	Environment                      types.String                   `tfsdk:"environment"`
+	Host                             types.String                   `tfsdk:"host"`
+	ID                               types.String                   `tfsdk:"id"`
+	InferFraming                     types.Bool                     `tfsdk:"infer_framing"`
+	IPWhitelistRegex                 types.String                   `tfsdk:"ip_whitelist_regex"`
+	KeepFieldsList                   []types.String                 `tfsdk:"keep_fields_list"`
+	MaxActiveCxn                     types.Float64                  `tfsdk:"max_active_cxn"`
+	MaxBufferSize                    types.Float64                  `tfsdk:"max_buffer_size"`
+	Metadata                         []ItemsTypeMetadata            `tfsdk:"metadata"`
+	OctetCounting                    types.Bool                     `tfsdk:"octet_counting"`
+	Pipeline                         types.String                   `tfsdk:"pipeline"`
+	Pq                               *PqType                        `tfsdk:"pq"`
+	PqEnabled                        types.Bool                     `tfsdk:"pq_enabled"`
+	SendToRoutes                     types.Bool                     `tfsdk:"send_to_routes"`
+	SingleMsgUDPPackets              types.Bool                     `tfsdk:"single_msg_udp_packets"`
+	SocketEndingMaxWait              types.Float64                  `tfsdk:"socket_ending_max_wait"`
+	SocketIdleTimeout                types.Float64                  `tfsdk:"socket_idle_timeout"`
+	SocketMaxLifespan                types.Float64                  `tfsdk:"socket_max_lifespan"`
+	Streamtags                       []types.String                 `tfsdk:"streamtags"`
+	StrictlyInferOctetCounting       types.Bool                     `tfsdk:"strictly_infer_octet_counting"`
+	TCPPort                          types.Float64                  `tfsdk:"tcp_port"`
+	TimestampTimezone                types.String                   `tfsdk:"timestamp_timezone"`
+	TLS                              *TLSSettingsServerSideType     `tfsdk:"tls"`
+	Type                             types.String                   `tfsdk:"type"`
+	UDPPort                          types.Float64                  `tfsdk:"udp_port"`
+	UDPSocketRxBufSize               types.Float64                  `tfsdk:"udp_socket_rx_buf_size"`
 }

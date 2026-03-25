@@ -200,6 +200,7 @@ func (r *PackRoutesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetRoutesByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

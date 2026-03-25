@@ -25,10 +25,11 @@ data "criblio_destination" "my_destination" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to GET
+- `id` (String) Unique ID for this output
 
 ### Read-Only
 
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `output_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob))
 - `output_azure_data_explorer` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer))
 - `output_azure_eventhub` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub))
@@ -100,6 +101,8 @@ data "criblio_destination" "my_destination" {
 - `output_webhook` (Attributes) (see [below for nested schema](#nestedatt--output_webhook))
 - `output_wiz_hec` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec))
 - `output_xsiam` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam))
+- `pipeline` (String) Pipeline to process data before sending out to this output
+- `type` (String)
 
 <a id="nestedatt--output_azure_blob"></a>
 ### Nested Schema for `output_azure_blob`
@@ -2925,25 +2928,17 @@ Read-Only:
 
 Read-Only:
 
-- `output_grafana_cloud_grafana_cloud1` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1))
-- `output_grafana_cloud_grafana_cloud2` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2))
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1`
-
-Read-Only:
-
 - `compress` (Boolean) Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
 - `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--extra_http_headers))
+- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `id` (String) Unique ID for this output
-- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--labels))
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--loki_auth))
-- `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
+- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}" (see [below for nested schema](#nestedatt--output_grafana_cloud--labels))
+- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--loki_auth))
+- `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
 - `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
@@ -2952,36 +2947,29 @@ Read-Only:
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `pq_compress` (String) Codec to use to compress the persisted data
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--pq_controls))
-- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
-- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--pq_controls))
 - `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
 - `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
 - `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
-- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--prometheus_auth))
-- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--prometheus_auth))
+- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. LokiUrl, PrometheusUrl, or both are required.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--response_retry_settings))
+- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
-- `template_loki_url` (String) Binds 'lokiUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'lokiUrl' at runtime.
-- `template_prometheus_url` (String) Binds 'prometheusUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusUrl' at runtime.
-- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--timeout_retry_settings))
+- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `type` (String)
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--extra_http_headers"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.extra_http_headers`
+<a id="nestedatt--output_grafana_cloud--extra_http_headers"></a>
+### Nested Schema for `output_grafana_cloud.extra_http_headers`
 
 Read-Only:
 
@@ -2989,8 +2977,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--labels"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.labels`
+<a id="nestedatt--output_grafana_cloud--labels"></a>
+### Nested Schema for `output_grafana_cloud.labels`
 
 Read-Only:
 
@@ -2998,8 +2986,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--loki_auth"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.loki_auth`
+<a id="nestedatt--output_grafana_cloud--loki_auth"></a>
+### Nested Schema for `output_grafana_cloud.loki_auth`
 
 Read-Only:
 
@@ -3011,12 +2999,12 @@ Read-Only:
 - `username` (String) Username for authentication
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--pq_controls"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.pq_controls`
+<a id="nestedatt--output_grafana_cloud--pq_controls"></a>
+### Nested Schema for `output_grafana_cloud.pq_controls`
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--prometheus_auth"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.prometheus_auth`
+<a id="nestedatt--output_grafana_cloud--prometheus_auth"></a>
+### Nested Schema for `output_grafana_cloud.prometheus_auth`
 
 Read-Only:
 
@@ -3028,8 +3016,8 @@ Read-Only:
 - `username` (String) Username for authentication
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--response_retry_settings"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.response_retry_settings`
+<a id="nestedatt--output_grafana_cloud--response_retry_settings"></a>
+### Nested Schema for `output_grafana_cloud.response_retry_settings`
 
 Read-Only:
 
@@ -3039,8 +3027,8 @@ Read-Only:
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
 
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud1--timeout_retry_settings"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud1.timeout_retry_settings`
+<a id="nestedatt--output_grafana_cloud--timeout_retry_settings"></a>
+### Nested Schema for `output_grafana_cloud.timeout_retry_settings`
 
 Read-Only:
 
@@ -3048,130 +3036,6 @@ Read-Only:
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 - `timeout_retry` (Boolean)
-
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2`
-
-Read-Only:
-
-- `compress` (Boolean) Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
-- `concurrency` (Number) Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.
-- `description` (String)
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--extra_http_headers))
-- `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-- `id` (String) Unique ID for this output
-- `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}' (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--labels))
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--loki_auth))
-- `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
-- `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-- `max_payload_size_kb` (Number) Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.
-- `message` (String) Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
-- `message_format` (String) Format to use when sending logs to Loki (Protobuf or JSON)
-- `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
-- `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
-- `pipeline` (String) Pipeline to process data before sending out to this output
-- `pq_compress` (String) Codec to use to compress the persisted data
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--pq_controls))
-- `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
-- `pq_max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
-- `pq_max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
-- `pq_max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
-- `pq_max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `pq_mode` (String) In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
-- `pq_on_backpressure` (String) How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
-- `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
-- `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
-- `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--prometheus_auth))
-- `prometheus_url` (String) The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
-- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
-        Enabled by default. When this setting is also present in TLS Settings (Client Side), 
-        that value will take precedence.
-- `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
-- `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--response_retry_settings))
-- `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
-- `template_loki_url` (String) Binds 'lokiUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'lokiUrl' at runtime.
-- `template_prometheus_url` (String) Binds 'prometheusUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusUrl' at runtime.
-- `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--timeout_retry_settings))
-- `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String)
-- `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--extra_http_headers"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.extra_http_headers`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String)
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--labels"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.labels`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String)
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--loki_auth"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.loki_auth`
-
-Read-Only:
-
-- `auth_type` (String)
-- `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (API key in Grafana Cloud domain) for authentication
-- `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
-- `username` (String) Username for authentication
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--pq_controls"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.pq_controls`
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--prometheus_auth"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.prometheus_auth`
-
-Read-Only:
-
-- `auth_type` (String)
-- `credentials_secret` (String) Select or create a secret that references your credentials
-- `password` (String) Password (API key in Grafana Cloud domain) for authentication
-- `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
-- `username` (String) Username for authentication
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--response_retry_settings"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.response_retry_settings`
-
-Read-Only:
-
-- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries
-- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-
-
-<a id="nestedatt--output_grafana_cloud--output_grafana_cloud_grafana_cloud2--timeout_retry_settings"></a>
-### Nested Schema for `output_grafana_cloud.output_grafana_cloud_grafana_cloud2.timeout_retry_settings`
-
-Read-Only:
-
-- `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
-- `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean)
-
 
 
 

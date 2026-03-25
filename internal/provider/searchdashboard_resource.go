@@ -14,6 +14,7 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -256,6 +257,17 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 											Computed: true,
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
+												"array_of_str": schema.ListAttribute{
+													Optional:    true,
+													ElementType: types.StringType,
+													Validators: []validator.List{
+														listvalidator.ConflictsWith(path.Expressions{
+															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("default_value"),
+														}...),
+													},
+												},
 												"default_value": schema.SingleNestedAttribute{
 													Optional: true,
 													Attributes: map[string]schema.Attribute{
@@ -320,6 +332,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
 															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("array_of"),
 														}...),
 													},
 												},
@@ -328,6 +341,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.Float64{
 														float64validator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("str"),
+															path.MatchRelative().AtParent().AtName("array_of"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},
@@ -337,11 +351,17 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 													Validators: []validator.String{
 														stringvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("number"),
+															path.MatchRelative().AtParent().AtName("array_of"),
 															path.MatchRelative().AtParent().AtName("default_value"),
 														}...),
 													},
 												},
 											},
+										},
+										"multiselect": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `When true, the dropdown allows multiple values; defaultValue may be a string array.`,
 										},
 									},
 								},

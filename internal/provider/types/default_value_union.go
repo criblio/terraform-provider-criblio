@@ -7,7 +7,8 @@ import (
 )
 
 type DefaultValueUnion struct {
-	Str          types.String  `queryParam:"inline" tfsdk:"str"`
-	Number       types.Float64 `queryParam:"inline" tfsdk:"number"`
-	DefaultValue *DefaultValue `queryParam:"inline" tfsdk:"default_value"`
+	Str          types.String   `queryParam:"inline" tfsdk:"str"`
+	Number       types.Float64  `queryParam:"inline" tfsdk:"number"`
+	ArrayOfStr   []types.String `queryParam:"inline" tfsdk:"array_of_str"`
+	DefaultValue *DefaultValue  `queryParam:"inline" tfsdk:"default_value"`
 }

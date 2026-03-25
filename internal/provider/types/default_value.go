@@ -7,7 +7,7 @@ import (
 )
 
 type DefaultValue struct {
-	Earliest *InputElementConfigEarliest `tfsdk:"earliest"`
-	Latest   *InputElementConfigLatest   `tfsdk:"latest"`
-	Timezone types.String                `tfsdk:"timezone"`
+	Earliest *EarliestTypeSearchQuery `tfsdk:"earliest"`
+	Latest   *EarliestTypeSearchQuery `tfsdk:"latest"`
+	Timezone types.String             `tfsdk:"timezone"`
 }

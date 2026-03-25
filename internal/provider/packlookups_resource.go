@@ -255,6 +255,7 @@ func (r *PackLookupsResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.CreateSystemLookupsByPack(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -315,6 +316,7 @@ func (r *PackLookupsResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetSystemLookupsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -406,6 +408,7 @@ func (r *PackLookupsResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res1, err := r.client.Routes.GetSystemLookupsByPackAndID(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -466,6 +469,7 @@ func (r *PackLookupsResource) Delete(ctx context.Context, req resource.DeleteReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Pipelines.DeleteSystemLookupsByPackAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

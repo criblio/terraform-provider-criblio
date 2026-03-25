@@ -35,188 +35,10 @@ func (e *ApplyMode) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type InputElementConfigEarliestType string
-
-const (
-	InputElementConfigEarliestTypeStr    InputElementConfigEarliestType = "str"
-	InputElementConfigEarliestTypeNumber InputElementConfigEarliestType = "number"
-)
-
-type InputElementConfigEarliest struct {
-	Str    *string  `queryParam:"inline" union:"member"`
-	Number *float64 `queryParam:"inline" union:"member"`
-
-	Type InputElementConfigEarliestType
-}
-
-func CreateInputElementConfigEarliestStr(str string) InputElementConfigEarliest {
-	typ := InputElementConfigEarliestTypeStr
-
-	return InputElementConfigEarliest{
-		Str:  &str,
-		Type: typ,
-	}
-}
-
-func CreateInputElementConfigEarliestNumber(number float64) InputElementConfigEarliest {
-	typ := InputElementConfigEarliestTypeNumber
-
-	return InputElementConfigEarliest{
-		Number: &number,
-		Type:   typ,
-	}
-}
-
-func (u *InputElementConfigEarliest) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputElementConfigEarliestTypeStr,
-			Value: &str,
-		})
-	}
-
-	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputElementConfigEarliestTypeNumber,
-			Value: &number,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigEarliest", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestUnionCandidate(candidates, data)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigEarliest", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(InputElementConfigEarliestType)
-	switch best.Type {
-	case InputElementConfigEarliestTypeStr:
-		u.Str = best.Value.(*string)
-		return nil
-	case InputElementConfigEarliestTypeNumber:
-		u.Number = best.Value.(*float64)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigEarliest", string(data))
-}
-
-func (u InputElementConfigEarliest) MarshalJSON() ([]byte, error) {
-	if u.Str != nil {
-		return utils.MarshalJSON(u.Str, "", true)
-	}
-
-	if u.Number != nil {
-		return utils.MarshalJSON(u.Number, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type InputElementConfigEarliest: all fields are null")
-}
-
-type InputElementConfigLatestType string
-
-const (
-	InputElementConfigLatestTypeStr    InputElementConfigLatestType = "str"
-	InputElementConfigLatestTypeNumber InputElementConfigLatestType = "number"
-)
-
-type InputElementConfigLatest struct {
-	Str    *string  `queryParam:"inline" union:"member"`
-	Number *float64 `queryParam:"inline" union:"member"`
-
-	Type InputElementConfigLatestType
-}
-
-func CreateInputElementConfigLatestStr(str string) InputElementConfigLatest {
-	typ := InputElementConfigLatestTypeStr
-
-	return InputElementConfigLatest{
-		Str:  &str,
-		Type: typ,
-	}
-}
-
-func CreateInputElementConfigLatestNumber(number float64) InputElementConfigLatest {
-	typ := InputElementConfigLatestTypeNumber
-
-	return InputElementConfigLatest{
-		Number: &number,
-		Type:   typ,
-	}
-}
-
-func (u *InputElementConfigLatest) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var str string = ""
-	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputElementConfigLatestTypeStr,
-			Value: &str,
-		})
-	}
-
-	var number float64 = float64(0)
-	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputElementConfigLatestTypeNumber,
-			Value: &number,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigLatest", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestUnionCandidate(candidates, data)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigLatest", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(InputElementConfigLatestType)
-	switch best.Type {
-	case InputElementConfigLatestTypeStr:
-		u.Str = best.Value.(*string)
-		return nil
-	case InputElementConfigLatestTypeNumber:
-		u.Number = best.Value.(*float64)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputElementConfigLatest", string(data))
-}
-
-func (u InputElementConfigLatest) MarshalJSON() ([]byte, error) {
-	if u.Str != nil {
-		return utils.MarshalJSON(u.Str, "", true)
-	}
-
-	if u.Number != nil {
-		return utils.MarshalJSON(u.Number, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type InputElementConfigLatest: all fields are null")
-}
-
 type DefaultValue struct {
-	Earliest InputElementConfigEarliest `json:"earliest"`
-	Latest   InputElementConfigLatest   `json:"latest"`
-	Timezone *string                    `json:"timezone,omitempty"`
+	Earliest EarliestTypeSearchQuery `json:"earliest"`
+	Latest   EarliestTypeSearchQuery `json:"latest"`
+	Timezone *string                 `json:"timezone,omitempty"`
 }
 
 func (d DefaultValue) MarshalJSON() ([]byte, error) {
@@ -230,16 +52,16 @@ func (d *DefaultValue) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DefaultValue) GetEarliest() InputElementConfigEarliest {
+func (d *DefaultValue) GetEarliest() EarliestTypeSearchQuery {
 	if d == nil {
-		return InputElementConfigEarliest{}
+		return EarliestTypeSearchQuery{}
 	}
 	return d.Earliest
 }
 
-func (d *DefaultValue) GetLatest() InputElementConfigLatest {
+func (d *DefaultValue) GetLatest() EarliestTypeSearchQuery {
 	if d == nil {
-		return InputElementConfigLatest{}
+		return EarliestTypeSearchQuery{}
 	}
 	return d.Latest
 }
@@ -256,12 +78,14 @@ type DefaultValueUnionType string
 const (
 	DefaultValueUnionTypeStr          DefaultValueUnionType = "str"
 	DefaultValueUnionTypeNumber       DefaultValueUnionType = "number"
+	DefaultValueUnionTypeArrayOfStr   DefaultValueUnionType = "arrayOfStr"
 	DefaultValueUnionTypeDefaultValue DefaultValueUnionType = "defaultValue"
 )
 
 type DefaultValueUnion struct {
 	Str          *string       `queryParam:"inline" union:"member"`
 	Number       *float64      `queryParam:"inline" union:"member"`
+	ArrayOfStr   []string      `queryParam:"inline" union:"member"`
 	DefaultValue *DefaultValue `queryParam:"inline" union:"member"`
 
 	Type DefaultValueUnionType
@@ -282,6 +106,15 @@ func CreateDefaultValueUnionNumber(number float64) DefaultValueUnion {
 	return DefaultValueUnion{
 		Number: &number,
 		Type:   typ,
+	}
+}
+
+func CreateDefaultValueUnionArrayOfStr(arrayOfStr []string) DefaultValueUnion {
+	typ := DefaultValueUnionTypeArrayOfStr
+
+	return DefaultValueUnion{
+		ArrayOfStr: arrayOfStr,
+		Type:       typ,
 	}
 }
 
@@ -315,6 +148,14 @@ func (u *DefaultValueUnion) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var arrayOfStr []string = []string{}
+	if err := utils.UnmarshalJSON(data, &arrayOfStr, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  DefaultValueUnionTypeArrayOfStr,
+			Value: arrayOfStr,
+		})
+	}
+
 	var defaultValue DefaultValue = DefaultValue{}
 	if err := utils.UnmarshalJSON(data, &defaultValue, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
@@ -342,6 +183,9 @@ func (u *DefaultValueUnion) UnmarshalJSON(data []byte) error {
 	case DefaultValueUnionTypeNumber:
 		u.Number = best.Value.(*float64)
 		return nil
+	case DefaultValueUnionTypeArrayOfStr:
+		u.ArrayOfStr = best.Value.([]string)
+		return nil
 	case DefaultValueUnionTypeDefaultValue:
 		u.DefaultValue = best.Value.(*DefaultValue)
 		return nil
@@ -359,6 +203,10 @@ func (u DefaultValueUnion) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.Number, "", true)
 	}
 
+	if u.ArrayOfStr != nil {
+		return utils.MarshalJSON(u.ArrayOfStr, "", true)
+	}
+
 	if u.DefaultValue != nil {
 		return utils.MarshalJSON(u.DefaultValue, "", true)
 	}
@@ -370,6 +218,8 @@ type InputElementConfig struct {
 	ApplyMode    *ApplyMode         `json:"applyMode,omitempty"`
 	DebounceMs   *float64           `json:"debounceMs,omitempty"`
 	DefaultValue *DefaultValueUnion `json:"defaultValue,omitempty"`
+	// When true, the dropdown allows multiple values; defaultValue may be a string array.
+	Multiselect *bool `json:"multiselect,omitempty"`
 }
 
 func (i InputElementConfig) MarshalJSON() ([]byte, error) {
@@ -402,4 +252,11 @@ func (i *InputElementConfig) GetDefaultValue() *DefaultValueUnion {
 		return nil
 	}
 	return i.DefaultValue
+}
+
+func (i *InputElementConfig) GetMultiselect() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.Multiselect
 }

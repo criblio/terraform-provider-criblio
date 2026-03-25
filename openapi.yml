@@ -131,57 +131,50 @@ components:
             - themes
     Certificate:
       type: object
+      required:
+        - id
+        - cert
+        - privKey
       properties:
-        ca:
-          type: string
-          description: Certificate Authority (CA) certificate in PEM format:<br/><br/>
-            Base64-encoded data enclosed by <code>-----BEGIN
-            CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code>
-            delimiters.<br/><br/> If you need to provide a chain, concatenate
-            multiple CA certificates in a single JSON string, each beginning and
-            ending with its own delimiters.
-        caPath:
-          type: string
-          description: Path to the Certificate Authority (CA) certificate file.
-        cert:
-          type: string
-          description: Certificate in PEM format:<br/><br/> Base64-encoded data enclosed
-            by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END
-            CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide
-            a chain, concatenate multiple certificates in a single JSON string,
-            each beginning and ending with its own delimiters.
-        certExpiryDate:
-          type: string
-          description: Certificate expiration date and time as an ISO-8601 UTC string.
-        certPath:
-          type: string
-          description: Path to the certificate file.
-        description:
-          type: string
-          description: Brief description of the certificate.
         id:
           type: string
-          description: Unique identifier for the certificate.
-        passphrase:
+          title: Name
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: "myUniqueCertId"
+        description:
           type: string
-          description: If the private key is encrypted, the decryption passphrase.
-        passphrasePath:
+          title: Description
+          example: "Short description of x509 certificate"
+        cert:
           type: string
-          description: Path to the passphrase file.
+          title: Certificate
+          description: Drag/drop or upload host certificate in PEM/Base64 format, or paste
+            its contents here
+          example: "LS0tLS1CR...FLS0tLS0K"
         privKey:
           type: string
-          description: Private key for the certificate in PEM format:<br/><br/>
-            Base64-encoded data enclosed by the appropriate delimiters for the
-            key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and
-            <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do
-            not include the <code>privKey</code> value.
-        privKeyPath:
+          title: Private key
+          example: "dont-share-this-key"
+          x-speakeasy-param-sensitive: true
+        passphrase:
           type: string
-          description: Path to the private key file.
-      required:
-        - cert
-        - id
-        - privKey
+          title: Passphrase
+          example: "SecurityPassphrase"
+          x-speakeasy-param-sensitive: true
+        ca:
+          type: string
+          title: CA certificate
+          description: Optionally, drag/drop or upload all CA certificates in PEM/Base64
+            format. Or, paste certificate contents here. Certificates can be
+            used for client and/or server authentication.
+          example: "LS0tLS1CR...FLS0tLS0K"
+        inUse:
+          type: array
+          title: Referenced
+          description: List of configurations that reference this certificate
+          items:
+            type: string
+          example: [ "list", "of", "configurations" ]
     FeaturesEntry:
       type: object
       properties:
@@ -6836,6 +6829,11 @@ components:
         - custom.throughputMetrics
         - custom.flowMatrix
       x-speakeasy-unknown-values: allow
+    # Shared with Search dashboard input defaultValue (timerange object). Matches openapi-new EarliestTypeSearchQuery.
+    EarliestTypeSearchQuery:
+      oneOf:
+        - type: string
+        - type: number
     InputElementConfig:
       type: object
       properties:
@@ -6853,21 +6851,24 @@ components:
           oneOf:
             - type: string
             - type: number
+            - type: array
+              items:
+                type: string
+              description: Default selection for multiselect dropdown inputs (e.g. log levels).
             - type: object
               properties:
                 earliest:
-                  oneOf:
-                    - type: string
-                    - type: number
+                  $ref: '#/components/schemas/EarliestTypeSearchQuery'
                 latest:
-                  oneOf:
-                    - type: string
-                    - type: number
+                  $ref: '#/components/schemas/EarliestTypeSearchQuery'
                 timezone:
                   type: string
               required:
                 - earliest
                 - latest
+        multiselect:
+          type: boolean
+          description: When true, the dropdown allows multiple values; defaultValue may be a string array.
     InputElementType:
       type: string
       enum:
@@ -11068,13 +11069,13 @@ components:
         prometheusAPI:
           type: string
           title: Remote Write API endpoint
-          description: 'Absolute path on which to listen for Grafana Agent''s Remote Write requests. Defaults to /api/prom/push, which will expand as: ''http://<your‑upstream‑URL>:<your‑port>/api/prom/push''. Either this field or ''Logs API endpoint'' must be configured.'
+          description: 'Absolute path on which to listen for Grafana Agent''s Remote Write requests. Defaults to /api/prom/push, which will expand as: ''http://<your‑upstream‑URL>:<your‑port>/api/prom/push''. Remote Write API endpoint, Logs API endpoint, or both must be configured.'
           pattern: ^/
           example: /api/prom/push
         lokiAPI:
           type: string
           title: Logs API endpoint
-          description: 'Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: ''http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push''. Either this field or ''Remote Write API endpoint'' must be configured.'
+          description: 'Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: ''http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push''. Remote Write API endpoint, Logs API endpoint, or both must be configured.'
           pattern: ^/
           example: /loki/api/v1/push
         prometheusAuth:
@@ -11220,11 +11221,6 @@ components:
         __template_port:
           type: string
           description: Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-      anyOf:
-        - required:
-            - prometheusAPI
-        - required:
-            - lokiAPI
     InputLoki:
       type: object
       required:
@@ -18122,13 +18118,6 @@ components:
         __template_tcpPort:
           type: string
           description: Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-      anyOf:
-        - required:
-            - host
-            - udpPort
-        - required:
-            - host
-            - tcpPort
     InputFile:
       type: object
       properties:
@@ -31448,7 +31437,9 @@ components:
       required:
         - type
     OutputGrafanaCloud:
-      type: object
+      required:
+        - id
+        - type
       properties:
         id:
           type: string
@@ -31468,7 +31459,12 @@ components:
         systemFields:
           type: array
           title: System fields
-          description: Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
+          description: Fields to automatically add to events, such as cribl_pipe. Supports
+            wildcards. These fields are added as dimensions and labels to
+            generated metrics and logs, respectively.
+          default:
+            - cribl_host
+            - cribl_wp
           items:
             type: string
           example:
@@ -31477,12 +31473,14 @@ components:
         environment:
           type: string
           title: Environment
-          description: Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+          description: Optionally, enable this config only on a specified Git branch. If
+            empty, will be enabled everywhere.
           example: main
         streamtags:
           type: array
           title: Tags
           description: Tags for filtering and grouping in @{product}
+          default: []
           items:
             type: string
           example:
@@ -31491,29 +31489,57 @@ components:
         lokiUrl:
           type: string
           title: Loki URL
-          description: The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net
+          description: The endpoint to send logs to, such as
+            https://logs-prod-us-central1.grafana.net.
+            LokiUrl, PrometheusUrl, or both are required.
           pattern: ^https?://
           example: https://logs-prod-us-central1.grafana.net
         prometheusUrl:
           type: string
           title: Prometheus URL
-          description: The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
+          description: The remote_write endpoint to send Prometheus metrics to, such as
+            https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push.
+            LokiUrl, PrometheusUrl, or both are required.
           pattern: ^https?://
           example: https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push
         message:
           type: string
           title: Logs message field
-          description: Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.
+          description: Name of the event field that contains the message to send. If not
+            specified, Stream sends a JSON representation of the whole event.
           example: _raw
         messageFormat:
-          $ref: '#/components/schemas/MessageFormatOptions'
+          type: string
+          title: Message format
+          description: Format to use when sending logs to Loki (Protobuf or JSON)
+          enum:
+            - protobuf
+            - json
+          default: protobuf
+          example: protobuf
         labels:
           type: array
           title: Logs labels
-          description: 'List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event''s __labels field. Example: ''__labels: {host: "cribl.io", level: "error"}'''
+          description: 'List of labels to send with logs. Labels define Loki streams, so
+            use static labels to avoid proliferating label value combinations
+            and streams. Can be merged and/or overridden by the events __labels
+            field. Example: "__labels: {host: "cribl.io", level: "error"}"'
           minItems: 0
           items:
-            $ref: '#/components/schemas/ItemsTypeContentConfigItemsRequestParams'
+            type: object
+            required:
+              - name
+              - value
+            properties:
+              name:
+                type: string
+                title: Name
+                default: ""
+                example: host
+              value:
+                type: string
+                title: Value
+                example: web-01
           example:
             - name: host
               value: web-01
@@ -31522,72 +31548,206 @@ components:
         metricRenameExpr:
           type: string
           title: Metrics renaming expression
-          description: JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
+          description: JavaScript expression that can be used to rename metrics. For
+            example, name.replace(/\./g, '_') will replace all '.' characters in
+            a metric's name with the supported '_' character. Use the 'name'
+            global variable to access the metric's name. You can access event
+            fields' values via __e.<fieldName>.
+          default: name.replace(/[^a-zA-Z0-9_]/g, '_')
           example: name.replace(/[^a-zA-Z0-9_]/g, '_')
         prometheusAuth:
-          $ref: '#/components/schemas/PrometheusAuthType'
+          type: object
+          properties:
+            authType:
+              type: string
+              title: Authentication type
+              enum:
+                - none
+                - token
+                - textSecret
+                - basic
+                - credentialsSecret
+              default: basic
+              example: basic
+            token:
+              type: string
+              title: Auth token
+              description: "Bearer token to include in the authorization header. In Grafana
+                Cloud, this is generally built by concatenating the username and
+                the API key, separated by a colon. Example:
+                <your-username>:<your-api-key>"
+              example: "12345:glc_abcd1234"
+            textSecret:
+              type: string
+              title: Auth token (text secret)
+              description: Select or create a stored text secret
+              example: grafana_prom_token
+            username:
+              type: string
+              title: Username
+              description: Username for authentication
+              example: 12345
+            password:
+              type: string
+              title: Password
+              description: Password (API key in Grafana Cloud domain) for authentication
+              example: glc_abcd1234
+            credentialsSecret:
+              type: string
+              title: Credentials secret
+              description: Select or create a secret that references your credentials
+              example: grafana_prom_credentials
         lokiAuth:
-          $ref: '#/components/schemas/PrometheusAuthType'
+          type: object
+          properties:
+            authType:
+              type: string
+              title: Authentication type
+              enum:
+                - none
+                - token
+                - textSecret
+                - basic
+                - credentialsSecret
+              default: basic
+              example: basic
+            token:
+              type: string
+              title: Auth token
+              description: "Bearer token to include in the authorization header. In Grafana
+                Cloud, this is generally built by concatenating the username and
+                the API key, separated by a colon. Example:
+                <your-username>:<your-api-key>"
+              example: "12345:glc_efgh5678"
+            textSecret:
+              type: string
+              title: Auth token (text secret)
+              description: Select or create a stored text secret
+              example: grafana_loki_token
+            username:
+              type: string
+              title: Username
+              description: Username for authentication
+              example: 12345
+            password:
+              type: string
+              title: Password
+              description: Password (API key in Grafana Cloud domain) for authentication
+              example: glc_efgh5678
+            credentialsSecret:
+              type: string
+              title: Credentials secret
+              description: Select or create a secret that references your credentials
+              example: grafana_loki_credentials
         concurrency:
           type: number
           title: Request concurrency
-          description: 'Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.'
+          description: "Maximum number of ongoing requests before blocking. Warning:
+            Setting this value > 1 can cause Loki and Prometheus to complain
+            about entries being delivered out of order."
+          default: 1
           minimum: 1
           maximum: 32
           example: 2
         maxPayloadSizeKB:
           type: number
           title: Body size limit (KB)
-          description: 'Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of ''Request concurrency''); this can cause Loki and Prometheus to complain about entries being delivered out of order.'
+          description: "Maximum size, in KB, of the request body. Warning: Setting this
+            too low can increase the number of ongoing requests (depending on
+            the value of 'Request concurrency'); this can cause Loki and
+            Prometheus to complain about entries being delivered out of order."
+          default: 4096
           minimum: 1024
           maximum: 10240
           example: 2048
         maxPayloadEvents:
           type: number
           title: Events-per-request limit
-          description: 'Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of ''Request concurrency''); this can cause Loki and Prometheus to complain about entries being delivered out of order.'
+          description: "Maximum number of events to include in the request body. Default
+            is 0 (unlimited). Warning: Setting this too low can increase the
+            number of ongoing requests (depending on the value of 'Request
+            concurrency'); this can cause Loki and Prometheus to complain about
+            entries being delivered out of order."
+          default: 0
           minimum: 0
           example: 1000
         rejectUnauthorized:
           type: boolean
+          default: true
           title: Validate server certs
-          description: |-
-            Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
+          description: >-
+            Reject certificates not authorized by a CA in the CA certificate
+            path or by another trusted CA (such as the system's). 
                     Enabled by default. When this setting is also present in TLS Settings (Client Side), 
                     that value will take precedence.
           example: true
         timeoutSec:
           type: number
+          default: 30
           minimum: 1
           maximum: 9007199254740991
           title: Request timeout
-          description: Amount of time, in seconds, to wait for a request to complete before canceling it
+          description: Amount of time, in seconds, to wait for a request to complete
+            before canceling it
           example: 30
         flushPeriodSec:
           type: number
+          default: 15
           title: Flush period (sec)
-          description: 'Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured ''Max record size'' and ''Max events per request''. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of ''Request concurrency''); this can cause Loki and Prometheus to complain about entries being delivered out of order.'
+          description: "Maximum time between requests. Small values could cause the
+            payload size to be smaller than the configured Maximum time between
+            requests. Small values can reduce the payload size below the
+            configured 'Max record size' and 'Max events per request'. Warning:
+            Setting this too low can increase the number of ongoing requests
+            (depending on the value of 'Request concurrency'); this can cause
+            Loki and Prometheus to complain about entries being delivered out of
+            order."
           example: 10
         extraHttpHeaders:
           type: array
           title: Extra HTTP headers
           description: Headers to add to all events
           items:
-            $ref: '#/components/schemas/ItemsTypeExtraHttpHeaders'
+            type: object
+            required:
+              - value
+            properties:
+              name:
+                type: string
+                title: Field Name
+                example: X-Request-ID
+              value:
+                type: string
+                title: Field Value
+                example: 123e4567-e89b-12d3-a456-426614174000
           example:
             - name: X-Request-ID
               value: 123e4567-e89b-12d3-a456-426614174000
         useRoundRobinDns:
           type: boolean
           title: Round-robin DNS
-          description: Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
+          description: Enable round-robin DNS lookup. When a DNS server returns multiple
+            addresses, @{product} will cycle through them in the order returned.
+            For optimal performance, consider enabling this setting for non-load
+            balanced destinations.
+          default: false
           example: true
         failedRequestLoggingMode:
-          $ref: '#/components/schemas/FailedRequestLoggingModeOptions'
+          type: string
+          title: Failed request logging mode
+          description: Data to log when a request fails. All headers are redacted by
+            default, unless listed as safe headers below.
+          enum:
+            - payload
+            - payloadAndHeaders
+            - none
+          default: none
+          example: payloadAndHeaders
         safeHeaders:
           type: array
           title: Safe headers
           description: List of headers that are safe to log in plain text
+          default: []
           items:
             type: string
           example:
@@ -31596,98 +31756,196 @@ components:
         responseRetrySettings:
           type: array
           title: Settings for failed HTTP requests
-          description: Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)
+          description: Automatically retry after unsuccessful response status codes, such
+            as 429 (Too Many Requests) or 503 (Service Unavailable)
           minItems: 0
+          default: []
           items:
-            $ref: '#/components/schemas/ItemsTypeResponseRetrySettings'
+            type: object
+            required:
+              - httpStatus
+            properties:
+              httpStatus:
+                type: number
+                title: HTTP status code
+                description: The HTTP response status code that will trigger retries
+                minimum: 100
+                maximum: 599
+                example: 429
+              initialBackoff:
+                type: number
+                title: Pre-backoff interval (ms)
+                description: How long, in milliseconds, Cribl Stream should wait before
+                  initiating backoff. Maximum interval is 600,000 ms (10
+                  minutes).
+                minimum: 0
+                maximum: 600000
+                default: 1000
+                example: 1000
+              backoffRate:
+                type: number
+                title: Backoff multiplier
+                description: Base for exponential backoff. A value of 2 (default) means Cribl
+                  Stream will retry after 2 seconds, then 4 seconds, then 8
+                  seconds, etc.
+                minimum: 1
+                maximum: 20
+                default: 2
+                example: 2
+              maxBackoff:
+                type: number
+                title: Backoff limit (ms)
+                description: The maximum backoff interval, in milliseconds, Cribl Stream should
+                  apply. Default (and minimum) is 10,000 ms (10 seconds);
+                  maximum is 180,000 ms (180 seconds).
+                minimum: 10000
+                maximum: 180000
+                default: 10000
+                example: 30000
           example:
             - httpStatus: 429
               initialBackoff: 1000
               backoffRate: 2
               maxBackoff: 30000
         timeoutRetrySettings:
-          $ref: '#/components/schemas/TimeoutRetrySettingsType'
+          type: object
+          required:
+            - timeoutRetry
+          properties:
+            timeoutRetry:
+              type: boolean
+              title: Retry timed-out HTTP requests
+              default: false
+              example: true
+            initialBackoff:
+              type: number
+              title: Pre-backoff interval (ms)
+              description: How long, in milliseconds, Cribl Stream should wait before
+                initiating backoff. Maximum interval is 600,000 ms (10 minutes).
+              minimum: 0
+              maximum: 600000
+              default: 1000
+              example: 1000
+            backoffRate:
+              type: number
+              title: Backoff multiplier
+              description: Base for exponential backoff. A value of 2 (default) means Cribl
+                Stream will retry after 2 seconds, then 4 seconds, then 8
+                seconds, etc.
+              minimum: 1
+              maximum: 20
+              default: 2
+              example: 2
+            maxBackoff:
+              type: number
+              title: Backoff limit (ms)
+              description: The maximum backoff interval, in milliseconds, Cribl Stream should
+                apply. Default (and minimum) is 10,000 ms (10 seconds); maximum
+                is 180,000 ms (180 seconds).
+              minimum: 10000
+              maximum: 180000
+              default: 10000
+              example: 30000
+          example:
+            timeoutRetry: true
+            initialBackoff: 1000
+            backoffRate: 2
+            maxBackoff: 30000
         responseHonorRetryAfterHeader:
           type: boolean
           title: Honor Retry-After header
-          description: Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
+          description: Honor any Retry-After header that specifies a delay (in seconds) no
+            longer than 180 seconds after the retry request. @{product} limits
+            the delay to 180 seconds, even if the Retry-After header specifies a
+            longer delay. When enabled, takes precedence over user-configured
+            retry options. When disabled, all Retry-After headers are ignored.
+          default: false
           example: true
         onBackpressure:
-          $ref: '#/components/schemas/BackpressureBehaviorOptions'
+          type: string
+          title: Backpressure behavior
+          description: How to handle events when all receivers are exerting backpressure
+          enum:
+            - block
+            - drop
+            - queue
+          default: block
+          example: block
         description:
           type: string
           title: Description
           example: Send logs and metrics to Grafana Cloud Loki and Prometheus
         compress:
           type: boolean
+          default: true
           title: Compress
-          description: Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.
+          description: Compress the payload body before sending. Applies only to JSON
+            payloads; the Protobuf variant for both Prometheus and Loki are
+            snappy-compressed by default.
           example: true
-        pqStrictOrdering:
-          title: Strict ordering
-          description: Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-          type: boolean
-        pqRatePerSec:
-          type: number
-          title: Drain rate limit (EPS)
-          description: Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
-          minimum: 0
-        pqMode:
-          $ref: '#/components/schemas/ModeOptions'
-        pqMaxBufferSize:
-          type: number
-          title: Buffer size limit (events - deprecated)
-          description: Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.
-          minimum: 42
-          maximum: 1000
-        pqMaxBackpressureSec:
-          type: number
-          title: Backpressure duration limit
-          description: How long (in seconds) to wait for backpressure to resolve before engaging the queue
-          minimum: 0
         pqMaxFileSize:
           type: string
           title: File size limit
-          description: The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)
+          description: The maximum size to store in each queue file before closing and
+            optionally compressing (KB, MB, etc.)
           pattern: ^\d+\s*(?:\w{2})?$
+          default: 1 MB
           example: 100 MB
         pqMaxSize:
           type: string
           title: Queue size limit
-          description: The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+          description: The maximum disk space that the queue can consume (as an average
+            per Worker Process) before queueing stops. Enter a numeral with
+            units of KB, MB, etc.
           pattern: ^\d+\s*(?:\w{2})?$
+          default: 5GB
           example: 10GB
         pqPath:
           type: string
+          default: $CRIBL_HOME/state/queues
           title: Queue file path
-          description: 'The location for the persistent queue files. To this field''s value, the system will append: /<worker-id>/<output-id>.'
+          description: "The location for the persistent queue files. To this field's
+            value, the system will append: /<worker-id>/<output-id>."
           example: /opt/cribl/state/queues
         pqCompress:
-          $ref: '#/components/schemas/CompressionOptionsPq'
-        pqOnBackpressure:
-          $ref: '#/components/schemas/QueueFullBehaviorOptions'
-        pqMaxBufferSizeBytes:
           type: string
-          title: Buffer size limit (bytes)
-          description: The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
-          pattern: ^\d+\s*(?:\w{2})?$
+          default: none
+          enum:
+            - none
+            - gzip
+          title: Compression
+          description: Codec to use to compress the persisted data
+          example: gzip
+        pqOnBackpressure:
+          type: string
+          default: block
+          enum:
+            - block
+            - drop
+          title: Queue-full behavior
+          description: How to handle events when the queue is exerting backpressure (full
+            capacity or low disk). 'Block' is the same behavior as non-PQ
+            blocking. 'Drop new data' throws away incoming data, while leaving
+            the contents of the PQ unchanged.
+          example: block
+        pqMode:
+          title: Mode
+          description: In Error mode, PQ writes events to the filesystem if the
+            Destination is unavailable. In Backpressure mode, PQ writes events
+            to the filesystem when it detects backpressure from the Destination.
+            In Always On mode, PQ always writes events to the filesystem.
+          type: string
+          default: error
+          enum:
+            - error
+            - backpressure
+            - always
+          example: backpressure
         pqControls:
           type: object
-          title: ''
+          title: ""
           example: {}
-        __template_lokiUrl:
-          type: string
-          description: Binds 'lokiUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'lokiUrl' at runtime.
-        __template_prometheusUrl:
-          type: string
-          description: Binds 'prometheusUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusUrl' at runtime.
-      anyOf:
-        - required:
-            - lokiUrl
-        - required:
-            - prometheusUrl
-      required:
-        - type
+      type: object
     OutputLoki:
       type: object
       required:
@@ -52726,7 +52984,6 @@ paths:
         - usage-groups
       summary: Create UsageGroup
       description: Create UsageGroup
-      x-speakeasy-entity-operation: SearchUsageGroup#create
       requestBody:
         description: New UsageGroup object
         required: true
@@ -52766,7 +53023,6 @@ paths:
         - usage-groups
       summary: Get UsageGroup by ID
       description: Get UsageGroup by ID
-      x-speakeasy-entity-operation: SearchUsageGroup#get
       parameters:
         - name: id
           in: path
@@ -52806,7 +53062,6 @@ paths:
         - usage-groups
       summary: Update UsageGroup
       description: Update UsageGroup
-      x-speakeasy-entity-operation: SearchUsageGroup#update
       parameters:
         - name: id
           in: path
@@ -52854,7 +53109,6 @@ paths:
         - usage-groups
       summary: Delete UsageGroup
       description: Delete UsageGroup
-      x-speakeasy-entity-operation: SearchUsageGroup#delete
       parameters:
         - name: id
           in: path

@@ -30,6 +30,7 @@ type DestinationDataSource struct {
 
 // DestinationDataSourceModel describes the data model.
 type DestinationDataSourceModel struct {
+	Environment                  types.String                          `tfsdk:"environment"`
 	GroupID                      types.String                          `tfsdk:"group_id"`
 	ID                           types.String                          `tfsdk:"id"`
 	OutputAzureBlob              *tfTypes.OutputAzureBlob              `queryParam:"inline" tfsdk:"output_azure_blob"`
@@ -103,6 +104,8 @@ type DestinationDataSourceModel struct {
 	OutputWebhook                *tfTypes.OutputWebhook                `queryParam:"inline" tfsdk:"output_webhook"`
 	OutputWizHec                 *tfTypes.OutputWizHec                 `queryParam:"inline" tfsdk:"output_wiz_hec"`
 	OutputXsiam                  *tfTypes.OutputXsiam                  `queryParam:"inline" tfsdk:"output_xsiam"`
+	Pipeline                     types.String                          `tfsdk:"pipeline"`
+	Type                         types.String                          `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -116,13 +119,17 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 		MarkdownDescription: "Destination DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"environment": schema.StringAttribute{
+				Computed:    true,
+				Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
 				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique ID to GET`,
+				Description: `Unique ID for this output`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Computed: true,
@@ -7741,579 +7748,259 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"output_grafana_cloud": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"output_grafana_cloud_grafana_cloud1": schema.SingleNestedAttribute{
+					"compress": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.`,
+					},
+					"concurrency": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+					},
+					"environment": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"extra_http_headers": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"value": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						Description: `Headers to add to all events`,
+					},
+					"failed_request_logging_mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+					},
+					"flush_period_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique ID for this output`,
+					},
+					"labels": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"value": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+						Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}"`,
+					},
+					"loki_auth": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"compress": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.`,
-							},
-							"concurrency": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"description": schema.StringAttribute{
+							"auth_type": schema.StringAttribute{
 								Computed: true,
 							},
-							"environment": schema.StringAttribute{
+							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								Description: `Select or create a secret that references your credentials`,
 							},
-							"extra_http_headers": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Computed: true,
-										},
-										"value": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								Description: `Headers to add to all events`,
-							},
-							"failed_request_logging_mode": schema.StringAttribute{
+							"password": schema.StringAttribute{
 								Computed:    true,
-								Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								Description: `Password (API key in Grafana Cloud domain) for authentication`,
 							},
-							"flush_period_sec": schema.Float64Attribute{
+							"text_secret": schema.StringAttribute{
 								Computed:    true,
-								Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								Description: `Select or create a stored text secret`,
 							},
-							"id": schema.StringAttribute{
+							"token": schema.StringAttribute{
 								Computed:    true,
-								Description: `Unique ID for this output`,
+								Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
 							},
-							"labels": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Computed: true,
-										},
-										"value": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
-							},
-							"loki_auth": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_type": schema.StringAttribute{
-										Computed: true,
-									},
-									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"password": schema.StringAttribute{
-										Computed:    true,
-										Description: `Password (API key in Grafana Cloud domain) for authentication`,
-									},
-									"text_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Computed:    true,
-										Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
-									},
-									"username": schema.StringAttribute{
-										Computed:    true,
-										Description: `Username for authentication`,
-									},
-								},
-							},
-							"loki_url": schema.StringAttribute{
+							"username": schema.StringAttribute{
 								Computed:    true,
-								Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net`,
-							},
-							"max_payload_events": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"max_payload_size_kb": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"message": schema.StringAttribute{
-								Computed:    true,
-								Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
-							},
-							"message_format": schema.StringAttribute{
-								Computed:    true,
-								Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
-							},
-							"metric_rename_expr": schema.StringAttribute{
-								Computed:    true,
-								Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
-							},
-							"on_backpressure": schema.StringAttribute{
-								Computed:    true,
-								Description: `How to handle events when all receivers are exerting backpressure`,
-							},
-							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Description: `Pipeline to process data before sending out to this output`,
-							},
-							"pq_compress": schema.StringAttribute{
-								Computed:    true,
-								Description: `Codec to use to compress the persisted data`,
-							},
-							"pq_controls": schema.SingleNestedAttribute{
-								Computed: true,
-							},
-							"pq_max_backpressure_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
-							},
-							"pq_max_buffer_size": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
-							},
-							"pq_max_buffer_size_bytes": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-							},
-							"pq_max_file_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
-							},
-							"pq_max_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-							},
-							"pq_mode": schema.StringAttribute{
-								Computed:    true,
-								Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
-							},
-							"pq_on_backpressure": schema.StringAttribute{
-								Computed:    true,
-								Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
-							},
-							"pq_path": schema.StringAttribute{
-								Computed:    true,
-								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
-							},
-							"pq_rate_per_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
-							},
-							"pq_strict_ordering": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
-							},
-							"prometheus_auth": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_type": schema.StringAttribute{
-										Computed: true,
-									},
-									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"password": schema.StringAttribute{
-										Computed:    true,
-										Description: `Password (API key in Grafana Cloud domain) for authentication`,
-									},
-									"text_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Computed:    true,
-										Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
-									},
-									"username": schema.StringAttribute{
-										Computed:    true,
-										Description: `Username for authentication`,
-									},
-								},
-							},
-							"prometheus_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push`,
-							},
-							"reject_unauthorized": schema.BoolAttribute{
-								Computed: true,
-								MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
-									`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
-									`        that value will take precedence.`,
-							},
-							"response_honor_retry_after_header": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
-							},
-							"response_retry_settings": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"backoff_rate": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
-										},
-										"http_status": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The HTTP response status code that will trigger retries`,
-										},
-										"initial_backoff": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
-										},
-										"max_backoff": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
-										},
-									},
-								},
-								Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
-							},
-							"safe_headers": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `List of headers that are safe to log in plain text`,
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
-							},
-							"system_fields": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
-							},
-							"template_loki_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `Binds 'lokiUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'lokiUrl' at runtime.`,
-							},
-							"template_prometheus_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `Binds 'prometheusUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusUrl' at runtime.`,
-							},
-							"timeout_retry_settings": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"backoff_rate": schema.Float64Attribute{
-										Computed:    true,
-										Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
-									},
-									"initial_backoff": schema.Float64Attribute{
-										Computed:    true,
-										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
-									},
-									"max_backoff": schema.Float64Attribute{
-										Computed:    true,
-										Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
-									},
-									"timeout_retry": schema.BoolAttribute{
-										Computed: true,
-									},
-								},
-							},
-							"timeout_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-							},
-							"use_round_robin_dns": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								Description: `Username for authentication`,
 							},
 						},
 					},
-					"output_grafana_cloud_grafana_cloud2": schema.SingleNestedAttribute{
+					"loki_url": schema.StringAttribute{
+						Computed:    true,
+						Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.`,
+					},
+					"max_payload_events": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+					},
+					"max_payload_size_kb": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+					},
+					"message": schema.StringAttribute{
+						Computed:    true,
+						Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
+					},
+					"message_format": schema.StringAttribute{
+						Computed:    true,
+						Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
+					},
+					"metric_rename_expr": schema.StringAttribute{
+						Computed:    true,
+						Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
+					},
+					"on_backpressure": schema.StringAttribute{
+						Computed:    true,
+						Description: `How to handle events when all receivers are exerting backpressure`,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed:    true,
+						Description: `Pipeline to process data before sending out to this output`,
+					},
+					"pq_compress": schema.StringAttribute{
+						Computed:    true,
+						Description: `Codec to use to compress the persisted data`,
+					},
+					"pq_controls": schema.SingleNestedAttribute{
+						Computed: true,
+					},
+					"pq_max_file_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
+					},
+					"pq_max_size": schema.StringAttribute{
+						Computed:    true,
+						Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+					},
+					"pq_mode": schema.StringAttribute{
+						Computed:    true,
+						Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
+					},
+					"pq_on_backpressure": schema.StringAttribute{
+						Computed:    true,
+						Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
+					},
+					"pq_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
+					},
+					"prometheus_auth": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"compress": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Compress the payload body before sending. Applies only to JSON payloads; the Protobuf variant for both Prometheus and Loki are snappy-compressed by default.`,
-							},
-							"concurrency": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of ongoing requests before blocking. Warning: Setting this value > 1 can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"description": schema.StringAttribute{
+							"auth_type": schema.StringAttribute{
 								Computed: true,
 							},
-							"environment": schema.StringAttribute{
+							"credentials_secret": schema.StringAttribute{
 								Computed:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								Description: `Select or create a secret that references your credentials`,
 							},
-							"extra_http_headers": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Computed: true,
-										},
-										"value": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								Description: `Headers to add to all events`,
-							},
-							"failed_request_logging_mode": schema.StringAttribute{
+							"password": schema.StringAttribute{
 								Computed:    true,
-								Description: `Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.`,
+								Description: `Password (API key in Grafana Cloud domain) for authentication`,
 							},
-							"flush_period_sec": schema.Float64Attribute{
+							"text_secret": schema.StringAttribute{
 								Computed:    true,
-								Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
+								Description: `Select or create a stored text secret`,
 							},
-							"id": schema.StringAttribute{
+							"token": schema.StringAttribute{
 								Computed:    true,
-								Description: `Unique ID for this output`,
+								Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
 							},
-							"labels": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Computed: true,
-										},
-										"value": schema.StringAttribute{
-											Computed: true,
-										},
-									},
-								},
-								Description: `List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the event's __labels field. Example: '__labels: {host: "cribl.io", level: "error"}'`,
-							},
-							"loki_auth": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_type": schema.StringAttribute{
-										Computed: true,
-									},
-									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"password": schema.StringAttribute{
-										Computed:    true,
-										Description: `Password (API key in Grafana Cloud domain) for authentication`,
-									},
-									"text_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Computed:    true,
-										Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
-									},
-									"username": schema.StringAttribute{
-										Computed:    true,
-										Description: `Username for authentication`,
-									},
-								},
-							},
-							"loki_url": schema.StringAttribute{
+							"username": schema.StringAttribute{
 								Computed:    true,
-								Description: `The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net`,
-							},
-							"max_payload_events": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of events to include in the request body. Default is 0 (unlimited). Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"max_payload_size_kb": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum size, in KB, of the request body. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order.`,
-							},
-							"message": schema.StringAttribute{
-								Computed:    true,
-								Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
-							},
-							"message_format": schema.StringAttribute{
-								Computed:    true,
-								Description: `Format to use when sending logs to Loki (Protobuf or JSON)`,
-							},
-							"metric_rename_expr": schema.StringAttribute{
-								Computed:    true,
-								Description: `JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.`,
-							},
-							"on_backpressure": schema.StringAttribute{
-								Computed:    true,
-								Description: `How to handle events when all receivers are exerting backpressure`,
-							},
-							"pipeline": schema.StringAttribute{
-								Computed:    true,
-								Description: `Pipeline to process data before sending out to this output`,
-							},
-							"pq_compress": schema.StringAttribute{
-								Computed:    true,
-								Description: `Codec to use to compress the persisted data`,
-							},
-							"pq_controls": schema.SingleNestedAttribute{
-								Computed: true,
-							},
-							"pq_max_backpressure_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `How long (in seconds) to wait for backpressure to resolve before engaging the queue`,
-							},
-							"pq_max_buffer_size": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use pqMaxBufferSizeBytes instead.`,
-							},
-							"pq_max_buffer_size_bytes": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-							},
-							"pq_max_file_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum size to store in each queue file before closing and optionally compressing (KB, MB, etc.)`,
-							},
-							"pq_max_size": schema.StringAttribute{
-								Computed:    true,
-								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-							},
-							"pq_mode": schema.StringAttribute{
-								Computed:    true,
-								Description: `In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.`,
-							},
-							"pq_on_backpressure": schema.StringAttribute{
-								Computed:    true,
-								Description: `How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.`,
-							},
-							"pq_path": schema.StringAttribute{
-								Computed:    true,
-								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.`,
-							},
-							"pq_rate_per_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.`,
-							},
-							"pq_strict_ordering": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.`,
-							},
-							"prometheus_auth": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"auth_type": schema.StringAttribute{
-										Computed: true,
-									},
-									"credentials_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a secret that references your credentials`,
-									},
-									"password": schema.StringAttribute{
-										Computed:    true,
-										Description: `Password (API key in Grafana Cloud domain) for authentication`,
-									},
-									"text_secret": schema.StringAttribute{
-										Computed:    true,
-										Description: `Select or create a stored text secret`,
-									},
-									"token": schema.StringAttribute{
-										Computed:    true,
-										Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
-									},
-									"username": schema.StringAttribute{
-										Computed:    true,
-										Description: `Username for authentication`,
-									},
-								},
-							},
-							"prometheus_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push`,
-							},
-							"reject_unauthorized": schema.BoolAttribute{
-								Computed: true,
-								MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
-									`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
-									`        that value will take precedence.`,
-							},
-							"response_honor_retry_after_header": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
-							},
-							"response_retry_settings": schema.ListNestedAttribute{
-								Computed: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"backoff_rate": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
-										},
-										"http_status": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The HTTP response status code that will trigger retries`,
-										},
-										"initial_backoff": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
-										},
-										"max_backoff": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
-										},
-									},
-								},
-								Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
-							},
-							"safe_headers": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `List of headers that are safe to log in plain text`,
-							},
-							"streamtags": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
-							},
-							"system_fields": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-								Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
-							},
-							"template_loki_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `Binds 'lokiUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'lokiUrl' at runtime.`,
-							},
-							"template_prometheus_url": schema.StringAttribute{
-								Computed:    true,
-								Description: `Binds 'prometheusUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusUrl' at runtime.`,
-							},
-							"timeout_retry_settings": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"backoff_rate": schema.Float64Attribute{
-										Computed:    true,
-										Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
-									},
-									"initial_backoff": schema.Float64Attribute{
-										Computed:    true,
-										Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
-									},
-									"max_backoff": schema.Float64Attribute{
-										Computed:    true,
-										Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
-									},
-									"timeout_retry": schema.BoolAttribute{
-										Computed: true,
-									},
-								},
-							},
-							"timeout_sec": schema.Float64Attribute{
-								Computed:    true,
-								Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
-							},
-							"type": schema.StringAttribute{
-								Computed: true,
-							},
-							"use_round_robin_dns": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
+								Description: `Username for authentication`,
 							},
 						},
+					},
+					"prometheus_url": schema.StringAttribute{
+						Computed:    true,
+						Description: `The remote_write endpoint to send Prometheus metrics to, such as https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push. LokiUrl, PrometheusUrl, or both are required.`,
+					},
+					"reject_unauthorized": schema.BoolAttribute{
+						Computed: true,
+						MarkdownDescription: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). ` + "\n" +
+							`        Enabled by default. When this setting is also present in TLS Settings (Client Side), ` + "\n" +
+							`        that value will take precedence.`,
+					},
+					"response_honor_retry_after_header": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.`,
+					},
+					"response_retry_settings": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"backoff_rate": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+								},
+								"http_status": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The HTTP response status code that will trigger retries`,
+								},
+								"initial_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+								},
+								"max_backoff": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+								},
+							},
+						},
+						Description: `Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable)`,
+					},
+					"safe_headers": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `List of headers that are safe to log in plain text`,
+					},
+					"streamtags": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"system_fields": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
+					},
+					"timeout_retry_settings": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"backoff_rate": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.`,
+							},
+							"initial_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).`,
+							},
+							"max_backoff": schema.Float64Attribute{
+								Computed:    true,
+								Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).`,
+							},
+							"timeout_retry": schema.BoolAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"timeout_sec": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Amount of time, in seconds, to wait for a request to complete before canceling it`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+					"use_round_robin_dns": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 				},
 			},
@@ -17466,6 +17153,13 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.`,
 					},
 				},
+			},
+			"pipeline": schema.StringAttribute{
+				Computed:    true,
+				Description: `Pipeline to process data before sending out to this output`,
+			},
+			"type": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}

@@ -8,11 +8,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -31,18 +34,14 @@ type CertificateResource struct {
 
 // CertificateResourceModel describes the resource data model.
 type CertificateResourceModel struct {
-	Ca             types.String `tfsdk:"ca"`
-	CaPath         types.String `tfsdk:"ca_path"`
-	Cert           types.String `tfsdk:"cert"`
-	CertExpiryDate types.String `tfsdk:"cert_expiry_date"`
-	CertPath       types.String `tfsdk:"cert_path"`
-	Description    types.String `tfsdk:"description"`
-	GroupID        types.String `tfsdk:"group_id"`
-	ID             types.String `tfsdk:"id"`
-	Passphrase     types.String `tfsdk:"passphrase"`
-	PassphrasePath types.String `tfsdk:"passphrase_path"`
-	PrivKey        types.String `tfsdk:"priv_key"`
-	PrivKeyPath    types.String `tfsdk:"priv_key_path"`
+	Ca          types.String   `tfsdk:"ca"`
+	Cert        types.String   `tfsdk:"cert"`
+	Description types.String   `tfsdk:"description"`
+	GroupID     types.String   `tfsdk:"group_id"`
+	ID          types.String   `tfsdk:"id"`
+	InUse       []types.String `tfsdk:"in_use"`
+	Passphrase  types.String   `tfsdk:"passphrase"`
+	PrivKey     types.String   `tfsdk:"priv_key"`
 }
 
 func (r *CertificateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,31 +55,15 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 			"ca": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Certificate Authority (CA) certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple CA certificates in a single JSON string, each beginning and ending with its own delimiters.`,
-			},
-			"ca_path": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Path to the Certificate Authority (CA) certificate file.`,
+				Description: `Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.`,
 			},
 			"cert": schema.StringAttribute{
 				Required:    true,
-				Description: `Certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple certificates in a single JSON string, each beginning and ending with its own delimiters.`,
-			},
-			"cert_expiry_date": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Certificate expiration date and time as an ISO-8601 UTC string.`,
-			},
-			"cert_path": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Path to the certificate file.`,
+				Description: `Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Brief description of the certificate.`,
+				Computed: true,
+				Optional: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
@@ -88,26 +71,25 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Unique identifier for the certificate.`,
+				Description: `Unique ID to PATCH`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+				},
+			},
+			"in_use": schema.ListAttribute{
+				Computed:    true,
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `List of configurations that reference this certificate`,
 			},
 			"passphrase": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `If the private key is encrypted, the decryption passphrase.`,
-			},
-			"passphrase_path": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Path to the passphrase file.`,
+				Computed:  true,
+				Optional:  true,
+				Sensitive: true,
 			},
 			"priv_key": schema.StringAttribute{
-				Required:    true,
-				Description: `Private key for the certificate in PEM format:<br/><br/> Base64-encoded data enclosed by the appropriate delimiters for the key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do not include the <code>privKey</code> value.`,
-			},
-			"priv_key_path": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Path to the private key file.`,
+				Required:  true,
+				Sensitive: true,
 			},
 		},
 	}

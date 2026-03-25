@@ -3,70 +3,16 @@
 package shared
 
 type Certificate struct {
-	// Certificate Authority (CA) certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple CA certificates in a single JSON string, each beginning and ending with its own delimiters.
-	Ca *string `json:"ca,omitempty"`
-	// Path to the Certificate Authority (CA) certificate file.
-	CaPath *string `json:"caPath,omitempty"`
-	// Certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple certificates in a single JSON string, each beginning and ending with its own delimiters.
-	Cert string `json:"cert"`
-	// Certificate expiration date and time as an ISO-8601 UTC string.
-	CertExpiryDate *string `json:"certExpiryDate,omitempty"`
-	// Path to the certificate file.
-	CertPath *string `json:"certPath,omitempty"`
-	// Brief description of the certificate.
+	ID          string  `json:"id"`
 	Description *string `json:"description,omitempty"`
-	// Unique identifier for the certificate.
-	ID string `json:"id"`
-	// If the private key is encrypted, the decryption passphrase.
+	// Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
+	Cert       string  `json:"cert"`
+	PrivKey    string  `json:"privKey"`
 	Passphrase *string `json:"passphrase,omitempty"`
-	// Path to the passphrase file.
-	PassphrasePath *string `json:"passphrasePath,omitempty"`
-	// Private key for the certificate in PEM format:<br/><br/> Base64-encoded data enclosed by the appropriate delimiters for the key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do not include the <code>privKey</code> value.
-	PrivKey string `json:"privKey"`
-	// Path to the private key file.
-	PrivKeyPath *string `json:"privKeyPath,omitempty"`
-}
-
-func (c *Certificate) GetCa() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Ca
-}
-
-func (c *Certificate) GetCaPath() *string {
-	if c == nil {
-		return nil
-	}
-	return c.CaPath
-}
-
-func (c *Certificate) GetCert() string {
-	if c == nil {
-		return ""
-	}
-	return c.Cert
-}
-
-func (c *Certificate) GetCertExpiryDate() *string {
-	if c == nil {
-		return nil
-	}
-	return c.CertExpiryDate
-}
-
-func (c *Certificate) GetCertPath() *string {
-	if c == nil {
-		return nil
-	}
-	return c.CertPath
-}
-
-func (c *Certificate) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
+	// Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.
+	Ca *string `json:"ca,omitempty"`
+	// List of configurations that reference this certificate
+	InUse []string `json:"inUse,omitempty"`
 }
 
 func (c *Certificate) GetID() string {
@@ -76,18 +22,18 @@ func (c *Certificate) GetID() string {
 	return c.ID
 }
 
-func (c *Certificate) GetPassphrase() *string {
+func (c *Certificate) GetDescription() *string {
 	if c == nil {
 		return nil
 	}
-	return c.Passphrase
+	return c.Description
 }
 
-func (c *Certificate) GetPassphrasePath() *string {
+func (c *Certificate) GetCert() string {
 	if c == nil {
-		return nil
+		return ""
 	}
-	return c.PassphrasePath
+	return c.Cert
 }
 
 func (c *Certificate) GetPrivKey() string {
@@ -97,9 +43,23 @@ func (c *Certificate) GetPrivKey() string {
 	return c.PrivKey
 }
 
-func (c *Certificate) GetPrivKeyPath() *string {
+func (c *Certificate) GetPassphrase() *string {
 	if c == nil {
 		return nil
 	}
-	return c.PrivKeyPath
+	return c.Passphrase
+}
+
+func (c *Certificate) GetCa() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Ca
+}
+
+func (c *Certificate) GetInUse() []string {
+	if c == nil {
+		return nil
+	}
+	return c.InUse
 }

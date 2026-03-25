@@ -180,12 +180,14 @@ Optional:
 Optional:
 
 - `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value))
+- `multiselect` (Boolean) When true, the dropdown allows multiple values; defaultValue may be a string array.
 
 <a id="nestedatt--elements--dashboard_element_input--config--default_value"></a>
 ### Nested Schema for `elements.dashboard_element_input.config.default_value`
 
 Optional:
 
+- `array_of_str` (List of String)
 - `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value))
 - `number` (Number)
 - `str` (String)

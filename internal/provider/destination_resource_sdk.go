@@ -124,6 +124,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputAzureBlob.EnableWritePageIndex = types.BoolPointerValue(resp.OutputAzureBlob.EnableWritePageIndex)
 		r.OutputAzureBlob.EndpointSuffix = types.StringPointerValue(resp.OutputAzureBlob.EndpointSuffix)
 		r.OutputAzureBlob.Environment = types.StringPointerValue(resp.OutputAzureBlob.Environment)
+		r.Environment = r.OutputAzureBlob.Environment
 		r.OutputAzureBlob.FileNameSuffix = types.StringPointerValue(resp.OutputAzureBlob.FileNameSuffix)
 		r.OutputAzureBlob.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputAzureBlob.ForceCloseOnShutdown)
 		if resp.OutputAzureBlob.Format != nil {
@@ -133,6 +134,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureBlob.HeaderLine = types.StringPointerValue(resp.OutputAzureBlob.HeaderLine)
 		r.OutputAzureBlob.ID = types.StringPointerValue(resp.OutputAzureBlob.ID)
+		r.ID = r.OutputAzureBlob.ID
 		r.OutputAzureBlob.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem := range resp.OutputAzureBlob.KeyValueMetadata {
@@ -174,6 +176,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureBlob.PartitionExpr = types.StringPointerValue(resp.OutputAzureBlob.PartitionExpr)
 		r.OutputAzureBlob.Pipeline = types.StringPointerValue(resp.OutputAzureBlob.Pipeline)
+		r.Pipeline = r.OutputAzureBlob.Pipeline
 		r.OutputAzureBlob.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputAzureBlob.RemoveEmptyDirs)
 		if resp.OutputAzureBlob.RetrySettings == nil {
 			r.OutputAzureBlob.RetrySettings = nil
@@ -204,6 +207,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputAzureBlob.TenantID = types.StringPointerValue(resp.OutputAzureBlob.TenantID)
 		r.OutputAzureBlob.TextSecret = types.StringPointerValue(resp.OutputAzureBlob.TextSecret)
 		r.OutputAzureBlob.Type = types.StringValue(string(resp.OutputAzureBlob.Type))
+		r.Type = r.OutputAzureBlob.Type
 		r.OutputAzureBlob.WriteHighWaterMark = types.Float64PointerValue(resp.OutputAzureBlob.WriteHighWaterMark)
 	}
 	if resp.OutputAzureDataExplorer != nil {
@@ -255,6 +259,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputAzureDataExplorer.EnableStatistics = types.BoolPointerValue(resp.OutputAzureDataExplorer.EnableStatistics)
 		r.OutputAzureDataExplorer.EnableWritePageIndex = types.BoolPointerValue(resp.OutputAzureDataExplorer.EnableWritePageIndex)
 		r.OutputAzureDataExplorer.Environment = types.StringPointerValue(resp.OutputAzureDataExplorer.Environment)
+		r.Environment = r.OutputAzureDataExplorer.Environment
 		r.OutputAzureDataExplorer.ExtentTags = []tfTypes.ExtentTag{}
 
 		for _, extentTagsItem := range resp.OutputAzureDataExplorer.ExtentTags {
@@ -278,6 +283,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputAzureDataExplorer.Format = types.StringNull()
 		}
 		r.OutputAzureDataExplorer.ID = types.StringPointerValue(resp.OutputAzureDataExplorer.ID)
+		r.ID = r.OutputAzureDataExplorer.ID
 		r.OutputAzureDataExplorer.IngestIfNotExists = []tfTypes.IngestIfNotExist{}
 
 		for _, ingestIfNotExistsItem := range resp.OutputAzureDataExplorer.IngestIfNotExists {
@@ -341,6 +347,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputAzureDataExplorer.ParquetVersion = types.StringNull()
 		}
 		r.OutputAzureDataExplorer.Pipeline = types.StringPointerValue(resp.OutputAzureDataExplorer.Pipeline)
+		r.Pipeline = r.OutputAzureDataExplorer.Pipeline
 		if resp.OutputAzureDataExplorer.PqCompress != nil {
 			r.OutputAzureDataExplorer.PqCompress = types.StringValue(string(*resp.OutputAzureDataExplorer.PqCompress))
 		} else {
@@ -430,6 +437,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureDataExplorer.TimeoutSec = types.Float64PointerValue(resp.OutputAzureDataExplorer.TimeoutSec)
 		r.OutputAzureDataExplorer.Type = types.StringValue(string(resp.OutputAzureDataExplorer.Type))
+		r.Type = r.OutputAzureDataExplorer.Type
 		r.OutputAzureDataExplorer.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputAzureDataExplorer.UseRoundRobinDNS)
 		r.OutputAzureDataExplorer.ValidateDatabaseSettings = types.BoolPointerValue(resp.OutputAzureDataExplorer.ValidateDatabaseSettings)
 	}
@@ -450,6 +458,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputAzureEventhub.ConnectionTimeout = types.Float64PointerValue(resp.OutputAzureEventhub.ConnectionTimeout)
 		r.OutputAzureEventhub.Description = types.StringPointerValue(resp.OutputAzureEventhub.Description)
 		r.OutputAzureEventhub.Environment = types.StringPointerValue(resp.OutputAzureEventhub.Environment)
+		r.Environment = r.OutputAzureEventhub.Environment
 		r.OutputAzureEventhub.FlushEventCount = types.Float64PointerValue(resp.OutputAzureEventhub.FlushEventCount)
 		r.OutputAzureEventhub.FlushPeriodSec = types.Float64PointerValue(resp.OutputAzureEventhub.FlushPeriodSec)
 		if resp.OutputAzureEventhub.Format != nil {
@@ -458,6 +467,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputAzureEventhub.Format = types.StringNull()
 		}
 		r.OutputAzureEventhub.ID = types.StringPointerValue(resp.OutputAzureEventhub.ID)
+		r.ID = r.OutputAzureEventhub.ID
 		r.OutputAzureEventhub.InitialBackoff = types.Float64PointerValue(resp.OutputAzureEventhub.InitialBackoff)
 		r.OutputAzureEventhub.MaxBackOff = types.Float64PointerValue(resp.OutputAzureEventhub.MaxBackOff)
 		r.OutputAzureEventhub.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputAzureEventhub.MaxRecordSizeKB)
@@ -468,6 +478,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputAzureEventhub.OnBackpressure = types.StringNull()
 		}
 		r.OutputAzureEventhub.Pipeline = types.StringPointerValue(resp.OutputAzureEventhub.Pipeline)
+		r.Pipeline = r.OutputAzureEventhub.Pipeline
 		if resp.OutputAzureEventhub.PqCompress != nil {
 			r.OutputAzureEventhub.PqCompress = types.StringValue(string(*resp.OutputAzureEventhub.PqCompress))
 		} else {
@@ -553,6 +564,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureEventhub.Topic = types.StringValue(resp.OutputAzureEventhub.Topic)
 		r.OutputAzureEventhub.Type = types.StringValue(string(resp.OutputAzureEventhub.Type))
+		r.Type = r.OutputAzureEventhub.Type
 	}
 	if resp.OutputAzureLogs != nil {
 		r.OutputAzureLogs = &tfTypes.OutputAzureLogs{}
@@ -568,6 +580,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputAzureLogs.Concurrency = types.Float64PointerValue(resp.OutputAzureLogs.Concurrency)
 		r.OutputAzureLogs.Description = types.StringPointerValue(resp.OutputAzureLogs.Description)
 		r.OutputAzureLogs.Environment = types.StringPointerValue(resp.OutputAzureLogs.Environment)
+		r.Environment = r.OutputAzureLogs.Environment
 		r.OutputAzureLogs.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem := range resp.OutputAzureLogs.ExtraHTTPHeaders {
@@ -585,6 +598,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureLogs.FlushPeriodSec = types.Float64PointerValue(resp.OutputAzureLogs.FlushPeriodSec)
 		r.OutputAzureLogs.ID = types.StringPointerValue(resp.OutputAzureLogs.ID)
+		r.ID = r.OutputAzureLogs.ID
 		r.OutputAzureLogs.KeypairSecret = types.StringPointerValue(resp.OutputAzureLogs.KeypairSecret)
 		r.OutputAzureLogs.LogType = types.StringValue(resp.OutputAzureLogs.LogType)
 		r.OutputAzureLogs.MaxPayloadEvents = types.Float64PointerValue(resp.OutputAzureLogs.MaxPayloadEvents)
@@ -595,6 +609,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputAzureLogs.OnBackpressure = types.StringNull()
 		}
 		r.OutputAzureLogs.Pipeline = types.StringPointerValue(resp.OutputAzureLogs.Pipeline)
+		r.Pipeline = r.OutputAzureLogs.Pipeline
 		if resp.OutputAzureLogs.PqCompress != nil {
 			r.OutputAzureLogs.PqCompress = types.StringValue(string(*resp.OutputAzureLogs.PqCompress))
 		} else {
@@ -661,6 +676,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputAzureLogs.TimeoutSec = types.Float64PointerValue(resp.OutputAzureLogs.TimeoutSec)
 		r.OutputAzureLogs.Type = types.StringValue(string(resp.OutputAzureLogs.Type))
+		r.Type = r.OutputAzureLogs.Type
 		r.OutputAzureLogs.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputAzureLogs.UseRoundRobinDNS)
 		r.OutputAzureLogs.WorkspaceID = types.StringPointerValue(resp.OutputAzureLogs.WorkspaceID)
 		r.OutputAzureLogs.WorkspaceKey = types.StringPointerValue(resp.OutputAzureLogs.WorkspaceKey)
@@ -691,6 +707,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputChronicle.Description = types.StringPointerValue(resp.OutputChronicle.Description)
 		r.OutputChronicle.Endpoint = types.StringPointerValue(resp.OutputChronicle.Endpoint)
 		r.OutputChronicle.Environment = types.StringPointerValue(resp.OutputChronicle.Environment)
+		r.Environment = r.OutputChronicle.Environment
 		r.OutputChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem1 := range resp.OutputChronicle.ExtraHTTPHeaders {
@@ -710,6 +727,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputChronicle.GcpInstance = types.StringValue(resp.OutputChronicle.GcpInstance)
 		r.OutputChronicle.GcpProjectID = types.StringValue(resp.OutputChronicle.GcpProjectID)
 		r.OutputChronicle.ID = types.StringPointerValue(resp.OutputChronicle.ID)
+		r.ID = r.OutputChronicle.ID
 		r.OutputChronicle.IngestionMethod = types.StringPointerValue(resp.OutputChronicle.IngestionMethod)
 		r.OutputChronicle.LogTextField = types.StringPointerValue(resp.OutputChronicle.LogTextField)
 		r.OutputChronicle.LogType = types.StringValue(resp.OutputChronicle.LogType)
@@ -722,6 +740,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputChronicle.OnBackpressure = types.StringNull()
 		}
 		r.OutputChronicle.Pipeline = types.StringPointerValue(resp.OutputChronicle.Pipeline)
+		r.Pipeline = r.OutputChronicle.Pipeline
 		if resp.OutputChronicle.PqCompress != nil {
 			r.OutputChronicle.PqCompress = types.StringValue(string(*resp.OutputChronicle.PqCompress))
 		} else {
@@ -791,6 +810,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputChronicle.TimeoutSec = types.Float64PointerValue(resp.OutputChronicle.TimeoutSec)
 		r.OutputChronicle.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputChronicle.TotalMemoryLimitKB)
 		r.OutputChronicle.Type = types.StringValue(string(resp.OutputChronicle.Type))
+		r.Type = r.OutputChronicle.Type
 		r.OutputChronicle.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputChronicle.UseRoundRobinDNS)
 	}
 	if resp.OutputClickHouse != nil {
@@ -829,6 +849,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputClickHouse.Description = types.StringPointerValue(resp.OutputClickHouse.Description)
 		r.OutputClickHouse.DumpFormatErrorsToDisk = types.BoolPointerValue(resp.OutputClickHouse.DumpFormatErrorsToDisk)
 		r.OutputClickHouse.Environment = types.StringPointerValue(resp.OutputClickHouse.Environment)
+		r.Environment = r.OutputClickHouse.Environment
 		r.OutputClickHouse.ExcludeMappingFields = make([]types.String, 0, len(resp.OutputClickHouse.ExcludeMappingFields))
 		for _, v := range resp.OutputClickHouse.ExcludeMappingFields {
 			r.OutputClickHouse.ExcludeMappingFields = append(r.OutputClickHouse.ExcludeMappingFields, types.StringValue(v))
@@ -855,6 +876,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.Format = types.StringNull()
 		}
 		r.OutputClickHouse.ID = types.StringPointerValue(resp.OutputClickHouse.ID)
+		r.ID = r.OutputClickHouse.ID
 		if resp.OutputClickHouse.LoginURL == nil {
 			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedNull()
 		} else {
@@ -915,6 +937,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputClickHouse.Password = types.StringPointerValue(resp.OutputClickHouse.Password)
 		r.OutputClickHouse.Pipeline = types.StringPointerValue(resp.OutputClickHouse.Pipeline)
+		r.Pipeline = r.OutputClickHouse.Pipeline
 		if resp.OutputClickHouse.PqCompress != nil {
 			r.OutputClickHouse.PqCompress = types.StringValue(string(*resp.OutputClickHouse.PqCompress))
 		} else {
@@ -1040,6 +1063,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
 		}
 		r.OutputClickHouse.Type = types.StringValue(string(resp.OutputClickHouse.Type))
+		r.Type = r.OutputClickHouse.Type
 		r.OutputClickHouse.URL = types.StringValue(resp.OutputClickHouse.URL)
 		r.OutputClickHouse.Username = types.StringPointerValue(resp.OutputClickHouse.Username)
 		r.OutputClickHouse.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputClickHouse.UseRoundRobinDNS)
@@ -1087,6 +1111,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.EnableWritePageIndex = types.BoolPointerValue(resp.OutputCloudflareR2.EnableWritePageIndex)
 		r.OutputCloudflareR2.Endpoint = types.StringValue(resp.OutputCloudflareR2.Endpoint)
 		r.OutputCloudflareR2.Environment = types.StringPointerValue(resp.OutputCloudflareR2.Environment)
+		r.Environment = r.OutputCloudflareR2.Environment
 		r.OutputCloudflareR2.FileNameSuffix = types.StringPointerValue(resp.OutputCloudflareR2.FileNameSuffix)
 		r.OutputCloudflareR2.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputCloudflareR2.ForceCloseOnShutdown)
 		if resp.OutputCloudflareR2.Format != nil {
@@ -1096,6 +1121,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCloudflareR2.HeaderLine = types.StringPointerValue(resp.OutputCloudflareR2.HeaderLine)
 		r.OutputCloudflareR2.ID = types.StringPointerValue(resp.OutputCloudflareR2.ID)
+		r.ID = r.OutputCloudflareR2.ID
 		r.OutputCloudflareR2.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem2 := range resp.OutputCloudflareR2.KeyValueMetadata {
@@ -1143,6 +1169,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCloudflareR2.PartitionExpr = types.StringPointerValue(resp.OutputCloudflareR2.PartitionExpr)
 		r.OutputCloudflareR2.Pipeline = types.StringPointerValue(resp.OutputCloudflareR2.Pipeline)
+		r.Pipeline = r.OutputCloudflareR2.Pipeline
 		if resp.OutputCloudflareR2.Region == nil {
 			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedNull()
 		} else {
@@ -1188,6 +1215,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCloudflareR2.SystemFields = append(r.OutputCloudflareR2.SystemFields, types.StringValue(v))
 		}
 		r.OutputCloudflareR2.Type = types.StringValue(string(resp.OutputCloudflareR2.Type))
+		r.Type = r.OutputCloudflareR2.Type
 		r.OutputCloudflareR2.VerifyPermissions = types.BoolPointerValue(resp.OutputCloudflareR2.VerifyPermissions)
 		r.OutputCloudflareR2.WriteHighWaterMark = types.Float64PointerValue(resp.OutputCloudflareR2.WriteHighWaterMark)
 	}
@@ -1213,8 +1241,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudwatch.EnableAssumeRole = types.BoolPointerValue(resp.OutputCloudwatch.EnableAssumeRole)
 		r.OutputCloudwatch.Endpoint = types.StringPointerValue(resp.OutputCloudwatch.Endpoint)
 		r.OutputCloudwatch.Environment = types.StringPointerValue(resp.OutputCloudwatch.Environment)
+		r.Environment = r.OutputCloudwatch.Environment
 		r.OutputCloudwatch.FlushPeriodSec = types.Float64PointerValue(resp.OutputCloudwatch.FlushPeriodSec)
 		r.OutputCloudwatch.ID = types.StringPointerValue(resp.OutputCloudwatch.ID)
+		r.ID = r.OutputCloudwatch.ID
 		r.OutputCloudwatch.LogGroupName = types.StringValue(resp.OutputCloudwatch.LogGroupName)
 		r.OutputCloudwatch.LogStreamName = types.StringValue(resp.OutputCloudwatch.LogStreamName)
 		r.OutputCloudwatch.MaxQueueSize = types.Float64PointerValue(resp.OutputCloudwatch.MaxQueueSize)
@@ -1225,6 +1255,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCloudwatch.OnBackpressure = types.StringNull()
 		}
 		r.OutputCloudwatch.Pipeline = types.StringPointerValue(resp.OutputCloudwatch.Pipeline)
+		r.Pipeline = r.OutputCloudwatch.Pipeline
 		if resp.OutputCloudwatch.PqCompress != nil {
 			r.OutputCloudwatch.PqCompress = types.StringValue(string(*resp.OutputCloudwatch.PqCompress))
 		} else {
@@ -1265,6 +1296,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCloudwatch.SystemFields = append(r.OutputCloudwatch.SystemFields, types.StringValue(v))
 		}
 		r.OutputCloudwatch.Type = types.StringValue(string(resp.OutputCloudwatch.Type))
+		r.Type = r.OutputCloudwatch.Type
 	}
 	if resp.OutputConfluentCloud != nil {
 		r.OutputConfluentCloud = &tfTypes.OutputConfluentCloud{}
@@ -1288,6 +1320,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputConfluentCloud.ConnectionTimeout = types.Float64PointerValue(resp.OutputConfluentCloud.ConnectionTimeout)
 		r.OutputConfluentCloud.Description = types.StringPointerValue(resp.OutputConfluentCloud.Description)
 		r.OutputConfluentCloud.Environment = types.StringPointerValue(resp.OutputConfluentCloud.Environment)
+		r.Environment = r.OutputConfluentCloud.Environment
 		r.OutputConfluentCloud.FlushEventCount = types.Float64PointerValue(resp.OutputConfluentCloud.FlushEventCount)
 		r.OutputConfluentCloud.FlushPeriodSec = types.Float64PointerValue(resp.OutputConfluentCloud.FlushPeriodSec)
 		if resp.OutputConfluentCloud.Format != nil {
@@ -1296,6 +1329,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputConfluentCloud.Format = types.StringNull()
 		}
 		r.OutputConfluentCloud.ID = types.StringPointerValue(resp.OutputConfluentCloud.ID)
+		r.ID = r.OutputConfluentCloud.ID
 		r.OutputConfluentCloud.InitialBackoff = types.Float64PointerValue(resp.OutputConfluentCloud.InitialBackoff)
 		if resp.OutputConfluentCloud.KafkaSchemaRegistry == nil {
 			r.OutputConfluentCloud.KafkaSchemaRegistry = nil
@@ -1348,6 +1382,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputConfluentCloud.OnBackpressure = types.StringNull()
 		}
 		r.OutputConfluentCloud.Pipeline = types.StringPointerValue(resp.OutputConfluentCloud.Pipeline)
+		r.Pipeline = r.OutputConfluentCloud.Pipeline
 		if resp.OutputConfluentCloud.PqCompress != nil {
 			r.OutputConfluentCloud.PqCompress = types.StringValue(string(*resp.OutputConfluentCloud.PqCompress))
 		} else {
@@ -1460,6 +1495,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputConfluentCloud.Topic = types.StringValue(resp.OutputConfluentCloud.Topic)
 		r.OutputConfluentCloud.Type = types.StringValue(string(resp.OutputConfluentCloud.Type))
+		r.Type = r.OutputConfluentCloud.Type
 	}
 	if resp.OutputCriblHTTP != nil {
 		r.OutputCriblHTTP = &tfTypes.OutputCriblHTTP{}
@@ -1484,6 +1520,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCriblHTTP.Description = types.StringPointerValue(resp.OutputCriblHTTP.Description)
 		r.OutputCriblHTTP.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.DNSResolvePeriodSec)
 		r.OutputCriblHTTP.Environment = types.StringPointerValue(resp.OutputCriblHTTP.Environment)
+		r.Environment = r.OutputCriblHTTP.Environment
 		r.OutputCriblHTTP.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblHTTP.ExcludeFields))
 		for _, v := range resp.OutputCriblHTTP.ExcludeFields {
 			r.OutputCriblHTTP.ExcludeFields = append(r.OutputCriblHTTP.ExcludeFields, types.StringValue(v))
@@ -1506,6 +1543,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblHTTP.FlushPeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.FlushPeriodSec)
 		r.OutputCriblHTTP.ID = types.StringPointerValue(resp.OutputCriblHTTP.ID)
+		r.ID = r.OutputCriblHTTP.ID
 		r.OutputCriblHTTP.LoadBalanced = types.BoolPointerValue(resp.OutputCriblHTTP.LoadBalanced)
 		r.OutputCriblHTTP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblHTTP.LoadBalanceStatsPeriodSec)
 		r.OutputCriblHTTP.MaxPayloadEvents = types.Float64PointerValue(resp.OutputCriblHTTP.MaxPayloadEvents)
@@ -1516,6 +1554,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblHTTP.OnBackpressure = types.StringNull()
 		}
 		r.OutputCriblHTTP.Pipeline = types.StringPointerValue(resp.OutputCriblHTTP.Pipeline)
+		r.Pipeline = r.OutputCriblHTTP.Pipeline
 		if resp.OutputCriblHTTP.PqCompress != nil {
 			r.OutputCriblHTTP.PqCompress = types.StringValue(string(*resp.OutputCriblHTTP.PqCompress))
 		} else {
@@ -1606,6 +1645,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblHTTP.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblHTTP.TokenTTLMinutes)
 		r.OutputCriblHTTP.Type = types.StringValue(string(resp.OutputCriblHTTP.Type))
+		r.Type = r.OutputCriblHTTP.Type
 		r.OutputCriblHTTP.URL = types.StringPointerValue(resp.OutputCriblHTTP.URL)
 		r.OutputCriblHTTP.Urls = []tfTypes.ItemsTypeUrls{}
 
@@ -1649,6 +1689,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCriblLake.EnableAssumeRole = types.BoolPointerValue(resp.OutputCriblLake.EnableAssumeRole)
 		r.OutputCriblLake.Endpoint = types.StringPointerValue(resp.OutputCriblLake.Endpoint)
 		r.OutputCriblLake.Environment = types.StringPointerValue(resp.OutputCriblLake.Environment)
+		r.Environment = r.OutputCriblLake.Environment
 		r.OutputCriblLake.FileNameSuffix = types.StringPointerValue(resp.OutputCriblLake.FileNameSuffix)
 		r.OutputCriblLake.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputCriblLake.ForceCloseOnShutdown)
 		if resp.OutputCriblLake.Format != nil {
@@ -1658,6 +1699,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblLake.HeaderLine = types.StringPointerValue(resp.OutputCriblLake.HeaderLine)
 		r.OutputCriblLake.ID = types.StringPointerValue(resp.OutputCriblLake.ID)
+		r.ID = r.OutputCriblLake.ID
 		r.OutputCriblLake.KmsKeyID = types.StringPointerValue(resp.OutputCriblLake.KmsKeyID)
 		r.OutputCriblLake.MaxClosingFilesToBackpressure = types.Float64PointerValue(resp.OutputCriblLake.MaxClosingFilesToBackpressure)
 		r.OutputCriblLake.MaxConcurrentFileParts = types.Float64PointerValue(resp.OutputCriblLake.MaxConcurrentFileParts)
@@ -1682,6 +1724,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblLake.OnDiskFullBackpressure = types.StringNull()
 		}
 		r.OutputCriblLake.Pipeline = types.StringPointerValue(resp.OutputCriblLake.Pipeline)
+		r.Pipeline = r.OutputCriblLake.Pipeline
 		r.OutputCriblLake.Region = types.StringPointerValue(resp.OutputCriblLake.Region)
 		r.OutputCriblLake.RejectUnauthorized = types.BoolPointerValue(resp.OutputCriblLake.RejectUnauthorized)
 		r.OutputCriblLake.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputCriblLake.RemoveEmptyDirs)
@@ -1721,6 +1764,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblLake.SystemFields = append(r.OutputCriblLake.SystemFields, types.StringValue(v))
 		}
 		r.OutputCriblLake.Type = types.StringValue(string(resp.OutputCriblLake.Type))
+		r.Type = r.OutputCriblLake.Type
 		r.OutputCriblLake.VerifyPermissions = types.BoolPointerValue(resp.OutputCriblLake.VerifyPermissions)
 		r.OutputCriblLake.WriteHighWaterMark = types.Float64PointerValue(resp.OutputCriblLake.WriteHighWaterMark)
 	}
@@ -1747,6 +1791,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCriblSearchEngine.Description = types.StringPointerValue(resp.OutputCriblSearchEngine.Description)
 		r.OutputCriblSearchEngine.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.DNSResolvePeriodSec)
 		r.OutputCriblSearchEngine.Environment = types.StringPointerValue(resp.OutputCriblSearchEngine.Environment)
+		r.Environment = r.OutputCriblSearchEngine.Environment
 		r.OutputCriblSearchEngine.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblSearchEngine.ExcludeFields))
 		for _, v := range resp.OutputCriblSearchEngine.ExcludeFields {
 			r.OutputCriblSearchEngine.ExcludeFields = append(r.OutputCriblSearchEngine.ExcludeFields, types.StringValue(v))
@@ -1769,6 +1814,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblSearchEngine.FlushPeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.FlushPeriodSec)
 		r.OutputCriblSearchEngine.ID = types.StringPointerValue(resp.OutputCriblSearchEngine.ID)
+		r.ID = r.OutputCriblSearchEngine.ID
 		r.OutputCriblSearchEngine.LoadBalanced = types.BoolPointerValue(resp.OutputCriblSearchEngine.LoadBalanced)
 		r.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblSearchEngine.LoadBalanceStatsPeriodSec)
 		r.OutputCriblSearchEngine.MaxPayloadEvents = types.Float64PointerValue(resp.OutputCriblSearchEngine.MaxPayloadEvents)
@@ -1779,6 +1825,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblSearchEngine.OnBackpressure = types.StringNull()
 		}
 		r.OutputCriblSearchEngine.Pipeline = types.StringPointerValue(resp.OutputCriblSearchEngine.Pipeline)
+		r.Pipeline = r.OutputCriblSearchEngine.Pipeline
 		if resp.OutputCriblSearchEngine.PqCompress != nil {
 			r.OutputCriblSearchEngine.PqCompress = types.StringValue(string(*resp.OutputCriblSearchEngine.PqCompress))
 		} else {
@@ -1869,6 +1916,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblSearchEngine.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblSearchEngine.TokenTTLMinutes)
 		r.OutputCriblSearchEngine.Type = types.StringValue(string(resp.OutputCriblSearchEngine.Type))
+		r.Type = r.OutputCriblSearchEngine.Type
 		r.OutputCriblSearchEngine.URL = types.StringPointerValue(resp.OutputCriblSearchEngine.URL)
 		r.OutputCriblSearchEngine.Urls = []tfTypes.ItemsTypeUrls{}
 
@@ -1907,6 +1955,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCriblTCP.Description = types.StringPointerValue(resp.OutputCriblTCP.Description)
 		r.OutputCriblTCP.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputCriblTCP.DNSResolvePeriodSec)
 		r.OutputCriblTCP.Environment = types.StringPointerValue(resp.OutputCriblTCP.Environment)
+		r.Environment = r.OutputCriblTCP.Environment
 		r.OutputCriblTCP.ExcludeFields = make([]types.String, 0, len(resp.OutputCriblTCP.ExcludeFields))
 		for _, v := range resp.OutputCriblTCP.ExcludeFields {
 			r.OutputCriblTCP.ExcludeFields = append(r.OutputCriblTCP.ExcludeFields, types.StringValue(v))
@@ -1933,6 +1982,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblTCP.Hosts = append(r.OutputCriblTCP.Hosts, hosts)
 		}
 		r.OutputCriblTCP.ID = types.StringPointerValue(resp.OutputCriblTCP.ID)
+		r.ID = r.OutputCriblTCP.ID
 		r.OutputCriblTCP.LoadBalanced = types.BoolPointerValue(resp.OutputCriblTCP.LoadBalanced)
 		r.OutputCriblTCP.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputCriblTCP.LoadBalanceStatsPeriodSec)
 		r.OutputCriblTCP.LogFailedRequests = types.BoolPointerValue(resp.OutputCriblTCP.LogFailedRequests)
@@ -1943,6 +1993,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCriblTCP.OnBackpressure = types.StringNull()
 		}
 		r.OutputCriblTCP.Pipeline = types.StringPointerValue(resp.OutputCriblTCP.Pipeline)
+		r.Pipeline = r.OutputCriblTCP.Pipeline
 		r.OutputCriblTCP.Port = types.Float64PointerValue(resp.OutputCriblTCP.Port)
 		if resp.OutputCriblTCP.PqCompress != nil {
 			r.OutputCriblTCP.PqCompress = types.StringValue(string(*resp.OutputCriblTCP.PqCompress))
@@ -2006,6 +2057,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputCriblTCP.TokenTTLMinutes = types.Float64PointerValue(resp.OutputCriblTCP.TokenTTLMinutes)
 		r.OutputCriblTCP.Type = types.StringValue(string(resp.OutputCriblTCP.Type))
+		r.Type = r.OutputCriblTCP.Type
 		r.OutputCriblTCP.WriteTimeout = types.Float64PointerValue(resp.OutputCriblTCP.WriteTimeout)
 	}
 	if resp.OutputCrowdstrikeNextGenSiem != nil {
@@ -2020,6 +2072,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCrowdstrikeNextGenSiem.Concurrency = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.Concurrency)
 		r.OutputCrowdstrikeNextGenSiem.Description = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Description)
 		r.OutputCrowdstrikeNextGenSiem.Environment = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Environment)
+		r.Environment = r.OutputCrowdstrikeNextGenSiem.Environment
 		r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem5 := range resp.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
@@ -2038,6 +2091,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.FlushPeriodSec)
 		r.OutputCrowdstrikeNextGenSiem.Format = types.StringValue(string(resp.OutputCrowdstrikeNextGenSiem.Format))
 		r.OutputCrowdstrikeNextGenSiem.ID = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.ID)
+		r.ID = r.OutputCrowdstrikeNextGenSiem.ID
 		r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents)
 		r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB)
 		if resp.OutputCrowdstrikeNextGenSiem.OnBackpressure != nil {
@@ -2046,6 +2100,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputCrowdstrikeNextGenSiem.OnBackpressure = types.StringNull()
 		}
 		r.OutputCrowdstrikeNextGenSiem.Pipeline = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Pipeline)
+		r.Pipeline = r.OutputCrowdstrikeNextGenSiem.Pipeline
 		if resp.OutputCrowdstrikeNextGenSiem.PqCompress != nil {
 			r.OutputCrowdstrikeNextGenSiem.PqCompress = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.PqCompress))
 		} else {
@@ -2113,6 +2168,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCrowdstrikeNextGenSiem.TimeoutSec = types.Float64PointerValue(resp.OutputCrowdstrikeNextGenSiem.TimeoutSec)
 		r.OutputCrowdstrikeNextGenSiem.Token = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.Token)
 		r.OutputCrowdstrikeNextGenSiem.Type = types.StringValue(string(resp.OutputCrowdstrikeNextGenSiem.Type))
+		r.Type = r.OutputCrowdstrikeNextGenSiem.Type
 		r.OutputCrowdstrikeNextGenSiem.URL = types.StringValue(resp.OutputCrowdstrikeNextGenSiem.URL)
 		r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS)
 	}
@@ -2145,6 +2201,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDatabricks.EnableStatistics = types.BoolPointerValue(resp.OutputDatabricks.EnableStatistics)
 		r.OutputDatabricks.EnableWritePageIndex = types.BoolPointerValue(resp.OutputDatabricks.EnableWritePageIndex)
 		r.OutputDatabricks.Environment = types.StringPointerValue(resp.OutputDatabricks.Environment)
+		r.Environment = r.OutputDatabricks.Environment
 		r.OutputDatabricks.EventsVolumeName = types.StringValue(resp.OutputDatabricks.EventsVolumeName)
 		r.OutputDatabricks.FileNameSuffix = types.StringPointerValue(resp.OutputDatabricks.FileNameSuffix)
 		r.OutputDatabricks.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputDatabricks.ForceCloseOnShutdown)
@@ -2155,6 +2212,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDatabricks.HeaderLine = types.StringPointerValue(resp.OutputDatabricks.HeaderLine)
 		r.OutputDatabricks.ID = types.StringPointerValue(resp.OutputDatabricks.ID)
+		r.ID = r.OutputDatabricks.ID
 		r.OutputDatabricks.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem3 := range resp.OutputDatabricks.KeyValueMetadata {
@@ -2195,6 +2253,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDatabricks.PartitionExpr = types.StringPointerValue(resp.OutputDatabricks.PartitionExpr)
 		r.OutputDatabricks.Pipeline = types.StringPointerValue(resp.OutputDatabricks.Pipeline)
+		r.Pipeline = r.OutputDatabricks.Pipeline
 		r.OutputDatabricks.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputDatabricks.RemoveEmptyDirs)
 		if resp.OutputDatabricks.RetrySettings == nil {
 			r.OutputDatabricks.RetrySettings = nil
@@ -2220,6 +2279,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDatabricks.TimeoutSec = types.Int64PointerValue(resp.OutputDatabricks.TimeoutSec)
 		r.OutputDatabricks.Type = types.StringValue(string(resp.OutputDatabricks.Type))
+		r.Type = r.OutputDatabricks.Type
 		r.OutputDatabricks.WorkspaceID = types.StringValue(resp.OutputDatabricks.WorkspaceID)
 		r.OutputDatabricks.WriteHighWaterMark = types.Float64PointerValue(resp.OutputDatabricks.WriteHighWaterMark)
 	}
@@ -2243,6 +2303,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDatadog.CustomURL = types.StringPointerValue(resp.OutputDatadog.CustomURL)
 		r.OutputDatadog.Description = types.StringPointerValue(resp.OutputDatadog.Description)
 		r.OutputDatadog.Environment = types.StringPointerValue(resp.OutputDatadog.Environment)
+		r.Environment = r.OutputDatadog.Environment
 		r.OutputDatadog.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem6 := range resp.OutputDatadog.ExtraHTTPHeaders {
@@ -2261,6 +2322,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDatadog.FlushPeriodSec = types.Float64PointerValue(resp.OutputDatadog.FlushPeriodSec)
 		r.OutputDatadog.Host = types.StringPointerValue(resp.OutputDatadog.Host)
 		r.OutputDatadog.ID = types.StringPointerValue(resp.OutputDatadog.ID)
+		r.ID = r.OutputDatadog.ID
 		r.OutputDatadog.MaxPayloadEvents = types.Float64PointerValue(resp.OutputDatadog.MaxPayloadEvents)
 		r.OutputDatadog.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDatadog.MaxPayloadSizeKB)
 		r.OutputDatadog.Message = types.StringPointerValue(resp.OutputDatadog.Message)
@@ -2270,6 +2332,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDatadog.OnBackpressure = types.StringNull()
 		}
 		r.OutputDatadog.Pipeline = types.StringPointerValue(resp.OutputDatadog.Pipeline)
+		r.Pipeline = r.OutputDatadog.Pipeline
 		if resp.OutputDatadog.PqCompress != nil {
 			r.OutputDatadog.PqCompress = types.StringValue(string(*resp.OutputDatadog.PqCompress))
 		} else {
@@ -2354,6 +2417,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDatadog.TimeoutSec = types.Float64PointerValue(resp.OutputDatadog.TimeoutSec)
 		r.OutputDatadog.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDatadog.TotalMemoryLimitKB)
 		r.OutputDatadog.Type = types.StringValue(string(resp.OutputDatadog.Type))
+		r.Type = r.OutputDatadog.Type
 		r.OutputDatadog.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDatadog.UseRoundRobinDNS)
 	}
 	if resp.OutputDataset != nil {
@@ -2375,6 +2439,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDataset.Description = types.StringPointerValue(resp.OutputDataset.Description)
 		r.OutputDataset.Environment = types.StringPointerValue(resp.OutputDataset.Environment)
+		r.Environment = r.OutputDataset.Environment
 		r.OutputDataset.ExcludeFields = make([]types.String, 0, len(resp.OutputDataset.ExcludeFields))
 		for _, v := range resp.OutputDataset.ExcludeFields {
 			r.OutputDataset.ExcludeFields = append(r.OutputDataset.ExcludeFields, types.StringValue(v))
@@ -2396,6 +2461,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDataset.FlushPeriodSec = types.Float64PointerValue(resp.OutputDataset.FlushPeriodSec)
 		r.OutputDataset.ID = types.StringPointerValue(resp.OutputDataset.ID)
+		r.ID = r.OutputDataset.ID
 		r.OutputDataset.MaxPayloadEvents = types.Float64PointerValue(resp.OutputDataset.MaxPayloadEvents)
 		r.OutputDataset.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDataset.MaxPayloadSizeKB)
 		r.OutputDataset.MessageField = types.StringPointerValue(resp.OutputDataset.MessageField)
@@ -2405,6 +2471,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDataset.OnBackpressure = types.StringNull()
 		}
 		r.OutputDataset.Pipeline = types.StringPointerValue(resp.OutputDataset.Pipeline)
+		r.Pipeline = r.OutputDataset.Pipeline
 		if resp.OutputDataset.PqCompress != nil {
 			r.OutputDataset.PqCompress = types.StringValue(string(*resp.OutputDataset.PqCompress))
 		} else {
@@ -2479,14 +2546,18 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDataset.TimestampField = types.StringPointerValue(resp.OutputDataset.TimestampField)
 		r.OutputDataset.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDataset.TotalMemoryLimitKB)
 		r.OutputDataset.Type = types.StringValue(string(resp.OutputDataset.Type))
+		r.Type = r.OutputDataset.Type
 		r.OutputDataset.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDataset.UseRoundRobinDNS)
 	}
 	if resp.OutputDefault != nil {
 		r.OutputDefault = &tfTypes.OutputDefault{}
 		r.OutputDefault.DefaultID = types.StringPointerValue(resp.OutputDefault.DefaultID)
 		r.OutputDefault.Environment = types.StringPointerValue(resp.OutputDefault.Environment)
+		r.Environment = r.OutputDefault.Environment
 		r.OutputDefault.ID = types.StringPointerValue(resp.OutputDefault.ID)
+		r.ID = r.OutputDefault.ID
 		r.OutputDefault.Pipeline = types.StringPointerValue(resp.OutputDefault.Pipeline)
+		r.Pipeline = r.OutputDefault.Pipeline
 		r.OutputDefault.Streamtags = make([]types.String, 0, len(resp.OutputDefault.Streamtags))
 		for _, v := range resp.OutputDefault.Streamtags {
 			r.OutputDefault.Streamtags = append(r.OutputDefault.Streamtags, types.StringValue(v))
@@ -2496,12 +2567,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDefault.SystemFields = append(r.OutputDefault.SystemFields, types.StringValue(v))
 		}
 		r.OutputDefault.Type = types.StringValue(string(resp.OutputDefault.Type))
+		r.Type = r.OutputDefault.Type
 	}
 	if resp.OutputDevnull != nil {
 		r.OutputDevnull = &tfTypes.OutputDevnull{}
 		r.OutputDevnull.Environment = types.StringPointerValue(resp.OutputDevnull.Environment)
+		r.Environment = r.OutputDevnull.Environment
 		r.OutputDevnull.ID = types.StringPointerValue(resp.OutputDevnull.ID)
+		r.ID = r.OutputDevnull.ID
 		r.OutputDevnull.Pipeline = types.StringPointerValue(resp.OutputDevnull.Pipeline)
+		r.Pipeline = r.OutputDevnull.Pipeline
 		r.OutputDevnull.Streamtags = make([]types.String, 0, len(resp.OutputDevnull.Streamtags))
 		for _, v := range resp.OutputDevnull.Streamtags {
 			r.OutputDevnull.Streamtags = append(r.OutputDevnull.Streamtags, types.StringValue(v))
@@ -2511,6 +2586,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDevnull.SystemFields = append(r.OutputDevnull.SystemFields, types.StringValue(v))
 		}
 		r.OutputDevnull.Type = types.StringValue(string(resp.OutputDevnull.Type))
+		r.Type = r.OutputDevnull.Type
 	}
 	if resp.OutputDiskSpool != nil {
 		r.OutputDiskSpool = &tfTypes.OutputDiskSpool{}
@@ -2521,11 +2597,14 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDiskSpool.Description = types.StringPointerValue(resp.OutputDiskSpool.Description)
 		r.OutputDiskSpool.Environment = types.StringPointerValue(resp.OutputDiskSpool.Environment)
+		r.Environment = r.OutputDiskSpool.Environment
 		r.OutputDiskSpool.ID = types.StringPointerValue(resp.OutputDiskSpool.ID)
+		r.ID = r.OutputDiskSpool.ID
 		r.OutputDiskSpool.MaxDataSize = types.StringPointerValue(resp.OutputDiskSpool.MaxDataSize)
 		r.OutputDiskSpool.MaxDataTime = types.StringPointerValue(resp.OutputDiskSpool.MaxDataTime)
 		r.OutputDiskSpool.PartitionExpr = types.StringPointerValue(resp.OutputDiskSpool.PartitionExpr)
 		r.OutputDiskSpool.Pipeline = types.StringPointerValue(resp.OutputDiskSpool.Pipeline)
+		r.Pipeline = r.OutputDiskSpool.Pipeline
 		r.OutputDiskSpool.Streamtags = make([]types.String, 0, len(resp.OutputDiskSpool.Streamtags))
 		for _, v := range resp.OutputDiskSpool.Streamtags {
 			r.OutputDiskSpool.Streamtags = append(r.OutputDiskSpool.Streamtags, types.StringValue(v))
@@ -2536,6 +2615,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDiskSpool.TimeWindow = types.StringPointerValue(resp.OutputDiskSpool.TimeWindow)
 		r.OutputDiskSpool.Type = types.StringValue(string(resp.OutputDiskSpool.Type))
+		r.Type = r.OutputDiskSpool.Type
 	}
 	if resp.OutputDlS3 != nil {
 		r.OutputDlS3 = &tfTypes.OutputDlS3{}
@@ -2583,6 +2663,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDlS3.EnableWritePageIndex = types.BoolPointerValue(resp.OutputDlS3.EnableWritePageIndex)
 		r.OutputDlS3.Endpoint = types.StringPointerValue(resp.OutputDlS3.Endpoint)
 		r.OutputDlS3.Environment = types.StringPointerValue(resp.OutputDlS3.Environment)
+		r.Environment = r.OutputDlS3.Environment
 		r.OutputDlS3.FileNameSuffix = types.StringPointerValue(resp.OutputDlS3.FileNameSuffix)
 		r.OutputDlS3.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputDlS3.ForceCloseOnShutdown)
 		if resp.OutputDlS3.Format != nil {
@@ -2592,6 +2673,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDlS3.HeaderLine = types.StringPointerValue(resp.OutputDlS3.HeaderLine)
 		r.OutputDlS3.ID = types.StringPointerValue(resp.OutputDlS3.ID)
+		r.ID = r.OutputDlS3.ID
 		r.OutputDlS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem4 := range resp.OutputDlS3.KeyValueMetadata {
@@ -2643,6 +2725,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDlS3.PartitioningFields = append(r.OutputDlS3.PartitioningFields, types.StringValue(v))
 		}
 		r.OutputDlS3.Pipeline = types.StringPointerValue(resp.OutputDlS3.Pipeline)
+		r.Pipeline = r.OutputDlS3.Pipeline
 		r.OutputDlS3.Region = types.StringPointerValue(resp.OutputDlS3.Region)
 		r.OutputDlS3.RejectUnauthorized = types.BoolPointerValue(resp.OutputDlS3.RejectUnauthorized)
 		r.OutputDlS3.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputDlS3.RemoveEmptyDirs)
@@ -2683,6 +2766,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDlS3.SystemFields = append(r.OutputDlS3.SystemFields, types.StringValue(v))
 		}
 		r.OutputDlS3.Type = types.StringValue(string(resp.OutputDlS3.Type))
+		r.Type = r.OutputDlS3.Type
 		r.OutputDlS3.VerifyPermissions = types.BoolPointerValue(resp.OutputDlS3.VerifyPermissions)
 		r.OutputDlS3.WriteHighWaterMark = types.Float64PointerValue(resp.OutputDlS3.WriteHighWaterMark)
 	}
@@ -2700,6 +2784,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceHTTP.Description = types.StringPointerValue(resp.OutputDynatraceHTTP.Description)
 		r.OutputDynatraceHTTP.Endpoint = types.StringValue(string(resp.OutputDynatraceHTTP.Endpoint))
 		r.OutputDynatraceHTTP.Environment = types.StringPointerValue(resp.OutputDynatraceHTTP.Environment)
+		r.Environment = r.OutputDynatraceHTTP.Environment
 		r.OutputDynatraceHTTP.EnvironmentID = types.StringPointerValue(resp.OutputDynatraceHTTP.EnvironmentID)
 		r.OutputDynatraceHTTP.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
@@ -2719,6 +2804,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceHTTP.FlushPeriodSec = types.Float64PointerValue(resp.OutputDynatraceHTTP.FlushPeriodSec)
 		r.OutputDynatraceHTTP.Format = types.StringValue(string(resp.OutputDynatraceHTTP.Format))
 		r.OutputDynatraceHTTP.ID = types.StringPointerValue(resp.OutputDynatraceHTTP.ID)
+		r.ID = r.OutputDynatraceHTTP.ID
 		r.OutputDynatraceHTTP.KeepAlive = types.BoolPointerValue(resp.OutputDynatraceHTTP.KeepAlive)
 		r.OutputDynatraceHTTP.MaxPayloadEvents = types.Float64PointerValue(resp.OutputDynatraceHTTP.MaxPayloadEvents)
 		r.OutputDynatraceHTTP.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDynatraceHTTP.MaxPayloadSizeKB)
@@ -2733,6 +2819,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputDynatraceHTTP.OnBackpressure = types.StringNull()
 		}
 		r.OutputDynatraceHTTP.Pipeline = types.StringPointerValue(resp.OutputDynatraceHTTP.Pipeline)
+		r.Pipeline = r.OutputDynatraceHTTP.Pipeline
 		if resp.OutputDynatraceHTTP.PqCompress != nil {
 			r.OutputDynatraceHTTP.PqCompress = types.StringValue(string(*resp.OutputDynatraceHTTP.PqCompress))
 		} else {
@@ -2802,6 +2889,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceHTTP.Token = types.StringPointerValue(resp.OutputDynatraceHTTP.Token)
 		r.OutputDynatraceHTTP.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputDynatraceHTTP.TotalMemoryLimitKB)
 		r.OutputDynatraceHTTP.Type = types.StringValue(string(resp.OutputDynatraceHTTP.Type))
+		r.Type = r.OutputDynatraceHTTP.Type
 		r.OutputDynatraceHTTP.URL = types.StringPointerValue(resp.OutputDynatraceHTTP.URL)
 		r.OutputDynatraceHTTP.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDynatraceHTTP.UseRoundRobinDNS)
 	}
@@ -2819,6 +2907,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceOtlp.Endpoint = types.StringValue(resp.OutputDynatraceOtlp.Endpoint)
 		r.OutputDynatraceOtlp.EndpointType = types.StringValue(string(resp.OutputDynatraceOtlp.EndpointType))
 		r.OutputDynatraceOtlp.Environment = types.StringPointerValue(resp.OutputDynatraceOtlp.Environment)
+		r.Environment = r.OutputDynatraceOtlp.Environment
 		r.OutputDynatraceOtlp.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem9 := range resp.OutputDynatraceOtlp.ExtraHTTPHeaders {
@@ -2844,6 +2933,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceOtlp.HTTPMetricsEndpointOverride = types.StringPointerValue(resp.OutputDynatraceOtlp.HTTPMetricsEndpointOverride)
 		r.OutputDynatraceOtlp.HTTPTracesEndpointOverride = types.StringPointerValue(resp.OutputDynatraceOtlp.HTTPTracesEndpointOverride)
 		r.OutputDynatraceOtlp.ID = types.StringPointerValue(resp.OutputDynatraceOtlp.ID)
+		r.ID = r.OutputDynatraceOtlp.ID
 		r.OutputDynatraceOtlp.KeepAlive = types.BoolPointerValue(resp.OutputDynatraceOtlp.KeepAlive)
 		r.OutputDynatraceOtlp.KeepAliveTime = types.Float64PointerValue(resp.OutputDynatraceOtlp.KeepAliveTime)
 		r.OutputDynatraceOtlp.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputDynatraceOtlp.MaxPayloadSizeKB)
@@ -2864,6 +2954,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputDynatraceOtlp.OtlpVersion = types.StringValue(string(resp.OutputDynatraceOtlp.OtlpVersion))
 		r.OutputDynatraceOtlp.Pipeline = types.StringPointerValue(resp.OutputDynatraceOtlp.Pipeline)
+		r.Pipeline = r.OutputDynatraceOtlp.Pipeline
 		if resp.OutputDynatraceOtlp.PqCompress != nil {
 			r.OutputDynatraceOtlp.PqCompress = types.StringValue(string(*resp.OutputDynatraceOtlp.PqCompress))
 		} else {
@@ -2931,6 +3022,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputDynatraceOtlp.TimeoutSec = types.Float64PointerValue(resp.OutputDynatraceOtlp.TimeoutSec)
 		r.OutputDynatraceOtlp.TokenSecret = types.StringValue(resp.OutputDynatraceOtlp.TokenSecret)
 		r.OutputDynatraceOtlp.Type = types.StringValue(string(resp.OutputDynatraceOtlp.Type))
+		r.Type = r.OutputDynatraceOtlp.Type
 		r.OutputDynatraceOtlp.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputDynatraceOtlp.UseRoundRobinDNS)
 	}
 	if resp.OutputElastic != nil {
@@ -2964,6 +3056,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputElastic.ElasticVersion = types.StringNull()
 		}
 		r.OutputElastic.Environment = types.StringPointerValue(resp.OutputElastic.Environment)
+		r.Environment = r.OutputElastic.Environment
 		r.OutputElastic.ExcludeSelf = types.BoolPointerValue(resp.OutputElastic.ExcludeSelf)
 		r.OutputElastic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
@@ -2992,6 +3085,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputElastic.FlushPeriodSec = types.Float64PointerValue(resp.OutputElastic.FlushPeriodSec)
 		r.OutputElastic.ID = types.StringPointerValue(resp.OutputElastic.ID)
+		r.ID = r.OutputElastic.ID
 		r.OutputElastic.IncludeDocID = types.BoolPointerValue(resp.OutputElastic.IncludeDocID)
 		r.OutputElastic.Index = types.StringValue(resp.OutputElastic.Index)
 		r.OutputElastic.LoadBalanced = types.BoolPointerValue(resp.OutputElastic.LoadBalanced)
@@ -3004,6 +3098,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputElastic.OnBackpressure = types.StringNull()
 		}
 		r.OutputElastic.Pipeline = types.StringPointerValue(resp.OutputElastic.Pipeline)
+		r.Pipeline = r.OutputElastic.Pipeline
 		if resp.OutputElastic.PqCompress != nil {
 			r.OutputElastic.PqCompress = types.StringValue(string(*resp.OutputElastic.PqCompress))
 		} else {
@@ -3070,6 +3165,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputElastic.TimeoutSec = types.Float64PointerValue(resp.OutputElastic.TimeoutSec)
 		r.OutputElastic.Type = types.StringValue(string(resp.OutputElastic.Type))
+		r.Type = r.OutputElastic.Type
 		r.OutputElastic.URL = types.StringPointerValue(resp.OutputElastic.URL)
 		r.OutputElastic.Urls = []tfTypes.OutputElasticURL{}
 
@@ -3112,6 +3208,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputElasticCloud.Description = types.StringPointerValue(resp.OutputElasticCloud.Description)
 		r.OutputElasticCloud.ElasticPipeline = types.StringPointerValue(resp.OutputElasticCloud.ElasticPipeline)
 		r.OutputElasticCloud.Environment = types.StringPointerValue(resp.OutputElasticCloud.Environment)
+		r.Environment = r.OutputElasticCloud.Environment
 		r.OutputElasticCloud.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem11 := range resp.OutputElasticCloud.ExtraHTTPHeaders {
@@ -3139,6 +3236,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputElasticCloud.FlushPeriodSec = types.Float64PointerValue(resp.OutputElasticCloud.FlushPeriodSec)
 		r.OutputElasticCloud.ID = types.StringPointerValue(resp.OutputElasticCloud.ID)
+		r.ID = r.OutputElasticCloud.ID
 		r.OutputElasticCloud.IncludeDocID = types.BoolPointerValue(resp.OutputElasticCloud.IncludeDocID)
 		r.OutputElasticCloud.Index = types.StringValue(resp.OutputElasticCloud.Index)
 		r.OutputElasticCloud.MaxPayloadEvents = types.Float64PointerValue(resp.OutputElasticCloud.MaxPayloadEvents)
@@ -3149,6 +3247,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputElasticCloud.OnBackpressure = types.StringNull()
 		}
 		r.OutputElasticCloud.Pipeline = types.StringPointerValue(resp.OutputElasticCloud.Pipeline)
+		r.Pipeline = r.OutputElasticCloud.Pipeline
 		if resp.OutputElasticCloud.PqCompress != nil {
 			r.OutputElasticCloud.PqCompress = types.StringValue(string(*resp.OutputElasticCloud.PqCompress))
 		} else {
@@ -3214,6 +3313,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputElasticCloud.TimeoutSec = types.Float64PointerValue(resp.OutputElasticCloud.TimeoutSec)
 		r.OutputElasticCloud.Type = types.StringValue(string(resp.OutputElasticCloud.Type))
+		r.Type = r.OutputElasticCloud.Type
 		r.OutputElasticCloud.URL = types.StringValue(resp.OutputElasticCloud.URL)
 	}
 	if resp.OutputExabeam != nil {
@@ -3232,7 +3332,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputExabeam.EncodedConfiguration = types.StringPointerValue(resp.OutputExabeam.EncodedConfiguration)
 		r.OutputExabeam.Endpoint = types.StringValue(resp.OutputExabeam.Endpoint)
 		r.OutputExabeam.Environment = types.StringPointerValue(resp.OutputExabeam.Environment)
+		r.Environment = r.OutputExabeam.Environment
 		r.OutputExabeam.ID = types.StringPointerValue(resp.OutputExabeam.ID)
+		r.ID = r.OutputExabeam.ID
 		r.OutputExabeam.MaxFileIdleTimeSec = types.Float64PointerValue(resp.OutputExabeam.MaxFileIdleTimeSec)
 		r.OutputExabeam.MaxFileOpenTimeSec = types.Float64PointerValue(resp.OutputExabeam.MaxFileOpenTimeSec)
 		r.OutputExabeam.MaxFileSizeMB = types.Float64PointerValue(resp.OutputExabeam.MaxFileSizeMB)
@@ -3254,6 +3356,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputExabeam.OnDiskFullBackpressure = types.StringNull()
 		}
 		r.OutputExabeam.Pipeline = types.StringPointerValue(resp.OutputExabeam.Pipeline)
+		r.Pipeline = r.OutputExabeam.Pipeline
 		r.OutputExabeam.Region = types.StringValue(resp.OutputExabeam.Region)
 		r.OutputExabeam.RejectUnauthorized = types.BoolPointerValue(resp.OutputExabeam.RejectUnauthorized)
 		r.OutputExabeam.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputExabeam.RemoveEmptyDirs)
@@ -3291,6 +3394,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputExabeam.TimezoneOffset = types.StringPointerValue(resp.OutputExabeam.TimezoneOffset)
 		r.OutputExabeam.Type = types.StringValue(string(resp.OutputExabeam.Type))
+		r.Type = r.OutputExabeam.Type
 	}
 	if resp.OutputFilesystem != nil {
 		r.OutputFilesystem = &tfTypes.OutputFilesystem{}
@@ -3318,6 +3422,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputFilesystem.EnableStatistics = types.BoolPointerValue(resp.OutputFilesystem.EnableStatistics)
 		r.OutputFilesystem.EnableWritePageIndex = types.BoolPointerValue(resp.OutputFilesystem.EnableWritePageIndex)
 		r.OutputFilesystem.Environment = types.StringPointerValue(resp.OutputFilesystem.Environment)
+		r.Environment = r.OutputFilesystem.Environment
 		r.OutputFilesystem.FileNameSuffix = types.StringPointerValue(resp.OutputFilesystem.FileNameSuffix)
 		r.OutputFilesystem.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputFilesystem.ForceCloseOnShutdown)
 		if resp.OutputFilesystem.Format != nil {
@@ -3327,6 +3432,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputFilesystem.HeaderLine = types.StringPointerValue(resp.OutputFilesystem.HeaderLine)
 		r.OutputFilesystem.ID = types.StringPointerValue(resp.OutputFilesystem.ID)
+		r.ID = r.OutputFilesystem.ID
 		r.OutputFilesystem.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem5 := range resp.OutputFilesystem.KeyValueMetadata {
@@ -3367,6 +3473,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputFilesystem.PartitionExpr = types.StringPointerValue(resp.OutputFilesystem.PartitionExpr)
 		r.OutputFilesystem.Pipeline = types.StringPointerValue(resp.OutputFilesystem.Pipeline)
+		r.Pipeline = r.OutputFilesystem.Pipeline
 		r.OutputFilesystem.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputFilesystem.RemoveEmptyDirs)
 		if resp.OutputFilesystem.RetrySettings == nil {
 			r.OutputFilesystem.RetrySettings = nil
@@ -3389,6 +3496,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputFilesystem.SystemFields = append(r.OutputFilesystem.SystemFields, types.StringValue(v))
 		}
 		r.OutputFilesystem.Type = types.StringValue(string(resp.OutputFilesystem.Type))
+		r.Type = r.OutputFilesystem.Type
 		r.OutputFilesystem.WriteHighWaterMark = types.Float64PointerValue(resp.OutputFilesystem.WriteHighWaterMark)
 	}
 	if resp.OutputGoogleChronicle != nil {
@@ -3423,6 +3531,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGoogleChronicle.Description = types.StringPointerValue(resp.OutputGoogleChronicle.Description)
 		r.OutputGoogleChronicle.Environment = types.StringPointerValue(resp.OutputGoogleChronicle.Environment)
+		r.Environment = r.OutputGoogleChronicle.Environment
 		r.OutputGoogleChronicle.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
 		for _, extraHTTPHeadersItem12 := range resp.OutputGoogleChronicle.ExtraHTTPHeaders {
@@ -3450,6 +3559,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGoogleChronicle.FlushPeriodSec = types.Float64PointerValue(resp.OutputGoogleChronicle.FlushPeriodSec)
 		r.OutputGoogleChronicle.ID = types.StringPointerValue(resp.OutputGoogleChronicle.ID)
+		r.ID = r.OutputGoogleChronicle.ID
 		r.OutputGoogleChronicle.LogFormatType = types.StringValue(string(resp.OutputGoogleChronicle.LogFormatType))
 		r.OutputGoogleChronicle.LogTextField = types.StringPointerValue(resp.OutputGoogleChronicle.LogTextField)
 		r.OutputGoogleChronicle.LogType = types.StringPointerValue(resp.OutputGoogleChronicle.LogType)
@@ -3462,6 +3572,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGoogleChronicle.OnBackpressure = types.StringNull()
 		}
 		r.OutputGoogleChronicle.Pipeline = types.StringPointerValue(resp.OutputGoogleChronicle.Pipeline)
+		r.Pipeline = r.OutputGoogleChronicle.Pipeline
 		if resp.OutputGoogleChronicle.PqCompress != nil {
 			r.OutputGoogleChronicle.PqCompress = types.StringValue(string(*resp.OutputGoogleChronicle.PqCompress))
 		} else {
@@ -3531,6 +3642,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGoogleChronicle.TimeoutSec = types.Float64PointerValue(resp.OutputGoogleChronicle.TimeoutSec)
 		r.OutputGoogleChronicle.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputGoogleChronicle.TotalMemoryLimitKB)
 		r.OutputGoogleChronicle.Type = types.StringValue(string(resp.OutputGoogleChronicle.Type))
+		r.Type = r.OutputGoogleChronicle.Type
 		if resp.OutputGoogleChronicle.UdmType != nil {
 			r.OutputGoogleChronicle.UdmType = types.StringValue(string(*resp.OutputGoogleChronicle.UdmType))
 		} else {
@@ -3548,6 +3660,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGoogleCloudLogging.ConnectionTimeout = types.Float64PointerValue(resp.OutputGoogleCloudLogging.ConnectionTimeout)
 		r.OutputGoogleCloudLogging.Description = types.StringPointerValue(resp.OutputGoogleCloudLogging.Description)
 		r.OutputGoogleCloudLogging.Environment = types.StringPointerValue(resp.OutputGoogleCloudLogging.Environment)
+		r.Environment = r.OutputGoogleCloudLogging.Environment
 		r.OutputGoogleCloudLogging.FileExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.FileExpression)
 		r.OutputGoogleCloudLogging.FirstExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.FirstExpression)
 		r.OutputGoogleCloudLogging.FlushPeriodSec = types.Float64PointerValue(resp.OutputGoogleCloudLogging.FlushPeriodSec)
@@ -3558,6 +3671,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGoogleCloudLogging.GoogleAuthMethod = types.StringNull()
 		}
 		r.OutputGoogleCloudLogging.ID = types.StringPointerValue(resp.OutputGoogleCloudLogging.ID)
+		r.ID = r.OutputGoogleCloudLogging.ID
 		r.OutputGoogleCloudLogging.IDExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.IDExpression)
 		r.OutputGoogleCloudLogging.IndexExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.IndexExpression)
 		r.OutputGoogleCloudLogging.InsertIDExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.InsertIDExpression)
@@ -3591,6 +3705,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGoogleCloudLogging.PayloadFormat = types.StringNull()
 		}
 		r.OutputGoogleCloudLogging.Pipeline = types.StringPointerValue(resp.OutputGoogleCloudLogging.Pipeline)
+		r.Pipeline = r.OutputGoogleCloudLogging.Pipeline
 		if resp.OutputGoogleCloudLogging.PqCompress != nil {
 			r.OutputGoogleCloudLogging.PqCompress = types.StringValue(string(*resp.OutputGoogleCloudLogging.PqCompress))
 		} else {
@@ -3660,6 +3775,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGoogleCloudLogging.TraceExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.TraceExpression)
 		r.OutputGoogleCloudLogging.TraceSampledExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.TraceSampledExpression)
 		r.OutputGoogleCloudLogging.Type = types.StringValue(string(resp.OutputGoogleCloudLogging.Type))
+		r.Type = r.OutputGoogleCloudLogging.Type
 		r.OutputGoogleCloudLogging.UIDExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.UIDExpression)
 		r.OutputGoogleCloudLogging.UserAgentExpression = types.StringPointerValue(resp.OutputGoogleCloudLogging.UserAgentExpression)
 	}
@@ -3701,6 +3817,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGoogleCloudStorage.EnableWritePageIndex = types.BoolPointerValue(resp.OutputGoogleCloudStorage.EnableWritePageIndex)
 		r.OutputGoogleCloudStorage.Endpoint = types.StringValue(resp.OutputGoogleCloudStorage.Endpoint)
 		r.OutputGoogleCloudStorage.Environment = types.StringPointerValue(resp.OutputGoogleCloudStorage.Environment)
+		r.Environment = r.OutputGoogleCloudStorage.Environment
 		r.OutputGoogleCloudStorage.FileNameSuffix = types.StringPointerValue(resp.OutputGoogleCloudStorage.FileNameSuffix)
 		r.OutputGoogleCloudStorage.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputGoogleCloudStorage.ForceCloseOnShutdown)
 		if resp.OutputGoogleCloudStorage.Format != nil {
@@ -3710,6 +3827,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGoogleCloudStorage.HeaderLine = types.StringPointerValue(resp.OutputGoogleCloudStorage.HeaderLine)
 		r.OutputGoogleCloudStorage.ID = types.StringPointerValue(resp.OutputGoogleCloudStorage.ID)
+		r.ID = r.OutputGoogleCloudStorage.ID
 		r.OutputGoogleCloudStorage.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem6 := range resp.OutputGoogleCloudStorage.KeyValueMetadata {
@@ -3755,6 +3873,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGoogleCloudStorage.PartitionExpr = types.StringPointerValue(resp.OutputGoogleCloudStorage.PartitionExpr)
 		r.OutputGoogleCloudStorage.Pipeline = types.StringPointerValue(resp.OutputGoogleCloudStorage.Pipeline)
+		r.Pipeline = r.OutputGoogleCloudStorage.Pipeline
 		r.OutputGoogleCloudStorage.Region = types.StringValue(resp.OutputGoogleCloudStorage.Region)
 		r.OutputGoogleCloudStorage.RejectUnauthorized = types.BoolPointerValue(resp.OutputGoogleCloudStorage.RejectUnauthorized)
 		r.OutputGoogleCloudStorage.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputGoogleCloudStorage.RemoveEmptyDirs)
@@ -3790,6 +3909,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGoogleCloudStorage.SystemFields = append(r.OutputGoogleCloudStorage.SystemFields, types.StringValue(v))
 		}
 		r.OutputGoogleCloudStorage.Type = types.StringValue(string(resp.OutputGoogleCloudStorage.Type))
+		r.Type = r.OutputGoogleCloudStorage.Type
 		r.OutputGoogleCloudStorage.VerifyPermissions = types.BoolPointerValue(resp.OutputGoogleCloudStorage.VerifyPermissions)
 		r.OutputGoogleCloudStorage.WriteHighWaterMark = types.Float64PointerValue(resp.OutputGoogleCloudStorage.WriteHighWaterMark)
 	}
@@ -3802,6 +3922,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGooglePubsub.CreateTopic = types.BoolPointerValue(resp.OutputGooglePubsub.CreateTopic)
 		r.OutputGooglePubsub.Description = types.StringPointerValue(resp.OutputGooglePubsub.Description)
 		r.OutputGooglePubsub.Environment = types.StringPointerValue(resp.OutputGooglePubsub.Environment)
+		r.Environment = r.OutputGooglePubsub.Environment
 		r.OutputGooglePubsub.FlushPeriod = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriod)
 		if resp.OutputGooglePubsub.FlushPeriodSec == nil {
 			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedNull()
@@ -3815,6 +3936,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGooglePubsub.GoogleAuthMethod = types.StringNull()
 		}
 		r.OutputGooglePubsub.ID = types.StringPointerValue(resp.OutputGooglePubsub.ID)
+		r.ID = r.OutputGooglePubsub.ID
 		r.OutputGooglePubsub.MaxInProgress = types.Float64PointerValue(resp.OutputGooglePubsub.MaxInProgress)
 		r.OutputGooglePubsub.MaxQueueSize = types.Float64PointerValue(resp.OutputGooglePubsub.MaxQueueSize)
 		r.OutputGooglePubsub.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputGooglePubsub.MaxRecordSizeKB)
@@ -3825,6 +3947,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGooglePubsub.OrderedDelivery = types.BoolPointerValue(resp.OutputGooglePubsub.OrderedDelivery)
 		r.OutputGooglePubsub.Pipeline = types.StringPointerValue(resp.OutputGooglePubsub.Pipeline)
+		r.Pipeline = r.OutputGooglePubsub.Pipeline
 		if resp.OutputGooglePubsub.PqCompress != nil {
 			r.OutputGooglePubsub.PqCompress = types.StringValue(string(*resp.OutputGooglePubsub.PqCompress))
 		} else {
@@ -3866,309 +3989,153 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGooglePubsub.TopicName = types.StringValue(resp.OutputGooglePubsub.TopicName)
 		r.OutputGooglePubsub.Type = types.StringValue(string(resp.OutputGooglePubsub.Type))
+		r.Type = r.OutputGooglePubsub.Type
 	}
 	if resp.OutputGrafanaCloud != nil {
-		if r.OutputGrafanaCloud == nil {
-			r.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+		r.OutputGrafanaCloud = &tfTypes.OutputGrafanaCloud{}
+		r.OutputGrafanaCloud.Compress = types.BoolPointerValue(resp.OutputGrafanaCloud.Compress)
+		r.OutputGrafanaCloud.Concurrency = types.Float64PointerValue(resp.OutputGrafanaCloud.Concurrency)
+		r.OutputGrafanaCloud.Description = types.StringPointerValue(resp.OutputGrafanaCloud.Description)
+		r.OutputGrafanaCloud.Environment = types.StringPointerValue(resp.OutputGrafanaCloud.Environment)
+		r.Environment = r.OutputGrafanaCloud.Environment
+		r.OutputGrafanaCloud.ExtraHTTPHeaders = []tfTypes.ExtraHTTPHeader{}
+
+		for _, extraHTTPHeadersItem13 := range resp.OutputGrafanaCloud.ExtraHTTPHeaders {
+			var extraHTTPHeaders13 tfTypes.ExtraHTTPHeader
+
+			extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
+			extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
+
+			r.OutputGrafanaCloud.ExtraHTTPHeaders = append(r.OutputGrafanaCloud.ExtraHTTPHeaders, extraHTTPHeaders13)
 		}
-		if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 != nil {
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 = &tfTypes.OutputGrafanaCloudGrafanaCloud1{}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplatePrometheusURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplatePrometheusURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Compress = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Compress)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Concurrency = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Concurrency)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Description = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Description)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
-
-			for _, extraHTTPHeadersItem13 := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders {
-				var extraHTTPHeaders13 tfTypes.ItemsTypeExtraHTTPHeaders
-
-				extraHTTPHeaders13.Name = types.StringPointerValue(extraHTTPHeadersItem13.Name)
-				extraHTTPHeaders13.Value = types.StringValue(extraHTTPHeadersItem13.Value)
-
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders, extraHTTPHeaders13)
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FlushPeriodSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FlushPeriodSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ID = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ID)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
-
-			for _, labelsItem := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels {
-				var labels tfTypes.ItemsTypeContentConfigItemsRequestParams
-
-				labels.Name = types.StringValue(labelsItem.Name)
-				labels.Value = types.StringValue(labelsItem.Value)
-
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels, labels)
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth = &tfTypes.PrometheusAuthType{}
-				if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType != nil {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType))
-				} else {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType = types.StringNull()
-				}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.CredentialsSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Password)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.TextSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Token)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Username)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiURL = types.StringValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadEvents = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadEvents)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadSizeKB)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Message = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Message)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MetricRenameExpr = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MetricRenameExpr)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Pipeline = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Pipeline)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress = types.StringNull()
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqControls == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqControls = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqControls = &tfTypes.OutputGrafanaCloudPqControls1{}
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBackpressureSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSize)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSizeBytes)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxFileSize = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxFileSize)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxSize = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxSize)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode = types.StringNull()
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqPath = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqPath)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqRatePerSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqRatePerSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqStrictOrdering = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqStrictOrdering)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth = &tfTypes.PrometheusAuthType{}
-				if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType != nil {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType))
-				} else {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType = types.StringNull()
-				}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.CredentialsSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Password)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.TextSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Token)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Username)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.RejectUnauthorized = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.RejectUnauthorized)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseHonorRetryAfterHeader)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
-
-			for _, responseRetrySettingsItem14 := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings {
-				var responseRetrySettings14 tfTypes.ItemsTypeResponseRetrySettings
-
-				responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
-				responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
-				responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
-				responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
-
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings, responseRetrySettings14)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders, types.StringValue(v))
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags, types.StringValue(v))
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields, types.StringValue(v))
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.BackoffRate)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.InitialBackoff)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.MaxBackoff)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.TimeoutRetry)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Type = types.StringValue(string(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Type))
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.UseRoundRobinDNS)
+		if resp.OutputGrafanaCloud.FailedRequestLoggingMode != nil {
+			r.OutputGrafanaCloud.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputGrafanaCloud.FailedRequestLoggingMode))
+		} else {
+			r.OutputGrafanaCloud.FailedRequestLoggingMode = types.StringNull()
 		}
-		if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2 != nil {
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2 = &tfTypes.OutputGrafanaCloudGrafanaCloud2{}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplateLokiURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplateLokiURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplatePrometheusURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplatePrometheusURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Compress = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Compress)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Concurrency = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Concurrency)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Description = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Description)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
+		r.OutputGrafanaCloud.FlushPeriodSec = types.Float64PointerValue(resp.OutputGrafanaCloud.FlushPeriodSec)
+		r.OutputGrafanaCloud.ID = types.StringValue(resp.OutputGrafanaCloud.ID)
+		r.ID = r.OutputGrafanaCloud.ID
+		r.OutputGrafanaCloud.Labels = []tfTypes.Label{}
 
-			for _, extraHTTPHeadersItem14 := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders {
-				var extraHTTPHeaders14 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, labelsItem := range resp.OutputGrafanaCloud.Labels {
+			var labels tfTypes.Label
 
-				extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
-				extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Value = types.StringValue(labelsItem.Value)
 
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders, extraHTTPHeaders14)
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FlushPeriodSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FlushPeriodSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ID = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ID)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
-
-			for _, labelsItem1 := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels {
-				var labels1 tfTypes.ItemsTypeContentConfigItemsRequestParams
-
-				labels1.Name = types.StringValue(labelsItem1.Name)
-				labels1.Value = types.StringValue(labelsItem1.Value)
-
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels, labels1)
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth = &tfTypes.PrometheusAuthType{}
-				if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType != nil {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType))
-				} else {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType = types.StringNull()
-				}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.CredentialsSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Password)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.TextSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Token)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Username)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadEvents = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadEvents)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadSizeKB)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Message = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Message)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MetricRenameExpr = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MetricRenameExpr)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Pipeline = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Pipeline)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress = types.StringNull()
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqControls == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqControls = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqControls = &tfTypes.OutputGrafanaCloudPqControls2{}
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBackpressureSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBackpressureSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSize = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSize)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSizeBytes = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSizeBytes)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxFileSize = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxFileSize)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxSize = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxSize)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode = types.StringNull()
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure != nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure))
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure = types.StringNull()
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqPath = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqPath)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqRatePerSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqRatePerSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqStrictOrdering = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqStrictOrdering)
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth = &tfTypes.PrometheusAuthType{}
-				if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType != nil {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType))
-				} else {
-					r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType = types.StringNull()
-				}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.CredentialsSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Password)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.TextSecret)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Token)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Username)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusURL = types.StringValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusURL)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.RejectUnauthorized = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.RejectUnauthorized)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseHonorRetryAfterHeader)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
-
-			for _, responseRetrySettingsItem15 := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings {
-				var responseRetrySettings15 tfTypes.ItemsTypeResponseRetrySettings
-
-				responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
-				responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
-				responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
-				responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
-
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings, responseRetrySettings15)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders, types.StringValue(v))
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags, types.StringValue(v))
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields = make([]types.String, 0, len(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields))
-			for _, v := range resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields = append(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields, types.StringValue(v))
-			}
-			if resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings == nil {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings = nil
-			} else {
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettingsType{}
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.BackoffRate)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.InitialBackoff)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.MaxBackoff)
-				r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.TimeoutRetry = types.BoolValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.TimeoutRetry)
-			}
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutSec = types.Float64PointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutSec)
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Type = types.StringValue(string(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Type))
-			r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.UseRoundRobinDNS)
+			r.OutputGrafanaCloud.Labels = append(r.OutputGrafanaCloud.Labels, labels)
 		}
+		if resp.OutputGrafanaCloud.LokiAuth == nil {
+			r.OutputGrafanaCloud.LokiAuth = nil
+		} else {
+			r.OutputGrafanaCloud.LokiAuth = &tfTypes.OutputGrafanaCloudLokiAuth{}
+			if resp.OutputGrafanaCloud.LokiAuth.AuthType != nil {
+				r.OutputGrafanaCloud.LokiAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.LokiAuth.AuthType))
+			} else {
+				r.OutputGrafanaCloud.LokiAuth.AuthType = types.StringNull()
+			}
+			r.OutputGrafanaCloud.LokiAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.LokiAuth.CredentialsSecret)
+			r.OutputGrafanaCloud.LokiAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.LokiAuth.Password)
+			r.OutputGrafanaCloud.LokiAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.LokiAuth.TextSecret)
+			r.OutputGrafanaCloud.LokiAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.LokiAuth.Token)
+			r.OutputGrafanaCloud.LokiAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.LokiAuth.Username)
+		}
+		r.OutputGrafanaCloud.LokiURL = types.StringPointerValue(resp.OutputGrafanaCloud.LokiURL)
+		r.OutputGrafanaCloud.MaxPayloadEvents = types.Float64PointerValue(resp.OutputGrafanaCloud.MaxPayloadEvents)
+		r.OutputGrafanaCloud.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputGrafanaCloud.MaxPayloadSizeKB)
+		r.OutputGrafanaCloud.Message = types.StringPointerValue(resp.OutputGrafanaCloud.Message)
+		if resp.OutputGrafanaCloud.MessageFormat != nil {
+			r.OutputGrafanaCloud.MessageFormat = types.StringValue(string(*resp.OutputGrafanaCloud.MessageFormat))
+		} else {
+			r.OutputGrafanaCloud.MessageFormat = types.StringNull()
+		}
+		r.OutputGrafanaCloud.MetricRenameExpr = types.StringPointerValue(resp.OutputGrafanaCloud.MetricRenameExpr)
+		if resp.OutputGrafanaCloud.OnBackpressure != nil {
+			r.OutputGrafanaCloud.OnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.OnBackpressure))
+		} else {
+			r.OutputGrafanaCloud.OnBackpressure = types.StringNull()
+		}
+		r.OutputGrafanaCloud.Pipeline = types.StringPointerValue(resp.OutputGrafanaCloud.Pipeline)
+		r.Pipeline = r.OutputGrafanaCloud.Pipeline
+		if resp.OutputGrafanaCloud.PqCompress != nil {
+			r.OutputGrafanaCloud.PqCompress = types.StringValue(string(*resp.OutputGrafanaCloud.PqCompress))
+		} else {
+			r.OutputGrafanaCloud.PqCompress = types.StringNull()
+		}
+		if resp.OutputGrafanaCloud.PqControls == nil {
+			r.OutputGrafanaCloud.PqControls = nil
+		} else {
+			r.OutputGrafanaCloud.PqControls = &tfTypes.OutputGrafanaCloudPqControls{}
+		}
+		r.OutputGrafanaCloud.PqMaxFileSize = types.StringPointerValue(resp.OutputGrafanaCloud.PqMaxFileSize)
+		r.OutputGrafanaCloud.PqMaxSize = types.StringPointerValue(resp.OutputGrafanaCloud.PqMaxSize)
+		if resp.OutputGrafanaCloud.PqMode != nil {
+			r.OutputGrafanaCloud.PqMode = types.StringValue(string(*resp.OutputGrafanaCloud.PqMode))
+		} else {
+			r.OutputGrafanaCloud.PqMode = types.StringNull()
+		}
+		if resp.OutputGrafanaCloud.PqOnBackpressure != nil {
+			r.OutputGrafanaCloud.PqOnBackpressure = types.StringValue(string(*resp.OutputGrafanaCloud.PqOnBackpressure))
+		} else {
+			r.OutputGrafanaCloud.PqOnBackpressure = types.StringNull()
+		}
+		r.OutputGrafanaCloud.PqPath = types.StringPointerValue(resp.OutputGrafanaCloud.PqPath)
+		if resp.OutputGrafanaCloud.PrometheusAuth == nil {
+			r.OutputGrafanaCloud.PrometheusAuth = nil
+		} else {
+			r.OutputGrafanaCloud.PrometheusAuth = &tfTypes.OutputGrafanaCloudPrometheusAuth{}
+			if resp.OutputGrafanaCloud.PrometheusAuth.AuthType != nil {
+				r.OutputGrafanaCloud.PrometheusAuth.AuthType = types.StringValue(string(*resp.OutputGrafanaCloud.PrometheusAuth.AuthType))
+			} else {
+				r.OutputGrafanaCloud.PrometheusAuth.AuthType = types.StringNull()
+			}
+			r.OutputGrafanaCloud.PrometheusAuth.CredentialsSecret = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusAuth.CredentialsSecret)
+			r.OutputGrafanaCloud.PrometheusAuth.Password = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusAuth.Password)
+			r.OutputGrafanaCloud.PrometheusAuth.TextSecret = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusAuth.TextSecret)
+			r.OutputGrafanaCloud.PrometheusAuth.Token = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusAuth.Token)
+			r.OutputGrafanaCloud.PrometheusAuth.Username = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusAuth.Username)
+		}
+		r.OutputGrafanaCloud.PrometheusURL = types.StringPointerValue(resp.OutputGrafanaCloud.PrometheusURL)
+		r.OutputGrafanaCloud.RejectUnauthorized = types.BoolPointerValue(resp.OutputGrafanaCloud.RejectUnauthorized)
+		r.OutputGrafanaCloud.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputGrafanaCloud.ResponseHonorRetryAfterHeader)
+		r.OutputGrafanaCloud.ResponseRetrySettings = []tfTypes.ResponseRetrySetting{}
+
+		for _, responseRetrySettingsItem14 := range resp.OutputGrafanaCloud.ResponseRetrySettings {
+			var responseRetrySettings14 tfTypes.ResponseRetrySetting
+
+			responseRetrySettings14.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem14.BackoffRate)
+			responseRetrySettings14.HTTPStatus = types.Float64Value(responseRetrySettingsItem14.HTTPStatus)
+			responseRetrySettings14.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem14.InitialBackoff)
+			responseRetrySettings14.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem14.MaxBackoff)
+
+			r.OutputGrafanaCloud.ResponseRetrySettings = append(r.OutputGrafanaCloud.ResponseRetrySettings, responseRetrySettings14)
+		}
+		r.OutputGrafanaCloud.SafeHeaders = make([]types.String, 0, len(resp.OutputGrafanaCloud.SafeHeaders))
+		for _, v := range resp.OutputGrafanaCloud.SafeHeaders {
+			r.OutputGrafanaCloud.SafeHeaders = append(r.OutputGrafanaCloud.SafeHeaders, types.StringValue(v))
+		}
+		r.OutputGrafanaCloud.Streamtags = make([]types.String, 0, len(resp.OutputGrafanaCloud.Streamtags))
+		for _, v := range resp.OutputGrafanaCloud.Streamtags {
+			r.OutputGrafanaCloud.Streamtags = append(r.OutputGrafanaCloud.Streamtags, types.StringValue(v))
+		}
+		r.OutputGrafanaCloud.SystemFields = make([]types.String, 0, len(resp.OutputGrafanaCloud.SystemFields))
+		for _, v := range resp.OutputGrafanaCloud.SystemFields {
+			r.OutputGrafanaCloud.SystemFields = append(r.OutputGrafanaCloud.SystemFields, types.StringValue(v))
+		}
+		if resp.OutputGrafanaCloud.TimeoutRetrySettings == nil {
+			r.OutputGrafanaCloud.TimeoutRetrySettings = nil
+		} else {
+			r.OutputGrafanaCloud.TimeoutRetrySettings = &tfTypes.TimeoutRetrySettings{}
+			r.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate)
+			r.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff)
+			r.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff)
+			r.OutputGrafanaCloud.TimeoutRetrySettings.TimeoutRetry = types.BoolPointerValue(resp.OutputGrafanaCloud.TimeoutRetrySettings.TimeoutRetry)
+		}
+		r.OutputGrafanaCloud.TimeoutSec = types.Float64PointerValue(resp.OutputGrafanaCloud.TimeoutSec)
+		r.OutputGrafanaCloud.Type = types.StringValue(string(resp.OutputGrafanaCloud.Type))
+		r.Type = r.OutputGrafanaCloud.Type
+		r.OutputGrafanaCloud.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputGrafanaCloud.UseRoundRobinDNS)
 	}
 	if resp.OutputGraphite != nil {
 		r.OutputGraphite = &tfTypes.OutputGraphite{}
@@ -4176,9 +4143,11 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGraphite.Description = types.StringPointerValue(resp.OutputGraphite.Description)
 		r.OutputGraphite.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputGraphite.DNSResolvePeriodSec)
 		r.OutputGraphite.Environment = types.StringPointerValue(resp.OutputGraphite.Environment)
+		r.Environment = r.OutputGraphite.Environment
 		r.OutputGraphite.FlushPeriodSec = types.Float64PointerValue(resp.OutputGraphite.FlushPeriodSec)
 		r.OutputGraphite.Host = types.StringValue(resp.OutputGraphite.Host)
 		r.OutputGraphite.ID = types.StringPointerValue(resp.OutputGraphite.ID)
+		r.ID = r.OutputGraphite.ID
 		r.OutputGraphite.Mtu = types.Float64PointerValue(resp.OutputGraphite.Mtu)
 		if resp.OutputGraphite.OnBackpressure != nil {
 			r.OutputGraphite.OnBackpressure = types.StringValue(string(*resp.OutputGraphite.OnBackpressure))
@@ -4186,6 +4155,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputGraphite.OnBackpressure = types.StringNull()
 		}
 		r.OutputGraphite.Pipeline = types.StringPointerValue(resp.OutputGraphite.Pipeline)
+		r.Pipeline = r.OutputGraphite.Pipeline
 		r.OutputGraphite.Port = types.Float64Value(resp.OutputGraphite.Port)
 		if resp.OutputGraphite.PqCompress != nil {
 			r.OutputGraphite.PqCompress = types.StringValue(string(*resp.OutputGraphite.PqCompress))
@@ -4226,6 +4196,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputGraphite.ThrottleRatePerSec = types.StringPointerValue(resp.OutputGraphite.ThrottleRatePerSec)
 		r.OutputGraphite.Type = types.StringValue(string(resp.OutputGraphite.Type))
+		r.Type = r.OutputGraphite.Type
 		r.OutputGraphite.WriteTimeout = types.Float64PointerValue(resp.OutputGraphite.WriteTimeout)
 	}
 	if resp.OutputHoneycomb != nil {
@@ -4240,15 +4211,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHoneycomb.Dataset = types.StringValue(resp.OutputHoneycomb.Dataset)
 		r.OutputHoneycomb.Description = types.StringPointerValue(resp.OutputHoneycomb.Description)
 		r.OutputHoneycomb.Environment = types.StringPointerValue(resp.OutputHoneycomb.Environment)
+		r.Environment = r.OutputHoneycomb.Environment
 		r.OutputHoneycomb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem15 := range resp.OutputHoneycomb.ExtraHTTPHeaders {
-			var extraHTTPHeaders15 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem14 := range resp.OutputHoneycomb.ExtraHTTPHeaders {
+			var extraHTTPHeaders14 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
-			extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
+			extraHTTPHeaders14.Name = types.StringPointerValue(extraHTTPHeadersItem14.Name)
+			extraHTTPHeaders14.Value = types.StringValue(extraHTTPHeadersItem14.Value)
 
-			r.OutputHoneycomb.ExtraHTTPHeaders = append(r.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders15)
+			r.OutputHoneycomb.ExtraHTTPHeaders = append(r.OutputHoneycomb.ExtraHTTPHeaders, extraHTTPHeaders14)
 		}
 		if resp.OutputHoneycomb.FailedRequestLoggingMode != nil {
 			r.OutputHoneycomb.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputHoneycomb.FailedRequestLoggingMode))
@@ -4257,6 +4229,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputHoneycomb.FlushPeriodSec = types.Float64PointerValue(resp.OutputHoneycomb.FlushPeriodSec)
 		r.OutputHoneycomb.ID = types.StringPointerValue(resp.OutputHoneycomb.ID)
+		r.ID = r.OutputHoneycomb.ID
 		r.OutputHoneycomb.MaxPayloadEvents = types.Float64PointerValue(resp.OutputHoneycomb.MaxPayloadEvents)
 		r.OutputHoneycomb.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputHoneycomb.MaxPayloadSizeKB)
 		if resp.OutputHoneycomb.OnBackpressure != nil {
@@ -4265,6 +4238,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputHoneycomb.OnBackpressure = types.StringNull()
 		}
 		r.OutputHoneycomb.Pipeline = types.StringPointerValue(resp.OutputHoneycomb.Pipeline)
+		r.Pipeline = r.OutputHoneycomb.Pipeline
 		if resp.OutputHoneycomb.PqCompress != nil {
 			r.OutputHoneycomb.PqCompress = types.StringValue(string(*resp.OutputHoneycomb.PqCompress))
 		} else {
@@ -4297,15 +4271,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHoneycomb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputHoneycomb.ResponseHonorRetryAfterHeader)
 		r.OutputHoneycomb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem16 := range resp.OutputHoneycomb.ResponseRetrySettings {
-			var responseRetrySettings16 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem15 := range resp.OutputHoneycomb.ResponseRetrySettings {
+			var responseRetrySettings15 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
-			responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
-			responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
-			responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
+			responseRetrySettings15.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem15.BackoffRate)
+			responseRetrySettings15.HTTPStatus = types.Float64Value(responseRetrySettingsItem15.HTTPStatus)
+			responseRetrySettings15.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem15.InitialBackoff)
+			responseRetrySettings15.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem15.MaxBackoff)
 
-			r.OutputHoneycomb.ResponseRetrySettings = append(r.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings16)
+			r.OutputHoneycomb.ResponseRetrySettings = append(r.OutputHoneycomb.ResponseRetrySettings, responseRetrySettings15)
 		}
 		r.OutputHoneycomb.SafeHeaders = make([]types.String, 0, len(resp.OutputHoneycomb.SafeHeaders))
 		for _, v := range resp.OutputHoneycomb.SafeHeaders {
@@ -4332,6 +4306,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputHoneycomb.TimeoutSec = types.Float64PointerValue(resp.OutputHoneycomb.TimeoutSec)
 		r.OutputHoneycomb.Type = types.StringValue(string(resp.OutputHoneycomb.Type))
+		r.Type = r.OutputHoneycomb.Type
 		r.OutputHoneycomb.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputHoneycomb.UseRoundRobinDNS)
 	}
 	if resp.OutputHumioHec != nil {
@@ -4346,15 +4321,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHumioHec.Concurrency = types.Float64PointerValue(resp.OutputHumioHec.Concurrency)
 		r.OutputHumioHec.Description = types.StringPointerValue(resp.OutputHumioHec.Description)
 		r.OutputHumioHec.Environment = types.StringPointerValue(resp.OutputHumioHec.Environment)
+		r.Environment = r.OutputHumioHec.Environment
 		r.OutputHumioHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem16 := range resp.OutputHumioHec.ExtraHTTPHeaders {
-			var extraHTTPHeaders16 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem15 := range resp.OutputHumioHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders15 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
-			extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
+			extraHTTPHeaders15.Name = types.StringPointerValue(extraHTTPHeadersItem15.Name)
+			extraHTTPHeaders15.Value = types.StringValue(extraHTTPHeadersItem15.Value)
 
-			r.OutputHumioHec.ExtraHTTPHeaders = append(r.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders16)
+			r.OutputHumioHec.ExtraHTTPHeaders = append(r.OutputHumioHec.ExtraHTTPHeaders, extraHTTPHeaders15)
 		}
 		if resp.OutputHumioHec.FailedRequestLoggingMode != nil {
 			r.OutputHumioHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputHumioHec.FailedRequestLoggingMode))
@@ -4364,6 +4340,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHumioHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputHumioHec.FlushPeriodSec)
 		r.OutputHumioHec.Format = types.StringValue(string(resp.OutputHumioHec.Format))
 		r.OutputHumioHec.ID = types.StringPointerValue(resp.OutputHumioHec.ID)
+		r.ID = r.OutputHumioHec.ID
 		r.OutputHumioHec.MaxPayloadEvents = types.Float64PointerValue(resp.OutputHumioHec.MaxPayloadEvents)
 		r.OutputHumioHec.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputHumioHec.MaxPayloadSizeKB)
 		if resp.OutputHumioHec.OnBackpressure != nil {
@@ -4372,6 +4349,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputHumioHec.OnBackpressure = types.StringNull()
 		}
 		r.OutputHumioHec.Pipeline = types.StringPointerValue(resp.OutputHumioHec.Pipeline)
+		r.Pipeline = r.OutputHumioHec.Pipeline
 		if resp.OutputHumioHec.PqCompress != nil {
 			r.OutputHumioHec.PqCompress = types.StringValue(string(*resp.OutputHumioHec.PqCompress))
 		} else {
@@ -4404,15 +4382,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHumioHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputHumioHec.ResponseHonorRetryAfterHeader)
 		r.OutputHumioHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem17 := range resp.OutputHumioHec.ResponseRetrySettings {
-			var responseRetrySettings17 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem16 := range resp.OutputHumioHec.ResponseRetrySettings {
+			var responseRetrySettings16 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
-			responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
-			responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
-			responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
+			responseRetrySettings16.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem16.BackoffRate)
+			responseRetrySettings16.HTTPStatus = types.Float64Value(responseRetrySettingsItem16.HTTPStatus)
+			responseRetrySettings16.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem16.InitialBackoff)
+			responseRetrySettings16.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem16.MaxBackoff)
 
-			r.OutputHumioHec.ResponseRetrySettings = append(r.OutputHumioHec.ResponseRetrySettings, responseRetrySettings17)
+			r.OutputHumioHec.ResponseRetrySettings = append(r.OutputHumioHec.ResponseRetrySettings, responseRetrySettings16)
 		}
 		r.OutputHumioHec.SafeHeaders = make([]types.String, 0, len(resp.OutputHumioHec.SafeHeaders))
 		for _, v := range resp.OutputHumioHec.SafeHeaders {
@@ -4439,6 +4417,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputHumioHec.TimeoutSec = types.Float64PointerValue(resp.OutputHumioHec.TimeoutSec)
 		r.OutputHumioHec.Token = types.StringPointerValue(resp.OutputHumioHec.Token)
 		r.OutputHumioHec.Type = types.StringValue(string(resp.OutputHumioHec.Type))
+		r.Type = r.OutputHumioHec.Type
 		r.OutputHumioHec.URL = types.StringValue(resp.OutputHumioHec.URL)
 		r.OutputHumioHec.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputHumioHec.UseRoundRobinDNS)
 	}
@@ -4466,15 +4445,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.Description = types.StringPointerValue(resp.OutputInfluxdb.Description)
 		r.OutputInfluxdb.DynamicValueFieldName = types.BoolPointerValue(resp.OutputInfluxdb.DynamicValueFieldName)
 		r.OutputInfluxdb.Environment = types.StringPointerValue(resp.OutputInfluxdb.Environment)
+		r.Environment = r.OutputInfluxdb.Environment
 		r.OutputInfluxdb.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem17 := range resp.OutputInfluxdb.ExtraHTTPHeaders {
-			var extraHTTPHeaders17 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem16 := range resp.OutputInfluxdb.ExtraHTTPHeaders {
+			var extraHTTPHeaders16 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
-			extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
+			extraHTTPHeaders16.Name = types.StringPointerValue(extraHTTPHeadersItem16.Name)
+			extraHTTPHeaders16.Value = types.StringValue(extraHTTPHeadersItem16.Value)
 
-			r.OutputInfluxdb.ExtraHTTPHeaders = append(r.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders17)
+			r.OutputInfluxdb.ExtraHTTPHeaders = append(r.OutputInfluxdb.ExtraHTTPHeaders, extraHTTPHeaders16)
 		}
 		if resp.OutputInfluxdb.FailedRequestLoggingMode != nil {
 			r.OutputInfluxdb.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputInfluxdb.FailedRequestLoggingMode))
@@ -4483,6 +4463,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputInfluxdb.FlushPeriodSec = types.Float64PointerValue(resp.OutputInfluxdb.FlushPeriodSec)
 		r.OutputInfluxdb.ID = types.StringPointerValue(resp.OutputInfluxdb.ID)
+		r.ID = r.OutputInfluxdb.ID
 		if resp.OutputInfluxdb.LoginURL == nil {
 			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedNull()
 		} else {
@@ -4539,6 +4520,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.Org = types.StringPointerValue(resp.OutputInfluxdb.Org)
 		r.OutputInfluxdb.Password = types.StringPointerValue(resp.OutputInfluxdb.Password)
 		r.OutputInfluxdb.Pipeline = types.StringPointerValue(resp.OutputInfluxdb.Pipeline)
+		r.Pipeline = r.OutputInfluxdb.Pipeline
 		if resp.OutputInfluxdb.PqCompress != nil {
 			r.OutputInfluxdb.PqCompress = types.StringValue(string(*resp.OutputInfluxdb.PqCompress))
 		} else {
@@ -4571,15 +4553,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputInfluxdb.ResponseHonorRetryAfterHeader)
 		r.OutputInfluxdb.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem18 := range resp.OutputInfluxdb.ResponseRetrySettings {
-			var responseRetrySettings18 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem17 := range resp.OutputInfluxdb.ResponseRetrySettings {
+			var responseRetrySettings17 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
-			responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
-			responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
-			responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
+			responseRetrySettings17.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem17.BackoffRate)
+			responseRetrySettings17.HTTPStatus = types.Float64Value(responseRetrySettingsItem17.HTTPStatus)
+			responseRetrySettings17.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem17.InitialBackoff)
+			responseRetrySettings17.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem17.MaxBackoff)
 
-			r.OutputInfluxdb.ResponseRetrySettings = append(r.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings18)
+			r.OutputInfluxdb.ResponseRetrySettings = append(r.OutputInfluxdb.ResponseRetrySettings, responseRetrySettings17)
 		}
 		r.OutputInfluxdb.SafeHeaders = make([]types.String, 0, len(resp.OutputInfluxdb.SafeHeaders))
 		for _, v := range resp.OutputInfluxdb.SafeHeaders {
@@ -4635,6 +4617,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
 		}
 		r.OutputInfluxdb.Type = types.StringValue(string(resp.OutputInfluxdb.Type))
+		r.Type = r.OutputInfluxdb.Type
 		r.OutputInfluxdb.URL = types.StringValue(resp.OutputInfluxdb.URL)
 		r.OutputInfluxdb.Username = types.StringPointerValue(resp.OutputInfluxdb.Username)
 		r.OutputInfluxdb.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputInfluxdb.UseRoundRobinDNS)
@@ -4663,6 +4646,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputKafka.ConnectionTimeout = types.Float64PointerValue(resp.OutputKafka.ConnectionTimeout)
 		r.OutputKafka.Description = types.StringPointerValue(resp.OutputKafka.Description)
 		r.OutputKafka.Environment = types.StringPointerValue(resp.OutputKafka.Environment)
+		r.Environment = r.OutputKafka.Environment
 		r.OutputKafka.FlushEventCount = types.Float64PointerValue(resp.OutputKafka.FlushEventCount)
 		r.OutputKafka.FlushPeriodSec = types.Float64PointerValue(resp.OutputKafka.FlushPeriodSec)
 		if resp.OutputKafka.Format != nil {
@@ -4671,6 +4655,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputKafka.Format = types.StringNull()
 		}
 		r.OutputKafka.ID = types.StringPointerValue(resp.OutputKafka.ID)
+		r.ID = r.OutputKafka.ID
 		r.OutputKafka.InitialBackoff = types.Float64PointerValue(resp.OutputKafka.InitialBackoff)
 		if resp.OutputKafka.KafkaSchemaRegistry == nil {
 			r.OutputKafka.KafkaSchemaRegistry = nil
@@ -4723,6 +4708,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputKafka.OnBackpressure = types.StringNull()
 		}
 		r.OutputKafka.Pipeline = types.StringPointerValue(resp.OutputKafka.Pipeline)
+		r.Pipeline = r.OutputKafka.Pipeline
 		if resp.OutputKafka.PqCompress != nil {
 			r.OutputKafka.PqCompress = types.StringValue(string(*resp.OutputKafka.PqCompress))
 		} else {
@@ -4835,6 +4821,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputKafka.Topic = types.StringValue(resp.OutputKafka.Topic)
 		r.OutputKafka.Type = types.StringValue(string(resp.OutputKafka.Type))
+		r.Type = r.OutputKafka.Type
 	}
 	if resp.OutputKinesis != nil {
 		r.OutputKinesis = &tfTypes.OutputKinesis{}
@@ -4866,8 +4853,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputKinesis.EnableAssumeRole = types.BoolPointerValue(resp.OutputKinesis.EnableAssumeRole)
 		r.OutputKinesis.Endpoint = types.StringPointerValue(resp.OutputKinesis.Endpoint)
 		r.OutputKinesis.Environment = types.StringPointerValue(resp.OutputKinesis.Environment)
+		r.Environment = r.OutputKinesis.Environment
 		r.OutputKinesis.FlushPeriodSec = types.Float64PointerValue(resp.OutputKinesis.FlushPeriodSec)
 		r.OutputKinesis.ID = types.StringPointerValue(resp.OutputKinesis.ID)
+		r.ID = r.OutputKinesis.ID
 		r.OutputKinesis.MaxEventsPerFlush = types.Float64PointerValue(resp.OutputKinesis.MaxEventsPerFlush)
 		r.OutputKinesis.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputKinesis.MaxRecordSizeKB)
 		if resp.OutputKinesis.OnBackpressure != nil {
@@ -4876,6 +4865,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputKinesis.OnBackpressure = types.StringNull()
 		}
 		r.OutputKinesis.Pipeline = types.StringPointerValue(resp.OutputKinesis.Pipeline)
+		r.Pipeline = r.OutputKinesis.Pipeline
 		if resp.OutputKinesis.PqCompress != nil {
 			r.OutputKinesis.PqCompress = types.StringValue(string(*resp.OutputKinesis.PqCompress))
 		} else {
@@ -4922,6 +4912,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputKinesis.SystemFields = append(r.OutputKinesis.SystemFields, types.StringValue(v))
 		}
 		r.OutputKinesis.Type = types.StringValue(string(resp.OutputKinesis.Type))
+		r.Type = r.OutputKinesis.Type
 		r.OutputKinesis.UseListShards = types.BoolPointerValue(resp.OutputKinesis.UseListShards)
 	}
 	if resp.OutputLocalSearchStorage != nil {
@@ -4954,19 +4945,20 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputLocalSearchStorage.Description = types.StringPointerValue(resp.OutputLocalSearchStorage.Description)
 		r.OutputLocalSearchStorage.DumpFormatErrorsToDisk = types.BoolPointerValue(resp.OutputLocalSearchStorage.DumpFormatErrorsToDisk)
 		r.OutputLocalSearchStorage.Environment = types.StringPointerValue(resp.OutputLocalSearchStorage.Environment)
+		r.Environment = r.OutputLocalSearchStorage.Environment
 		r.OutputLocalSearchStorage.ExcludeMappingFields = make([]types.String, 0, len(resp.OutputLocalSearchStorage.ExcludeMappingFields))
 		for _, v := range resp.OutputLocalSearchStorage.ExcludeMappingFields {
 			r.OutputLocalSearchStorage.ExcludeMappingFields = append(r.OutputLocalSearchStorage.ExcludeMappingFields, types.StringValue(v))
 		}
 		r.OutputLocalSearchStorage.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem18 := range resp.OutputLocalSearchStorage.ExtraHTTPHeaders {
-			var extraHTTPHeaders18 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem17 := range resp.OutputLocalSearchStorage.ExtraHTTPHeaders {
+			var extraHTTPHeaders17 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
-			extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
+			extraHTTPHeaders17.Name = types.StringPointerValue(extraHTTPHeadersItem17.Name)
+			extraHTTPHeaders17.Value = types.StringValue(extraHTTPHeadersItem17.Value)
 
-			r.OutputLocalSearchStorage.ExtraHTTPHeaders = append(r.OutputLocalSearchStorage.ExtraHTTPHeaders, extraHTTPHeaders18)
+			r.OutputLocalSearchStorage.ExtraHTTPHeaders = append(r.OutputLocalSearchStorage.ExtraHTTPHeaders, extraHTTPHeaders17)
 		}
 		if resp.OutputLocalSearchStorage.FailedRequestLoggingMode != nil {
 			r.OutputLocalSearchStorage.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputLocalSearchStorage.FailedRequestLoggingMode))
@@ -4980,6 +4972,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputLocalSearchStorage.Format = types.StringNull()
 		}
 		r.OutputLocalSearchStorage.ID = types.StringPointerValue(resp.OutputLocalSearchStorage.ID)
+		r.ID = r.OutputLocalSearchStorage.ID
 		if resp.OutputLocalSearchStorage.MappingType != nil {
 			r.OutputLocalSearchStorage.MappingType = types.StringValue(string(*resp.OutputLocalSearchStorage.MappingType))
 		} else {
@@ -4994,6 +4987,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputLocalSearchStorage.Password = types.StringPointerValue(resp.OutputLocalSearchStorage.Password)
 		r.OutputLocalSearchStorage.Pipeline = types.StringPointerValue(resp.OutputLocalSearchStorage.Pipeline)
+		r.Pipeline = r.OutputLocalSearchStorage.Pipeline
 		if resp.OutputLocalSearchStorage.PqCompress != nil {
 			r.OutputLocalSearchStorage.PqCompress = types.StringValue(string(*resp.OutputLocalSearchStorage.PqCompress))
 		} else {
@@ -5026,15 +5020,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader)
 		r.OutputLocalSearchStorage.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem19 := range resp.OutputLocalSearchStorage.ResponseRetrySettings {
-			var responseRetrySettings19 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem18 := range resp.OutputLocalSearchStorage.ResponseRetrySettings {
+			var responseRetrySettings18 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
-			responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
-			responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
-			responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
+			responseRetrySettings18.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem18.BackoffRate)
+			responseRetrySettings18.HTTPStatus = types.Float64Value(responseRetrySettingsItem18.HTTPStatus)
+			responseRetrySettings18.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem18.InitialBackoff)
+			responseRetrySettings18.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem18.MaxBackoff)
 
-			r.OutputLocalSearchStorage.ResponseRetrySettings = append(r.OutputLocalSearchStorage.ResponseRetrySettings, responseRetrySettings19)
+			r.OutputLocalSearchStorage.ResponseRetrySettings = append(r.OutputLocalSearchStorage.ResponseRetrySettings, responseRetrySettings18)
 		}
 		r.OutputLocalSearchStorage.SafeHeaders = make([]types.String, 0, len(resp.OutputLocalSearchStorage.SafeHeaders))
 		for _, v := range resp.OutputLocalSearchStorage.SafeHeaders {
@@ -5095,6 +5089,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputLocalSearchStorage.TLS.Servername = types.StringPointerValue(resp.OutputLocalSearchStorage.TLS.Servername)
 		}
 		r.OutputLocalSearchStorage.Type = types.StringValue(string(resp.OutputLocalSearchStorage.Type))
+		r.Type = r.OutputLocalSearchStorage.Type
 		r.OutputLocalSearchStorage.URL = types.StringValue(resp.OutputLocalSearchStorage.URL)
 		r.OutputLocalSearchStorage.Username = types.StringPointerValue(resp.OutputLocalSearchStorage.Username)
 		r.OutputLocalSearchStorage.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputLocalSearchStorage.UseRoundRobinDNS)
@@ -5113,15 +5108,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputLoki.Description = types.StringPointerValue(resp.OutputLoki.Description)
 		r.OutputLoki.EnableDynamicHeaders = types.BoolPointerValue(resp.OutputLoki.EnableDynamicHeaders)
 		r.OutputLoki.Environment = types.StringPointerValue(resp.OutputLoki.Environment)
+		r.Environment = r.OutputLoki.Environment
 		r.OutputLoki.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem19 := range resp.OutputLoki.ExtraHTTPHeaders {
-			var extraHTTPHeaders19 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem18 := range resp.OutputLoki.ExtraHTTPHeaders {
+			var extraHTTPHeaders18 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
-			extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
+			extraHTTPHeaders18.Name = types.StringPointerValue(extraHTTPHeadersItem18.Name)
+			extraHTTPHeaders18.Value = types.StringValue(extraHTTPHeadersItem18.Value)
 
-			r.OutputLoki.ExtraHTTPHeaders = append(r.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders19)
+			r.OutputLoki.ExtraHTTPHeaders = append(r.OutputLoki.ExtraHTTPHeaders, extraHTTPHeaders18)
 		}
 		if resp.OutputLoki.FailedRequestLoggingMode != nil {
 			r.OutputLoki.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputLoki.FailedRequestLoggingMode))
@@ -5130,15 +5126,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputLoki.FlushPeriodSec = types.Float64PointerValue(resp.OutputLoki.FlushPeriodSec)
 		r.OutputLoki.ID = types.StringPointerValue(resp.OutputLoki.ID)
+		r.ID = r.OutputLoki.ID
 		r.OutputLoki.Labels = []tfTypes.ItemsTypeContentConfigItemsRequestParams{}
 
-		for _, labelsItem2 := range resp.OutputLoki.Labels {
-			var labels2 tfTypes.ItemsTypeContentConfigItemsRequestParams
+		for _, labelsItem1 := range resp.OutputLoki.Labels {
+			var labels1 tfTypes.ItemsTypeContentConfigItemsRequestParams
 
-			labels2.Name = types.StringValue(labelsItem2.Name)
-			labels2.Value = types.StringValue(labelsItem2.Value)
+			labels1.Name = types.StringValue(labelsItem1.Name)
+			labels1.Value = types.StringValue(labelsItem1.Value)
 
-			r.OutputLoki.Labels = append(r.OutputLoki.Labels, labels2)
+			r.OutputLoki.Labels = append(r.OutputLoki.Labels, labels1)
 		}
 		r.OutputLoki.MaxPayloadEvents = types.Float64PointerValue(resp.OutputLoki.MaxPayloadEvents)
 		r.OutputLoki.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputLoki.MaxPayloadSizeKB)
@@ -5155,6 +5152,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputLoki.Password = types.StringPointerValue(resp.OutputLoki.Password)
 		r.OutputLoki.Pipeline = types.StringPointerValue(resp.OutputLoki.Pipeline)
+		r.Pipeline = r.OutputLoki.Pipeline
 		if resp.OutputLoki.PqCompress != nil {
 			r.OutputLoki.PqCompress = types.StringValue(string(*resp.OutputLoki.PqCompress))
 		} else {
@@ -5187,15 +5185,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputLoki.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputLoki.ResponseHonorRetryAfterHeader)
 		r.OutputLoki.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem20 := range resp.OutputLoki.ResponseRetrySettings {
-			var responseRetrySettings20 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem19 := range resp.OutputLoki.ResponseRetrySettings {
+			var responseRetrySettings19 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
-			responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
-			responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
-			responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
+			responseRetrySettings19.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem19.BackoffRate)
+			responseRetrySettings19.HTTPStatus = types.Float64Value(responseRetrySettingsItem19.HTTPStatus)
+			responseRetrySettings19.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem19.InitialBackoff)
+			responseRetrySettings19.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem19.MaxBackoff)
 
-			r.OutputLoki.ResponseRetrySettings = append(r.OutputLoki.ResponseRetrySettings, responseRetrySettings20)
+			r.OutputLoki.ResponseRetrySettings = append(r.OutputLoki.ResponseRetrySettings, responseRetrySettings19)
 		}
 		r.OutputLoki.SafeHeaders = make([]types.String, 0, len(resp.OutputLoki.SafeHeaders))
 		for _, v := range resp.OutputLoki.SafeHeaders {
@@ -5223,6 +5221,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputLoki.Token = types.StringPointerValue(resp.OutputLoki.Token)
 		r.OutputLoki.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputLoki.TotalMemoryLimitKB)
 		r.OutputLoki.Type = types.StringValue(string(resp.OutputLoki.Type))
+		r.Type = r.OutputLoki.Type
 		r.OutputLoki.URL = types.StringValue(resp.OutputLoki.URL)
 		r.OutputLoki.Username = types.StringPointerValue(resp.OutputLoki.Username)
 		r.OutputLoki.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputLoki.UseRoundRobinDNS)
@@ -5242,6 +5241,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputMicrosoftFabric.ConnectionTimeout = types.Float64PointerValue(resp.OutputMicrosoftFabric.ConnectionTimeout)
 		r.OutputMicrosoftFabric.Description = types.StringPointerValue(resp.OutputMicrosoftFabric.Description)
 		r.OutputMicrosoftFabric.Environment = types.StringPointerValue(resp.OutputMicrosoftFabric.Environment)
+		r.Environment = r.OutputMicrosoftFabric.Environment
 		r.OutputMicrosoftFabric.FlushEventCount = types.Float64PointerValue(resp.OutputMicrosoftFabric.FlushEventCount)
 		r.OutputMicrosoftFabric.FlushPeriodSec = types.Float64PointerValue(resp.OutputMicrosoftFabric.FlushPeriodSec)
 		if resp.OutputMicrosoftFabric.Format != nil {
@@ -5250,6 +5250,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputMicrosoftFabric.Format = types.StringNull()
 		}
 		r.OutputMicrosoftFabric.ID = types.StringPointerValue(resp.OutputMicrosoftFabric.ID)
+		r.ID = r.OutputMicrosoftFabric.ID
 		r.OutputMicrosoftFabric.InitialBackoff = types.Float64PointerValue(resp.OutputMicrosoftFabric.InitialBackoff)
 		r.OutputMicrosoftFabric.MaxBackOff = types.Float64PointerValue(resp.OutputMicrosoftFabric.MaxBackOff)
 		r.OutputMicrosoftFabric.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputMicrosoftFabric.MaxRecordSizeKB)
@@ -5260,6 +5261,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputMicrosoftFabric.OnBackpressure = types.StringNull()
 		}
 		r.OutputMicrosoftFabric.Pipeline = types.StringPointerValue(resp.OutputMicrosoftFabric.Pipeline)
+		r.Pipeline = r.OutputMicrosoftFabric.Pipeline
 		if resp.OutputMicrosoftFabric.PqCompress != nil {
 			r.OutputMicrosoftFabric.PqCompress = types.StringValue(string(*resp.OutputMicrosoftFabric.PqCompress))
 		} else {
@@ -5338,6 +5340,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputMicrosoftFabric.Topic = types.StringValue(resp.OutputMicrosoftFabric.Topic)
 		r.OutputMicrosoftFabric.Type = types.StringValue(string(resp.OutputMicrosoftFabric.Type))
+		r.Type = r.OutputMicrosoftFabric.Type
 	}
 	if resp.OutputMinio != nil {
 		r.OutputMinio = &tfTypes.OutputMinio{}
@@ -5378,6 +5381,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputMinio.EnableWritePageIndex = types.BoolPointerValue(resp.OutputMinio.EnableWritePageIndex)
 		r.OutputMinio.Endpoint = types.StringValue(resp.OutputMinio.Endpoint)
 		r.OutputMinio.Environment = types.StringPointerValue(resp.OutputMinio.Environment)
+		r.Environment = r.OutputMinio.Environment
 		r.OutputMinio.FileNameSuffix = types.StringPointerValue(resp.OutputMinio.FileNameSuffix)
 		r.OutputMinio.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputMinio.ForceCloseOnShutdown)
 		if resp.OutputMinio.Format != nil {
@@ -5387,6 +5391,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputMinio.HeaderLine = types.StringPointerValue(resp.OutputMinio.HeaderLine)
 		r.OutputMinio.ID = types.StringPointerValue(resp.OutputMinio.ID)
+		r.ID = r.OutputMinio.ID
 		r.OutputMinio.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem7 := range resp.OutputMinio.KeyValueMetadata {
@@ -5433,6 +5438,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputMinio.PartitionExpr = types.StringPointerValue(resp.OutputMinio.PartitionExpr)
 		r.OutputMinio.Pipeline = types.StringPointerValue(resp.OutputMinio.Pipeline)
+		r.Pipeline = r.OutputMinio.Pipeline
 		r.OutputMinio.Region = types.StringPointerValue(resp.OutputMinio.Region)
 		r.OutputMinio.RejectUnauthorized = types.BoolPointerValue(resp.OutputMinio.RejectUnauthorized)
 		r.OutputMinio.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputMinio.RemoveEmptyDirs)
@@ -5473,6 +5479,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputMinio.SystemFields = append(r.OutputMinio.SystemFields, types.StringValue(v))
 		}
 		r.OutputMinio.Type = types.StringValue(string(resp.OutputMinio.Type))
+		r.Type = r.OutputMinio.Type
 		r.OutputMinio.VerifyPermissions = types.BoolPointerValue(resp.OutputMinio.VerifyPermissions)
 		r.OutputMinio.WriteHighWaterMark = types.Float64PointerValue(resp.OutputMinio.WriteHighWaterMark)
 	}
@@ -5512,6 +5519,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputMsk.EnableAssumeRole = types.BoolPointerValue(resp.OutputMsk.EnableAssumeRole)
 		r.OutputMsk.Endpoint = types.StringPointerValue(resp.OutputMsk.Endpoint)
 		r.OutputMsk.Environment = types.StringPointerValue(resp.OutputMsk.Environment)
+		r.Environment = r.OutputMsk.Environment
 		r.OutputMsk.FlushEventCount = types.Float64PointerValue(resp.OutputMsk.FlushEventCount)
 		r.OutputMsk.FlushPeriodSec = types.Float64PointerValue(resp.OutputMsk.FlushPeriodSec)
 		if resp.OutputMsk.Format != nil {
@@ -5520,6 +5528,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputMsk.Format = types.StringNull()
 		}
 		r.OutputMsk.ID = types.StringPointerValue(resp.OutputMsk.ID)
+		r.ID = r.OutputMsk.ID
 		r.OutputMsk.InitialBackoff = types.Float64PointerValue(resp.OutputMsk.InitialBackoff)
 		if resp.OutputMsk.KafkaSchemaRegistry == nil {
 			r.OutputMsk.KafkaSchemaRegistry = nil
@@ -5572,6 +5581,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputMsk.OnBackpressure = types.StringNull()
 		}
 		r.OutputMsk.Pipeline = types.StringPointerValue(resp.OutputMsk.Pipeline)
+		r.Pipeline = r.OutputMsk.Pipeline
 		if resp.OutputMsk.PqCompress != nil {
 			r.OutputMsk.PqCompress = types.StringValue(string(*resp.OutputMsk.PqCompress))
 		} else {
@@ -5645,6 +5655,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputMsk.Topic = types.StringValue(resp.OutputMsk.Topic)
 		r.OutputMsk.Type = types.StringValue(string(resp.OutputMsk.Type))
+		r.Type = r.OutputMsk.Type
 	}
 	if resp.OutputNetflow != nil {
 		r.OutputNetflow = &tfTypes.OutputNetflow{}
@@ -5652,6 +5663,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNetflow.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputNetflow.DNSResolvePeriodSec)
 		r.OutputNetflow.EnableIPSpoofing = types.BoolPointerValue(resp.OutputNetflow.EnableIPSpoofing)
 		r.OutputNetflow.Environment = types.StringPointerValue(resp.OutputNetflow.Environment)
+		r.Environment = r.OutputNetflow.Environment
 		r.OutputNetflow.Hosts = []tfTypes.OutputNetflowHost{}
 
 		for _, hostsItem1 := range resp.OutputNetflow.Hosts {
@@ -5665,8 +5677,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputNetflow.Hosts = append(r.OutputNetflow.Hosts, hosts1)
 		}
 		r.OutputNetflow.ID = types.StringPointerValue(resp.OutputNetflow.ID)
+		r.ID = r.OutputNetflow.ID
 		r.OutputNetflow.MaxRecordSize = types.Float64PointerValue(resp.OutputNetflow.MaxRecordSize)
 		r.OutputNetflow.Pipeline = types.StringPointerValue(resp.OutputNetflow.Pipeline)
+		r.Pipeline = r.OutputNetflow.Pipeline
 		r.OutputNetflow.Streamtags = make([]types.String, 0, len(resp.OutputNetflow.Streamtags))
 		for _, v := range resp.OutputNetflow.Streamtags {
 			r.OutputNetflow.Streamtags = append(r.OutputNetflow.Streamtags, types.StringValue(v))
@@ -5676,6 +5690,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputNetflow.SystemFields = append(r.OutputNetflow.SystemFields, types.StringValue(v))
 		}
 		r.OutputNetflow.Type = types.StringValue(string(resp.OutputNetflow.Type))
+		r.Type = r.OutputNetflow.Type
 	}
 	if resp.OutputNewrelic != nil {
 		r.OutputNewrelic = &tfTypes.OutputNewrelic{}
@@ -5693,15 +5708,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNewrelic.CustomURL = types.StringPointerValue(resp.OutputNewrelic.CustomURL)
 		r.OutputNewrelic.Description = types.StringPointerValue(resp.OutputNewrelic.Description)
 		r.OutputNewrelic.Environment = types.StringPointerValue(resp.OutputNewrelic.Environment)
+		r.Environment = r.OutputNewrelic.Environment
 		r.OutputNewrelic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem20 := range resp.OutputNewrelic.ExtraHTTPHeaders {
-			var extraHTTPHeaders20 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem19 := range resp.OutputNewrelic.ExtraHTTPHeaders {
+			var extraHTTPHeaders19 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
-			extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
+			extraHTTPHeaders19.Name = types.StringPointerValue(extraHTTPHeadersItem19.Name)
+			extraHTTPHeaders19.Value = types.StringValue(extraHTTPHeadersItem19.Value)
 
-			r.OutputNewrelic.ExtraHTTPHeaders = append(r.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders20)
+			r.OutputNewrelic.ExtraHTTPHeaders = append(r.OutputNewrelic.ExtraHTTPHeaders, extraHTTPHeaders19)
 		}
 		if resp.OutputNewrelic.FailedRequestLoggingMode != nil {
 			r.OutputNewrelic.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputNewrelic.FailedRequestLoggingMode))
@@ -5710,6 +5726,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputNewrelic.FlushPeriodSec = types.Float64PointerValue(resp.OutputNewrelic.FlushPeriodSec)
 		r.OutputNewrelic.ID = types.StringPointerValue(resp.OutputNewrelic.ID)
+		r.ID = r.OutputNewrelic.ID
 		r.OutputNewrelic.LogType = types.StringPointerValue(resp.OutputNewrelic.LogType)
 		r.OutputNewrelic.MaxPayloadEvents = types.Float64PointerValue(resp.OutputNewrelic.MaxPayloadEvents)
 		r.OutputNewrelic.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputNewrelic.MaxPayloadSizeKB)
@@ -5730,6 +5747,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputNewrelic.OnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelic.Pipeline = types.StringPointerValue(resp.OutputNewrelic.Pipeline)
+		r.Pipeline = r.OutputNewrelic.Pipeline
 		if resp.OutputNewrelic.PqCompress != nil {
 			r.OutputNewrelic.PqCompress = types.StringValue(string(*resp.OutputNewrelic.PqCompress))
 		} else {
@@ -5767,15 +5785,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNewrelic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputNewrelic.ResponseHonorRetryAfterHeader)
 		r.OutputNewrelic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem21 := range resp.OutputNewrelic.ResponseRetrySettings {
-			var responseRetrySettings21 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem20 := range resp.OutputNewrelic.ResponseRetrySettings {
+			var responseRetrySettings20 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
-			responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
-			responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
-			responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
+			responseRetrySettings20.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem20.BackoffRate)
+			responseRetrySettings20.HTTPStatus = types.Float64Value(responseRetrySettingsItem20.HTTPStatus)
+			responseRetrySettings20.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem20.InitialBackoff)
+			responseRetrySettings20.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem20.MaxBackoff)
 
-			r.OutputNewrelic.ResponseRetrySettings = append(r.OutputNewrelic.ResponseRetrySettings, responseRetrySettings21)
+			r.OutputNewrelic.ResponseRetrySettings = append(r.OutputNewrelic.ResponseRetrySettings, responseRetrySettings20)
 		}
 		r.OutputNewrelic.SafeHeaders = make([]types.String, 0, len(resp.OutputNewrelic.SafeHeaders))
 		for _, v := range resp.OutputNewrelic.SafeHeaders {
@@ -5802,6 +5820,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNewrelic.TimeoutSec = types.Float64PointerValue(resp.OutputNewrelic.TimeoutSec)
 		r.OutputNewrelic.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputNewrelic.TotalMemoryLimitKB)
 		r.OutputNewrelic.Type = types.StringValue(string(resp.OutputNewrelic.Type))
+		r.Type = r.OutputNewrelic.Type
 		r.OutputNewrelic.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputNewrelic.UseRoundRobinDNS)
 	}
 	if resp.OutputNewrelicEvents != nil {
@@ -5822,16 +5841,17 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNewrelicEvents.CustomURL = types.StringPointerValue(resp.OutputNewrelicEvents.CustomURL)
 		r.OutputNewrelicEvents.Description = types.StringPointerValue(resp.OutputNewrelicEvents.Description)
 		r.OutputNewrelicEvents.Environment = types.StringPointerValue(resp.OutputNewrelicEvents.Environment)
+		r.Environment = r.OutputNewrelicEvents.Environment
 		r.OutputNewrelicEvents.EventType = types.StringValue(resp.OutputNewrelicEvents.EventType)
 		r.OutputNewrelicEvents.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem21 := range resp.OutputNewrelicEvents.ExtraHTTPHeaders {
-			var extraHTTPHeaders21 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem20 := range resp.OutputNewrelicEvents.ExtraHTTPHeaders {
+			var extraHTTPHeaders20 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
-			extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
+			extraHTTPHeaders20.Name = types.StringPointerValue(extraHTTPHeadersItem20.Name)
+			extraHTTPHeaders20.Value = types.StringValue(extraHTTPHeadersItem20.Value)
 
-			r.OutputNewrelicEvents.ExtraHTTPHeaders = append(r.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders21)
+			r.OutputNewrelicEvents.ExtraHTTPHeaders = append(r.OutputNewrelicEvents.ExtraHTTPHeaders, extraHTTPHeaders20)
 		}
 		if resp.OutputNewrelicEvents.FailedRequestLoggingMode != nil {
 			r.OutputNewrelicEvents.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputNewrelicEvents.FailedRequestLoggingMode))
@@ -5840,6 +5860,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputNewrelicEvents.FlushPeriodSec = types.Float64PointerValue(resp.OutputNewrelicEvents.FlushPeriodSec)
 		r.OutputNewrelicEvents.ID = types.StringPointerValue(resp.OutputNewrelicEvents.ID)
+		r.ID = r.OutputNewrelicEvents.ID
 		r.OutputNewrelicEvents.MaxPayloadEvents = types.Float64PointerValue(resp.OutputNewrelicEvents.MaxPayloadEvents)
 		r.OutputNewrelicEvents.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputNewrelicEvents.MaxPayloadSizeKB)
 		if resp.OutputNewrelicEvents.OnBackpressure != nil {
@@ -5848,6 +5869,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputNewrelicEvents.OnBackpressure = types.StringNull()
 		}
 		r.OutputNewrelicEvents.Pipeline = types.StringPointerValue(resp.OutputNewrelicEvents.Pipeline)
+		r.Pipeline = r.OutputNewrelicEvents.Pipeline
 		if resp.OutputNewrelicEvents.PqCompress != nil {
 			r.OutputNewrelicEvents.PqCompress = types.StringValue(string(*resp.OutputNewrelicEvents.PqCompress))
 		} else {
@@ -5885,15 +5907,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputNewrelicEvents.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputNewrelicEvents.ResponseHonorRetryAfterHeader)
 		r.OutputNewrelicEvents.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem22 := range resp.OutputNewrelicEvents.ResponseRetrySettings {
-			var responseRetrySettings22 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem21 := range resp.OutputNewrelicEvents.ResponseRetrySettings {
+			var responseRetrySettings21 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
-			responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
-			responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
-			responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
+			responseRetrySettings21.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem21.BackoffRate)
+			responseRetrySettings21.HTTPStatus = types.Float64Value(responseRetrySettingsItem21.HTTPStatus)
+			responseRetrySettings21.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem21.InitialBackoff)
+			responseRetrySettings21.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem21.MaxBackoff)
 
-			r.OutputNewrelicEvents.ResponseRetrySettings = append(r.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings22)
+			r.OutputNewrelicEvents.ResponseRetrySettings = append(r.OutputNewrelicEvents.ResponseRetrySettings, responseRetrySettings21)
 		}
 		r.OutputNewrelicEvents.SafeHeaders = make([]types.String, 0, len(resp.OutputNewrelicEvents.SafeHeaders))
 		for _, v := range resp.OutputNewrelicEvents.SafeHeaders {
@@ -5919,6 +5941,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputNewrelicEvents.TimeoutSec = types.Float64PointerValue(resp.OutputNewrelicEvents.TimeoutSec)
 		r.OutputNewrelicEvents.Type = types.StringValue(string(resp.OutputNewrelicEvents.Type))
+		r.Type = r.OutputNewrelicEvents.Type
 		r.OutputNewrelicEvents.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputNewrelicEvents.UseRoundRobinDNS)
 	}
 	if resp.OutputOpenTelemetry != nil {
@@ -5945,15 +5968,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputOpenTelemetry.Description = types.StringPointerValue(resp.OutputOpenTelemetry.Description)
 		r.OutputOpenTelemetry.Endpoint = types.StringValue(resp.OutputOpenTelemetry.Endpoint)
 		r.OutputOpenTelemetry.Environment = types.StringPointerValue(resp.OutputOpenTelemetry.Environment)
+		r.Environment = r.OutputOpenTelemetry.Environment
 		r.OutputOpenTelemetry.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem22 := range resp.OutputOpenTelemetry.ExtraHTTPHeaders {
-			var extraHTTPHeaders22 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem21 := range resp.OutputOpenTelemetry.ExtraHTTPHeaders {
+			var extraHTTPHeaders21 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
-			extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
+			extraHTTPHeaders21.Name = types.StringPointerValue(extraHTTPHeadersItem21.Name)
+			extraHTTPHeaders21.Value = types.StringValue(extraHTTPHeadersItem21.Value)
 
-			r.OutputOpenTelemetry.ExtraHTTPHeaders = append(r.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders22)
+			r.OutputOpenTelemetry.ExtraHTTPHeaders = append(r.OutputOpenTelemetry.ExtraHTTPHeaders, extraHTTPHeaders21)
 		}
 		if resp.OutputOpenTelemetry.FailedRequestLoggingMode != nil {
 			r.OutputOpenTelemetry.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputOpenTelemetry.FailedRequestLoggingMode))
@@ -5970,6 +5994,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputOpenTelemetry.HTTPMetricsEndpointOverride = types.StringPointerValue(resp.OutputOpenTelemetry.HTTPMetricsEndpointOverride)
 		r.OutputOpenTelemetry.HTTPTracesEndpointOverride = types.StringPointerValue(resp.OutputOpenTelemetry.HTTPTracesEndpointOverride)
 		r.OutputOpenTelemetry.ID = types.StringPointerValue(resp.OutputOpenTelemetry.ID)
+		r.ID = r.OutputOpenTelemetry.ID
 		r.OutputOpenTelemetry.KeepAlive = types.BoolPointerValue(resp.OutputOpenTelemetry.KeepAlive)
 		r.OutputOpenTelemetry.KeepAliveTime = types.Float64PointerValue(resp.OutputOpenTelemetry.KeepAliveTime)
 		if resp.OutputOpenTelemetry.LoginURL == nil {
@@ -6041,6 +6066,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputOpenTelemetry.Password = types.StringPointerValue(resp.OutputOpenTelemetry.Password)
 		r.OutputOpenTelemetry.Pipeline = types.StringPointerValue(resp.OutputOpenTelemetry.Pipeline)
+		r.Pipeline = r.OutputOpenTelemetry.Pipeline
 		if resp.OutputOpenTelemetry.PqCompress != nil {
 			r.OutputOpenTelemetry.PqCompress = types.StringValue(string(*resp.OutputOpenTelemetry.PqCompress))
 		} else {
@@ -6078,15 +6104,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputOpenTelemetry.ResponseHonorRetryAfterHeader)
 		r.OutputOpenTelemetry.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem23 := range resp.OutputOpenTelemetry.ResponseRetrySettings {
-			var responseRetrySettings23 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem22 := range resp.OutputOpenTelemetry.ResponseRetrySettings {
+			var responseRetrySettings22 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
-			responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
-			responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
-			responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
+			responseRetrySettings22.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem22.BackoffRate)
+			responseRetrySettings22.HTTPStatus = types.Float64Value(responseRetrySettingsItem22.HTTPStatus)
+			responseRetrySettings22.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem22.InitialBackoff)
+			responseRetrySettings22.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem22.MaxBackoff)
 
-			r.OutputOpenTelemetry.ResponseRetrySettings = append(r.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings23)
+			r.OutputOpenTelemetry.ResponseRetrySettings = append(r.OutputOpenTelemetry.ResponseRetrySettings, responseRetrySettings22)
 		}
 		r.OutputOpenTelemetry.SafeHeaders = make([]types.String, 0, len(resp.OutputOpenTelemetry.SafeHeaders))
 		for _, v := range resp.OutputOpenTelemetry.SafeHeaders {
@@ -6159,6 +6185,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
 		}
 		r.OutputOpenTelemetry.Type = types.StringValue(string(resp.OutputOpenTelemetry.Type))
+		r.Type = r.OutputOpenTelemetry.Type
 		r.OutputOpenTelemetry.Username = types.StringPointerValue(resp.OutputOpenTelemetry.Username)
 		r.OutputOpenTelemetry.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputOpenTelemetry.UseRoundRobinDNS)
 	}
@@ -6180,15 +6207,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputPrometheus.CredentialsSecret = types.StringPointerValue(resp.OutputPrometheus.CredentialsSecret)
 		r.OutputPrometheus.Description = types.StringPointerValue(resp.OutputPrometheus.Description)
 		r.OutputPrometheus.Environment = types.StringPointerValue(resp.OutputPrometheus.Environment)
+		r.Environment = r.OutputPrometheus.Environment
 		r.OutputPrometheus.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem23 := range resp.OutputPrometheus.ExtraHTTPHeaders {
-			var extraHTTPHeaders23 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem22 := range resp.OutputPrometheus.ExtraHTTPHeaders {
+			var extraHTTPHeaders22 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
-			extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
+			extraHTTPHeaders22.Name = types.StringPointerValue(extraHTTPHeadersItem22.Name)
+			extraHTTPHeaders22.Value = types.StringValue(extraHTTPHeadersItem22.Value)
 
-			r.OutputPrometheus.ExtraHTTPHeaders = append(r.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders23)
+			r.OutputPrometheus.ExtraHTTPHeaders = append(r.OutputPrometheus.ExtraHTTPHeaders, extraHTTPHeaders22)
 		}
 		if resp.OutputPrometheus.FailedRequestLoggingMode != nil {
 			r.OutputPrometheus.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputPrometheus.FailedRequestLoggingMode))
@@ -6197,6 +6225,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputPrometheus.FlushPeriodSec = types.Float64PointerValue(resp.OutputPrometheus.FlushPeriodSec)
 		r.OutputPrometheus.ID = types.StringPointerValue(resp.OutputPrometheus.ID)
+		r.ID = r.OutputPrometheus.ID
 		if resp.OutputPrometheus.LoginURL == nil {
 			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedNull()
 		} else {
@@ -6254,6 +6283,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputPrometheus.Password = types.StringPointerValue(resp.OutputPrometheus.Password)
 		r.OutputPrometheus.Pipeline = types.StringPointerValue(resp.OutputPrometheus.Pipeline)
+		r.Pipeline = r.OutputPrometheus.Pipeline
 		if resp.OutputPrometheus.PqCompress != nil {
 			r.OutputPrometheus.PqCompress = types.StringValue(string(*resp.OutputPrometheus.PqCompress))
 		} else {
@@ -6286,15 +6316,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputPrometheus.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputPrometheus.ResponseHonorRetryAfterHeader)
 		r.OutputPrometheus.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem24 := range resp.OutputPrometheus.ResponseRetrySettings {
-			var responseRetrySettings24 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem23 := range resp.OutputPrometheus.ResponseRetrySettings {
+			var responseRetrySettings23 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
-			responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
-			responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
-			responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
+			responseRetrySettings23.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem23.BackoffRate)
+			responseRetrySettings23.HTTPStatus = types.Float64Value(responseRetrySettingsItem23.HTTPStatus)
+			responseRetrySettings23.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem23.InitialBackoff)
+			responseRetrySettings23.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem23.MaxBackoff)
 
-			r.OutputPrometheus.ResponseRetrySettings = append(r.OutputPrometheus.ResponseRetrySettings, responseRetrySettings24)
+			r.OutputPrometheus.ResponseRetrySettings = append(r.OutputPrometheus.ResponseRetrySettings, responseRetrySettings23)
 		}
 		r.OutputPrometheus.SafeHeaders = make([]types.String, 0, len(resp.OutputPrometheus.SafeHeaders))
 		for _, v := range resp.OutputPrometheus.SafeHeaders {
@@ -6346,6 +6376,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
 		}
 		r.OutputPrometheus.Type = types.StringValue(string(resp.OutputPrometheus.Type))
+		r.Type = r.OutputPrometheus.Type
 		r.OutputPrometheus.URL = types.StringValue(resp.OutputPrometheus.URL)
 		r.OutputPrometheus.Username = types.StringPointerValue(resp.OutputPrometheus.Username)
 		r.OutputPrometheus.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputPrometheus.UseRoundRobinDNS)
@@ -6360,12 +6391,14 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputRing.Description = types.StringPointerValue(resp.OutputRing.Description)
 		r.OutputRing.DestPath = types.StringPointerValue(resp.OutputRing.DestPath)
 		r.OutputRing.Environment = types.StringPointerValue(resp.OutputRing.Environment)
+		r.Environment = r.OutputRing.Environment
 		if resp.OutputRing.Format != nil {
 			r.OutputRing.Format = types.StringValue(string(*resp.OutputRing.Format))
 		} else {
 			r.OutputRing.Format = types.StringNull()
 		}
 		r.OutputRing.ID = types.StringPointerValue(resp.OutputRing.ID)
+		r.ID = r.OutputRing.ID
 		r.OutputRing.MaxDataSize = types.StringPointerValue(resp.OutputRing.MaxDataSize)
 		r.OutputRing.MaxDataTime = types.StringPointerValue(resp.OutputRing.MaxDataTime)
 		if resp.OutputRing.OnBackpressure != nil {
@@ -6375,6 +6408,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputRing.PartitionExpr = types.StringPointerValue(resp.OutputRing.PartitionExpr)
 		r.OutputRing.Pipeline = types.StringPointerValue(resp.OutputRing.Pipeline)
+		r.Pipeline = r.OutputRing.Pipeline
 		r.OutputRing.Streamtags = make([]types.String, 0, len(resp.OutputRing.Streamtags))
 		for _, v := range resp.OutputRing.Streamtags {
 			r.OutputRing.Streamtags = append(r.OutputRing.Streamtags, types.StringValue(v))
@@ -6384,13 +6418,17 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputRing.SystemFields = append(r.OutputRing.SystemFields, types.StringValue(v))
 		}
 		r.OutputRing.Type = types.StringValue(string(resp.OutputRing.Type))
+		r.Type = r.OutputRing.Type
 	}
 	if resp.OutputRouter != nil {
 		r.OutputRouter = &tfTypes.OutputRouter{}
 		r.OutputRouter.Description = types.StringPointerValue(resp.OutputRouter.Description)
 		r.OutputRouter.Environment = types.StringPointerValue(resp.OutputRouter.Environment)
+		r.Environment = r.OutputRouter.Environment
 		r.OutputRouter.ID = types.StringPointerValue(resp.OutputRouter.ID)
+		r.ID = r.OutputRouter.ID
 		r.OutputRouter.Pipeline = types.StringPointerValue(resp.OutputRouter.Pipeline)
+		r.Pipeline = r.OutputRouter.Pipeline
 		r.OutputRouter.Rules = []tfTypes.OutputRouterRule{}
 
 		for _, rulesItem := range resp.OutputRouter.Rules {
@@ -6412,6 +6450,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputRouter.SystemFields = append(r.OutputRouter.SystemFields, types.StringValue(v))
 		}
 		r.OutputRouter.Type = types.StringValue(string(resp.OutputRouter.Type))
+		r.Type = r.OutputRouter.Type
 	}
 	if resp.OutputS3 != nil {
 		r.OutputS3 = &tfTypes.OutputS3{}
@@ -6459,6 +6498,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputS3.EnableWritePageIndex = types.BoolPointerValue(resp.OutputS3.EnableWritePageIndex)
 		r.OutputS3.Endpoint = types.StringPointerValue(resp.OutputS3.Endpoint)
 		r.OutputS3.Environment = types.StringPointerValue(resp.OutputS3.Environment)
+		r.Environment = r.OutputS3.Environment
 		r.OutputS3.FileNameSuffix = types.StringPointerValue(resp.OutputS3.FileNameSuffix)
 		r.OutputS3.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputS3.ForceCloseOnShutdown)
 		if resp.OutputS3.Format != nil {
@@ -6468,6 +6508,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputS3.HeaderLine = types.StringPointerValue(resp.OutputS3.HeaderLine)
 		r.OutputS3.ID = types.StringPointerValue(resp.OutputS3.ID)
+		r.ID = r.OutputS3.ID
 		r.OutputS3.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem8 := range resp.OutputS3.KeyValueMetadata {
@@ -6516,6 +6557,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputS3.PartitionExpr = types.StringPointerValue(resp.OutputS3.PartitionExpr)
 		r.OutputS3.Pipeline = types.StringPointerValue(resp.OutputS3.Pipeline)
+		r.Pipeline = r.OutputS3.Pipeline
 		r.OutputS3.Region = types.StringPointerValue(resp.OutputS3.Region)
 		r.OutputS3.RejectUnauthorized = types.BoolPointerValue(resp.OutputS3.RejectUnauthorized)
 		r.OutputS3.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputS3.RemoveEmptyDirs)
@@ -6556,6 +6598,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputS3.SystemFields = append(r.OutputS3.SystemFields, types.StringValue(v))
 		}
 		r.OutputS3.Type = types.StringValue(string(resp.OutputS3.Type))
+		r.Type = r.OutputS3.Type
 		r.OutputS3.VerifyPermissions = types.BoolPointerValue(resp.OutputS3.VerifyPermissions)
 		r.OutputS3.WriteHighWaterMark = types.Float64PointerValue(resp.OutputS3.WriteHighWaterMark)
 	}
@@ -6595,9 +6638,11 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSecurityLake.EnableWritePageIndex = types.BoolPointerValue(resp.OutputSecurityLake.EnableWritePageIndex)
 		r.OutputSecurityLake.Endpoint = types.StringPointerValue(resp.OutputSecurityLake.Endpoint)
 		r.OutputSecurityLake.Environment = types.StringPointerValue(resp.OutputSecurityLake.Environment)
+		r.Environment = r.OutputSecurityLake.Environment
 		r.OutputSecurityLake.ForceCloseOnShutdown = types.BoolPointerValue(resp.OutputSecurityLake.ForceCloseOnShutdown)
 		r.OutputSecurityLake.HeaderLine = types.StringPointerValue(resp.OutputSecurityLake.HeaderLine)
 		r.OutputSecurityLake.ID = types.StringPointerValue(resp.OutputSecurityLake.ID)
+		r.ID = r.OutputSecurityLake.ID
 		r.OutputSecurityLake.KeyValueMetadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
 		for _, keyValueMetadataItem9 := range resp.OutputSecurityLake.KeyValueMetadata {
@@ -6645,6 +6690,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSecurityLake.ParquetVersion = types.StringNull()
 		}
 		r.OutputSecurityLake.Pipeline = types.StringPointerValue(resp.OutputSecurityLake.Pipeline)
+		r.Pipeline = r.OutputSecurityLake.Pipeline
 		r.OutputSecurityLake.Region = types.StringValue(resp.OutputSecurityLake.Region)
 		r.OutputSecurityLake.RejectUnauthorized = types.BoolPointerValue(resp.OutputSecurityLake.RejectUnauthorized)
 		r.OutputSecurityLake.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputSecurityLake.RemoveEmptyDirs)
@@ -6685,6 +6731,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSecurityLake.SystemFields = append(r.OutputSecurityLake.SystemFields, types.StringValue(v))
 		}
 		r.OutputSecurityLake.Type = types.StringValue(string(resp.OutputSecurityLake.Type))
+		r.Type = r.OutputSecurityLake.Type
 		r.OutputSecurityLake.VerifyPermissions = types.BoolPointerValue(resp.OutputSecurityLake.VerifyPermissions)
 		r.OutputSecurityLake.WriteHighWaterMark = types.Float64PointerValue(resp.OutputSecurityLake.WriteHighWaterMark)
 	}
@@ -6717,15 +6764,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinel.Description = types.StringPointerValue(resp.OutputSentinel.Description)
 		r.OutputSentinel.EndpointURLConfiguration = types.StringValue(string(resp.OutputSentinel.EndpointURLConfiguration))
 		r.OutputSentinel.Environment = types.StringPointerValue(resp.OutputSentinel.Environment)
+		r.Environment = r.OutputSentinel.Environment
 		r.OutputSentinel.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem24 := range resp.OutputSentinel.ExtraHTTPHeaders {
-			var extraHTTPHeaders24 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem23 := range resp.OutputSentinel.ExtraHTTPHeaders {
+			var extraHTTPHeaders23 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
-			extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
+			extraHTTPHeaders23.Name = types.StringPointerValue(extraHTTPHeadersItem23.Name)
+			extraHTTPHeaders23.Value = types.StringValue(extraHTTPHeadersItem23.Value)
 
-			r.OutputSentinel.ExtraHTTPHeaders = append(r.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders24)
+			r.OutputSentinel.ExtraHTTPHeaders = append(r.OutputSentinel.ExtraHTTPHeaders, extraHTTPHeaders23)
 		}
 		if resp.OutputSentinel.FailedRequestLoggingMode != nil {
 			r.OutputSentinel.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSentinel.FailedRequestLoggingMode))
@@ -6741,6 +6789,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinel.FormatEventCode = types.StringPointerValue(resp.OutputSentinel.FormatEventCode)
 		r.OutputSentinel.FormatPayloadCode = types.StringPointerValue(resp.OutputSentinel.FormatPayloadCode)
 		r.OutputSentinel.ID = types.StringPointerValue(resp.OutputSentinel.ID)
+		r.ID = r.OutputSentinel.ID
 		r.OutputSentinel.KeepAlive = types.BoolPointerValue(resp.OutputSentinel.KeepAlive)
 		r.OutputSentinel.LoginURL = types.StringValue(resp.OutputSentinel.LoginURL)
 		r.OutputSentinel.MaxPayloadEvents = types.Float64PointerValue(resp.OutputSentinel.MaxPayloadEvents)
@@ -6751,6 +6800,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSentinel.OnBackpressure = types.StringNull()
 		}
 		r.OutputSentinel.Pipeline = types.StringPointerValue(resp.OutputSentinel.Pipeline)
+		r.Pipeline = r.OutputSentinel.Pipeline
 		if resp.OutputSentinel.PqCompress != nil {
 			r.OutputSentinel.PqCompress = types.StringValue(string(*resp.OutputSentinel.PqCompress))
 		} else {
@@ -6783,15 +6833,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinel.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSentinel.ResponseHonorRetryAfterHeader)
 		r.OutputSentinel.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem25 := range resp.OutputSentinel.ResponseRetrySettings {
-			var responseRetrySettings25 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem24 := range resp.OutputSentinel.ResponseRetrySettings {
+			var responseRetrySettings24 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
-			responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
-			responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
-			responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
+			responseRetrySettings24.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem24.BackoffRate)
+			responseRetrySettings24.HTTPStatus = types.Float64Value(responseRetrySettingsItem24.HTTPStatus)
+			responseRetrySettings24.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem24.InitialBackoff)
+			responseRetrySettings24.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem24.MaxBackoff)
 
-			r.OutputSentinel.ResponseRetrySettings = append(r.OutputSentinel.ResponseRetrySettings, responseRetrySettings25)
+			r.OutputSentinel.ResponseRetrySettings = append(r.OutputSentinel.ResponseRetrySettings, responseRetrySettings24)
 		}
 		r.OutputSentinel.SafeHeaders = make([]types.String, 0, len(resp.OutputSentinel.SafeHeaders))
 		for _, v := range resp.OutputSentinel.SafeHeaders {
@@ -6820,6 +6870,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinel.TimeoutSec = types.Float64PointerValue(resp.OutputSentinel.TimeoutSec)
 		r.OutputSentinel.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputSentinel.TotalMemoryLimitKB)
 		r.OutputSentinel.Type = types.StringValue(string(resp.OutputSentinel.Type))
+		r.Type = r.OutputSentinel.Type
 		r.OutputSentinel.URL = types.StringPointerValue(resp.OutputSentinel.URL)
 		r.OutputSentinel.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSentinel.UseRoundRobinDNS)
 	}
@@ -6842,17 +6893,18 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinelOneAiSiem.Description = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Description)
 		r.OutputSentinelOneAiSiem.Endpoint = types.StringValue(string(resp.OutputSentinelOneAiSiem.Endpoint))
 		r.OutputSentinelOneAiSiem.Environment = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Environment)
+		r.Environment = r.OutputSentinelOneAiSiem.Environment
 		r.OutputSentinelOneAiSiem.EventType = types.StringPointerValue(resp.OutputSentinelOneAiSiem.EventType)
 		r.OutputSentinelOneAiSiem.EventTypeExpression = types.StringPointerValue(resp.OutputSentinelOneAiSiem.EventTypeExpression)
 		r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem25 := range resp.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
-			var extraHTTPHeaders25 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem24 := range resp.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
+			var extraHTTPHeaders24 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
-			extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
+			extraHTTPHeaders24.Name = types.StringPointerValue(extraHTTPHeadersItem24.Name)
+			extraHTTPHeaders24.Value = types.StringValue(extraHTTPHeadersItem24.Value)
 
-			r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders25)
+			r.OutputSentinelOneAiSiem.ExtraHTTPHeaders = append(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders, extraHTTPHeaders24)
 		}
 		if resp.OutputSentinelOneAiSiem.FailedRequestLoggingMode != nil {
 			r.OutputSentinelOneAiSiem.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSentinelOneAiSiem.FailedRequestLoggingMode))
@@ -6863,6 +6915,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinelOneAiSiem.Host = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Host)
 		r.OutputSentinelOneAiSiem.HostExpression = types.StringPointerValue(resp.OutputSentinelOneAiSiem.HostExpression)
 		r.OutputSentinelOneAiSiem.ID = types.StringPointerValue(resp.OutputSentinelOneAiSiem.ID)
+		r.ID = r.OutputSentinelOneAiSiem.ID
 		r.OutputSentinelOneAiSiem.MaxPayloadEvents = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.MaxPayloadEvents)
 		r.OutputSentinelOneAiSiem.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.MaxPayloadSizeKB)
 		if resp.OutputSentinelOneAiSiem.OnBackpressure != nil {
@@ -6871,6 +6924,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSentinelOneAiSiem.OnBackpressure = types.StringNull()
 		}
 		r.OutputSentinelOneAiSiem.Pipeline = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Pipeline)
+		r.Pipeline = r.OutputSentinelOneAiSiem.Pipeline
 		if resp.OutputSentinelOneAiSiem.PqCompress != nil {
 			r.OutputSentinelOneAiSiem.PqCompress = types.StringValue(string(*resp.OutputSentinelOneAiSiem.PqCompress))
 		} else {
@@ -6904,15 +6958,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader)
 		r.OutputSentinelOneAiSiem.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem26 := range resp.OutputSentinelOneAiSiem.ResponseRetrySettings {
-			var responseRetrySettings26 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem25 := range resp.OutputSentinelOneAiSiem.ResponseRetrySettings {
+			var responseRetrySettings25 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
-			responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
-			responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
-			responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
+			responseRetrySettings25.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem25.BackoffRate)
+			responseRetrySettings25.HTTPStatus = types.Float64Value(responseRetrySettingsItem25.HTTPStatus)
+			responseRetrySettings25.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem25.InitialBackoff)
+			responseRetrySettings25.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem25.MaxBackoff)
 
-			r.OutputSentinelOneAiSiem.ResponseRetrySettings = append(r.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings26)
+			r.OutputSentinelOneAiSiem.ResponseRetrySettings = append(r.OutputSentinelOneAiSiem.ResponseRetrySettings, responseRetrySettings25)
 		}
 		r.OutputSentinelOneAiSiem.SafeHeaders = make([]types.String, 0, len(resp.OutputSentinelOneAiSiem.SafeHeaders))
 		for _, v := range resp.OutputSentinelOneAiSiem.SafeHeaders {
@@ -6943,6 +6997,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSentinelOneAiSiem.TimeoutSec = types.Float64PointerValue(resp.OutputSentinelOneAiSiem.TimeoutSec)
 		r.OutputSentinelOneAiSiem.Token = types.StringPointerValue(resp.OutputSentinelOneAiSiem.Token)
 		r.OutputSentinelOneAiSiem.Type = types.StringValue(string(resp.OutputSentinelOneAiSiem.Type))
+		r.Type = r.OutputSentinelOneAiSiem.Type
 	}
 	if resp.OutputServiceNow != nil {
 		r.OutputServiceNow = &tfTypes.OutputServiceNow{}
@@ -6957,15 +7012,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputServiceNow.Description = types.StringPointerValue(resp.OutputServiceNow.Description)
 		r.OutputServiceNow.Endpoint = types.StringValue(resp.OutputServiceNow.Endpoint)
 		r.OutputServiceNow.Environment = types.StringPointerValue(resp.OutputServiceNow.Environment)
+		r.Environment = r.OutputServiceNow.Environment
 		r.OutputServiceNow.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem26 := range resp.OutputServiceNow.ExtraHTTPHeaders {
-			var extraHTTPHeaders26 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem25 := range resp.OutputServiceNow.ExtraHTTPHeaders {
+			var extraHTTPHeaders25 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
-			extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
+			extraHTTPHeaders25.Name = types.StringPointerValue(extraHTTPHeadersItem25.Name)
+			extraHTTPHeaders25.Value = types.StringValue(extraHTTPHeadersItem25.Value)
 
-			r.OutputServiceNow.ExtraHTTPHeaders = append(r.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders26)
+			r.OutputServiceNow.ExtraHTTPHeaders = append(r.OutputServiceNow.ExtraHTTPHeaders, extraHTTPHeaders25)
 		}
 		if resp.OutputServiceNow.FailedRequestLoggingMode != nil {
 			r.OutputServiceNow.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputServiceNow.FailedRequestLoggingMode))
@@ -6982,6 +7038,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputServiceNow.HTTPMetricsEndpointOverride = types.StringPointerValue(resp.OutputServiceNow.HTTPMetricsEndpointOverride)
 		r.OutputServiceNow.HTTPTracesEndpointOverride = types.StringPointerValue(resp.OutputServiceNow.HTTPTracesEndpointOverride)
 		r.OutputServiceNow.ID = types.StringPointerValue(resp.OutputServiceNow.ID)
+		r.ID = r.OutputServiceNow.ID
 		r.OutputServiceNow.KeepAlive = types.BoolPointerValue(resp.OutputServiceNow.KeepAlive)
 		r.OutputServiceNow.KeepAliveTime = types.Float64PointerValue(resp.OutputServiceNow.KeepAliveTime)
 		r.OutputServiceNow.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputServiceNow.MaxPayloadSizeKB)
@@ -7002,6 +7059,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputServiceNow.OtlpVersion = types.StringValue(string(resp.OutputServiceNow.OtlpVersion))
 		r.OutputServiceNow.Pipeline = types.StringPointerValue(resp.OutputServiceNow.Pipeline)
+		r.Pipeline = r.OutputServiceNow.Pipeline
 		if resp.OutputServiceNow.PqCompress != nil {
 			r.OutputServiceNow.PqCompress = types.StringValue(string(*resp.OutputServiceNow.PqCompress))
 		} else {
@@ -7035,15 +7093,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputServiceNow.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputServiceNow.ResponseHonorRetryAfterHeader)
 		r.OutputServiceNow.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem27 := range resp.OutputServiceNow.ResponseRetrySettings {
-			var responseRetrySettings27 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem26 := range resp.OutputServiceNow.ResponseRetrySettings {
+			var responseRetrySettings26 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
-			responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
-			responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
-			responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
+			responseRetrySettings26.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem26.BackoffRate)
+			responseRetrySettings26.HTTPStatus = types.Float64Value(responseRetrySettingsItem26.HTTPStatus)
+			responseRetrySettings26.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem26.InitialBackoff)
+			responseRetrySettings26.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem26.MaxBackoff)
 
-			r.OutputServiceNow.ResponseRetrySettings = append(r.OutputServiceNow.ResponseRetrySettings, responseRetrySettings27)
+			r.OutputServiceNow.ResponseRetrySettings = append(r.OutputServiceNow.ResponseRetrySettings, responseRetrySettings26)
 		}
 		r.OutputServiceNow.SafeHeaders = make([]types.String, 0, len(resp.OutputServiceNow.SafeHeaders))
 		for _, v := range resp.OutputServiceNow.SafeHeaders {
@@ -7091,6 +7149,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputServiceNow.TokenSecret = types.StringValue(resp.OutputServiceNow.TokenSecret)
 		r.OutputServiceNow.Type = types.StringValue(string(resp.OutputServiceNow.Type))
+		r.Type = r.OutputServiceNow.Type
 		r.OutputServiceNow.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputServiceNow.UseRoundRobinDNS)
 	}
 	if resp.OutputSignalfx != nil {
@@ -7104,15 +7163,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSignalfx.Concurrency = types.Float64PointerValue(resp.OutputSignalfx.Concurrency)
 		r.OutputSignalfx.Description = types.StringPointerValue(resp.OutputSignalfx.Description)
 		r.OutputSignalfx.Environment = types.StringPointerValue(resp.OutputSignalfx.Environment)
+		r.Environment = r.OutputSignalfx.Environment
 		r.OutputSignalfx.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem27 := range resp.OutputSignalfx.ExtraHTTPHeaders {
-			var extraHTTPHeaders27 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem26 := range resp.OutputSignalfx.ExtraHTTPHeaders {
+			var extraHTTPHeaders26 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
-			extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
+			extraHTTPHeaders26.Name = types.StringPointerValue(extraHTTPHeadersItem26.Name)
+			extraHTTPHeaders26.Value = types.StringValue(extraHTTPHeadersItem26.Value)
 
-			r.OutputSignalfx.ExtraHTTPHeaders = append(r.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders27)
+			r.OutputSignalfx.ExtraHTTPHeaders = append(r.OutputSignalfx.ExtraHTTPHeaders, extraHTTPHeaders26)
 		}
 		if resp.OutputSignalfx.FailedRequestLoggingMode != nil {
 			r.OutputSignalfx.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSignalfx.FailedRequestLoggingMode))
@@ -7121,6 +7181,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputSignalfx.FlushPeriodSec = types.Float64PointerValue(resp.OutputSignalfx.FlushPeriodSec)
 		r.OutputSignalfx.ID = types.StringPointerValue(resp.OutputSignalfx.ID)
+		r.ID = r.OutputSignalfx.ID
 		r.OutputSignalfx.MaxPayloadEvents = types.Float64PointerValue(resp.OutputSignalfx.MaxPayloadEvents)
 		r.OutputSignalfx.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputSignalfx.MaxPayloadSizeKB)
 		if resp.OutputSignalfx.OnBackpressure != nil {
@@ -7129,6 +7190,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSignalfx.OnBackpressure = types.StringNull()
 		}
 		r.OutputSignalfx.Pipeline = types.StringPointerValue(resp.OutputSignalfx.Pipeline)
+		r.Pipeline = r.OutputSignalfx.Pipeline
 		if resp.OutputSignalfx.PqCompress != nil {
 			r.OutputSignalfx.PqCompress = types.StringValue(string(*resp.OutputSignalfx.PqCompress))
 		} else {
@@ -7162,15 +7224,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSignalfx.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSignalfx.ResponseHonorRetryAfterHeader)
 		r.OutputSignalfx.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem28 := range resp.OutputSignalfx.ResponseRetrySettings {
-			var responseRetrySettings28 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem27 := range resp.OutputSignalfx.ResponseRetrySettings {
+			var responseRetrySettings27 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
-			responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
-			responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
-			responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
+			responseRetrySettings27.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem27.BackoffRate)
+			responseRetrySettings27.HTTPStatus = types.Float64Value(responseRetrySettingsItem27.HTTPStatus)
+			responseRetrySettings27.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem27.InitialBackoff)
+			responseRetrySettings27.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem27.MaxBackoff)
 
-			r.OutputSignalfx.ResponseRetrySettings = append(r.OutputSignalfx.ResponseRetrySettings, responseRetrySettings28)
+			r.OutputSignalfx.ResponseRetrySettings = append(r.OutputSignalfx.ResponseRetrySettings, responseRetrySettings27)
 		}
 		r.OutputSignalfx.SafeHeaders = make([]types.String, 0, len(resp.OutputSignalfx.SafeHeaders))
 		for _, v := range resp.OutputSignalfx.SafeHeaders {
@@ -7197,6 +7259,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSignalfx.TimeoutSec = types.Float64PointerValue(resp.OutputSignalfx.TimeoutSec)
 		r.OutputSignalfx.Token = types.StringPointerValue(resp.OutputSignalfx.Token)
 		r.OutputSignalfx.Type = types.StringValue(string(resp.OutputSignalfx.Type))
+		r.Type = r.OutputSignalfx.Type
 		r.OutputSignalfx.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSignalfx.UseRoundRobinDNS)
 	}
 	if resp.OutputSnmp != nil {
@@ -7204,6 +7267,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSnmp.Description = types.StringPointerValue(resp.OutputSnmp.Description)
 		r.OutputSnmp.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSnmp.DNSResolvePeriodSec)
 		r.OutputSnmp.Environment = types.StringPointerValue(resp.OutputSnmp.Environment)
+		r.Environment = r.OutputSnmp.Environment
 		r.OutputSnmp.Hosts = []tfTypes.OutputSnmpHost{}
 
 		for _, hostsItem2 := range resp.OutputSnmp.Hosts {
@@ -7217,7 +7281,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSnmp.Hosts = append(r.OutputSnmp.Hosts, hosts2)
 		}
 		r.OutputSnmp.ID = types.StringPointerValue(resp.OutputSnmp.ID)
+		r.ID = r.OutputSnmp.ID
 		r.OutputSnmp.Pipeline = types.StringPointerValue(resp.OutputSnmp.Pipeline)
+		r.Pipeline = r.OutputSnmp.Pipeline
 		r.OutputSnmp.Streamtags = make([]types.String, 0, len(resp.OutputSnmp.Streamtags))
 		for _, v := range resp.OutputSnmp.Streamtags {
 			r.OutputSnmp.Streamtags = append(r.OutputSnmp.Streamtags, types.StringValue(v))
@@ -7227,6 +7293,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSnmp.SystemFields = append(r.OutputSnmp.SystemFields, types.StringValue(v))
 		}
 		r.OutputSnmp.Type = types.StringValue(string(resp.OutputSnmp.Type))
+		r.Type = r.OutputSnmp.Type
 	}
 	if resp.OutputSns != nil {
 		r.OutputSns = &tfTypes.OutputSns{}
@@ -7250,7 +7317,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSns.EnableAssumeRole = types.BoolPointerValue(resp.OutputSns.EnableAssumeRole)
 		r.OutputSns.Endpoint = types.StringPointerValue(resp.OutputSns.Endpoint)
 		r.OutputSns.Environment = types.StringPointerValue(resp.OutputSns.Environment)
+		r.Environment = r.OutputSns.Environment
 		r.OutputSns.ID = types.StringPointerValue(resp.OutputSns.ID)
+		r.ID = r.OutputSns.ID
 		r.OutputSns.MaxRetries = types.Float64PointerValue(resp.OutputSns.MaxRetries)
 		r.OutputSns.MessageGroupID = types.StringValue(resp.OutputSns.MessageGroupID)
 		if resp.OutputSns.OnBackpressure != nil {
@@ -7259,6 +7328,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSns.OnBackpressure = types.StringNull()
 		}
 		r.OutputSns.Pipeline = types.StringPointerValue(resp.OutputSns.Pipeline)
+		r.Pipeline = r.OutputSns.Pipeline
 		if resp.OutputSns.PqCompress != nil {
 			r.OutputSns.PqCompress = types.StringValue(string(*resp.OutputSns.PqCompress))
 		} else {
@@ -7305,6 +7375,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputSns.TopicArn = types.StringValue(resp.OutputSns.TopicArn)
 		r.OutputSns.Type = types.StringValue(string(resp.OutputSns.Type))
+		r.Type = r.OutputSns.Type
 	}
 	if resp.OutputSplunk != nil {
 		r.OutputSplunk = &tfTypes.OutputSplunk{}
@@ -7326,8 +7397,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSplunk.EnableACK = types.BoolPointerValue(resp.OutputSplunk.EnableACK)
 		r.OutputSplunk.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunk.EnableMultiMetrics)
 		r.OutputSplunk.Environment = types.StringPointerValue(resp.OutputSplunk.Environment)
+		r.Environment = r.OutputSplunk.Environment
 		r.OutputSplunk.Host = types.StringValue(resp.OutputSplunk.Host)
 		r.OutputSplunk.ID = types.StringPointerValue(resp.OutputSplunk.ID)
+		r.ID = r.OutputSplunk.ID
 		r.OutputSplunk.LogFailedRequests = types.BoolPointerValue(resp.OutputSplunk.LogFailedRequests)
 		r.OutputSplunk.MaxFailedHealthChecks = types.Float64PointerValue(resp.OutputSplunk.MaxFailedHealthChecks)
 		if resp.OutputSplunk.MaxS2Sversion != nil {
@@ -7346,6 +7419,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunk.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunk.Pipeline = types.StringPointerValue(resp.OutputSplunk.Pipeline)
+		r.Pipeline = r.OutputSplunk.Pipeline
 		r.OutputSplunk.Port = types.Float64Value(resp.OutputSplunk.Port)
 		if resp.OutputSplunk.PqCompress != nil {
 			r.OutputSplunk.PqCompress = types.StringValue(string(*resp.OutputSplunk.PqCompress))
@@ -7409,6 +7483,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunk.TLS.Servername = types.StringPointerValue(resp.OutputSplunk.TLS.Servername)
 		}
 		r.OutputSplunk.Type = types.StringValue(string(resp.OutputSplunk.Type))
+		r.Type = r.OutputSplunk.Type
 		r.OutputSplunk.WriteTimeout = types.Float64PointerValue(resp.OutputSplunk.WriteTimeout)
 	}
 	if resp.OutputSplunkHec != nil {
@@ -7425,16 +7500,17 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSplunkHec.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.DNSResolvePeriodSec)
 		r.OutputSplunkHec.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunkHec.EnableMultiMetrics)
 		r.OutputSplunkHec.Environment = types.StringPointerValue(resp.OutputSplunkHec.Environment)
+		r.Environment = r.OutputSplunkHec.Environment
 		r.OutputSplunkHec.ExcludeSelf = types.BoolPointerValue(resp.OutputSplunkHec.ExcludeSelf)
 		r.OutputSplunkHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem28 := range resp.OutputSplunkHec.ExtraHTTPHeaders {
-			var extraHTTPHeaders28 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem27 := range resp.OutputSplunkHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders27 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
-			extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
+			extraHTTPHeaders27.Name = types.StringPointerValue(extraHTTPHeadersItem27.Name)
+			extraHTTPHeaders27.Value = types.StringValue(extraHTTPHeadersItem27.Value)
 
-			r.OutputSplunkHec.ExtraHTTPHeaders = append(r.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders28)
+			r.OutputSplunkHec.ExtraHTTPHeaders = append(r.OutputSplunkHec.ExtraHTTPHeaders, extraHTTPHeaders27)
 		}
 		if resp.OutputSplunkHec.FailedRequestLoggingMode != nil {
 			r.OutputSplunkHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSplunkHec.FailedRequestLoggingMode))
@@ -7443,6 +7519,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputSplunkHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.FlushPeriodSec)
 		r.OutputSplunkHec.ID = types.StringPointerValue(resp.OutputSplunkHec.ID)
+		r.ID = r.OutputSplunkHec.ID
 		r.OutputSplunkHec.LoadBalanced = types.BoolPointerValue(resp.OutputSplunkHec.LoadBalanced)
 		r.OutputSplunkHec.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputSplunkHec.LoadBalanceStatsPeriodSec)
 		r.OutputSplunkHec.MaxPayloadEvents = types.Float64PointerValue(resp.OutputSplunkHec.MaxPayloadEvents)
@@ -7454,6 +7531,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunkHec.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkHec.Pipeline = types.StringPointerValue(resp.OutputSplunkHec.Pipeline)
+		r.Pipeline = r.OutputSplunkHec.Pipeline
 		if resp.OutputSplunkHec.PqCompress != nil {
 			r.OutputSplunkHec.PqCompress = types.StringValue(string(*resp.OutputSplunkHec.PqCompress))
 		} else {
@@ -7486,15 +7564,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSplunkHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSplunkHec.ResponseHonorRetryAfterHeader)
 		r.OutputSplunkHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem29 := range resp.OutputSplunkHec.ResponseRetrySettings {
-			var responseRetrySettings29 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem28 := range resp.OutputSplunkHec.ResponseRetrySettings {
+			var responseRetrySettings28 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
-			responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
-			responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
-			responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
+			responseRetrySettings28.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem28.BackoffRate)
+			responseRetrySettings28.HTTPStatus = types.Float64Value(responseRetrySettingsItem28.HTTPStatus)
+			responseRetrySettings28.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem28.InitialBackoff)
+			responseRetrySettings28.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem28.MaxBackoff)
 
-			r.OutputSplunkHec.ResponseRetrySettings = append(r.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings29)
+			r.OutputSplunkHec.ResponseRetrySettings = append(r.OutputSplunkHec.ResponseRetrySettings, responseRetrySettings28)
 		}
 		r.OutputSplunkHec.SafeHeaders = make([]types.String, 0, len(resp.OutputSplunkHec.SafeHeaders))
 		for _, v := range resp.OutputSplunkHec.SafeHeaders {
@@ -7544,6 +7622,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputSplunkHec.Token = types.StringPointerValue(resp.OutputSplunkHec.Token)
 		r.OutputSplunkHec.Type = types.StringValue(string(resp.OutputSplunkHec.Type))
+		r.Type = r.OutputSplunkHec.Type
 		r.OutputSplunkHec.URL = types.StringPointerValue(resp.OutputSplunkHec.URL)
 		r.OutputSplunkHec.Urls = []tfTypes.OutputSplunkHecURL{}
 
@@ -7577,6 +7656,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSplunkLb.EnableACK = types.BoolPointerValue(resp.OutputSplunkLb.EnableACK)
 		r.OutputSplunkLb.EnableMultiMetrics = types.BoolPointerValue(resp.OutputSplunkLb.EnableMultiMetrics)
 		r.OutputSplunkLb.Environment = types.StringPointerValue(resp.OutputSplunkLb.Environment)
+		r.Environment = r.OutputSplunkLb.Environment
 		r.OutputSplunkLb.ExcludeSelf = types.BoolPointerValue(resp.OutputSplunkLb.ExcludeSelf)
 		r.OutputSplunkLb.Hosts = []tfTypes.ItemsTypeHosts{}
 
@@ -7598,6 +7678,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunkLb.Hosts = append(r.OutputSplunkLb.Hosts, hosts3)
 		}
 		r.OutputSplunkLb.ID = types.StringPointerValue(resp.OutputSplunkLb.ID)
+		r.ID = r.OutputSplunkLb.ID
 		r.OutputSplunkLb.IndexerDiscovery = types.BoolPointerValue(resp.OutputSplunkLb.IndexerDiscovery)
 		if resp.OutputSplunkLb.IndexerDiscoveryConfigs == nil {
 			r.OutputSplunkLb.IndexerDiscoveryConfigs = nil
@@ -7650,6 +7731,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunkLb.OnBackpressure = types.StringNull()
 		}
 		r.OutputSplunkLb.Pipeline = types.StringPointerValue(resp.OutputSplunkLb.Pipeline)
+		r.Pipeline = r.OutputSplunkLb.Pipeline
 		if resp.OutputSplunkLb.PqCompress != nil {
 			r.OutputSplunkLb.PqCompress = types.StringValue(string(*resp.OutputSplunkLb.PqCompress))
 		} else {
@@ -7713,6 +7795,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSplunkLb.TLS.Servername = types.StringPointerValue(resp.OutputSplunkLb.TLS.Servername)
 		}
 		r.OutputSplunkLb.Type = types.StringValue(string(resp.OutputSplunkLb.Type))
+		r.Type = r.OutputSplunkLb.Type
 		r.OutputSplunkLb.WriteTimeout = types.Float64PointerValue(resp.OutputSplunkLb.WriteTimeout)
 	}
 	if resp.OutputSqs != nil {
@@ -7741,8 +7824,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSqs.EnableAssumeRole = types.BoolPointerValue(resp.OutputSqs.EnableAssumeRole)
 		r.OutputSqs.Endpoint = types.StringPointerValue(resp.OutputSqs.Endpoint)
 		r.OutputSqs.Environment = types.StringPointerValue(resp.OutputSqs.Environment)
+		r.Environment = r.OutputSqs.Environment
 		r.OutputSqs.FlushPeriodSec = types.Float64PointerValue(resp.OutputSqs.FlushPeriodSec)
 		r.OutputSqs.ID = types.StringPointerValue(resp.OutputSqs.ID)
+		r.ID = r.OutputSqs.ID
 		r.OutputSqs.MaxInProgress = types.Float64PointerValue(resp.OutputSqs.MaxInProgress)
 		r.OutputSqs.MaxQueueSize = types.Float64PointerValue(resp.OutputSqs.MaxQueueSize)
 		r.OutputSqs.MaxRecordSizeKB = types.Float64PointerValue(resp.OutputSqs.MaxRecordSizeKB)
@@ -7753,6 +7838,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSqs.OnBackpressure = types.StringNull()
 		}
 		r.OutputSqs.Pipeline = types.StringPointerValue(resp.OutputSqs.Pipeline)
+		r.Pipeline = r.OutputSqs.Pipeline
 		if resp.OutputSqs.PqCompress != nil {
 			r.OutputSqs.PqCompress = types.StringValue(string(*resp.OutputSqs.PqCompress))
 		} else {
@@ -7800,6 +7886,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSqs.SystemFields = append(r.OutputSqs.SystemFields, types.StringValue(v))
 		}
 		r.OutputSqs.Type = types.StringValue(string(resp.OutputSqs.Type))
+		r.Type = r.OutputSqs.Type
 	}
 	if resp.OutputStatsd != nil {
 		r.OutputStatsd = &tfTypes.OutputStatsd{}
@@ -7807,9 +7894,11 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputStatsd.Description = types.StringPointerValue(resp.OutputStatsd.Description)
 		r.OutputStatsd.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputStatsd.DNSResolvePeriodSec)
 		r.OutputStatsd.Environment = types.StringPointerValue(resp.OutputStatsd.Environment)
+		r.Environment = r.OutputStatsd.Environment
 		r.OutputStatsd.FlushPeriodSec = types.Float64PointerValue(resp.OutputStatsd.FlushPeriodSec)
 		r.OutputStatsd.Host = types.StringValue(resp.OutputStatsd.Host)
 		r.OutputStatsd.ID = types.StringPointerValue(resp.OutputStatsd.ID)
+		r.ID = r.OutputStatsd.ID
 		r.OutputStatsd.Mtu = types.Float64PointerValue(resp.OutputStatsd.Mtu)
 		if resp.OutputStatsd.OnBackpressure != nil {
 			r.OutputStatsd.OnBackpressure = types.StringValue(string(*resp.OutputStatsd.OnBackpressure))
@@ -7817,6 +7906,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputStatsd.OnBackpressure = types.StringNull()
 		}
 		r.OutputStatsd.Pipeline = types.StringPointerValue(resp.OutputStatsd.Pipeline)
+		r.Pipeline = r.OutputStatsd.Pipeline
 		r.OutputStatsd.Port = types.Float64Value(resp.OutputStatsd.Port)
 		if resp.OutputStatsd.PqCompress != nil {
 			r.OutputStatsd.PqCompress = types.StringValue(string(*resp.OutputStatsd.PqCompress))
@@ -7857,6 +7947,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputStatsd.ThrottleRatePerSec = types.StringPointerValue(resp.OutputStatsd.ThrottleRatePerSec)
 		r.OutputStatsd.Type = types.StringValue(string(resp.OutputStatsd.Type))
+		r.Type = r.OutputStatsd.Type
 		r.OutputStatsd.WriteTimeout = types.Float64PointerValue(resp.OutputStatsd.WriteTimeout)
 	}
 	if resp.OutputStatsdExt != nil {
@@ -7865,9 +7956,11 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputStatsdExt.Description = types.StringPointerValue(resp.OutputStatsdExt.Description)
 		r.OutputStatsdExt.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputStatsdExt.DNSResolvePeriodSec)
 		r.OutputStatsdExt.Environment = types.StringPointerValue(resp.OutputStatsdExt.Environment)
+		r.Environment = r.OutputStatsdExt.Environment
 		r.OutputStatsdExt.FlushPeriodSec = types.Float64PointerValue(resp.OutputStatsdExt.FlushPeriodSec)
 		r.OutputStatsdExt.Host = types.StringValue(resp.OutputStatsdExt.Host)
 		r.OutputStatsdExt.ID = types.StringPointerValue(resp.OutputStatsdExt.ID)
+		r.ID = r.OutputStatsdExt.ID
 		r.OutputStatsdExt.Mtu = types.Float64PointerValue(resp.OutputStatsdExt.Mtu)
 		if resp.OutputStatsdExt.OnBackpressure != nil {
 			r.OutputStatsdExt.OnBackpressure = types.StringValue(string(*resp.OutputStatsdExt.OnBackpressure))
@@ -7875,6 +7968,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputStatsdExt.OnBackpressure = types.StringNull()
 		}
 		r.OutputStatsdExt.Pipeline = types.StringPointerValue(resp.OutputStatsdExt.Pipeline)
+		r.Pipeline = r.OutputStatsdExt.Pipeline
 		r.OutputStatsdExt.Port = types.Float64Value(resp.OutputStatsdExt.Port)
 		if resp.OutputStatsdExt.PqCompress != nil {
 			r.OutputStatsdExt.PqCompress = types.StringValue(string(*resp.OutputStatsdExt.PqCompress))
@@ -7915,6 +8009,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputStatsdExt.ThrottleRatePerSec = types.StringPointerValue(resp.OutputStatsdExt.ThrottleRatePerSec)
 		r.OutputStatsdExt.Type = types.StringValue(string(resp.OutputStatsdExt.Type))
+		r.Type = r.OutputStatsdExt.Type
 		r.OutputStatsdExt.WriteTimeout = types.Float64PointerValue(resp.OutputStatsdExt.WriteTimeout)
 	}
 	if resp.OutputSumoLogic != nil {
@@ -7926,15 +8021,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSumoLogic.CustomSource = types.StringPointerValue(resp.OutputSumoLogic.CustomSource)
 		r.OutputSumoLogic.Description = types.StringPointerValue(resp.OutputSumoLogic.Description)
 		r.OutputSumoLogic.Environment = types.StringPointerValue(resp.OutputSumoLogic.Environment)
+		r.Environment = r.OutputSumoLogic.Environment
 		r.OutputSumoLogic.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem29 := range resp.OutputSumoLogic.ExtraHTTPHeaders {
-			var extraHTTPHeaders29 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem28 := range resp.OutputSumoLogic.ExtraHTTPHeaders {
+			var extraHTTPHeaders28 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
-			extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
+			extraHTTPHeaders28.Name = types.StringPointerValue(extraHTTPHeadersItem28.Name)
+			extraHTTPHeaders28.Value = types.StringValue(extraHTTPHeadersItem28.Value)
 
-			r.OutputSumoLogic.ExtraHTTPHeaders = append(r.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders29)
+			r.OutputSumoLogic.ExtraHTTPHeaders = append(r.OutputSumoLogic.ExtraHTTPHeaders, extraHTTPHeaders28)
 		}
 		if resp.OutputSumoLogic.FailedRequestLoggingMode != nil {
 			r.OutputSumoLogic.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputSumoLogic.FailedRequestLoggingMode))
@@ -7948,6 +8044,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSumoLogic.Format = types.StringNull()
 		}
 		r.OutputSumoLogic.ID = types.StringPointerValue(resp.OutputSumoLogic.ID)
+		r.ID = r.OutputSumoLogic.ID
 		r.OutputSumoLogic.MaxPayloadEvents = types.Float64PointerValue(resp.OutputSumoLogic.MaxPayloadEvents)
 		r.OutputSumoLogic.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputSumoLogic.MaxPayloadSizeKB)
 		if resp.OutputSumoLogic.OnBackpressure != nil {
@@ -7956,6 +8053,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSumoLogic.OnBackpressure = types.StringNull()
 		}
 		r.OutputSumoLogic.Pipeline = types.StringPointerValue(resp.OutputSumoLogic.Pipeline)
+		r.Pipeline = r.OutputSumoLogic.Pipeline
 		if resp.OutputSumoLogic.PqCompress != nil {
 			r.OutputSumoLogic.PqCompress = types.StringValue(string(*resp.OutputSumoLogic.PqCompress))
 		} else {
@@ -7988,15 +8086,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSumoLogic.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputSumoLogic.ResponseHonorRetryAfterHeader)
 		r.OutputSumoLogic.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem30 := range resp.OutputSumoLogic.ResponseRetrySettings {
-			var responseRetrySettings30 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem29 := range resp.OutputSumoLogic.ResponseRetrySettings {
+			var responseRetrySettings29 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
-			responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
-			responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
-			responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
+			responseRetrySettings29.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem29.BackoffRate)
+			responseRetrySettings29.HTTPStatus = types.Float64Value(responseRetrySettingsItem29.HTTPStatus)
+			responseRetrySettings29.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem29.InitialBackoff)
+			responseRetrySettings29.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem29.MaxBackoff)
 
-			r.OutputSumoLogic.ResponseRetrySettings = append(r.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings30)
+			r.OutputSumoLogic.ResponseRetrySettings = append(r.OutputSumoLogic.ResponseRetrySettings, responseRetrySettings29)
 		}
 		r.OutputSumoLogic.SafeHeaders = make([]types.String, 0, len(resp.OutputSumoLogic.SafeHeaders))
 		for _, v := range resp.OutputSumoLogic.SafeHeaders {
@@ -8022,6 +8120,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSumoLogic.TimeoutSec = types.Float64PointerValue(resp.OutputSumoLogic.TimeoutSec)
 		r.OutputSumoLogic.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputSumoLogic.TotalMemoryLimitKB)
 		r.OutputSumoLogic.Type = types.StringValue(string(resp.OutputSumoLogic.Type))
+		r.Type = r.OutputSumoLogic.Type
 		r.OutputSumoLogic.URL = types.StringValue(resp.OutputSumoLogic.URL)
 		r.OutputSumoLogic.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputSumoLogic.UseRoundRobinDNS)
 	}
@@ -8035,6 +8134,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputSyslog.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSyslog.DNSResolvePeriodSec)
 		r.OutputSyslog.EnableIPSpoofing = types.BoolPointerValue(resp.OutputSyslog.EnableIPSpoofing)
 		r.OutputSyslog.Environment = types.StringPointerValue(resp.OutputSyslog.Environment)
+		r.Environment = r.OutputSyslog.Environment
 		r.OutputSyslog.ExcludeSelf = types.BoolPointerValue(resp.OutputSyslog.ExcludeSelf)
 		if resp.OutputSyslog.Facility != nil {
 			r.OutputSyslog.Facility = types.Int64Value(int64(*resp.OutputSyslog.Facility))
@@ -8062,6 +8162,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSyslog.Hosts = append(r.OutputSyslog.Hosts, hosts4)
 		}
 		r.OutputSyslog.ID = types.StringPointerValue(resp.OutputSyslog.ID)
+		r.ID = r.OutputSyslog.ID
 		r.OutputSyslog.LoadBalanced = types.BoolPointerValue(resp.OutputSyslog.LoadBalanced)
 		r.OutputSyslog.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputSyslog.LoadBalanceStatsPeriodSec)
 		r.OutputSyslog.LogFailedRequests = types.BoolPointerValue(resp.OutputSyslog.LogFailedRequests)
@@ -8079,6 +8180,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSyslog.OnBackpressure = types.StringNull()
 		}
 		r.OutputSyslog.Pipeline = types.StringPointerValue(resp.OutputSyslog.Pipeline)
+		r.Pipeline = r.OutputSyslog.Pipeline
 		r.OutputSyslog.Port = types.Float64PointerValue(resp.OutputSyslog.Port)
 		if resp.OutputSyslog.PqCompress != nil {
 			r.OutputSyslog.PqCompress = types.StringValue(string(*resp.OutputSyslog.PqCompress))
@@ -8156,6 +8258,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputSyslog.TLS.Servername = types.StringPointerValue(resp.OutputSyslog.TLS.Servername)
 		}
 		r.OutputSyslog.Type = types.StringValue(string(resp.OutputSyslog.Type))
+		r.Type = r.OutputSyslog.Type
 		r.OutputSyslog.UDPDNSResolvePeriodSec = types.Float64PointerValue(resp.OutputSyslog.UDPDNSResolvePeriodSec)
 		r.OutputSyslog.WriteTimeout = types.Float64PointerValue(resp.OutputSyslog.WriteTimeout)
 	}
@@ -8178,6 +8281,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputTcpjson.Description = types.StringPointerValue(resp.OutputTcpjson.Description)
 		r.OutputTcpjson.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputTcpjson.DNSResolvePeriodSec)
 		r.OutputTcpjson.Environment = types.StringPointerValue(resp.OutputTcpjson.Environment)
+		r.Environment = r.OutputTcpjson.Environment
 		r.OutputTcpjson.ExcludeSelf = types.BoolPointerValue(resp.OutputTcpjson.ExcludeSelf)
 		r.OutputTcpjson.Host = types.StringPointerValue(resp.OutputTcpjson.Host)
 		r.OutputTcpjson.Hosts = []tfTypes.ItemsTypeHosts{}
@@ -8200,6 +8304,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputTcpjson.Hosts = append(r.OutputTcpjson.Hosts, hosts5)
 		}
 		r.OutputTcpjson.ID = types.StringPointerValue(resp.OutputTcpjson.ID)
+		r.ID = r.OutputTcpjson.ID
 		r.OutputTcpjson.LoadBalanced = types.BoolPointerValue(resp.OutputTcpjson.LoadBalanced)
 		r.OutputTcpjson.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputTcpjson.LoadBalanceStatsPeriodSec)
 		r.OutputTcpjson.LogFailedRequests = types.BoolPointerValue(resp.OutputTcpjson.LogFailedRequests)
@@ -8210,6 +8315,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputTcpjson.OnBackpressure = types.StringNull()
 		}
 		r.OutputTcpjson.Pipeline = types.StringPointerValue(resp.OutputTcpjson.Pipeline)
+		r.Pipeline = r.OutputTcpjson.Pipeline
 		r.OutputTcpjson.Port = types.Float64PointerValue(resp.OutputTcpjson.Port)
 		if resp.OutputTcpjson.PqCompress != nil {
 			r.OutputTcpjson.PqCompress = types.StringValue(string(*resp.OutputTcpjson.PqCompress))
@@ -8275,6 +8381,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputTcpjson.TokenTTLMinutes = types.Float64PointerValue(resp.OutputTcpjson.TokenTTLMinutes)
 		r.OutputTcpjson.Type = types.StringValue(string(resp.OutputTcpjson.Type))
+		r.Type = r.OutputTcpjson.Type
 		r.OutputTcpjson.WriteTimeout = types.Float64PointerValue(resp.OutputTcpjson.WriteTimeout)
 	}
 	if resp.OutputWavefront != nil {
@@ -8289,15 +8396,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWavefront.Description = types.StringPointerValue(resp.OutputWavefront.Description)
 		r.OutputWavefront.Domain = types.StringValue(resp.OutputWavefront.Domain)
 		r.OutputWavefront.Environment = types.StringPointerValue(resp.OutputWavefront.Environment)
+		r.Environment = r.OutputWavefront.Environment
 		r.OutputWavefront.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem30 := range resp.OutputWavefront.ExtraHTTPHeaders {
-			var extraHTTPHeaders30 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem29 := range resp.OutputWavefront.ExtraHTTPHeaders {
+			var extraHTTPHeaders29 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders30.Name = types.StringPointerValue(extraHTTPHeadersItem30.Name)
-			extraHTTPHeaders30.Value = types.StringValue(extraHTTPHeadersItem30.Value)
+			extraHTTPHeaders29.Name = types.StringPointerValue(extraHTTPHeadersItem29.Name)
+			extraHTTPHeaders29.Value = types.StringValue(extraHTTPHeadersItem29.Value)
 
-			r.OutputWavefront.ExtraHTTPHeaders = append(r.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders30)
+			r.OutputWavefront.ExtraHTTPHeaders = append(r.OutputWavefront.ExtraHTTPHeaders, extraHTTPHeaders29)
 		}
 		if resp.OutputWavefront.FailedRequestLoggingMode != nil {
 			r.OutputWavefront.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWavefront.FailedRequestLoggingMode))
@@ -8306,6 +8414,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputWavefront.FlushPeriodSec = types.Float64PointerValue(resp.OutputWavefront.FlushPeriodSec)
 		r.OutputWavefront.ID = types.StringPointerValue(resp.OutputWavefront.ID)
+		r.ID = r.OutputWavefront.ID
 		r.OutputWavefront.MaxPayloadEvents = types.Float64PointerValue(resp.OutputWavefront.MaxPayloadEvents)
 		r.OutputWavefront.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputWavefront.MaxPayloadSizeKB)
 		if resp.OutputWavefront.OnBackpressure != nil {
@@ -8314,6 +8423,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputWavefront.OnBackpressure = types.StringNull()
 		}
 		r.OutputWavefront.Pipeline = types.StringPointerValue(resp.OutputWavefront.Pipeline)
+		r.Pipeline = r.OutputWavefront.Pipeline
 		if resp.OutputWavefront.PqCompress != nil {
 			r.OutputWavefront.PqCompress = types.StringValue(string(*resp.OutputWavefront.PqCompress))
 		} else {
@@ -8346,15 +8456,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWavefront.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWavefront.ResponseHonorRetryAfterHeader)
 		r.OutputWavefront.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem31 := range resp.OutputWavefront.ResponseRetrySettings {
-			var responseRetrySettings31 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem30 := range resp.OutputWavefront.ResponseRetrySettings {
+			var responseRetrySettings30 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings31.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem31.BackoffRate)
-			responseRetrySettings31.HTTPStatus = types.Float64Value(responseRetrySettingsItem31.HTTPStatus)
-			responseRetrySettings31.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem31.InitialBackoff)
-			responseRetrySettings31.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem31.MaxBackoff)
+			responseRetrySettings30.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem30.BackoffRate)
+			responseRetrySettings30.HTTPStatus = types.Float64Value(responseRetrySettingsItem30.HTTPStatus)
+			responseRetrySettings30.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem30.InitialBackoff)
+			responseRetrySettings30.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem30.MaxBackoff)
 
-			r.OutputWavefront.ResponseRetrySettings = append(r.OutputWavefront.ResponseRetrySettings, responseRetrySettings31)
+			r.OutputWavefront.ResponseRetrySettings = append(r.OutputWavefront.ResponseRetrySettings, responseRetrySettings30)
 		}
 		r.OutputWavefront.SafeHeaders = make([]types.String, 0, len(resp.OutputWavefront.SafeHeaders))
 		for _, v := range resp.OutputWavefront.SafeHeaders {
@@ -8381,6 +8491,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWavefront.TimeoutSec = types.Float64PointerValue(resp.OutputWavefront.TimeoutSec)
 		r.OutputWavefront.Token = types.StringPointerValue(resp.OutputWavefront.Token)
 		r.OutputWavefront.Type = types.StringValue(string(resp.OutputWavefront.Type))
+		r.Type = r.OutputWavefront.Type
 		r.OutputWavefront.UseRoundRobinDNS = types.BoolPointerValue(resp.OutputWavefront.UseRoundRobinDNS)
 	}
 	if resp.OutputWebhook != nil {
@@ -8406,16 +8517,17 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWebhook.Description = types.StringPointerValue(resp.OutputWebhook.Description)
 		r.OutputWebhook.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputWebhook.DNSResolvePeriodSec)
 		r.OutputWebhook.Environment = types.StringPointerValue(resp.OutputWebhook.Environment)
+		r.Environment = r.OutputWebhook.Environment
 		r.OutputWebhook.ExcludeSelf = types.BoolPointerValue(resp.OutputWebhook.ExcludeSelf)
 		r.OutputWebhook.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem31 := range resp.OutputWebhook.ExtraHTTPHeaders {
-			var extraHTTPHeaders31 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem30 := range resp.OutputWebhook.ExtraHTTPHeaders {
+			var extraHTTPHeaders30 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders31.Name = types.StringPointerValue(extraHTTPHeadersItem31.Name)
-			extraHTTPHeaders31.Value = types.StringValue(extraHTTPHeadersItem31.Value)
+			extraHTTPHeaders30.Name = types.StringPointerValue(extraHTTPHeadersItem30.Name)
+			extraHTTPHeaders30.Value = types.StringValue(extraHTTPHeadersItem30.Value)
 
-			r.OutputWebhook.ExtraHTTPHeaders = append(r.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders31)
+			r.OutputWebhook.ExtraHTTPHeaders = append(r.OutputWebhook.ExtraHTTPHeaders, extraHTTPHeaders30)
 		}
 		if resp.OutputWebhook.FailedRequestLoggingMode != nil {
 			r.OutputWebhook.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWebhook.FailedRequestLoggingMode))
@@ -8431,6 +8543,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWebhook.FormatEventCode = types.StringPointerValue(resp.OutputWebhook.FormatEventCode)
 		r.OutputWebhook.FormatPayloadCode = types.StringPointerValue(resp.OutputWebhook.FormatPayloadCode)
 		r.OutputWebhook.ID = types.StringPointerValue(resp.OutputWebhook.ID)
+		r.ID = r.OutputWebhook.ID
 		r.OutputWebhook.KeepAlive = types.BoolPointerValue(resp.OutputWebhook.KeepAlive)
 		r.OutputWebhook.LoadBalanced = types.BoolPointerValue(resp.OutputWebhook.LoadBalanced)
 		r.OutputWebhook.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputWebhook.LoadBalanceStatsPeriodSec)
@@ -8469,6 +8582,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputWebhook.Password = types.StringPointerValue(resp.OutputWebhook.Password)
 		r.OutputWebhook.Pipeline = types.StringPointerValue(resp.OutputWebhook.Pipeline)
+		r.Pipeline = r.OutputWebhook.Pipeline
 		if resp.OutputWebhook.PqCompress != nil {
 			r.OutputWebhook.PqCompress = types.StringValue(string(*resp.OutputWebhook.PqCompress))
 		} else {
@@ -8501,15 +8615,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWebhook.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWebhook.ResponseHonorRetryAfterHeader)
 		r.OutputWebhook.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem32 := range resp.OutputWebhook.ResponseRetrySettings {
-			var responseRetrySettings32 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem31 := range resp.OutputWebhook.ResponseRetrySettings {
+			var responseRetrySettings31 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings32.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem32.BackoffRate)
-			responseRetrySettings32.HTTPStatus = types.Float64Value(responseRetrySettingsItem32.HTTPStatus)
-			responseRetrySettings32.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem32.InitialBackoff)
-			responseRetrySettings32.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem32.MaxBackoff)
+			responseRetrySettings31.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem31.BackoffRate)
+			responseRetrySettings31.HTTPStatus = types.Float64Value(responseRetrySettingsItem31.HTTPStatus)
+			responseRetrySettings31.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem31.InitialBackoff)
+			responseRetrySettings31.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem31.MaxBackoff)
 
-			r.OutputWebhook.ResponseRetrySettings = append(r.OutputWebhook.ResponseRetrySettings, responseRetrySettings32)
+			r.OutputWebhook.ResponseRetrySettings = append(r.OutputWebhook.ResponseRetrySettings, responseRetrySettings31)
 		}
 		r.OutputWebhook.SafeHeaders = make([]types.String, 0, len(resp.OutputWebhook.SafeHeaders))
 		for _, v := range resp.OutputWebhook.SafeHeaders {
@@ -8563,6 +8677,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWebhook.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputWebhook.TokenTimeoutSecs)
 		r.OutputWebhook.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputWebhook.TotalMemoryLimitKB)
 		r.OutputWebhook.Type = types.StringValue(string(resp.OutputWebhook.Type))
+		r.Type = r.OutputWebhook.Type
 		r.OutputWebhook.URL = types.StringPointerValue(resp.OutputWebhook.URL)
 		r.OutputWebhook.Urls = []tfTypes.OutputWebhookURL{}
 
@@ -8593,15 +8708,16 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWizHec.DataCenter = types.StringValue(resp.OutputWizHec.DataCenter)
 		r.OutputWizHec.Description = types.StringPointerValue(resp.OutputWizHec.Description)
 		r.OutputWizHec.Environment = types.StringPointerValue(resp.OutputWizHec.Environment)
+		r.Environment = r.OutputWizHec.Environment
 		r.OutputWizHec.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem32 := range resp.OutputWizHec.ExtraHTTPHeaders {
-			var extraHTTPHeaders32 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem31 := range resp.OutputWizHec.ExtraHTTPHeaders {
+			var extraHTTPHeaders31 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders32.Name = types.StringPointerValue(extraHTTPHeadersItem32.Name)
-			extraHTTPHeaders32.Value = types.StringValue(extraHTTPHeadersItem32.Value)
+			extraHTTPHeaders31.Name = types.StringPointerValue(extraHTTPHeadersItem31.Name)
+			extraHTTPHeaders31.Value = types.StringValue(extraHTTPHeadersItem31.Value)
 
-			r.OutputWizHec.ExtraHTTPHeaders = append(r.OutputWizHec.ExtraHTTPHeaders, extraHTTPHeaders32)
+			r.OutputWizHec.ExtraHTTPHeaders = append(r.OutputWizHec.ExtraHTTPHeaders, extraHTTPHeaders31)
 		}
 		if resp.OutputWizHec.FailedRequestLoggingMode != nil {
 			r.OutputWizHec.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputWizHec.FailedRequestLoggingMode))
@@ -8610,6 +8726,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputWizHec.FlushPeriodSec = types.Float64PointerValue(resp.OutputWizHec.FlushPeriodSec)
 		r.OutputWizHec.ID = types.StringPointerValue(resp.OutputWizHec.ID)
+		r.ID = r.OutputWizHec.ID
 		r.OutputWizHec.MaxPayloadEvents = types.Float64PointerValue(resp.OutputWizHec.MaxPayloadEvents)
 		r.OutputWizHec.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputWizHec.MaxPayloadSizeKB)
 		r.OutputWizHec.NextQueue = types.StringPointerValue(resp.OutputWizHec.NextQueue)
@@ -8619,6 +8736,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputWizHec.OnBackpressure = types.StringNull()
 		}
 		r.OutputWizHec.Pipeline = types.StringPointerValue(resp.OutputWizHec.Pipeline)
+		r.Pipeline = r.OutputWizHec.Pipeline
 		if resp.OutputWizHec.PqCompress != nil {
 			r.OutputWizHec.PqCompress = types.StringValue(string(*resp.OutputWizHec.PqCompress))
 		} else {
@@ -8651,15 +8769,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputWizHec.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputWizHec.ResponseHonorRetryAfterHeader)
 		r.OutputWizHec.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem33 := range resp.OutputWizHec.ResponseRetrySettings {
-			var responseRetrySettings33 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem32 := range resp.OutputWizHec.ResponseRetrySettings {
+			var responseRetrySettings32 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings33.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem33.BackoffRate)
-			responseRetrySettings33.HTTPStatus = types.Float64Value(responseRetrySettingsItem33.HTTPStatus)
-			responseRetrySettings33.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem33.InitialBackoff)
-			responseRetrySettings33.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem33.MaxBackoff)
+			responseRetrySettings32.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem32.BackoffRate)
+			responseRetrySettings32.HTTPStatus = types.Float64Value(responseRetrySettingsItem32.HTTPStatus)
+			responseRetrySettings32.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem32.InitialBackoff)
+			responseRetrySettings32.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem32.MaxBackoff)
 
-			r.OutputWizHec.ResponseRetrySettings = append(r.OutputWizHec.ResponseRetrySettings, responseRetrySettings33)
+			r.OutputWizHec.ResponseRetrySettings = append(r.OutputWizHec.ResponseRetrySettings, responseRetrySettings32)
 		}
 		r.OutputWizHec.SafeHeaders = make([]types.String, 0, len(resp.OutputWizHec.SafeHeaders))
 		for _, v := range resp.OutputWizHec.SafeHeaders {
@@ -8709,6 +8827,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputWizHec.Token = types.StringPointerValue(resp.OutputWizHec.Token)
 		r.OutputWizHec.Type = types.StringValue(string(resp.OutputWizHec.Type))
+		r.Type = r.OutputWizHec.Type
 		r.OutputWizHec.WizConnectorID = types.StringValue(resp.OutputWizHec.WizConnectorID)
 		r.OutputWizHec.WizEnvironment = types.StringValue(resp.OutputWizHec.WizEnvironment)
 		r.OutputWizHec.WizSourcetype = types.StringValue(resp.OutputWizHec.WizSourcetype)
@@ -8725,16 +8844,17 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputXsiam.Description = types.StringPointerValue(resp.OutputXsiam.Description)
 		r.OutputXsiam.DNSResolvePeriodSec = types.Float64PointerValue(resp.OutputXsiam.DNSResolvePeriodSec)
 		r.OutputXsiam.Environment = types.StringPointerValue(resp.OutputXsiam.Environment)
+		r.Environment = r.OutputXsiam.Environment
 		r.OutputXsiam.ExcludeSelf = types.BoolPointerValue(resp.OutputXsiam.ExcludeSelf)
 		r.OutputXsiam.ExtraHTTPHeaders = []tfTypes.ItemsTypeExtraHTTPHeaders{}
 
-		for _, extraHTTPHeadersItem33 := range resp.OutputXsiam.ExtraHTTPHeaders {
-			var extraHTTPHeaders33 tfTypes.ItemsTypeExtraHTTPHeaders
+		for _, extraHTTPHeadersItem32 := range resp.OutputXsiam.ExtraHTTPHeaders {
+			var extraHTTPHeaders32 tfTypes.ItemsTypeExtraHTTPHeaders
 
-			extraHTTPHeaders33.Name = types.StringPointerValue(extraHTTPHeadersItem33.Name)
-			extraHTTPHeaders33.Value = types.StringValue(extraHTTPHeadersItem33.Value)
+			extraHTTPHeaders32.Name = types.StringPointerValue(extraHTTPHeadersItem32.Name)
+			extraHTTPHeaders32.Value = types.StringValue(extraHTTPHeadersItem32.Value)
 
-			r.OutputXsiam.ExtraHTTPHeaders = append(r.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders33)
+			r.OutputXsiam.ExtraHTTPHeaders = append(r.OutputXsiam.ExtraHTTPHeaders, extraHTTPHeaders32)
 		}
 		if resp.OutputXsiam.FailedRequestLoggingMode != nil {
 			r.OutputXsiam.FailedRequestLoggingMode = types.StringValue(string(*resp.OutputXsiam.FailedRequestLoggingMode))
@@ -8743,6 +8863,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputXsiam.FlushPeriodSec = types.Float64PointerValue(resp.OutputXsiam.FlushPeriodSec)
 		r.OutputXsiam.ID = types.StringPointerValue(resp.OutputXsiam.ID)
+		r.ID = r.OutputXsiam.ID
 		r.OutputXsiam.LoadBalanced = types.BoolPointerValue(resp.OutputXsiam.LoadBalanced)
 		r.OutputXsiam.LoadBalanceStatsPeriodSec = types.Float64PointerValue(resp.OutputXsiam.LoadBalanceStatsPeriodSec)
 		r.OutputXsiam.MaxPayloadEvents = types.Float64PointerValue(resp.OutputXsiam.MaxPayloadEvents)
@@ -8753,6 +8874,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputXsiam.OnBackpressure = types.StringNull()
 		}
 		r.OutputXsiam.Pipeline = types.StringPointerValue(resp.OutputXsiam.Pipeline)
+		r.Pipeline = r.OutputXsiam.Pipeline
 		if resp.OutputXsiam.PqCompress != nil {
 			r.OutputXsiam.PqCompress = types.StringValue(string(*resp.OutputXsiam.PqCompress))
 		} else {
@@ -8785,15 +8907,15 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputXsiam.ResponseHonorRetryAfterHeader = types.BoolPointerValue(resp.OutputXsiam.ResponseHonorRetryAfterHeader)
 		r.OutputXsiam.ResponseRetrySettings = []tfTypes.ItemsTypeResponseRetrySettings{}
 
-		for _, responseRetrySettingsItem34 := range resp.OutputXsiam.ResponseRetrySettings {
-			var responseRetrySettings34 tfTypes.ItemsTypeResponseRetrySettings
+		for _, responseRetrySettingsItem33 := range resp.OutputXsiam.ResponseRetrySettings {
+			var responseRetrySettings33 tfTypes.ItemsTypeResponseRetrySettings
 
-			responseRetrySettings34.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem34.BackoffRate)
-			responseRetrySettings34.HTTPStatus = types.Float64Value(responseRetrySettingsItem34.HTTPStatus)
-			responseRetrySettings34.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem34.InitialBackoff)
-			responseRetrySettings34.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem34.MaxBackoff)
+			responseRetrySettings33.BackoffRate = types.Float64PointerValue(responseRetrySettingsItem33.BackoffRate)
+			responseRetrySettings33.HTTPStatus = types.Float64Value(responseRetrySettingsItem33.HTTPStatus)
+			responseRetrySettings33.InitialBackoff = types.Float64PointerValue(responseRetrySettingsItem33.InitialBackoff)
+			responseRetrySettings33.MaxBackoff = types.Float64PointerValue(responseRetrySettingsItem33.MaxBackoff)
 
-			r.OutputXsiam.ResponseRetrySettings = append(r.OutputXsiam.ResponseRetrySettings, responseRetrySettings34)
+			r.OutputXsiam.ResponseRetrySettings = append(r.OutputXsiam.ResponseRetrySettings, responseRetrySettings33)
 		}
 		r.OutputXsiam.SafeHeaders = make([]types.String, 0, len(resp.OutputXsiam.SafeHeaders))
 		for _, v := range resp.OutputXsiam.SafeHeaders {
@@ -8822,6 +8944,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputXsiam.Token = types.StringPointerValue(resp.OutputXsiam.Token)
 		r.OutputXsiam.TotalMemoryLimitKB = types.Float64PointerValue(resp.OutputXsiam.TotalMemoryLimitKB)
 		r.OutputXsiam.Type = types.StringValue(string(resp.OutputXsiam.Type))
+		r.Type = r.OutputXsiam.Type
 		r.OutputXsiam.URL = types.StringPointerValue(resp.OutputXsiam.URL)
 		r.OutputXsiam.Urls = []tfTypes.OutputXsiamURL{}
 
@@ -10198,9 +10321,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			appName = nil
 		}
-		messageFormat := new(shared.MessageFormat)
+		messageFormat := new(shared.OutputSyslogMessageFormat)
 		if !r.OutputSyslog.MessageFormat.IsUnknown() && !r.OutputSyslog.MessageFormat.IsNull() {
-			*messageFormat = shared.MessageFormat(r.OutputSyslog.MessageFormat.ValueString())
+			*messageFormat = shared.OutputSyslogMessageFormat(r.OutputSyslog.MessageFormat.ValueString())
 		} else {
 			messageFormat = nil
 		}
@@ -25413,903 +25536,403 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputGrafanaCloud *shared.OutputGrafanaCloud
 	if r.OutputGrafanaCloud != nil {
-		var outputGrafanaCloudGrafanaCloud1 *shared.OutputGrafanaCloudGrafanaCloud1
-		if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1 != nil {
-			id44 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ID.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ID.IsNull() {
-				*id44 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ID.ValueString()
-			} else {
-				id44 = nil
-			}
-			typeVar44 := shared.OutputGrafanaCloudType1(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Type.ValueString())
-			pipeline44 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Pipeline.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Pipeline.IsNull() {
-				*pipeline44 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Pipeline.ValueString()
-			} else {
-				pipeline44 = nil
-			}
-			systemFields44 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields))
-			for systemFieldsIndex44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields {
-				systemFields44 = append(systemFields44, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SystemFields[systemFieldsIndex44].ValueString())
-			}
-			environment44 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment.IsNull() {
-				*environment44 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Environment.ValueString()
-			} else {
-				environment44 = nil
-			}
-			streamtags44 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags))
-			for streamtagsIndex44 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags {
-				streamtags44 = append(streamtags44, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Streamtags[streamtagsIndex44].ValueString())
-			}
-			var lokiURL string
-			lokiURL = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiURL.ValueString()
+		var id44 string
+		id44 = r.OutputGrafanaCloud.ID.ValueString()
 
-			prometheusURL := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusURL.IsNull() {
-				*prometheusURL = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusURL.ValueString()
+		typeVar44 := shared.OutputGrafanaCloudType(r.OutputGrafanaCloud.Type.ValueString())
+		pipeline44 := new(string)
+		if !r.OutputGrafanaCloud.Pipeline.IsUnknown() && !r.OutputGrafanaCloud.Pipeline.IsNull() {
+			*pipeline44 = r.OutputGrafanaCloud.Pipeline.ValueString()
+		} else {
+			pipeline44 = nil
+		}
+		systemFields44 := make([]string, 0, len(r.OutputGrafanaCloud.SystemFields))
+		for systemFieldsIndex44 := range r.OutputGrafanaCloud.SystemFields {
+			systemFields44 = append(systemFields44, r.OutputGrafanaCloud.SystemFields[systemFieldsIndex44].ValueString())
+		}
+		environment44 := new(string)
+		if !r.OutputGrafanaCloud.Environment.IsUnknown() && !r.OutputGrafanaCloud.Environment.IsNull() {
+			*environment44 = r.OutputGrafanaCloud.Environment.ValueString()
+		} else {
+			environment44 = nil
+		}
+		streamtags44 := make([]string, 0, len(r.OutputGrafanaCloud.Streamtags))
+		for streamtagsIndex44 := range r.OutputGrafanaCloud.Streamtags {
+			streamtags44 = append(streamtags44, r.OutputGrafanaCloud.Streamtags[streamtagsIndex44].ValueString())
+		}
+		lokiURL := new(string)
+		if !r.OutputGrafanaCloud.LokiURL.IsUnknown() && !r.OutputGrafanaCloud.LokiURL.IsNull() {
+			*lokiURL = r.OutputGrafanaCloud.LokiURL.ValueString()
+		} else {
+			lokiURL = nil
+		}
+		prometheusURL := new(string)
+		if !r.OutputGrafanaCloud.PrometheusURL.IsUnknown() && !r.OutputGrafanaCloud.PrometheusURL.IsNull() {
+			*prometheusURL = r.OutputGrafanaCloud.PrometheusURL.ValueString()
+		} else {
+			prometheusURL = nil
+		}
+		message1 := new(string)
+		if !r.OutputGrafanaCloud.Message.IsUnknown() && !r.OutputGrafanaCloud.Message.IsNull() {
+			*message1 = r.OutputGrafanaCloud.Message.ValueString()
+		} else {
+			message1 = nil
+		}
+		messageFormat1 := new(shared.OutputGrafanaCloudMessageFormat)
+		if !r.OutputGrafanaCloud.MessageFormat.IsUnknown() && !r.OutputGrafanaCloud.MessageFormat.IsNull() {
+			*messageFormat1 = shared.OutputGrafanaCloudMessageFormat(r.OutputGrafanaCloud.MessageFormat.ValueString())
+		} else {
+			messageFormat1 = nil
+		}
+		labels := make([]shared.Label, 0, len(r.OutputGrafanaCloud.Labels))
+		for labelsIndex := range r.OutputGrafanaCloud.Labels {
+			name27 := new(string)
+			if !r.OutputGrafanaCloud.Labels[labelsIndex].Name.IsUnknown() && !r.OutputGrafanaCloud.Labels[labelsIndex].Name.IsNull() {
+				*name27 = r.OutputGrafanaCloud.Labels[labelsIndex].Name.ValueString()
 			} else {
-				prometheusURL = nil
+				name27 = nil
 			}
-			message1 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Message.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Message.IsNull() {
-				*message1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Message.ValueString()
-			} else {
-				message1 = nil
-			}
-			messageFormat1 := new(shared.MessageFormatOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat.IsNull() {
-				*messageFormat1 = shared.MessageFormatOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MessageFormat.ValueString())
-			} else {
-				messageFormat1 = nil
-			}
-			labels := make([]shared.ItemsTypeContentConfigItemsRequestParams, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels))
-			for labelsIndex := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels {
-				var name27 string
-				name27 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Name.ValueString()
+			var value37 string
+			value37 = r.OutputGrafanaCloud.Labels[labelsIndex].Value.ValueString()
 
-				var value37 string
-				value37 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Labels[labelsIndex].Value.ValueString()
-
-				labels = append(labels, shared.ItemsTypeContentConfigItemsRequestParams{
-					Name:  name27,
-					Value: value37,
-				})
-			}
-			metricRenameExpr := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MetricRenameExpr.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MetricRenameExpr.IsNull() {
-				*metricRenameExpr = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MetricRenameExpr.ValueString()
+			labels = append(labels, shared.Label{
+				Name:  name27,
+				Value: value37,
+			})
+		}
+		metricRenameExpr := new(string)
+		if !r.OutputGrafanaCloud.MetricRenameExpr.IsUnknown() && !r.OutputGrafanaCloud.MetricRenameExpr.IsNull() {
+			*metricRenameExpr = r.OutputGrafanaCloud.MetricRenameExpr.ValueString()
+		} else {
+			metricRenameExpr = nil
+		}
+		var prometheusAuth *shared.OutputGrafanaCloudPrometheusAuth
+		if r.OutputGrafanaCloud.PrometheusAuth != nil {
+			authType23 := new(shared.PrometheusAuthAuthenticationType)
+			if !r.OutputGrafanaCloud.PrometheusAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.AuthType.IsNull() {
+				*authType23 = shared.PrometheusAuthAuthenticationType(r.OutputGrafanaCloud.PrometheusAuth.AuthType.ValueString())
 			} else {
-				metricRenameExpr = nil
+				authType23 = nil
 			}
-			var prometheusAuth *shared.PrometheusAuthType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth != nil {
-				authType23 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType.IsNull() {
-					*authType23 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.AuthType.ValueString())
-				} else {
-					authType23 = nil
-				}
-				token6 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Token.IsNull() {
-					*token6 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Token.ValueString()
-				} else {
-					token6 = nil
-				}
-				textSecret20 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.TextSecret.IsNull() {
-					*textSecret20 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.TextSecret.ValueString()
-				} else {
-					textSecret20 = nil
-				}
-				username7 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Username.IsNull() {
-					*username7 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Username.ValueString()
-				} else {
-					username7 = nil
-				}
-				password7 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Password.IsNull() {
-					*password7 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.Password.ValueString()
-				} else {
-					password7 = nil
-				}
-				credentialsSecret9 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret9 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PrometheusAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret9 = nil
-				}
-				prometheusAuth = &shared.PrometheusAuthType{
-					AuthType:          authType23,
-					Token:             token6,
-					TextSecret:        textSecret20,
-					Username:          username7,
-					Password:          password7,
-					CredentialsSecret: credentialsSecret9,
-				}
-			}
-			var lokiAuth *shared.PrometheusAuthType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth != nil {
-				authType24 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType.IsNull() {
-					*authType24 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.AuthType.ValueString())
-				} else {
-					authType24 = nil
-				}
-				token7 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Token.IsNull() {
-					*token7 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Token.ValueString()
-				} else {
-					token7 = nil
-				}
-				textSecret21 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.TextSecret.IsNull() {
-					*textSecret21 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.TextSecret.ValueString()
-				} else {
-					textSecret21 = nil
-				}
-				username8 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Username.IsNull() {
-					*username8 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Username.ValueString()
-				} else {
-					username8 = nil
-				}
-				password8 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Password.IsNull() {
-					*password8 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.Password.ValueString()
-				} else {
-					password8 = nil
-				}
-				credentialsSecret10 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret10 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.LokiAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret10 = nil
-				}
-				lokiAuth = &shared.PrometheusAuthType{
-					AuthType:          authType24,
-					Token:             token7,
-					TextSecret:        textSecret21,
-					Username:          username8,
-					Password:          password8,
-					CredentialsSecret: credentialsSecret10,
-				}
-			}
-			concurrency19 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Concurrency.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Concurrency.IsNull() {
-				*concurrency19 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Concurrency.ValueFloat64()
+			token6 := new(string)
+			if !r.OutputGrafanaCloud.PrometheusAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.Token.IsNull() {
+				*token6 = r.OutputGrafanaCloud.PrometheusAuth.Token.ValueString()
 			} else {
-				concurrency19 = nil
+				token6 = nil
 			}
-			maxPayloadSizeKb18 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadSizeKB.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadSizeKB.IsNull() {
-				*maxPayloadSizeKb18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadSizeKB.ValueFloat64()
+			textSecret20 := new(string)
+			if !r.OutputGrafanaCloud.PrometheusAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.TextSecret.IsNull() {
+				*textSecret20 = r.OutputGrafanaCloud.PrometheusAuth.TextSecret.ValueString()
 			} else {
-				maxPayloadSizeKb18 = nil
+				textSecret20 = nil
 			}
-			maxPayloadEvents18 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadEvents.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadEvents.IsNull() {
-				*maxPayloadEvents18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.MaxPayloadEvents.ValueFloat64()
+			username7 := new(string)
+			if !r.OutputGrafanaCloud.PrometheusAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.Username.IsNull() {
+				*username7 = r.OutputGrafanaCloud.PrometheusAuth.Username.ValueString()
 			} else {
-				maxPayloadEvents18 = nil
+				username7 = nil
 			}
-			rejectUnauthorized38 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.RejectUnauthorized.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.RejectUnauthorized.ValueBool()
+			password7 := new(string)
+			if !r.OutputGrafanaCloud.PrometheusAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.Password.IsNull() {
+				*password7 = r.OutputGrafanaCloud.PrometheusAuth.Password.ValueString()
 			} else {
-				rejectUnauthorized38 = nil
+				password7 = nil
 			}
-			timeoutSec18 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutSec.IsNull() {
-				*timeoutSec18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutSec.ValueFloat64()
+			credentialsSecret9 := new(string)
+			if !r.OutputGrafanaCloud.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.PrometheusAuth.CredentialsSecret.IsNull() {
+				*credentialsSecret9 = r.OutputGrafanaCloud.PrometheusAuth.CredentialsSecret.ValueString()
 			} else {
-				timeoutSec18 = nil
+				credentialsSecret9 = nil
 			}
-			flushPeriodSec29 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FlushPeriodSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FlushPeriodSec.IsNull() {
-				*flushPeriodSec29 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FlushPeriodSec.ValueFloat64()
-			} else {
-				flushPeriodSec29 = nil
-			}
-			extraHTTPHeaders16 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders))
-			for extraHTTPHeadersIndex16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders {
-				name28 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsNull() {
-					*name28 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.ValueString()
-				} else {
-					name28 = nil
-				}
-				var value38 string
-				value38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Value.ValueString()
-
-				extraHTTPHeaders16 = append(extraHTTPHeaders16, shared.ItemsTypeExtraHTTPHeaders{
-					Name:  name28,
-					Value: value38,
-				})
-			}
-			useRoundRobinDns15 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.UseRoundRobinDNS.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.UseRoundRobinDNS.IsNull() {
-				*useRoundRobinDns15 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.UseRoundRobinDNS.ValueBool()
-			} else {
-				useRoundRobinDns15 = nil
-			}
-			failedRequestLoggingMode16 := new(shared.FailedRequestLoggingModeOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode.IsNull() {
-				*failedRequestLoggingMode16 = shared.FailedRequestLoggingModeOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.FailedRequestLoggingMode.ValueString())
-			} else {
-				failedRequestLoggingMode16 = nil
-			}
-			safeHeaders16 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders))
-			for safeHeadersIndex16 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders {
-				safeHeaders16 = append(safeHeaders16, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.SafeHeaders[safeHeadersIndex16].ValueString())
-			}
-			responseRetrySettings17 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings))
-			for responseRetrySettingsIndex17 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings {
-				var httpStatus17 float64
-				httpStatus17 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].HTTPStatus.ValueFloat64()
-
-				initialBackoff38 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsNull() {
-					*initialBackoff38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.ValueFloat64()
-				} else {
-					initialBackoff38 = nil
-				}
-				backoffRate38 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsNull() {
-					*backoffRate38 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.ValueFloat64()
-				} else {
-					backoffRate38 = nil
-				}
-				maxBackoff34 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsNull() {
-					*maxBackoff34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.ValueFloat64()
-				} else {
-					maxBackoff34 = nil
-				}
-				responseRetrySettings17 = append(responseRetrySettings17, shared.ItemsTypeResponseRetrySettings{
-					HTTPStatus:     httpStatus17,
-					InitialBackoff: initialBackoff38,
-					BackoffRate:    backoffRate38,
-					MaxBackoff:     maxBackoff34,
-				})
-			}
-			var timeoutRetrySettings17 *shared.TimeoutRetrySettingsType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings != nil {
-				var timeoutRetry17 bool
-				timeoutRetry17 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.TimeoutRetry.ValueBool()
-
-				initialBackoff39 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.InitialBackoff.IsNull() {
-					*initialBackoff39 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
-				} else {
-					initialBackoff39 = nil
-				}
-				backoffRate39 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.BackoffRate.IsNull() {
-					*backoffRate39 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.BackoffRate.ValueFloat64()
-				} else {
-					backoffRate39 = nil
-				}
-				maxBackoff35 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.MaxBackoff.IsNull() {
-					*maxBackoff35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
-				} else {
-					maxBackoff35 = nil
-				}
-				timeoutRetrySettings17 = &shared.TimeoutRetrySettingsType{
-					TimeoutRetry:   timeoutRetry17,
-					InitialBackoff: initialBackoff39,
-					BackoffRate:    backoffRate39,
-					MaxBackoff:     maxBackoff35,
-				}
-			}
-			responseHonorRetryAfterHeader17 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseHonorRetryAfterHeader.IsNull() {
-				*responseHonorRetryAfterHeader17 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.ResponseHonorRetryAfterHeader.ValueBool()
-			} else {
-				responseHonorRetryAfterHeader17 = nil
-			}
-			onBackpressure40 := new(shared.BackpressureBehaviorOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure.IsNull() {
-				*onBackpressure40 = shared.BackpressureBehaviorOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.OnBackpressure.ValueString())
-			} else {
-				onBackpressure40 = nil
-			}
-			description44 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Description.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Description.IsNull() {
-				*description44 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Description.ValueString()
-			} else {
-				description44 = nil
-			}
-			compress24 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Compress.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Compress.IsNull() {
-				*compress24 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.Compress.ValueBool()
-			} else {
-				compress24 = nil
-			}
-			pqStrictOrdering34 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqStrictOrdering.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqStrictOrdering.IsNull() {
-				*pqStrictOrdering34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqStrictOrdering.ValueBool()
-			} else {
-				pqStrictOrdering34 = nil
-			}
-			pqRatePerSec34 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqRatePerSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqRatePerSec.IsNull() {
-				*pqRatePerSec34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqRatePerSec.ValueFloat64()
-			} else {
-				pqRatePerSec34 = nil
-			}
-			pqMode34 := new(shared.ModeOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode.IsNull() {
-				*pqMode34 = shared.ModeOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMode.ValueString())
-			} else {
-				pqMode34 = nil
-			}
-			pqMaxBufferSize34 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSize.IsNull() {
-				*pqMaxBufferSize34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSize.ValueFloat64()
-			} else {
-				pqMaxBufferSize34 = nil
-			}
-			pqMaxBackpressureSec34 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBackpressureSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBackpressureSec.IsNull() {
-				*pqMaxBackpressureSec34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBackpressureSec.ValueFloat64()
-			} else {
-				pqMaxBackpressureSec34 = nil
-			}
-			pqMaxFileSize34 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxFileSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxFileSize.IsNull() {
-				*pqMaxFileSize34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxFileSize.ValueString()
-			} else {
-				pqMaxFileSize34 = nil
-			}
-			pqMaxSize34 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxSize.IsNull() {
-				*pqMaxSize34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxSize.ValueString()
-			} else {
-				pqMaxSize34 = nil
-			}
-			pqPath34 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqPath.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqPath.IsNull() {
-				*pqPath34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqPath.ValueString()
-			} else {
-				pqPath34 = nil
-			}
-			pqCompress34 := new(shared.CompressionOptionsPq)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress.IsNull() {
-				*pqCompress34 = shared.CompressionOptionsPq(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqCompress.ValueString())
-			} else {
-				pqCompress34 = nil
-			}
-			pqOnBackpressure34 := new(shared.QueueFullBehaviorOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure.IsNull() {
-				*pqOnBackpressure34 = shared.QueueFullBehaviorOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqOnBackpressure.ValueString())
-			} else {
-				pqOnBackpressure34 = nil
-			}
-			pqMaxBufferSizeBytes34 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSizeBytes.IsNull() {
-				*pqMaxBufferSizeBytes34 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqMaxBufferSizeBytes.ValueString()
-			} else {
-				pqMaxBufferSizeBytes34 = nil
-			}
-			var pqControls34 *shared.OutputGrafanaCloudPqControls1
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.PqControls != nil {
-				pqControls34 = &shared.OutputGrafanaCloudPqControls1{}
-			}
-			templateLokiURL := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL.IsNull() {
-				*templateLokiURL = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplateLokiURL.ValueString()
-			} else {
-				templateLokiURL = nil
-			}
-			templatePrometheusURL := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplatePrometheusURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplatePrometheusURL.IsNull() {
-				*templatePrometheusURL = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud1.TemplatePrometheusURL.ValueString()
-			} else {
-				templatePrometheusURL = nil
-			}
-			outputGrafanaCloudGrafanaCloud1 = &shared.OutputGrafanaCloudGrafanaCloud1{
-				ID:                            id44,
-				Type:                          typeVar44,
-				Pipeline:                      pipeline44,
-				SystemFields:                  systemFields44,
-				Environment:                   environment44,
-				Streamtags:                    streamtags44,
-				LokiURL:                       lokiURL,
-				PrometheusURL:                 prometheusURL,
-				Message:                       message1,
-				MessageFormat:                 messageFormat1,
-				Labels:                        labels,
-				MetricRenameExpr:              metricRenameExpr,
-				PrometheusAuth:                prometheusAuth,
-				LokiAuth:                      lokiAuth,
-				Concurrency:                   concurrency19,
-				MaxPayloadSizeKB:              maxPayloadSizeKb18,
-				MaxPayloadEvents:              maxPayloadEvents18,
-				RejectUnauthorized:            rejectUnauthorized38,
-				TimeoutSec:                    timeoutSec18,
-				FlushPeriodSec:                flushPeriodSec29,
-				ExtraHTTPHeaders:              extraHTTPHeaders16,
-				UseRoundRobinDNS:              useRoundRobinDns15,
-				FailedRequestLoggingMode:      failedRequestLoggingMode16,
-				SafeHeaders:                   safeHeaders16,
-				ResponseRetrySettings:         responseRetrySettings17,
-				TimeoutRetrySettings:          timeoutRetrySettings17,
-				ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader17,
-				OnBackpressure:                onBackpressure40,
-				Description:                   description44,
-				Compress:                      compress24,
-				PqStrictOrdering:              pqStrictOrdering34,
-				PqRatePerSec:                  pqRatePerSec34,
-				PqMode:                        pqMode34,
-				PqMaxBufferSize:               pqMaxBufferSize34,
-				PqMaxBackpressureSec:          pqMaxBackpressureSec34,
-				PqMaxFileSize:                 pqMaxFileSize34,
-				PqMaxSize:                     pqMaxSize34,
-				PqPath:                        pqPath34,
-				PqCompress:                    pqCompress34,
-				PqOnBackpressure:              pqOnBackpressure34,
-				PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes34,
-				PqControls:                    pqControls34,
-				TemplateLokiURL:               templateLokiURL,
-				TemplatePrometheusURL:         templatePrometheusURL,
+			prometheusAuth = &shared.OutputGrafanaCloudPrometheusAuth{
+				AuthType:          authType23,
+				Token:             token6,
+				TextSecret:        textSecret20,
+				Username:          username7,
+				Password:          password7,
+				CredentialsSecret: credentialsSecret9,
 			}
 		}
-		if outputGrafanaCloudGrafanaCloud1 != nil {
-			outputGrafanaCloud = &shared.OutputGrafanaCloud{
-				OutputGrafanaCloudGrafanaCloud1: outputGrafanaCloudGrafanaCloud1,
+		var lokiAuth *shared.OutputGrafanaCloudLokiAuth
+		if r.OutputGrafanaCloud.LokiAuth != nil {
+			authType24 := new(shared.LokiAuthAuthenticationType)
+			if !r.OutputGrafanaCloud.LokiAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.AuthType.IsNull() {
+				*authType24 = shared.LokiAuthAuthenticationType(r.OutputGrafanaCloud.LokiAuth.AuthType.ValueString())
+			} else {
+				authType24 = nil
+			}
+			token7 := new(string)
+			if !r.OutputGrafanaCloud.LokiAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.Token.IsNull() {
+				*token7 = r.OutputGrafanaCloud.LokiAuth.Token.ValueString()
+			} else {
+				token7 = nil
+			}
+			textSecret21 := new(string)
+			if !r.OutputGrafanaCloud.LokiAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.TextSecret.IsNull() {
+				*textSecret21 = r.OutputGrafanaCloud.LokiAuth.TextSecret.ValueString()
+			} else {
+				textSecret21 = nil
+			}
+			username8 := new(string)
+			if !r.OutputGrafanaCloud.LokiAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.Username.IsNull() {
+				*username8 = r.OutputGrafanaCloud.LokiAuth.Username.ValueString()
+			} else {
+				username8 = nil
+			}
+			password8 := new(string)
+			if !r.OutputGrafanaCloud.LokiAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.Password.IsNull() {
+				*password8 = r.OutputGrafanaCloud.LokiAuth.Password.ValueString()
+			} else {
+				password8 = nil
+			}
+			credentialsSecret10 := new(string)
+			if !r.OutputGrafanaCloud.LokiAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.LokiAuth.CredentialsSecret.IsNull() {
+				*credentialsSecret10 = r.OutputGrafanaCloud.LokiAuth.CredentialsSecret.ValueString()
+			} else {
+				credentialsSecret10 = nil
+			}
+			lokiAuth = &shared.OutputGrafanaCloudLokiAuth{
+				AuthType:          authType24,
+				Token:             token7,
+				TextSecret:        textSecret21,
+				Username:          username8,
+				Password:          password8,
+				CredentialsSecret: credentialsSecret10,
 			}
 		}
-		var outputGrafanaCloudGrafanaCloud2 *shared.OutputGrafanaCloudGrafanaCloud2
-		if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2 != nil {
-			id45 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ID.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ID.IsNull() {
-				*id45 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ID.ValueString()
+		concurrency19 := new(float64)
+		if !r.OutputGrafanaCloud.Concurrency.IsUnknown() && !r.OutputGrafanaCloud.Concurrency.IsNull() {
+			*concurrency19 = r.OutputGrafanaCloud.Concurrency.ValueFloat64()
+		} else {
+			concurrency19 = nil
+		}
+		maxPayloadSizeKb18 := new(float64)
+		if !r.OutputGrafanaCloud.MaxPayloadSizeKB.IsUnknown() && !r.OutputGrafanaCloud.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb18 = r.OutputGrafanaCloud.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb18 = nil
+		}
+		maxPayloadEvents18 := new(float64)
+		if !r.OutputGrafanaCloud.MaxPayloadEvents.IsUnknown() && !r.OutputGrafanaCloud.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents18 = r.OutputGrafanaCloud.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents18 = nil
+		}
+		rejectUnauthorized38 := new(bool)
+		if !r.OutputGrafanaCloud.RejectUnauthorized.IsUnknown() && !r.OutputGrafanaCloud.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized38 = r.OutputGrafanaCloud.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized38 = nil
+		}
+		timeoutSec18 := new(float64)
+		if !r.OutputGrafanaCloud.TimeoutSec.IsUnknown() && !r.OutputGrafanaCloud.TimeoutSec.IsNull() {
+			*timeoutSec18 = r.OutputGrafanaCloud.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec18 = nil
+		}
+		flushPeriodSec29 := new(float64)
+		if !r.OutputGrafanaCloud.FlushPeriodSec.IsUnknown() && !r.OutputGrafanaCloud.FlushPeriodSec.IsNull() {
+			*flushPeriodSec29 = r.OutputGrafanaCloud.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec29 = nil
+		}
+		extraHTTPHeaders16 := make([]shared.ExtraHTTPHeader, 0, len(r.OutputGrafanaCloud.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex16 := range r.OutputGrafanaCloud.ExtraHTTPHeaders {
+			name28 := new(string)
+			if !r.OutputGrafanaCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsUnknown() && !r.OutputGrafanaCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.IsNull() {
+				*name28 = r.OutputGrafanaCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Name.ValueString()
 			} else {
-				id45 = nil
+				name28 = nil
 			}
-			typeVar45 := shared.OutputGrafanaCloudType2(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Type.ValueString())
-			pipeline45 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Pipeline.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Pipeline.IsNull() {
-				*pipeline45 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Pipeline.ValueString()
-			} else {
-				pipeline45 = nil
-			}
-			systemFields45 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields))
-			for systemFieldsIndex45 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields {
-				systemFields45 = append(systemFields45, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SystemFields[systemFieldsIndex45].ValueString())
-			}
-			environment45 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment.IsNull() {
-				*environment45 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Environment.ValueString()
-			} else {
-				environment45 = nil
-			}
-			streamtags45 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags))
-			for streamtagsIndex45 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags {
-				streamtags45 = append(streamtags45, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Streamtags[streamtagsIndex45].ValueString())
-			}
-			lokiUrl1 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL.IsNull() {
-				*lokiUrl1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiURL.ValueString()
-			} else {
-				lokiUrl1 = nil
-			}
-			var prometheusUrl1 string
-			prometheusUrl1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusURL.ValueString()
+			var value38 string
+			value38 = r.OutputGrafanaCloud.ExtraHTTPHeaders[extraHTTPHeadersIndex16].Value.ValueString()
 
-			message2 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Message.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Message.IsNull() {
-				*message2 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Message.ValueString()
-			} else {
-				message2 = nil
-			}
-			messageFormat2 := new(shared.MessageFormatOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat.IsNull() {
-				*messageFormat2 = shared.MessageFormatOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MessageFormat.ValueString())
-			} else {
-				messageFormat2 = nil
-			}
-			labels1 := make([]shared.ItemsTypeContentConfigItemsRequestParams, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels))
-			for labelsIndex1 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels {
-				var name29 string
-				name29 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Name.ValueString()
+			extraHTTPHeaders16 = append(extraHTTPHeaders16, shared.ExtraHTTPHeader{
+				Name:  name28,
+				Value: value38,
+			})
+		}
+		useRoundRobinDns15 := new(bool)
+		if !r.OutputGrafanaCloud.UseRoundRobinDNS.IsUnknown() && !r.OutputGrafanaCloud.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns15 = r.OutputGrafanaCloud.UseRoundRobinDNS.ValueBool()
+		} else {
+			useRoundRobinDns15 = nil
+		}
+		failedRequestLoggingMode16 := new(shared.FailedRequestLoggingMode)
+		if !r.OutputGrafanaCloud.FailedRequestLoggingMode.IsUnknown() && !r.OutputGrafanaCloud.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode16 = shared.FailedRequestLoggingMode(r.OutputGrafanaCloud.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode16 = nil
+		}
+		safeHeaders16 := make([]string, 0, len(r.OutputGrafanaCloud.SafeHeaders))
+		for safeHeadersIndex16 := range r.OutputGrafanaCloud.SafeHeaders {
+			safeHeaders16 = append(safeHeaders16, r.OutputGrafanaCloud.SafeHeaders[safeHeadersIndex16].ValueString())
+		}
+		responseRetrySettings17 := make([]shared.ResponseRetrySetting, 0, len(r.OutputGrafanaCloud.ResponseRetrySettings))
+		for responseRetrySettingsIndex17 := range r.OutputGrafanaCloud.ResponseRetrySettings {
+			var httpStatus17 float64
+			httpStatus17 = r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].HTTPStatus.ValueFloat64()
 
-				var value39 string
-				value39 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Labels[labelsIndex1].Value.ValueString()
-
-				labels1 = append(labels1, shared.ItemsTypeContentConfigItemsRequestParams{
-					Name:  name29,
-					Value: value39,
-				})
-			}
-			metricRenameExpr1 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MetricRenameExpr.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MetricRenameExpr.IsNull() {
-				*metricRenameExpr1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MetricRenameExpr.ValueString()
+			initialBackoff38 := new(float64)
+			if !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.IsNull() {
+				*initialBackoff38 = r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].InitialBackoff.ValueFloat64()
 			} else {
-				metricRenameExpr1 = nil
+				initialBackoff38 = nil
 			}
-			var prometheusAuth1 *shared.PrometheusAuthType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth != nil {
-				authType25 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType.IsNull() {
-					*authType25 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.AuthType.ValueString())
-				} else {
-					authType25 = nil
-				}
-				token8 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Token.IsNull() {
-					*token8 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Token.ValueString()
-				} else {
-					token8 = nil
-				}
-				textSecret22 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.TextSecret.IsNull() {
-					*textSecret22 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.TextSecret.ValueString()
-				} else {
-					textSecret22 = nil
-				}
-				username9 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Username.IsNull() {
-					*username9 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Username.ValueString()
-				} else {
-					username9 = nil
-				}
-				password9 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Password.IsNull() {
-					*password9 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.Password.ValueString()
-				} else {
-					password9 = nil
-				}
-				credentialsSecret11 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret11 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PrometheusAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret11 = nil
-				}
-				prometheusAuth1 = &shared.PrometheusAuthType{
-					AuthType:          authType25,
-					Token:             token8,
-					TextSecret:        textSecret22,
-					Username:          username9,
-					Password:          password9,
-					CredentialsSecret: credentialsSecret11,
-				}
-			}
-			var lokiAuth1 *shared.PrometheusAuthType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth != nil {
-				authType26 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType.IsNull() {
-					*authType26 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.AuthType.ValueString())
-				} else {
-					authType26 = nil
-				}
-				token9 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Token.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Token.IsNull() {
-					*token9 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Token.ValueString()
-				} else {
-					token9 = nil
-				}
-				textSecret23 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.TextSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.TextSecret.IsNull() {
-					*textSecret23 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.TextSecret.ValueString()
-				} else {
-					textSecret23 = nil
-				}
-				username10 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Username.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Username.IsNull() {
-					*username10 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Username.ValueString()
-				} else {
-					username10 = nil
-				}
-				password10 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Password.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Password.IsNull() {
-					*password10 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.Password.ValueString()
-				} else {
-					password10 = nil
-				}
-				credentialsSecret12 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.CredentialsSecret.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.CredentialsSecret.IsNull() {
-					*credentialsSecret12 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.LokiAuth.CredentialsSecret.ValueString()
-				} else {
-					credentialsSecret12 = nil
-				}
-				lokiAuth1 = &shared.PrometheusAuthType{
-					AuthType:          authType26,
-					Token:             token9,
-					TextSecret:        textSecret23,
-					Username:          username10,
-					Password:          password10,
-					CredentialsSecret: credentialsSecret12,
-				}
-			}
-			concurrency20 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Concurrency.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Concurrency.IsNull() {
-				*concurrency20 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Concurrency.ValueFloat64()
+			backoffRate38 := new(float64)
+			if !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.IsNull() {
+				*backoffRate38 = r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].BackoffRate.ValueFloat64()
 			} else {
-				concurrency20 = nil
+				backoffRate38 = nil
 			}
-			maxPayloadSizeKb19 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadSizeKB.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadSizeKB.IsNull() {
-				*maxPayloadSizeKb19 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadSizeKB.ValueFloat64()
+			maxBackoff34 := new(float64)
+			if !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.IsNull() {
+				*maxBackoff34 = r.OutputGrafanaCloud.ResponseRetrySettings[responseRetrySettingsIndex17].MaxBackoff.ValueFloat64()
 			} else {
-				maxPayloadSizeKb19 = nil
+				maxBackoff34 = nil
 			}
-			maxPayloadEvents19 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadEvents.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadEvents.IsNull() {
-				*maxPayloadEvents19 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.MaxPayloadEvents.ValueFloat64()
+			responseRetrySettings17 = append(responseRetrySettings17, shared.ResponseRetrySetting{
+				HTTPStatus:     httpStatus17,
+				InitialBackoff: initialBackoff38,
+				BackoffRate:    backoffRate38,
+				MaxBackoff:     maxBackoff34,
+			})
+		}
+		var timeoutRetrySettings17 *shared.TimeoutRetrySettings
+		if r.OutputGrafanaCloud.TimeoutRetrySettings != nil {
+			timeoutRetry17 := new(bool)
+			if !r.OutputGrafanaCloud.TimeoutRetrySettings.TimeoutRetry.IsUnknown() && !r.OutputGrafanaCloud.TimeoutRetrySettings.TimeoutRetry.IsNull() {
+				*timeoutRetry17 = r.OutputGrafanaCloud.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 			} else {
-				maxPayloadEvents19 = nil
+				timeoutRetry17 = nil
 			}
-			rejectUnauthorized39 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.RejectUnauthorized.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized39 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.RejectUnauthorized.ValueBool()
+			initialBackoff39 := new(float64)
+			if !r.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff39 = r.OutputGrafanaCloud.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				rejectUnauthorized39 = nil
+				initialBackoff39 = nil
 			}
-			timeoutSec19 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutSec.IsNull() {
-				*timeoutSec19 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutSec.ValueFloat64()
+			backoffRate39 := new(float64)
+			if !r.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate39 = r.OutputGrafanaCloud.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				timeoutSec19 = nil
+				backoffRate39 = nil
 			}
-			flushPeriodSec30 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FlushPeriodSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FlushPeriodSec.IsNull() {
-				*flushPeriodSec30 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FlushPeriodSec.ValueFloat64()
+			maxBackoff35 := new(float64)
+			if !r.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff35 = r.OutputGrafanaCloud.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				flushPeriodSec30 = nil
+				maxBackoff35 = nil
 			}
-			extraHTTPHeaders17 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders))
-			for extraHTTPHeadersIndex17 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders {
-				name30 := new(string)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsNull() {
-					*name30 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.ValueString()
-				} else {
-					name30 = nil
-				}
-				var value40 string
-				value40 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Value.ValueString()
-
-				extraHTTPHeaders17 = append(extraHTTPHeaders17, shared.ItemsTypeExtraHTTPHeaders{
-					Name:  name30,
-					Value: value40,
-				})
-			}
-			useRoundRobinDns16 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.UseRoundRobinDNS.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.UseRoundRobinDNS.IsNull() {
-				*useRoundRobinDns16 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.UseRoundRobinDNS.ValueBool()
-			} else {
-				useRoundRobinDns16 = nil
-			}
-			failedRequestLoggingMode17 := new(shared.FailedRequestLoggingModeOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode.IsNull() {
-				*failedRequestLoggingMode17 = shared.FailedRequestLoggingModeOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.FailedRequestLoggingMode.ValueString())
-			} else {
-				failedRequestLoggingMode17 = nil
-			}
-			safeHeaders17 := make([]string, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders))
-			for safeHeadersIndex17 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders {
-				safeHeaders17 = append(safeHeaders17, r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.SafeHeaders[safeHeadersIndex17].ValueString())
-			}
-			responseRetrySettings18 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings))
-			for responseRetrySettingsIndex18 := range r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings {
-				var httpStatus18 float64
-				httpStatus18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].HTTPStatus.ValueFloat64()
-
-				initialBackoff40 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsNull() {
-					*initialBackoff40 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.ValueFloat64()
-				} else {
-					initialBackoff40 = nil
-				}
-				backoffRate40 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsNull() {
-					*backoffRate40 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.ValueFloat64()
-				} else {
-					backoffRate40 = nil
-				}
-				maxBackoff36 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsNull() {
-					*maxBackoff36 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.ValueFloat64()
-				} else {
-					maxBackoff36 = nil
-				}
-				responseRetrySettings18 = append(responseRetrySettings18, shared.ItemsTypeResponseRetrySettings{
-					HTTPStatus:     httpStatus18,
-					InitialBackoff: initialBackoff40,
-					BackoffRate:    backoffRate40,
-					MaxBackoff:     maxBackoff36,
-				})
-			}
-			var timeoutRetrySettings18 *shared.TimeoutRetrySettingsType
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings != nil {
-				var timeoutRetry18 bool
-				timeoutRetry18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.TimeoutRetry.ValueBool()
-
-				initialBackoff41 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.InitialBackoff.IsNull() {
-					*initialBackoff41 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
-				} else {
-					initialBackoff41 = nil
-				}
-				backoffRate41 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.BackoffRate.IsNull() {
-					*backoffRate41 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.BackoffRate.ValueFloat64()
-				} else {
-					backoffRate41 = nil
-				}
-				maxBackoff37 := new(float64)
-				if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.MaxBackoff.IsNull() {
-					*maxBackoff37 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
-				} else {
-					maxBackoff37 = nil
-				}
-				timeoutRetrySettings18 = &shared.TimeoutRetrySettingsType{
-					TimeoutRetry:   timeoutRetry18,
-					InitialBackoff: initialBackoff41,
-					BackoffRate:    backoffRate41,
-					MaxBackoff:     maxBackoff37,
-				}
-			}
-			responseHonorRetryAfterHeader18 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseHonorRetryAfterHeader.IsNull() {
-				*responseHonorRetryAfterHeader18 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.ResponseHonorRetryAfterHeader.ValueBool()
-			} else {
-				responseHonorRetryAfterHeader18 = nil
-			}
-			onBackpressure41 := new(shared.BackpressureBehaviorOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure.IsNull() {
-				*onBackpressure41 = shared.BackpressureBehaviorOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.OnBackpressure.ValueString())
-			} else {
-				onBackpressure41 = nil
-			}
-			description45 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Description.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Description.IsNull() {
-				*description45 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Description.ValueString()
-			} else {
-				description45 = nil
-			}
-			compress25 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Compress.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Compress.IsNull() {
-				*compress25 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.Compress.ValueBool()
-			} else {
-				compress25 = nil
-			}
-			pqStrictOrdering35 := new(bool)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqStrictOrdering.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqStrictOrdering.IsNull() {
-				*pqStrictOrdering35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqStrictOrdering.ValueBool()
-			} else {
-				pqStrictOrdering35 = nil
-			}
-			pqRatePerSec35 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqRatePerSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqRatePerSec.IsNull() {
-				*pqRatePerSec35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqRatePerSec.ValueFloat64()
-			} else {
-				pqRatePerSec35 = nil
-			}
-			pqMode35 := new(shared.ModeOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode.IsNull() {
-				*pqMode35 = shared.ModeOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMode.ValueString())
-			} else {
-				pqMode35 = nil
-			}
-			pqMaxBufferSize35 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSize.IsNull() {
-				*pqMaxBufferSize35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSize.ValueFloat64()
-			} else {
-				pqMaxBufferSize35 = nil
-			}
-			pqMaxBackpressureSec35 := new(float64)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBackpressureSec.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBackpressureSec.IsNull() {
-				*pqMaxBackpressureSec35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBackpressureSec.ValueFloat64()
-			} else {
-				pqMaxBackpressureSec35 = nil
-			}
-			pqMaxFileSize35 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxFileSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxFileSize.IsNull() {
-				*pqMaxFileSize35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxFileSize.ValueString()
-			} else {
-				pqMaxFileSize35 = nil
-			}
-			pqMaxSize35 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxSize.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxSize.IsNull() {
-				*pqMaxSize35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxSize.ValueString()
-			} else {
-				pqMaxSize35 = nil
-			}
-			pqPath35 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqPath.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqPath.IsNull() {
-				*pqPath35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqPath.ValueString()
-			} else {
-				pqPath35 = nil
-			}
-			pqCompress35 := new(shared.CompressionOptionsPq)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress.IsNull() {
-				*pqCompress35 = shared.CompressionOptionsPq(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqCompress.ValueString())
-			} else {
-				pqCompress35 = nil
-			}
-			pqOnBackpressure35 := new(shared.QueueFullBehaviorOptions)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure.IsNull() {
-				*pqOnBackpressure35 = shared.QueueFullBehaviorOptions(r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqOnBackpressure.ValueString())
-			} else {
-				pqOnBackpressure35 = nil
-			}
-			pqMaxBufferSizeBytes35 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSizeBytes.IsNull() {
-				*pqMaxBufferSizeBytes35 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqMaxBufferSizeBytes.ValueString()
-			} else {
-				pqMaxBufferSizeBytes35 = nil
-			}
-			var pqControls35 *shared.OutputGrafanaCloudPqControls2
-			if r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.PqControls != nil {
-				pqControls35 = &shared.OutputGrafanaCloudPqControls2{}
-			}
-			templateLokiUrl1 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplateLokiURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplateLokiURL.IsNull() {
-				*templateLokiUrl1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplateLokiURL.ValueString()
-			} else {
-				templateLokiUrl1 = nil
-			}
-			templatePrometheusUrl1 := new(string)
-			if !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplatePrometheusURL.IsUnknown() && !r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplatePrometheusURL.IsNull() {
-				*templatePrometheusUrl1 = r.OutputGrafanaCloud.OutputGrafanaCloudGrafanaCloud2.TemplatePrometheusURL.ValueString()
-			} else {
-				templatePrometheusUrl1 = nil
-			}
-			outputGrafanaCloudGrafanaCloud2 = &shared.OutputGrafanaCloudGrafanaCloud2{
-				ID:                            id45,
-				Type:                          typeVar45,
-				Pipeline:                      pipeline45,
-				SystemFields:                  systemFields45,
-				Environment:                   environment45,
-				Streamtags:                    streamtags45,
-				LokiURL:                       lokiUrl1,
-				PrometheusURL:                 prometheusUrl1,
-				Message:                       message2,
-				MessageFormat:                 messageFormat2,
-				Labels:                        labels1,
-				MetricRenameExpr:              metricRenameExpr1,
-				PrometheusAuth:                prometheusAuth1,
-				LokiAuth:                      lokiAuth1,
-				Concurrency:                   concurrency20,
-				MaxPayloadSizeKB:              maxPayloadSizeKb19,
-				MaxPayloadEvents:              maxPayloadEvents19,
-				RejectUnauthorized:            rejectUnauthorized39,
-				TimeoutSec:                    timeoutSec19,
-				FlushPeriodSec:                flushPeriodSec30,
-				ExtraHTTPHeaders:              extraHTTPHeaders17,
-				UseRoundRobinDNS:              useRoundRobinDns16,
-				FailedRequestLoggingMode:      failedRequestLoggingMode17,
-				SafeHeaders:                   safeHeaders17,
-				ResponseRetrySettings:         responseRetrySettings18,
-				TimeoutRetrySettings:          timeoutRetrySettings18,
-				ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader18,
-				OnBackpressure:                onBackpressure41,
-				Description:                   description45,
-				Compress:                      compress25,
-				PqStrictOrdering:              pqStrictOrdering35,
-				PqRatePerSec:                  pqRatePerSec35,
-				PqMode:                        pqMode35,
-				PqMaxBufferSize:               pqMaxBufferSize35,
-				PqMaxBackpressureSec:          pqMaxBackpressureSec35,
-				PqMaxFileSize:                 pqMaxFileSize35,
-				PqMaxSize:                     pqMaxSize35,
-				PqPath:                        pqPath35,
-				PqCompress:                    pqCompress35,
-				PqOnBackpressure:              pqOnBackpressure35,
-				PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes35,
-				PqControls:                    pqControls35,
-				TemplateLokiURL:               templateLokiUrl1,
-				TemplatePrometheusURL:         templatePrometheusUrl1,
+			timeoutRetrySettings17 = &shared.TimeoutRetrySettings{
+				TimeoutRetry:   timeoutRetry17,
+				InitialBackoff: initialBackoff39,
+				BackoffRate:    backoffRate39,
+				MaxBackoff:     maxBackoff35,
 			}
 		}
-		if outputGrafanaCloudGrafanaCloud2 != nil {
-			outputGrafanaCloud = &shared.OutputGrafanaCloud{
-				OutputGrafanaCloudGrafanaCloud2: outputGrafanaCloudGrafanaCloud2,
-			}
+		responseHonorRetryAfterHeader17 := new(bool)
+		if !r.OutputGrafanaCloud.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputGrafanaCloud.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader17 = r.OutputGrafanaCloud.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader17 = nil
+		}
+		onBackpressure40 := new(shared.BackpressureBehavior)
+		if !r.OutputGrafanaCloud.OnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.OnBackpressure.IsNull() {
+			*onBackpressure40 = shared.BackpressureBehavior(r.OutputGrafanaCloud.OnBackpressure.ValueString())
+		} else {
+			onBackpressure40 = nil
+		}
+		description44 := new(string)
+		if !r.OutputGrafanaCloud.Description.IsUnknown() && !r.OutputGrafanaCloud.Description.IsNull() {
+			*description44 = r.OutputGrafanaCloud.Description.ValueString()
+		} else {
+			description44 = nil
+		}
+		compress24 := new(bool)
+		if !r.OutputGrafanaCloud.Compress.IsUnknown() && !r.OutputGrafanaCloud.Compress.IsNull() {
+			*compress24 = r.OutputGrafanaCloud.Compress.ValueBool()
+		} else {
+			compress24 = nil
+		}
+		pqMaxFileSize34 := new(string)
+		if !r.OutputGrafanaCloud.PqMaxFileSize.IsUnknown() && !r.OutputGrafanaCloud.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize34 = r.OutputGrafanaCloud.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize34 = nil
+		}
+		pqMaxSize34 := new(string)
+		if !r.OutputGrafanaCloud.PqMaxSize.IsUnknown() && !r.OutputGrafanaCloud.PqMaxSize.IsNull() {
+			*pqMaxSize34 = r.OutputGrafanaCloud.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize34 = nil
+		}
+		pqPath34 := new(string)
+		if !r.OutputGrafanaCloud.PqPath.IsUnknown() && !r.OutputGrafanaCloud.PqPath.IsNull() {
+			*pqPath34 = r.OutputGrafanaCloud.PqPath.ValueString()
+		} else {
+			pqPath34 = nil
+		}
+		pqCompress34 := new(shared.OutputGrafanaCloudCompression)
+		if !r.OutputGrafanaCloud.PqCompress.IsUnknown() && !r.OutputGrafanaCloud.PqCompress.IsNull() {
+			*pqCompress34 = shared.OutputGrafanaCloudCompression(r.OutputGrafanaCloud.PqCompress.ValueString())
+		} else {
+			pqCompress34 = nil
+		}
+		pqOnBackpressure34 := new(shared.QueueFullBehavior)
+		if !r.OutputGrafanaCloud.PqOnBackpressure.IsUnknown() && !r.OutputGrafanaCloud.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure34 = shared.QueueFullBehavior(r.OutputGrafanaCloud.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure34 = nil
+		}
+		pqMode34 := new(shared.OutputGrafanaCloudMode)
+		if !r.OutputGrafanaCloud.PqMode.IsUnknown() && !r.OutputGrafanaCloud.PqMode.IsNull() {
+			*pqMode34 = shared.OutputGrafanaCloudMode(r.OutputGrafanaCloud.PqMode.ValueString())
+		} else {
+			pqMode34 = nil
+		}
+		var pqControls34 *shared.OutputGrafanaCloudPqControls
+		if r.OutputGrafanaCloud.PqControls != nil {
+			pqControls34 = &shared.OutputGrafanaCloudPqControls{}
+		}
+		outputGrafanaCloud = &shared.OutputGrafanaCloud{
+			ID:                            id44,
+			Type:                          typeVar44,
+			Pipeline:                      pipeline44,
+			SystemFields:                  systemFields44,
+			Environment:                   environment44,
+			Streamtags:                    streamtags44,
+			LokiURL:                       lokiURL,
+			PrometheusURL:                 prometheusURL,
+			Message:                       message1,
+			MessageFormat:                 messageFormat1,
+			Labels:                        labels,
+			MetricRenameExpr:              metricRenameExpr,
+			PrometheusAuth:                prometheusAuth,
+			LokiAuth:                      lokiAuth,
+			Concurrency:                   concurrency19,
+			MaxPayloadSizeKB:              maxPayloadSizeKb18,
+			MaxPayloadEvents:              maxPayloadEvents18,
+			RejectUnauthorized:            rejectUnauthorized38,
+			TimeoutSec:                    timeoutSec18,
+			FlushPeriodSec:                flushPeriodSec29,
+			ExtraHTTPHeaders:              extraHTTPHeaders16,
+			UseRoundRobinDNS:              useRoundRobinDns15,
+			FailedRequestLoggingMode:      failedRequestLoggingMode16,
+			SafeHeaders:                   safeHeaders16,
+			ResponseRetrySettings:         responseRetrySettings17,
+			TimeoutRetrySettings:          timeoutRetrySettings17,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader17,
+			OnBackpressure:                onBackpressure40,
+			Description:                   description44,
+			Compress:                      compress24,
+			PqMaxFileSize:                 pqMaxFileSize34,
+			PqMaxSize:                     pqMaxSize34,
+			PqPath:                        pqPath34,
+			PqCompress:                    pqCompress34,
+			PqOnBackpressure:              pqOnBackpressure34,
+			PqMode:                        pqMode34,
+			PqControls:                    pqControls34,
 		}
 	}
 	if outputGrafanaCloud != nil {
@@ -26319,155 +25942,517 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputLoki *shared.OutputLoki
 	if r.OutputLoki != nil {
-		id46 := new(string)
+		id45 := new(string)
 		if !r.OutputLoki.ID.IsUnknown() && !r.OutputLoki.ID.IsNull() {
-			*id46 = r.OutputLoki.ID.ValueString()
+			*id45 = r.OutputLoki.ID.ValueString()
 		} else {
-			id46 = nil
+			id45 = nil
 		}
-		typeVar46 := shared.OutputLokiType(r.OutputLoki.Type.ValueString())
-		pipeline46 := new(string)
+		typeVar45 := shared.OutputLokiType(r.OutputLoki.Type.ValueString())
+		pipeline45 := new(string)
 		if !r.OutputLoki.Pipeline.IsUnknown() && !r.OutputLoki.Pipeline.IsNull() {
-			*pipeline46 = r.OutputLoki.Pipeline.ValueString()
+			*pipeline45 = r.OutputLoki.Pipeline.ValueString()
 		} else {
-			pipeline46 = nil
+			pipeline45 = nil
 		}
-		systemFields46 := make([]string, 0, len(r.OutputLoki.SystemFields))
-		for systemFieldsIndex46 := range r.OutputLoki.SystemFields {
-			systemFields46 = append(systemFields46, r.OutputLoki.SystemFields[systemFieldsIndex46].ValueString())
+		systemFields45 := make([]string, 0, len(r.OutputLoki.SystemFields))
+		for systemFieldsIndex45 := range r.OutputLoki.SystemFields {
+			systemFields45 = append(systemFields45, r.OutputLoki.SystemFields[systemFieldsIndex45].ValueString())
 		}
-		environment46 := new(string)
+		environment45 := new(string)
 		if !r.OutputLoki.Environment.IsUnknown() && !r.OutputLoki.Environment.IsNull() {
-			*environment46 = r.OutputLoki.Environment.ValueString()
+			*environment45 = r.OutputLoki.Environment.ValueString()
 		} else {
-			environment46 = nil
+			environment45 = nil
 		}
-		streamtags46 := make([]string, 0, len(r.OutputLoki.Streamtags))
-		for streamtagsIndex46 := range r.OutputLoki.Streamtags {
-			streamtags46 = append(streamtags46, r.OutputLoki.Streamtags[streamtagsIndex46].ValueString())
+		streamtags45 := make([]string, 0, len(r.OutputLoki.Streamtags))
+		for streamtagsIndex45 := range r.OutputLoki.Streamtags {
+			streamtags45 = append(streamtags45, r.OutputLoki.Streamtags[streamtagsIndex45].ValueString())
 		}
 		var url10 string
 		url10 = r.OutputLoki.URL.ValueString()
 
-		message3 := new(string)
+		message2 := new(string)
 		if !r.OutputLoki.Message.IsUnknown() && !r.OutputLoki.Message.IsNull() {
-			*message3 = r.OutputLoki.Message.ValueString()
+			*message2 = r.OutputLoki.Message.ValueString()
 		} else {
-			message3 = nil
+			message2 = nil
 		}
-		messageFormat3 := new(shared.MessageFormatOptions)
+		messageFormat2 := new(shared.MessageFormatOptions)
 		if !r.OutputLoki.MessageFormat.IsUnknown() && !r.OutputLoki.MessageFormat.IsNull() {
-			*messageFormat3 = shared.MessageFormatOptions(r.OutputLoki.MessageFormat.ValueString())
+			*messageFormat2 = shared.MessageFormatOptions(r.OutputLoki.MessageFormat.ValueString())
 		} else {
-			messageFormat3 = nil
+			messageFormat2 = nil
 		}
-		labels2 := make([]shared.ItemsTypeContentConfigItemsRequestParams, 0, len(r.OutputLoki.Labels))
-		for labelsIndex2 := range r.OutputLoki.Labels {
-			var name31 string
-			name31 = r.OutputLoki.Labels[labelsIndex2].Name.ValueString()
+		labels1 := make([]shared.ItemsTypeContentConfigItemsRequestParams, 0, len(r.OutputLoki.Labels))
+		for labelsIndex1 := range r.OutputLoki.Labels {
+			var name29 string
+			name29 = r.OutputLoki.Labels[labelsIndex1].Name.ValueString()
 
-			var value41 string
-			value41 = r.OutputLoki.Labels[labelsIndex2].Value.ValueString()
+			var value39 string
+			value39 = r.OutputLoki.Labels[labelsIndex1].Value.ValueString()
 
-			labels2 = append(labels2, shared.ItemsTypeContentConfigItemsRequestParams{
-				Name:  name31,
-				Value: value41,
+			labels1 = append(labels1, shared.ItemsTypeContentConfigItemsRequestParams{
+				Name:  name29,
+				Value: value39,
 			})
 		}
-		authType27 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
+		authType25 := new(shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret)
 		if !r.OutputLoki.AuthType.IsUnknown() && !r.OutputLoki.AuthType.IsNull() {
-			*authType27 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputLoki.AuthType.ValueString())
+			*authType25 = shared.AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(r.OutputLoki.AuthType.ValueString())
 		} else {
-			authType27 = nil
+			authType25 = nil
+		}
+		concurrency20 := new(float64)
+		if !r.OutputLoki.Concurrency.IsUnknown() && !r.OutputLoki.Concurrency.IsNull() {
+			*concurrency20 = r.OutputLoki.Concurrency.ValueFloat64()
+		} else {
+			concurrency20 = nil
+		}
+		maxPayloadSizeKb19 := new(float64)
+		if !r.OutputLoki.MaxPayloadSizeKB.IsUnknown() && !r.OutputLoki.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb19 = r.OutputLoki.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb19 = nil
+		}
+		maxPayloadEvents19 := new(float64)
+		if !r.OutputLoki.MaxPayloadEvents.IsUnknown() && !r.OutputLoki.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents19 = r.OutputLoki.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents19 = nil
+		}
+		rejectUnauthorized39 := new(bool)
+		if !r.OutputLoki.RejectUnauthorized.IsUnknown() && !r.OutputLoki.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized39 = r.OutputLoki.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized39 = nil
+		}
+		timeoutSec19 := new(float64)
+		if !r.OutputLoki.TimeoutSec.IsUnknown() && !r.OutputLoki.TimeoutSec.IsNull() {
+			*timeoutSec19 = r.OutputLoki.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec19 = nil
+		}
+		flushPeriodSec30 := new(float64)
+		if !r.OutputLoki.FlushPeriodSec.IsUnknown() && !r.OutputLoki.FlushPeriodSec.IsNull() {
+			*flushPeriodSec30 = r.OutputLoki.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec30 = nil
+		}
+		extraHTTPHeaders17 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputLoki.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex17 := range r.OutputLoki.ExtraHTTPHeaders {
+			name30 := new(string)
+			if !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsUnknown() && !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.IsNull() {
+				*name30 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Name.ValueString()
+			} else {
+				name30 = nil
+			}
+			var value40 string
+			value40 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex17].Value.ValueString()
+
+			extraHTTPHeaders17 = append(extraHTTPHeaders17, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name30,
+				Value: value40,
+			})
+		}
+		useRoundRobinDns16 := new(bool)
+		if !r.OutputLoki.UseRoundRobinDNS.IsUnknown() && !r.OutputLoki.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns16 = r.OutputLoki.UseRoundRobinDNS.ValueBool()
+		} else {
+			useRoundRobinDns16 = nil
+		}
+		failedRequestLoggingMode17 := new(shared.FailedRequestLoggingModeOptions)
+		if !r.OutputLoki.FailedRequestLoggingMode.IsUnknown() && !r.OutputLoki.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode17 = shared.FailedRequestLoggingModeOptions(r.OutputLoki.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode17 = nil
+		}
+		safeHeaders17 := make([]string, 0, len(r.OutputLoki.SafeHeaders))
+		for safeHeadersIndex17 := range r.OutputLoki.SafeHeaders {
+			safeHeaders17 = append(safeHeaders17, r.OutputLoki.SafeHeaders[safeHeadersIndex17].ValueString())
+		}
+		responseRetrySettings18 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputLoki.ResponseRetrySettings))
+		for responseRetrySettingsIndex18 := range r.OutputLoki.ResponseRetrySettings {
+			var httpStatus18 float64
+			httpStatus18 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].HTTPStatus.ValueFloat64()
+
+			initialBackoff40 := new(float64)
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.IsNull() {
+				*initialBackoff40 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff40 = nil
+			}
+			backoffRate40 := new(float64)
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.IsNull() {
+				*backoffRate40 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].BackoffRate.ValueFloat64()
+			} else {
+				backoffRate40 = nil
+			}
+			maxBackoff36 := new(float64)
+			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.IsNull() {
+				*maxBackoff36 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex18].MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff36 = nil
+			}
+			responseRetrySettings18 = append(responseRetrySettings18, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus18,
+				InitialBackoff: initialBackoff40,
+				BackoffRate:    backoffRate40,
+				MaxBackoff:     maxBackoff36,
+			})
+		}
+		var timeoutRetrySettings18 *shared.TimeoutRetrySettingsType
+		if r.OutputLoki.TimeoutRetrySettings != nil {
+			var timeoutRetry18 bool
+			timeoutRetry18 = r.OutputLoki.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+
+			initialBackoff41 := new(float64)
+			if !r.OutputLoki.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff41 = r.OutputLoki.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff41 = nil
+			}
+			backoffRate41 := new(float64)
+			if !r.OutputLoki.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate41 = r.OutputLoki.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			} else {
+				backoffRate41 = nil
+			}
+			maxBackoff37 := new(float64)
+			if !r.OutputLoki.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff37 = r.OutputLoki.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff37 = nil
+			}
+			timeoutRetrySettings18 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry18,
+				InitialBackoff: initialBackoff41,
+				BackoffRate:    backoffRate41,
+				MaxBackoff:     maxBackoff37,
+			}
+		}
+		responseHonorRetryAfterHeader18 := new(bool)
+		if !r.OutputLoki.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputLoki.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader18 = r.OutputLoki.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader18 = nil
+		}
+		enableDynamicHeaders := new(bool)
+		if !r.OutputLoki.EnableDynamicHeaders.IsUnknown() && !r.OutputLoki.EnableDynamicHeaders.IsNull() {
+			*enableDynamicHeaders = r.OutputLoki.EnableDynamicHeaders.ValueBool()
+		} else {
+			enableDynamicHeaders = nil
+		}
+		onBackpressure41 := new(shared.BackpressureBehaviorOptions)
+		if !r.OutputLoki.OnBackpressure.IsUnknown() && !r.OutputLoki.OnBackpressure.IsNull() {
+			*onBackpressure41 = shared.BackpressureBehaviorOptions(r.OutputLoki.OnBackpressure.ValueString())
+		} else {
+			onBackpressure41 = nil
+		}
+		totalMemoryLimitKb7 := new(float64)
+		if !r.OutputLoki.TotalMemoryLimitKB.IsUnknown() && !r.OutputLoki.TotalMemoryLimitKB.IsNull() {
+			*totalMemoryLimitKb7 = r.OutputLoki.TotalMemoryLimitKB.ValueFloat64()
+		} else {
+			totalMemoryLimitKb7 = nil
+		}
+		description45 := new(string)
+		if !r.OutputLoki.Description.IsUnknown() && !r.OutputLoki.Description.IsNull() {
+			*description45 = r.OutputLoki.Description.ValueString()
+		} else {
+			description45 = nil
+		}
+		compress25 := new(bool)
+		if !r.OutputLoki.Compress.IsUnknown() && !r.OutputLoki.Compress.IsNull() {
+			*compress25 = r.OutputLoki.Compress.ValueBool()
+		} else {
+			compress25 = nil
+		}
+		token8 := new(string)
+		if !r.OutputLoki.Token.IsUnknown() && !r.OutputLoki.Token.IsNull() {
+			*token8 = r.OutputLoki.Token.ValueString()
+		} else {
+			token8 = nil
+		}
+		textSecret22 := new(string)
+		if !r.OutputLoki.TextSecret.IsUnknown() && !r.OutputLoki.TextSecret.IsNull() {
+			*textSecret22 = r.OutputLoki.TextSecret.ValueString()
+		} else {
+			textSecret22 = nil
+		}
+		username9 := new(string)
+		if !r.OutputLoki.Username.IsUnknown() && !r.OutputLoki.Username.IsNull() {
+			*username9 = r.OutputLoki.Username.ValueString()
+		} else {
+			username9 = nil
+		}
+		password9 := new(string)
+		if !r.OutputLoki.Password.IsUnknown() && !r.OutputLoki.Password.IsNull() {
+			*password9 = r.OutputLoki.Password.ValueString()
+		} else {
+			password9 = nil
+		}
+		credentialsSecret11 := new(string)
+		if !r.OutputLoki.CredentialsSecret.IsUnknown() && !r.OutputLoki.CredentialsSecret.IsNull() {
+			*credentialsSecret11 = r.OutputLoki.CredentialsSecret.ValueString()
+		} else {
+			credentialsSecret11 = nil
+		}
+		pqStrictOrdering34 := new(bool)
+		if !r.OutputLoki.PqStrictOrdering.IsUnknown() && !r.OutputLoki.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering34 = r.OutputLoki.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering34 = nil
+		}
+		pqRatePerSec34 := new(float64)
+		if !r.OutputLoki.PqRatePerSec.IsUnknown() && !r.OutputLoki.PqRatePerSec.IsNull() {
+			*pqRatePerSec34 = r.OutputLoki.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec34 = nil
+		}
+		pqMode35 := new(shared.ModeOptions)
+		if !r.OutputLoki.PqMode.IsUnknown() && !r.OutputLoki.PqMode.IsNull() {
+			*pqMode35 = shared.ModeOptions(r.OutputLoki.PqMode.ValueString())
+		} else {
+			pqMode35 = nil
+		}
+		pqMaxBufferSize34 := new(float64)
+		if !r.OutputLoki.PqMaxBufferSize.IsUnknown() && !r.OutputLoki.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize34 = r.OutputLoki.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize34 = nil
+		}
+		pqMaxBackpressureSec34 := new(float64)
+		if !r.OutputLoki.PqMaxBackpressureSec.IsUnknown() && !r.OutputLoki.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec34 = r.OutputLoki.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec34 = nil
+		}
+		pqMaxFileSize35 := new(string)
+		if !r.OutputLoki.PqMaxFileSize.IsUnknown() && !r.OutputLoki.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize35 = r.OutputLoki.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize35 = nil
+		}
+		pqMaxSize35 := new(string)
+		if !r.OutputLoki.PqMaxSize.IsUnknown() && !r.OutputLoki.PqMaxSize.IsNull() {
+			*pqMaxSize35 = r.OutputLoki.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize35 = nil
+		}
+		pqPath35 := new(string)
+		if !r.OutputLoki.PqPath.IsUnknown() && !r.OutputLoki.PqPath.IsNull() {
+			*pqPath35 = r.OutputLoki.PqPath.ValueString()
+		} else {
+			pqPath35 = nil
+		}
+		pqCompress35 := new(shared.CompressionOptionsPq)
+		if !r.OutputLoki.PqCompress.IsUnknown() && !r.OutputLoki.PqCompress.IsNull() {
+			*pqCompress35 = shared.CompressionOptionsPq(r.OutputLoki.PqCompress.ValueString())
+		} else {
+			pqCompress35 = nil
+		}
+		pqOnBackpressure35 := new(shared.QueueFullBehaviorOptions)
+		if !r.OutputLoki.PqOnBackpressure.IsUnknown() && !r.OutputLoki.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure35 = shared.QueueFullBehaviorOptions(r.OutputLoki.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure35 = nil
+		}
+		pqMaxBufferSizeBytes34 := new(string)
+		if !r.OutputLoki.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputLoki.PqMaxBufferSizeBytes.IsNull() {
+			*pqMaxBufferSizeBytes34 = r.OutputLoki.PqMaxBufferSizeBytes.ValueString()
+		} else {
+			pqMaxBufferSizeBytes34 = nil
+		}
+		var pqControls35 *shared.OutputLokiPqControls
+		if r.OutputLoki.PqControls != nil {
+			pqControls35 = &shared.OutputLokiPqControls{}
+		}
+		outputLoki = &shared.OutputLoki{
+			ID:                            id45,
+			Type:                          typeVar45,
+			Pipeline:                      pipeline45,
+			SystemFields:                  systemFields45,
+			Environment:                   environment45,
+			Streamtags:                    streamtags45,
+			URL:                           url10,
+			Message:                       message2,
+			MessageFormat:                 messageFormat2,
+			Labels:                        labels1,
+			AuthType:                      authType25,
+			Concurrency:                   concurrency20,
+			MaxPayloadSizeKB:              maxPayloadSizeKb19,
+			MaxPayloadEvents:              maxPayloadEvents19,
+			RejectUnauthorized:            rejectUnauthorized39,
+			TimeoutSec:                    timeoutSec19,
+			FlushPeriodSec:                flushPeriodSec30,
+			ExtraHTTPHeaders:              extraHTTPHeaders17,
+			UseRoundRobinDNS:              useRoundRobinDns16,
+			FailedRequestLoggingMode:      failedRequestLoggingMode17,
+			SafeHeaders:                   safeHeaders17,
+			ResponseRetrySettings:         responseRetrySettings18,
+			TimeoutRetrySettings:          timeoutRetrySettings18,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader18,
+			EnableDynamicHeaders:          enableDynamicHeaders,
+			OnBackpressure:                onBackpressure41,
+			TotalMemoryLimitKB:            totalMemoryLimitKb7,
+			Description:                   description45,
+			Compress:                      compress25,
+			Token:                         token8,
+			TextSecret:                    textSecret22,
+			Username:                      username9,
+			Password:                      password9,
+			CredentialsSecret:             credentialsSecret11,
+			PqStrictOrdering:              pqStrictOrdering34,
+			PqRatePerSec:                  pqRatePerSec34,
+			PqMode:                        pqMode35,
+			PqMaxBufferSize:               pqMaxBufferSize34,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec34,
+			PqMaxFileSize:                 pqMaxFileSize35,
+			PqMaxSize:                     pqMaxSize35,
+			PqPath:                        pqPath35,
+			PqCompress:                    pqCompress35,
+			PqOnBackpressure:              pqOnBackpressure35,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes34,
+			PqControls:                    pqControls35,
+		}
+	}
+	if outputLoki != nil {
+		out = shared.Output{
+			OutputLoki: outputLoki,
+		}
+	}
+	var outputPrometheus *shared.OutputPrometheus
+	if r.OutputPrometheus != nil {
+		id46 := new(string)
+		if !r.OutputPrometheus.ID.IsUnknown() && !r.OutputPrometheus.ID.IsNull() {
+			*id46 = r.OutputPrometheus.ID.ValueString()
+		} else {
+			id46 = nil
+		}
+		typeVar46 := shared.OutputPrometheusType(r.OutputPrometheus.Type.ValueString())
+		pipeline46 := new(string)
+		if !r.OutputPrometheus.Pipeline.IsUnknown() && !r.OutputPrometheus.Pipeline.IsNull() {
+			*pipeline46 = r.OutputPrometheus.Pipeline.ValueString()
+		} else {
+			pipeline46 = nil
+		}
+		systemFields46 := make([]string, 0, len(r.OutputPrometheus.SystemFields))
+		for systemFieldsIndex46 := range r.OutputPrometheus.SystemFields {
+			systemFields46 = append(systemFields46, r.OutputPrometheus.SystemFields[systemFieldsIndex46].ValueString())
+		}
+		environment46 := new(string)
+		if !r.OutputPrometheus.Environment.IsUnknown() && !r.OutputPrometheus.Environment.IsNull() {
+			*environment46 = r.OutputPrometheus.Environment.ValueString()
+		} else {
+			environment46 = nil
+		}
+		streamtags46 := make([]string, 0, len(r.OutputPrometheus.Streamtags))
+		for streamtagsIndex46 := range r.OutputPrometheus.Streamtags {
+			streamtags46 = append(streamtags46, r.OutputPrometheus.Streamtags[streamtagsIndex46].ValueString())
+		}
+		var url11 string
+		url11 = r.OutputPrometheus.URL.ValueString()
+
+		metricRenameExpr1 := new(string)
+		if !r.OutputPrometheus.MetricRenameExpr.IsUnknown() && !r.OutputPrometheus.MetricRenameExpr.IsNull() {
+			*metricRenameExpr1 = r.OutputPrometheus.MetricRenameExpr.ValueString()
+		} else {
+			metricRenameExpr1 = nil
+		}
+		sendMetadata := new(bool)
+		if !r.OutputPrometheus.SendMetadata.IsUnknown() && !r.OutputPrometheus.SendMetadata.IsNull() {
+			*sendMetadata = r.OutputPrometheus.SendMetadata.ValueBool()
+		} else {
+			sendMetadata = nil
 		}
 		concurrency21 := new(float64)
-		if !r.OutputLoki.Concurrency.IsUnknown() && !r.OutputLoki.Concurrency.IsNull() {
-			*concurrency21 = r.OutputLoki.Concurrency.ValueFloat64()
+		if !r.OutputPrometheus.Concurrency.IsUnknown() && !r.OutputPrometheus.Concurrency.IsNull() {
+			*concurrency21 = r.OutputPrometheus.Concurrency.ValueFloat64()
 		} else {
 			concurrency21 = nil
 		}
 		maxPayloadSizeKb20 := new(float64)
-		if !r.OutputLoki.MaxPayloadSizeKB.IsUnknown() && !r.OutputLoki.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb20 = r.OutputLoki.MaxPayloadSizeKB.ValueFloat64()
+		if !r.OutputPrometheus.MaxPayloadSizeKB.IsUnknown() && !r.OutputPrometheus.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb20 = r.OutputPrometheus.MaxPayloadSizeKB.ValueFloat64()
 		} else {
 			maxPayloadSizeKb20 = nil
 		}
 		maxPayloadEvents20 := new(float64)
-		if !r.OutputLoki.MaxPayloadEvents.IsUnknown() && !r.OutputLoki.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents20 = r.OutputLoki.MaxPayloadEvents.ValueFloat64()
+		if !r.OutputPrometheus.MaxPayloadEvents.IsUnknown() && !r.OutputPrometheus.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents20 = r.OutputPrometheus.MaxPayloadEvents.ValueFloat64()
 		} else {
 			maxPayloadEvents20 = nil
 		}
 		rejectUnauthorized40 := new(bool)
-		if !r.OutputLoki.RejectUnauthorized.IsUnknown() && !r.OutputLoki.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized40 = r.OutputLoki.RejectUnauthorized.ValueBool()
+		if !r.OutputPrometheus.RejectUnauthorized.IsUnknown() && !r.OutputPrometheus.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized40 = r.OutputPrometheus.RejectUnauthorized.ValueBool()
 		} else {
 			rejectUnauthorized40 = nil
 		}
 		timeoutSec20 := new(float64)
-		if !r.OutputLoki.TimeoutSec.IsUnknown() && !r.OutputLoki.TimeoutSec.IsNull() {
-			*timeoutSec20 = r.OutputLoki.TimeoutSec.ValueFloat64()
+		if !r.OutputPrometheus.TimeoutSec.IsUnknown() && !r.OutputPrometheus.TimeoutSec.IsNull() {
+			*timeoutSec20 = r.OutputPrometheus.TimeoutSec.ValueFloat64()
 		} else {
 			timeoutSec20 = nil
 		}
 		flushPeriodSec31 := new(float64)
-		if !r.OutputLoki.FlushPeriodSec.IsUnknown() && !r.OutputLoki.FlushPeriodSec.IsNull() {
-			*flushPeriodSec31 = r.OutputLoki.FlushPeriodSec.ValueFloat64()
+		if !r.OutputPrometheus.FlushPeriodSec.IsUnknown() && !r.OutputPrometheus.FlushPeriodSec.IsNull() {
+			*flushPeriodSec31 = r.OutputPrometheus.FlushPeriodSec.ValueFloat64()
 		} else {
 			flushPeriodSec31 = nil
 		}
-		extraHTTPHeaders18 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputLoki.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex18 := range r.OutputLoki.ExtraHTTPHeaders {
-			name32 := new(string)
-			if !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsUnknown() && !r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsNull() {
-				*name32 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.ValueString()
+		extraHTTPHeaders18 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputPrometheus.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex18 := range r.OutputPrometheus.ExtraHTTPHeaders {
+			name31 := new(string)
+			if !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsUnknown() && !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.IsNull() {
+				*name31 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Name.ValueString()
 			} else {
-				name32 = nil
+				name31 = nil
 			}
-			var value42 string
-			value42 = r.OutputLoki.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Value.ValueString()
+			var value41 string
+			value41 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex18].Value.ValueString()
 
 			extraHTTPHeaders18 = append(extraHTTPHeaders18, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name32,
-				Value: value42,
+				Name:  name31,
+				Value: value41,
 			})
 		}
 		useRoundRobinDns17 := new(bool)
-		if !r.OutputLoki.UseRoundRobinDNS.IsUnknown() && !r.OutputLoki.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns17 = r.OutputLoki.UseRoundRobinDNS.ValueBool()
+		if !r.OutputPrometheus.UseRoundRobinDNS.IsUnknown() && !r.OutputPrometheus.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns17 = r.OutputPrometheus.UseRoundRobinDNS.ValueBool()
 		} else {
 			useRoundRobinDns17 = nil
 		}
 		failedRequestLoggingMode18 := new(shared.FailedRequestLoggingModeOptions)
-		if !r.OutputLoki.FailedRequestLoggingMode.IsUnknown() && !r.OutputLoki.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode18 = shared.FailedRequestLoggingModeOptions(r.OutputLoki.FailedRequestLoggingMode.ValueString())
+		if !r.OutputPrometheus.FailedRequestLoggingMode.IsUnknown() && !r.OutputPrometheus.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode18 = shared.FailedRequestLoggingModeOptions(r.OutputPrometheus.FailedRequestLoggingMode.ValueString())
 		} else {
 			failedRequestLoggingMode18 = nil
 		}
-		safeHeaders18 := make([]string, 0, len(r.OutputLoki.SafeHeaders))
-		for safeHeadersIndex18 := range r.OutputLoki.SafeHeaders {
-			safeHeaders18 = append(safeHeaders18, r.OutputLoki.SafeHeaders[safeHeadersIndex18].ValueString())
+		safeHeaders18 := make([]string, 0, len(r.OutputPrometheus.SafeHeaders))
+		for safeHeadersIndex18 := range r.OutputPrometheus.SafeHeaders {
+			safeHeaders18 = append(safeHeaders18, r.OutputPrometheus.SafeHeaders[safeHeadersIndex18].ValueString())
 		}
-		responseRetrySettings19 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputLoki.ResponseRetrySettings))
-		for responseRetrySettingsIndex19 := range r.OutputLoki.ResponseRetrySettings {
+		responseRetrySettings19 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputPrometheus.ResponseRetrySettings))
+		for responseRetrySettingsIndex19 := range r.OutputPrometheus.ResponseRetrySettings {
 			var httpStatus19 float64
-			httpStatus19 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].HTTPStatus.ValueFloat64()
+			httpStatus19 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].HTTPStatus.ValueFloat64()
 
 			initialBackoff42 := new(float64)
-			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsNull() {
-				*initialBackoff42 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.IsNull() {
+				*initialBackoff42 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff42 = nil
 			}
 			backoffRate42 := new(float64)
-			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsNull() {
-				*backoffRate42 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.IsNull() {
+				*backoffRate42 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate42 = nil
 			}
 			maxBackoff38 := new(float64)
-			if !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsUnknown() && !r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsNull() {
-				*maxBackoff38 = r.OutputLoki.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.ValueFloat64()
+			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.IsNull() {
+				*maxBackoff38 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex19].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff38 = nil
 			}
@@ -26479,25 +26464,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			})
 		}
 		var timeoutRetrySettings19 *shared.TimeoutRetrySettingsType
-		if r.OutputLoki.TimeoutRetrySettings != nil {
+		if r.OutputPrometheus.TimeoutRetrySettings != nil {
 			var timeoutRetry19 bool
-			timeoutRetry19 = r.OutputLoki.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			timeoutRetry19 = r.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
 			initialBackoff43 := new(float64)
-			if !r.OutputLoki.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff43 = r.OutputLoki.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			if !r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff43 = r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff43 = nil
 			}
 			backoffRate43 := new(float64)
-			if !r.OutputLoki.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate43 = r.OutputLoki.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			if !r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate43 = r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
 				backoffRate43 = nil
 			}
 			maxBackoff39 := new(float64)
-			if !r.OutputLoki.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputLoki.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff39 = r.OutputLoki.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			if !r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff39 = r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff39 = nil
 			}
@@ -26509,390 +26494,28 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 		}
 		responseHonorRetryAfterHeader19 := new(bool)
-		if !r.OutputLoki.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputLoki.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader19 = r.OutputLoki.ResponseHonorRetryAfterHeader.ValueBool()
+		if !r.OutputPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputPrometheus.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader19 = r.OutputPrometheus.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
 			responseHonorRetryAfterHeader19 = nil
 		}
-		enableDynamicHeaders := new(bool)
-		if !r.OutputLoki.EnableDynamicHeaders.IsUnknown() && !r.OutputLoki.EnableDynamicHeaders.IsNull() {
-			*enableDynamicHeaders = r.OutputLoki.EnableDynamicHeaders.ValueBool()
-		} else {
-			enableDynamicHeaders = nil
-		}
 		onBackpressure42 := new(shared.BackpressureBehaviorOptions)
-		if !r.OutputLoki.OnBackpressure.IsUnknown() && !r.OutputLoki.OnBackpressure.IsNull() {
-			*onBackpressure42 = shared.BackpressureBehaviorOptions(r.OutputLoki.OnBackpressure.ValueString())
+		if !r.OutputPrometheus.OnBackpressure.IsUnknown() && !r.OutputPrometheus.OnBackpressure.IsNull() {
+			*onBackpressure42 = shared.BackpressureBehaviorOptions(r.OutputPrometheus.OnBackpressure.ValueString())
 		} else {
 			onBackpressure42 = nil
 		}
-		totalMemoryLimitKb7 := new(float64)
-		if !r.OutputLoki.TotalMemoryLimitKB.IsUnknown() && !r.OutputLoki.TotalMemoryLimitKB.IsNull() {
-			*totalMemoryLimitKb7 = r.OutputLoki.TotalMemoryLimitKB.ValueFloat64()
+		authType26 := new(shared.AuthenticationTypeOptionsPrometheusAuth)
+		if !r.OutputPrometheus.AuthType.IsUnknown() && !r.OutputPrometheus.AuthType.IsNull() {
+			*authType26 = shared.AuthenticationTypeOptionsPrometheusAuth(r.OutputPrometheus.AuthType.ValueString())
 		} else {
-			totalMemoryLimitKb7 = nil
+			authType26 = nil
 		}
 		description46 := new(string)
-		if !r.OutputLoki.Description.IsUnknown() && !r.OutputLoki.Description.IsNull() {
-			*description46 = r.OutputLoki.Description.ValueString()
+		if !r.OutputPrometheus.Description.IsUnknown() && !r.OutputPrometheus.Description.IsNull() {
+			*description46 = r.OutputPrometheus.Description.ValueString()
 		} else {
 			description46 = nil
-		}
-		compress26 := new(bool)
-		if !r.OutputLoki.Compress.IsUnknown() && !r.OutputLoki.Compress.IsNull() {
-			*compress26 = r.OutputLoki.Compress.ValueBool()
-		} else {
-			compress26 = nil
-		}
-		token10 := new(string)
-		if !r.OutputLoki.Token.IsUnknown() && !r.OutputLoki.Token.IsNull() {
-			*token10 = r.OutputLoki.Token.ValueString()
-		} else {
-			token10 = nil
-		}
-		textSecret24 := new(string)
-		if !r.OutputLoki.TextSecret.IsUnknown() && !r.OutputLoki.TextSecret.IsNull() {
-			*textSecret24 = r.OutputLoki.TextSecret.ValueString()
-		} else {
-			textSecret24 = nil
-		}
-		username11 := new(string)
-		if !r.OutputLoki.Username.IsUnknown() && !r.OutputLoki.Username.IsNull() {
-			*username11 = r.OutputLoki.Username.ValueString()
-		} else {
-			username11 = nil
-		}
-		password11 := new(string)
-		if !r.OutputLoki.Password.IsUnknown() && !r.OutputLoki.Password.IsNull() {
-			*password11 = r.OutputLoki.Password.ValueString()
-		} else {
-			password11 = nil
-		}
-		credentialsSecret13 := new(string)
-		if !r.OutputLoki.CredentialsSecret.IsUnknown() && !r.OutputLoki.CredentialsSecret.IsNull() {
-			*credentialsSecret13 = r.OutputLoki.CredentialsSecret.ValueString()
-		} else {
-			credentialsSecret13 = nil
-		}
-		pqStrictOrdering36 := new(bool)
-		if !r.OutputLoki.PqStrictOrdering.IsUnknown() && !r.OutputLoki.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering36 = r.OutputLoki.PqStrictOrdering.ValueBool()
-		} else {
-			pqStrictOrdering36 = nil
-		}
-		pqRatePerSec36 := new(float64)
-		if !r.OutputLoki.PqRatePerSec.IsUnknown() && !r.OutputLoki.PqRatePerSec.IsNull() {
-			*pqRatePerSec36 = r.OutputLoki.PqRatePerSec.ValueFloat64()
-		} else {
-			pqRatePerSec36 = nil
-		}
-		pqMode36 := new(shared.ModeOptions)
-		if !r.OutputLoki.PqMode.IsUnknown() && !r.OutputLoki.PqMode.IsNull() {
-			*pqMode36 = shared.ModeOptions(r.OutputLoki.PqMode.ValueString())
-		} else {
-			pqMode36 = nil
-		}
-		pqMaxBufferSize36 := new(float64)
-		if !r.OutputLoki.PqMaxBufferSize.IsUnknown() && !r.OutputLoki.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize36 = r.OutputLoki.PqMaxBufferSize.ValueFloat64()
-		} else {
-			pqMaxBufferSize36 = nil
-		}
-		pqMaxBackpressureSec36 := new(float64)
-		if !r.OutputLoki.PqMaxBackpressureSec.IsUnknown() && !r.OutputLoki.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec36 = r.OutputLoki.PqMaxBackpressureSec.ValueFloat64()
-		} else {
-			pqMaxBackpressureSec36 = nil
-		}
-		pqMaxFileSize36 := new(string)
-		if !r.OutputLoki.PqMaxFileSize.IsUnknown() && !r.OutputLoki.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize36 = r.OutputLoki.PqMaxFileSize.ValueString()
-		} else {
-			pqMaxFileSize36 = nil
-		}
-		pqMaxSize36 := new(string)
-		if !r.OutputLoki.PqMaxSize.IsUnknown() && !r.OutputLoki.PqMaxSize.IsNull() {
-			*pqMaxSize36 = r.OutputLoki.PqMaxSize.ValueString()
-		} else {
-			pqMaxSize36 = nil
-		}
-		pqPath36 := new(string)
-		if !r.OutputLoki.PqPath.IsUnknown() && !r.OutputLoki.PqPath.IsNull() {
-			*pqPath36 = r.OutputLoki.PqPath.ValueString()
-		} else {
-			pqPath36 = nil
-		}
-		pqCompress36 := new(shared.CompressionOptionsPq)
-		if !r.OutputLoki.PqCompress.IsUnknown() && !r.OutputLoki.PqCompress.IsNull() {
-			*pqCompress36 = shared.CompressionOptionsPq(r.OutputLoki.PqCompress.ValueString())
-		} else {
-			pqCompress36 = nil
-		}
-		pqOnBackpressure36 := new(shared.QueueFullBehaviorOptions)
-		if !r.OutputLoki.PqOnBackpressure.IsUnknown() && !r.OutputLoki.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure36 = shared.QueueFullBehaviorOptions(r.OutputLoki.PqOnBackpressure.ValueString())
-		} else {
-			pqOnBackpressure36 = nil
-		}
-		pqMaxBufferSizeBytes36 := new(string)
-		if !r.OutputLoki.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputLoki.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes36 = r.OutputLoki.PqMaxBufferSizeBytes.ValueString()
-		} else {
-			pqMaxBufferSizeBytes36 = nil
-		}
-		var pqControls36 *shared.OutputLokiPqControls
-		if r.OutputLoki.PqControls != nil {
-			pqControls36 = &shared.OutputLokiPqControls{}
-		}
-		outputLoki = &shared.OutputLoki{
-			ID:                            id46,
-			Type:                          typeVar46,
-			Pipeline:                      pipeline46,
-			SystemFields:                  systemFields46,
-			Environment:                   environment46,
-			Streamtags:                    streamtags46,
-			URL:                           url10,
-			Message:                       message3,
-			MessageFormat:                 messageFormat3,
-			Labels:                        labels2,
-			AuthType:                      authType27,
-			Concurrency:                   concurrency21,
-			MaxPayloadSizeKB:              maxPayloadSizeKb20,
-			MaxPayloadEvents:              maxPayloadEvents20,
-			RejectUnauthorized:            rejectUnauthorized40,
-			TimeoutSec:                    timeoutSec20,
-			FlushPeriodSec:                flushPeriodSec31,
-			ExtraHTTPHeaders:              extraHTTPHeaders18,
-			UseRoundRobinDNS:              useRoundRobinDns17,
-			FailedRequestLoggingMode:      failedRequestLoggingMode18,
-			SafeHeaders:                   safeHeaders18,
-			ResponseRetrySettings:         responseRetrySettings19,
-			TimeoutRetrySettings:          timeoutRetrySettings19,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader19,
-			EnableDynamicHeaders:          enableDynamicHeaders,
-			OnBackpressure:                onBackpressure42,
-			TotalMemoryLimitKB:            totalMemoryLimitKb7,
-			Description:                   description46,
-			Compress:                      compress26,
-			Token:                         token10,
-			TextSecret:                    textSecret24,
-			Username:                      username11,
-			Password:                      password11,
-			CredentialsSecret:             credentialsSecret13,
-			PqStrictOrdering:              pqStrictOrdering36,
-			PqRatePerSec:                  pqRatePerSec36,
-			PqMode:                        pqMode36,
-			PqMaxBufferSize:               pqMaxBufferSize36,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec36,
-			PqMaxFileSize:                 pqMaxFileSize36,
-			PqMaxSize:                     pqMaxSize36,
-			PqPath:                        pqPath36,
-			PqCompress:                    pqCompress36,
-			PqOnBackpressure:              pqOnBackpressure36,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes36,
-			PqControls:                    pqControls36,
-		}
-	}
-	if outputLoki != nil {
-		out = shared.Output{
-			OutputLoki: outputLoki,
-		}
-	}
-	var outputPrometheus *shared.OutputPrometheus
-	if r.OutputPrometheus != nil {
-		id47 := new(string)
-		if !r.OutputPrometheus.ID.IsUnknown() && !r.OutputPrometheus.ID.IsNull() {
-			*id47 = r.OutputPrometheus.ID.ValueString()
-		} else {
-			id47 = nil
-		}
-		typeVar47 := shared.OutputPrometheusType(r.OutputPrometheus.Type.ValueString())
-		pipeline47 := new(string)
-		if !r.OutputPrometheus.Pipeline.IsUnknown() && !r.OutputPrometheus.Pipeline.IsNull() {
-			*pipeline47 = r.OutputPrometheus.Pipeline.ValueString()
-		} else {
-			pipeline47 = nil
-		}
-		systemFields47 := make([]string, 0, len(r.OutputPrometheus.SystemFields))
-		for systemFieldsIndex47 := range r.OutputPrometheus.SystemFields {
-			systemFields47 = append(systemFields47, r.OutputPrometheus.SystemFields[systemFieldsIndex47].ValueString())
-		}
-		environment47 := new(string)
-		if !r.OutputPrometheus.Environment.IsUnknown() && !r.OutputPrometheus.Environment.IsNull() {
-			*environment47 = r.OutputPrometheus.Environment.ValueString()
-		} else {
-			environment47 = nil
-		}
-		streamtags47 := make([]string, 0, len(r.OutputPrometheus.Streamtags))
-		for streamtagsIndex47 := range r.OutputPrometheus.Streamtags {
-			streamtags47 = append(streamtags47, r.OutputPrometheus.Streamtags[streamtagsIndex47].ValueString())
-		}
-		var url11 string
-		url11 = r.OutputPrometheus.URL.ValueString()
-
-		metricRenameExpr2 := new(string)
-		if !r.OutputPrometheus.MetricRenameExpr.IsUnknown() && !r.OutputPrometheus.MetricRenameExpr.IsNull() {
-			*metricRenameExpr2 = r.OutputPrometheus.MetricRenameExpr.ValueString()
-		} else {
-			metricRenameExpr2 = nil
-		}
-		sendMetadata := new(bool)
-		if !r.OutputPrometheus.SendMetadata.IsUnknown() && !r.OutputPrometheus.SendMetadata.IsNull() {
-			*sendMetadata = r.OutputPrometheus.SendMetadata.ValueBool()
-		} else {
-			sendMetadata = nil
-		}
-		concurrency22 := new(float64)
-		if !r.OutputPrometheus.Concurrency.IsUnknown() && !r.OutputPrometheus.Concurrency.IsNull() {
-			*concurrency22 = r.OutputPrometheus.Concurrency.ValueFloat64()
-		} else {
-			concurrency22 = nil
-		}
-		maxPayloadSizeKb21 := new(float64)
-		if !r.OutputPrometheus.MaxPayloadSizeKB.IsUnknown() && !r.OutputPrometheus.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb21 = r.OutputPrometheus.MaxPayloadSizeKB.ValueFloat64()
-		} else {
-			maxPayloadSizeKb21 = nil
-		}
-		maxPayloadEvents21 := new(float64)
-		if !r.OutputPrometheus.MaxPayloadEvents.IsUnknown() && !r.OutputPrometheus.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents21 = r.OutputPrometheus.MaxPayloadEvents.ValueFloat64()
-		} else {
-			maxPayloadEvents21 = nil
-		}
-		rejectUnauthorized41 := new(bool)
-		if !r.OutputPrometheus.RejectUnauthorized.IsUnknown() && !r.OutputPrometheus.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized41 = r.OutputPrometheus.RejectUnauthorized.ValueBool()
-		} else {
-			rejectUnauthorized41 = nil
-		}
-		timeoutSec21 := new(float64)
-		if !r.OutputPrometheus.TimeoutSec.IsUnknown() && !r.OutputPrometheus.TimeoutSec.IsNull() {
-			*timeoutSec21 = r.OutputPrometheus.TimeoutSec.ValueFloat64()
-		} else {
-			timeoutSec21 = nil
-		}
-		flushPeriodSec32 := new(float64)
-		if !r.OutputPrometheus.FlushPeriodSec.IsUnknown() && !r.OutputPrometheus.FlushPeriodSec.IsNull() {
-			*flushPeriodSec32 = r.OutputPrometheus.FlushPeriodSec.ValueFloat64()
-		} else {
-			flushPeriodSec32 = nil
-		}
-		extraHTTPHeaders19 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputPrometheus.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex19 := range r.OutputPrometheus.ExtraHTTPHeaders {
-			name33 := new(string)
-			if !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsUnknown() && !r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsNull() {
-				*name33 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.ValueString()
-			} else {
-				name33 = nil
-			}
-			var value43 string
-			value43 = r.OutputPrometheus.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Value.ValueString()
-
-			extraHTTPHeaders19 = append(extraHTTPHeaders19, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name33,
-				Value: value43,
-			})
-		}
-		useRoundRobinDns18 := new(bool)
-		if !r.OutputPrometheus.UseRoundRobinDNS.IsUnknown() && !r.OutputPrometheus.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns18 = r.OutputPrometheus.UseRoundRobinDNS.ValueBool()
-		} else {
-			useRoundRobinDns18 = nil
-		}
-		failedRequestLoggingMode19 := new(shared.FailedRequestLoggingModeOptions)
-		if !r.OutputPrometheus.FailedRequestLoggingMode.IsUnknown() && !r.OutputPrometheus.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode19 = shared.FailedRequestLoggingModeOptions(r.OutputPrometheus.FailedRequestLoggingMode.ValueString())
-		} else {
-			failedRequestLoggingMode19 = nil
-		}
-		safeHeaders19 := make([]string, 0, len(r.OutputPrometheus.SafeHeaders))
-		for safeHeadersIndex19 := range r.OutputPrometheus.SafeHeaders {
-			safeHeaders19 = append(safeHeaders19, r.OutputPrometheus.SafeHeaders[safeHeadersIndex19].ValueString())
-		}
-		responseRetrySettings20 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputPrometheus.ResponseRetrySettings))
-		for responseRetrySettingsIndex20 := range r.OutputPrometheus.ResponseRetrySettings {
-			var httpStatus20 float64
-			httpStatus20 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].HTTPStatus.ValueFloat64()
-
-			initialBackoff44 := new(float64)
-			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsNull() {
-				*initialBackoff44 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff44 = nil
-			}
-			backoffRate44 := new(float64)
-			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsNull() {
-				*backoffRate44 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.ValueFloat64()
-			} else {
-				backoffRate44 = nil
-			}
-			maxBackoff40 := new(float64)
-			if !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsUnknown() && !r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsNull() {
-				*maxBackoff40 = r.OutputPrometheus.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff40 = nil
-			}
-			responseRetrySettings20 = append(responseRetrySettings20, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus20,
-				InitialBackoff: initialBackoff44,
-				BackoffRate:    backoffRate44,
-				MaxBackoff:     maxBackoff40,
-			})
-		}
-		var timeoutRetrySettings20 *shared.TimeoutRetrySettingsType
-		if r.OutputPrometheus.TimeoutRetrySettings != nil {
-			var timeoutRetry20 bool
-			timeoutRetry20 = r.OutputPrometheus.TimeoutRetrySettings.TimeoutRetry.ValueBool()
-
-			initialBackoff45 := new(float64)
-			if !r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff45 = r.OutputPrometheus.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff45 = nil
-			}
-			backoffRate45 := new(float64)
-			if !r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate45 = r.OutputPrometheus.TimeoutRetrySettings.BackoffRate.ValueFloat64()
-			} else {
-				backoffRate45 = nil
-			}
-			maxBackoff41 := new(float64)
-			if !r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff41 = r.OutputPrometheus.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff41 = nil
-			}
-			timeoutRetrySettings20 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry20,
-				InitialBackoff: initialBackoff45,
-				BackoffRate:    backoffRate45,
-				MaxBackoff:     maxBackoff41,
-			}
-		}
-		responseHonorRetryAfterHeader20 := new(bool)
-		if !r.OutputPrometheus.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputPrometheus.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader20 = r.OutputPrometheus.ResponseHonorRetryAfterHeader.ValueBool()
-		} else {
-			responseHonorRetryAfterHeader20 = nil
-		}
-		onBackpressure43 := new(shared.BackpressureBehaviorOptions)
-		if !r.OutputPrometheus.OnBackpressure.IsUnknown() && !r.OutputPrometheus.OnBackpressure.IsNull() {
-			*onBackpressure43 = shared.BackpressureBehaviorOptions(r.OutputPrometheus.OnBackpressure.ValueString())
-		} else {
-			onBackpressure43 = nil
-		}
-		authType28 := new(shared.AuthenticationTypeOptionsPrometheusAuth)
-		if !r.OutputPrometheus.AuthType.IsUnknown() && !r.OutputPrometheus.AuthType.IsNull() {
-			*authType28 = shared.AuthenticationTypeOptionsPrometheusAuth(r.OutputPrometheus.AuthType.ValueString())
-		} else {
-			authType28 = nil
-		}
-		description47 := new(string)
-		if !r.OutputPrometheus.Description.IsUnknown() && !r.OutputPrometheus.Description.IsNull() {
-			*description47 = r.OutputPrometheus.Description.ValueString()
-		} else {
-			description47 = nil
 		}
 		metricsFlushPeriodSec := new(float64)
 		if !r.OutputPrometheus.MetricsFlushPeriodSec.IsUnknown() && !r.OutputPrometheus.MetricsFlushPeriodSec.IsNull() {
@@ -26900,105 +26523,105 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			metricsFlushPeriodSec = nil
 		}
-		pqStrictOrdering37 := new(bool)
+		pqStrictOrdering35 := new(bool)
 		if !r.OutputPrometheus.PqStrictOrdering.IsUnknown() && !r.OutputPrometheus.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering37 = r.OutputPrometheus.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering35 = r.OutputPrometheus.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering37 = nil
+			pqStrictOrdering35 = nil
 		}
-		pqRatePerSec37 := new(float64)
+		pqRatePerSec35 := new(float64)
 		if !r.OutputPrometheus.PqRatePerSec.IsUnknown() && !r.OutputPrometheus.PqRatePerSec.IsNull() {
-			*pqRatePerSec37 = r.OutputPrometheus.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec35 = r.OutputPrometheus.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec37 = nil
+			pqRatePerSec35 = nil
 		}
-		pqMode37 := new(shared.ModeOptions)
+		pqMode36 := new(shared.ModeOptions)
 		if !r.OutputPrometheus.PqMode.IsUnknown() && !r.OutputPrometheus.PqMode.IsNull() {
-			*pqMode37 = shared.ModeOptions(r.OutputPrometheus.PqMode.ValueString())
+			*pqMode36 = shared.ModeOptions(r.OutputPrometheus.PqMode.ValueString())
 		} else {
-			pqMode37 = nil
+			pqMode36 = nil
 		}
-		pqMaxBufferSize37 := new(float64)
+		pqMaxBufferSize35 := new(float64)
 		if !r.OutputPrometheus.PqMaxBufferSize.IsUnknown() && !r.OutputPrometheus.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize37 = r.OutputPrometheus.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize35 = r.OutputPrometheus.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize37 = nil
+			pqMaxBufferSize35 = nil
 		}
-		pqMaxBackpressureSec37 := new(float64)
+		pqMaxBackpressureSec35 := new(float64)
 		if !r.OutputPrometheus.PqMaxBackpressureSec.IsUnknown() && !r.OutputPrometheus.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec37 = r.OutputPrometheus.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec35 = r.OutputPrometheus.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec37 = nil
+			pqMaxBackpressureSec35 = nil
 		}
-		pqMaxFileSize37 := new(string)
+		pqMaxFileSize36 := new(string)
 		if !r.OutputPrometheus.PqMaxFileSize.IsUnknown() && !r.OutputPrometheus.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize37 = r.OutputPrometheus.PqMaxFileSize.ValueString()
+			*pqMaxFileSize36 = r.OutputPrometheus.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize37 = nil
+			pqMaxFileSize36 = nil
 		}
-		pqMaxSize37 := new(string)
+		pqMaxSize36 := new(string)
 		if !r.OutputPrometheus.PqMaxSize.IsUnknown() && !r.OutputPrometheus.PqMaxSize.IsNull() {
-			*pqMaxSize37 = r.OutputPrometheus.PqMaxSize.ValueString()
+			*pqMaxSize36 = r.OutputPrometheus.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize37 = nil
+			pqMaxSize36 = nil
 		}
-		pqPath37 := new(string)
+		pqPath36 := new(string)
 		if !r.OutputPrometheus.PqPath.IsUnknown() && !r.OutputPrometheus.PqPath.IsNull() {
-			*pqPath37 = r.OutputPrometheus.PqPath.ValueString()
+			*pqPath36 = r.OutputPrometheus.PqPath.ValueString()
 		} else {
-			pqPath37 = nil
+			pqPath36 = nil
 		}
-		pqCompress37 := new(shared.CompressionOptionsPq)
+		pqCompress36 := new(shared.CompressionOptionsPq)
 		if !r.OutputPrometheus.PqCompress.IsUnknown() && !r.OutputPrometheus.PqCompress.IsNull() {
-			*pqCompress37 = shared.CompressionOptionsPq(r.OutputPrometheus.PqCompress.ValueString())
+			*pqCompress36 = shared.CompressionOptionsPq(r.OutputPrometheus.PqCompress.ValueString())
 		} else {
-			pqCompress37 = nil
+			pqCompress36 = nil
 		}
-		pqOnBackpressure37 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure36 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputPrometheus.PqOnBackpressure.IsUnknown() && !r.OutputPrometheus.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure37 = shared.QueueFullBehaviorOptions(r.OutputPrometheus.PqOnBackpressure.ValueString())
+			*pqOnBackpressure36 = shared.QueueFullBehaviorOptions(r.OutputPrometheus.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure37 = nil
+			pqOnBackpressure36 = nil
 		}
-		pqMaxBufferSizeBytes37 := new(string)
+		pqMaxBufferSizeBytes35 := new(string)
 		if !r.OutputPrometheus.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputPrometheus.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes37 = r.OutputPrometheus.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes35 = r.OutputPrometheus.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes37 = nil
+			pqMaxBufferSizeBytes35 = nil
 		}
-		var pqControls37 *shared.OutputPrometheusPqControls
+		var pqControls36 *shared.OutputPrometheusPqControls
 		if r.OutputPrometheus.PqControls != nil {
-			pqControls37 = &shared.OutputPrometheusPqControls{}
+			pqControls36 = &shared.OutputPrometheusPqControls{}
 		}
-		username12 := new(string)
+		username10 := new(string)
 		if !r.OutputPrometheus.Username.IsUnknown() && !r.OutputPrometheus.Username.IsNull() {
-			*username12 = r.OutputPrometheus.Username.ValueString()
+			*username10 = r.OutputPrometheus.Username.ValueString()
 		} else {
-			username12 = nil
+			username10 = nil
 		}
-		password12 := new(string)
+		password10 := new(string)
 		if !r.OutputPrometheus.Password.IsUnknown() && !r.OutputPrometheus.Password.IsNull() {
-			*password12 = r.OutputPrometheus.Password.ValueString()
+			*password10 = r.OutputPrometheus.Password.ValueString()
 		} else {
-			password12 = nil
+			password10 = nil
 		}
-		token11 := new(string)
+		token9 := new(string)
 		if !r.OutputPrometheus.Token.IsUnknown() && !r.OutputPrometheus.Token.IsNull() {
-			*token11 = r.OutputPrometheus.Token.ValueString()
+			*token9 = r.OutputPrometheus.Token.ValueString()
 		} else {
-			token11 = nil
+			token9 = nil
 		}
-		credentialsSecret14 := new(string)
+		credentialsSecret12 := new(string)
 		if !r.OutputPrometheus.CredentialsSecret.IsUnknown() && !r.OutputPrometheus.CredentialsSecret.IsNull() {
-			*credentialsSecret14 = r.OutputPrometheus.CredentialsSecret.ValueString()
+			*credentialsSecret12 = r.OutputPrometheus.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret14 = nil
+			credentialsSecret12 = nil
 		}
-		textSecret25 := new(string)
+		textSecret23 := new(string)
 		if !r.OutputPrometheus.TextSecret.IsUnknown() && !r.OutputPrometheus.TextSecret.IsNull() {
-			*textSecret25 = r.OutputPrometheus.TextSecret.ValueString()
+			*textSecret23 = r.OutputPrometheus.TextSecret.ValueString()
 		} else {
-			textSecret25 = nil
+			textSecret23 = nil
 		}
 		templateUrl9 := new(string)
 		if !r.OutputPrometheus.TemplateURL.IsUnknown() && !r.OutputPrometheus.TemplateURL.IsNull() {
@@ -27032,78 +26655,78 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthParams4 := make([]shared.OutputPrometheusOauthParam, 0, len(r.OutputPrometheus.OauthParams))
 		for oauthParamsIndex4 := range r.OutputPrometheus.OauthParams {
-			var name34 interface{}
+			var name32 interface{}
 			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()), &name34)
+				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()), &name32)
 			}
-			var value44 interface{}
+			var value42 interface{}
 			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()), &value44)
+				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()), &value42)
 			}
 			oauthParams4 = append(oauthParams4, shared.OutputPrometheusOauthParam{
-				Name:  name34,
-				Value: value44,
+				Name:  name32,
+				Value: value42,
 			})
 		}
 		oauthHeaders2 := make([]shared.OutputPrometheusOauthHeader, 0, len(r.OutputPrometheus.OauthHeaders))
 		for oauthHeadersIndex2 := range r.OutputPrometheus.OauthHeaders {
-			var name35 interface{}
+			var name33 interface{}
 			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()), &name35)
+				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()), &name33)
 			}
-			var value45 interface{}
+			var value43 interface{}
 			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()), &value45)
+				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()), &value43)
 			}
 			oauthHeaders2 = append(oauthHeaders2, shared.OutputPrometheusOauthHeader{
-				Name:  name35,
-				Value: value45,
+				Name:  name33,
+				Value: value43,
 			})
 		}
 		outputPrometheus = &shared.OutputPrometheus{
-			ID:                            id47,
-			Type:                          typeVar47,
-			Pipeline:                      pipeline47,
-			SystemFields:                  systemFields47,
-			Environment:                   environment47,
-			Streamtags:                    streamtags47,
+			ID:                            id46,
+			Type:                          typeVar46,
+			Pipeline:                      pipeline46,
+			SystemFields:                  systemFields46,
+			Environment:                   environment46,
+			Streamtags:                    streamtags46,
 			URL:                           url11,
-			MetricRenameExpr:              metricRenameExpr2,
+			MetricRenameExpr:              metricRenameExpr1,
 			SendMetadata:                  sendMetadata,
-			Concurrency:                   concurrency22,
-			MaxPayloadSizeKB:              maxPayloadSizeKb21,
-			MaxPayloadEvents:              maxPayloadEvents21,
-			RejectUnauthorized:            rejectUnauthorized41,
-			TimeoutSec:                    timeoutSec21,
-			FlushPeriodSec:                flushPeriodSec32,
-			ExtraHTTPHeaders:              extraHTTPHeaders19,
-			UseRoundRobinDNS:              useRoundRobinDns18,
-			FailedRequestLoggingMode:      failedRequestLoggingMode19,
-			SafeHeaders:                   safeHeaders19,
-			ResponseRetrySettings:         responseRetrySettings20,
-			TimeoutRetrySettings:          timeoutRetrySettings20,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader20,
-			OnBackpressure:                onBackpressure43,
-			AuthType:                      authType28,
-			Description:                   description47,
+			Concurrency:                   concurrency21,
+			MaxPayloadSizeKB:              maxPayloadSizeKb20,
+			MaxPayloadEvents:              maxPayloadEvents20,
+			RejectUnauthorized:            rejectUnauthorized40,
+			TimeoutSec:                    timeoutSec20,
+			FlushPeriodSec:                flushPeriodSec31,
+			ExtraHTTPHeaders:              extraHTTPHeaders18,
+			UseRoundRobinDNS:              useRoundRobinDns17,
+			FailedRequestLoggingMode:      failedRequestLoggingMode18,
+			SafeHeaders:                   safeHeaders18,
+			ResponseRetrySettings:         responseRetrySettings19,
+			TimeoutRetrySettings:          timeoutRetrySettings19,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader19,
+			OnBackpressure:                onBackpressure42,
+			AuthType:                      authType26,
+			Description:                   description46,
 			MetricsFlushPeriodSec:         metricsFlushPeriodSec,
-			PqStrictOrdering:              pqStrictOrdering37,
-			PqRatePerSec:                  pqRatePerSec37,
-			PqMode:                        pqMode37,
-			PqMaxBufferSize:               pqMaxBufferSize37,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec37,
-			PqMaxFileSize:                 pqMaxFileSize37,
-			PqMaxSize:                     pqMaxSize37,
-			PqPath:                        pqPath37,
-			PqCompress:                    pqCompress37,
-			PqOnBackpressure:              pqOnBackpressure37,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes37,
-			PqControls:                    pqControls37,
-			Username:                      username12,
-			Password:                      password12,
-			Token:                         token11,
-			CredentialsSecret:             credentialsSecret14,
-			TextSecret:                    textSecret25,
+			PqStrictOrdering:              pqStrictOrdering35,
+			PqRatePerSec:                  pqRatePerSec35,
+			PqMode:                        pqMode36,
+			PqMaxBufferSize:               pqMaxBufferSize35,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec35,
+			PqMaxFileSize:                 pqMaxFileSize36,
+			PqMaxSize:                     pqMaxSize36,
+			PqPath:                        pqPath36,
+			PqCompress:                    pqCompress36,
+			PqOnBackpressure:              pqOnBackpressure36,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes35,
+			PqControls:                    pqControls36,
+			Username:                      username10,
+			Password:                      password10,
+			Token:                         token9,
+			CredentialsSecret:             credentialsSecret12,
+			TextSecret:                    textSecret23,
 			TemplateURL:                   templateUrl9,
 			LoginURL:                      loginUrl3,
 			SecretParamName:               secretParamName2,
@@ -27122,32 +26745,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputRing *shared.OutputRing
 	if r.OutputRing != nil {
-		id48 := new(string)
+		id47 := new(string)
 		if !r.OutputRing.ID.IsUnknown() && !r.OutputRing.ID.IsNull() {
-			*id48 = r.OutputRing.ID.ValueString()
+			*id47 = r.OutputRing.ID.ValueString()
 		} else {
-			id48 = nil
+			id47 = nil
 		}
-		typeVar48 := shared.OutputRingType(r.OutputRing.Type.ValueString())
-		pipeline48 := new(string)
+		typeVar47 := shared.OutputRingType(r.OutputRing.Type.ValueString())
+		pipeline47 := new(string)
 		if !r.OutputRing.Pipeline.IsUnknown() && !r.OutputRing.Pipeline.IsNull() {
-			*pipeline48 = r.OutputRing.Pipeline.ValueString()
+			*pipeline47 = r.OutputRing.Pipeline.ValueString()
 		} else {
-			pipeline48 = nil
+			pipeline47 = nil
 		}
-		systemFields48 := make([]string, 0, len(r.OutputRing.SystemFields))
-		for systemFieldsIndex48 := range r.OutputRing.SystemFields {
-			systemFields48 = append(systemFields48, r.OutputRing.SystemFields[systemFieldsIndex48].ValueString())
+		systemFields47 := make([]string, 0, len(r.OutputRing.SystemFields))
+		for systemFieldsIndex47 := range r.OutputRing.SystemFields {
+			systemFields47 = append(systemFields47, r.OutputRing.SystemFields[systemFieldsIndex47].ValueString())
 		}
-		environment48 := new(string)
+		environment47 := new(string)
 		if !r.OutputRing.Environment.IsUnknown() && !r.OutputRing.Environment.IsNull() {
-			*environment48 = r.OutputRing.Environment.ValueString()
+			*environment47 = r.OutputRing.Environment.ValueString()
 		} else {
-			environment48 = nil
+			environment47 = nil
 		}
-		streamtags48 := make([]string, 0, len(r.OutputRing.Streamtags))
-		for streamtagsIndex48 := range r.OutputRing.Streamtags {
-			streamtags48 = append(streamtags48, r.OutputRing.Streamtags[streamtagsIndex48].ValueString())
+		streamtags47 := make([]string, 0, len(r.OutputRing.Streamtags))
+		for streamtagsIndex47 := range r.OutputRing.Streamtags {
+			streamtags47 = append(streamtags47, r.OutputRing.Streamtags[streamtagsIndex47].ValueString())
 		}
 		format13 := new(shared.OutputRingDataFormat)
 		if !r.OutputRing.Format.IsUnknown() && !r.OutputRing.Format.IsNull() {
@@ -27173,11 +26796,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxDataTime = nil
 		}
-		compress27 := new(shared.DataCompressionFormatOptionsPersistence)
+		compress26 := new(shared.DataCompressionFormatOptionsPersistence)
 		if !r.OutputRing.Compress.IsUnknown() && !r.OutputRing.Compress.IsNull() {
-			*compress27 = shared.DataCompressionFormatOptionsPersistence(r.OutputRing.Compress.ValueString())
+			*compress26 = shared.DataCompressionFormatOptionsPersistence(r.OutputRing.Compress.ValueString())
 		} else {
-			compress27 = nil
+			compress26 = nil
 		}
 		destPath5 := new(string)
 		if !r.OutputRing.DestPath.IsUnknown() && !r.OutputRing.DestPath.IsNull() {
@@ -27185,33 +26808,33 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			destPath5 = nil
 		}
-		onBackpressure44 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure43 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputRing.OnBackpressure.IsUnknown() && !r.OutputRing.OnBackpressure.IsNull() {
-			*onBackpressure44 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputRing.OnBackpressure.ValueString())
+			*onBackpressure43 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputRing.OnBackpressure.ValueString())
 		} else {
-			onBackpressure44 = nil
+			onBackpressure43 = nil
 		}
-		description48 := new(string)
+		description47 := new(string)
 		if !r.OutputRing.Description.IsUnknown() && !r.OutputRing.Description.IsNull() {
-			*description48 = r.OutputRing.Description.ValueString()
+			*description47 = r.OutputRing.Description.ValueString()
 		} else {
-			description48 = nil
+			description47 = nil
 		}
 		outputRing = &shared.OutputRing{
-			ID:             id48,
-			Type:           typeVar48,
-			Pipeline:       pipeline48,
-			SystemFields:   systemFields48,
-			Environment:    environment48,
-			Streamtags:     streamtags48,
+			ID:             id47,
+			Type:           typeVar47,
+			Pipeline:       pipeline47,
+			SystemFields:   systemFields47,
+			Environment:    environment47,
+			Streamtags:     streamtags47,
 			Format:         format13,
 			PartitionExpr:  partitionExpr5,
 			MaxDataSize:    maxDataSize,
 			MaxDataTime:    maxDataTime,
-			Compress:       compress27,
+			Compress:       compress26,
 			DestPath:       destPath5,
-			OnBackpressure: onBackpressure44,
-			Description:    description48,
+			OnBackpressure: onBackpressure43,
+			Description:    description47,
 		}
 	}
 	if outputRing != nil {
@@ -27221,32 +26844,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputOpenTelemetry *shared.OutputOpenTelemetry
 	if r.OutputOpenTelemetry != nil {
-		id49 := new(string)
+		id48 := new(string)
 		if !r.OutputOpenTelemetry.ID.IsUnknown() && !r.OutputOpenTelemetry.ID.IsNull() {
-			*id49 = r.OutputOpenTelemetry.ID.ValueString()
+			*id48 = r.OutputOpenTelemetry.ID.ValueString()
 		} else {
-			id49 = nil
+			id48 = nil
 		}
-		typeVar49 := shared.OutputOpenTelemetryType(r.OutputOpenTelemetry.Type.ValueString())
-		pipeline49 := new(string)
+		typeVar48 := shared.OutputOpenTelemetryType(r.OutputOpenTelemetry.Type.ValueString())
+		pipeline48 := new(string)
 		if !r.OutputOpenTelemetry.Pipeline.IsUnknown() && !r.OutputOpenTelemetry.Pipeline.IsNull() {
-			*pipeline49 = r.OutputOpenTelemetry.Pipeline.ValueString()
+			*pipeline48 = r.OutputOpenTelemetry.Pipeline.ValueString()
 		} else {
-			pipeline49 = nil
+			pipeline48 = nil
 		}
-		systemFields49 := make([]string, 0, len(r.OutputOpenTelemetry.SystemFields))
-		for systemFieldsIndex49 := range r.OutputOpenTelemetry.SystemFields {
-			systemFields49 = append(systemFields49, r.OutputOpenTelemetry.SystemFields[systemFieldsIndex49].ValueString())
+		systemFields48 := make([]string, 0, len(r.OutputOpenTelemetry.SystemFields))
+		for systemFieldsIndex48 := range r.OutputOpenTelemetry.SystemFields {
+			systemFields48 = append(systemFields48, r.OutputOpenTelemetry.SystemFields[systemFieldsIndex48].ValueString())
 		}
-		environment49 := new(string)
+		environment48 := new(string)
 		if !r.OutputOpenTelemetry.Environment.IsUnknown() && !r.OutputOpenTelemetry.Environment.IsNull() {
-			*environment49 = r.OutputOpenTelemetry.Environment.ValueString()
+			*environment48 = r.OutputOpenTelemetry.Environment.ValueString()
 		} else {
-			environment49 = nil
+			environment48 = nil
 		}
-		streamtags49 := make([]string, 0, len(r.OutputOpenTelemetry.Streamtags))
-		for streamtagsIndex49 := range r.OutputOpenTelemetry.Streamtags {
-			streamtags49 = append(streamtags49, r.OutputOpenTelemetry.Streamtags[streamtagsIndex49].ValueString())
+		streamtags48 := make([]string, 0, len(r.OutputOpenTelemetry.Streamtags))
+		for streamtagsIndex48 := range r.OutputOpenTelemetry.Streamtags {
+			streamtags48 = append(streamtags48, r.OutputOpenTelemetry.Streamtags[streamtagsIndex48].ValueString())
 		}
 		protocol4 := new(shared.ProtocolOptions)
 		if !r.OutputOpenTelemetry.Protocol.IsUnknown() && !r.OutputOpenTelemetry.Protocol.IsNull() {
@@ -27263,11 +26886,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			otlpVersion = nil
 		}
-		compress28 := new(shared.CompressionOptionsDeflateGzip)
+		compress27 := new(shared.CompressionOptionsDeflateGzip)
 		if !r.OutputOpenTelemetry.Compress.IsUnknown() && !r.OutputOpenTelemetry.Compress.IsNull() {
-			*compress28 = shared.CompressionOptionsDeflateGzip(r.OutputOpenTelemetry.Compress.ValueString())
+			*compress27 = shared.CompressionOptionsDeflateGzip(r.OutputOpenTelemetry.Compress.ValueString())
 		} else {
-			compress28 = nil
+			compress27 = nil
 		}
 		httpCompress := new(shared.CompressionOptionsMessages)
 		if !r.OutputOpenTelemetry.HTTPCompress.IsUnknown() && !r.OutputOpenTelemetry.HTTPCompress.IsNull() {
@@ -27275,11 +26898,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			httpCompress = nil
 		}
-		authType29 := new(shared.AuthenticationTypeOptions)
+		authType27 := new(shared.AuthenticationTypeOptions)
 		if !r.OutputOpenTelemetry.AuthType.IsUnknown() && !r.OutputOpenTelemetry.AuthType.IsNull() {
-			*authType29 = shared.AuthenticationTypeOptions(r.OutputOpenTelemetry.AuthType.ValueString())
+			*authType27 = shared.AuthenticationTypeOptions(r.OutputOpenTelemetry.AuthType.ValueString())
 		} else {
-			authType29 = nil
+			authType27 = nil
 		}
 		httpTracesEndpointOverride := new(string)
 		if !r.OutputOpenTelemetry.HTTPTracesEndpointOverride.IsUnknown() && !r.OutputOpenTelemetry.HTTPTracesEndpointOverride.IsNull() {
@@ -27304,43 +26927,43 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key8 string
 			key8 = r.OutputOpenTelemetry.Metadata[metadataIndex1].Key.ValueString()
 
-			var value46 string
-			value46 = r.OutputOpenTelemetry.Metadata[metadataIndex1].Value.ValueString()
+			var value44 string
+			value44 = r.OutputOpenTelemetry.Metadata[metadataIndex1].Value.ValueString()
 
 			metadata1 = append(metadata1, shared.ItemsTypeKeyValueMetadata{
 				Key:   key8,
-				Value: value46,
+				Value: value44,
 			})
 		}
-		concurrency23 := new(float64)
+		concurrency22 := new(float64)
 		if !r.OutputOpenTelemetry.Concurrency.IsUnknown() && !r.OutputOpenTelemetry.Concurrency.IsNull() {
-			*concurrency23 = r.OutputOpenTelemetry.Concurrency.ValueFloat64()
+			*concurrency22 = r.OutputOpenTelemetry.Concurrency.ValueFloat64()
 		} else {
-			concurrency23 = nil
+			concurrency22 = nil
 		}
-		maxPayloadSizeKb22 := new(float64)
+		maxPayloadSizeKb21 := new(float64)
 		if !r.OutputOpenTelemetry.MaxPayloadSizeKB.IsUnknown() && !r.OutputOpenTelemetry.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb22 = r.OutputOpenTelemetry.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb21 = r.OutputOpenTelemetry.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb22 = nil
+			maxPayloadSizeKb21 = nil
 		}
-		timeoutSec22 := new(float64)
+		timeoutSec21 := new(float64)
 		if !r.OutputOpenTelemetry.TimeoutSec.IsUnknown() && !r.OutputOpenTelemetry.TimeoutSec.IsNull() {
-			*timeoutSec22 = r.OutputOpenTelemetry.TimeoutSec.ValueFloat64()
+			*timeoutSec21 = r.OutputOpenTelemetry.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec22 = nil
+			timeoutSec21 = nil
 		}
-		flushPeriodSec33 := new(float64)
+		flushPeriodSec32 := new(float64)
 		if !r.OutputOpenTelemetry.FlushPeriodSec.IsUnknown() && !r.OutputOpenTelemetry.FlushPeriodSec.IsNull() {
-			*flushPeriodSec33 = r.OutputOpenTelemetry.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec32 = r.OutputOpenTelemetry.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec33 = nil
+			flushPeriodSec32 = nil
 		}
-		failedRequestLoggingMode20 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode19 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputOpenTelemetry.FailedRequestLoggingMode.IsUnknown() && !r.OutputOpenTelemetry.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode20 = shared.FailedRequestLoggingModeOptions(r.OutputOpenTelemetry.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode19 = shared.FailedRequestLoggingModeOptions(r.OutputOpenTelemetry.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode20 = nil
+			failedRequestLoggingMode19 = nil
 		}
 		connectionTimeout15 := new(float64)
 		if !r.OutputOpenTelemetry.ConnectionTimeout.IsUnknown() && !r.OutputOpenTelemetry.ConnectionTimeout.IsNull() {
@@ -27360,145 +26983,145 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			keepAlive3 = nil
 		}
-		onBackpressure45 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure44 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputOpenTelemetry.OnBackpressure.IsUnknown() && !r.OutputOpenTelemetry.OnBackpressure.IsNull() {
-			*onBackpressure45 = shared.BackpressureBehaviorOptions(r.OutputOpenTelemetry.OnBackpressure.ValueString())
+			*onBackpressure44 = shared.BackpressureBehaviorOptions(r.OutputOpenTelemetry.OnBackpressure.ValueString())
 		} else {
-			onBackpressure45 = nil
+			onBackpressure44 = nil
 		}
-		description49 := new(string)
+		description48 := new(string)
 		if !r.OutputOpenTelemetry.Description.IsUnknown() && !r.OutputOpenTelemetry.Description.IsNull() {
-			*description49 = r.OutputOpenTelemetry.Description.ValueString()
+			*description48 = r.OutputOpenTelemetry.Description.ValueString()
 		} else {
-			description49 = nil
+			description48 = nil
 		}
-		username13 := new(string)
+		username11 := new(string)
 		if !r.OutputOpenTelemetry.Username.IsUnknown() && !r.OutputOpenTelemetry.Username.IsNull() {
-			*username13 = r.OutputOpenTelemetry.Username.ValueString()
+			*username11 = r.OutputOpenTelemetry.Username.ValueString()
 		} else {
-			username13 = nil
+			username11 = nil
 		}
-		password13 := new(string)
+		password11 := new(string)
 		if !r.OutputOpenTelemetry.Password.IsUnknown() && !r.OutputOpenTelemetry.Password.IsNull() {
-			*password13 = r.OutputOpenTelemetry.Password.ValueString()
+			*password11 = r.OutputOpenTelemetry.Password.ValueString()
 		} else {
-			password13 = nil
+			password11 = nil
 		}
-		token12 := new(string)
+		token10 := new(string)
 		if !r.OutputOpenTelemetry.Token.IsUnknown() && !r.OutputOpenTelemetry.Token.IsNull() {
-			*token12 = r.OutputOpenTelemetry.Token.ValueString()
+			*token10 = r.OutputOpenTelemetry.Token.ValueString()
 		} else {
-			token12 = nil
+			token10 = nil
 		}
-		credentialsSecret15 := new(string)
+		credentialsSecret13 := new(string)
 		if !r.OutputOpenTelemetry.CredentialsSecret.IsUnknown() && !r.OutputOpenTelemetry.CredentialsSecret.IsNull() {
-			*credentialsSecret15 = r.OutputOpenTelemetry.CredentialsSecret.ValueString()
+			*credentialsSecret13 = r.OutputOpenTelemetry.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret15 = nil
+			credentialsSecret13 = nil
 		}
-		textSecret26 := new(string)
+		textSecret24 := new(string)
 		if !r.OutputOpenTelemetry.TextSecret.IsUnknown() && !r.OutputOpenTelemetry.TextSecret.IsNull() {
-			*textSecret26 = r.OutputOpenTelemetry.TextSecret.ValueString()
+			*textSecret24 = r.OutputOpenTelemetry.TextSecret.ValueString()
 		} else {
-			textSecret26 = nil
+			textSecret24 = nil
 		}
-		rejectUnauthorized42 := new(bool)
+		rejectUnauthorized41 := new(bool)
 		if !r.OutputOpenTelemetry.RejectUnauthorized.IsUnknown() && !r.OutputOpenTelemetry.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized42 = r.OutputOpenTelemetry.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized41 = r.OutputOpenTelemetry.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized42 = nil
+			rejectUnauthorized41 = nil
 		}
-		useRoundRobinDns19 := new(bool)
+		useRoundRobinDns18 := new(bool)
 		if !r.OutputOpenTelemetry.UseRoundRobinDNS.IsUnknown() && !r.OutputOpenTelemetry.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns19 = r.OutputOpenTelemetry.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns18 = r.OutputOpenTelemetry.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns19 = nil
+			useRoundRobinDns18 = nil
 		}
-		extraHTTPHeaders20 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputOpenTelemetry.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex20 := range r.OutputOpenTelemetry.ExtraHTTPHeaders {
-			name36 := new(string)
-			if !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsUnknown() && !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsNull() {
-				*name36 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.ValueString()
+		extraHTTPHeaders19 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputOpenTelemetry.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex19 := range r.OutputOpenTelemetry.ExtraHTTPHeaders {
+			name34 := new(string)
+			if !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsUnknown() && !r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.IsNull() {
+				*name34 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Name.ValueString()
 			} else {
-				name36 = nil
+				name34 = nil
 			}
-			var value47 string
-			value47 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Value.ValueString()
+			var value45 string
+			value45 = r.OutputOpenTelemetry.ExtraHTTPHeaders[extraHTTPHeadersIndex19].Value.ValueString()
 
-			extraHTTPHeaders20 = append(extraHTTPHeaders20, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name36,
-				Value: value47,
+			extraHTTPHeaders19 = append(extraHTTPHeaders19, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name34,
+				Value: value45,
 			})
 		}
-		safeHeaders20 := make([]string, 0, len(r.OutputOpenTelemetry.SafeHeaders))
-		for safeHeadersIndex20 := range r.OutputOpenTelemetry.SafeHeaders {
-			safeHeaders20 = append(safeHeaders20, r.OutputOpenTelemetry.SafeHeaders[safeHeadersIndex20].ValueString())
+		safeHeaders19 := make([]string, 0, len(r.OutputOpenTelemetry.SafeHeaders))
+		for safeHeadersIndex19 := range r.OutputOpenTelemetry.SafeHeaders {
+			safeHeaders19 = append(safeHeaders19, r.OutputOpenTelemetry.SafeHeaders[safeHeadersIndex19].ValueString())
 		}
-		responseRetrySettings21 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputOpenTelemetry.ResponseRetrySettings))
-		for responseRetrySettingsIndex21 := range r.OutputOpenTelemetry.ResponseRetrySettings {
-			var httpStatus21 float64
-			httpStatus21 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].HTTPStatus.ValueFloat64()
+		responseRetrySettings20 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputOpenTelemetry.ResponseRetrySettings))
+		for responseRetrySettingsIndex20 := range r.OutputOpenTelemetry.ResponseRetrySettings {
+			var httpStatus20 float64
+			httpStatus20 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].HTTPStatus.ValueFloat64()
 
-			initialBackoff46 := new(float64)
-			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsNull() {
-				*initialBackoff46 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.ValueFloat64()
+			initialBackoff44 := new(float64)
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.IsNull() {
+				*initialBackoff44 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff46 = nil
+				initialBackoff44 = nil
 			}
-			backoffRate46 := new(float64)
-			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsNull() {
-				*backoffRate46 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.ValueFloat64()
+			backoffRate44 := new(float64)
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.IsNull() {
+				*backoffRate44 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate46 = nil
+				backoffRate44 = nil
 			}
-			maxBackoff42 := new(float64)
-			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsNull() {
-				*maxBackoff42 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.ValueFloat64()
+			maxBackoff40 := new(float64)
+			if !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsUnknown() && !r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.IsNull() {
+				*maxBackoff40 = r.OutputOpenTelemetry.ResponseRetrySettings[responseRetrySettingsIndex20].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff42 = nil
+				maxBackoff40 = nil
 			}
-			responseRetrySettings21 = append(responseRetrySettings21, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus21,
-				InitialBackoff: initialBackoff46,
-				BackoffRate:    backoffRate46,
-				MaxBackoff:     maxBackoff42,
+			responseRetrySettings20 = append(responseRetrySettings20, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus20,
+				InitialBackoff: initialBackoff44,
+				BackoffRate:    backoffRate44,
+				MaxBackoff:     maxBackoff40,
 			})
 		}
-		var timeoutRetrySettings21 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings20 *shared.TimeoutRetrySettingsType
 		if r.OutputOpenTelemetry.TimeoutRetrySettings != nil {
-			var timeoutRetry21 bool
-			timeoutRetry21 = r.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry20 bool
+			timeoutRetry20 = r.OutputOpenTelemetry.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff47 := new(float64)
+			initialBackoff45 := new(float64)
 			if !r.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff47 = r.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff45 = r.OutputOpenTelemetry.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff47 = nil
+				initialBackoff45 = nil
 			}
-			backoffRate47 := new(float64)
+			backoffRate45 := new(float64)
 			if !r.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate47 = r.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate45 = r.OutputOpenTelemetry.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate47 = nil
+				backoffRate45 = nil
 			}
-			maxBackoff43 := new(float64)
+			maxBackoff41 := new(float64)
 			if !r.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff43 = r.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff41 = r.OutputOpenTelemetry.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff43 = nil
+				maxBackoff41 = nil
 			}
-			timeoutRetrySettings21 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry21,
-				InitialBackoff: initialBackoff47,
-				BackoffRate:    backoffRate47,
-				MaxBackoff:     maxBackoff43,
+			timeoutRetrySettings20 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry20,
+				InitialBackoff: initialBackoff45,
+				BackoffRate:    backoffRate45,
+				MaxBackoff:     maxBackoff41,
 			}
 		}
-		responseHonorRetryAfterHeader21 := new(bool)
+		responseHonorRetryAfterHeader20 := new(bool)
 		if !r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader21 = r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader20 = r.OutputOpenTelemetry.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader21 = nil
+			responseHonorRetryAfterHeader20 = nil
 		}
 		var tls17 *shared.TLSSettingsClientSideTypeExtended
 		if r.OutputOpenTelemetry.TLS != nil {
@@ -27508,11 +27131,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				disabled25 = nil
 			}
-			rejectUnauthorized43 := new(bool)
+			rejectUnauthorized42 := new(bool)
 			if !r.OutputOpenTelemetry.TLS.RejectUnauthorized.IsUnknown() && !r.OutputOpenTelemetry.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized43 = r.OutputOpenTelemetry.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized42 = r.OutputOpenTelemetry.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized43 = nil
+				rejectUnauthorized42 = nil
 			}
 			certificateName16 := new(string)
 			if !r.OutputOpenTelemetry.TLS.CertificateName.IsUnknown() && !r.OutputOpenTelemetry.TLS.CertificateName.IsNull() {
@@ -27558,7 +27181,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			tls17 = &shared.TLSSettingsClientSideTypeExtended{
 				Disabled:           disabled25,
-				RejectUnauthorized: rejectUnauthorized43,
+				RejectUnauthorized: rejectUnauthorized42,
 				CertificateName:    certificateName16,
 				CaPath:             caPath13,
 				PrivKeyPath:        privKeyPath14,
@@ -27568,75 +27191,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				MaxVersion:         maxVersion13,
 			}
 		}
-		pqStrictOrdering38 := new(bool)
+		pqStrictOrdering36 := new(bool)
 		if !r.OutputOpenTelemetry.PqStrictOrdering.IsUnknown() && !r.OutputOpenTelemetry.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering38 = r.OutputOpenTelemetry.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering36 = r.OutputOpenTelemetry.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering38 = nil
+			pqStrictOrdering36 = nil
 		}
-		pqRatePerSec38 := new(float64)
+		pqRatePerSec36 := new(float64)
 		if !r.OutputOpenTelemetry.PqRatePerSec.IsUnknown() && !r.OutputOpenTelemetry.PqRatePerSec.IsNull() {
-			*pqRatePerSec38 = r.OutputOpenTelemetry.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec36 = r.OutputOpenTelemetry.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec38 = nil
+			pqRatePerSec36 = nil
 		}
-		pqMode38 := new(shared.ModeOptions)
+		pqMode37 := new(shared.ModeOptions)
 		if !r.OutputOpenTelemetry.PqMode.IsUnknown() && !r.OutputOpenTelemetry.PqMode.IsNull() {
-			*pqMode38 = shared.ModeOptions(r.OutputOpenTelemetry.PqMode.ValueString())
+			*pqMode37 = shared.ModeOptions(r.OutputOpenTelemetry.PqMode.ValueString())
 		} else {
-			pqMode38 = nil
+			pqMode37 = nil
 		}
-		pqMaxBufferSize38 := new(float64)
+		pqMaxBufferSize36 := new(float64)
 		if !r.OutputOpenTelemetry.PqMaxBufferSize.IsUnknown() && !r.OutputOpenTelemetry.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize38 = r.OutputOpenTelemetry.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize36 = r.OutputOpenTelemetry.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize38 = nil
+			pqMaxBufferSize36 = nil
 		}
-		pqMaxBackpressureSec38 := new(float64)
+		pqMaxBackpressureSec36 := new(float64)
 		if !r.OutputOpenTelemetry.PqMaxBackpressureSec.IsUnknown() && !r.OutputOpenTelemetry.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec38 = r.OutputOpenTelemetry.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec36 = r.OutputOpenTelemetry.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec38 = nil
+			pqMaxBackpressureSec36 = nil
 		}
-		pqMaxFileSize38 := new(string)
+		pqMaxFileSize37 := new(string)
 		if !r.OutputOpenTelemetry.PqMaxFileSize.IsUnknown() && !r.OutputOpenTelemetry.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize38 = r.OutputOpenTelemetry.PqMaxFileSize.ValueString()
+			*pqMaxFileSize37 = r.OutputOpenTelemetry.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize38 = nil
+			pqMaxFileSize37 = nil
 		}
-		pqMaxSize38 := new(string)
+		pqMaxSize37 := new(string)
 		if !r.OutputOpenTelemetry.PqMaxSize.IsUnknown() && !r.OutputOpenTelemetry.PqMaxSize.IsNull() {
-			*pqMaxSize38 = r.OutputOpenTelemetry.PqMaxSize.ValueString()
+			*pqMaxSize37 = r.OutputOpenTelemetry.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize38 = nil
+			pqMaxSize37 = nil
 		}
-		pqPath38 := new(string)
+		pqPath37 := new(string)
 		if !r.OutputOpenTelemetry.PqPath.IsUnknown() && !r.OutputOpenTelemetry.PqPath.IsNull() {
-			*pqPath38 = r.OutputOpenTelemetry.PqPath.ValueString()
+			*pqPath37 = r.OutputOpenTelemetry.PqPath.ValueString()
 		} else {
-			pqPath38 = nil
+			pqPath37 = nil
 		}
-		pqCompress38 := new(shared.CompressionOptionsPq)
+		pqCompress37 := new(shared.CompressionOptionsPq)
 		if !r.OutputOpenTelemetry.PqCompress.IsUnknown() && !r.OutputOpenTelemetry.PqCompress.IsNull() {
-			*pqCompress38 = shared.CompressionOptionsPq(r.OutputOpenTelemetry.PqCompress.ValueString())
+			*pqCompress37 = shared.CompressionOptionsPq(r.OutputOpenTelemetry.PqCompress.ValueString())
 		} else {
-			pqCompress38 = nil
+			pqCompress37 = nil
 		}
-		pqOnBackpressure38 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure37 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputOpenTelemetry.PqOnBackpressure.IsUnknown() && !r.OutputOpenTelemetry.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure38 = shared.QueueFullBehaviorOptions(r.OutputOpenTelemetry.PqOnBackpressure.ValueString())
+			*pqOnBackpressure37 = shared.QueueFullBehaviorOptions(r.OutputOpenTelemetry.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure38 = nil
+			pqOnBackpressure37 = nil
 		}
-		pqMaxBufferSizeBytes38 := new(string)
+		pqMaxBufferSizeBytes36 := new(string)
 		if !r.OutputOpenTelemetry.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputOpenTelemetry.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes38 = r.OutputOpenTelemetry.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes36 = r.OutputOpenTelemetry.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes38 = nil
+			pqMaxBufferSizeBytes36 = nil
 		}
-		var pqControls38 *shared.OutputOpenTelemetryPqControls
+		var pqControls37 *shared.OutputOpenTelemetryPqControls
 		if r.OutputOpenTelemetry.PqControls != nil {
-			pqControls38 = &shared.OutputOpenTelemetryPqControls{}
+			pqControls37 = &shared.OutputOpenTelemetryPqControls{}
 		}
 		var loginUrl4 interface{}
 		if !r.OutputOpenTelemetry.LoginURL.IsUnknown() && !r.OutputOpenTelemetry.LoginURL.IsNull() {
@@ -27664,86 +27287,86 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthParams5 := make([]shared.OutputOpenTelemetryOauthParam, 0, len(r.OutputOpenTelemetry.OauthParams))
 		for oauthParamsIndex5 := range r.OutputOpenTelemetry.OauthParams {
-			var name37 interface{}
+			var name35 interface{}
 			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()), &name37)
+				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()), &name35)
 			}
-			var value48 interface{}
+			var value46 interface{}
 			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()), &value48)
+				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()), &value46)
 			}
 			oauthParams5 = append(oauthParams5, shared.OutputOpenTelemetryOauthParam{
-				Name:  name37,
-				Value: value48,
+				Name:  name35,
+				Value: value46,
 			})
 		}
 		oauthHeaders3 := make([]shared.OutputOpenTelemetryOauthHeader, 0, len(r.OutputOpenTelemetry.OauthHeaders))
 		for oauthHeadersIndex3 := range r.OutputOpenTelemetry.OauthHeaders {
-			var name38 interface{}
+			var name36 interface{}
 			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()), &name38)
+				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()), &name36)
 			}
-			var value49 interface{}
+			var value47 interface{}
 			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()), &value49)
+				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()), &value47)
 			}
 			oauthHeaders3 = append(oauthHeaders3, shared.OutputOpenTelemetryOauthHeader{
-				Name:  name38,
-				Value: value49,
+				Name:  name36,
+				Value: value47,
 			})
 		}
 		outputOpenTelemetry = &shared.OutputOpenTelemetry{
-			ID:                            id49,
-			Type:                          typeVar49,
-			Pipeline:                      pipeline49,
-			SystemFields:                  systemFields49,
-			Environment:                   environment49,
-			Streamtags:                    streamtags49,
+			ID:                            id48,
+			Type:                          typeVar48,
+			Pipeline:                      pipeline48,
+			SystemFields:                  systemFields48,
+			Environment:                   environment48,
+			Streamtags:                    streamtags48,
 			Protocol:                      protocol4,
 			Endpoint:                      endpoint9,
 			OtlpVersion:                   otlpVersion,
-			Compress:                      compress28,
+			Compress:                      compress27,
 			HTTPCompress:                  httpCompress,
-			AuthType:                      authType29,
+			AuthType:                      authType27,
 			HTTPTracesEndpointOverride:    httpTracesEndpointOverride,
 			HTTPMetricsEndpointOverride:   httpMetricsEndpointOverride,
 			HTTPLogsEndpointOverride:      httpLogsEndpointOverride,
 			Metadata:                      metadata1,
-			Concurrency:                   concurrency23,
-			MaxPayloadSizeKB:              maxPayloadSizeKb22,
-			TimeoutSec:                    timeoutSec22,
-			FlushPeriodSec:                flushPeriodSec33,
-			FailedRequestLoggingMode:      failedRequestLoggingMode20,
+			Concurrency:                   concurrency22,
+			MaxPayloadSizeKB:              maxPayloadSizeKb21,
+			TimeoutSec:                    timeoutSec21,
+			FlushPeriodSec:                flushPeriodSec32,
+			FailedRequestLoggingMode:      failedRequestLoggingMode19,
 			ConnectionTimeout:             connectionTimeout15,
 			KeepAliveTime:                 keepAliveTime,
 			KeepAlive:                     keepAlive3,
-			OnBackpressure:                onBackpressure45,
-			Description:                   description49,
-			Username:                      username13,
-			Password:                      password13,
-			Token:                         token12,
-			CredentialsSecret:             credentialsSecret15,
-			TextSecret:                    textSecret26,
-			RejectUnauthorized:            rejectUnauthorized42,
-			UseRoundRobinDNS:              useRoundRobinDns19,
-			ExtraHTTPHeaders:              extraHTTPHeaders20,
-			SafeHeaders:                   safeHeaders20,
-			ResponseRetrySettings:         responseRetrySettings21,
-			TimeoutRetrySettings:          timeoutRetrySettings21,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader21,
+			OnBackpressure:                onBackpressure44,
+			Description:                   description48,
+			Username:                      username11,
+			Password:                      password11,
+			Token:                         token10,
+			CredentialsSecret:             credentialsSecret13,
+			TextSecret:                    textSecret24,
+			RejectUnauthorized:            rejectUnauthorized41,
+			UseRoundRobinDNS:              useRoundRobinDns18,
+			ExtraHTTPHeaders:              extraHTTPHeaders19,
+			SafeHeaders:                   safeHeaders19,
+			ResponseRetrySettings:         responseRetrySettings20,
+			TimeoutRetrySettings:          timeoutRetrySettings20,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader20,
 			TLS:                           tls17,
-			PqStrictOrdering:              pqStrictOrdering38,
-			PqRatePerSec:                  pqRatePerSec38,
-			PqMode:                        pqMode38,
-			PqMaxBufferSize:               pqMaxBufferSize38,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec38,
-			PqMaxFileSize:                 pqMaxFileSize38,
-			PqMaxSize:                     pqMaxSize38,
-			PqPath:                        pqPath38,
-			PqCompress:                    pqCompress38,
-			PqOnBackpressure:              pqOnBackpressure38,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes38,
-			PqControls:                    pqControls38,
+			PqStrictOrdering:              pqStrictOrdering36,
+			PqRatePerSec:                  pqRatePerSec36,
+			PqMode:                        pqMode37,
+			PqMaxBufferSize:               pqMaxBufferSize36,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec36,
+			PqMaxFileSize:                 pqMaxFileSize37,
+			PqMaxSize:                     pqMaxSize37,
+			PqPath:                        pqPath37,
+			PqCompress:                    pqCompress37,
+			PqOnBackpressure:              pqOnBackpressure37,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes36,
+			PqControls:                    pqControls37,
 			LoginURL:                      loginUrl4,
 			SecretParamName:               secretParamName3,
 			Secret:                        secret6,
@@ -27761,32 +27384,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputServiceNow *shared.OutputServiceNow
 	if r.OutputServiceNow != nil {
-		id50 := new(string)
+		id49 := new(string)
 		if !r.OutputServiceNow.ID.IsUnknown() && !r.OutputServiceNow.ID.IsNull() {
-			*id50 = r.OutputServiceNow.ID.ValueString()
+			*id49 = r.OutputServiceNow.ID.ValueString()
 		} else {
-			id50 = nil
+			id49 = nil
 		}
-		typeVar50 := shared.OutputServiceNowType(r.OutputServiceNow.Type.ValueString())
-		pipeline50 := new(string)
+		typeVar49 := shared.OutputServiceNowType(r.OutputServiceNow.Type.ValueString())
+		pipeline49 := new(string)
 		if !r.OutputServiceNow.Pipeline.IsUnknown() && !r.OutputServiceNow.Pipeline.IsNull() {
-			*pipeline50 = r.OutputServiceNow.Pipeline.ValueString()
+			*pipeline49 = r.OutputServiceNow.Pipeline.ValueString()
 		} else {
-			pipeline50 = nil
+			pipeline49 = nil
 		}
-		systemFields50 := make([]string, 0, len(r.OutputServiceNow.SystemFields))
-		for systemFieldsIndex50 := range r.OutputServiceNow.SystemFields {
-			systemFields50 = append(systemFields50, r.OutputServiceNow.SystemFields[systemFieldsIndex50].ValueString())
+		systemFields49 := make([]string, 0, len(r.OutputServiceNow.SystemFields))
+		for systemFieldsIndex49 := range r.OutputServiceNow.SystemFields {
+			systemFields49 = append(systemFields49, r.OutputServiceNow.SystemFields[systemFieldsIndex49].ValueString())
 		}
-		environment50 := new(string)
+		environment49 := new(string)
 		if !r.OutputServiceNow.Environment.IsUnknown() && !r.OutputServiceNow.Environment.IsNull() {
-			*environment50 = r.OutputServiceNow.Environment.ValueString()
+			*environment49 = r.OutputServiceNow.Environment.ValueString()
 		} else {
-			environment50 = nil
+			environment49 = nil
 		}
-		streamtags50 := make([]string, 0, len(r.OutputServiceNow.Streamtags))
-		for streamtagsIndex50 := range r.OutputServiceNow.Streamtags {
-			streamtags50 = append(streamtags50, r.OutputServiceNow.Streamtags[streamtagsIndex50].ValueString())
+		streamtags49 := make([]string, 0, len(r.OutputServiceNow.Streamtags))
+		for streamtagsIndex49 := range r.OutputServiceNow.Streamtags {
+			streamtags49 = append(streamtags49, r.OutputServiceNow.Streamtags[streamtagsIndex49].ValueString())
 		}
 		var endpoint10 string
 		endpoint10 = r.OutputServiceNow.Endpoint.ValueString()
@@ -27801,18 +27424,18 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			authTokenName = nil
 		}
 		otlpVersion1 := shared.OtlpVersionOptions131(r.OutputServiceNow.OtlpVersion.ValueString())
-		maxPayloadSizeKb23 := new(float64)
+		maxPayloadSizeKb22 := new(float64)
 		if !r.OutputServiceNow.MaxPayloadSizeKB.IsUnknown() && !r.OutputServiceNow.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb23 = r.OutputServiceNow.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb22 = r.OutputServiceNow.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb23 = nil
+			maxPayloadSizeKb22 = nil
 		}
 		protocol5 := shared.ProtocolOptions(r.OutputServiceNow.Protocol.ValueString())
-		compress29 := new(shared.CompressionOptionsDeflateGzip)
+		compress28 := new(shared.CompressionOptionsDeflateGzip)
 		if !r.OutputServiceNow.Compress.IsUnknown() && !r.OutputServiceNow.Compress.IsNull() {
-			*compress29 = shared.CompressionOptionsDeflateGzip(r.OutputServiceNow.Compress.ValueString())
+			*compress28 = shared.CompressionOptionsDeflateGzip(r.OutputServiceNow.Compress.ValueString())
 		} else {
-			compress29 = nil
+			compress28 = nil
 		}
 		httpCompress1 := new(shared.CompressionOptionsMessages)
 		if !r.OutputServiceNow.HTTPCompress.IsUnknown() && !r.OutputServiceNow.HTTPCompress.IsNull() {
@@ -27843,37 +27466,37 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key9 string
 			key9 = r.OutputServiceNow.Metadata[metadataIndex2].Key.ValueString()
 
-			var value50 string
-			value50 = r.OutputServiceNow.Metadata[metadataIndex2].Value.ValueString()
+			var value48 string
+			value48 = r.OutputServiceNow.Metadata[metadataIndex2].Value.ValueString()
 
 			metadata2 = append(metadata2, shared.ItemsTypeKeyValueMetadata{
 				Key:   key9,
-				Value: value50,
+				Value: value48,
 			})
 		}
-		concurrency24 := new(float64)
+		concurrency23 := new(float64)
 		if !r.OutputServiceNow.Concurrency.IsUnknown() && !r.OutputServiceNow.Concurrency.IsNull() {
-			*concurrency24 = r.OutputServiceNow.Concurrency.ValueFloat64()
+			*concurrency23 = r.OutputServiceNow.Concurrency.ValueFloat64()
 		} else {
-			concurrency24 = nil
+			concurrency23 = nil
 		}
-		timeoutSec23 := new(float64)
+		timeoutSec22 := new(float64)
 		if !r.OutputServiceNow.TimeoutSec.IsUnknown() && !r.OutputServiceNow.TimeoutSec.IsNull() {
-			*timeoutSec23 = r.OutputServiceNow.TimeoutSec.ValueFloat64()
+			*timeoutSec22 = r.OutputServiceNow.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec23 = nil
+			timeoutSec22 = nil
 		}
-		flushPeriodSec34 := new(float64)
+		flushPeriodSec33 := new(float64)
 		if !r.OutputServiceNow.FlushPeriodSec.IsUnknown() && !r.OutputServiceNow.FlushPeriodSec.IsNull() {
-			*flushPeriodSec34 = r.OutputServiceNow.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec33 = r.OutputServiceNow.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec34 = nil
+			flushPeriodSec33 = nil
 		}
-		failedRequestLoggingMode21 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode20 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputServiceNow.FailedRequestLoggingMode.IsUnknown() && !r.OutputServiceNow.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode21 = shared.FailedRequestLoggingModeOptions(r.OutputServiceNow.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode20 = shared.FailedRequestLoggingModeOptions(r.OutputServiceNow.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode21 = nil
+			failedRequestLoggingMode20 = nil
 		}
 		connectionTimeout16 := new(float64)
 		if !r.OutputServiceNow.ConnectionTimeout.IsUnknown() && !r.OutputServiceNow.ConnectionTimeout.IsNull() {
@@ -27893,115 +27516,115 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			keepAlive4 = nil
 		}
-		onBackpressure46 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure45 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputServiceNow.OnBackpressure.IsUnknown() && !r.OutputServiceNow.OnBackpressure.IsNull() {
-			*onBackpressure46 = shared.BackpressureBehaviorOptions(r.OutputServiceNow.OnBackpressure.ValueString())
+			*onBackpressure45 = shared.BackpressureBehaviorOptions(r.OutputServiceNow.OnBackpressure.ValueString())
 		} else {
-			onBackpressure46 = nil
+			onBackpressure45 = nil
 		}
-		description50 := new(string)
+		description49 := new(string)
 		if !r.OutputServiceNow.Description.IsUnknown() && !r.OutputServiceNow.Description.IsNull() {
-			*description50 = r.OutputServiceNow.Description.ValueString()
+			*description49 = r.OutputServiceNow.Description.ValueString()
 		} else {
-			description50 = nil
+			description49 = nil
 		}
-		rejectUnauthorized44 := new(bool)
+		rejectUnauthorized43 := new(bool)
 		if !r.OutputServiceNow.RejectUnauthorized.IsUnknown() && !r.OutputServiceNow.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized44 = r.OutputServiceNow.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized43 = r.OutputServiceNow.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized44 = nil
+			rejectUnauthorized43 = nil
 		}
-		useRoundRobinDns20 := new(bool)
+		useRoundRobinDns19 := new(bool)
 		if !r.OutputServiceNow.UseRoundRobinDNS.IsUnknown() && !r.OutputServiceNow.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns20 = r.OutputServiceNow.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns19 = r.OutputServiceNow.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns20 = nil
+			useRoundRobinDns19 = nil
 		}
-		extraHTTPHeaders21 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputServiceNow.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex21 := range r.OutputServiceNow.ExtraHTTPHeaders {
-			name39 := new(string)
-			if !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsUnknown() && !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsNull() {
-				*name39 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.ValueString()
+		extraHTTPHeaders20 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputServiceNow.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex20 := range r.OutputServiceNow.ExtraHTTPHeaders {
+			name37 := new(string)
+			if !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsUnknown() && !r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.IsNull() {
+				*name37 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Name.ValueString()
 			} else {
-				name39 = nil
+				name37 = nil
 			}
-			var value51 string
-			value51 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Value.ValueString()
+			var value49 string
+			value49 = r.OutputServiceNow.ExtraHTTPHeaders[extraHTTPHeadersIndex20].Value.ValueString()
 
-			extraHTTPHeaders21 = append(extraHTTPHeaders21, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name39,
-				Value: value51,
+			extraHTTPHeaders20 = append(extraHTTPHeaders20, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name37,
+				Value: value49,
 			})
 		}
-		safeHeaders21 := make([]string, 0, len(r.OutputServiceNow.SafeHeaders))
-		for safeHeadersIndex21 := range r.OutputServiceNow.SafeHeaders {
-			safeHeaders21 = append(safeHeaders21, r.OutputServiceNow.SafeHeaders[safeHeadersIndex21].ValueString())
+		safeHeaders20 := make([]string, 0, len(r.OutputServiceNow.SafeHeaders))
+		for safeHeadersIndex20 := range r.OutputServiceNow.SafeHeaders {
+			safeHeaders20 = append(safeHeaders20, r.OutputServiceNow.SafeHeaders[safeHeadersIndex20].ValueString())
 		}
-		responseRetrySettings22 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputServiceNow.ResponseRetrySettings))
-		for responseRetrySettingsIndex22 := range r.OutputServiceNow.ResponseRetrySettings {
-			var httpStatus22 float64
-			httpStatus22 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].HTTPStatus.ValueFloat64()
+		responseRetrySettings21 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputServiceNow.ResponseRetrySettings))
+		for responseRetrySettingsIndex21 := range r.OutputServiceNow.ResponseRetrySettings {
+			var httpStatus21 float64
+			httpStatus21 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].HTTPStatus.ValueFloat64()
 
-			initialBackoff48 := new(float64)
-			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsNull() {
-				*initialBackoff48 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.ValueFloat64()
+			initialBackoff46 := new(float64)
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.IsNull() {
+				*initialBackoff46 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff48 = nil
+				initialBackoff46 = nil
 			}
-			backoffRate48 := new(float64)
-			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsNull() {
-				*backoffRate48 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.ValueFloat64()
+			backoffRate46 := new(float64)
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.IsNull() {
+				*backoffRate46 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate48 = nil
+				backoffRate46 = nil
 			}
-			maxBackoff44 := new(float64)
-			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsNull() {
-				*maxBackoff44 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.ValueFloat64()
+			maxBackoff42 := new(float64)
+			if !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsUnknown() && !r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.IsNull() {
+				*maxBackoff42 = r.OutputServiceNow.ResponseRetrySettings[responseRetrySettingsIndex21].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff44 = nil
+				maxBackoff42 = nil
 			}
-			responseRetrySettings22 = append(responseRetrySettings22, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus22,
-				InitialBackoff: initialBackoff48,
-				BackoffRate:    backoffRate48,
-				MaxBackoff:     maxBackoff44,
+			responseRetrySettings21 = append(responseRetrySettings21, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus21,
+				InitialBackoff: initialBackoff46,
+				BackoffRate:    backoffRate46,
+				MaxBackoff:     maxBackoff42,
 			})
 		}
-		var timeoutRetrySettings22 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings21 *shared.TimeoutRetrySettingsType
 		if r.OutputServiceNow.TimeoutRetrySettings != nil {
-			var timeoutRetry22 bool
-			timeoutRetry22 = r.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry21 bool
+			timeoutRetry21 = r.OutputServiceNow.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff49 := new(float64)
+			initialBackoff47 := new(float64)
 			if !r.OutputServiceNow.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputServiceNow.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff49 = r.OutputServiceNow.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff47 = r.OutputServiceNow.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff49 = nil
+				initialBackoff47 = nil
 			}
-			backoffRate49 := new(float64)
+			backoffRate47 := new(float64)
 			if !r.OutputServiceNow.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputServiceNow.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate49 = r.OutputServiceNow.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate47 = r.OutputServiceNow.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate49 = nil
+				backoffRate47 = nil
 			}
-			maxBackoff45 := new(float64)
+			maxBackoff43 := new(float64)
 			if !r.OutputServiceNow.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputServiceNow.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff45 = r.OutputServiceNow.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff43 = r.OutputServiceNow.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff45 = nil
+				maxBackoff43 = nil
 			}
-			timeoutRetrySettings22 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry22,
-				InitialBackoff: initialBackoff49,
-				BackoffRate:    backoffRate49,
-				MaxBackoff:     maxBackoff45,
+			timeoutRetrySettings21 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry21,
+				InitialBackoff: initialBackoff47,
+				BackoffRate:    backoffRate47,
+				MaxBackoff:     maxBackoff43,
 			}
 		}
-		responseHonorRetryAfterHeader22 := new(bool)
+		responseHonorRetryAfterHeader21 := new(bool)
 		if !r.OutputServiceNow.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputServiceNow.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader22 = r.OutputServiceNow.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader21 = r.OutputServiceNow.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader22 = nil
+			responseHonorRetryAfterHeader21 = nil
 		}
 		var tls18 *shared.TLSSettingsClientSideTypeExtended
 		if r.OutputServiceNow.TLS != nil {
@@ -28011,11 +27634,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				disabled26 = nil
 			}
-			rejectUnauthorized45 := new(bool)
+			rejectUnauthorized44 := new(bool)
 			if !r.OutputServiceNow.TLS.RejectUnauthorized.IsUnknown() && !r.OutputServiceNow.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized45 = r.OutputServiceNow.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized44 = r.OutputServiceNow.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized45 = nil
+				rejectUnauthorized44 = nil
 			}
 			certificateName17 := new(string)
 			if !r.OutputServiceNow.TLS.CertificateName.IsUnknown() && !r.OutputServiceNow.TLS.CertificateName.IsNull() {
@@ -28061,7 +27684,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			tls18 = &shared.TLSSettingsClientSideTypeExtended{
 				Disabled:           disabled26,
-				RejectUnauthorized: rejectUnauthorized45,
+				RejectUnauthorized: rejectUnauthorized44,
 				CertificateName:    certificateName17,
 				CaPath:             caPath14,
 				PrivKeyPath:        privKeyPath15,
@@ -28071,124 +27694,124 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				MaxVersion:         maxVersion14,
 			}
 		}
-		pqStrictOrdering39 := new(bool)
+		pqStrictOrdering37 := new(bool)
 		if !r.OutputServiceNow.PqStrictOrdering.IsUnknown() && !r.OutputServiceNow.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering39 = r.OutputServiceNow.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering37 = r.OutputServiceNow.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering39 = nil
+			pqStrictOrdering37 = nil
 		}
-		pqRatePerSec39 := new(float64)
+		pqRatePerSec37 := new(float64)
 		if !r.OutputServiceNow.PqRatePerSec.IsUnknown() && !r.OutputServiceNow.PqRatePerSec.IsNull() {
-			*pqRatePerSec39 = r.OutputServiceNow.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec37 = r.OutputServiceNow.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec39 = nil
+			pqRatePerSec37 = nil
 		}
-		pqMode39 := new(shared.ModeOptions)
+		pqMode38 := new(shared.ModeOptions)
 		if !r.OutputServiceNow.PqMode.IsUnknown() && !r.OutputServiceNow.PqMode.IsNull() {
-			*pqMode39 = shared.ModeOptions(r.OutputServiceNow.PqMode.ValueString())
+			*pqMode38 = shared.ModeOptions(r.OutputServiceNow.PqMode.ValueString())
 		} else {
-			pqMode39 = nil
+			pqMode38 = nil
 		}
-		pqMaxBufferSize39 := new(float64)
+		pqMaxBufferSize37 := new(float64)
 		if !r.OutputServiceNow.PqMaxBufferSize.IsUnknown() && !r.OutputServiceNow.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize39 = r.OutputServiceNow.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize37 = r.OutputServiceNow.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize39 = nil
+			pqMaxBufferSize37 = nil
 		}
-		pqMaxBackpressureSec39 := new(float64)
+		pqMaxBackpressureSec37 := new(float64)
 		if !r.OutputServiceNow.PqMaxBackpressureSec.IsUnknown() && !r.OutputServiceNow.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec39 = r.OutputServiceNow.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec37 = r.OutputServiceNow.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec39 = nil
+			pqMaxBackpressureSec37 = nil
 		}
-		pqMaxFileSize39 := new(string)
+		pqMaxFileSize38 := new(string)
 		if !r.OutputServiceNow.PqMaxFileSize.IsUnknown() && !r.OutputServiceNow.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize39 = r.OutputServiceNow.PqMaxFileSize.ValueString()
+			*pqMaxFileSize38 = r.OutputServiceNow.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize39 = nil
+			pqMaxFileSize38 = nil
 		}
-		pqMaxSize39 := new(string)
+		pqMaxSize38 := new(string)
 		if !r.OutputServiceNow.PqMaxSize.IsUnknown() && !r.OutputServiceNow.PqMaxSize.IsNull() {
-			*pqMaxSize39 = r.OutputServiceNow.PqMaxSize.ValueString()
+			*pqMaxSize38 = r.OutputServiceNow.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize39 = nil
+			pqMaxSize38 = nil
 		}
-		pqPath39 := new(string)
+		pqPath38 := new(string)
 		if !r.OutputServiceNow.PqPath.IsUnknown() && !r.OutputServiceNow.PqPath.IsNull() {
-			*pqPath39 = r.OutputServiceNow.PqPath.ValueString()
+			*pqPath38 = r.OutputServiceNow.PqPath.ValueString()
 		} else {
-			pqPath39 = nil
+			pqPath38 = nil
 		}
-		pqCompress39 := new(shared.CompressionOptionsPq)
+		pqCompress38 := new(shared.CompressionOptionsPq)
 		if !r.OutputServiceNow.PqCompress.IsUnknown() && !r.OutputServiceNow.PqCompress.IsNull() {
-			*pqCompress39 = shared.CompressionOptionsPq(r.OutputServiceNow.PqCompress.ValueString())
+			*pqCompress38 = shared.CompressionOptionsPq(r.OutputServiceNow.PqCompress.ValueString())
 		} else {
-			pqCompress39 = nil
+			pqCompress38 = nil
 		}
-		pqOnBackpressure39 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure38 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputServiceNow.PqOnBackpressure.IsUnknown() && !r.OutputServiceNow.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure39 = shared.QueueFullBehaviorOptions(r.OutputServiceNow.PqOnBackpressure.ValueString())
+			*pqOnBackpressure38 = shared.QueueFullBehaviorOptions(r.OutputServiceNow.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure39 = nil
+			pqOnBackpressure38 = nil
 		}
-		pqMaxBufferSizeBytes39 := new(string)
+		pqMaxBufferSizeBytes37 := new(string)
 		if !r.OutputServiceNow.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputServiceNow.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes39 = r.OutputServiceNow.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes37 = r.OutputServiceNow.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes39 = nil
+			pqMaxBufferSizeBytes37 = nil
 		}
-		var pqControls39 *shared.OutputServiceNowPqControls
+		var pqControls38 *shared.OutputServiceNowPqControls
 		if r.OutputServiceNow.PqControls != nil {
-			pqControls39 = &shared.OutputServiceNowPqControls{}
+			pqControls38 = &shared.OutputServiceNowPqControls{}
 		}
 		outputServiceNow = &shared.OutputServiceNow{
-			ID:                            id50,
-			Type:                          typeVar50,
-			Pipeline:                      pipeline50,
-			SystemFields:                  systemFields50,
-			Environment:                   environment50,
-			Streamtags:                    streamtags50,
+			ID:                            id49,
+			Type:                          typeVar49,
+			Pipeline:                      pipeline49,
+			SystemFields:                  systemFields49,
+			Environment:                   environment49,
+			Streamtags:                    streamtags49,
 			Endpoint:                      endpoint10,
 			TokenSecret:                   tokenSecret,
 			AuthTokenName:                 authTokenName,
 			OtlpVersion:                   otlpVersion1,
-			MaxPayloadSizeKB:              maxPayloadSizeKb23,
+			MaxPayloadSizeKB:              maxPayloadSizeKb22,
 			Protocol:                      protocol5,
-			Compress:                      compress29,
+			Compress:                      compress28,
 			HTTPCompress:                  httpCompress1,
 			HTTPTracesEndpointOverride:    httpTracesEndpointOverride1,
 			HTTPMetricsEndpointOverride:   httpMetricsEndpointOverride1,
 			HTTPLogsEndpointOverride:      httpLogsEndpointOverride1,
 			Metadata:                      metadata2,
-			Concurrency:                   concurrency24,
-			TimeoutSec:                    timeoutSec23,
-			FlushPeriodSec:                flushPeriodSec34,
-			FailedRequestLoggingMode:      failedRequestLoggingMode21,
+			Concurrency:                   concurrency23,
+			TimeoutSec:                    timeoutSec22,
+			FlushPeriodSec:                flushPeriodSec33,
+			FailedRequestLoggingMode:      failedRequestLoggingMode20,
 			ConnectionTimeout:             connectionTimeout16,
 			KeepAliveTime:                 keepAliveTime1,
 			KeepAlive:                     keepAlive4,
-			OnBackpressure:                onBackpressure46,
-			Description:                   description50,
-			RejectUnauthorized:            rejectUnauthorized44,
-			UseRoundRobinDNS:              useRoundRobinDns20,
-			ExtraHTTPHeaders:              extraHTTPHeaders21,
-			SafeHeaders:                   safeHeaders21,
-			ResponseRetrySettings:         responseRetrySettings22,
-			TimeoutRetrySettings:          timeoutRetrySettings22,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader22,
+			OnBackpressure:                onBackpressure45,
+			Description:                   description49,
+			RejectUnauthorized:            rejectUnauthorized43,
+			UseRoundRobinDNS:              useRoundRobinDns19,
+			ExtraHTTPHeaders:              extraHTTPHeaders20,
+			SafeHeaders:                   safeHeaders20,
+			ResponseRetrySettings:         responseRetrySettings21,
+			TimeoutRetrySettings:          timeoutRetrySettings21,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader21,
 			TLS:                           tls18,
-			PqStrictOrdering:              pqStrictOrdering39,
-			PqRatePerSec:                  pqRatePerSec39,
-			PqMode:                        pqMode39,
-			PqMaxBufferSize:               pqMaxBufferSize39,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec39,
-			PqMaxFileSize:                 pqMaxFileSize39,
-			PqMaxSize:                     pqMaxSize39,
-			PqPath:                        pqPath39,
-			PqCompress:                    pqCompress39,
-			PqOnBackpressure:              pqOnBackpressure39,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes39,
-			PqControls:                    pqControls39,
+			PqStrictOrdering:              pqStrictOrdering37,
+			PqRatePerSec:                  pqRatePerSec37,
+			PqMode:                        pqMode38,
+			PqMaxBufferSize:               pqMaxBufferSize37,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec37,
+			PqMaxFileSize:                 pqMaxFileSize38,
+			PqMaxSize:                     pqMaxSize38,
+			PqPath:                        pqPath38,
+			PqCompress:                    pqCompress38,
+			PqOnBackpressure:              pqOnBackpressure38,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes37,
+			PqControls:                    pqControls38,
 		}
 	}
 	if outputServiceNow != nil {
@@ -28198,32 +27821,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDataset *shared.OutputDataset
 	if r.OutputDataset != nil {
-		id51 := new(string)
+		id50 := new(string)
 		if !r.OutputDataset.ID.IsUnknown() && !r.OutputDataset.ID.IsNull() {
-			*id51 = r.OutputDataset.ID.ValueString()
+			*id50 = r.OutputDataset.ID.ValueString()
 		} else {
-			id51 = nil
+			id50 = nil
 		}
-		typeVar51 := shared.OutputDatasetType(r.OutputDataset.Type.ValueString())
-		pipeline51 := new(string)
+		typeVar50 := shared.OutputDatasetType(r.OutputDataset.Type.ValueString())
+		pipeline50 := new(string)
 		if !r.OutputDataset.Pipeline.IsUnknown() && !r.OutputDataset.Pipeline.IsNull() {
-			*pipeline51 = r.OutputDataset.Pipeline.ValueString()
+			*pipeline50 = r.OutputDataset.Pipeline.ValueString()
 		} else {
-			pipeline51 = nil
+			pipeline50 = nil
 		}
-		systemFields51 := make([]string, 0, len(r.OutputDataset.SystemFields))
-		for systemFieldsIndex51 := range r.OutputDataset.SystemFields {
-			systemFields51 = append(systemFields51, r.OutputDataset.SystemFields[systemFieldsIndex51].ValueString())
+		systemFields50 := make([]string, 0, len(r.OutputDataset.SystemFields))
+		for systemFieldsIndex50 := range r.OutputDataset.SystemFields {
+			systemFields50 = append(systemFields50, r.OutputDataset.SystemFields[systemFieldsIndex50].ValueString())
 		}
-		environment51 := new(string)
+		environment50 := new(string)
 		if !r.OutputDataset.Environment.IsUnknown() && !r.OutputDataset.Environment.IsNull() {
-			*environment51 = r.OutputDataset.Environment.ValueString()
+			*environment50 = r.OutputDataset.Environment.ValueString()
 		} else {
-			environment51 = nil
+			environment50 = nil
 		}
-		streamtags51 := make([]string, 0, len(r.OutputDataset.Streamtags))
-		for streamtagsIndex51 := range r.OutputDataset.Streamtags {
-			streamtags51 = append(streamtags51, r.OutputDataset.Streamtags[streamtagsIndex51].ValueString())
+		streamtags50 := make([]string, 0, len(r.OutputDataset.Streamtags))
+		for streamtagsIndex50 := range r.OutputDataset.Streamtags {
+			streamtags50 = append(streamtags50, r.OutputDataset.Streamtags[streamtagsIndex50].ValueString())
 		}
 		messageField1 := new(string)
 		if !r.OutputDataset.MessageField.IsUnknown() && !r.OutputDataset.MessageField.IsNull() {
@@ -28253,71 +27876,71 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			defaultSeverity = nil
 		}
-		responseRetrySettings23 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDataset.ResponseRetrySettings))
-		for responseRetrySettingsIndex23 := range r.OutputDataset.ResponseRetrySettings {
-			var httpStatus23 float64
-			httpStatus23 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].HTTPStatus.ValueFloat64()
+		responseRetrySettings22 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDataset.ResponseRetrySettings))
+		for responseRetrySettingsIndex22 := range r.OutputDataset.ResponseRetrySettings {
+			var httpStatus22 float64
+			httpStatus22 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].HTTPStatus.ValueFloat64()
 
-			initialBackoff50 := new(float64)
-			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsNull() {
-				*initialBackoff50 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.ValueFloat64()
+			initialBackoff48 := new(float64)
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.IsNull() {
+				*initialBackoff48 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff50 = nil
+				initialBackoff48 = nil
 			}
-			backoffRate50 := new(float64)
-			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsNull() {
-				*backoffRate50 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.ValueFloat64()
+			backoffRate48 := new(float64)
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.IsNull() {
+				*backoffRate48 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate50 = nil
+				backoffRate48 = nil
 			}
-			maxBackoff46 := new(float64)
-			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsNull() {
-				*maxBackoff46 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.ValueFloat64()
+			maxBackoff44 := new(float64)
+			if !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsUnknown() && !r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.IsNull() {
+				*maxBackoff44 = r.OutputDataset.ResponseRetrySettings[responseRetrySettingsIndex22].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff46 = nil
+				maxBackoff44 = nil
 			}
-			responseRetrySettings23 = append(responseRetrySettings23, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus23,
-				InitialBackoff: initialBackoff50,
-				BackoffRate:    backoffRate50,
-				MaxBackoff:     maxBackoff46,
+			responseRetrySettings22 = append(responseRetrySettings22, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus22,
+				InitialBackoff: initialBackoff48,
+				BackoffRate:    backoffRate48,
+				MaxBackoff:     maxBackoff44,
 			})
 		}
-		var timeoutRetrySettings23 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings22 *shared.TimeoutRetrySettingsType
 		if r.OutputDataset.TimeoutRetrySettings != nil {
-			var timeoutRetry23 bool
-			timeoutRetry23 = r.OutputDataset.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry22 bool
+			timeoutRetry22 = r.OutputDataset.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff51 := new(float64)
+			initialBackoff49 := new(float64)
 			if !r.OutputDataset.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputDataset.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff51 = r.OutputDataset.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff49 = r.OutputDataset.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff51 = nil
+				initialBackoff49 = nil
 			}
-			backoffRate51 := new(float64)
+			backoffRate49 := new(float64)
 			if !r.OutputDataset.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputDataset.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate51 = r.OutputDataset.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate49 = r.OutputDataset.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate51 = nil
+				backoffRate49 = nil
 			}
-			maxBackoff47 := new(float64)
+			maxBackoff45 := new(float64)
 			if !r.OutputDataset.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputDataset.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff47 = r.OutputDataset.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff45 = r.OutputDataset.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff47 = nil
+				maxBackoff45 = nil
 			}
-			timeoutRetrySettings23 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry23,
-				InitialBackoff: initialBackoff51,
-				BackoffRate:    backoffRate51,
-				MaxBackoff:     maxBackoff47,
+			timeoutRetrySettings22 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry22,
+				InitialBackoff: initialBackoff49,
+				BackoffRate:    backoffRate49,
+				MaxBackoff:     maxBackoff45,
 			}
 		}
-		responseHonorRetryAfterHeader23 := new(bool)
+		responseHonorRetryAfterHeader22 := new(bool)
 		if !r.OutputDataset.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputDataset.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader23 = r.OutputDataset.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader22 = r.OutputDataset.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader23 = nil
+			responseHonorRetryAfterHeader22 = nil
 		}
 		site2 := new(shared.DataSetSite)
 		if !r.OutputDataset.Site.IsUnknown() && !r.OutputDataset.Site.IsNull() {
@@ -28325,91 +27948,91 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			site2 = nil
 		}
-		concurrency25 := new(float64)
+		concurrency24 := new(float64)
 		if !r.OutputDataset.Concurrency.IsUnknown() && !r.OutputDataset.Concurrency.IsNull() {
-			*concurrency25 = r.OutputDataset.Concurrency.ValueFloat64()
+			*concurrency24 = r.OutputDataset.Concurrency.ValueFloat64()
 		} else {
-			concurrency25 = nil
+			concurrency24 = nil
 		}
-		maxPayloadSizeKb24 := new(float64)
+		maxPayloadSizeKb23 := new(float64)
 		if !r.OutputDataset.MaxPayloadSizeKB.IsUnknown() && !r.OutputDataset.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb24 = r.OutputDataset.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb23 = r.OutputDataset.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb24 = nil
+			maxPayloadSizeKb23 = nil
 		}
-		maxPayloadEvents22 := new(float64)
+		maxPayloadEvents21 := new(float64)
 		if !r.OutputDataset.MaxPayloadEvents.IsUnknown() && !r.OutputDataset.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents22 = r.OutputDataset.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents21 = r.OutputDataset.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents22 = nil
+			maxPayloadEvents21 = nil
 		}
-		compress30 := new(bool)
+		compress29 := new(bool)
 		if !r.OutputDataset.Compress.IsUnknown() && !r.OutputDataset.Compress.IsNull() {
-			*compress30 = r.OutputDataset.Compress.ValueBool()
+			*compress29 = r.OutputDataset.Compress.ValueBool()
 		} else {
-			compress30 = nil
+			compress29 = nil
 		}
-		rejectUnauthorized46 := new(bool)
+		rejectUnauthorized45 := new(bool)
 		if !r.OutputDataset.RejectUnauthorized.IsUnknown() && !r.OutputDataset.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized46 = r.OutputDataset.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized45 = r.OutputDataset.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized46 = nil
+			rejectUnauthorized45 = nil
 		}
-		timeoutSec24 := new(float64)
+		timeoutSec23 := new(float64)
 		if !r.OutputDataset.TimeoutSec.IsUnknown() && !r.OutputDataset.TimeoutSec.IsNull() {
-			*timeoutSec24 = r.OutputDataset.TimeoutSec.ValueFloat64()
+			*timeoutSec23 = r.OutputDataset.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec24 = nil
+			timeoutSec23 = nil
 		}
-		flushPeriodSec35 := new(float64)
+		flushPeriodSec34 := new(float64)
 		if !r.OutputDataset.FlushPeriodSec.IsUnknown() && !r.OutputDataset.FlushPeriodSec.IsNull() {
-			*flushPeriodSec35 = r.OutputDataset.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec34 = r.OutputDataset.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec35 = nil
+			flushPeriodSec34 = nil
 		}
-		extraHTTPHeaders22 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDataset.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex22 := range r.OutputDataset.ExtraHTTPHeaders {
-			name40 := new(string)
-			if !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsUnknown() && !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsNull() {
-				*name40 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.ValueString()
+		extraHTTPHeaders21 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDataset.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex21 := range r.OutputDataset.ExtraHTTPHeaders {
+			name38 := new(string)
+			if !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsUnknown() && !r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.IsNull() {
+				*name38 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Name.ValueString()
 			} else {
-				name40 = nil
+				name38 = nil
 			}
-			var value52 string
-			value52 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Value.ValueString()
+			var value50 string
+			value50 = r.OutputDataset.ExtraHTTPHeaders[extraHTTPHeadersIndex21].Value.ValueString()
 
-			extraHTTPHeaders22 = append(extraHTTPHeaders22, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name40,
-				Value: value52,
+			extraHTTPHeaders21 = append(extraHTTPHeaders21, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name38,
+				Value: value50,
 			})
 		}
-		useRoundRobinDns21 := new(bool)
+		useRoundRobinDns20 := new(bool)
 		if !r.OutputDataset.UseRoundRobinDNS.IsUnknown() && !r.OutputDataset.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns21 = r.OutputDataset.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns20 = r.OutputDataset.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns21 = nil
+			useRoundRobinDns20 = nil
 		}
-		failedRequestLoggingMode22 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode21 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputDataset.FailedRequestLoggingMode.IsUnknown() && !r.OutputDataset.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode22 = shared.FailedRequestLoggingModeOptions(r.OutputDataset.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode21 = shared.FailedRequestLoggingModeOptions(r.OutputDataset.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode22 = nil
+			failedRequestLoggingMode21 = nil
 		}
-		safeHeaders22 := make([]string, 0, len(r.OutputDataset.SafeHeaders))
-		for safeHeadersIndex22 := range r.OutputDataset.SafeHeaders {
-			safeHeaders22 = append(safeHeaders22, r.OutputDataset.SafeHeaders[safeHeadersIndex22].ValueString())
+		safeHeaders21 := make([]string, 0, len(r.OutputDataset.SafeHeaders))
+		for safeHeadersIndex21 := range r.OutputDataset.SafeHeaders {
+			safeHeaders21 = append(safeHeaders21, r.OutputDataset.SafeHeaders[safeHeadersIndex21].ValueString())
 		}
-		onBackpressure47 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure46 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputDataset.OnBackpressure.IsUnknown() && !r.OutputDataset.OnBackpressure.IsNull() {
-			*onBackpressure47 = shared.BackpressureBehaviorOptions(r.OutputDataset.OnBackpressure.ValueString())
+			*onBackpressure46 = shared.BackpressureBehaviorOptions(r.OutputDataset.OnBackpressure.ValueString())
 		} else {
-			onBackpressure47 = nil
+			onBackpressure46 = nil
 		}
-		authType30 := new(shared.AuthenticationMethodOptionsAPI)
+		authType28 := new(shared.AuthenticationMethodOptionsAPI)
 		if !r.OutputDataset.AuthType.IsUnknown() && !r.OutputDataset.AuthType.IsNull() {
-			*authType30 = shared.AuthenticationMethodOptionsAPI(r.OutputDataset.AuthType.ValueString())
+			*authType28 = shared.AuthenticationMethodOptionsAPI(r.OutputDataset.AuthType.ValueString())
 		} else {
-			authType30 = nil
+			authType28 = nil
 		}
 		totalMemoryLimitKb8 := new(float64)
 		if !r.OutputDataset.TotalMemoryLimitKB.IsUnknown() && !r.OutputDataset.TotalMemoryLimitKB.IsNull() {
@@ -28417,11 +28040,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			totalMemoryLimitKb8 = nil
 		}
-		description51 := new(string)
+		description50 := new(string)
 		if !r.OutputDataset.Description.IsUnknown() && !r.OutputDataset.Description.IsNull() {
-			*description51 = r.OutputDataset.Description.ValueString()
+			*description50 = r.OutputDataset.Description.ValueString()
 		} else {
-			description51 = nil
+			description50 = nil
 		}
 		customUrl3 := new(string)
 		if !r.OutputDataset.CustomURL.IsUnknown() && !r.OutputDataset.CustomURL.IsNull() {
@@ -28429,75 +28052,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			customUrl3 = nil
 		}
-		pqStrictOrdering40 := new(bool)
+		pqStrictOrdering38 := new(bool)
 		if !r.OutputDataset.PqStrictOrdering.IsUnknown() && !r.OutputDataset.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering40 = r.OutputDataset.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering38 = r.OutputDataset.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering40 = nil
+			pqStrictOrdering38 = nil
 		}
-		pqRatePerSec40 := new(float64)
+		pqRatePerSec38 := new(float64)
 		if !r.OutputDataset.PqRatePerSec.IsUnknown() && !r.OutputDataset.PqRatePerSec.IsNull() {
-			*pqRatePerSec40 = r.OutputDataset.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec38 = r.OutputDataset.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec40 = nil
+			pqRatePerSec38 = nil
 		}
-		pqMode40 := new(shared.ModeOptions)
+		pqMode39 := new(shared.ModeOptions)
 		if !r.OutputDataset.PqMode.IsUnknown() && !r.OutputDataset.PqMode.IsNull() {
-			*pqMode40 = shared.ModeOptions(r.OutputDataset.PqMode.ValueString())
+			*pqMode39 = shared.ModeOptions(r.OutputDataset.PqMode.ValueString())
 		} else {
-			pqMode40 = nil
+			pqMode39 = nil
 		}
-		pqMaxBufferSize40 := new(float64)
+		pqMaxBufferSize38 := new(float64)
 		if !r.OutputDataset.PqMaxBufferSize.IsUnknown() && !r.OutputDataset.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize40 = r.OutputDataset.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize38 = r.OutputDataset.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize40 = nil
+			pqMaxBufferSize38 = nil
 		}
-		pqMaxBackpressureSec40 := new(float64)
+		pqMaxBackpressureSec38 := new(float64)
 		if !r.OutputDataset.PqMaxBackpressureSec.IsUnknown() && !r.OutputDataset.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec40 = r.OutputDataset.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec38 = r.OutputDataset.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec40 = nil
+			pqMaxBackpressureSec38 = nil
 		}
-		pqMaxFileSize40 := new(string)
+		pqMaxFileSize39 := new(string)
 		if !r.OutputDataset.PqMaxFileSize.IsUnknown() && !r.OutputDataset.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize40 = r.OutputDataset.PqMaxFileSize.ValueString()
+			*pqMaxFileSize39 = r.OutputDataset.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize40 = nil
+			pqMaxFileSize39 = nil
 		}
-		pqMaxSize40 := new(string)
+		pqMaxSize39 := new(string)
 		if !r.OutputDataset.PqMaxSize.IsUnknown() && !r.OutputDataset.PqMaxSize.IsNull() {
-			*pqMaxSize40 = r.OutputDataset.PqMaxSize.ValueString()
+			*pqMaxSize39 = r.OutputDataset.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize40 = nil
+			pqMaxSize39 = nil
 		}
-		pqPath40 := new(string)
+		pqPath39 := new(string)
 		if !r.OutputDataset.PqPath.IsUnknown() && !r.OutputDataset.PqPath.IsNull() {
-			*pqPath40 = r.OutputDataset.PqPath.ValueString()
+			*pqPath39 = r.OutputDataset.PqPath.ValueString()
 		} else {
-			pqPath40 = nil
+			pqPath39 = nil
 		}
-		pqCompress40 := new(shared.CompressionOptionsPq)
+		pqCompress39 := new(shared.CompressionOptionsPq)
 		if !r.OutputDataset.PqCompress.IsUnknown() && !r.OutputDataset.PqCompress.IsNull() {
-			*pqCompress40 = shared.CompressionOptionsPq(r.OutputDataset.PqCompress.ValueString())
+			*pqCompress39 = shared.CompressionOptionsPq(r.OutputDataset.PqCompress.ValueString())
 		} else {
-			pqCompress40 = nil
+			pqCompress39 = nil
 		}
-		pqOnBackpressure40 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure39 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputDataset.PqOnBackpressure.IsUnknown() && !r.OutputDataset.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure40 = shared.QueueFullBehaviorOptions(r.OutputDataset.PqOnBackpressure.ValueString())
+			*pqOnBackpressure39 = shared.QueueFullBehaviorOptions(r.OutputDataset.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure40 = nil
+			pqOnBackpressure39 = nil
 		}
-		pqMaxBufferSizeBytes40 := new(string)
+		pqMaxBufferSizeBytes38 := new(string)
 		if !r.OutputDataset.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputDataset.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes40 = r.OutputDataset.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes38 = r.OutputDataset.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes40 = nil
+			pqMaxBufferSizeBytes38 = nil
 		}
-		var pqControls40 *shared.OutputDatasetPqControls
+		var pqControls39 *shared.OutputDatasetPqControls
 		if r.OutputDataset.PqControls != nil {
-			pqControls40 = &shared.OutputDatasetPqControls{}
+			pqControls39 = &shared.OutputDatasetPqControls{}
 		}
 		apiKey4 := new(string)
 		if !r.OutputDataset.APIKey.IsUnknown() && !r.OutputDataset.APIKey.IsNull() {
@@ -28505,11 +28128,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			apiKey4 = nil
 		}
-		textSecret27 := new(string)
+		textSecret25 := new(string)
 		if !r.OutputDataset.TextSecret.IsUnknown() && !r.OutputDataset.TextSecret.IsNull() {
-			*textSecret27 = r.OutputDataset.TextSecret.ValueString()
+			*textSecret25 = r.OutputDataset.TextSecret.ValueString()
 		} else {
-			textSecret27 = nil
+			textSecret25 = nil
 		}
 		templateCustomUrl1 := new(string)
 		if !r.OutputDataset.TemplateCustomURL.IsUnknown() && !r.OutputDataset.TemplateCustomURL.IsNull() {
@@ -28518,51 +28141,51 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateCustomUrl1 = nil
 		}
 		outputDataset = &shared.OutputDataset{
-			ID:                            id51,
-			Type:                          typeVar51,
-			Pipeline:                      pipeline51,
-			SystemFields:                  systemFields51,
-			Environment:                   environment51,
-			Streamtags:                    streamtags51,
+			ID:                            id50,
+			Type:                          typeVar50,
+			Pipeline:                      pipeline50,
+			SystemFields:                  systemFields50,
+			Environment:                   environment50,
+			Streamtags:                    streamtags50,
 			MessageField:                  messageField1,
 			ExcludeFields:                 excludeFields,
 			ServerHostField:               serverHostField,
 			TimestampField:                timestampField,
 			DefaultSeverity:               defaultSeverity,
-			ResponseRetrySettings:         responseRetrySettings23,
-			TimeoutRetrySettings:          timeoutRetrySettings23,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader23,
+			ResponseRetrySettings:         responseRetrySettings22,
+			TimeoutRetrySettings:          timeoutRetrySettings22,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader22,
 			Site:                          site2,
-			Concurrency:                   concurrency25,
-			MaxPayloadSizeKB:              maxPayloadSizeKb24,
-			MaxPayloadEvents:              maxPayloadEvents22,
-			Compress:                      compress30,
-			RejectUnauthorized:            rejectUnauthorized46,
-			TimeoutSec:                    timeoutSec24,
-			FlushPeriodSec:                flushPeriodSec35,
-			ExtraHTTPHeaders:              extraHTTPHeaders22,
-			UseRoundRobinDNS:              useRoundRobinDns21,
-			FailedRequestLoggingMode:      failedRequestLoggingMode22,
-			SafeHeaders:                   safeHeaders22,
-			OnBackpressure:                onBackpressure47,
-			AuthType:                      authType30,
+			Concurrency:                   concurrency24,
+			MaxPayloadSizeKB:              maxPayloadSizeKb23,
+			MaxPayloadEvents:              maxPayloadEvents21,
+			Compress:                      compress29,
+			RejectUnauthorized:            rejectUnauthorized45,
+			TimeoutSec:                    timeoutSec23,
+			FlushPeriodSec:                flushPeriodSec34,
+			ExtraHTTPHeaders:              extraHTTPHeaders21,
+			UseRoundRobinDNS:              useRoundRobinDns20,
+			FailedRequestLoggingMode:      failedRequestLoggingMode21,
+			SafeHeaders:                   safeHeaders21,
+			OnBackpressure:                onBackpressure46,
+			AuthType:                      authType28,
 			TotalMemoryLimitKB:            totalMemoryLimitKb8,
-			Description:                   description51,
+			Description:                   description50,
 			CustomURL:                     customUrl3,
-			PqStrictOrdering:              pqStrictOrdering40,
-			PqRatePerSec:                  pqRatePerSec40,
-			PqMode:                        pqMode40,
-			PqMaxBufferSize:               pqMaxBufferSize40,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec40,
-			PqMaxFileSize:                 pqMaxFileSize40,
-			PqMaxSize:                     pqMaxSize40,
-			PqPath:                        pqPath40,
-			PqCompress:                    pqCompress40,
-			PqOnBackpressure:              pqOnBackpressure40,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes40,
-			PqControls:                    pqControls40,
+			PqStrictOrdering:              pqStrictOrdering38,
+			PqRatePerSec:                  pqRatePerSec38,
+			PqMode:                        pqMode39,
+			PqMaxBufferSize:               pqMaxBufferSize38,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec38,
+			PqMaxFileSize:                 pqMaxFileSize39,
+			PqMaxSize:                     pqMaxSize39,
+			PqPath:                        pqPath39,
+			PqCompress:                    pqCompress39,
+			PqOnBackpressure:              pqOnBackpressure39,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes38,
+			PqControls:                    pqControls39,
 			APIKey:                        apiKey4,
-			TextSecret:                    textSecret27,
+			TextSecret:                    textSecret25,
 			TemplateCustomURL:             templateCustomUrl1,
 		}
 	}
@@ -28573,32 +28196,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputCriblTCP *shared.OutputCriblTCP
 	if r.OutputCriblTCP != nil {
-		id52 := new(string)
+		id51 := new(string)
 		if !r.OutputCriblTCP.ID.IsUnknown() && !r.OutputCriblTCP.ID.IsNull() {
-			*id52 = r.OutputCriblTCP.ID.ValueString()
+			*id51 = r.OutputCriblTCP.ID.ValueString()
 		} else {
-			id52 = nil
+			id51 = nil
 		}
-		typeVar52 := shared.OutputCriblTCPType(r.OutputCriblTCP.Type.ValueString())
-		pipeline52 := new(string)
+		typeVar51 := shared.OutputCriblTCPType(r.OutputCriblTCP.Type.ValueString())
+		pipeline51 := new(string)
 		if !r.OutputCriblTCP.Pipeline.IsUnknown() && !r.OutputCriblTCP.Pipeline.IsNull() {
-			*pipeline52 = r.OutputCriblTCP.Pipeline.ValueString()
+			*pipeline51 = r.OutputCriblTCP.Pipeline.ValueString()
 		} else {
-			pipeline52 = nil
+			pipeline51 = nil
 		}
-		systemFields52 := make([]string, 0, len(r.OutputCriblTCP.SystemFields))
-		for systemFieldsIndex52 := range r.OutputCriblTCP.SystemFields {
-			systemFields52 = append(systemFields52, r.OutputCriblTCP.SystemFields[systemFieldsIndex52].ValueString())
+		systemFields51 := make([]string, 0, len(r.OutputCriblTCP.SystemFields))
+		for systemFieldsIndex51 := range r.OutputCriblTCP.SystemFields {
+			systemFields51 = append(systemFields51, r.OutputCriblTCP.SystemFields[systemFieldsIndex51].ValueString())
 		}
-		environment52 := new(string)
+		environment51 := new(string)
 		if !r.OutputCriblTCP.Environment.IsUnknown() && !r.OutputCriblTCP.Environment.IsNull() {
-			*environment52 = r.OutputCriblTCP.Environment.ValueString()
+			*environment51 = r.OutputCriblTCP.Environment.ValueString()
 		} else {
-			environment52 = nil
+			environment51 = nil
 		}
-		streamtags52 := make([]string, 0, len(r.OutputCriblTCP.Streamtags))
-		for streamtagsIndex52 := range r.OutputCriblTCP.Streamtags {
-			streamtags52 = append(streamtags52, r.OutputCriblTCP.Streamtags[streamtagsIndex52].ValueString())
+		streamtags51 := make([]string, 0, len(r.OutputCriblTCP.Streamtags))
+		for streamtagsIndex51 := range r.OutputCriblTCP.Streamtags {
+			streamtags51 = append(streamtags51, r.OutputCriblTCP.Streamtags[streamtagsIndex51].ValueString())
 		}
 		loadBalanced5 := new(bool)
 		if !r.OutputCriblTCP.LoadBalanced.IsUnknown() && !r.OutputCriblTCP.LoadBalanced.IsNull() {
@@ -28632,11 +28255,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				disabled27 = nil
 			}
-			rejectUnauthorized47 := new(bool)
+			rejectUnauthorized46 := new(bool)
 			if !r.OutputCriblTCP.TLS.RejectUnauthorized.IsUnknown() && !r.OutputCriblTCP.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized47 = r.OutputCriblTCP.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized46 = r.OutputCriblTCP.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized47 = nil
+				rejectUnauthorized46 = nil
 			}
 			servername16 := new(string)
 			if !r.OutputCriblTCP.TLS.Servername.IsUnknown() && !r.OutputCriblTCP.TLS.Servername.IsNull() {
@@ -28688,7 +28311,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			tls19 = &shared.TLSSettingsClientSideTypeCaPathCertPath{
 				Disabled:           disabled27,
-				RejectUnauthorized: rejectUnauthorized47,
+				RejectUnauthorized: rejectUnauthorized46,
 				Servername:         servername16,
 				CertificateName:    certificateName18,
 				CaPath:             caPath15,
@@ -28728,33 +28351,33 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				enabled7 = nil
 			}
-			description52 := new(string)
+			description51 := new(string)
 			if !r.OutputCriblTCP.AuthTokens[authTokensIndex1].Description.IsUnknown() && !r.OutputCriblTCP.AuthTokens[authTokensIndex1].Description.IsNull() {
-				*description52 = r.OutputCriblTCP.AuthTokens[authTokensIndex1].Description.ValueString()
+				*description51 = r.OutputCriblTCP.AuthTokens[authTokensIndex1].Description.ValueString()
 			} else {
-				description52 = nil
+				description51 = nil
 			}
 			authTokens1 = append(authTokens1, shared.ItemsTypeAuthTokens{
 				TokenSecret: tokenSecret1,
 				Enabled:     enabled7,
-				Description: description52,
+				Description: description51,
 			})
 		}
 		excludeFields1 := make([]string, 0, len(r.OutputCriblTCP.ExcludeFields))
 		for excludeFieldsIndex1 := range r.OutputCriblTCP.ExcludeFields {
 			excludeFields1 = append(excludeFields1, r.OutputCriblTCP.ExcludeFields[excludeFieldsIndex1].ValueString())
 		}
-		onBackpressure48 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure47 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputCriblTCP.OnBackpressure.IsUnknown() && !r.OutputCriblTCP.OnBackpressure.IsNull() {
-			*onBackpressure48 = shared.BackpressureBehaviorOptions(r.OutputCriblTCP.OnBackpressure.ValueString())
+			*onBackpressure47 = shared.BackpressureBehaviorOptions(r.OutputCriblTCP.OnBackpressure.ValueString())
 		} else {
-			onBackpressure48 = nil
+			onBackpressure47 = nil
 		}
-		description53 := new(string)
+		description52 := new(string)
 		if !r.OutputCriblTCP.Description.IsUnknown() && !r.OutputCriblTCP.Description.IsNull() {
-			*description53 = r.OutputCriblTCP.Description.ValueString()
+			*description52 = r.OutputCriblTCP.Description.ValueString()
 		} else {
-			description53 = nil
+			description52 = nil
 		}
 		host11 := new(string)
 		if !r.OutputCriblTCP.Host.IsUnknown() && !r.OutputCriblTCP.Host.IsNull() {
@@ -28840,75 +28463,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxConcurrentSenders3 = nil
 		}
-		pqStrictOrdering41 := new(bool)
+		pqStrictOrdering39 := new(bool)
 		if !r.OutputCriblTCP.PqStrictOrdering.IsUnknown() && !r.OutputCriblTCP.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering41 = r.OutputCriblTCP.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering39 = r.OutputCriblTCP.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering41 = nil
+			pqStrictOrdering39 = nil
 		}
-		pqRatePerSec41 := new(float64)
+		pqRatePerSec39 := new(float64)
 		if !r.OutputCriblTCP.PqRatePerSec.IsUnknown() && !r.OutputCriblTCP.PqRatePerSec.IsNull() {
-			*pqRatePerSec41 = r.OutputCriblTCP.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec39 = r.OutputCriblTCP.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec41 = nil
+			pqRatePerSec39 = nil
 		}
-		pqMode41 := new(shared.ModeOptions)
+		pqMode40 := new(shared.ModeOptions)
 		if !r.OutputCriblTCP.PqMode.IsUnknown() && !r.OutputCriblTCP.PqMode.IsNull() {
-			*pqMode41 = shared.ModeOptions(r.OutputCriblTCP.PqMode.ValueString())
+			*pqMode40 = shared.ModeOptions(r.OutputCriblTCP.PqMode.ValueString())
 		} else {
-			pqMode41 = nil
+			pqMode40 = nil
 		}
-		pqMaxBufferSize41 := new(float64)
+		pqMaxBufferSize39 := new(float64)
 		if !r.OutputCriblTCP.PqMaxBufferSize.IsUnknown() && !r.OutputCriblTCP.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize41 = r.OutputCriblTCP.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize39 = r.OutputCriblTCP.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize41 = nil
+			pqMaxBufferSize39 = nil
 		}
-		pqMaxBackpressureSec41 := new(float64)
+		pqMaxBackpressureSec39 := new(float64)
 		if !r.OutputCriblTCP.PqMaxBackpressureSec.IsUnknown() && !r.OutputCriblTCP.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec41 = r.OutputCriblTCP.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec39 = r.OutputCriblTCP.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec41 = nil
+			pqMaxBackpressureSec39 = nil
 		}
-		pqMaxFileSize41 := new(string)
+		pqMaxFileSize40 := new(string)
 		if !r.OutputCriblTCP.PqMaxFileSize.IsUnknown() && !r.OutputCriblTCP.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize41 = r.OutputCriblTCP.PqMaxFileSize.ValueString()
+			*pqMaxFileSize40 = r.OutputCriblTCP.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize41 = nil
+			pqMaxFileSize40 = nil
 		}
-		pqMaxSize41 := new(string)
+		pqMaxSize40 := new(string)
 		if !r.OutputCriblTCP.PqMaxSize.IsUnknown() && !r.OutputCriblTCP.PqMaxSize.IsNull() {
-			*pqMaxSize41 = r.OutputCriblTCP.PqMaxSize.ValueString()
+			*pqMaxSize40 = r.OutputCriblTCP.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize41 = nil
+			pqMaxSize40 = nil
 		}
-		pqPath41 := new(string)
+		pqPath40 := new(string)
 		if !r.OutputCriblTCP.PqPath.IsUnknown() && !r.OutputCriblTCP.PqPath.IsNull() {
-			*pqPath41 = r.OutputCriblTCP.PqPath.ValueString()
+			*pqPath40 = r.OutputCriblTCP.PqPath.ValueString()
 		} else {
-			pqPath41 = nil
+			pqPath40 = nil
 		}
-		pqCompress41 := new(shared.CompressionOptionsPq)
+		pqCompress40 := new(shared.CompressionOptionsPq)
 		if !r.OutputCriblTCP.PqCompress.IsUnknown() && !r.OutputCriblTCP.PqCompress.IsNull() {
-			*pqCompress41 = shared.CompressionOptionsPq(r.OutputCriblTCP.PqCompress.ValueString())
+			*pqCompress40 = shared.CompressionOptionsPq(r.OutputCriblTCP.PqCompress.ValueString())
 		} else {
-			pqCompress41 = nil
+			pqCompress40 = nil
 		}
-		pqOnBackpressure41 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure40 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputCriblTCP.PqOnBackpressure.IsUnknown() && !r.OutputCriblTCP.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure41 = shared.QueueFullBehaviorOptions(r.OutputCriblTCP.PqOnBackpressure.ValueString())
+			*pqOnBackpressure40 = shared.QueueFullBehaviorOptions(r.OutputCriblTCP.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure41 = nil
+			pqOnBackpressure40 = nil
 		}
-		pqMaxBufferSizeBytes41 := new(string)
+		pqMaxBufferSizeBytes39 := new(string)
 		if !r.OutputCriblTCP.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputCriblTCP.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes41 = r.OutputCriblTCP.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes39 = r.OutputCriblTCP.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes41 = nil
+			pqMaxBufferSizeBytes39 = nil
 		}
-		var pqControls41 *shared.OutputCriblTCPPqControls
+		var pqControls40 *shared.OutputCriblTCPPqControls
 		if r.OutputCriblTCP.PqControls != nil {
-			pqControls41 = &shared.OutputCriblTCPPqControls{}
+			pqControls40 = &shared.OutputCriblTCPPqControls{}
 		}
 		templateHost8 := new(string)
 		if !r.OutputCriblTCP.TemplateHost.IsUnknown() && !r.OutputCriblTCP.TemplateHost.IsNull() {
@@ -28923,12 +28546,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templatePort8 = nil
 		}
 		outputCriblTCP = &shared.OutputCriblTCP{
-			ID:                        id52,
-			Type:                      typeVar52,
-			Pipeline:                  pipeline52,
-			SystemFields:              systemFields52,
-			Environment:               environment52,
-			Streamtags:                streamtags52,
+			ID:                        id51,
+			Type:                      typeVar51,
+			Pipeline:                  pipeline51,
+			SystemFields:              systemFields51,
+			Environment:               environment51,
+			Streamtags:                streamtags51,
 			LoadBalanced:              loadBalanced5,
 			Compression:               compression5,
 			LogFailedRequests:         logFailedRequests4,
@@ -28939,8 +28562,8 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			TokenTTLMinutes:           tokenTTLMinutes1,
 			AuthTokens:                authTokens1,
 			ExcludeFields:             excludeFields1,
-			OnBackpressure:            onBackpressure48,
-			Description:               description53,
+			OnBackpressure:            onBackpressure47,
+			Description:               description52,
 			Host:                      host11,
 			Port:                      port10,
 			ExcludeSelf:               excludeSelf6,
@@ -28948,18 +28571,18 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DNSResolvePeriodSec:       dnsResolvePeriodSec10,
 			LoadBalanceStatsPeriodSec: loadBalanceStatsPeriodSec6,
 			MaxConcurrentSenders:      maxConcurrentSenders3,
-			PqStrictOrdering:          pqStrictOrdering41,
-			PqRatePerSec:              pqRatePerSec41,
-			PqMode:                    pqMode41,
-			PqMaxBufferSize:           pqMaxBufferSize41,
-			PqMaxBackpressureSec:      pqMaxBackpressureSec41,
-			PqMaxFileSize:             pqMaxFileSize41,
-			PqMaxSize:                 pqMaxSize41,
-			PqPath:                    pqPath41,
-			PqCompress:                pqCompress41,
-			PqOnBackpressure:          pqOnBackpressure41,
-			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes41,
-			PqControls:                pqControls41,
+			PqStrictOrdering:          pqStrictOrdering39,
+			PqRatePerSec:              pqRatePerSec39,
+			PqMode:                    pqMode40,
+			PqMaxBufferSize:           pqMaxBufferSize39,
+			PqMaxBackpressureSec:      pqMaxBackpressureSec39,
+			PqMaxFileSize:             pqMaxFileSize40,
+			PqMaxSize:                 pqMaxSize40,
+			PqPath:                    pqPath40,
+			PqCompress:                pqCompress40,
+			PqOnBackpressure:          pqOnBackpressure40,
+			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes39,
+			PqControls:                pqControls40,
 			TemplateHost:              templateHost8,
 			TemplatePort:              templatePort8,
 		}
@@ -28971,32 +28594,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputCriblHTTP *shared.OutputCriblHTTP
 	if r.OutputCriblHTTP != nil {
-		id53 := new(string)
+		id52 := new(string)
 		if !r.OutputCriblHTTP.ID.IsUnknown() && !r.OutputCriblHTTP.ID.IsNull() {
-			*id53 = r.OutputCriblHTTP.ID.ValueString()
+			*id52 = r.OutputCriblHTTP.ID.ValueString()
 		} else {
-			id53 = nil
+			id52 = nil
 		}
-		typeVar53 := shared.OutputCriblHTTPType(r.OutputCriblHTTP.Type.ValueString())
-		pipeline53 := new(string)
+		typeVar52 := shared.OutputCriblHTTPType(r.OutputCriblHTTP.Type.ValueString())
+		pipeline52 := new(string)
 		if !r.OutputCriblHTTP.Pipeline.IsUnknown() && !r.OutputCriblHTTP.Pipeline.IsNull() {
-			*pipeline53 = r.OutputCriblHTTP.Pipeline.ValueString()
+			*pipeline52 = r.OutputCriblHTTP.Pipeline.ValueString()
 		} else {
-			pipeline53 = nil
+			pipeline52 = nil
 		}
-		systemFields53 := make([]string, 0, len(r.OutputCriblHTTP.SystemFields))
-		for systemFieldsIndex53 := range r.OutputCriblHTTP.SystemFields {
-			systemFields53 = append(systemFields53, r.OutputCriblHTTP.SystemFields[systemFieldsIndex53].ValueString())
+		systemFields52 := make([]string, 0, len(r.OutputCriblHTTP.SystemFields))
+		for systemFieldsIndex52 := range r.OutputCriblHTTP.SystemFields {
+			systemFields52 = append(systemFields52, r.OutputCriblHTTP.SystemFields[systemFieldsIndex52].ValueString())
 		}
-		environment53 := new(string)
+		environment52 := new(string)
 		if !r.OutputCriblHTTP.Environment.IsUnknown() && !r.OutputCriblHTTP.Environment.IsNull() {
-			*environment53 = r.OutputCriblHTTP.Environment.ValueString()
+			*environment52 = r.OutputCriblHTTP.Environment.ValueString()
 		} else {
-			environment53 = nil
+			environment52 = nil
 		}
-		streamtags53 := make([]string, 0, len(r.OutputCriblHTTP.Streamtags))
-		for streamtagsIndex53 := range r.OutputCriblHTTP.Streamtags {
-			streamtags53 = append(streamtags53, r.OutputCriblHTTP.Streamtags[streamtagsIndex53].ValueString())
+		streamtags52 := make([]string, 0, len(r.OutputCriblHTTP.Streamtags))
+		for streamtagsIndex52 := range r.OutputCriblHTTP.Streamtags {
+			streamtags52 = append(streamtags52, r.OutputCriblHTTP.Streamtags[streamtagsIndex52].ValueString())
 		}
 		loadBalanced6 := new(bool)
 		if !r.OutputCriblHTTP.LoadBalanced.IsUnknown() && !r.OutputCriblHTTP.LoadBalanced.IsNull() {
@@ -29012,11 +28635,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				disabled28 = nil
 			}
-			rejectUnauthorized48 := new(bool)
+			rejectUnauthorized47 := new(bool)
 			if !r.OutputCriblHTTP.TLS.RejectUnauthorized.IsUnknown() && !r.OutputCriblHTTP.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized48 = r.OutputCriblHTTP.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized47 = r.OutputCriblHTTP.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized48 = nil
+				rejectUnauthorized47 = nil
 			}
 			servername18 := new(string)
 			if !r.OutputCriblHTTP.TLS.Servername.IsUnknown() && !r.OutputCriblHTTP.TLS.Servername.IsNull() {
@@ -29068,7 +28691,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			tls21 = &shared.TLSSettingsClientSideTypeCaPathCertPath{
 				Disabled:           disabled28,
-				RejectUnauthorized: rejectUnauthorized48,
+				RejectUnauthorized: rejectUnauthorized47,
 				Servername:         servername18,
 				CertificateName:    certificateName19,
 				CaPath:             caPath16,
@@ -29095,67 +28718,67 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			compression6 = nil
 		}
-		concurrency26 := new(float64)
+		concurrency25 := new(float64)
 		if !r.OutputCriblHTTP.Concurrency.IsUnknown() && !r.OutputCriblHTTP.Concurrency.IsNull() {
-			*concurrency26 = r.OutputCriblHTTP.Concurrency.ValueFloat64()
+			*concurrency25 = r.OutputCriblHTTP.Concurrency.ValueFloat64()
 		} else {
-			concurrency26 = nil
+			concurrency25 = nil
 		}
-		maxPayloadSizeKb25 := new(float64)
+		maxPayloadSizeKb24 := new(float64)
 		if !r.OutputCriblHTTP.MaxPayloadSizeKB.IsUnknown() && !r.OutputCriblHTTP.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb25 = r.OutputCriblHTTP.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb24 = r.OutputCriblHTTP.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb25 = nil
+			maxPayloadSizeKb24 = nil
 		}
-		maxPayloadEvents23 := new(float64)
+		maxPayloadEvents22 := new(float64)
 		if !r.OutputCriblHTTP.MaxPayloadEvents.IsUnknown() && !r.OutputCriblHTTP.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents23 = r.OutputCriblHTTP.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents22 = r.OutputCriblHTTP.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents23 = nil
+			maxPayloadEvents22 = nil
 		}
-		rejectUnauthorized49 := new(bool)
+		rejectUnauthorized48 := new(bool)
 		if !r.OutputCriblHTTP.RejectUnauthorized.IsUnknown() && !r.OutputCriblHTTP.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized49 = r.OutputCriblHTTP.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized48 = r.OutputCriblHTTP.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized49 = nil
+			rejectUnauthorized48 = nil
 		}
-		timeoutSec25 := new(float64)
+		timeoutSec24 := new(float64)
 		if !r.OutputCriblHTTP.TimeoutSec.IsUnknown() && !r.OutputCriblHTTP.TimeoutSec.IsNull() {
-			*timeoutSec25 = r.OutputCriblHTTP.TimeoutSec.ValueFloat64()
+			*timeoutSec24 = r.OutputCriblHTTP.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec25 = nil
+			timeoutSec24 = nil
 		}
-		flushPeriodSec36 := new(float64)
+		flushPeriodSec35 := new(float64)
 		if !r.OutputCriblHTTP.FlushPeriodSec.IsUnknown() && !r.OutputCriblHTTP.FlushPeriodSec.IsNull() {
-			*flushPeriodSec36 = r.OutputCriblHTTP.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec35 = r.OutputCriblHTTP.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec36 = nil
+			flushPeriodSec35 = nil
 		}
-		extraHTTPHeaders23 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCriblHTTP.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex23 := range r.OutputCriblHTTP.ExtraHTTPHeaders {
-			name41 := new(string)
-			if !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsUnknown() && !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsNull() {
-				*name41 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.ValueString()
+		extraHTTPHeaders22 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCriblHTTP.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex22 := range r.OutputCriblHTTP.ExtraHTTPHeaders {
+			name39 := new(string)
+			if !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsUnknown() && !r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.IsNull() {
+				*name39 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Name.ValueString()
 			} else {
-				name41 = nil
+				name39 = nil
 			}
-			var value53 string
-			value53 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Value.ValueString()
+			var value51 string
+			value51 = r.OutputCriblHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex22].Value.ValueString()
 
-			extraHTTPHeaders23 = append(extraHTTPHeaders23, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name41,
-				Value: value53,
+			extraHTTPHeaders22 = append(extraHTTPHeaders22, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name39,
+				Value: value51,
 			})
 		}
-		failedRequestLoggingMode23 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode22 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputCriblHTTP.FailedRequestLoggingMode.IsUnknown() && !r.OutputCriblHTTP.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode23 = shared.FailedRequestLoggingModeOptions(r.OutputCriblHTTP.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode22 = shared.FailedRequestLoggingModeOptions(r.OutputCriblHTTP.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode23 = nil
+			failedRequestLoggingMode22 = nil
 		}
-		safeHeaders23 := make([]string, 0, len(r.OutputCriblHTTP.SafeHeaders))
-		for safeHeadersIndex23 := range r.OutputCriblHTTP.SafeHeaders {
-			safeHeaders23 = append(safeHeaders23, r.OutputCriblHTTP.SafeHeaders[safeHeadersIndex23].ValueString())
+		safeHeaders22 := make([]string, 0, len(r.OutputCriblHTTP.SafeHeaders))
+		for safeHeadersIndex22 := range r.OutputCriblHTTP.SafeHeaders {
+			safeHeaders22 = append(safeHeaders22, r.OutputCriblHTTP.SafeHeaders[safeHeadersIndex22].ValueString())
 		}
 		throttleRatePerSec8 := new(string)
 		if !r.OutputCriblHTTP.ThrottleRatePerSec.IsUnknown() && !r.OutputCriblHTTP.ThrottleRatePerSec.IsNull() {
@@ -29163,71 +28786,71 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			throttleRatePerSec8 = nil
 		}
-		responseRetrySettings24 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCriblHTTP.ResponseRetrySettings))
-		for responseRetrySettingsIndex24 := range r.OutputCriblHTTP.ResponseRetrySettings {
-			var httpStatus24 float64
-			httpStatus24 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].HTTPStatus.ValueFloat64()
+		responseRetrySettings23 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCriblHTTP.ResponseRetrySettings))
+		for responseRetrySettingsIndex23 := range r.OutputCriblHTTP.ResponseRetrySettings {
+			var httpStatus23 float64
+			httpStatus23 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].HTTPStatus.ValueFloat64()
 
-			initialBackoff52 := new(float64)
-			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsNull() {
-				*initialBackoff52 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.ValueFloat64()
+			initialBackoff50 := new(float64)
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.IsNull() {
+				*initialBackoff50 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff52 = nil
+				initialBackoff50 = nil
 			}
-			backoffRate52 := new(float64)
-			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsNull() {
-				*backoffRate52 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.ValueFloat64()
+			backoffRate50 := new(float64)
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.IsNull() {
+				*backoffRate50 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate52 = nil
+				backoffRate50 = nil
 			}
-			maxBackoff48 := new(float64)
-			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsNull() {
-				*maxBackoff48 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.ValueFloat64()
+			maxBackoff46 := new(float64)
+			if !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsUnknown() && !r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.IsNull() {
+				*maxBackoff46 = r.OutputCriblHTTP.ResponseRetrySettings[responseRetrySettingsIndex23].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff48 = nil
+				maxBackoff46 = nil
 			}
-			responseRetrySettings24 = append(responseRetrySettings24, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus24,
-				InitialBackoff: initialBackoff52,
-				BackoffRate:    backoffRate52,
-				MaxBackoff:     maxBackoff48,
+			responseRetrySettings23 = append(responseRetrySettings23, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus23,
+				InitialBackoff: initialBackoff50,
+				BackoffRate:    backoffRate50,
+				MaxBackoff:     maxBackoff46,
 			})
 		}
-		var timeoutRetrySettings24 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings23 *shared.TimeoutRetrySettingsType
 		if r.OutputCriblHTTP.TimeoutRetrySettings != nil {
-			var timeoutRetry24 bool
-			timeoutRetry24 = r.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry23 bool
+			timeoutRetry23 = r.OutputCriblHTTP.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff53 := new(float64)
+			initialBackoff51 := new(float64)
 			if !r.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff53 = r.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff51 = r.OutputCriblHTTP.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff53 = nil
+				initialBackoff51 = nil
 			}
-			backoffRate53 := new(float64)
+			backoffRate51 := new(float64)
 			if !r.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate53 = r.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate51 = r.OutputCriblHTTP.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate53 = nil
+				backoffRate51 = nil
 			}
-			maxBackoff49 := new(float64)
+			maxBackoff47 := new(float64)
 			if !r.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff49 = r.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff47 = r.OutputCriblHTTP.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff49 = nil
+				maxBackoff47 = nil
 			}
-			timeoutRetrySettings24 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry24,
-				InitialBackoff: initialBackoff53,
-				BackoffRate:    backoffRate53,
-				MaxBackoff:     maxBackoff49,
+			timeoutRetrySettings23 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry23,
+				InitialBackoff: initialBackoff51,
+				BackoffRate:    backoffRate51,
+				MaxBackoff:     maxBackoff47,
 			}
 		}
-		responseHonorRetryAfterHeader24 := new(bool)
+		responseHonorRetryAfterHeader23 := new(bool)
 		if !r.OutputCriblHTTP.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputCriblHTTP.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader24 = r.OutputCriblHTTP.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader23 = r.OutputCriblHTTP.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader24 = nil
+			responseHonorRetryAfterHeader23 = nil
 		}
 		authTokens2 := make([]shared.ItemsTypeAuthTokensTokenSecret, 0, len(r.OutputCriblHTTP.AuthTokens))
 		for authTokensIndex2 := range r.OutputCriblHTTP.AuthTokens {
@@ -29240,29 +28863,29 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				enabled8 = nil
 			}
-			description54 := new(string)
+			description53 := new(string)
 			if !r.OutputCriblHTTP.AuthTokens[authTokensIndex2].Description.IsUnknown() && !r.OutputCriblHTTP.AuthTokens[authTokensIndex2].Description.IsNull() {
-				*description54 = r.OutputCriblHTTP.AuthTokens[authTokensIndex2].Description.ValueString()
+				*description53 = r.OutputCriblHTTP.AuthTokens[authTokensIndex2].Description.ValueString()
 			} else {
-				description54 = nil
+				description53 = nil
 			}
 			authTokens2 = append(authTokens2, shared.ItemsTypeAuthTokensTokenSecret{
 				TokenSecret: tokenSecret2,
 				Enabled:     enabled8,
-				Description: description54,
+				Description: description53,
 			})
 		}
-		onBackpressure49 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure48 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputCriblHTTP.OnBackpressure.IsUnknown() && !r.OutputCriblHTTP.OnBackpressure.IsNull() {
-			*onBackpressure49 = shared.BackpressureBehaviorOptions(r.OutputCriblHTTP.OnBackpressure.ValueString())
+			*onBackpressure48 = shared.BackpressureBehaviorOptions(r.OutputCriblHTTP.OnBackpressure.ValueString())
 		} else {
-			onBackpressure49 = nil
+			onBackpressure48 = nil
 		}
-		description55 := new(string)
+		description54 := new(string)
 		if !r.OutputCriblHTTP.Description.IsUnknown() && !r.OutputCriblHTTP.Description.IsNull() {
-			*description55 = r.OutputCriblHTTP.Description.ValueString()
+			*description54 = r.OutputCriblHTTP.Description.ValueString()
 		} else {
-			description55 = nil
+			description54 = nil
 		}
 		url12 := new(string)
 		if !r.OutputCriblHTTP.URL.IsUnknown() && !r.OutputCriblHTTP.URL.IsNull() {
@@ -29270,11 +28893,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			url12 = nil
 		}
-		useRoundRobinDns22 := new(bool)
+		useRoundRobinDns21 := new(bool)
 		if !r.OutputCriblHTTP.UseRoundRobinDNS.IsUnknown() && !r.OutputCriblHTTP.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns22 = r.OutputCriblHTTP.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns21 = r.OutputCriblHTTP.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns22 = nil
+			useRoundRobinDns21 = nil
 		}
 		excludeSelf7 := new(bool)
 		if !r.OutputCriblHTTP.ExcludeSelf.IsUnknown() && !r.OutputCriblHTTP.ExcludeSelf.IsNull() {
@@ -29317,75 +28940,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			loadBalanceStatsPeriodSec7 = nil
 		}
-		pqStrictOrdering42 := new(bool)
+		pqStrictOrdering40 := new(bool)
 		if !r.OutputCriblHTTP.PqStrictOrdering.IsUnknown() && !r.OutputCriblHTTP.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering42 = r.OutputCriblHTTP.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering40 = r.OutputCriblHTTP.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering42 = nil
+			pqStrictOrdering40 = nil
 		}
-		pqRatePerSec42 := new(float64)
+		pqRatePerSec40 := new(float64)
 		if !r.OutputCriblHTTP.PqRatePerSec.IsUnknown() && !r.OutputCriblHTTP.PqRatePerSec.IsNull() {
-			*pqRatePerSec42 = r.OutputCriblHTTP.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec40 = r.OutputCriblHTTP.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec42 = nil
+			pqRatePerSec40 = nil
 		}
-		pqMode42 := new(shared.ModeOptions)
+		pqMode41 := new(shared.ModeOptions)
 		if !r.OutputCriblHTTP.PqMode.IsUnknown() && !r.OutputCriblHTTP.PqMode.IsNull() {
-			*pqMode42 = shared.ModeOptions(r.OutputCriblHTTP.PqMode.ValueString())
+			*pqMode41 = shared.ModeOptions(r.OutputCriblHTTP.PqMode.ValueString())
 		} else {
-			pqMode42 = nil
+			pqMode41 = nil
 		}
-		pqMaxBufferSize42 := new(float64)
+		pqMaxBufferSize40 := new(float64)
 		if !r.OutputCriblHTTP.PqMaxBufferSize.IsUnknown() && !r.OutputCriblHTTP.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize42 = r.OutputCriblHTTP.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize40 = r.OutputCriblHTTP.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize42 = nil
+			pqMaxBufferSize40 = nil
 		}
-		pqMaxBackpressureSec42 := new(float64)
+		pqMaxBackpressureSec40 := new(float64)
 		if !r.OutputCriblHTTP.PqMaxBackpressureSec.IsUnknown() && !r.OutputCriblHTTP.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec42 = r.OutputCriblHTTP.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec40 = r.OutputCriblHTTP.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec42 = nil
+			pqMaxBackpressureSec40 = nil
 		}
-		pqMaxFileSize42 := new(string)
+		pqMaxFileSize41 := new(string)
 		if !r.OutputCriblHTTP.PqMaxFileSize.IsUnknown() && !r.OutputCriblHTTP.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize42 = r.OutputCriblHTTP.PqMaxFileSize.ValueString()
+			*pqMaxFileSize41 = r.OutputCriblHTTP.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize42 = nil
+			pqMaxFileSize41 = nil
 		}
-		pqMaxSize42 := new(string)
+		pqMaxSize41 := new(string)
 		if !r.OutputCriblHTTP.PqMaxSize.IsUnknown() && !r.OutputCriblHTTP.PqMaxSize.IsNull() {
-			*pqMaxSize42 = r.OutputCriblHTTP.PqMaxSize.ValueString()
+			*pqMaxSize41 = r.OutputCriblHTTP.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize42 = nil
+			pqMaxSize41 = nil
 		}
-		pqPath42 := new(string)
+		pqPath41 := new(string)
 		if !r.OutputCriblHTTP.PqPath.IsUnknown() && !r.OutputCriblHTTP.PqPath.IsNull() {
-			*pqPath42 = r.OutputCriblHTTP.PqPath.ValueString()
+			*pqPath41 = r.OutputCriblHTTP.PqPath.ValueString()
 		} else {
-			pqPath42 = nil
+			pqPath41 = nil
 		}
-		pqCompress42 := new(shared.CompressionOptionsPq)
+		pqCompress41 := new(shared.CompressionOptionsPq)
 		if !r.OutputCriblHTTP.PqCompress.IsUnknown() && !r.OutputCriblHTTP.PqCompress.IsNull() {
-			*pqCompress42 = shared.CompressionOptionsPq(r.OutputCriblHTTP.PqCompress.ValueString())
+			*pqCompress41 = shared.CompressionOptionsPq(r.OutputCriblHTTP.PqCompress.ValueString())
 		} else {
-			pqCompress42 = nil
+			pqCompress41 = nil
 		}
-		pqOnBackpressure42 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure41 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputCriblHTTP.PqOnBackpressure.IsUnknown() && !r.OutputCriblHTTP.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure42 = shared.QueueFullBehaviorOptions(r.OutputCriblHTTP.PqOnBackpressure.ValueString())
+			*pqOnBackpressure41 = shared.QueueFullBehaviorOptions(r.OutputCriblHTTP.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure42 = nil
+			pqOnBackpressure41 = nil
 		}
-		pqMaxBufferSizeBytes42 := new(string)
+		pqMaxBufferSizeBytes40 := new(string)
 		if !r.OutputCriblHTTP.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputCriblHTTP.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes42 = r.OutputCriblHTTP.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes40 = r.OutputCriblHTTP.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes42 = nil
+			pqMaxBufferSizeBytes40 = nil
 		}
-		var pqControls42 *shared.OutputCriblHTTPPqControls
+		var pqControls41 *shared.OutputCriblHTTPPqControls
 		if r.OutputCriblHTTP.PqControls != nil {
-			pqControls42 = &shared.OutputCriblHTTPPqControls{}
+			pqControls41 = &shared.OutputCriblHTTPPqControls{}
 		}
 		templateUrl11 := new(string)
 		if !r.OutputCriblHTTP.TemplateURL.IsUnknown() && !r.OutputCriblHTTP.TemplateURL.IsNull() {
@@ -29394,51 +29017,51 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateUrl11 = nil
 		}
 		outputCriblHTTP = &shared.OutputCriblHTTP{
-			ID:                            id53,
-			Type:                          typeVar53,
-			Pipeline:                      pipeline53,
-			SystemFields:                  systemFields53,
-			Environment:                   environment53,
-			Streamtags:                    streamtags53,
+			ID:                            id52,
+			Type:                          typeVar52,
+			Pipeline:                      pipeline52,
+			SystemFields:                  systemFields52,
+			Environment:                   environment52,
+			Streamtags:                    streamtags52,
 			LoadBalanced:                  loadBalanced6,
 			TLS:                           tls21,
 			TokenTTLMinutes:               tokenTTLMinutes2,
 			ExcludeFields:                 excludeFields2,
 			Compression:                   compression6,
-			Concurrency:                   concurrency26,
-			MaxPayloadSizeKB:              maxPayloadSizeKb25,
-			MaxPayloadEvents:              maxPayloadEvents23,
-			RejectUnauthorized:            rejectUnauthorized49,
-			TimeoutSec:                    timeoutSec25,
-			FlushPeriodSec:                flushPeriodSec36,
-			ExtraHTTPHeaders:              extraHTTPHeaders23,
-			FailedRequestLoggingMode:      failedRequestLoggingMode23,
-			SafeHeaders:                   safeHeaders23,
+			Concurrency:                   concurrency25,
+			MaxPayloadSizeKB:              maxPayloadSizeKb24,
+			MaxPayloadEvents:              maxPayloadEvents22,
+			RejectUnauthorized:            rejectUnauthorized48,
+			TimeoutSec:                    timeoutSec24,
+			FlushPeriodSec:                flushPeriodSec35,
+			ExtraHTTPHeaders:              extraHTTPHeaders22,
+			FailedRequestLoggingMode:      failedRequestLoggingMode22,
+			SafeHeaders:                   safeHeaders22,
 			ThrottleRatePerSec:            throttleRatePerSec8,
-			ResponseRetrySettings:         responseRetrySettings24,
-			TimeoutRetrySettings:          timeoutRetrySettings24,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader24,
+			ResponseRetrySettings:         responseRetrySettings23,
+			TimeoutRetrySettings:          timeoutRetrySettings23,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader23,
 			AuthTokens:                    authTokens2,
-			OnBackpressure:                onBackpressure49,
-			Description:                   description55,
+			OnBackpressure:                onBackpressure48,
+			Description:                   description54,
 			URL:                           url12,
-			UseRoundRobinDNS:              useRoundRobinDns22,
+			UseRoundRobinDNS:              useRoundRobinDns21,
 			ExcludeSelf:                   excludeSelf7,
 			Urls:                          urls3,
 			DNSResolvePeriodSec:           dnsResolvePeriodSec11,
 			LoadBalanceStatsPeriodSec:     loadBalanceStatsPeriodSec7,
-			PqStrictOrdering:              pqStrictOrdering42,
-			PqRatePerSec:                  pqRatePerSec42,
-			PqMode:                        pqMode42,
-			PqMaxBufferSize:               pqMaxBufferSize42,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec42,
-			PqMaxFileSize:                 pqMaxFileSize42,
-			PqMaxSize:                     pqMaxSize42,
-			PqPath:                        pqPath42,
-			PqCompress:                    pqCompress42,
-			PqOnBackpressure:              pqOnBackpressure42,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes42,
-			PqControls:                    pqControls42,
+			PqStrictOrdering:              pqStrictOrdering40,
+			PqRatePerSec:                  pqRatePerSec40,
+			PqMode:                        pqMode41,
+			PqMaxBufferSize:               pqMaxBufferSize40,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec40,
+			PqMaxFileSize:                 pqMaxFileSize41,
+			PqMaxSize:                     pqMaxSize41,
+			PqPath:                        pqPath41,
+			PqCompress:                    pqCompress41,
+			PqOnBackpressure:              pqOnBackpressure41,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes40,
+			PqControls:                    pqControls41,
 			TemplateURL:                   templateUrl11,
 		}
 	}
@@ -29449,32 +29072,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputCriblSearchEngine *shared.OutputCriblSearchEngine
 	if r.OutputCriblSearchEngine != nil {
-		id54 := new(string)
+		id53 := new(string)
 		if !r.OutputCriblSearchEngine.ID.IsUnknown() && !r.OutputCriblSearchEngine.ID.IsNull() {
-			*id54 = r.OutputCriblSearchEngine.ID.ValueString()
+			*id53 = r.OutputCriblSearchEngine.ID.ValueString()
 		} else {
-			id54 = nil
+			id53 = nil
 		}
-		typeVar54 := shared.OutputCriblSearchEngineType(r.OutputCriblSearchEngine.Type.ValueString())
-		pipeline54 := new(string)
+		typeVar53 := shared.OutputCriblSearchEngineType(r.OutputCriblSearchEngine.Type.ValueString())
+		pipeline53 := new(string)
 		if !r.OutputCriblSearchEngine.Pipeline.IsUnknown() && !r.OutputCriblSearchEngine.Pipeline.IsNull() {
-			*pipeline54 = r.OutputCriblSearchEngine.Pipeline.ValueString()
+			*pipeline53 = r.OutputCriblSearchEngine.Pipeline.ValueString()
 		} else {
-			pipeline54 = nil
+			pipeline53 = nil
 		}
-		systemFields54 := make([]string, 0, len(r.OutputCriblSearchEngine.SystemFields))
-		for systemFieldsIndex54 := range r.OutputCriblSearchEngine.SystemFields {
-			systemFields54 = append(systemFields54, r.OutputCriblSearchEngine.SystemFields[systemFieldsIndex54].ValueString())
+		systemFields53 := make([]string, 0, len(r.OutputCriblSearchEngine.SystemFields))
+		for systemFieldsIndex53 := range r.OutputCriblSearchEngine.SystemFields {
+			systemFields53 = append(systemFields53, r.OutputCriblSearchEngine.SystemFields[systemFieldsIndex53].ValueString())
 		}
-		environment54 := new(string)
+		environment53 := new(string)
 		if !r.OutputCriblSearchEngine.Environment.IsUnknown() && !r.OutputCriblSearchEngine.Environment.IsNull() {
-			*environment54 = r.OutputCriblSearchEngine.Environment.ValueString()
+			*environment53 = r.OutputCriblSearchEngine.Environment.ValueString()
 		} else {
-			environment54 = nil
+			environment53 = nil
 		}
-		streamtags54 := make([]string, 0, len(r.OutputCriblSearchEngine.Streamtags))
-		for streamtagsIndex54 := range r.OutputCriblSearchEngine.Streamtags {
-			streamtags54 = append(streamtags54, r.OutputCriblSearchEngine.Streamtags[streamtagsIndex54].ValueString())
+		streamtags53 := make([]string, 0, len(r.OutputCriblSearchEngine.Streamtags))
+		for streamtagsIndex53 := range r.OutputCriblSearchEngine.Streamtags {
+			streamtags53 = append(streamtags53, r.OutputCriblSearchEngine.Streamtags[streamtagsIndex53].ValueString())
 		}
 		loadBalanced7 := new(bool)
 		if !r.OutputCriblSearchEngine.LoadBalanced.IsUnknown() && !r.OutputCriblSearchEngine.LoadBalanced.IsNull() {
@@ -29490,11 +29113,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				disabled29 = nil
 			}
-			rejectUnauthorized50 := new(bool)
+			rejectUnauthorized49 := new(bool)
 			if !r.OutputCriblSearchEngine.TLS.RejectUnauthorized.IsUnknown() && !r.OutputCriblSearchEngine.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized50 = r.OutputCriblSearchEngine.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized49 = r.OutputCriblSearchEngine.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized50 = nil
+				rejectUnauthorized49 = nil
 			}
 			servername19 := new(string)
 			if !r.OutputCriblSearchEngine.TLS.Servername.IsUnknown() && !r.OutputCriblSearchEngine.TLS.Servername.IsNull() {
@@ -29546,7 +29169,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			tls22 = &shared.TLSSettingsClientSideTypeCaPathCertPath{
 				Disabled:           disabled29,
-				RejectUnauthorized: rejectUnauthorized50,
+				RejectUnauthorized: rejectUnauthorized49,
 				Servername:         servername19,
 				CertificateName:    certificateName20,
 				CaPath:             caPath17,
@@ -29573,67 +29196,67 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			compression7 = nil
 		}
-		concurrency27 := new(float64)
+		concurrency26 := new(float64)
 		if !r.OutputCriblSearchEngine.Concurrency.IsUnknown() && !r.OutputCriblSearchEngine.Concurrency.IsNull() {
-			*concurrency27 = r.OutputCriblSearchEngine.Concurrency.ValueFloat64()
+			*concurrency26 = r.OutputCriblSearchEngine.Concurrency.ValueFloat64()
 		} else {
-			concurrency27 = nil
+			concurrency26 = nil
 		}
-		maxPayloadSizeKb26 := new(float64)
+		maxPayloadSizeKb25 := new(float64)
 		if !r.OutputCriblSearchEngine.MaxPayloadSizeKB.IsUnknown() && !r.OutputCriblSearchEngine.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb26 = r.OutputCriblSearchEngine.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb25 = r.OutputCriblSearchEngine.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb26 = nil
+			maxPayloadSizeKb25 = nil
 		}
-		maxPayloadEvents24 := new(float64)
+		maxPayloadEvents23 := new(float64)
 		if !r.OutputCriblSearchEngine.MaxPayloadEvents.IsUnknown() && !r.OutputCriblSearchEngine.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents24 = r.OutputCriblSearchEngine.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents23 = r.OutputCriblSearchEngine.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents24 = nil
+			maxPayloadEvents23 = nil
 		}
-		rejectUnauthorized51 := new(bool)
+		rejectUnauthorized50 := new(bool)
 		if !r.OutputCriblSearchEngine.RejectUnauthorized.IsUnknown() && !r.OutputCriblSearchEngine.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized51 = r.OutputCriblSearchEngine.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized50 = r.OutputCriblSearchEngine.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized51 = nil
+			rejectUnauthorized50 = nil
 		}
-		timeoutSec26 := new(float64)
+		timeoutSec25 := new(float64)
 		if !r.OutputCriblSearchEngine.TimeoutSec.IsUnknown() && !r.OutputCriblSearchEngine.TimeoutSec.IsNull() {
-			*timeoutSec26 = r.OutputCriblSearchEngine.TimeoutSec.ValueFloat64()
+			*timeoutSec25 = r.OutputCriblSearchEngine.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec26 = nil
+			timeoutSec25 = nil
 		}
-		flushPeriodSec37 := new(float64)
+		flushPeriodSec36 := new(float64)
 		if !r.OutputCriblSearchEngine.FlushPeriodSec.IsUnknown() && !r.OutputCriblSearchEngine.FlushPeriodSec.IsNull() {
-			*flushPeriodSec37 = r.OutputCriblSearchEngine.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec36 = r.OutputCriblSearchEngine.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec37 = nil
+			flushPeriodSec36 = nil
 		}
-		extraHTTPHeaders24 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCriblSearchEngine.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex24 := range r.OutputCriblSearchEngine.ExtraHTTPHeaders {
-			name42 := new(string)
-			if !r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsUnknown() && !r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsNull() {
-				*name42 = r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.ValueString()
+		extraHTTPHeaders23 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCriblSearchEngine.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex23 := range r.OutputCriblSearchEngine.ExtraHTTPHeaders {
+			name40 := new(string)
+			if !r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsUnknown() && !r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.IsNull() {
+				*name40 = r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Name.ValueString()
 			} else {
-				name42 = nil
+				name40 = nil
 			}
-			var value54 string
-			value54 = r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Value.ValueString()
+			var value52 string
+			value52 = r.OutputCriblSearchEngine.ExtraHTTPHeaders[extraHTTPHeadersIndex23].Value.ValueString()
 
-			extraHTTPHeaders24 = append(extraHTTPHeaders24, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name42,
-				Value: value54,
+			extraHTTPHeaders23 = append(extraHTTPHeaders23, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name40,
+				Value: value52,
 			})
 		}
-		failedRequestLoggingMode24 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode23 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputCriblSearchEngine.FailedRequestLoggingMode.IsUnknown() && !r.OutputCriblSearchEngine.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode24 = shared.FailedRequestLoggingModeOptions(r.OutputCriblSearchEngine.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode23 = shared.FailedRequestLoggingModeOptions(r.OutputCriblSearchEngine.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode24 = nil
+			failedRequestLoggingMode23 = nil
 		}
-		safeHeaders24 := make([]string, 0, len(r.OutputCriblSearchEngine.SafeHeaders))
-		for safeHeadersIndex24 := range r.OutputCriblSearchEngine.SafeHeaders {
-			safeHeaders24 = append(safeHeaders24, r.OutputCriblSearchEngine.SafeHeaders[safeHeadersIndex24].ValueString())
+		safeHeaders23 := make([]string, 0, len(r.OutputCriblSearchEngine.SafeHeaders))
+		for safeHeadersIndex23 := range r.OutputCriblSearchEngine.SafeHeaders {
+			safeHeaders23 = append(safeHeaders23, r.OutputCriblSearchEngine.SafeHeaders[safeHeadersIndex23].ValueString())
 		}
 		throttleRatePerSec9 := new(string)
 		if !r.OutputCriblSearchEngine.ThrottleRatePerSec.IsUnknown() && !r.OutputCriblSearchEngine.ThrottleRatePerSec.IsNull() {
@@ -29641,71 +29264,71 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			throttleRatePerSec9 = nil
 		}
-		responseRetrySettings25 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCriblSearchEngine.ResponseRetrySettings))
-		for responseRetrySettingsIndex25 := range r.OutputCriblSearchEngine.ResponseRetrySettings {
-			var httpStatus25 float64
-			httpStatus25 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].HTTPStatus.ValueFloat64()
+		responseRetrySettings24 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCriblSearchEngine.ResponseRetrySettings))
+		for responseRetrySettingsIndex24 := range r.OutputCriblSearchEngine.ResponseRetrySettings {
+			var httpStatus24 float64
+			httpStatus24 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].HTTPStatus.ValueFloat64()
 
-			initialBackoff54 := new(float64)
-			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsNull() {
-				*initialBackoff54 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.ValueFloat64()
+			initialBackoff52 := new(float64)
+			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.IsNull() {
+				*initialBackoff52 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff54 = nil
+				initialBackoff52 = nil
 			}
-			backoffRate54 := new(float64)
-			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsNull() {
-				*backoffRate54 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.ValueFloat64()
+			backoffRate52 := new(float64)
+			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.IsNull() {
+				*backoffRate52 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate54 = nil
+				backoffRate52 = nil
 			}
-			maxBackoff50 := new(float64)
-			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsNull() {
-				*maxBackoff50 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.ValueFloat64()
+			maxBackoff48 := new(float64)
+			if !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsUnknown() && !r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.IsNull() {
+				*maxBackoff48 = r.OutputCriblSearchEngine.ResponseRetrySettings[responseRetrySettingsIndex24].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff50 = nil
+				maxBackoff48 = nil
 			}
-			responseRetrySettings25 = append(responseRetrySettings25, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus25,
-				InitialBackoff: initialBackoff54,
-				BackoffRate:    backoffRate54,
-				MaxBackoff:     maxBackoff50,
+			responseRetrySettings24 = append(responseRetrySettings24, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus24,
+				InitialBackoff: initialBackoff52,
+				BackoffRate:    backoffRate52,
+				MaxBackoff:     maxBackoff48,
 			})
 		}
-		var timeoutRetrySettings25 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings24 *shared.TimeoutRetrySettingsType
 		if r.OutputCriblSearchEngine.TimeoutRetrySettings != nil {
-			var timeoutRetry25 bool
-			timeoutRetry25 = r.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry24 bool
+			timeoutRetry24 = r.OutputCriblSearchEngine.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff55 := new(float64)
+			initialBackoff53 := new(float64)
 			if !r.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff55 = r.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff53 = r.OutputCriblSearchEngine.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff55 = nil
+				initialBackoff53 = nil
 			}
-			backoffRate55 := new(float64)
+			backoffRate53 := new(float64)
 			if !r.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate55 = r.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate53 = r.OutputCriblSearchEngine.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate55 = nil
+				backoffRate53 = nil
 			}
-			maxBackoff51 := new(float64)
+			maxBackoff49 := new(float64)
 			if !r.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff51 = r.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff49 = r.OutputCriblSearchEngine.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff51 = nil
+				maxBackoff49 = nil
 			}
-			timeoutRetrySettings25 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry25,
-				InitialBackoff: initialBackoff55,
-				BackoffRate:    backoffRate55,
-				MaxBackoff:     maxBackoff51,
+			timeoutRetrySettings24 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry24,
+				InitialBackoff: initialBackoff53,
+				BackoffRate:    backoffRate53,
+				MaxBackoff:     maxBackoff49,
 			}
 		}
-		responseHonorRetryAfterHeader25 := new(bool)
+		responseHonorRetryAfterHeader24 := new(bool)
 		if !r.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader25 = r.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader24 = r.OutputCriblSearchEngine.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader25 = nil
+			responseHonorRetryAfterHeader24 = nil
 		}
 		authTokens3 := make([]shared.ItemsTypeAuthTokensTokenSecret, 0, len(r.OutputCriblSearchEngine.AuthTokens))
 		for authTokensIndex3 := range r.OutputCriblSearchEngine.AuthTokens {
@@ -29718,35 +29341,35 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				enabled9 = nil
 			}
-			description56 := new(string)
+			description55 := new(string)
 			if !r.OutputCriblSearchEngine.AuthTokens[authTokensIndex3].Description.IsUnknown() && !r.OutputCriblSearchEngine.AuthTokens[authTokensIndex3].Description.IsNull() {
-				*description56 = r.OutputCriblSearchEngine.AuthTokens[authTokensIndex3].Description.ValueString()
+				*description55 = r.OutputCriblSearchEngine.AuthTokens[authTokensIndex3].Description.ValueString()
 			} else {
-				description56 = nil
+				description55 = nil
 			}
 			authTokens3 = append(authTokens3, shared.ItemsTypeAuthTokensTokenSecret{
 				TokenSecret: tokenSecret3,
 				Enabled:     enabled9,
-				Description: description56,
+				Description: description55,
 			})
 		}
-		onBackpressure50 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure49 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputCriblSearchEngine.OnBackpressure.IsUnknown() && !r.OutputCriblSearchEngine.OnBackpressure.IsNull() {
-			*onBackpressure50 = shared.BackpressureBehaviorOptions(r.OutputCriblSearchEngine.OnBackpressure.ValueString())
+			*onBackpressure49 = shared.BackpressureBehaviorOptions(r.OutputCriblSearchEngine.OnBackpressure.ValueString())
 		} else {
-			onBackpressure50 = nil
+			onBackpressure49 = nil
 		}
-		useRoundRobinDns23 := new(bool)
+		useRoundRobinDns22 := new(bool)
 		if !r.OutputCriblSearchEngine.UseRoundRobinDNS.IsUnknown() && !r.OutputCriblSearchEngine.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns23 = r.OutputCriblSearchEngine.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns22 = r.OutputCriblSearchEngine.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns23 = nil
+			useRoundRobinDns22 = nil
 		}
-		description57 := new(string)
+		description56 := new(string)
 		if !r.OutputCriblSearchEngine.Description.IsUnknown() && !r.OutputCriblSearchEngine.Description.IsNull() {
-			*description57 = r.OutputCriblSearchEngine.Description.ValueString()
+			*description56 = r.OutputCriblSearchEngine.Description.ValueString()
 		} else {
-			description57 = nil
+			description56 = nil
 		}
 		url14 := new(string)
 		if !r.OutputCriblSearchEngine.URL.IsUnknown() && !r.OutputCriblSearchEngine.URL.IsNull() {
@@ -29795,75 +29418,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			loadBalanceStatsPeriodSec8 = nil
 		}
-		pqStrictOrdering43 := new(bool)
+		pqStrictOrdering41 := new(bool)
 		if !r.OutputCriblSearchEngine.PqStrictOrdering.IsUnknown() && !r.OutputCriblSearchEngine.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering43 = r.OutputCriblSearchEngine.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering41 = r.OutputCriblSearchEngine.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering43 = nil
+			pqStrictOrdering41 = nil
 		}
-		pqRatePerSec43 := new(float64)
+		pqRatePerSec41 := new(float64)
 		if !r.OutputCriblSearchEngine.PqRatePerSec.IsUnknown() && !r.OutputCriblSearchEngine.PqRatePerSec.IsNull() {
-			*pqRatePerSec43 = r.OutputCriblSearchEngine.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec41 = r.OutputCriblSearchEngine.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec43 = nil
+			pqRatePerSec41 = nil
 		}
-		pqMode43 := new(shared.ModeOptions)
+		pqMode42 := new(shared.ModeOptions)
 		if !r.OutputCriblSearchEngine.PqMode.IsUnknown() && !r.OutputCriblSearchEngine.PqMode.IsNull() {
-			*pqMode43 = shared.ModeOptions(r.OutputCriblSearchEngine.PqMode.ValueString())
+			*pqMode42 = shared.ModeOptions(r.OutputCriblSearchEngine.PqMode.ValueString())
 		} else {
-			pqMode43 = nil
+			pqMode42 = nil
 		}
-		pqMaxBufferSize43 := new(float64)
+		pqMaxBufferSize41 := new(float64)
 		if !r.OutputCriblSearchEngine.PqMaxBufferSize.IsUnknown() && !r.OutputCriblSearchEngine.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize43 = r.OutputCriblSearchEngine.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize41 = r.OutputCriblSearchEngine.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize43 = nil
+			pqMaxBufferSize41 = nil
 		}
-		pqMaxBackpressureSec43 := new(float64)
+		pqMaxBackpressureSec41 := new(float64)
 		if !r.OutputCriblSearchEngine.PqMaxBackpressureSec.IsUnknown() && !r.OutputCriblSearchEngine.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec43 = r.OutputCriblSearchEngine.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec41 = r.OutputCriblSearchEngine.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec43 = nil
+			pqMaxBackpressureSec41 = nil
 		}
-		pqMaxFileSize43 := new(string)
+		pqMaxFileSize42 := new(string)
 		if !r.OutputCriblSearchEngine.PqMaxFileSize.IsUnknown() && !r.OutputCriblSearchEngine.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize43 = r.OutputCriblSearchEngine.PqMaxFileSize.ValueString()
+			*pqMaxFileSize42 = r.OutputCriblSearchEngine.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize43 = nil
+			pqMaxFileSize42 = nil
 		}
-		pqMaxSize43 := new(string)
+		pqMaxSize42 := new(string)
 		if !r.OutputCriblSearchEngine.PqMaxSize.IsUnknown() && !r.OutputCriblSearchEngine.PqMaxSize.IsNull() {
-			*pqMaxSize43 = r.OutputCriblSearchEngine.PqMaxSize.ValueString()
+			*pqMaxSize42 = r.OutputCriblSearchEngine.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize43 = nil
+			pqMaxSize42 = nil
 		}
-		pqPath43 := new(string)
+		pqPath42 := new(string)
 		if !r.OutputCriblSearchEngine.PqPath.IsUnknown() && !r.OutputCriblSearchEngine.PqPath.IsNull() {
-			*pqPath43 = r.OutputCriblSearchEngine.PqPath.ValueString()
+			*pqPath42 = r.OutputCriblSearchEngine.PqPath.ValueString()
 		} else {
-			pqPath43 = nil
+			pqPath42 = nil
 		}
-		pqCompress43 := new(shared.CompressionOptionsPq)
+		pqCompress42 := new(shared.CompressionOptionsPq)
 		if !r.OutputCriblSearchEngine.PqCompress.IsUnknown() && !r.OutputCriblSearchEngine.PqCompress.IsNull() {
-			*pqCompress43 = shared.CompressionOptionsPq(r.OutputCriblSearchEngine.PqCompress.ValueString())
+			*pqCompress42 = shared.CompressionOptionsPq(r.OutputCriblSearchEngine.PqCompress.ValueString())
 		} else {
-			pqCompress43 = nil
+			pqCompress42 = nil
 		}
-		pqOnBackpressure43 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure42 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputCriblSearchEngine.PqOnBackpressure.IsUnknown() && !r.OutputCriblSearchEngine.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure43 = shared.QueueFullBehaviorOptions(r.OutputCriblSearchEngine.PqOnBackpressure.ValueString())
+			*pqOnBackpressure42 = shared.QueueFullBehaviorOptions(r.OutputCriblSearchEngine.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure43 = nil
+			pqOnBackpressure42 = nil
 		}
-		pqMaxBufferSizeBytes43 := new(string)
+		pqMaxBufferSizeBytes41 := new(string)
 		if !r.OutputCriblSearchEngine.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputCriblSearchEngine.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes43 = r.OutputCriblSearchEngine.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes41 = r.OutputCriblSearchEngine.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes43 = nil
+			pqMaxBufferSizeBytes41 = nil
 		}
-		var pqControls43 *shared.OutputCriblSearchEnginePqControls
+		var pqControls42 *shared.OutputCriblSearchEnginePqControls
 		if r.OutputCriblSearchEngine.PqControls != nil {
-			pqControls43 = &shared.OutputCriblSearchEnginePqControls{}
+			pqControls42 = &shared.OutputCriblSearchEnginePqControls{}
 		}
 		templateUrl13 := new(string)
 		if !r.OutputCriblSearchEngine.TemplateURL.IsUnknown() && !r.OutputCriblSearchEngine.TemplateURL.IsNull() {
@@ -29872,51 +29495,51 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateUrl13 = nil
 		}
 		outputCriblSearchEngine = &shared.OutputCriblSearchEngine{
-			ID:                            id54,
-			Type:                          typeVar54,
-			Pipeline:                      pipeline54,
-			SystemFields:                  systemFields54,
-			Environment:                   environment54,
-			Streamtags:                    streamtags54,
+			ID:                            id53,
+			Type:                          typeVar53,
+			Pipeline:                      pipeline53,
+			SystemFields:                  systemFields53,
+			Environment:                   environment53,
+			Streamtags:                    streamtags53,
 			LoadBalanced:                  loadBalanced7,
 			TLS:                           tls22,
 			TokenTTLMinutes:               tokenTTLMinutes3,
 			ExcludeFields:                 excludeFields3,
 			Compression:                   compression7,
-			Concurrency:                   concurrency27,
-			MaxPayloadSizeKB:              maxPayloadSizeKb26,
-			MaxPayloadEvents:              maxPayloadEvents24,
-			RejectUnauthorized:            rejectUnauthorized51,
-			TimeoutSec:                    timeoutSec26,
-			FlushPeriodSec:                flushPeriodSec37,
-			ExtraHTTPHeaders:              extraHTTPHeaders24,
-			FailedRequestLoggingMode:      failedRequestLoggingMode24,
-			SafeHeaders:                   safeHeaders24,
+			Concurrency:                   concurrency26,
+			MaxPayloadSizeKB:              maxPayloadSizeKb25,
+			MaxPayloadEvents:              maxPayloadEvents23,
+			RejectUnauthorized:            rejectUnauthorized50,
+			TimeoutSec:                    timeoutSec25,
+			FlushPeriodSec:                flushPeriodSec36,
+			ExtraHTTPHeaders:              extraHTTPHeaders23,
+			FailedRequestLoggingMode:      failedRequestLoggingMode23,
+			SafeHeaders:                   safeHeaders23,
 			ThrottleRatePerSec:            throttleRatePerSec9,
-			ResponseRetrySettings:         responseRetrySettings25,
-			TimeoutRetrySettings:          timeoutRetrySettings25,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader25,
+			ResponseRetrySettings:         responseRetrySettings24,
+			TimeoutRetrySettings:          timeoutRetrySettings24,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader24,
 			AuthTokens:                    authTokens3,
-			OnBackpressure:                onBackpressure50,
-			UseRoundRobinDNS:              useRoundRobinDns23,
-			Description:                   description57,
+			OnBackpressure:                onBackpressure49,
+			UseRoundRobinDNS:              useRoundRobinDns22,
+			Description:                   description56,
 			URL:                           url14,
 			ExcludeSelf:                   excludeSelf8,
 			Urls:                          urls4,
 			DNSResolvePeriodSec:           dnsResolvePeriodSec12,
 			LoadBalanceStatsPeriodSec:     loadBalanceStatsPeriodSec8,
-			PqStrictOrdering:              pqStrictOrdering43,
-			PqRatePerSec:                  pqRatePerSec43,
-			PqMode:                        pqMode43,
-			PqMaxBufferSize:               pqMaxBufferSize43,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec43,
-			PqMaxFileSize:                 pqMaxFileSize43,
-			PqMaxSize:                     pqMaxSize43,
-			PqPath:                        pqPath43,
-			PqCompress:                    pqCompress43,
-			PqOnBackpressure:              pqOnBackpressure43,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes43,
-			PqControls:                    pqControls43,
+			PqStrictOrdering:              pqStrictOrdering41,
+			PqRatePerSec:                  pqRatePerSec41,
+			PqMode:                        pqMode42,
+			PqMaxBufferSize:               pqMaxBufferSize41,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec41,
+			PqMaxFileSize:                 pqMaxFileSize42,
+			PqMaxSize:                     pqMaxSize42,
+			PqPath:                        pqPath42,
+			PqCompress:                    pqCompress42,
+			PqOnBackpressure:              pqOnBackpressure42,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes41,
+			PqControls:                    pqControls42,
 			TemplateURL:                   templateUrl13,
 		}
 	}
@@ -29927,137 +29550,464 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputHumioHec *shared.OutputHumioHec
 	if r.OutputHumioHec != nil {
-		id55 := new(string)
+		id54 := new(string)
 		if !r.OutputHumioHec.ID.IsUnknown() && !r.OutputHumioHec.ID.IsNull() {
-			*id55 = r.OutputHumioHec.ID.ValueString()
+			*id54 = r.OutputHumioHec.ID.ValueString()
 		} else {
-			id55 = nil
+			id54 = nil
 		}
-		typeVar55 := shared.OutputHumioHecType(r.OutputHumioHec.Type.ValueString())
-		pipeline55 := new(string)
+		typeVar54 := shared.OutputHumioHecType(r.OutputHumioHec.Type.ValueString())
+		pipeline54 := new(string)
 		if !r.OutputHumioHec.Pipeline.IsUnknown() && !r.OutputHumioHec.Pipeline.IsNull() {
-			*pipeline55 = r.OutputHumioHec.Pipeline.ValueString()
+			*pipeline54 = r.OutputHumioHec.Pipeline.ValueString()
 		} else {
-			pipeline55 = nil
+			pipeline54 = nil
 		}
-		systemFields55 := make([]string, 0, len(r.OutputHumioHec.SystemFields))
-		for systemFieldsIndex55 := range r.OutputHumioHec.SystemFields {
-			systemFields55 = append(systemFields55, r.OutputHumioHec.SystemFields[systemFieldsIndex55].ValueString())
+		systemFields54 := make([]string, 0, len(r.OutputHumioHec.SystemFields))
+		for systemFieldsIndex54 := range r.OutputHumioHec.SystemFields {
+			systemFields54 = append(systemFields54, r.OutputHumioHec.SystemFields[systemFieldsIndex54].ValueString())
 		}
-		environment55 := new(string)
+		environment54 := new(string)
 		if !r.OutputHumioHec.Environment.IsUnknown() && !r.OutputHumioHec.Environment.IsNull() {
-			*environment55 = r.OutputHumioHec.Environment.ValueString()
+			*environment54 = r.OutputHumioHec.Environment.ValueString()
 		} else {
-			environment55 = nil
+			environment54 = nil
 		}
-		streamtags55 := make([]string, 0, len(r.OutputHumioHec.Streamtags))
-		for streamtagsIndex55 := range r.OutputHumioHec.Streamtags {
-			streamtags55 = append(streamtags55, r.OutputHumioHec.Streamtags[streamtagsIndex55].ValueString())
+		streamtags54 := make([]string, 0, len(r.OutputHumioHec.Streamtags))
+		for streamtagsIndex54 := range r.OutputHumioHec.Streamtags {
+			streamtags54 = append(streamtags54, r.OutputHumioHec.Streamtags[streamtagsIndex54].ValueString())
 		}
 		var url16 string
 		url16 = r.OutputHumioHec.URL.ValueString()
 
-		concurrency28 := new(float64)
+		concurrency27 := new(float64)
 		if !r.OutputHumioHec.Concurrency.IsUnknown() && !r.OutputHumioHec.Concurrency.IsNull() {
-			*concurrency28 = r.OutputHumioHec.Concurrency.ValueFloat64()
+			*concurrency27 = r.OutputHumioHec.Concurrency.ValueFloat64()
+		} else {
+			concurrency27 = nil
+		}
+		maxPayloadSizeKb26 := new(float64)
+		if !r.OutputHumioHec.MaxPayloadSizeKB.IsUnknown() && !r.OutputHumioHec.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb26 = r.OutputHumioHec.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb26 = nil
+		}
+		maxPayloadEvents24 := new(float64)
+		if !r.OutputHumioHec.MaxPayloadEvents.IsUnknown() && !r.OutputHumioHec.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents24 = r.OutputHumioHec.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents24 = nil
+		}
+		compress30 := new(bool)
+		if !r.OutputHumioHec.Compress.IsUnknown() && !r.OutputHumioHec.Compress.IsNull() {
+			*compress30 = r.OutputHumioHec.Compress.ValueBool()
+		} else {
+			compress30 = nil
+		}
+		rejectUnauthorized51 := new(bool)
+		if !r.OutputHumioHec.RejectUnauthorized.IsUnknown() && !r.OutputHumioHec.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized51 = r.OutputHumioHec.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized51 = nil
+		}
+		timeoutSec26 := new(float64)
+		if !r.OutputHumioHec.TimeoutSec.IsUnknown() && !r.OutputHumioHec.TimeoutSec.IsNull() {
+			*timeoutSec26 = r.OutputHumioHec.TimeoutSec.ValueFloat64()
+		} else {
+			timeoutSec26 = nil
+		}
+		flushPeriodSec37 := new(float64)
+		if !r.OutputHumioHec.FlushPeriodSec.IsUnknown() && !r.OutputHumioHec.FlushPeriodSec.IsNull() {
+			*flushPeriodSec37 = r.OutputHumioHec.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec37 = nil
+		}
+		extraHTTPHeaders24 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputHumioHec.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex24 := range r.OutputHumioHec.ExtraHTTPHeaders {
+			name41 := new(string)
+			if !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsUnknown() && !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.IsNull() {
+				*name41 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Name.ValueString()
+			} else {
+				name41 = nil
+			}
+			var value53 string
+			value53 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex24].Value.ValueString()
+
+			extraHTTPHeaders24 = append(extraHTTPHeaders24, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name41,
+				Value: value53,
+			})
+		}
+		useRoundRobinDns23 := new(bool)
+		if !r.OutputHumioHec.UseRoundRobinDNS.IsUnknown() && !r.OutputHumioHec.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns23 = r.OutputHumioHec.UseRoundRobinDNS.ValueBool()
+		} else {
+			useRoundRobinDns23 = nil
+		}
+		failedRequestLoggingMode24 := new(shared.FailedRequestLoggingModeOptions)
+		if !r.OutputHumioHec.FailedRequestLoggingMode.IsUnknown() && !r.OutputHumioHec.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode24 = shared.FailedRequestLoggingModeOptions(r.OutputHumioHec.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode24 = nil
+		}
+		safeHeaders24 := make([]string, 0, len(r.OutputHumioHec.SafeHeaders))
+		for safeHeadersIndex24 := range r.OutputHumioHec.SafeHeaders {
+			safeHeaders24 = append(safeHeaders24, r.OutputHumioHec.SafeHeaders[safeHeadersIndex24].ValueString())
+		}
+		format14 := shared.RequestFormatOptions(r.OutputHumioHec.Format.ValueString())
+		authType29 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
+		if !r.OutputHumioHec.AuthType.IsUnknown() && !r.OutputHumioHec.AuthType.IsNull() {
+			*authType29 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputHumioHec.AuthType.ValueString())
+		} else {
+			authType29 = nil
+		}
+		responseRetrySettings25 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputHumioHec.ResponseRetrySettings))
+		for responseRetrySettingsIndex25 := range r.OutputHumioHec.ResponseRetrySettings {
+			var httpStatus25 float64
+			httpStatus25 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].HTTPStatus.ValueFloat64()
+
+			initialBackoff54 := new(float64)
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.IsNull() {
+				*initialBackoff54 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff54 = nil
+			}
+			backoffRate54 := new(float64)
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.IsNull() {
+				*backoffRate54 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].BackoffRate.ValueFloat64()
+			} else {
+				backoffRate54 = nil
+			}
+			maxBackoff50 := new(float64)
+			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.IsNull() {
+				*maxBackoff50 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex25].MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff50 = nil
+			}
+			responseRetrySettings25 = append(responseRetrySettings25, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus25,
+				InitialBackoff: initialBackoff54,
+				BackoffRate:    backoffRate54,
+				MaxBackoff:     maxBackoff50,
+			})
+		}
+		var timeoutRetrySettings25 *shared.TimeoutRetrySettingsType
+		if r.OutputHumioHec.TimeoutRetrySettings != nil {
+			var timeoutRetry25 bool
+			timeoutRetry25 = r.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+
+			initialBackoff55 := new(float64)
+			if !r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff55 = r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff55 = nil
+			}
+			backoffRate55 := new(float64)
+			if !r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate55 = r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			} else {
+				backoffRate55 = nil
+			}
+			maxBackoff51 := new(float64)
+			if !r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff51 = r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff51 = nil
+			}
+			timeoutRetrySettings25 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry25,
+				InitialBackoff: initialBackoff55,
+				BackoffRate:    backoffRate55,
+				MaxBackoff:     maxBackoff51,
+			}
+		}
+		responseHonorRetryAfterHeader25 := new(bool)
+		if !r.OutputHumioHec.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputHumioHec.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader25 = r.OutputHumioHec.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader25 = nil
+		}
+		onBackpressure50 := new(shared.BackpressureBehaviorOptions)
+		if !r.OutputHumioHec.OnBackpressure.IsUnknown() && !r.OutputHumioHec.OnBackpressure.IsNull() {
+			*onBackpressure50 = shared.BackpressureBehaviorOptions(r.OutputHumioHec.OnBackpressure.ValueString())
+		} else {
+			onBackpressure50 = nil
+		}
+		description57 := new(string)
+		if !r.OutputHumioHec.Description.IsUnknown() && !r.OutputHumioHec.Description.IsNull() {
+			*description57 = r.OutputHumioHec.Description.ValueString()
+		} else {
+			description57 = nil
+		}
+		token11 := new(string)
+		if !r.OutputHumioHec.Token.IsUnknown() && !r.OutputHumioHec.Token.IsNull() {
+			*token11 = r.OutputHumioHec.Token.ValueString()
+		} else {
+			token11 = nil
+		}
+		textSecret26 := new(string)
+		if !r.OutputHumioHec.TextSecret.IsUnknown() && !r.OutputHumioHec.TextSecret.IsNull() {
+			*textSecret26 = r.OutputHumioHec.TextSecret.ValueString()
+		} else {
+			textSecret26 = nil
+		}
+		pqStrictOrdering42 := new(bool)
+		if !r.OutputHumioHec.PqStrictOrdering.IsUnknown() && !r.OutputHumioHec.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering42 = r.OutputHumioHec.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering42 = nil
+		}
+		pqRatePerSec42 := new(float64)
+		if !r.OutputHumioHec.PqRatePerSec.IsUnknown() && !r.OutputHumioHec.PqRatePerSec.IsNull() {
+			*pqRatePerSec42 = r.OutputHumioHec.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec42 = nil
+		}
+		pqMode43 := new(shared.ModeOptions)
+		if !r.OutputHumioHec.PqMode.IsUnknown() && !r.OutputHumioHec.PqMode.IsNull() {
+			*pqMode43 = shared.ModeOptions(r.OutputHumioHec.PqMode.ValueString())
+		} else {
+			pqMode43 = nil
+		}
+		pqMaxBufferSize42 := new(float64)
+		if !r.OutputHumioHec.PqMaxBufferSize.IsUnknown() && !r.OutputHumioHec.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize42 = r.OutputHumioHec.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize42 = nil
+		}
+		pqMaxBackpressureSec42 := new(float64)
+		if !r.OutputHumioHec.PqMaxBackpressureSec.IsUnknown() && !r.OutputHumioHec.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec42 = r.OutputHumioHec.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec42 = nil
+		}
+		pqMaxFileSize43 := new(string)
+		if !r.OutputHumioHec.PqMaxFileSize.IsUnknown() && !r.OutputHumioHec.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize43 = r.OutputHumioHec.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize43 = nil
+		}
+		pqMaxSize43 := new(string)
+		if !r.OutputHumioHec.PqMaxSize.IsUnknown() && !r.OutputHumioHec.PqMaxSize.IsNull() {
+			*pqMaxSize43 = r.OutputHumioHec.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize43 = nil
+		}
+		pqPath43 := new(string)
+		if !r.OutputHumioHec.PqPath.IsUnknown() && !r.OutputHumioHec.PqPath.IsNull() {
+			*pqPath43 = r.OutputHumioHec.PqPath.ValueString()
+		} else {
+			pqPath43 = nil
+		}
+		pqCompress43 := new(shared.CompressionOptionsPq)
+		if !r.OutputHumioHec.PqCompress.IsUnknown() && !r.OutputHumioHec.PqCompress.IsNull() {
+			*pqCompress43 = shared.CompressionOptionsPq(r.OutputHumioHec.PqCompress.ValueString())
+		} else {
+			pqCompress43 = nil
+		}
+		pqOnBackpressure43 := new(shared.QueueFullBehaviorOptions)
+		if !r.OutputHumioHec.PqOnBackpressure.IsUnknown() && !r.OutputHumioHec.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure43 = shared.QueueFullBehaviorOptions(r.OutputHumioHec.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure43 = nil
+		}
+		pqMaxBufferSizeBytes42 := new(string)
+		if !r.OutputHumioHec.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputHumioHec.PqMaxBufferSizeBytes.IsNull() {
+			*pqMaxBufferSizeBytes42 = r.OutputHumioHec.PqMaxBufferSizeBytes.ValueString()
+		} else {
+			pqMaxBufferSizeBytes42 = nil
+		}
+		var pqControls43 *shared.OutputHumioHecPqControls
+		if r.OutputHumioHec.PqControls != nil {
+			pqControls43 = &shared.OutputHumioHecPqControls{}
+		}
+		templateUrl14 := new(string)
+		if !r.OutputHumioHec.TemplateURL.IsUnknown() && !r.OutputHumioHec.TemplateURL.IsNull() {
+			*templateUrl14 = r.OutputHumioHec.TemplateURL.ValueString()
+		} else {
+			templateUrl14 = nil
+		}
+		outputHumioHec = &shared.OutputHumioHec{
+			ID:                            id54,
+			Type:                          typeVar54,
+			Pipeline:                      pipeline54,
+			SystemFields:                  systemFields54,
+			Environment:                   environment54,
+			Streamtags:                    streamtags54,
+			URL:                           url16,
+			Concurrency:                   concurrency27,
+			MaxPayloadSizeKB:              maxPayloadSizeKb26,
+			MaxPayloadEvents:              maxPayloadEvents24,
+			Compress:                      compress30,
+			RejectUnauthorized:            rejectUnauthorized51,
+			TimeoutSec:                    timeoutSec26,
+			FlushPeriodSec:                flushPeriodSec37,
+			ExtraHTTPHeaders:              extraHTTPHeaders24,
+			UseRoundRobinDNS:              useRoundRobinDns23,
+			FailedRequestLoggingMode:      failedRequestLoggingMode24,
+			SafeHeaders:                   safeHeaders24,
+			Format:                        format14,
+			AuthType:                      authType29,
+			ResponseRetrySettings:         responseRetrySettings25,
+			TimeoutRetrySettings:          timeoutRetrySettings25,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader25,
+			OnBackpressure:                onBackpressure50,
+			Description:                   description57,
+			Token:                         token11,
+			TextSecret:                    textSecret26,
+			PqStrictOrdering:              pqStrictOrdering42,
+			PqRatePerSec:                  pqRatePerSec42,
+			PqMode:                        pqMode43,
+			PqMaxBufferSize:               pqMaxBufferSize42,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec42,
+			PqMaxFileSize:                 pqMaxFileSize43,
+			PqMaxSize:                     pqMaxSize43,
+			PqPath:                        pqPath43,
+			PqCompress:                    pqCompress43,
+			PqOnBackpressure:              pqOnBackpressure43,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes42,
+			PqControls:                    pqControls43,
+			TemplateURL:                   templateUrl14,
+		}
+	}
+	if outputHumioHec != nil {
+		out = shared.Output{
+			OutputHumioHec: outputHumioHec,
+		}
+	}
+	var outputCrowdstrikeNextGenSiem *shared.OutputCrowdstrikeNextGenSiem
+	if r.OutputCrowdstrikeNextGenSiem != nil {
+		id55 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.ID.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ID.IsNull() {
+			*id55 = r.OutputCrowdstrikeNextGenSiem.ID.ValueString()
+		} else {
+			id55 = nil
+		}
+		typeVar55 := shared.OutputCrowdstrikeNextGenSiemType(r.OutputCrowdstrikeNextGenSiem.Type.ValueString())
+		pipeline55 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.Pipeline.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Pipeline.IsNull() {
+			*pipeline55 = r.OutputCrowdstrikeNextGenSiem.Pipeline.ValueString()
+		} else {
+			pipeline55 = nil
+		}
+		systemFields55 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SystemFields))
+		for systemFieldsIndex55 := range r.OutputCrowdstrikeNextGenSiem.SystemFields {
+			systemFields55 = append(systemFields55, r.OutputCrowdstrikeNextGenSiem.SystemFields[systemFieldsIndex55].ValueString())
+		}
+		environment55 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.Environment.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Environment.IsNull() {
+			*environment55 = r.OutputCrowdstrikeNextGenSiem.Environment.ValueString()
+		} else {
+			environment55 = nil
+		}
+		streamtags55 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.Streamtags))
+		for streamtagsIndex55 := range r.OutputCrowdstrikeNextGenSiem.Streamtags {
+			streamtags55 = append(streamtags55, r.OutputCrowdstrikeNextGenSiem.Streamtags[streamtagsIndex55].ValueString())
+		}
+		var url17 string
+		url17 = r.OutputCrowdstrikeNextGenSiem.URL.ValueString()
+
+		concurrency28 := new(float64)
+		if !r.OutputCrowdstrikeNextGenSiem.Concurrency.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Concurrency.IsNull() {
+			*concurrency28 = r.OutputCrowdstrikeNextGenSiem.Concurrency.ValueFloat64()
 		} else {
 			concurrency28 = nil
 		}
 		maxPayloadSizeKb27 := new(float64)
-		if !r.OutputHumioHec.MaxPayloadSizeKB.IsUnknown() && !r.OutputHumioHec.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb27 = r.OutputHumioHec.MaxPayloadSizeKB.ValueFloat64()
+		if !r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb27 = r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.ValueFloat64()
 		} else {
 			maxPayloadSizeKb27 = nil
 		}
 		maxPayloadEvents25 := new(float64)
-		if !r.OutputHumioHec.MaxPayloadEvents.IsUnknown() && !r.OutputHumioHec.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents25 = r.OutputHumioHec.MaxPayloadEvents.ValueFloat64()
+		if !r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents25 = r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.ValueFloat64()
 		} else {
 			maxPayloadEvents25 = nil
 		}
 		compress31 := new(bool)
-		if !r.OutputHumioHec.Compress.IsUnknown() && !r.OutputHumioHec.Compress.IsNull() {
-			*compress31 = r.OutputHumioHec.Compress.ValueBool()
+		if !r.OutputCrowdstrikeNextGenSiem.Compress.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Compress.IsNull() {
+			*compress31 = r.OutputCrowdstrikeNextGenSiem.Compress.ValueBool()
 		} else {
 			compress31 = nil
 		}
 		rejectUnauthorized52 := new(bool)
-		if !r.OutputHumioHec.RejectUnauthorized.IsUnknown() && !r.OutputHumioHec.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized52 = r.OutputHumioHec.RejectUnauthorized.ValueBool()
+		if !r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized52 = r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.ValueBool()
 		} else {
 			rejectUnauthorized52 = nil
 		}
 		timeoutSec27 := new(float64)
-		if !r.OutputHumioHec.TimeoutSec.IsUnknown() && !r.OutputHumioHec.TimeoutSec.IsNull() {
-			*timeoutSec27 = r.OutputHumioHec.TimeoutSec.ValueFloat64()
+		if !r.OutputCrowdstrikeNextGenSiem.TimeoutSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutSec.IsNull() {
+			*timeoutSec27 = r.OutputCrowdstrikeNextGenSiem.TimeoutSec.ValueFloat64()
 		} else {
 			timeoutSec27 = nil
 		}
 		flushPeriodSec38 := new(float64)
-		if !r.OutputHumioHec.FlushPeriodSec.IsUnknown() && !r.OutputHumioHec.FlushPeriodSec.IsNull() {
-			*flushPeriodSec38 = r.OutputHumioHec.FlushPeriodSec.ValueFloat64()
+		if !r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.IsNull() {
+			*flushPeriodSec38 = r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.ValueFloat64()
 		} else {
 			flushPeriodSec38 = nil
 		}
-		extraHTTPHeaders25 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputHumioHec.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex25 := range r.OutputHumioHec.ExtraHTTPHeaders {
-			name43 := new(string)
-			if !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsUnknown() && !r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsNull() {
-				*name43 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.ValueString()
+		extraHTTPHeaders25 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex25 := range r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
+			name42 := new(string)
+			if !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.IsNull() {
+				*name42 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Name.ValueString()
 			} else {
-				name43 = nil
+				name42 = nil
 			}
-			var value55 string
-			value55 = r.OutputHumioHec.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Value.ValueString()
+			var value54 string
+			value54 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex25].Value.ValueString()
 
 			extraHTTPHeaders25 = append(extraHTTPHeaders25, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name43,
-				Value: value55,
+				Name:  name42,
+				Value: value54,
 			})
 		}
 		useRoundRobinDns24 := new(bool)
-		if !r.OutputHumioHec.UseRoundRobinDNS.IsUnknown() && !r.OutputHumioHec.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns24 = r.OutputHumioHec.UseRoundRobinDNS.ValueBool()
+		if !r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns24 = r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.ValueBool()
 		} else {
 			useRoundRobinDns24 = nil
 		}
 		failedRequestLoggingMode25 := new(shared.FailedRequestLoggingModeOptions)
-		if !r.OutputHumioHec.FailedRequestLoggingMode.IsUnknown() && !r.OutputHumioHec.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode25 = shared.FailedRequestLoggingModeOptions(r.OutputHumioHec.FailedRequestLoggingMode.ValueString())
+		if !r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode25 = shared.FailedRequestLoggingModeOptions(r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.ValueString())
 		} else {
 			failedRequestLoggingMode25 = nil
 		}
-		safeHeaders25 := make([]string, 0, len(r.OutputHumioHec.SafeHeaders))
-		for safeHeadersIndex25 := range r.OutputHumioHec.SafeHeaders {
-			safeHeaders25 = append(safeHeaders25, r.OutputHumioHec.SafeHeaders[safeHeadersIndex25].ValueString())
+		safeHeaders25 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SafeHeaders))
+		for safeHeadersIndex25 := range r.OutputCrowdstrikeNextGenSiem.SafeHeaders {
+			safeHeaders25 = append(safeHeaders25, r.OutputCrowdstrikeNextGenSiem.SafeHeaders[safeHeadersIndex25].ValueString())
 		}
-		format14 := shared.RequestFormatOptions(r.OutputHumioHec.Format.ValueString())
-		authType31 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
-		if !r.OutputHumioHec.AuthType.IsUnknown() && !r.OutputHumioHec.AuthType.IsNull() {
-			*authType31 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputHumioHec.AuthType.ValueString())
+		format15 := shared.RequestFormatOptions(r.OutputCrowdstrikeNextGenSiem.Format.ValueString())
+		authType30 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
+		if !r.OutputCrowdstrikeNextGenSiem.AuthType.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.AuthType.IsNull() {
+			*authType30 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputCrowdstrikeNextGenSiem.AuthType.ValueString())
 		} else {
-			authType31 = nil
+			authType30 = nil
 		}
-		responseRetrySettings26 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputHumioHec.ResponseRetrySettings))
-		for responseRetrySettingsIndex26 := range r.OutputHumioHec.ResponseRetrySettings {
+		responseRetrySettings26 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings))
+		for responseRetrySettingsIndex26 := range r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
 			var httpStatus26 float64
-			httpStatus26 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].HTTPStatus.ValueFloat64()
+			httpStatus26 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].HTTPStatus.ValueFloat64()
 
 			initialBackoff56 := new(float64)
-			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsNull() {
-				*initialBackoff56 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.IsNull() {
+				*initialBackoff56 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff56 = nil
 			}
 			backoffRate56 := new(float64)
-			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsNull() {
-				*backoffRate56 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.IsNull() {
+				*backoffRate56 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate56 = nil
 			}
 			maxBackoff52 := new(float64)
-			if !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsUnknown() && !r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsNull() {
-				*maxBackoff52 = r.OutputHumioHec.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.IsNull() {
+				*maxBackoff52 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex26].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff52 = nil
 			}
@@ -30069,25 +30019,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			})
 		}
 		var timeoutRetrySettings26 *shared.TimeoutRetrySettingsType
-		if r.OutputHumioHec.TimeoutRetrySettings != nil {
+		if r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings != nil {
 			var timeoutRetry26 bool
-			timeoutRetry26 = r.OutputHumioHec.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			timeoutRetry26 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
 			initialBackoff57 := new(float64)
-			if !r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff57 = r.OutputHumioHec.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff57 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff57 = nil
 			}
 			backoffRate57 := new(float64)
-			if !r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate57 = r.OutputHumioHec.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate57 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
 				backoffRate57 = nil
 			}
 			maxBackoff53 := new(float64)
-			if !r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff53 = r.OutputHumioHec.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff53 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff53 = nil
 			}
@@ -30099,119 +30049,119 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 		}
 		responseHonorRetryAfterHeader26 := new(bool)
-		if !r.OutputHumioHec.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputHumioHec.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader26 = r.OutputHumioHec.ResponseHonorRetryAfterHeader.ValueBool()
+		if !r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader26 = r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
 			responseHonorRetryAfterHeader26 = nil
 		}
 		onBackpressure51 := new(shared.BackpressureBehaviorOptions)
-		if !r.OutputHumioHec.OnBackpressure.IsUnknown() && !r.OutputHumioHec.OnBackpressure.IsNull() {
-			*onBackpressure51 = shared.BackpressureBehaviorOptions(r.OutputHumioHec.OnBackpressure.ValueString())
+		if !r.OutputCrowdstrikeNextGenSiem.OnBackpressure.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.OnBackpressure.IsNull() {
+			*onBackpressure51 = shared.BackpressureBehaviorOptions(r.OutputCrowdstrikeNextGenSiem.OnBackpressure.ValueString())
 		} else {
 			onBackpressure51 = nil
 		}
 		description58 := new(string)
-		if !r.OutputHumioHec.Description.IsUnknown() && !r.OutputHumioHec.Description.IsNull() {
-			*description58 = r.OutputHumioHec.Description.ValueString()
+		if !r.OutputCrowdstrikeNextGenSiem.Description.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Description.IsNull() {
+			*description58 = r.OutputCrowdstrikeNextGenSiem.Description.ValueString()
 		} else {
 			description58 = nil
 		}
-		token13 := new(string)
-		if !r.OutputHumioHec.Token.IsUnknown() && !r.OutputHumioHec.Token.IsNull() {
-			*token13 = r.OutputHumioHec.Token.ValueString()
+		token12 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.Token.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Token.IsNull() {
+			*token12 = r.OutputCrowdstrikeNextGenSiem.Token.ValueString()
 		} else {
-			token13 = nil
+			token12 = nil
 		}
-		textSecret28 := new(string)
-		if !r.OutputHumioHec.TextSecret.IsUnknown() && !r.OutputHumioHec.TextSecret.IsNull() {
-			*textSecret28 = r.OutputHumioHec.TextSecret.ValueString()
+		textSecret27 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.TextSecret.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TextSecret.IsNull() {
+			*textSecret27 = r.OutputCrowdstrikeNextGenSiem.TextSecret.ValueString()
 		} else {
-			textSecret28 = nil
+			textSecret27 = nil
 		}
-		pqStrictOrdering44 := new(bool)
-		if !r.OutputHumioHec.PqStrictOrdering.IsUnknown() && !r.OutputHumioHec.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering44 = r.OutputHumioHec.PqStrictOrdering.ValueBool()
+		pqStrictOrdering43 := new(bool)
+		if !r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering43 = r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering44 = nil
+			pqStrictOrdering43 = nil
 		}
-		pqRatePerSec44 := new(float64)
-		if !r.OutputHumioHec.PqRatePerSec.IsUnknown() && !r.OutputHumioHec.PqRatePerSec.IsNull() {
-			*pqRatePerSec44 = r.OutputHumioHec.PqRatePerSec.ValueFloat64()
+		pqRatePerSec43 := new(float64)
+		if !r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.IsNull() {
+			*pqRatePerSec43 = r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec44 = nil
+			pqRatePerSec43 = nil
 		}
 		pqMode44 := new(shared.ModeOptions)
-		if !r.OutputHumioHec.PqMode.IsUnknown() && !r.OutputHumioHec.PqMode.IsNull() {
-			*pqMode44 = shared.ModeOptions(r.OutputHumioHec.PqMode.ValueString())
+		if !r.OutputCrowdstrikeNextGenSiem.PqMode.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMode.IsNull() {
+			*pqMode44 = shared.ModeOptions(r.OutputCrowdstrikeNextGenSiem.PqMode.ValueString())
 		} else {
 			pqMode44 = nil
 		}
-		pqMaxBufferSize44 := new(float64)
-		if !r.OutputHumioHec.PqMaxBufferSize.IsUnknown() && !r.OutputHumioHec.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize44 = r.OutputHumioHec.PqMaxBufferSize.ValueFloat64()
+		pqMaxBufferSize43 := new(float64)
+		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize43 = r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize44 = nil
+			pqMaxBufferSize43 = nil
 		}
-		pqMaxBackpressureSec44 := new(float64)
-		if !r.OutputHumioHec.PqMaxBackpressureSec.IsUnknown() && !r.OutputHumioHec.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec44 = r.OutputHumioHec.PqMaxBackpressureSec.ValueFloat64()
+		pqMaxBackpressureSec43 := new(float64)
+		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec43 = r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec44 = nil
+			pqMaxBackpressureSec43 = nil
 		}
 		pqMaxFileSize44 := new(string)
-		if !r.OutputHumioHec.PqMaxFileSize.IsUnknown() && !r.OutputHumioHec.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize44 = r.OutputHumioHec.PqMaxFileSize.ValueString()
+		if !r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize44 = r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.ValueString()
 		} else {
 			pqMaxFileSize44 = nil
 		}
 		pqMaxSize44 := new(string)
-		if !r.OutputHumioHec.PqMaxSize.IsUnknown() && !r.OutputHumioHec.PqMaxSize.IsNull() {
-			*pqMaxSize44 = r.OutputHumioHec.PqMaxSize.ValueString()
+		if !r.OutputCrowdstrikeNextGenSiem.PqMaxSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxSize.IsNull() {
+			*pqMaxSize44 = r.OutputCrowdstrikeNextGenSiem.PqMaxSize.ValueString()
 		} else {
 			pqMaxSize44 = nil
 		}
 		pqPath44 := new(string)
-		if !r.OutputHumioHec.PqPath.IsUnknown() && !r.OutputHumioHec.PqPath.IsNull() {
-			*pqPath44 = r.OutputHumioHec.PqPath.ValueString()
+		if !r.OutputCrowdstrikeNextGenSiem.PqPath.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqPath.IsNull() {
+			*pqPath44 = r.OutputCrowdstrikeNextGenSiem.PqPath.ValueString()
 		} else {
 			pqPath44 = nil
 		}
 		pqCompress44 := new(shared.CompressionOptionsPq)
-		if !r.OutputHumioHec.PqCompress.IsUnknown() && !r.OutputHumioHec.PqCompress.IsNull() {
-			*pqCompress44 = shared.CompressionOptionsPq(r.OutputHumioHec.PqCompress.ValueString())
+		if !r.OutputCrowdstrikeNextGenSiem.PqCompress.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqCompress.IsNull() {
+			*pqCompress44 = shared.CompressionOptionsPq(r.OutputCrowdstrikeNextGenSiem.PqCompress.ValueString())
 		} else {
 			pqCompress44 = nil
 		}
 		pqOnBackpressure44 := new(shared.QueueFullBehaviorOptions)
-		if !r.OutputHumioHec.PqOnBackpressure.IsUnknown() && !r.OutputHumioHec.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure44 = shared.QueueFullBehaviorOptions(r.OutputHumioHec.PqOnBackpressure.ValueString())
+		if !r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure44 = shared.QueueFullBehaviorOptions(r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.ValueString())
 		} else {
 			pqOnBackpressure44 = nil
 		}
-		pqMaxBufferSizeBytes44 := new(string)
-		if !r.OutputHumioHec.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputHumioHec.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes44 = r.OutputHumioHec.PqMaxBufferSizeBytes.ValueString()
+		pqMaxBufferSizeBytes43 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.IsNull() {
+			*pqMaxBufferSizeBytes43 = r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes44 = nil
+			pqMaxBufferSizeBytes43 = nil
 		}
-		var pqControls44 *shared.OutputHumioHecPqControls
-		if r.OutputHumioHec.PqControls != nil {
-			pqControls44 = &shared.OutputHumioHecPqControls{}
+		var pqControls44 *shared.OutputCrowdstrikeNextGenSiemPqControls
+		if r.OutputCrowdstrikeNextGenSiem.PqControls != nil {
+			pqControls44 = &shared.OutputCrowdstrikeNextGenSiemPqControls{}
 		}
-		templateUrl14 := new(string)
-		if !r.OutputHumioHec.TemplateURL.IsUnknown() && !r.OutputHumioHec.TemplateURL.IsNull() {
-			*templateUrl14 = r.OutputHumioHec.TemplateURL.ValueString()
+		templateUrl15 := new(string)
+		if !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsNull() {
+			*templateUrl15 = r.OutputCrowdstrikeNextGenSiem.TemplateURL.ValueString()
 		} else {
-			templateUrl14 = nil
+			templateUrl15 = nil
 		}
-		outputHumioHec = &shared.OutputHumioHec{
+		outputCrowdstrikeNextGenSiem = &shared.OutputCrowdstrikeNextGenSiem{
 			ID:                            id55,
 			Type:                          typeVar55,
 			Pipeline:                      pipeline55,
 			SystemFields:                  systemFields55,
 			Environment:                   environment55,
 			Streamtags:                    streamtags55,
-			URL:                           url16,
+			URL:                           url17,
 			Concurrency:                   concurrency28,
 			MaxPayloadSizeKB:              maxPayloadSizeKb27,
 			MaxPayloadEvents:              maxPayloadEvents25,
@@ -30223,354 +30173,27 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			UseRoundRobinDNS:              useRoundRobinDns24,
 			FailedRequestLoggingMode:      failedRequestLoggingMode25,
 			SafeHeaders:                   safeHeaders25,
-			Format:                        format14,
-			AuthType:                      authType31,
+			Format:                        format15,
+			AuthType:                      authType30,
 			ResponseRetrySettings:         responseRetrySettings26,
 			TimeoutRetrySettings:          timeoutRetrySettings26,
 			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader26,
 			OnBackpressure:                onBackpressure51,
 			Description:                   description58,
-			Token:                         token13,
-			TextSecret:                    textSecret28,
-			PqStrictOrdering:              pqStrictOrdering44,
-			PqRatePerSec:                  pqRatePerSec44,
+			Token:                         token12,
+			TextSecret:                    textSecret27,
+			PqStrictOrdering:              pqStrictOrdering43,
+			PqRatePerSec:                  pqRatePerSec43,
 			PqMode:                        pqMode44,
-			PqMaxBufferSize:               pqMaxBufferSize44,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec44,
+			PqMaxBufferSize:               pqMaxBufferSize43,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec43,
 			PqMaxFileSize:                 pqMaxFileSize44,
 			PqMaxSize:                     pqMaxSize44,
 			PqPath:                        pqPath44,
 			PqCompress:                    pqCompress44,
 			PqOnBackpressure:              pqOnBackpressure44,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes44,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes43,
 			PqControls:                    pqControls44,
-			TemplateURL:                   templateUrl14,
-		}
-	}
-	if outputHumioHec != nil {
-		out = shared.Output{
-			OutputHumioHec: outputHumioHec,
-		}
-	}
-	var outputCrowdstrikeNextGenSiem *shared.OutputCrowdstrikeNextGenSiem
-	if r.OutputCrowdstrikeNextGenSiem != nil {
-		id56 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.ID.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ID.IsNull() {
-			*id56 = r.OutputCrowdstrikeNextGenSiem.ID.ValueString()
-		} else {
-			id56 = nil
-		}
-		typeVar56 := shared.OutputCrowdstrikeNextGenSiemType(r.OutputCrowdstrikeNextGenSiem.Type.ValueString())
-		pipeline56 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.Pipeline.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Pipeline.IsNull() {
-			*pipeline56 = r.OutputCrowdstrikeNextGenSiem.Pipeline.ValueString()
-		} else {
-			pipeline56 = nil
-		}
-		systemFields56 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SystemFields))
-		for systemFieldsIndex56 := range r.OutputCrowdstrikeNextGenSiem.SystemFields {
-			systemFields56 = append(systemFields56, r.OutputCrowdstrikeNextGenSiem.SystemFields[systemFieldsIndex56].ValueString())
-		}
-		environment56 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.Environment.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Environment.IsNull() {
-			*environment56 = r.OutputCrowdstrikeNextGenSiem.Environment.ValueString()
-		} else {
-			environment56 = nil
-		}
-		streamtags56 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.Streamtags))
-		for streamtagsIndex56 := range r.OutputCrowdstrikeNextGenSiem.Streamtags {
-			streamtags56 = append(streamtags56, r.OutputCrowdstrikeNextGenSiem.Streamtags[streamtagsIndex56].ValueString())
-		}
-		var url17 string
-		url17 = r.OutputCrowdstrikeNextGenSiem.URL.ValueString()
-
-		concurrency29 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.Concurrency.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Concurrency.IsNull() {
-			*concurrency29 = r.OutputCrowdstrikeNextGenSiem.Concurrency.ValueFloat64()
-		} else {
-			concurrency29 = nil
-		}
-		maxPayloadSizeKb28 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb28 = r.OutputCrowdstrikeNextGenSiem.MaxPayloadSizeKB.ValueFloat64()
-		} else {
-			maxPayloadSizeKb28 = nil
-		}
-		maxPayloadEvents26 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents26 = r.OutputCrowdstrikeNextGenSiem.MaxPayloadEvents.ValueFloat64()
-		} else {
-			maxPayloadEvents26 = nil
-		}
-		compress32 := new(bool)
-		if !r.OutputCrowdstrikeNextGenSiem.Compress.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Compress.IsNull() {
-			*compress32 = r.OutputCrowdstrikeNextGenSiem.Compress.ValueBool()
-		} else {
-			compress32 = nil
-		}
-		rejectUnauthorized53 := new(bool)
-		if !r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized53 = r.OutputCrowdstrikeNextGenSiem.RejectUnauthorized.ValueBool()
-		} else {
-			rejectUnauthorized53 = nil
-		}
-		timeoutSec28 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.TimeoutSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutSec.IsNull() {
-			*timeoutSec28 = r.OutputCrowdstrikeNextGenSiem.TimeoutSec.ValueFloat64()
-		} else {
-			timeoutSec28 = nil
-		}
-		flushPeriodSec39 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.IsNull() {
-			*flushPeriodSec39 = r.OutputCrowdstrikeNextGenSiem.FlushPeriodSec.ValueFloat64()
-		} else {
-			flushPeriodSec39 = nil
-		}
-		extraHTTPHeaders26 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex26 := range r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders {
-			name44 := new(string)
-			if !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsNull() {
-				*name44 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.ValueString()
-			} else {
-				name44 = nil
-			}
-			var value56 string
-			value56 = r.OutputCrowdstrikeNextGenSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Value.ValueString()
-
-			extraHTTPHeaders26 = append(extraHTTPHeaders26, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name44,
-				Value: value56,
-			})
-		}
-		useRoundRobinDns25 := new(bool)
-		if !r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns25 = r.OutputCrowdstrikeNextGenSiem.UseRoundRobinDNS.ValueBool()
-		} else {
-			useRoundRobinDns25 = nil
-		}
-		failedRequestLoggingMode26 := new(shared.FailedRequestLoggingModeOptions)
-		if !r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode26 = shared.FailedRequestLoggingModeOptions(r.OutputCrowdstrikeNextGenSiem.FailedRequestLoggingMode.ValueString())
-		} else {
-			failedRequestLoggingMode26 = nil
-		}
-		safeHeaders26 := make([]string, 0, len(r.OutputCrowdstrikeNextGenSiem.SafeHeaders))
-		for safeHeadersIndex26 := range r.OutputCrowdstrikeNextGenSiem.SafeHeaders {
-			safeHeaders26 = append(safeHeaders26, r.OutputCrowdstrikeNextGenSiem.SafeHeaders[safeHeadersIndex26].ValueString())
-		}
-		format15 := shared.RequestFormatOptions(r.OutputCrowdstrikeNextGenSiem.Format.ValueString())
-		authType32 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
-		if !r.OutputCrowdstrikeNextGenSiem.AuthType.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.AuthType.IsNull() {
-			*authType32 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputCrowdstrikeNextGenSiem.AuthType.ValueString())
-		} else {
-			authType32 = nil
-		}
-		responseRetrySettings27 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings))
-		for responseRetrySettingsIndex27 := range r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings {
-			var httpStatus27 float64
-			httpStatus27 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].HTTPStatus.ValueFloat64()
-
-			initialBackoff58 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsNull() {
-				*initialBackoff58 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff58 = nil
-			}
-			backoffRate58 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsNull() {
-				*backoffRate58 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.ValueFloat64()
-			} else {
-				backoffRate58 = nil
-			}
-			maxBackoff54 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsNull() {
-				*maxBackoff54 = r.OutputCrowdstrikeNextGenSiem.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff54 = nil
-			}
-			responseRetrySettings27 = append(responseRetrySettings27, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus27,
-				InitialBackoff: initialBackoff58,
-				BackoffRate:    backoffRate58,
-				MaxBackoff:     maxBackoff54,
-			})
-		}
-		var timeoutRetrySettings27 *shared.TimeoutRetrySettingsType
-		if r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings != nil {
-			var timeoutRetry27 bool
-			timeoutRetry27 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.TimeoutRetry.ValueBool()
-
-			initialBackoff59 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff59 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff59 = nil
-			}
-			backoffRate59 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate59 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.BackoffRate.ValueFloat64()
-			} else {
-				backoffRate59 = nil
-			}
-			maxBackoff55 := new(float64)
-			if !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff55 = r.OutputCrowdstrikeNextGenSiem.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff55 = nil
-			}
-			timeoutRetrySettings27 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry27,
-				InitialBackoff: initialBackoff59,
-				BackoffRate:    backoffRate59,
-				MaxBackoff:     maxBackoff55,
-			}
-		}
-		responseHonorRetryAfterHeader27 := new(bool)
-		if !r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader27 = r.OutputCrowdstrikeNextGenSiem.ResponseHonorRetryAfterHeader.ValueBool()
-		} else {
-			responseHonorRetryAfterHeader27 = nil
-		}
-		onBackpressure52 := new(shared.BackpressureBehaviorOptions)
-		if !r.OutputCrowdstrikeNextGenSiem.OnBackpressure.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.OnBackpressure.IsNull() {
-			*onBackpressure52 = shared.BackpressureBehaviorOptions(r.OutputCrowdstrikeNextGenSiem.OnBackpressure.ValueString())
-		} else {
-			onBackpressure52 = nil
-		}
-		description59 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.Description.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Description.IsNull() {
-			*description59 = r.OutputCrowdstrikeNextGenSiem.Description.ValueString()
-		} else {
-			description59 = nil
-		}
-		token14 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.Token.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.Token.IsNull() {
-			*token14 = r.OutputCrowdstrikeNextGenSiem.Token.ValueString()
-		} else {
-			token14 = nil
-		}
-		textSecret29 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.TextSecret.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TextSecret.IsNull() {
-			*textSecret29 = r.OutputCrowdstrikeNextGenSiem.TextSecret.ValueString()
-		} else {
-			textSecret29 = nil
-		}
-		pqStrictOrdering45 := new(bool)
-		if !r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering45 = r.OutputCrowdstrikeNextGenSiem.PqStrictOrdering.ValueBool()
-		} else {
-			pqStrictOrdering45 = nil
-		}
-		pqRatePerSec45 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.IsNull() {
-			*pqRatePerSec45 = r.OutputCrowdstrikeNextGenSiem.PqRatePerSec.ValueFloat64()
-		} else {
-			pqRatePerSec45 = nil
-		}
-		pqMode45 := new(shared.ModeOptions)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMode.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMode.IsNull() {
-			*pqMode45 = shared.ModeOptions(r.OutputCrowdstrikeNextGenSiem.PqMode.ValueString())
-		} else {
-			pqMode45 = nil
-		}
-		pqMaxBufferSize45 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize45 = r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSize.ValueFloat64()
-		} else {
-			pqMaxBufferSize45 = nil
-		}
-		pqMaxBackpressureSec45 := new(float64)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec45 = r.OutputCrowdstrikeNextGenSiem.PqMaxBackpressureSec.ValueFloat64()
-		} else {
-			pqMaxBackpressureSec45 = nil
-		}
-		pqMaxFileSize45 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize45 = r.OutputCrowdstrikeNextGenSiem.PqMaxFileSize.ValueString()
-		} else {
-			pqMaxFileSize45 = nil
-		}
-		pqMaxSize45 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMaxSize.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxSize.IsNull() {
-			*pqMaxSize45 = r.OutputCrowdstrikeNextGenSiem.PqMaxSize.ValueString()
-		} else {
-			pqMaxSize45 = nil
-		}
-		pqPath45 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.PqPath.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqPath.IsNull() {
-			*pqPath45 = r.OutputCrowdstrikeNextGenSiem.PqPath.ValueString()
-		} else {
-			pqPath45 = nil
-		}
-		pqCompress45 := new(shared.CompressionOptionsPq)
-		if !r.OutputCrowdstrikeNextGenSiem.PqCompress.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqCompress.IsNull() {
-			*pqCompress45 = shared.CompressionOptionsPq(r.OutputCrowdstrikeNextGenSiem.PqCompress.ValueString())
-		} else {
-			pqCompress45 = nil
-		}
-		pqOnBackpressure45 := new(shared.QueueFullBehaviorOptions)
-		if !r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure45 = shared.QueueFullBehaviorOptions(r.OutputCrowdstrikeNextGenSiem.PqOnBackpressure.ValueString())
-		} else {
-			pqOnBackpressure45 = nil
-		}
-		pqMaxBufferSizeBytes45 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes45 = r.OutputCrowdstrikeNextGenSiem.PqMaxBufferSizeBytes.ValueString()
-		} else {
-			pqMaxBufferSizeBytes45 = nil
-		}
-		var pqControls45 *shared.OutputCrowdstrikeNextGenSiemPqControls
-		if r.OutputCrowdstrikeNextGenSiem.PqControls != nil {
-			pqControls45 = &shared.OutputCrowdstrikeNextGenSiemPqControls{}
-		}
-		templateUrl15 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsNull() {
-			*templateUrl15 = r.OutputCrowdstrikeNextGenSiem.TemplateURL.ValueString()
-		} else {
-			templateUrl15 = nil
-		}
-		outputCrowdstrikeNextGenSiem = &shared.OutputCrowdstrikeNextGenSiem{
-			ID:                            id56,
-			Type:                          typeVar56,
-			Pipeline:                      pipeline56,
-			SystemFields:                  systemFields56,
-			Environment:                   environment56,
-			Streamtags:                    streamtags56,
-			URL:                           url17,
-			Concurrency:                   concurrency29,
-			MaxPayloadSizeKB:              maxPayloadSizeKb28,
-			MaxPayloadEvents:              maxPayloadEvents26,
-			Compress:                      compress32,
-			RejectUnauthorized:            rejectUnauthorized53,
-			TimeoutSec:                    timeoutSec28,
-			FlushPeriodSec:                flushPeriodSec39,
-			ExtraHTTPHeaders:              extraHTTPHeaders26,
-			UseRoundRobinDNS:              useRoundRobinDns25,
-			FailedRequestLoggingMode:      failedRequestLoggingMode26,
-			SafeHeaders:                   safeHeaders26,
-			Format:                        format15,
-			AuthType:                      authType32,
-			ResponseRetrySettings:         responseRetrySettings27,
-			TimeoutRetrySettings:          timeoutRetrySettings27,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader27,
-			OnBackpressure:                onBackpressure52,
-			Description:                   description59,
-			Token:                         token14,
-			TextSecret:                    textSecret29,
-			PqStrictOrdering:              pqStrictOrdering45,
-			PqRatePerSec:                  pqRatePerSec45,
-			PqMode:                        pqMode45,
-			PqMaxBufferSize:               pqMaxBufferSize45,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec45,
-			PqMaxFileSize:                 pqMaxFileSize45,
-			PqMaxSize:                     pqMaxSize45,
-			PqPath:                        pqPath45,
-			PqCompress:                    pqCompress45,
-			PqOnBackpressure:              pqOnBackpressure45,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes45,
-			PqControls:                    pqControls45,
 			TemplateURL:                   templateUrl15,
 		}
 	}
@@ -30581,32 +30204,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDlS3 *shared.OutputDlS3
 	if r.OutputDlS3 != nil {
-		id57 := new(string)
+		id56 := new(string)
 		if !r.OutputDlS3.ID.IsUnknown() && !r.OutputDlS3.ID.IsNull() {
-			*id57 = r.OutputDlS3.ID.ValueString()
+			*id56 = r.OutputDlS3.ID.ValueString()
 		} else {
-			id57 = nil
+			id56 = nil
 		}
-		typeVar57 := shared.OutputDlS3Type(r.OutputDlS3.Type.ValueString())
-		pipeline57 := new(string)
+		typeVar56 := shared.OutputDlS3Type(r.OutputDlS3.Type.ValueString())
+		pipeline56 := new(string)
 		if !r.OutputDlS3.Pipeline.IsUnknown() && !r.OutputDlS3.Pipeline.IsNull() {
-			*pipeline57 = r.OutputDlS3.Pipeline.ValueString()
+			*pipeline56 = r.OutputDlS3.Pipeline.ValueString()
 		} else {
-			pipeline57 = nil
+			pipeline56 = nil
 		}
-		systemFields57 := make([]string, 0, len(r.OutputDlS3.SystemFields))
-		for systemFieldsIndex57 := range r.OutputDlS3.SystemFields {
-			systemFields57 = append(systemFields57, r.OutputDlS3.SystemFields[systemFieldsIndex57].ValueString())
+		systemFields56 := make([]string, 0, len(r.OutputDlS3.SystemFields))
+		for systemFieldsIndex56 := range r.OutputDlS3.SystemFields {
+			systemFields56 = append(systemFields56, r.OutputDlS3.SystemFields[systemFieldsIndex56].ValueString())
 		}
-		environment57 := new(string)
+		environment56 := new(string)
 		if !r.OutputDlS3.Environment.IsUnknown() && !r.OutputDlS3.Environment.IsNull() {
-			*environment57 = r.OutputDlS3.Environment.ValueString()
+			*environment56 = r.OutputDlS3.Environment.ValueString()
 		} else {
-			environment57 = nil
+			environment56 = nil
 		}
-		streamtags57 := make([]string, 0, len(r.OutputDlS3.Streamtags))
-		for streamtagsIndex57 := range r.OutputDlS3.Streamtags {
-			streamtags57 = append(streamtags57, r.OutputDlS3.Streamtags[streamtagsIndex57].ValueString())
+		streamtags56 := make([]string, 0, len(r.OutputDlS3.Streamtags))
+		for streamtagsIndex56 := range r.OutputDlS3.Streamtags {
+			streamtags56 = append(streamtags56, r.OutputDlS3.Streamtags[streamtagsIndex56].ValueString())
 		}
 		var bucket5 string
 		bucket5 = r.OutputDlS3.Bucket.ValueString()
@@ -30647,11 +30270,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			reuseConnections9 = nil
 		}
-		rejectUnauthorized54 := new(bool)
+		rejectUnauthorized53 := new(bool)
 		if !r.OutputDlS3.RejectUnauthorized.IsUnknown() && !r.OutputDlS3.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized54 = r.OutputDlS3.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized53 = r.OutputDlS3.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized54 = nil
+			rejectUnauthorized53 = nil
 		}
 		enableAssumeRole6 := new(bool)
 		if !r.OutputDlS3.EnableAssumeRole.IsUnknown() && !r.OutputDlS3.EnableAssumeRole.IsNull() {
@@ -30764,11 +30387,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark5 = nil
 		}
-		onBackpressure53 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure52 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputDlS3.OnBackpressure.IsUnknown() && !r.OutputDlS3.OnBackpressure.IsNull() {
-			*onBackpressure53 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputDlS3.OnBackpressure.ValueString())
+			*onBackpressure52 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputDlS3.OnBackpressure.ValueString())
 		} else {
-			onBackpressure53 = nil
+			onBackpressure52 = nil
 		}
 		deadletterEnabled7 := new(bool)
 		if !r.OutputDlS3.DeadletterEnabled.IsUnknown() && !r.OutputDlS3.DeadletterEnabled.IsNull() {
@@ -30862,11 +30485,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		for partitioningFieldsIndex := range r.OutputDlS3.PartitioningFields {
 			partitioningFields = append(partitioningFields, r.OutputDlS3.PartitioningFields[partitioningFieldsIndex].ValueString())
 		}
-		description60 := new(string)
+		description59 := new(string)
 		if !r.OutputDlS3.Description.IsUnknown() && !r.OutputDlS3.Description.IsNull() {
-			*description60 = r.OutputDlS3.Description.ValueString()
+			*description59 = r.OutputDlS3.Description.ValueString()
 		} else {
-			description60 = nil
+			description59 = nil
 		}
 		awsAPIKey9 := new(string)
 		if !r.OutputDlS3.AwsAPIKey.IsUnknown() && !r.OutputDlS3.AwsAPIKey.IsNull() {
@@ -30880,11 +30503,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			awsSecret8 = nil
 		}
-		compress33 := new(shared.CompressionOptionsHTTP)
+		compress32 := new(shared.CompressionOptionsHTTP)
 		if !r.OutputDlS3.Compress.IsUnknown() && !r.OutputDlS3.Compress.IsNull() {
-			*compress33 = shared.CompressionOptionsHTTP(r.OutputDlS3.Compress.ValueString())
+			*compress32 = shared.CompressionOptionsHTTP(r.OutputDlS3.Compress.ValueString())
 		} else {
-			compress33 = nil
+			compress32 = nil
 		}
 		compressionLevel6 := new(shared.CompressionLevelOptions)
 		if !r.OutputDlS3.CompressionLevel.IsUnknown() && !r.OutputDlS3.CompressionLevel.IsNull() {
@@ -30939,12 +30562,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key10 string
 			key10 = r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex6].Key.ValueString()
 
-			var value57 string
-			value57 = r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex6].Value.ValueString()
+			var value55 string
+			value55 = r.OutputDlS3.KeyValueMetadata[keyValueMetadataIndex6].Value.ValueString()
 
 			keyValueMetadata6 = append(keyValueMetadata6, shared.ItemsTypeKeyValueMetadata{
 				Key:   key10,
-				Value: value57,
+				Value: value55,
 			})
 		}
 		enableStatistics6 := new(bool)
@@ -31032,12 +30655,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateAwsAPIKey7 = nil
 		}
 		outputDlS3 = &shared.OutputDlS3{
-			ID:                            id57,
-			Type:                          typeVar57,
-			Pipeline:                      pipeline57,
-			SystemFields:                  systemFields57,
-			Environment:                   environment57,
-			Streamtags:                    streamtags57,
+			ID:                            id56,
+			Type:                          typeVar56,
+			Pipeline:                      pipeline56,
+			SystemFields:                  systemFields56,
+			Environment:                   environment56,
+			Streamtags:                    streamtags56,
 			Bucket:                        bucket5,
 			Region:                        region13,
 			AwsSecretKey:                  awsSecretKey9,
@@ -31045,7 +30668,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Endpoint:                      endpoint11,
 			SignatureVersion:              signatureVersion8,
 			ReuseConnections:              reuseConnections9,
-			RejectUnauthorized:            rejectUnauthorized54,
+			RejectUnauthorized:            rejectUnauthorized53,
 			EnableAssumeRole:              enableAssumeRole6,
 			AssumeRoleArn:                 assumeRoleArn6,
 			AssumeRoleExternalID:          assumeRoleExternalId6,
@@ -31065,7 +30688,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:                  maxOpenFiles7,
 			HeaderLine:                    headerLine5,
 			WriteHighWaterMark:            writeHighWaterMark5,
-			OnBackpressure:                onBackpressure53,
+			OnBackpressure:                onBackpressure52,
 			DeadletterEnabled:             deadletterEnabled7,
 			OnDiskFullBackpressure:        onDiskFullBackpressure7,
 			ForceCloseOnShutdown:          forceCloseOnShutdown5,
@@ -31076,10 +30699,10 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			VerifyPermissions:             verifyPermissions3,
 			MaxClosingFilesToBackpressure: maxClosingFilesToBackpressure1,
 			PartitioningFields:            partitioningFields,
-			Description:                   description60,
+			Description:                   description59,
 			AwsAPIKey:                     awsAPIKey9,
 			AwsSecret:                     awsSecret8,
-			Compress:                      compress33,
+			Compress:                      compress32,
 			CompressionLevel:              compressionLevel6,
 			AutomaticSchema:               automaticSchema6,
 			ParquetSchema:                 parquetSchema6,
@@ -31112,32 +30735,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputSecurityLake *shared.OutputSecurityLake
 	if r.OutputSecurityLake != nil {
-		id58 := new(string)
+		id57 := new(string)
 		if !r.OutputSecurityLake.ID.IsUnknown() && !r.OutputSecurityLake.ID.IsNull() {
-			*id58 = r.OutputSecurityLake.ID.ValueString()
+			*id57 = r.OutputSecurityLake.ID.ValueString()
 		} else {
-			id58 = nil
+			id57 = nil
 		}
-		typeVar58 := shared.OutputSecurityLakeType(r.OutputSecurityLake.Type.ValueString())
-		pipeline58 := new(string)
+		typeVar57 := shared.OutputSecurityLakeType(r.OutputSecurityLake.Type.ValueString())
+		pipeline57 := new(string)
 		if !r.OutputSecurityLake.Pipeline.IsUnknown() && !r.OutputSecurityLake.Pipeline.IsNull() {
-			*pipeline58 = r.OutputSecurityLake.Pipeline.ValueString()
+			*pipeline57 = r.OutputSecurityLake.Pipeline.ValueString()
 		} else {
-			pipeline58 = nil
+			pipeline57 = nil
 		}
-		systemFields58 := make([]string, 0, len(r.OutputSecurityLake.SystemFields))
-		for systemFieldsIndex58 := range r.OutputSecurityLake.SystemFields {
-			systemFields58 = append(systemFields58, r.OutputSecurityLake.SystemFields[systemFieldsIndex58].ValueString())
+		systemFields57 := make([]string, 0, len(r.OutputSecurityLake.SystemFields))
+		for systemFieldsIndex57 := range r.OutputSecurityLake.SystemFields {
+			systemFields57 = append(systemFields57, r.OutputSecurityLake.SystemFields[systemFieldsIndex57].ValueString())
 		}
-		environment58 := new(string)
+		environment57 := new(string)
 		if !r.OutputSecurityLake.Environment.IsUnknown() && !r.OutputSecurityLake.Environment.IsNull() {
-			*environment58 = r.OutputSecurityLake.Environment.ValueString()
+			*environment57 = r.OutputSecurityLake.Environment.ValueString()
 		} else {
-			environment58 = nil
+			environment57 = nil
 		}
-		streamtags58 := make([]string, 0, len(r.OutputSecurityLake.Streamtags))
-		for streamtagsIndex58 := range r.OutputSecurityLake.Streamtags {
-			streamtags58 = append(streamtags58, r.OutputSecurityLake.Streamtags[streamtagsIndex58].ValueString())
+		streamtags57 := make([]string, 0, len(r.OutputSecurityLake.Streamtags))
+		for streamtagsIndex57 := range r.OutputSecurityLake.Streamtags {
+			streamtags57 = append(streamtags57, r.OutputSecurityLake.Streamtags[streamtagsIndex57].ValueString())
 		}
 		var bucket6 string
 		bucket6 = r.OutputSecurityLake.Bucket.ValueString()
@@ -31175,11 +30798,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			reuseConnections10 = nil
 		}
-		rejectUnauthorized55 := new(bool)
+		rejectUnauthorized54 := new(bool)
 		if !r.OutputSecurityLake.RejectUnauthorized.IsUnknown() && !r.OutputSecurityLake.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized55 = r.OutputSecurityLake.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized54 = r.OutputSecurityLake.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized55 = nil
+			rejectUnauthorized54 = nil
 		}
 		enableAssumeRole7 := new(bool)
 		if !r.OutputSecurityLake.EnableAssumeRole.IsUnknown() && !r.OutputSecurityLake.EnableAssumeRole.IsNull() {
@@ -31271,11 +30894,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark6 = nil
 		}
-		onBackpressure54 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure53 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputSecurityLake.OnBackpressure.IsUnknown() && !r.OutputSecurityLake.OnBackpressure.IsNull() {
-			*onBackpressure54 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputSecurityLake.OnBackpressure.ValueString())
+			*onBackpressure53 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputSecurityLake.OnBackpressure.ValueString())
 		} else {
-			onBackpressure54 = nil
+			onBackpressure53 = nil
 		}
 		deadletterEnabled8 := new(bool)
 		if !r.OutputSecurityLake.DeadletterEnabled.IsUnknown() && !r.OutputSecurityLake.DeadletterEnabled.IsNull() {
@@ -31412,12 +31035,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key11 string
 			key11 = r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex7].Key.ValueString()
 
-			var value58 string
-			value58 = r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex7].Value.ValueString()
+			var value56 string
+			value56 = r.OutputSecurityLake.KeyValueMetadata[keyValueMetadataIndex7].Value.ValueString()
 
 			keyValueMetadata7 = append(keyValueMetadata7, shared.ItemsTypeKeyValueMetadata{
 				Key:   key11,
-				Value: value58,
+				Value: value56,
 			})
 		}
 		enableStatistics7 := new(bool)
@@ -31438,11 +31061,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			enablePageChecksum7 = nil
 		}
-		description61 := new(string)
+		description60 := new(string)
 		if !r.OutputSecurityLake.Description.IsUnknown() && !r.OutputSecurityLake.Description.IsNull() {
-			*description61 = r.OutputSecurityLake.Description.ValueString()
+			*description60 = r.OutputSecurityLake.Description.ValueString()
 		} else {
-			description61 = nil
+			description60 = nil
 		}
 		awsAPIKey10 := new(string)
 		if !r.OutputSecurityLake.AwsAPIKey.IsUnknown() && !r.OutputSecurityLake.AwsAPIKey.IsNull() {
@@ -31523,12 +31146,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateAwsAPIKey8 = nil
 		}
 		outputSecurityLake = &shared.OutputSecurityLake{
-			ID:                            id58,
-			Type:                          typeVar58,
-			Pipeline:                      pipeline58,
-			SystemFields:                  systemFields58,
-			Environment:                   environment58,
-			Streamtags:                    streamtags58,
+			ID:                            id57,
+			Type:                          typeVar57,
+			Pipeline:                      pipeline57,
+			SystemFields:                  systemFields57,
+			Environment:                   environment57,
+			Streamtags:                    streamtags57,
 			Bucket:                        bucket6,
 			Region:                        region14,
 			AwsSecretKey:                  awsSecretKey10,
@@ -31536,7 +31159,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Endpoint:                      endpoint12,
 			SignatureVersion:              signatureVersion9,
 			ReuseConnections:              reuseConnections10,
-			RejectUnauthorized:            rejectUnauthorized55,
+			RejectUnauthorized:            rejectUnauthorized54,
 			EnableAssumeRole:              enableAssumeRole7,
 			AssumeRoleArn:                 assumeRoleArn7,
 			AssumeRoleExternalID:          assumeRoleExternalId7,
@@ -31553,7 +31176,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:                  maxOpenFiles8,
 			HeaderLine:                    headerLine6,
 			WriteHighWaterMark:            writeHighWaterMark6,
-			OnBackpressure:                onBackpressure54,
+			OnBackpressure:                onBackpressure53,
 			DeadletterEnabled:             deadletterEnabled8,
 			OnDiskFullBackpressure:        onDiskFullBackpressure8,
 			ForceCloseOnShutdown:          forceCloseOnShutdown6,
@@ -31575,7 +31198,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			EnableStatistics:              enableStatistics7,
 			EnableWritePageIndex:          enableWritePageIndex7,
 			EnablePageChecksum:            enablePageChecksum7,
-			Description:                   description61,
+			Description:                   description60,
 			AwsAPIKey:                     awsAPIKey10,
 			AwsSecret:                     awsSecret9,
 			EmptyDirCleanupSec:            emptyDirCleanupSec8,
@@ -31598,32 +31221,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputCriblLake *shared.OutputCriblLake
 	if r.OutputCriblLake != nil {
-		id59 := new(string)
+		id58 := new(string)
 		if !r.OutputCriblLake.ID.IsUnknown() && !r.OutputCriblLake.ID.IsNull() {
-			*id59 = r.OutputCriblLake.ID.ValueString()
+			*id58 = r.OutputCriblLake.ID.ValueString()
 		} else {
-			id59 = nil
+			id58 = nil
 		}
-		typeVar59 := shared.OutputCriblLakeType(r.OutputCriblLake.Type.ValueString())
-		pipeline59 := new(string)
+		typeVar58 := shared.OutputCriblLakeType(r.OutputCriblLake.Type.ValueString())
+		pipeline58 := new(string)
 		if !r.OutputCriblLake.Pipeline.IsUnknown() && !r.OutputCriblLake.Pipeline.IsNull() {
-			*pipeline59 = r.OutputCriblLake.Pipeline.ValueString()
+			*pipeline58 = r.OutputCriblLake.Pipeline.ValueString()
 		} else {
-			pipeline59 = nil
+			pipeline58 = nil
 		}
-		systemFields59 := make([]string, 0, len(r.OutputCriblLake.SystemFields))
-		for systemFieldsIndex59 := range r.OutputCriblLake.SystemFields {
-			systemFields59 = append(systemFields59, r.OutputCriblLake.SystemFields[systemFieldsIndex59].ValueString())
+		systemFields58 := make([]string, 0, len(r.OutputCriblLake.SystemFields))
+		for systemFieldsIndex58 := range r.OutputCriblLake.SystemFields {
+			systemFields58 = append(systemFields58, r.OutputCriblLake.SystemFields[systemFieldsIndex58].ValueString())
 		}
-		environment59 := new(string)
+		environment58 := new(string)
 		if !r.OutputCriblLake.Environment.IsUnknown() && !r.OutputCriblLake.Environment.IsNull() {
-			*environment59 = r.OutputCriblLake.Environment.ValueString()
+			*environment58 = r.OutputCriblLake.Environment.ValueString()
 		} else {
-			environment59 = nil
+			environment58 = nil
 		}
-		streamtags59 := make([]string, 0, len(r.OutputCriblLake.Streamtags))
-		for streamtagsIndex59 := range r.OutputCriblLake.Streamtags {
-			streamtags59 = append(streamtags59, r.OutputCriblLake.Streamtags[streamtagsIndex59].ValueString())
+		streamtags58 := make([]string, 0, len(r.OutputCriblLake.Streamtags))
+		for streamtagsIndex58 := range r.OutputCriblLake.Streamtags {
+			streamtags58 = append(streamtags58, r.OutputCriblLake.Streamtags[streamtagsIndex58].ValueString())
 		}
 		bucket7 := new(string)
 		if !r.OutputCriblLake.Bucket.IsUnknown() && !r.OutputCriblLake.Bucket.IsNull() {
@@ -31661,11 +31284,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			reuseConnections11 = nil
 		}
-		rejectUnauthorized56 := new(bool)
+		rejectUnauthorized55 := new(bool)
 		if !r.OutputCriblLake.RejectUnauthorized.IsUnknown() && !r.OutputCriblLake.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized56 = r.OutputCriblLake.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized55 = r.OutputCriblLake.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized56 = nil
+			rejectUnauthorized55 = nil
 		}
 		enableAssumeRole8 := new(bool)
 		if !r.OutputCriblLake.EnableAssumeRole.IsUnknown() && !r.OutputCriblLake.EnableAssumeRole.IsNull() {
@@ -31775,11 +31398,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark7 = nil
 		}
-		onBackpressure55 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure54 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputCriblLake.OnBackpressure.IsUnknown() && !r.OutputCriblLake.OnBackpressure.IsNull() {
-			*onBackpressure55 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputCriblLake.OnBackpressure.ValueString())
+			*onBackpressure54 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputCriblLake.OnBackpressure.ValueString())
 		} else {
-			onBackpressure55 = nil
+			onBackpressure54 = nil
 		}
 		deadletterEnabled9 := new(bool)
 		if !r.OutputCriblLake.DeadletterEnabled.IsUnknown() && !r.OutputCriblLake.DeadletterEnabled.IsNull() {
@@ -31881,11 +31504,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxConcurrentFileParts6 = nil
 		}
-		description62 := new(string)
+		description61 := new(string)
 		if !r.OutputCriblLake.Description.IsUnknown() && !r.OutputCriblLake.Description.IsNull() {
-			*description62 = r.OutputCriblLake.Description.ValueString()
+			*description61 = r.OutputCriblLake.Description.ValueString()
 		} else {
-			description62 = nil
+			description61 = nil
 		}
 		emptyDirCleanupSec9 := new(float64)
 		if !r.OutputCriblLake.EmptyDirCleanupSec.IsUnknown() && !r.OutputCriblLake.EmptyDirCleanupSec.IsNull() {
@@ -31948,19 +31571,19 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateDestPath = nil
 		}
 		outputCriblLake = &shared.OutputCriblLake{
-			ID:                            id59,
-			Type:                          typeVar59,
-			Pipeline:                      pipeline59,
-			SystemFields:                  systemFields59,
-			Environment:                   environment59,
-			Streamtags:                    streamtags59,
+			ID:                            id58,
+			Type:                          typeVar58,
+			Pipeline:                      pipeline58,
+			SystemFields:                  systemFields58,
+			Environment:                   environment58,
+			Streamtags:                    streamtags58,
 			Bucket:                        bucket7,
 			Region:                        region15,
 			AwsSecretKey:                  awsSecretKey11,
 			Endpoint:                      endpoint13,
 			SignatureVersion:              signatureVersion10,
 			ReuseConnections:              reuseConnections11,
-			RejectUnauthorized:            rejectUnauthorized56,
+			RejectUnauthorized:            rejectUnauthorized55,
 			EnableAssumeRole:              enableAssumeRole8,
 			AssumeRoleArn:                 assumeRoleArn8,
 			AssumeRoleExternalID:          assumeRoleExternalId8,
@@ -31979,7 +31602,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:                  maxOpenFiles9,
 			HeaderLine:                    headerLine7,
 			WriteHighWaterMark:            writeHighWaterMark7,
-			OnBackpressure:                onBackpressure55,
+			OnBackpressure:                onBackpressure54,
 			DeadletterEnabled:             deadletterEnabled9,
 			OnDiskFullBackpressure:        onDiskFullBackpressure9,
 			ForceCloseOnShutdown:          forceCloseOnShutdown7,
@@ -31991,7 +31614,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			AwsAuthenticationMethod:       awsAuthenticationMethod10,
 			Format:                        format17,
 			MaxConcurrentFileParts:        maxConcurrentFileParts6,
-			Description:                   description62,
+			Description:                   description61,
 			EmptyDirCleanupSec:            emptyDirCleanupSec9,
 			DirectoryBatchSize:            directoryBatchSize9,
 			DeadletterPath:                deadletterPath9,
@@ -32011,32 +31634,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDiskSpool *shared.OutputDiskSpool
 	if r.OutputDiskSpool != nil {
-		id60 := new(string)
+		id59 := new(string)
 		if !r.OutputDiskSpool.ID.IsUnknown() && !r.OutputDiskSpool.ID.IsNull() {
-			*id60 = r.OutputDiskSpool.ID.ValueString()
+			*id59 = r.OutputDiskSpool.ID.ValueString()
 		} else {
-			id60 = nil
+			id59 = nil
 		}
-		typeVar60 := shared.OutputDiskSpoolType(r.OutputDiskSpool.Type.ValueString())
-		pipeline60 := new(string)
+		typeVar59 := shared.OutputDiskSpoolType(r.OutputDiskSpool.Type.ValueString())
+		pipeline59 := new(string)
 		if !r.OutputDiskSpool.Pipeline.IsUnknown() && !r.OutputDiskSpool.Pipeline.IsNull() {
-			*pipeline60 = r.OutputDiskSpool.Pipeline.ValueString()
+			*pipeline59 = r.OutputDiskSpool.Pipeline.ValueString()
 		} else {
-			pipeline60 = nil
+			pipeline59 = nil
 		}
-		systemFields60 := make([]string, 0, len(r.OutputDiskSpool.SystemFields))
-		for systemFieldsIndex60 := range r.OutputDiskSpool.SystemFields {
-			systemFields60 = append(systemFields60, r.OutputDiskSpool.SystemFields[systemFieldsIndex60].ValueString())
+		systemFields59 := make([]string, 0, len(r.OutputDiskSpool.SystemFields))
+		for systemFieldsIndex59 := range r.OutputDiskSpool.SystemFields {
+			systemFields59 = append(systemFields59, r.OutputDiskSpool.SystemFields[systemFieldsIndex59].ValueString())
 		}
-		environment60 := new(string)
+		environment59 := new(string)
 		if !r.OutputDiskSpool.Environment.IsUnknown() && !r.OutputDiskSpool.Environment.IsNull() {
-			*environment60 = r.OutputDiskSpool.Environment.ValueString()
+			*environment59 = r.OutputDiskSpool.Environment.ValueString()
 		} else {
-			environment60 = nil
+			environment59 = nil
 		}
-		streamtags60 := make([]string, 0, len(r.OutputDiskSpool.Streamtags))
-		for streamtagsIndex60 := range r.OutputDiskSpool.Streamtags {
-			streamtags60 = append(streamtags60, r.OutputDiskSpool.Streamtags[streamtagsIndex60].ValueString())
+		streamtags59 := make([]string, 0, len(r.OutputDiskSpool.Streamtags))
+		for streamtagsIndex59 := range r.OutputDiskSpool.Streamtags {
+			streamtags59 = append(streamtags59, r.OutputDiskSpool.Streamtags[streamtagsIndex59].ValueString())
 		}
 		timeWindow := new(string)
 		if !r.OutputDiskSpool.TimeWindow.IsUnknown() && !r.OutputDiskSpool.TimeWindow.IsNull() {
@@ -32056,11 +31679,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxDataTime1 = nil
 		}
-		compress34 := new(shared.CompressionOptionsPersistence)
+		compress33 := new(shared.CompressionOptionsPersistence)
 		if !r.OutputDiskSpool.Compress.IsUnknown() && !r.OutputDiskSpool.Compress.IsNull() {
-			*compress34 = shared.CompressionOptionsPersistence(r.OutputDiskSpool.Compress.ValueString())
+			*compress33 = shared.CompressionOptionsPersistence(r.OutputDiskSpool.Compress.ValueString())
 		} else {
-			compress34 = nil
+			compress33 = nil
 		}
 		partitionExpr6 := new(string)
 		if !r.OutputDiskSpool.PartitionExpr.IsUnknown() && !r.OutputDiskSpool.PartitionExpr.IsNull() {
@@ -32068,25 +31691,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			partitionExpr6 = nil
 		}
-		description63 := new(string)
+		description62 := new(string)
 		if !r.OutputDiskSpool.Description.IsUnknown() && !r.OutputDiskSpool.Description.IsNull() {
-			*description63 = r.OutputDiskSpool.Description.ValueString()
+			*description62 = r.OutputDiskSpool.Description.ValueString()
 		} else {
-			description63 = nil
+			description62 = nil
 		}
 		outputDiskSpool = &shared.OutputDiskSpool{
-			ID:            id60,
-			Type:          typeVar60,
-			Pipeline:      pipeline60,
-			SystemFields:  systemFields60,
-			Environment:   environment60,
-			Streamtags:    streamtags60,
+			ID:            id59,
+			Type:          typeVar59,
+			Pipeline:      pipeline59,
+			SystemFields:  systemFields59,
+			Environment:   environment59,
+			Streamtags:    streamtags59,
 			TimeWindow:    timeWindow,
 			MaxDataSize:   maxDataSize1,
 			MaxDataTime:   maxDataTime1,
-			Compress:      compress34,
+			Compress:      compress33,
 			PartitionExpr: partitionExpr6,
-			Description:   description63,
+			Description:   description62,
 		}
 	}
 	if outputDiskSpool != nil {
@@ -32096,41 +31719,41 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputClickHouse *shared.OutputClickHouse
 	if r.OutputClickHouse != nil {
-		id61 := new(string)
+		id60 := new(string)
 		if !r.OutputClickHouse.ID.IsUnknown() && !r.OutputClickHouse.ID.IsNull() {
-			*id61 = r.OutputClickHouse.ID.ValueString()
+			*id60 = r.OutputClickHouse.ID.ValueString()
 		} else {
-			id61 = nil
+			id60 = nil
 		}
-		typeVar61 := shared.OutputClickHouseType(r.OutputClickHouse.Type.ValueString())
-		pipeline61 := new(string)
+		typeVar60 := shared.OutputClickHouseType(r.OutputClickHouse.Type.ValueString())
+		pipeline60 := new(string)
 		if !r.OutputClickHouse.Pipeline.IsUnknown() && !r.OutputClickHouse.Pipeline.IsNull() {
-			*pipeline61 = r.OutputClickHouse.Pipeline.ValueString()
+			*pipeline60 = r.OutputClickHouse.Pipeline.ValueString()
 		} else {
-			pipeline61 = nil
+			pipeline60 = nil
 		}
-		systemFields61 := make([]string, 0, len(r.OutputClickHouse.SystemFields))
-		for systemFieldsIndex61 := range r.OutputClickHouse.SystemFields {
-			systemFields61 = append(systemFields61, r.OutputClickHouse.SystemFields[systemFieldsIndex61].ValueString())
+		systemFields60 := make([]string, 0, len(r.OutputClickHouse.SystemFields))
+		for systemFieldsIndex60 := range r.OutputClickHouse.SystemFields {
+			systemFields60 = append(systemFields60, r.OutputClickHouse.SystemFields[systemFieldsIndex60].ValueString())
 		}
-		environment61 := new(string)
+		environment60 := new(string)
 		if !r.OutputClickHouse.Environment.IsUnknown() && !r.OutputClickHouse.Environment.IsNull() {
-			*environment61 = r.OutputClickHouse.Environment.ValueString()
+			*environment60 = r.OutputClickHouse.Environment.ValueString()
 		} else {
-			environment61 = nil
+			environment60 = nil
 		}
-		streamtags61 := make([]string, 0, len(r.OutputClickHouse.Streamtags))
-		for streamtagsIndex61 := range r.OutputClickHouse.Streamtags {
-			streamtags61 = append(streamtags61, r.OutputClickHouse.Streamtags[streamtagsIndex61].ValueString())
+		streamtags60 := make([]string, 0, len(r.OutputClickHouse.Streamtags))
+		for streamtagsIndex60 := range r.OutputClickHouse.Streamtags {
+			streamtags60 = append(streamtags60, r.OutputClickHouse.Streamtags[streamtagsIndex60].ValueString())
 		}
 		var url18 string
 		url18 = r.OutputClickHouse.URL.ValueString()
 
-		authType33 := new(shared.AuthenticationTypeOptionsBasicCredentialsSecret)
+		authType31 := new(shared.AuthenticationTypeOptionsBasicCredentialsSecret)
 		if !r.OutputClickHouse.AuthType.IsUnknown() && !r.OutputClickHouse.AuthType.IsNull() {
-			*authType33 = shared.AuthenticationTypeOptionsBasicCredentialsSecret(r.OutputClickHouse.AuthType.ValueString())
+			*authType31 = shared.AuthenticationTypeOptionsBasicCredentialsSecret(r.OutputClickHouse.AuthType.ValueString())
 		} else {
-			authType33 = nil
+			authType31 = nil
 		}
 		var database2 string
 		database2 = r.OutputClickHouse.Database.ValueString()
@@ -32224,145 +31847,145 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				MaxVersion:      maxVersion18,
 			}
 		}
-		concurrency30 := new(float64)
+		concurrency29 := new(float64)
 		if !r.OutputClickHouse.Concurrency.IsUnknown() && !r.OutputClickHouse.Concurrency.IsNull() {
-			*concurrency30 = r.OutputClickHouse.Concurrency.ValueFloat64()
+			*concurrency29 = r.OutputClickHouse.Concurrency.ValueFloat64()
 		} else {
-			concurrency30 = nil
+			concurrency29 = nil
 		}
-		maxPayloadSizeKb29 := new(float64)
+		maxPayloadSizeKb28 := new(float64)
 		if !r.OutputClickHouse.MaxPayloadSizeKB.IsUnknown() && !r.OutputClickHouse.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb29 = r.OutputClickHouse.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb28 = r.OutputClickHouse.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb29 = nil
+			maxPayloadSizeKb28 = nil
 		}
-		maxPayloadEvents27 := new(float64)
+		maxPayloadEvents26 := new(float64)
 		if !r.OutputClickHouse.MaxPayloadEvents.IsUnknown() && !r.OutputClickHouse.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents27 = r.OutputClickHouse.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents26 = r.OutputClickHouse.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents27 = nil
+			maxPayloadEvents26 = nil
 		}
-		compress35 := new(bool)
+		compress34 := new(bool)
 		if !r.OutputClickHouse.Compress.IsUnknown() && !r.OutputClickHouse.Compress.IsNull() {
-			*compress35 = r.OutputClickHouse.Compress.ValueBool()
+			*compress34 = r.OutputClickHouse.Compress.ValueBool()
 		} else {
-			compress35 = nil
+			compress34 = nil
 		}
-		rejectUnauthorized57 := new(bool)
+		rejectUnauthorized56 := new(bool)
 		if !r.OutputClickHouse.RejectUnauthorized.IsUnknown() && !r.OutputClickHouse.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized57 = r.OutputClickHouse.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized56 = r.OutputClickHouse.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized57 = nil
+			rejectUnauthorized56 = nil
 		}
-		timeoutSec29 := new(float64)
+		timeoutSec28 := new(float64)
 		if !r.OutputClickHouse.TimeoutSec.IsUnknown() && !r.OutputClickHouse.TimeoutSec.IsNull() {
-			*timeoutSec29 = r.OutputClickHouse.TimeoutSec.ValueFloat64()
+			*timeoutSec28 = r.OutputClickHouse.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec29 = nil
+			timeoutSec28 = nil
 		}
-		flushPeriodSec40 := new(float64)
+		flushPeriodSec39 := new(float64)
 		if !r.OutputClickHouse.FlushPeriodSec.IsUnknown() && !r.OutputClickHouse.FlushPeriodSec.IsNull() {
-			*flushPeriodSec40 = r.OutputClickHouse.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec39 = r.OutputClickHouse.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec40 = nil
+			flushPeriodSec39 = nil
 		}
-		extraHTTPHeaders27 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputClickHouse.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex27 := range r.OutputClickHouse.ExtraHTTPHeaders {
-			name45 := new(string)
-			if !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsUnknown() && !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsNull() {
-				*name45 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.ValueString()
+		extraHTTPHeaders26 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputClickHouse.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex26 := range r.OutputClickHouse.ExtraHTTPHeaders {
+			name43 := new(string)
+			if !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsUnknown() && !r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.IsNull() {
+				*name43 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Name.ValueString()
 			} else {
-				name45 = nil
+				name43 = nil
 			}
-			var value59 string
-			value59 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Value.ValueString()
+			var value57 string
+			value57 = r.OutputClickHouse.ExtraHTTPHeaders[extraHTTPHeadersIndex26].Value.ValueString()
 
-			extraHTTPHeaders27 = append(extraHTTPHeaders27, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name45,
-				Value: value59,
+			extraHTTPHeaders26 = append(extraHTTPHeaders26, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name43,
+				Value: value57,
 			})
 		}
-		useRoundRobinDns26 := new(bool)
+		useRoundRobinDns25 := new(bool)
 		if !r.OutputClickHouse.UseRoundRobinDNS.IsUnknown() && !r.OutputClickHouse.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns26 = r.OutputClickHouse.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns25 = r.OutputClickHouse.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns26 = nil
+			useRoundRobinDns25 = nil
 		}
-		failedRequestLoggingMode27 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode26 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputClickHouse.FailedRequestLoggingMode.IsUnknown() && !r.OutputClickHouse.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode27 = shared.FailedRequestLoggingModeOptions(r.OutputClickHouse.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode26 = shared.FailedRequestLoggingModeOptions(r.OutputClickHouse.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode27 = nil
+			failedRequestLoggingMode26 = nil
 		}
-		safeHeaders27 := make([]string, 0, len(r.OutputClickHouse.SafeHeaders))
-		for safeHeadersIndex27 := range r.OutputClickHouse.SafeHeaders {
-			safeHeaders27 = append(safeHeaders27, r.OutputClickHouse.SafeHeaders[safeHeadersIndex27].ValueString())
+		safeHeaders26 := make([]string, 0, len(r.OutputClickHouse.SafeHeaders))
+		for safeHeadersIndex26 := range r.OutputClickHouse.SafeHeaders {
+			safeHeaders26 = append(safeHeaders26, r.OutputClickHouse.SafeHeaders[safeHeadersIndex26].ValueString())
 		}
-		responseRetrySettings28 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputClickHouse.ResponseRetrySettings))
-		for responseRetrySettingsIndex28 := range r.OutputClickHouse.ResponseRetrySettings {
-			var httpStatus28 float64
-			httpStatus28 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].HTTPStatus.ValueFloat64()
+		responseRetrySettings27 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputClickHouse.ResponseRetrySettings))
+		for responseRetrySettingsIndex27 := range r.OutputClickHouse.ResponseRetrySettings {
+			var httpStatus27 float64
+			httpStatus27 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].HTTPStatus.ValueFloat64()
 
-			initialBackoff60 := new(float64)
-			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsNull() {
-				*initialBackoff60 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.ValueFloat64()
+			initialBackoff58 := new(float64)
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.IsNull() {
+				*initialBackoff58 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff60 = nil
+				initialBackoff58 = nil
 			}
-			backoffRate60 := new(float64)
-			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsNull() {
-				*backoffRate60 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.ValueFloat64()
+			backoffRate58 := new(float64)
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.IsNull() {
+				*backoffRate58 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate60 = nil
+				backoffRate58 = nil
 			}
-			maxBackoff56 := new(float64)
-			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsNull() {
-				*maxBackoff56 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.ValueFloat64()
+			maxBackoff54 := new(float64)
+			if !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsUnknown() && !r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.IsNull() {
+				*maxBackoff54 = r.OutputClickHouse.ResponseRetrySettings[responseRetrySettingsIndex27].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff56 = nil
+				maxBackoff54 = nil
 			}
-			responseRetrySettings28 = append(responseRetrySettings28, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus28,
-				InitialBackoff: initialBackoff60,
-				BackoffRate:    backoffRate60,
-				MaxBackoff:     maxBackoff56,
+			responseRetrySettings27 = append(responseRetrySettings27, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus27,
+				InitialBackoff: initialBackoff58,
+				BackoffRate:    backoffRate58,
+				MaxBackoff:     maxBackoff54,
 			})
 		}
-		var timeoutRetrySettings28 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings27 *shared.TimeoutRetrySettingsType
 		if r.OutputClickHouse.TimeoutRetrySettings != nil {
-			var timeoutRetry28 bool
-			timeoutRetry28 = r.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry27 bool
+			timeoutRetry27 = r.OutputClickHouse.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff61 := new(float64)
+			initialBackoff59 := new(float64)
 			if !r.OutputClickHouse.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputClickHouse.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff61 = r.OutputClickHouse.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff59 = r.OutputClickHouse.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff61 = nil
+				initialBackoff59 = nil
 			}
-			backoffRate61 := new(float64)
+			backoffRate59 := new(float64)
 			if !r.OutputClickHouse.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputClickHouse.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate61 = r.OutputClickHouse.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate59 = r.OutputClickHouse.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate61 = nil
+				backoffRate59 = nil
 			}
-			maxBackoff57 := new(float64)
+			maxBackoff55 := new(float64)
 			if !r.OutputClickHouse.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputClickHouse.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff57 = r.OutputClickHouse.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff55 = r.OutputClickHouse.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff57 = nil
+				maxBackoff55 = nil
 			}
-			timeoutRetrySettings28 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry28,
-				InitialBackoff: initialBackoff61,
-				BackoffRate:    backoffRate61,
-				MaxBackoff:     maxBackoff57,
+			timeoutRetrySettings27 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry27,
+				InitialBackoff: initialBackoff59,
+				BackoffRate:    backoffRate59,
+				MaxBackoff:     maxBackoff55,
 			}
 		}
-		responseHonorRetryAfterHeader28 := new(bool)
+		responseHonorRetryAfterHeader27 := new(bool)
 		if !r.OutputClickHouse.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputClickHouse.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader28 = r.OutputClickHouse.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader27 = r.OutputClickHouse.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader28 = nil
+			responseHonorRetryAfterHeader27 = nil
 		}
 		dumpFormatErrorsToDisk := new(bool)
 		if !r.OutputClickHouse.DumpFormatErrorsToDisk.IsUnknown() && !r.OutputClickHouse.DumpFormatErrorsToDisk.IsNull() {
@@ -32370,35 +31993,35 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			dumpFormatErrorsToDisk = nil
 		}
-		onBackpressure56 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure55 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputClickHouse.OnBackpressure.IsUnknown() && !r.OutputClickHouse.OnBackpressure.IsNull() {
-			*onBackpressure56 = shared.BackpressureBehaviorOptions(r.OutputClickHouse.OnBackpressure.ValueString())
+			*onBackpressure55 = shared.BackpressureBehaviorOptions(r.OutputClickHouse.OnBackpressure.ValueString())
 		} else {
-			onBackpressure56 = nil
+			onBackpressure55 = nil
 		}
-		description64 := new(string)
+		description63 := new(string)
 		if !r.OutputClickHouse.Description.IsUnknown() && !r.OutputClickHouse.Description.IsNull() {
-			*description64 = r.OutputClickHouse.Description.ValueString()
+			*description63 = r.OutputClickHouse.Description.ValueString()
 		} else {
-			description64 = nil
+			description63 = nil
 		}
-		username14 := new(string)
+		username12 := new(string)
 		if !r.OutputClickHouse.Username.IsUnknown() && !r.OutputClickHouse.Username.IsNull() {
-			*username14 = r.OutputClickHouse.Username.ValueString()
+			*username12 = r.OutputClickHouse.Username.ValueString()
 		} else {
-			username14 = nil
+			username12 = nil
 		}
-		password14 := new(string)
+		password12 := new(string)
 		if !r.OutputClickHouse.Password.IsUnknown() && !r.OutputClickHouse.Password.IsNull() {
-			*password14 = r.OutputClickHouse.Password.ValueString()
+			*password12 = r.OutputClickHouse.Password.ValueString()
 		} else {
-			password14 = nil
+			password12 = nil
 		}
-		credentialsSecret16 := new(string)
+		credentialsSecret14 := new(string)
 		if !r.OutputClickHouse.CredentialsSecret.IsUnknown() && !r.OutputClickHouse.CredentialsSecret.IsNull() {
-			*credentialsSecret16 = r.OutputClickHouse.CredentialsSecret.ValueString()
+			*credentialsSecret14 = r.OutputClickHouse.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret16 = nil
+			credentialsSecret14 = nil
 		}
 		sqlUsername := new(string)
 		if !r.OutputClickHouse.SQLUsername.IsUnknown() && !r.OutputClickHouse.SQLUsername.IsNull() {
@@ -32442,75 +32065,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				ColumnValueExpression: columnValueExpression,
 			})
 		}
-		pqStrictOrdering46 := new(bool)
+		pqStrictOrdering44 := new(bool)
 		if !r.OutputClickHouse.PqStrictOrdering.IsUnknown() && !r.OutputClickHouse.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering46 = r.OutputClickHouse.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering44 = r.OutputClickHouse.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering46 = nil
+			pqStrictOrdering44 = nil
 		}
-		pqRatePerSec46 := new(float64)
+		pqRatePerSec44 := new(float64)
 		if !r.OutputClickHouse.PqRatePerSec.IsUnknown() && !r.OutputClickHouse.PqRatePerSec.IsNull() {
-			*pqRatePerSec46 = r.OutputClickHouse.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec44 = r.OutputClickHouse.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec46 = nil
+			pqRatePerSec44 = nil
 		}
-		pqMode46 := new(shared.ModeOptions)
+		pqMode45 := new(shared.ModeOptions)
 		if !r.OutputClickHouse.PqMode.IsUnknown() && !r.OutputClickHouse.PqMode.IsNull() {
-			*pqMode46 = shared.ModeOptions(r.OutputClickHouse.PqMode.ValueString())
+			*pqMode45 = shared.ModeOptions(r.OutputClickHouse.PqMode.ValueString())
 		} else {
-			pqMode46 = nil
+			pqMode45 = nil
 		}
-		pqMaxBufferSize46 := new(float64)
+		pqMaxBufferSize44 := new(float64)
 		if !r.OutputClickHouse.PqMaxBufferSize.IsUnknown() && !r.OutputClickHouse.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize46 = r.OutputClickHouse.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize44 = r.OutputClickHouse.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize46 = nil
+			pqMaxBufferSize44 = nil
 		}
-		pqMaxBackpressureSec46 := new(float64)
+		pqMaxBackpressureSec44 := new(float64)
 		if !r.OutputClickHouse.PqMaxBackpressureSec.IsUnknown() && !r.OutputClickHouse.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec46 = r.OutputClickHouse.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec44 = r.OutputClickHouse.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec46 = nil
+			pqMaxBackpressureSec44 = nil
 		}
-		pqMaxFileSize46 := new(string)
+		pqMaxFileSize45 := new(string)
 		if !r.OutputClickHouse.PqMaxFileSize.IsUnknown() && !r.OutputClickHouse.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize46 = r.OutputClickHouse.PqMaxFileSize.ValueString()
+			*pqMaxFileSize45 = r.OutputClickHouse.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize46 = nil
+			pqMaxFileSize45 = nil
 		}
-		pqMaxSize46 := new(string)
+		pqMaxSize45 := new(string)
 		if !r.OutputClickHouse.PqMaxSize.IsUnknown() && !r.OutputClickHouse.PqMaxSize.IsNull() {
-			*pqMaxSize46 = r.OutputClickHouse.PqMaxSize.ValueString()
+			*pqMaxSize45 = r.OutputClickHouse.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize46 = nil
+			pqMaxSize45 = nil
 		}
-		pqPath46 := new(string)
+		pqPath45 := new(string)
 		if !r.OutputClickHouse.PqPath.IsUnknown() && !r.OutputClickHouse.PqPath.IsNull() {
-			*pqPath46 = r.OutputClickHouse.PqPath.ValueString()
+			*pqPath45 = r.OutputClickHouse.PqPath.ValueString()
 		} else {
-			pqPath46 = nil
+			pqPath45 = nil
 		}
-		pqCompress46 := new(shared.CompressionOptionsPq)
+		pqCompress45 := new(shared.CompressionOptionsPq)
 		if !r.OutputClickHouse.PqCompress.IsUnknown() && !r.OutputClickHouse.PqCompress.IsNull() {
-			*pqCompress46 = shared.CompressionOptionsPq(r.OutputClickHouse.PqCompress.ValueString())
+			*pqCompress45 = shared.CompressionOptionsPq(r.OutputClickHouse.PqCompress.ValueString())
 		} else {
-			pqCompress46 = nil
+			pqCompress45 = nil
 		}
-		pqOnBackpressure46 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure45 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputClickHouse.PqOnBackpressure.IsUnknown() && !r.OutputClickHouse.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure46 = shared.QueueFullBehaviorOptions(r.OutputClickHouse.PqOnBackpressure.ValueString())
+			*pqOnBackpressure45 = shared.QueueFullBehaviorOptions(r.OutputClickHouse.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure46 = nil
+			pqOnBackpressure45 = nil
 		}
-		pqMaxBufferSizeBytes46 := new(string)
+		pqMaxBufferSizeBytes44 := new(string)
 		if !r.OutputClickHouse.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputClickHouse.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes46 = r.OutputClickHouse.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes44 = r.OutputClickHouse.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes46 = nil
+			pqMaxBufferSizeBytes44 = nil
 		}
-		var pqControls46 *shared.OutputClickHousePqControls
+		var pqControls45 *shared.OutputClickHousePqControls
 		if r.OutputClickHouse.PqControls != nil {
-			pqControls46 = &shared.OutputClickHousePqControls{}
+			pqControls45 = &shared.OutputClickHousePqControls{}
 		}
 		templateUrl16 := new(string)
 		if !r.OutputClickHouse.TemplateURL.IsUnknown() && !r.OutputClickHouse.TemplateURL.IsNull() {
@@ -32530,13 +32153,13 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateTableName = nil
 		}
-		var token15 interface{}
+		var token13 interface{}
 		if !r.OutputClickHouse.Token.IsUnknown() && !r.OutputClickHouse.Token.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.Token.ValueString()), &token15)
+			_ = json.Unmarshal([]byte(r.OutputClickHouse.Token.ValueString()), &token13)
 		}
-		var textSecret30 interface{}
+		var textSecret28 interface{}
 		if !r.OutputClickHouse.TextSecret.IsUnknown() && !r.OutputClickHouse.TextSecret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TextSecret.ValueString()), &textSecret30)
+			_ = json.Unmarshal([]byte(r.OutputClickHouse.TextSecret.ValueString()), &textSecret28)
 		}
 		var loginUrl5 interface{}
 		if !r.OutputClickHouse.LoginURL.IsUnknown() && !r.OutputClickHouse.LoginURL.IsNull() {
@@ -32564,91 +32187,91 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthParams6 := make([]shared.OutputClickHouseOauthParam, 0, len(r.OutputClickHouse.OauthParams))
 		for oauthParamsIndex6 := range r.OutputClickHouse.OauthParams {
-			var name46 interface{}
+			var name44 interface{}
 			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()), &name46)
+				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()), &name44)
 			}
-			var value60 interface{}
+			var value58 interface{}
 			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()), &value60)
+				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()), &value58)
 			}
 			oauthParams6 = append(oauthParams6, shared.OutputClickHouseOauthParam{
-				Name:  name46,
-				Value: value60,
+				Name:  name44,
+				Value: value58,
 			})
 		}
 		oauthHeaders4 := make([]shared.OutputClickHouseOauthHeader, 0, len(r.OutputClickHouse.OauthHeaders))
 		for oauthHeadersIndex4 := range r.OutputClickHouse.OauthHeaders {
-			var name47 interface{}
+			var name45 interface{}
 			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()), &name47)
+				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()), &name45)
 			}
-			var value61 interface{}
+			var value59 interface{}
 			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()), &value61)
+				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()), &value59)
 			}
 			oauthHeaders4 = append(oauthHeaders4, shared.OutputClickHouseOauthHeader{
-				Name:  name47,
-				Value: value61,
+				Name:  name45,
+				Value: value59,
 			})
 		}
 		outputClickHouse = &shared.OutputClickHouse{
-			ID:                            id61,
-			Type:                          typeVar61,
-			Pipeline:                      pipeline61,
-			SystemFields:                  systemFields61,
-			Environment:                   environment61,
-			Streamtags:                    streamtags61,
+			ID:                            id60,
+			Type:                          typeVar60,
+			Pipeline:                      pipeline60,
+			SystemFields:                  systemFields60,
+			Environment:                   environment60,
+			Streamtags:                    streamtags60,
 			URL:                           url18,
-			AuthType:                      authType33,
+			AuthType:                      authType31,
 			Database:                      database2,
 			TableName:                     tableName,
 			Format:                        format18,
 			MappingType:                   mappingType,
 			AsyncInserts:                  asyncInserts,
 			TLS:                           tls23,
-			Concurrency:                   concurrency30,
-			MaxPayloadSizeKB:              maxPayloadSizeKb29,
-			MaxPayloadEvents:              maxPayloadEvents27,
-			Compress:                      compress35,
-			RejectUnauthorized:            rejectUnauthorized57,
-			TimeoutSec:                    timeoutSec29,
-			FlushPeriodSec:                flushPeriodSec40,
-			ExtraHTTPHeaders:              extraHTTPHeaders27,
-			UseRoundRobinDNS:              useRoundRobinDns26,
-			FailedRequestLoggingMode:      failedRequestLoggingMode27,
-			SafeHeaders:                   safeHeaders27,
-			ResponseRetrySettings:         responseRetrySettings28,
-			TimeoutRetrySettings:          timeoutRetrySettings28,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader28,
+			Concurrency:                   concurrency29,
+			MaxPayloadSizeKB:              maxPayloadSizeKb28,
+			MaxPayloadEvents:              maxPayloadEvents26,
+			Compress:                      compress34,
+			RejectUnauthorized:            rejectUnauthorized56,
+			TimeoutSec:                    timeoutSec28,
+			FlushPeriodSec:                flushPeriodSec39,
+			ExtraHTTPHeaders:              extraHTTPHeaders26,
+			UseRoundRobinDNS:              useRoundRobinDns25,
+			FailedRequestLoggingMode:      failedRequestLoggingMode26,
+			SafeHeaders:                   safeHeaders26,
+			ResponseRetrySettings:         responseRetrySettings27,
+			TimeoutRetrySettings:          timeoutRetrySettings27,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader27,
 			DumpFormatErrorsToDisk:        dumpFormatErrorsToDisk,
-			OnBackpressure:                onBackpressure56,
-			Description:                   description64,
-			Username:                      username14,
-			Password:                      password14,
-			CredentialsSecret:             credentialsSecret16,
+			OnBackpressure:                onBackpressure55,
+			Description:                   description63,
+			Username:                      username12,
+			Password:                      password12,
+			CredentialsSecret:             credentialsSecret14,
 			SQLUsername:                   sqlUsername,
 			WaitForAsyncInserts:           waitForAsyncInserts,
 			ExcludeMappingFields:          excludeMappingFields,
 			DescribeTable:                 describeTable,
 			ColumnMappings:                columnMappings,
-			PqStrictOrdering:              pqStrictOrdering46,
-			PqRatePerSec:                  pqRatePerSec46,
-			PqMode:                        pqMode46,
-			PqMaxBufferSize:               pqMaxBufferSize46,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec46,
-			PqMaxFileSize:                 pqMaxFileSize46,
-			PqMaxSize:                     pqMaxSize46,
-			PqPath:                        pqPath46,
-			PqCompress:                    pqCompress46,
-			PqOnBackpressure:              pqOnBackpressure46,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes46,
-			PqControls:                    pqControls46,
+			PqStrictOrdering:              pqStrictOrdering44,
+			PqRatePerSec:                  pqRatePerSec44,
+			PqMode:                        pqMode45,
+			PqMaxBufferSize:               pqMaxBufferSize44,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec44,
+			PqMaxFileSize:                 pqMaxFileSize45,
+			PqMaxSize:                     pqMaxSize45,
+			PqPath:                        pqPath45,
+			PqCompress:                    pqCompress45,
+			PqOnBackpressure:              pqOnBackpressure45,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes44,
+			PqControls:                    pqControls45,
 			TemplateURL:                   templateUrl16,
 			TemplateDatabase:              templateDatabase2,
 			TemplateTableName:             templateTableName,
-			Token:                         token15,
-			TextSecret:                    textSecret30,
+			Token:                         token13,
+			TextSecret:                    textSecret28,
 			LoginURL:                      loginUrl5,
 			SecretParamName:               secretParamName4,
 			Secret:                        secret7,
@@ -32666,41 +32289,41 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputLocalSearchStorage *shared.OutputLocalSearchStorage
 	if r.OutputLocalSearchStorage != nil {
-		id62 := new(string)
+		id61 := new(string)
 		if !r.OutputLocalSearchStorage.ID.IsUnknown() && !r.OutputLocalSearchStorage.ID.IsNull() {
-			*id62 = r.OutputLocalSearchStorage.ID.ValueString()
+			*id61 = r.OutputLocalSearchStorage.ID.ValueString()
 		} else {
-			id62 = nil
+			id61 = nil
 		}
-		typeVar62 := shared.OutputLocalSearchStorageType(r.OutputLocalSearchStorage.Type.ValueString())
-		pipeline62 := new(string)
+		typeVar61 := shared.OutputLocalSearchStorageType(r.OutputLocalSearchStorage.Type.ValueString())
+		pipeline61 := new(string)
 		if !r.OutputLocalSearchStorage.Pipeline.IsUnknown() && !r.OutputLocalSearchStorage.Pipeline.IsNull() {
-			*pipeline62 = r.OutputLocalSearchStorage.Pipeline.ValueString()
+			*pipeline61 = r.OutputLocalSearchStorage.Pipeline.ValueString()
 		} else {
-			pipeline62 = nil
+			pipeline61 = nil
 		}
-		systemFields62 := make([]string, 0, len(r.OutputLocalSearchStorage.SystemFields))
-		for systemFieldsIndex62 := range r.OutputLocalSearchStorage.SystemFields {
-			systemFields62 = append(systemFields62, r.OutputLocalSearchStorage.SystemFields[systemFieldsIndex62].ValueString())
+		systemFields61 := make([]string, 0, len(r.OutputLocalSearchStorage.SystemFields))
+		for systemFieldsIndex61 := range r.OutputLocalSearchStorage.SystemFields {
+			systemFields61 = append(systemFields61, r.OutputLocalSearchStorage.SystemFields[systemFieldsIndex61].ValueString())
 		}
-		environment62 := new(string)
+		environment61 := new(string)
 		if !r.OutputLocalSearchStorage.Environment.IsUnknown() && !r.OutputLocalSearchStorage.Environment.IsNull() {
-			*environment62 = r.OutputLocalSearchStorage.Environment.ValueString()
+			*environment61 = r.OutputLocalSearchStorage.Environment.ValueString()
 		} else {
-			environment62 = nil
+			environment61 = nil
 		}
-		streamtags62 := make([]string, 0, len(r.OutputLocalSearchStorage.Streamtags))
-		for streamtagsIndex62 := range r.OutputLocalSearchStorage.Streamtags {
-			streamtags62 = append(streamtags62, r.OutputLocalSearchStorage.Streamtags[streamtagsIndex62].ValueString())
+		streamtags61 := make([]string, 0, len(r.OutputLocalSearchStorage.Streamtags))
+		for streamtagsIndex61 := range r.OutputLocalSearchStorage.Streamtags {
+			streamtags61 = append(streamtags61, r.OutputLocalSearchStorage.Streamtags[streamtagsIndex61].ValueString())
 		}
 		var url19 string
 		url19 = r.OutputLocalSearchStorage.URL.ValueString()
 
-		authType34 := new(shared.AuthenticationTypeOptionsBasicCredentialsSecret)
+		authType32 := new(shared.AuthenticationTypeOptionsBasicCredentialsSecret)
 		if !r.OutputLocalSearchStorage.AuthType.IsUnknown() && !r.OutputLocalSearchStorage.AuthType.IsNull() {
-			*authType34 = shared.AuthenticationTypeOptionsBasicCredentialsSecret(r.OutputLocalSearchStorage.AuthType.ValueString())
+			*authType32 = shared.AuthenticationTypeOptionsBasicCredentialsSecret(r.OutputLocalSearchStorage.AuthType.ValueString())
 		} else {
-			authType34 = nil
+			authType32 = nil
 		}
 		var database3 string
 		database3 = r.OutputLocalSearchStorage.Database.ValueString()
@@ -32794,145 +32417,145 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				MaxVersion:      maxVersion19,
 			}
 		}
-		concurrency31 := new(float64)
+		concurrency30 := new(float64)
 		if !r.OutputLocalSearchStorage.Concurrency.IsUnknown() && !r.OutputLocalSearchStorage.Concurrency.IsNull() {
-			*concurrency31 = r.OutputLocalSearchStorage.Concurrency.ValueFloat64()
+			*concurrency30 = r.OutputLocalSearchStorage.Concurrency.ValueFloat64()
 		} else {
-			concurrency31 = nil
+			concurrency30 = nil
 		}
-		maxPayloadSizeKb30 := new(float64)
+		maxPayloadSizeKb29 := new(float64)
 		if !r.OutputLocalSearchStorage.MaxPayloadSizeKB.IsUnknown() && !r.OutputLocalSearchStorage.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb30 = r.OutputLocalSearchStorage.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb29 = r.OutputLocalSearchStorage.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb30 = nil
+			maxPayloadSizeKb29 = nil
 		}
-		maxPayloadEvents28 := new(float64)
+		maxPayloadEvents27 := new(float64)
 		if !r.OutputLocalSearchStorage.MaxPayloadEvents.IsUnknown() && !r.OutputLocalSearchStorage.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents28 = r.OutputLocalSearchStorage.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents27 = r.OutputLocalSearchStorage.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents28 = nil
+			maxPayloadEvents27 = nil
 		}
-		compress36 := new(bool)
+		compress35 := new(bool)
 		if !r.OutputLocalSearchStorage.Compress.IsUnknown() && !r.OutputLocalSearchStorage.Compress.IsNull() {
-			*compress36 = r.OutputLocalSearchStorage.Compress.ValueBool()
+			*compress35 = r.OutputLocalSearchStorage.Compress.ValueBool()
 		} else {
-			compress36 = nil
+			compress35 = nil
 		}
-		rejectUnauthorized58 := new(bool)
+		rejectUnauthorized57 := new(bool)
 		if !r.OutputLocalSearchStorage.RejectUnauthorized.IsUnknown() && !r.OutputLocalSearchStorage.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized58 = r.OutputLocalSearchStorage.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized57 = r.OutputLocalSearchStorage.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized58 = nil
+			rejectUnauthorized57 = nil
 		}
-		timeoutSec30 := new(float64)
+		timeoutSec29 := new(float64)
 		if !r.OutputLocalSearchStorage.TimeoutSec.IsUnknown() && !r.OutputLocalSearchStorage.TimeoutSec.IsNull() {
-			*timeoutSec30 = r.OutputLocalSearchStorage.TimeoutSec.ValueFloat64()
+			*timeoutSec29 = r.OutputLocalSearchStorage.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec30 = nil
+			timeoutSec29 = nil
 		}
-		flushPeriodSec41 := new(float64)
+		flushPeriodSec40 := new(float64)
 		if !r.OutputLocalSearchStorage.FlushPeriodSec.IsUnknown() && !r.OutputLocalSearchStorage.FlushPeriodSec.IsNull() {
-			*flushPeriodSec41 = r.OutputLocalSearchStorage.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec40 = r.OutputLocalSearchStorage.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec41 = nil
+			flushPeriodSec40 = nil
 		}
-		extraHTTPHeaders28 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputLocalSearchStorage.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex28 := range r.OutputLocalSearchStorage.ExtraHTTPHeaders {
-			name48 := new(string)
-			if !r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsUnknown() && !r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsNull() {
-				*name48 = r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.ValueString()
+		extraHTTPHeaders27 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputLocalSearchStorage.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex27 := range r.OutputLocalSearchStorage.ExtraHTTPHeaders {
+			name46 := new(string)
+			if !r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsUnknown() && !r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.IsNull() {
+				*name46 = r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Name.ValueString()
 			} else {
-				name48 = nil
+				name46 = nil
 			}
-			var value62 string
-			value62 = r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Value.ValueString()
+			var value60 string
+			value60 = r.OutputLocalSearchStorage.ExtraHTTPHeaders[extraHTTPHeadersIndex27].Value.ValueString()
 
-			extraHTTPHeaders28 = append(extraHTTPHeaders28, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name48,
-				Value: value62,
+			extraHTTPHeaders27 = append(extraHTTPHeaders27, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name46,
+				Value: value60,
 			})
 		}
-		useRoundRobinDns27 := new(bool)
+		useRoundRobinDns26 := new(bool)
 		if !r.OutputLocalSearchStorage.UseRoundRobinDNS.IsUnknown() && !r.OutputLocalSearchStorage.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns27 = r.OutputLocalSearchStorage.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns26 = r.OutputLocalSearchStorage.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns27 = nil
+			useRoundRobinDns26 = nil
 		}
-		failedRequestLoggingMode28 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode27 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputLocalSearchStorage.FailedRequestLoggingMode.IsUnknown() && !r.OutputLocalSearchStorage.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode28 = shared.FailedRequestLoggingModeOptions(r.OutputLocalSearchStorage.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode27 = shared.FailedRequestLoggingModeOptions(r.OutputLocalSearchStorage.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode28 = nil
+			failedRequestLoggingMode27 = nil
 		}
-		safeHeaders28 := make([]string, 0, len(r.OutputLocalSearchStorage.SafeHeaders))
-		for safeHeadersIndex28 := range r.OutputLocalSearchStorage.SafeHeaders {
-			safeHeaders28 = append(safeHeaders28, r.OutputLocalSearchStorage.SafeHeaders[safeHeadersIndex28].ValueString())
+		safeHeaders27 := make([]string, 0, len(r.OutputLocalSearchStorage.SafeHeaders))
+		for safeHeadersIndex27 := range r.OutputLocalSearchStorage.SafeHeaders {
+			safeHeaders27 = append(safeHeaders27, r.OutputLocalSearchStorage.SafeHeaders[safeHeadersIndex27].ValueString())
 		}
-		responseRetrySettings29 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputLocalSearchStorage.ResponseRetrySettings))
-		for responseRetrySettingsIndex29 := range r.OutputLocalSearchStorage.ResponseRetrySettings {
-			var httpStatus29 float64
-			httpStatus29 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].HTTPStatus.ValueFloat64()
+		responseRetrySettings28 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputLocalSearchStorage.ResponseRetrySettings))
+		for responseRetrySettingsIndex28 := range r.OutputLocalSearchStorage.ResponseRetrySettings {
+			var httpStatus28 float64
+			httpStatus28 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].HTTPStatus.ValueFloat64()
 
-			initialBackoff62 := new(float64)
-			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsNull() {
-				*initialBackoff62 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.ValueFloat64()
+			initialBackoff60 := new(float64)
+			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.IsNull() {
+				*initialBackoff60 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff62 = nil
+				initialBackoff60 = nil
 			}
-			backoffRate62 := new(float64)
-			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsNull() {
-				*backoffRate62 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.ValueFloat64()
+			backoffRate60 := new(float64)
+			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.IsNull() {
+				*backoffRate60 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate62 = nil
+				backoffRate60 = nil
 			}
-			maxBackoff58 := new(float64)
-			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsNull() {
-				*maxBackoff58 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.ValueFloat64()
+			maxBackoff56 := new(float64)
+			if !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsUnknown() && !r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.IsNull() {
+				*maxBackoff56 = r.OutputLocalSearchStorage.ResponseRetrySettings[responseRetrySettingsIndex28].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff58 = nil
+				maxBackoff56 = nil
 			}
-			responseRetrySettings29 = append(responseRetrySettings29, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus29,
-				InitialBackoff: initialBackoff62,
-				BackoffRate:    backoffRate62,
-				MaxBackoff:     maxBackoff58,
+			responseRetrySettings28 = append(responseRetrySettings28, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus28,
+				InitialBackoff: initialBackoff60,
+				BackoffRate:    backoffRate60,
+				MaxBackoff:     maxBackoff56,
 			})
 		}
-		var timeoutRetrySettings29 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings28 *shared.TimeoutRetrySettingsType
 		if r.OutputLocalSearchStorage.TimeoutRetrySettings != nil {
-			var timeoutRetry29 bool
-			timeoutRetry29 = r.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry28 bool
+			timeoutRetry28 = r.OutputLocalSearchStorage.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff63 := new(float64)
+			initialBackoff61 := new(float64)
 			if !r.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff63 = r.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff61 = r.OutputLocalSearchStorage.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff63 = nil
+				initialBackoff61 = nil
 			}
-			backoffRate63 := new(float64)
+			backoffRate61 := new(float64)
 			if !r.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate63 = r.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate61 = r.OutputLocalSearchStorage.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate63 = nil
+				backoffRate61 = nil
 			}
-			maxBackoff59 := new(float64)
+			maxBackoff57 := new(float64)
 			if !r.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff59 = r.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff57 = r.OutputLocalSearchStorage.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff59 = nil
+				maxBackoff57 = nil
 			}
-			timeoutRetrySettings29 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry29,
-				InitialBackoff: initialBackoff63,
-				BackoffRate:    backoffRate63,
-				MaxBackoff:     maxBackoff59,
+			timeoutRetrySettings28 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry28,
+				InitialBackoff: initialBackoff61,
+				BackoffRate:    backoffRate61,
+				MaxBackoff:     maxBackoff57,
 			}
 		}
-		responseHonorRetryAfterHeader29 := new(bool)
+		responseHonorRetryAfterHeader28 := new(bool)
 		if !r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader29 = r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader28 = r.OutputLocalSearchStorage.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader29 = nil
+			responseHonorRetryAfterHeader28 = nil
 		}
 		dumpFormatErrorsToDisk1 := new(bool)
 		if !r.OutputLocalSearchStorage.DumpFormatErrorsToDisk.IsUnknown() && !r.OutputLocalSearchStorage.DumpFormatErrorsToDisk.IsNull() {
@@ -32940,11 +32563,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			dumpFormatErrorsToDisk1 = nil
 		}
-		onBackpressure57 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure56 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputLocalSearchStorage.OnBackpressure.IsUnknown() && !r.OutputLocalSearchStorage.OnBackpressure.IsNull() {
-			*onBackpressure57 = shared.BackpressureBehaviorOptions(r.OutputLocalSearchStorage.OnBackpressure.ValueString())
+			*onBackpressure56 = shared.BackpressureBehaviorOptions(r.OutputLocalSearchStorage.OnBackpressure.ValueString())
 		} else {
-			onBackpressure57 = nil
+			onBackpressure56 = nil
 		}
 		var statsDestination *shared.StatsDestination
 		if r.OutputLocalSearchStorage.StatsDestination != nil {
@@ -32966,17 +32589,17 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				tableName2 = nil
 			}
-			authType35 := new(string)
+			authType33 := new(string)
 			if !r.OutputLocalSearchStorage.StatsDestination.AuthType.IsUnknown() && !r.OutputLocalSearchStorage.StatsDestination.AuthType.IsNull() {
-				*authType35 = r.OutputLocalSearchStorage.StatsDestination.AuthType.ValueString()
+				*authType33 = r.OutputLocalSearchStorage.StatsDestination.AuthType.ValueString()
 			} else {
-				authType35 = nil
+				authType33 = nil
 			}
-			username15 := new(string)
+			username13 := new(string)
 			if !r.OutputLocalSearchStorage.StatsDestination.Username.IsUnknown() && !r.OutputLocalSearchStorage.StatsDestination.Username.IsNull() {
-				*username15 = r.OutputLocalSearchStorage.StatsDestination.Username.ValueString()
+				*username13 = r.OutputLocalSearchStorage.StatsDestination.Username.ValueString()
 			} else {
-				username15 = nil
+				username13 = nil
 			}
 			sqlUsername1 := new(string)
 			if !r.OutputLocalSearchStorage.StatsDestination.SQLUsername.IsUnknown() && !r.OutputLocalSearchStorage.StatsDestination.SQLUsername.IsNull() {
@@ -32984,45 +32607,45 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				sqlUsername1 = nil
 			}
-			password15 := new(string)
+			password13 := new(string)
 			if !r.OutputLocalSearchStorage.StatsDestination.Password.IsUnknown() && !r.OutputLocalSearchStorage.StatsDestination.Password.IsNull() {
-				*password15 = r.OutputLocalSearchStorage.StatsDestination.Password.ValueString()
+				*password13 = r.OutputLocalSearchStorage.StatsDestination.Password.ValueString()
 			} else {
-				password15 = nil
+				password13 = nil
 			}
 			statsDestination = &shared.StatsDestination{
 				URL:         url20,
 				Database:    database4,
 				TableName:   tableName2,
-				AuthType:    authType35,
-				Username:    username15,
+				AuthType:    authType33,
+				Username:    username13,
 				SQLUsername: sqlUsername1,
-				Password:    password15,
+				Password:    password13,
 			}
 		}
-		description65 := new(string)
+		description64 := new(string)
 		if !r.OutputLocalSearchStorage.Description.IsUnknown() && !r.OutputLocalSearchStorage.Description.IsNull() {
-			*description65 = r.OutputLocalSearchStorage.Description.ValueString()
+			*description64 = r.OutputLocalSearchStorage.Description.ValueString()
 		} else {
-			description65 = nil
+			description64 = nil
 		}
-		username16 := new(string)
+		username14 := new(string)
 		if !r.OutputLocalSearchStorage.Username.IsUnknown() && !r.OutputLocalSearchStorage.Username.IsNull() {
-			*username16 = r.OutputLocalSearchStorage.Username.ValueString()
+			*username14 = r.OutputLocalSearchStorage.Username.ValueString()
 		} else {
-			username16 = nil
+			username14 = nil
 		}
-		password16 := new(string)
+		password14 := new(string)
 		if !r.OutputLocalSearchStorage.Password.IsUnknown() && !r.OutputLocalSearchStorage.Password.IsNull() {
-			*password16 = r.OutputLocalSearchStorage.Password.ValueString()
+			*password14 = r.OutputLocalSearchStorage.Password.ValueString()
 		} else {
-			password16 = nil
+			password14 = nil
 		}
-		credentialsSecret17 := new(string)
+		credentialsSecret15 := new(string)
 		if !r.OutputLocalSearchStorage.CredentialsSecret.IsUnknown() && !r.OutputLocalSearchStorage.CredentialsSecret.IsNull() {
-			*credentialsSecret17 = r.OutputLocalSearchStorage.CredentialsSecret.ValueString()
+			*credentialsSecret15 = r.OutputLocalSearchStorage.CredentialsSecret.ValueString()
 		} else {
-			credentialsSecret17 = nil
+			credentialsSecret15 = nil
 		}
 		sqlUsername2 := new(string)
 		if !r.OutputLocalSearchStorage.SQLUsername.IsUnknown() && !r.OutputLocalSearchStorage.SQLUsername.IsNull() {
@@ -33066,75 +32689,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				ColumnValueExpression: columnValueExpression1,
 			})
 		}
-		pqStrictOrdering47 := new(bool)
+		pqStrictOrdering45 := new(bool)
 		if !r.OutputLocalSearchStorage.PqStrictOrdering.IsUnknown() && !r.OutputLocalSearchStorage.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering47 = r.OutputLocalSearchStorage.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering45 = r.OutputLocalSearchStorage.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering47 = nil
+			pqStrictOrdering45 = nil
 		}
-		pqRatePerSec47 := new(float64)
+		pqRatePerSec45 := new(float64)
 		if !r.OutputLocalSearchStorage.PqRatePerSec.IsUnknown() && !r.OutputLocalSearchStorage.PqRatePerSec.IsNull() {
-			*pqRatePerSec47 = r.OutputLocalSearchStorage.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec45 = r.OutputLocalSearchStorage.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec47 = nil
+			pqRatePerSec45 = nil
 		}
-		pqMode47 := new(shared.ModeOptions)
+		pqMode46 := new(shared.ModeOptions)
 		if !r.OutputLocalSearchStorage.PqMode.IsUnknown() && !r.OutputLocalSearchStorage.PqMode.IsNull() {
-			*pqMode47 = shared.ModeOptions(r.OutputLocalSearchStorage.PqMode.ValueString())
+			*pqMode46 = shared.ModeOptions(r.OutputLocalSearchStorage.PqMode.ValueString())
 		} else {
-			pqMode47 = nil
+			pqMode46 = nil
 		}
-		pqMaxBufferSize47 := new(float64)
+		pqMaxBufferSize45 := new(float64)
 		if !r.OutputLocalSearchStorage.PqMaxBufferSize.IsUnknown() && !r.OutputLocalSearchStorage.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize47 = r.OutputLocalSearchStorage.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize45 = r.OutputLocalSearchStorage.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize47 = nil
+			pqMaxBufferSize45 = nil
 		}
-		pqMaxBackpressureSec47 := new(float64)
+		pqMaxBackpressureSec45 := new(float64)
 		if !r.OutputLocalSearchStorage.PqMaxBackpressureSec.IsUnknown() && !r.OutputLocalSearchStorage.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec47 = r.OutputLocalSearchStorage.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec45 = r.OutputLocalSearchStorage.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec47 = nil
+			pqMaxBackpressureSec45 = nil
 		}
-		pqMaxFileSize47 := new(string)
+		pqMaxFileSize46 := new(string)
 		if !r.OutputLocalSearchStorage.PqMaxFileSize.IsUnknown() && !r.OutputLocalSearchStorage.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize47 = r.OutputLocalSearchStorage.PqMaxFileSize.ValueString()
+			*pqMaxFileSize46 = r.OutputLocalSearchStorage.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize47 = nil
+			pqMaxFileSize46 = nil
 		}
-		pqMaxSize47 := new(string)
+		pqMaxSize46 := new(string)
 		if !r.OutputLocalSearchStorage.PqMaxSize.IsUnknown() && !r.OutputLocalSearchStorage.PqMaxSize.IsNull() {
-			*pqMaxSize47 = r.OutputLocalSearchStorage.PqMaxSize.ValueString()
+			*pqMaxSize46 = r.OutputLocalSearchStorage.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize47 = nil
+			pqMaxSize46 = nil
 		}
-		pqPath47 := new(string)
+		pqPath46 := new(string)
 		if !r.OutputLocalSearchStorage.PqPath.IsUnknown() && !r.OutputLocalSearchStorage.PqPath.IsNull() {
-			*pqPath47 = r.OutputLocalSearchStorage.PqPath.ValueString()
+			*pqPath46 = r.OutputLocalSearchStorage.PqPath.ValueString()
 		} else {
-			pqPath47 = nil
+			pqPath46 = nil
 		}
-		pqCompress47 := new(shared.CompressionOptionsPq)
+		pqCompress46 := new(shared.CompressionOptionsPq)
 		if !r.OutputLocalSearchStorage.PqCompress.IsUnknown() && !r.OutputLocalSearchStorage.PqCompress.IsNull() {
-			*pqCompress47 = shared.CompressionOptionsPq(r.OutputLocalSearchStorage.PqCompress.ValueString())
+			*pqCompress46 = shared.CompressionOptionsPq(r.OutputLocalSearchStorage.PqCompress.ValueString())
 		} else {
-			pqCompress47 = nil
+			pqCompress46 = nil
 		}
-		pqOnBackpressure47 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure46 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputLocalSearchStorage.PqOnBackpressure.IsUnknown() && !r.OutputLocalSearchStorage.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure47 = shared.QueueFullBehaviorOptions(r.OutputLocalSearchStorage.PqOnBackpressure.ValueString())
+			*pqOnBackpressure46 = shared.QueueFullBehaviorOptions(r.OutputLocalSearchStorage.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure47 = nil
+			pqOnBackpressure46 = nil
 		}
-		pqMaxBufferSizeBytes47 := new(string)
+		pqMaxBufferSizeBytes45 := new(string)
 		if !r.OutputLocalSearchStorage.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputLocalSearchStorage.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes47 = r.OutputLocalSearchStorage.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes45 = r.OutputLocalSearchStorage.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes47 = nil
+			pqMaxBufferSizeBytes45 = nil
 		}
-		var pqControls47 *shared.OutputLocalSearchStoragePqControls
+		var pqControls46 *shared.OutputLocalSearchStoragePqControls
 		if r.OutputLocalSearchStorage.PqControls != nil {
-			pqControls47 = &shared.OutputLocalSearchStoragePqControls{}
+			pqControls46 = &shared.OutputLocalSearchStoragePqControls{}
 		}
 		templateUrl17 := new(string)
 		if !r.OutputLocalSearchStorage.TemplateURL.IsUnknown() && !r.OutputLocalSearchStorage.TemplateURL.IsNull() {
@@ -33155,58 +32778,58 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateTableName1 = nil
 		}
 		outputLocalSearchStorage = &shared.OutputLocalSearchStorage{
-			ID:                            id62,
-			Type:                          typeVar62,
-			Pipeline:                      pipeline62,
-			SystemFields:                  systemFields62,
-			Environment:                   environment62,
-			Streamtags:                    streamtags62,
+			ID:                            id61,
+			Type:                          typeVar61,
+			Pipeline:                      pipeline61,
+			SystemFields:                  systemFields61,
+			Environment:                   environment61,
+			Streamtags:                    streamtags61,
 			URL:                           url19,
-			AuthType:                      authType34,
+			AuthType:                      authType32,
 			Database:                      database3,
 			TableName:                     tableName1,
 			Format:                        format19,
 			MappingType:                   mappingType1,
 			AsyncInserts:                  asyncInserts1,
 			TLS:                           tls24,
-			Concurrency:                   concurrency31,
-			MaxPayloadSizeKB:              maxPayloadSizeKb30,
-			MaxPayloadEvents:              maxPayloadEvents28,
-			Compress:                      compress36,
-			RejectUnauthorized:            rejectUnauthorized58,
-			TimeoutSec:                    timeoutSec30,
-			FlushPeriodSec:                flushPeriodSec41,
-			ExtraHTTPHeaders:              extraHTTPHeaders28,
-			UseRoundRobinDNS:              useRoundRobinDns27,
-			FailedRequestLoggingMode:      failedRequestLoggingMode28,
-			SafeHeaders:                   safeHeaders28,
-			ResponseRetrySettings:         responseRetrySettings29,
-			TimeoutRetrySettings:          timeoutRetrySettings29,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader29,
+			Concurrency:                   concurrency30,
+			MaxPayloadSizeKB:              maxPayloadSizeKb29,
+			MaxPayloadEvents:              maxPayloadEvents27,
+			Compress:                      compress35,
+			RejectUnauthorized:            rejectUnauthorized57,
+			TimeoutSec:                    timeoutSec29,
+			FlushPeriodSec:                flushPeriodSec40,
+			ExtraHTTPHeaders:              extraHTTPHeaders27,
+			UseRoundRobinDNS:              useRoundRobinDns26,
+			FailedRequestLoggingMode:      failedRequestLoggingMode27,
+			SafeHeaders:                   safeHeaders27,
+			ResponseRetrySettings:         responseRetrySettings28,
+			TimeoutRetrySettings:          timeoutRetrySettings28,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader28,
 			DumpFormatErrorsToDisk:        dumpFormatErrorsToDisk1,
-			OnBackpressure:                onBackpressure57,
+			OnBackpressure:                onBackpressure56,
 			StatsDestination:              statsDestination,
-			Description:                   description65,
-			Username:                      username16,
-			Password:                      password16,
-			CredentialsSecret:             credentialsSecret17,
+			Description:                   description64,
+			Username:                      username14,
+			Password:                      password14,
+			CredentialsSecret:             credentialsSecret15,
 			SQLUsername:                   sqlUsername2,
 			WaitForAsyncInserts:           waitForAsyncInserts1,
 			ExcludeMappingFields:          excludeMappingFields1,
 			DescribeTable:                 describeTable1,
 			ColumnMappings:                columnMappings1,
-			PqStrictOrdering:              pqStrictOrdering47,
-			PqRatePerSec:                  pqRatePerSec47,
-			PqMode:                        pqMode47,
-			PqMaxBufferSize:               pqMaxBufferSize47,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec47,
-			PqMaxFileSize:                 pqMaxFileSize47,
-			PqMaxSize:                     pqMaxSize47,
-			PqPath:                        pqPath47,
-			PqCompress:                    pqCompress47,
-			PqOnBackpressure:              pqOnBackpressure47,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes47,
-			PqControls:                    pqControls47,
+			PqStrictOrdering:              pqStrictOrdering45,
+			PqRatePerSec:                  pqRatePerSec45,
+			PqMode:                        pqMode46,
+			PqMaxBufferSize:               pqMaxBufferSize45,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec45,
+			PqMaxFileSize:                 pqMaxFileSize46,
+			PqMaxSize:                     pqMaxSize46,
+			PqPath:                        pqPath46,
+			PqCompress:                    pqCompress46,
+			PqOnBackpressure:              pqOnBackpressure46,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes45,
+			PqControls:                    pqControls46,
 			TemplateURL:                   templateUrl17,
 			TemplateDatabase:              templateDatabase3,
 			TemplateTableName:             templateTableName1,
@@ -33219,32 +32842,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputXsiam *shared.OutputXsiam
 	if r.OutputXsiam != nil {
-		id63 := new(string)
+		id62 := new(string)
 		if !r.OutputXsiam.ID.IsUnknown() && !r.OutputXsiam.ID.IsNull() {
-			*id63 = r.OutputXsiam.ID.ValueString()
+			*id62 = r.OutputXsiam.ID.ValueString()
 		} else {
-			id63 = nil
+			id62 = nil
 		}
-		typeVar63 := shared.OutputXsiamType(r.OutputXsiam.Type.ValueString())
-		pipeline63 := new(string)
+		typeVar62 := shared.OutputXsiamType(r.OutputXsiam.Type.ValueString())
+		pipeline62 := new(string)
 		if !r.OutputXsiam.Pipeline.IsUnknown() && !r.OutputXsiam.Pipeline.IsNull() {
-			*pipeline63 = r.OutputXsiam.Pipeline.ValueString()
+			*pipeline62 = r.OutputXsiam.Pipeline.ValueString()
 		} else {
-			pipeline63 = nil
+			pipeline62 = nil
 		}
-		systemFields63 := make([]string, 0, len(r.OutputXsiam.SystemFields))
-		for systemFieldsIndex63 := range r.OutputXsiam.SystemFields {
-			systemFields63 = append(systemFields63, r.OutputXsiam.SystemFields[systemFieldsIndex63].ValueString())
+		systemFields62 := make([]string, 0, len(r.OutputXsiam.SystemFields))
+		for systemFieldsIndex62 := range r.OutputXsiam.SystemFields {
+			systemFields62 = append(systemFields62, r.OutputXsiam.SystemFields[systemFieldsIndex62].ValueString())
 		}
-		environment63 := new(string)
+		environment62 := new(string)
 		if !r.OutputXsiam.Environment.IsUnknown() && !r.OutputXsiam.Environment.IsNull() {
-			*environment63 = r.OutputXsiam.Environment.ValueString()
+			*environment62 = r.OutputXsiam.Environment.ValueString()
 		} else {
-			environment63 = nil
+			environment62 = nil
 		}
-		streamtags63 := make([]string, 0, len(r.OutputXsiam.Streamtags))
-		for streamtagsIndex63 := range r.OutputXsiam.Streamtags {
-			streamtags63 = append(streamtags63, r.OutputXsiam.Streamtags[streamtagsIndex63].ValueString())
+		streamtags62 := make([]string, 0, len(r.OutputXsiam.Streamtags))
+		for streamtagsIndex62 := range r.OutputXsiam.Streamtags {
+			streamtags62 = append(streamtags62, r.OutputXsiam.Streamtags[streamtagsIndex62].ValueString())
 		}
 		loadBalanced8 := new(bool)
 		if !r.OutputXsiam.LoadBalanced.IsUnknown() && !r.OutputXsiam.LoadBalanced.IsNull() {
@@ -33252,139 +32875,139 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			loadBalanced8 = nil
 		}
-		concurrency32 := new(float64)
+		concurrency31 := new(float64)
 		if !r.OutputXsiam.Concurrency.IsUnknown() && !r.OutputXsiam.Concurrency.IsNull() {
-			*concurrency32 = r.OutputXsiam.Concurrency.ValueFloat64()
+			*concurrency31 = r.OutputXsiam.Concurrency.ValueFloat64()
 		} else {
-			concurrency32 = nil
+			concurrency31 = nil
 		}
-		maxPayloadSizeKb31 := new(float64)
+		maxPayloadSizeKb30 := new(float64)
 		if !r.OutputXsiam.MaxPayloadSizeKB.IsUnknown() && !r.OutputXsiam.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb31 = r.OutputXsiam.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb30 = r.OutputXsiam.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb31 = nil
+			maxPayloadSizeKb30 = nil
 		}
-		maxPayloadEvents29 := new(float64)
+		maxPayloadEvents28 := new(float64)
 		if !r.OutputXsiam.MaxPayloadEvents.IsUnknown() && !r.OutputXsiam.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents29 = r.OutputXsiam.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents28 = r.OutputXsiam.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents29 = nil
+			maxPayloadEvents28 = nil
 		}
-		rejectUnauthorized59 := new(bool)
+		rejectUnauthorized58 := new(bool)
 		if !r.OutputXsiam.RejectUnauthorized.IsUnknown() && !r.OutputXsiam.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized59 = r.OutputXsiam.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized58 = r.OutputXsiam.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized59 = nil
+			rejectUnauthorized58 = nil
 		}
-		timeoutSec31 := new(float64)
+		timeoutSec30 := new(float64)
 		if !r.OutputXsiam.TimeoutSec.IsUnknown() && !r.OutputXsiam.TimeoutSec.IsNull() {
-			*timeoutSec31 = r.OutputXsiam.TimeoutSec.ValueFloat64()
+			*timeoutSec30 = r.OutputXsiam.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec31 = nil
+			timeoutSec30 = nil
 		}
-		flushPeriodSec42 := new(float64)
+		flushPeriodSec41 := new(float64)
 		if !r.OutputXsiam.FlushPeriodSec.IsUnknown() && !r.OutputXsiam.FlushPeriodSec.IsNull() {
-			*flushPeriodSec42 = r.OutputXsiam.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec41 = r.OutputXsiam.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec42 = nil
+			flushPeriodSec41 = nil
 		}
-		extraHTTPHeaders29 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputXsiam.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex29 := range r.OutputXsiam.ExtraHTTPHeaders {
-			name49 := new(string)
-			if !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsUnknown() && !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsNull() {
-				*name49 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.ValueString()
+		extraHTTPHeaders28 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputXsiam.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex28 := range r.OutputXsiam.ExtraHTTPHeaders {
+			name47 := new(string)
+			if !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsUnknown() && !r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.IsNull() {
+				*name47 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Name.ValueString()
 			} else {
-				name49 = nil
+				name47 = nil
 			}
-			var value63 string
-			value63 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Value.ValueString()
+			var value61 string
+			value61 = r.OutputXsiam.ExtraHTTPHeaders[extraHTTPHeadersIndex28].Value.ValueString()
 
-			extraHTTPHeaders29 = append(extraHTTPHeaders29, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name49,
-				Value: value63,
+			extraHTTPHeaders28 = append(extraHTTPHeaders28, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name47,
+				Value: value61,
 			})
 		}
-		failedRequestLoggingMode29 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode28 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputXsiam.FailedRequestLoggingMode.IsUnknown() && !r.OutputXsiam.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode29 = shared.FailedRequestLoggingModeOptions(r.OutputXsiam.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode28 = shared.FailedRequestLoggingModeOptions(r.OutputXsiam.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode29 = nil
+			failedRequestLoggingMode28 = nil
 		}
-		safeHeaders29 := make([]string, 0, len(r.OutputXsiam.SafeHeaders))
-		for safeHeadersIndex29 := range r.OutputXsiam.SafeHeaders {
-			safeHeaders29 = append(safeHeaders29, r.OutputXsiam.SafeHeaders[safeHeadersIndex29].ValueString())
+		safeHeaders28 := make([]string, 0, len(r.OutputXsiam.SafeHeaders))
+		for safeHeadersIndex28 := range r.OutputXsiam.SafeHeaders {
+			safeHeaders28 = append(safeHeaders28, r.OutputXsiam.SafeHeaders[safeHeadersIndex28].ValueString())
 		}
-		authType36 := new(shared.OutputXsiamAuthenticationMethod)
+		authType34 := new(shared.OutputXsiamAuthenticationMethod)
 		if !r.OutputXsiam.AuthType.IsUnknown() && !r.OutputXsiam.AuthType.IsNull() {
-			*authType36 = shared.OutputXsiamAuthenticationMethod(r.OutputXsiam.AuthType.ValueString())
+			*authType34 = shared.OutputXsiamAuthenticationMethod(r.OutputXsiam.AuthType.ValueString())
 		} else {
-			authType36 = nil
+			authType34 = nil
 		}
-		responseRetrySettings30 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputXsiam.ResponseRetrySettings))
-		for responseRetrySettingsIndex30 := range r.OutputXsiam.ResponseRetrySettings {
-			var httpStatus30 float64
-			httpStatus30 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].HTTPStatus.ValueFloat64()
+		responseRetrySettings29 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputXsiam.ResponseRetrySettings))
+		for responseRetrySettingsIndex29 := range r.OutputXsiam.ResponseRetrySettings {
+			var httpStatus29 float64
+			httpStatus29 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].HTTPStatus.ValueFloat64()
 
-			initialBackoff64 := new(float64)
-			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsNull() {
-				*initialBackoff64 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.ValueFloat64()
+			initialBackoff62 := new(float64)
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.IsNull() {
+				*initialBackoff62 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff64 = nil
+				initialBackoff62 = nil
 			}
-			backoffRate64 := new(float64)
-			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsNull() {
-				*backoffRate64 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.ValueFloat64()
+			backoffRate62 := new(float64)
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.IsNull() {
+				*backoffRate62 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate64 = nil
+				backoffRate62 = nil
 			}
-			maxBackoff60 := new(float64)
-			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsNull() {
-				*maxBackoff60 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.ValueFloat64()
+			maxBackoff58 := new(float64)
+			if !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsUnknown() && !r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.IsNull() {
+				*maxBackoff58 = r.OutputXsiam.ResponseRetrySettings[responseRetrySettingsIndex29].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff60 = nil
+				maxBackoff58 = nil
 			}
-			responseRetrySettings30 = append(responseRetrySettings30, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus30,
-				InitialBackoff: initialBackoff64,
-				BackoffRate:    backoffRate64,
-				MaxBackoff:     maxBackoff60,
+			responseRetrySettings29 = append(responseRetrySettings29, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus29,
+				InitialBackoff: initialBackoff62,
+				BackoffRate:    backoffRate62,
+				MaxBackoff:     maxBackoff58,
 			})
 		}
-		var timeoutRetrySettings30 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings29 *shared.TimeoutRetrySettingsType
 		if r.OutputXsiam.TimeoutRetrySettings != nil {
-			var timeoutRetry30 bool
-			timeoutRetry30 = r.OutputXsiam.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry29 bool
+			timeoutRetry29 = r.OutputXsiam.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff65 := new(float64)
+			initialBackoff63 := new(float64)
 			if !r.OutputXsiam.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputXsiam.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff65 = r.OutputXsiam.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff63 = r.OutputXsiam.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff65 = nil
+				initialBackoff63 = nil
 			}
-			backoffRate65 := new(float64)
+			backoffRate63 := new(float64)
 			if !r.OutputXsiam.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputXsiam.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate65 = r.OutputXsiam.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate63 = r.OutputXsiam.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate65 = nil
+				backoffRate63 = nil
 			}
-			maxBackoff61 := new(float64)
+			maxBackoff59 := new(float64)
 			if !r.OutputXsiam.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputXsiam.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff61 = r.OutputXsiam.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff59 = r.OutputXsiam.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff61 = nil
+				maxBackoff59 = nil
 			}
-			timeoutRetrySettings30 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry30,
-				InitialBackoff: initialBackoff65,
-				BackoffRate:    backoffRate65,
-				MaxBackoff:     maxBackoff61,
+			timeoutRetrySettings29 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry29,
+				InitialBackoff: initialBackoff63,
+				BackoffRate:    backoffRate63,
+				MaxBackoff:     maxBackoff59,
 			}
 		}
-		responseHonorRetryAfterHeader30 := new(bool)
+		responseHonorRetryAfterHeader29 := new(bool)
 		if !r.OutputXsiam.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputXsiam.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader30 = r.OutputXsiam.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader29 = r.OutputXsiam.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader30 = nil
+			responseHonorRetryAfterHeader29 = nil
 		}
 		throttleRateReqPerSec1 := new(int64)
 		if !r.OutputXsiam.ThrottleRateReqPerSec.IsUnknown() && !r.OutputXsiam.ThrottleRateReqPerSec.IsNull() {
@@ -33392,11 +33015,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			throttleRateReqPerSec1 = nil
 		}
-		onBackpressure58 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure57 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputXsiam.OnBackpressure.IsUnknown() && !r.OutputXsiam.OnBackpressure.IsNull() {
-			*onBackpressure58 = shared.BackpressureBehaviorOptions(r.OutputXsiam.OnBackpressure.ValueString())
+			*onBackpressure57 = shared.BackpressureBehaviorOptions(r.OutputXsiam.OnBackpressure.ValueString())
 		} else {
-			onBackpressure58 = nil
+			onBackpressure57 = nil
 		}
 		totalMemoryLimitKb9 := new(float64)
 		if !r.OutputXsiam.TotalMemoryLimitKB.IsUnknown() && !r.OutputXsiam.TotalMemoryLimitKB.IsNull() {
@@ -33404,11 +33027,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			totalMemoryLimitKb9 = nil
 		}
-		description66 := new(string)
+		description65 := new(string)
 		if !r.OutputXsiam.Description.IsUnknown() && !r.OutputXsiam.Description.IsNull() {
-			*description66 = r.OutputXsiam.Description.ValueString()
+			*description65 = r.OutputXsiam.Description.ValueString()
 		} else {
-			description66 = nil
+			description65 = nil
 		}
 		url21 := new(string)
 		if !r.OutputXsiam.URL.IsUnknown() && !r.OutputXsiam.URL.IsNull() {
@@ -33416,11 +33039,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			url21 = nil
 		}
-		useRoundRobinDns28 := new(bool)
+		useRoundRobinDns27 := new(bool)
 		if !r.OutputXsiam.UseRoundRobinDNS.IsUnknown() && !r.OutputXsiam.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns28 = r.OutputXsiam.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns27 = r.OutputXsiam.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns28 = nil
+			useRoundRobinDns27 = nil
 		}
 		excludeSelf9 := new(bool)
 		if !r.OutputXsiam.ExcludeSelf.IsUnknown() && !r.OutputXsiam.ExcludeSelf.IsNull() {
@@ -33457,87 +33080,87 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			loadBalanceStatsPeriodSec9 = nil
 		}
-		token16 := new(string)
+		token14 := new(string)
 		if !r.OutputXsiam.Token.IsUnknown() && !r.OutputXsiam.Token.IsNull() {
-			*token16 = r.OutputXsiam.Token.ValueString()
+			*token14 = r.OutputXsiam.Token.ValueString()
 		} else {
-			token16 = nil
+			token14 = nil
 		}
-		textSecret31 := new(string)
+		textSecret29 := new(string)
 		if !r.OutputXsiam.TextSecret.IsUnknown() && !r.OutputXsiam.TextSecret.IsNull() {
-			*textSecret31 = r.OutputXsiam.TextSecret.ValueString()
+			*textSecret29 = r.OutputXsiam.TextSecret.ValueString()
 		} else {
-			textSecret31 = nil
+			textSecret29 = nil
 		}
-		pqStrictOrdering48 := new(bool)
+		pqStrictOrdering46 := new(bool)
 		if !r.OutputXsiam.PqStrictOrdering.IsUnknown() && !r.OutputXsiam.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering48 = r.OutputXsiam.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering46 = r.OutputXsiam.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering48 = nil
+			pqStrictOrdering46 = nil
 		}
-		pqRatePerSec48 := new(float64)
+		pqRatePerSec46 := new(float64)
 		if !r.OutputXsiam.PqRatePerSec.IsUnknown() && !r.OutputXsiam.PqRatePerSec.IsNull() {
-			*pqRatePerSec48 = r.OutputXsiam.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec46 = r.OutputXsiam.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec48 = nil
+			pqRatePerSec46 = nil
 		}
-		pqMode48 := new(shared.ModeOptions)
+		pqMode47 := new(shared.ModeOptions)
 		if !r.OutputXsiam.PqMode.IsUnknown() && !r.OutputXsiam.PqMode.IsNull() {
-			*pqMode48 = shared.ModeOptions(r.OutputXsiam.PqMode.ValueString())
+			*pqMode47 = shared.ModeOptions(r.OutputXsiam.PqMode.ValueString())
 		} else {
-			pqMode48 = nil
+			pqMode47 = nil
 		}
-		pqMaxBufferSize48 := new(float64)
+		pqMaxBufferSize46 := new(float64)
 		if !r.OutputXsiam.PqMaxBufferSize.IsUnknown() && !r.OutputXsiam.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize48 = r.OutputXsiam.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize46 = r.OutputXsiam.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize48 = nil
+			pqMaxBufferSize46 = nil
 		}
-		pqMaxBackpressureSec48 := new(float64)
+		pqMaxBackpressureSec46 := new(float64)
 		if !r.OutputXsiam.PqMaxBackpressureSec.IsUnknown() && !r.OutputXsiam.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec48 = r.OutputXsiam.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec46 = r.OutputXsiam.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec48 = nil
+			pqMaxBackpressureSec46 = nil
 		}
-		pqMaxFileSize48 := new(string)
+		pqMaxFileSize47 := new(string)
 		if !r.OutputXsiam.PqMaxFileSize.IsUnknown() && !r.OutputXsiam.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize48 = r.OutputXsiam.PqMaxFileSize.ValueString()
+			*pqMaxFileSize47 = r.OutputXsiam.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize48 = nil
+			pqMaxFileSize47 = nil
 		}
-		pqMaxSize48 := new(string)
+		pqMaxSize47 := new(string)
 		if !r.OutputXsiam.PqMaxSize.IsUnknown() && !r.OutputXsiam.PqMaxSize.IsNull() {
-			*pqMaxSize48 = r.OutputXsiam.PqMaxSize.ValueString()
+			*pqMaxSize47 = r.OutputXsiam.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize48 = nil
+			pqMaxSize47 = nil
 		}
-		pqPath48 := new(string)
+		pqPath47 := new(string)
 		if !r.OutputXsiam.PqPath.IsUnknown() && !r.OutputXsiam.PqPath.IsNull() {
-			*pqPath48 = r.OutputXsiam.PqPath.ValueString()
+			*pqPath47 = r.OutputXsiam.PqPath.ValueString()
 		} else {
-			pqPath48 = nil
+			pqPath47 = nil
 		}
-		pqCompress48 := new(shared.CompressionOptionsPq)
+		pqCompress47 := new(shared.CompressionOptionsPq)
 		if !r.OutputXsiam.PqCompress.IsUnknown() && !r.OutputXsiam.PqCompress.IsNull() {
-			*pqCompress48 = shared.CompressionOptionsPq(r.OutputXsiam.PqCompress.ValueString())
+			*pqCompress47 = shared.CompressionOptionsPq(r.OutputXsiam.PqCompress.ValueString())
 		} else {
-			pqCompress48 = nil
+			pqCompress47 = nil
 		}
-		pqOnBackpressure48 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure47 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputXsiam.PqOnBackpressure.IsUnknown() && !r.OutputXsiam.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure48 = shared.QueueFullBehaviorOptions(r.OutputXsiam.PqOnBackpressure.ValueString())
+			*pqOnBackpressure47 = shared.QueueFullBehaviorOptions(r.OutputXsiam.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure48 = nil
+			pqOnBackpressure47 = nil
 		}
-		pqMaxBufferSizeBytes48 := new(string)
+		pqMaxBufferSizeBytes46 := new(string)
 		if !r.OutputXsiam.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputXsiam.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes48 = r.OutputXsiam.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes46 = r.OutputXsiam.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes48 = nil
+			pqMaxBufferSizeBytes46 = nil
 		}
-		var pqControls48 *shared.OutputXsiamPqControls
+		var pqControls47 *shared.OutputXsiamPqControls
 		if r.OutputXsiam.PqControls != nil {
-			pqControls48 = &shared.OutputXsiamPqControls{}
+			pqControls47 = &shared.OutputXsiamPqControls{}
 		}
 		templateUrl18 := new(string)
 		if !r.OutputXsiam.TemplateURL.IsUnknown() && !r.OutputXsiam.TemplateURL.IsNull() {
@@ -33546,50 +33169,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateUrl18 = nil
 		}
 		outputXsiam = &shared.OutputXsiam{
-			ID:                            id63,
-			Type:                          typeVar63,
-			Pipeline:                      pipeline63,
-			SystemFields:                  systemFields63,
-			Environment:                   environment63,
-			Streamtags:                    streamtags63,
+			ID:                            id62,
+			Type:                          typeVar62,
+			Pipeline:                      pipeline62,
+			SystemFields:                  systemFields62,
+			Environment:                   environment62,
+			Streamtags:                    streamtags62,
 			LoadBalanced:                  loadBalanced8,
-			Concurrency:                   concurrency32,
-			MaxPayloadSizeKB:              maxPayloadSizeKb31,
-			MaxPayloadEvents:              maxPayloadEvents29,
-			RejectUnauthorized:            rejectUnauthorized59,
-			TimeoutSec:                    timeoutSec31,
-			FlushPeriodSec:                flushPeriodSec42,
-			ExtraHTTPHeaders:              extraHTTPHeaders29,
-			FailedRequestLoggingMode:      failedRequestLoggingMode29,
-			SafeHeaders:                   safeHeaders29,
-			AuthType:                      authType36,
-			ResponseRetrySettings:         responseRetrySettings30,
-			TimeoutRetrySettings:          timeoutRetrySettings30,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader30,
+			Concurrency:                   concurrency31,
+			MaxPayloadSizeKB:              maxPayloadSizeKb30,
+			MaxPayloadEvents:              maxPayloadEvents28,
+			RejectUnauthorized:            rejectUnauthorized58,
+			TimeoutSec:                    timeoutSec30,
+			FlushPeriodSec:                flushPeriodSec41,
+			ExtraHTTPHeaders:              extraHTTPHeaders28,
+			FailedRequestLoggingMode:      failedRequestLoggingMode28,
+			SafeHeaders:                   safeHeaders28,
+			AuthType:                      authType34,
+			ResponseRetrySettings:         responseRetrySettings29,
+			TimeoutRetrySettings:          timeoutRetrySettings29,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader29,
 			ThrottleRateReqPerSec:         throttleRateReqPerSec1,
-			OnBackpressure:                onBackpressure58,
+			OnBackpressure:                onBackpressure57,
 			TotalMemoryLimitKB:            totalMemoryLimitKb9,
-			Description:                   description66,
+			Description:                   description65,
 			URL:                           url21,
-			UseRoundRobinDNS:              useRoundRobinDns28,
+			UseRoundRobinDNS:              useRoundRobinDns27,
 			ExcludeSelf:                   excludeSelf9,
 			Urls:                          urls5,
 			DNSResolvePeriodSec:           dnsResolvePeriodSec13,
 			LoadBalanceStatsPeriodSec:     loadBalanceStatsPeriodSec9,
-			Token:                         token16,
-			TextSecret:                    textSecret31,
-			PqStrictOrdering:              pqStrictOrdering48,
-			PqRatePerSec:                  pqRatePerSec48,
-			PqMode:                        pqMode48,
-			PqMaxBufferSize:               pqMaxBufferSize48,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec48,
-			PqMaxFileSize:                 pqMaxFileSize48,
-			PqMaxSize:                     pqMaxSize48,
-			PqPath:                        pqPath48,
-			PqCompress:                    pqCompress48,
-			PqOnBackpressure:              pqOnBackpressure48,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes48,
-			PqControls:                    pqControls48,
+			Token:                         token14,
+			TextSecret:                    textSecret29,
+			PqStrictOrdering:              pqStrictOrdering46,
+			PqRatePerSec:                  pqRatePerSec46,
+			PqMode:                        pqMode47,
+			PqMaxBufferSize:               pqMaxBufferSize46,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec46,
+			PqMaxFileSize:                 pqMaxFileSize47,
+			PqMaxSize:                     pqMaxSize47,
+			PqPath:                        pqPath47,
+			PqCompress:                    pqCompress47,
+			PqOnBackpressure:              pqOnBackpressure47,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes46,
+			PqControls:                    pqControls47,
 			TemplateURL:                   templateUrl18,
 		}
 	}
@@ -33600,32 +33223,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputNetflow *shared.OutputNetflow
 	if r.OutputNetflow != nil {
-		id64 := new(string)
+		id63 := new(string)
 		if !r.OutputNetflow.ID.IsUnknown() && !r.OutputNetflow.ID.IsNull() {
-			*id64 = r.OutputNetflow.ID.ValueString()
+			*id63 = r.OutputNetflow.ID.ValueString()
 		} else {
-			id64 = nil
+			id63 = nil
 		}
-		typeVar64 := shared.OutputNetflowType(r.OutputNetflow.Type.ValueString())
-		pipeline64 := new(string)
+		typeVar63 := shared.OutputNetflowType(r.OutputNetflow.Type.ValueString())
+		pipeline63 := new(string)
 		if !r.OutputNetflow.Pipeline.IsUnknown() && !r.OutputNetflow.Pipeline.IsNull() {
-			*pipeline64 = r.OutputNetflow.Pipeline.ValueString()
+			*pipeline63 = r.OutputNetflow.Pipeline.ValueString()
 		} else {
-			pipeline64 = nil
+			pipeline63 = nil
 		}
-		systemFields64 := make([]string, 0, len(r.OutputNetflow.SystemFields))
-		for systemFieldsIndex64 := range r.OutputNetflow.SystemFields {
-			systemFields64 = append(systemFields64, r.OutputNetflow.SystemFields[systemFieldsIndex64].ValueString())
+		systemFields63 := make([]string, 0, len(r.OutputNetflow.SystemFields))
+		for systemFieldsIndex63 := range r.OutputNetflow.SystemFields {
+			systemFields63 = append(systemFields63, r.OutputNetflow.SystemFields[systemFieldsIndex63].ValueString())
 		}
-		environment64 := new(string)
+		environment63 := new(string)
 		if !r.OutputNetflow.Environment.IsUnknown() && !r.OutputNetflow.Environment.IsNull() {
-			*environment64 = r.OutputNetflow.Environment.ValueString()
+			*environment63 = r.OutputNetflow.Environment.ValueString()
 		} else {
-			environment64 = nil
+			environment63 = nil
 		}
-		streamtags64 := make([]string, 0, len(r.OutputNetflow.Streamtags))
-		for streamtagsIndex64 := range r.OutputNetflow.Streamtags {
-			streamtags64 = append(streamtags64, r.OutputNetflow.Streamtags[streamtagsIndex64].ValueString())
+		streamtags63 := make([]string, 0, len(r.OutputNetflow.Streamtags))
+		for streamtagsIndex63 := range r.OutputNetflow.Streamtags {
+			streamtags63 = append(streamtags63, r.OutputNetflow.Streamtags[streamtagsIndex63].ValueString())
 		}
 		hosts5 := make([]shared.OutputNetflowHost, 0, len(r.OutputNetflow.Hosts))
 		for hostsIndex5 := range r.OutputNetflow.Hosts {
@@ -33666,11 +33289,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			enableIPSpoofing1 = nil
 		}
-		description67 := new(string)
+		description66 := new(string)
 		if !r.OutputNetflow.Description.IsUnknown() && !r.OutputNetflow.Description.IsNull() {
-			*description67 = r.OutputNetflow.Description.ValueString()
+			*description66 = r.OutputNetflow.Description.ValueString()
 		} else {
-			description67 = nil
+			description66 = nil
 		}
 		maxRecordSize1 := new(float64)
 		if !r.OutputNetflow.MaxRecordSize.IsUnknown() && !r.OutputNetflow.MaxRecordSize.IsNull() {
@@ -33679,16 +33302,16 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			maxRecordSize1 = nil
 		}
 		outputNetflow = &shared.OutputNetflow{
-			ID:                  id64,
-			Type:                typeVar64,
-			Pipeline:            pipeline64,
-			SystemFields:        systemFields64,
-			Environment:         environment64,
-			Streamtags:          streamtags64,
+			ID:                  id63,
+			Type:                typeVar63,
+			Pipeline:            pipeline63,
+			SystemFields:        systemFields63,
+			Environment:         environment63,
+			Streamtags:          streamtags63,
 			Hosts:               hosts5,
 			DNSResolvePeriodSec: dnsResolvePeriodSec14,
 			EnableIPSpoofing:    enableIPSpoofing1,
-			Description:         description67,
+			Description:         description66,
 			MaxRecordSize:       maxRecordSize1,
 		}
 	}
@@ -33699,32 +33322,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDynatraceHTTP *shared.OutputDynatraceHTTP
 	if r.OutputDynatraceHTTP != nil {
-		id65 := new(string)
+		id64 := new(string)
 		if !r.OutputDynatraceHTTP.ID.IsUnknown() && !r.OutputDynatraceHTTP.ID.IsNull() {
-			*id65 = r.OutputDynatraceHTTP.ID.ValueString()
+			*id64 = r.OutputDynatraceHTTP.ID.ValueString()
 		} else {
-			id65 = nil
+			id64 = nil
 		}
-		typeVar65 := shared.OutputDynatraceHTTPType(r.OutputDynatraceHTTP.Type.ValueString())
-		pipeline65 := new(string)
+		typeVar64 := shared.OutputDynatraceHTTPType(r.OutputDynatraceHTTP.Type.ValueString())
+		pipeline64 := new(string)
 		if !r.OutputDynatraceHTTP.Pipeline.IsUnknown() && !r.OutputDynatraceHTTP.Pipeline.IsNull() {
-			*pipeline65 = r.OutputDynatraceHTTP.Pipeline.ValueString()
+			*pipeline64 = r.OutputDynatraceHTTP.Pipeline.ValueString()
 		} else {
-			pipeline65 = nil
+			pipeline64 = nil
 		}
-		systemFields65 := make([]string, 0, len(r.OutputDynatraceHTTP.SystemFields))
-		for systemFieldsIndex65 := range r.OutputDynatraceHTTP.SystemFields {
-			systemFields65 = append(systemFields65, r.OutputDynatraceHTTP.SystemFields[systemFieldsIndex65].ValueString())
+		systemFields64 := make([]string, 0, len(r.OutputDynatraceHTTP.SystemFields))
+		for systemFieldsIndex64 := range r.OutputDynatraceHTTP.SystemFields {
+			systemFields64 = append(systemFields64, r.OutputDynatraceHTTP.SystemFields[systemFieldsIndex64].ValueString())
 		}
-		environment65 := new(string)
+		environment64 := new(string)
 		if !r.OutputDynatraceHTTP.Environment.IsUnknown() && !r.OutputDynatraceHTTP.Environment.IsNull() {
-			*environment65 = r.OutputDynatraceHTTP.Environment.ValueString()
+			*environment64 = r.OutputDynatraceHTTP.Environment.ValueString()
 		} else {
-			environment65 = nil
+			environment64 = nil
 		}
-		streamtags65 := make([]string, 0, len(r.OutputDynatraceHTTP.Streamtags))
-		for streamtagsIndex65 := range r.OutputDynatraceHTTP.Streamtags {
-			streamtags65 = append(streamtags65, r.OutputDynatraceHTTP.Streamtags[streamtagsIndex65].ValueString())
+		streamtags64 := make([]string, 0, len(r.OutputDynatraceHTTP.Streamtags))
+		for streamtagsIndex64 := range r.OutputDynatraceHTTP.Streamtags {
+			streamtags64 = append(streamtags64, r.OutputDynatraceHTTP.Streamtags[streamtagsIndex64].ValueString())
 		}
 		method1 := new(shared.MethodOptions)
 		if !r.OutputDynatraceHTTP.Method.IsUnknown() && !r.OutputDynatraceHTTP.Method.IsNull() {
@@ -33738,157 +33361,157 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			keepAlive5 = nil
 		}
-		concurrency33 := new(float64)
+		concurrency32 := new(float64)
 		if !r.OutputDynatraceHTTP.Concurrency.IsUnknown() && !r.OutputDynatraceHTTP.Concurrency.IsNull() {
-			*concurrency33 = r.OutputDynatraceHTTP.Concurrency.ValueFloat64()
+			*concurrency32 = r.OutputDynatraceHTTP.Concurrency.ValueFloat64()
 		} else {
-			concurrency33 = nil
+			concurrency32 = nil
 		}
-		maxPayloadSizeKb32 := new(float64)
+		maxPayloadSizeKb31 := new(float64)
 		if !r.OutputDynatraceHTTP.MaxPayloadSizeKB.IsUnknown() && !r.OutputDynatraceHTTP.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb32 = r.OutputDynatraceHTTP.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb31 = r.OutputDynatraceHTTP.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb32 = nil
+			maxPayloadSizeKb31 = nil
 		}
-		maxPayloadEvents30 := new(float64)
+		maxPayloadEvents29 := new(float64)
 		if !r.OutputDynatraceHTTP.MaxPayloadEvents.IsUnknown() && !r.OutputDynatraceHTTP.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents30 = r.OutputDynatraceHTTP.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents29 = r.OutputDynatraceHTTP.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents30 = nil
+			maxPayloadEvents29 = nil
 		}
-		compress37 := new(bool)
+		compress36 := new(bool)
 		if !r.OutputDynatraceHTTP.Compress.IsUnknown() && !r.OutputDynatraceHTTP.Compress.IsNull() {
-			*compress37 = r.OutputDynatraceHTTP.Compress.ValueBool()
+			*compress36 = r.OutputDynatraceHTTP.Compress.ValueBool()
 		} else {
-			compress37 = nil
+			compress36 = nil
 		}
-		rejectUnauthorized60 := new(bool)
+		rejectUnauthorized59 := new(bool)
 		if !r.OutputDynatraceHTTP.RejectUnauthorized.IsUnknown() && !r.OutputDynatraceHTTP.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized60 = r.OutputDynatraceHTTP.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized59 = r.OutputDynatraceHTTP.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized60 = nil
+			rejectUnauthorized59 = nil
 		}
-		timeoutSec32 := new(float64)
+		timeoutSec31 := new(float64)
 		if !r.OutputDynatraceHTTP.TimeoutSec.IsUnknown() && !r.OutputDynatraceHTTP.TimeoutSec.IsNull() {
-			*timeoutSec32 = r.OutputDynatraceHTTP.TimeoutSec.ValueFloat64()
+			*timeoutSec31 = r.OutputDynatraceHTTP.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec32 = nil
+			timeoutSec31 = nil
 		}
-		flushPeriodSec43 := new(float64)
+		flushPeriodSec42 := new(float64)
 		if !r.OutputDynatraceHTTP.FlushPeriodSec.IsUnknown() && !r.OutputDynatraceHTTP.FlushPeriodSec.IsNull() {
-			*flushPeriodSec43 = r.OutputDynatraceHTTP.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec42 = r.OutputDynatraceHTTP.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec43 = nil
+			flushPeriodSec42 = nil
 		}
-		extraHTTPHeaders30 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDynatraceHTTP.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex30 := range r.OutputDynatraceHTTP.ExtraHTTPHeaders {
-			name50 := new(string)
-			if !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsUnknown() && !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsNull() {
-				*name50 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.ValueString()
+		extraHTTPHeaders29 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDynatraceHTTP.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex29 := range r.OutputDynatraceHTTP.ExtraHTTPHeaders {
+			name48 := new(string)
+			if !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsUnknown() && !r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.IsNull() {
+				*name48 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Name.ValueString()
 			} else {
-				name50 = nil
+				name48 = nil
 			}
-			var value64 string
-			value64 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Value.ValueString()
+			var value62 string
+			value62 = r.OutputDynatraceHTTP.ExtraHTTPHeaders[extraHTTPHeadersIndex29].Value.ValueString()
 
-			extraHTTPHeaders30 = append(extraHTTPHeaders30, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name50,
-				Value: value64,
+			extraHTTPHeaders29 = append(extraHTTPHeaders29, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name48,
+				Value: value62,
 			})
 		}
-		useRoundRobinDns29 := new(bool)
+		useRoundRobinDns28 := new(bool)
 		if !r.OutputDynatraceHTTP.UseRoundRobinDNS.IsUnknown() && !r.OutputDynatraceHTTP.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns29 = r.OutputDynatraceHTTP.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns28 = r.OutputDynatraceHTTP.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns29 = nil
+			useRoundRobinDns28 = nil
 		}
-		failedRequestLoggingMode30 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode29 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputDynatraceHTTP.FailedRequestLoggingMode.IsUnknown() && !r.OutputDynatraceHTTP.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode30 = shared.FailedRequestLoggingModeOptions(r.OutputDynatraceHTTP.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode29 = shared.FailedRequestLoggingModeOptions(r.OutputDynatraceHTTP.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode30 = nil
+			failedRequestLoggingMode29 = nil
 		}
-		safeHeaders30 := make([]string, 0, len(r.OutputDynatraceHTTP.SafeHeaders))
-		for safeHeadersIndex30 := range r.OutputDynatraceHTTP.SafeHeaders {
-			safeHeaders30 = append(safeHeaders30, r.OutputDynatraceHTTP.SafeHeaders[safeHeadersIndex30].ValueString())
+		safeHeaders29 := make([]string, 0, len(r.OutputDynatraceHTTP.SafeHeaders))
+		for safeHeadersIndex29 := range r.OutputDynatraceHTTP.SafeHeaders {
+			safeHeaders29 = append(safeHeaders29, r.OutputDynatraceHTTP.SafeHeaders[safeHeadersIndex29].ValueString())
 		}
-		responseRetrySettings31 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDynatraceHTTP.ResponseRetrySettings))
-		for responseRetrySettingsIndex31 := range r.OutputDynatraceHTTP.ResponseRetrySettings {
-			var httpStatus31 float64
-			httpStatus31 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].HTTPStatus.ValueFloat64()
+		responseRetrySettings30 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDynatraceHTTP.ResponseRetrySettings))
+		for responseRetrySettingsIndex30 := range r.OutputDynatraceHTTP.ResponseRetrySettings {
+			var httpStatus30 float64
+			httpStatus30 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].HTTPStatus.ValueFloat64()
 
-			initialBackoff66 := new(float64)
-			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsNull() {
-				*initialBackoff66 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.ValueFloat64()
+			initialBackoff64 := new(float64)
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.IsNull() {
+				*initialBackoff64 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff66 = nil
+				initialBackoff64 = nil
 			}
-			backoffRate66 := new(float64)
-			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsNull() {
-				*backoffRate66 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.ValueFloat64()
+			backoffRate64 := new(float64)
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.IsNull() {
+				*backoffRate64 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate66 = nil
+				backoffRate64 = nil
 			}
-			maxBackoff62 := new(float64)
-			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsNull() {
-				*maxBackoff62 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.ValueFloat64()
+			maxBackoff60 := new(float64)
+			if !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsUnknown() && !r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.IsNull() {
+				*maxBackoff60 = r.OutputDynatraceHTTP.ResponseRetrySettings[responseRetrySettingsIndex30].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff62 = nil
+				maxBackoff60 = nil
 			}
-			responseRetrySettings31 = append(responseRetrySettings31, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus31,
-				InitialBackoff: initialBackoff66,
-				BackoffRate:    backoffRate66,
-				MaxBackoff:     maxBackoff62,
+			responseRetrySettings30 = append(responseRetrySettings30, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus30,
+				InitialBackoff: initialBackoff64,
+				BackoffRate:    backoffRate64,
+				MaxBackoff:     maxBackoff60,
 			})
 		}
-		var timeoutRetrySettings31 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings30 *shared.TimeoutRetrySettingsType
 		if r.OutputDynatraceHTTP.TimeoutRetrySettings != nil {
-			var timeoutRetry31 bool
-			timeoutRetry31 = r.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry30 bool
+			timeoutRetry30 = r.OutputDynatraceHTTP.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff67 := new(float64)
+			initialBackoff65 := new(float64)
 			if !r.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff67 = r.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff65 = r.OutputDynatraceHTTP.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff67 = nil
+				initialBackoff65 = nil
 			}
-			backoffRate67 := new(float64)
+			backoffRate65 := new(float64)
 			if !r.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate67 = r.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate65 = r.OutputDynatraceHTTP.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate67 = nil
+				backoffRate65 = nil
 			}
-			maxBackoff63 := new(float64)
+			maxBackoff61 := new(float64)
 			if !r.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff63 = r.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff61 = r.OutputDynatraceHTTP.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff63 = nil
+				maxBackoff61 = nil
 			}
-			timeoutRetrySettings31 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry31,
-				InitialBackoff: initialBackoff67,
-				BackoffRate:    backoffRate67,
-				MaxBackoff:     maxBackoff63,
+			timeoutRetrySettings30 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry30,
+				InitialBackoff: initialBackoff65,
+				BackoffRate:    backoffRate65,
+				MaxBackoff:     maxBackoff61,
 			}
 		}
-		responseHonorRetryAfterHeader31 := new(bool)
+		responseHonorRetryAfterHeader30 := new(bool)
 		if !r.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader31 = r.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader30 = r.OutputDynatraceHTTP.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader31 = nil
+			responseHonorRetryAfterHeader30 = nil
 		}
-		onBackpressure59 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure58 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputDynatraceHTTP.OnBackpressure.IsUnknown() && !r.OutputDynatraceHTTP.OnBackpressure.IsNull() {
-			*onBackpressure59 = shared.BackpressureBehaviorOptions(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
+			*onBackpressure58 = shared.BackpressureBehaviorOptions(r.OutputDynatraceHTTP.OnBackpressure.ValueString())
 		} else {
-			onBackpressure59 = nil
+			onBackpressure58 = nil
 		}
-		authType37 := new(shared.OutputDynatraceHTTPAuthenticationType)
+		authType35 := new(shared.OutputDynatraceHTTPAuthenticationType)
 		if !r.OutputDynatraceHTTP.AuthType.IsUnknown() && !r.OutputDynatraceHTTP.AuthType.IsNull() {
-			*authType37 = shared.OutputDynatraceHTTPAuthenticationType(r.OutputDynatraceHTTP.AuthType.ValueString())
+			*authType35 = shared.OutputDynatraceHTTPAuthenticationType(r.OutputDynatraceHTTP.AuthType.ValueString())
 		} else {
-			authType37 = nil
+			authType35 = nil
 		}
 		format20 := shared.OutputDynatraceHTTPFormat(r.OutputDynatraceHTTP.Format.ValueString())
 		endpoint14 := shared.Endpoint(r.OutputDynatraceHTTP.Endpoint.ValueString())
@@ -33899,93 +33522,93 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			totalMemoryLimitKb10 = nil
 		}
-		description68 := new(string)
+		description67 := new(string)
 		if !r.OutputDynatraceHTTP.Description.IsUnknown() && !r.OutputDynatraceHTTP.Description.IsNull() {
-			*description68 = r.OutputDynatraceHTTP.Description.ValueString()
+			*description67 = r.OutputDynatraceHTTP.Description.ValueString()
 		} else {
-			description68 = nil
+			description67 = nil
 		}
-		pqStrictOrdering49 := new(bool)
+		pqStrictOrdering47 := new(bool)
 		if !r.OutputDynatraceHTTP.PqStrictOrdering.IsUnknown() && !r.OutputDynatraceHTTP.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering49 = r.OutputDynatraceHTTP.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering47 = r.OutputDynatraceHTTP.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering49 = nil
+			pqStrictOrdering47 = nil
 		}
-		pqRatePerSec49 := new(float64)
+		pqRatePerSec47 := new(float64)
 		if !r.OutputDynatraceHTTP.PqRatePerSec.IsUnknown() && !r.OutputDynatraceHTTP.PqRatePerSec.IsNull() {
-			*pqRatePerSec49 = r.OutputDynatraceHTTP.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec47 = r.OutputDynatraceHTTP.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec49 = nil
+			pqRatePerSec47 = nil
 		}
-		pqMode49 := new(shared.ModeOptions)
+		pqMode48 := new(shared.ModeOptions)
 		if !r.OutputDynatraceHTTP.PqMode.IsUnknown() && !r.OutputDynatraceHTTP.PqMode.IsNull() {
-			*pqMode49 = shared.ModeOptions(r.OutputDynatraceHTTP.PqMode.ValueString())
+			*pqMode48 = shared.ModeOptions(r.OutputDynatraceHTTP.PqMode.ValueString())
 		} else {
-			pqMode49 = nil
+			pqMode48 = nil
 		}
-		pqMaxBufferSize49 := new(float64)
+		pqMaxBufferSize47 := new(float64)
 		if !r.OutputDynatraceHTTP.PqMaxBufferSize.IsUnknown() && !r.OutputDynatraceHTTP.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize49 = r.OutputDynatraceHTTP.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize47 = r.OutputDynatraceHTTP.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize49 = nil
+			pqMaxBufferSize47 = nil
 		}
-		pqMaxBackpressureSec49 := new(float64)
+		pqMaxBackpressureSec47 := new(float64)
 		if !r.OutputDynatraceHTTP.PqMaxBackpressureSec.IsUnknown() && !r.OutputDynatraceHTTP.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec49 = r.OutputDynatraceHTTP.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec47 = r.OutputDynatraceHTTP.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec49 = nil
+			pqMaxBackpressureSec47 = nil
 		}
-		pqMaxFileSize49 := new(string)
+		pqMaxFileSize48 := new(string)
 		if !r.OutputDynatraceHTTP.PqMaxFileSize.IsUnknown() && !r.OutputDynatraceHTTP.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize49 = r.OutputDynatraceHTTP.PqMaxFileSize.ValueString()
+			*pqMaxFileSize48 = r.OutputDynatraceHTTP.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize49 = nil
+			pqMaxFileSize48 = nil
 		}
-		pqMaxSize49 := new(string)
+		pqMaxSize48 := new(string)
 		if !r.OutputDynatraceHTTP.PqMaxSize.IsUnknown() && !r.OutputDynatraceHTTP.PqMaxSize.IsNull() {
-			*pqMaxSize49 = r.OutputDynatraceHTTP.PqMaxSize.ValueString()
+			*pqMaxSize48 = r.OutputDynatraceHTTP.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize49 = nil
+			pqMaxSize48 = nil
 		}
-		pqPath49 := new(string)
+		pqPath48 := new(string)
 		if !r.OutputDynatraceHTTP.PqPath.IsUnknown() && !r.OutputDynatraceHTTP.PqPath.IsNull() {
-			*pqPath49 = r.OutputDynatraceHTTP.PqPath.ValueString()
+			*pqPath48 = r.OutputDynatraceHTTP.PqPath.ValueString()
 		} else {
-			pqPath49 = nil
+			pqPath48 = nil
 		}
-		pqCompress49 := new(shared.CompressionOptionsPq)
+		pqCompress48 := new(shared.CompressionOptionsPq)
 		if !r.OutputDynatraceHTTP.PqCompress.IsUnknown() && !r.OutputDynatraceHTTP.PqCompress.IsNull() {
-			*pqCompress49 = shared.CompressionOptionsPq(r.OutputDynatraceHTTP.PqCompress.ValueString())
+			*pqCompress48 = shared.CompressionOptionsPq(r.OutputDynatraceHTTP.PqCompress.ValueString())
 		} else {
-			pqCompress49 = nil
+			pqCompress48 = nil
 		}
-		pqOnBackpressure49 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure48 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputDynatraceHTTP.PqOnBackpressure.IsUnknown() && !r.OutputDynatraceHTTP.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure49 = shared.QueueFullBehaviorOptions(r.OutputDynatraceHTTP.PqOnBackpressure.ValueString())
+			*pqOnBackpressure48 = shared.QueueFullBehaviorOptions(r.OutputDynatraceHTTP.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure49 = nil
+			pqOnBackpressure48 = nil
 		}
-		pqMaxBufferSizeBytes49 := new(string)
+		pqMaxBufferSizeBytes47 := new(string)
 		if !r.OutputDynatraceHTTP.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputDynatraceHTTP.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes49 = r.OutputDynatraceHTTP.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes47 = r.OutputDynatraceHTTP.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes49 = nil
+			pqMaxBufferSizeBytes47 = nil
 		}
-		var pqControls49 *shared.OutputDynatraceHTTPPqControls
+		var pqControls48 *shared.OutputDynatraceHTTPPqControls
 		if r.OutputDynatraceHTTP.PqControls != nil {
-			pqControls49 = &shared.OutputDynatraceHTTPPqControls{}
+			pqControls48 = &shared.OutputDynatraceHTTPPqControls{}
 		}
-		token17 := new(string)
+		token15 := new(string)
 		if !r.OutputDynatraceHTTP.Token.IsUnknown() && !r.OutputDynatraceHTTP.Token.IsNull() {
-			*token17 = r.OutputDynatraceHTTP.Token.ValueString()
+			*token15 = r.OutputDynatraceHTTP.Token.ValueString()
 		} else {
-			token17 = nil
+			token15 = nil
 		}
-		textSecret32 := new(string)
+		textSecret30 := new(string)
 		if !r.OutputDynatraceHTTP.TextSecret.IsUnknown() && !r.OutputDynatraceHTTP.TextSecret.IsNull() {
-			*textSecret32 = r.OutputDynatraceHTTP.TextSecret.ValueString()
+			*textSecret30 = r.OutputDynatraceHTTP.TextSecret.ValueString()
 		} else {
-			textSecret32 = nil
+			textSecret30 = nil
 		}
 		environmentID := new(string)
 		if !r.OutputDynatraceHTTP.EnvironmentID.IsUnknown() && !r.OutputDynatraceHTTP.EnvironmentID.IsNull() {
@@ -34012,49 +33635,49 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateUrl19 = nil
 		}
 		outputDynatraceHTTP = &shared.OutputDynatraceHTTP{
-			ID:                            id65,
-			Type:                          typeVar65,
-			Pipeline:                      pipeline65,
-			SystemFields:                  systemFields65,
-			Environment:                   environment65,
-			Streamtags:                    streamtags65,
+			ID:                            id64,
+			Type:                          typeVar64,
+			Pipeline:                      pipeline64,
+			SystemFields:                  systemFields64,
+			Environment:                   environment64,
+			Streamtags:                    streamtags64,
 			Method:                        method1,
 			KeepAlive:                     keepAlive5,
-			Concurrency:                   concurrency33,
-			MaxPayloadSizeKB:              maxPayloadSizeKb32,
-			MaxPayloadEvents:              maxPayloadEvents30,
-			Compress:                      compress37,
-			RejectUnauthorized:            rejectUnauthorized60,
-			TimeoutSec:                    timeoutSec32,
-			FlushPeriodSec:                flushPeriodSec43,
-			ExtraHTTPHeaders:              extraHTTPHeaders30,
-			UseRoundRobinDNS:              useRoundRobinDns29,
-			FailedRequestLoggingMode:      failedRequestLoggingMode30,
-			SafeHeaders:                   safeHeaders30,
-			ResponseRetrySettings:         responseRetrySettings31,
-			TimeoutRetrySettings:          timeoutRetrySettings31,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader31,
-			OnBackpressure:                onBackpressure59,
-			AuthType:                      authType37,
+			Concurrency:                   concurrency32,
+			MaxPayloadSizeKB:              maxPayloadSizeKb31,
+			MaxPayloadEvents:              maxPayloadEvents29,
+			Compress:                      compress36,
+			RejectUnauthorized:            rejectUnauthorized59,
+			TimeoutSec:                    timeoutSec31,
+			FlushPeriodSec:                flushPeriodSec42,
+			ExtraHTTPHeaders:              extraHTTPHeaders29,
+			UseRoundRobinDNS:              useRoundRobinDns28,
+			FailedRequestLoggingMode:      failedRequestLoggingMode29,
+			SafeHeaders:                   safeHeaders29,
+			ResponseRetrySettings:         responseRetrySettings30,
+			TimeoutRetrySettings:          timeoutRetrySettings30,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader30,
+			OnBackpressure:                onBackpressure58,
+			AuthType:                      authType35,
 			Format:                        format20,
 			Endpoint:                      endpoint14,
 			TelemetryType:                 telemetryType,
 			TotalMemoryLimitKB:            totalMemoryLimitKb10,
-			Description:                   description68,
-			PqStrictOrdering:              pqStrictOrdering49,
-			PqRatePerSec:                  pqRatePerSec49,
-			PqMode:                        pqMode49,
-			PqMaxBufferSize:               pqMaxBufferSize49,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec49,
-			PqMaxFileSize:                 pqMaxFileSize49,
-			PqMaxSize:                     pqMaxSize49,
-			PqPath:                        pqPath49,
-			PqCompress:                    pqCompress49,
-			PqOnBackpressure:              pqOnBackpressure49,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes49,
-			PqControls:                    pqControls49,
-			Token:                         token17,
-			TextSecret:                    textSecret32,
+			Description:                   description67,
+			PqStrictOrdering:              pqStrictOrdering47,
+			PqRatePerSec:                  pqRatePerSec47,
+			PqMode:                        pqMode48,
+			PqMaxBufferSize:               pqMaxBufferSize47,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec47,
+			PqMaxFileSize:                 pqMaxFileSize48,
+			PqMaxSize:                     pqMaxSize48,
+			PqPath:                        pqPath48,
+			PqCompress:                    pqCompress48,
+			PqOnBackpressure:              pqOnBackpressure48,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes47,
+			PqControls:                    pqControls48,
+			Token:                         token15,
+			TextSecret:                    textSecret30,
 			EnvironmentID:                 environmentID,
 			ActiveGateDomain:              activeGateDomain,
 			URL:                           url23,
@@ -34068,43 +33691,43 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDynatraceOtlp *shared.OutputDynatraceOtlp
 	if r.OutputDynatraceOtlp != nil {
-		id66 := new(string)
+		id65 := new(string)
 		if !r.OutputDynatraceOtlp.ID.IsUnknown() && !r.OutputDynatraceOtlp.ID.IsNull() {
-			*id66 = r.OutputDynatraceOtlp.ID.ValueString()
+			*id65 = r.OutputDynatraceOtlp.ID.ValueString()
 		} else {
-			id66 = nil
+			id65 = nil
 		}
-		typeVar66 := shared.OutputDynatraceOtlpType(r.OutputDynatraceOtlp.Type.ValueString())
-		pipeline66 := new(string)
+		typeVar65 := shared.OutputDynatraceOtlpType(r.OutputDynatraceOtlp.Type.ValueString())
+		pipeline65 := new(string)
 		if !r.OutputDynatraceOtlp.Pipeline.IsUnknown() && !r.OutputDynatraceOtlp.Pipeline.IsNull() {
-			*pipeline66 = r.OutputDynatraceOtlp.Pipeline.ValueString()
+			*pipeline65 = r.OutputDynatraceOtlp.Pipeline.ValueString()
 		} else {
-			pipeline66 = nil
+			pipeline65 = nil
 		}
-		systemFields66 := make([]string, 0, len(r.OutputDynatraceOtlp.SystemFields))
-		for systemFieldsIndex66 := range r.OutputDynatraceOtlp.SystemFields {
-			systemFields66 = append(systemFields66, r.OutputDynatraceOtlp.SystemFields[systemFieldsIndex66].ValueString())
+		systemFields65 := make([]string, 0, len(r.OutputDynatraceOtlp.SystemFields))
+		for systemFieldsIndex65 := range r.OutputDynatraceOtlp.SystemFields {
+			systemFields65 = append(systemFields65, r.OutputDynatraceOtlp.SystemFields[systemFieldsIndex65].ValueString())
 		}
-		environment66 := new(string)
+		environment65 := new(string)
 		if !r.OutputDynatraceOtlp.Environment.IsUnknown() && !r.OutputDynatraceOtlp.Environment.IsNull() {
-			*environment66 = r.OutputDynatraceOtlp.Environment.ValueString()
+			*environment65 = r.OutputDynatraceOtlp.Environment.ValueString()
 		} else {
-			environment66 = nil
+			environment65 = nil
 		}
-		streamtags66 := make([]string, 0, len(r.OutputDynatraceOtlp.Streamtags))
-		for streamtagsIndex66 := range r.OutputDynatraceOtlp.Streamtags {
-			streamtags66 = append(streamtags66, r.OutputDynatraceOtlp.Streamtags[streamtagsIndex66].ValueString())
+		streamtags65 := make([]string, 0, len(r.OutputDynatraceOtlp.Streamtags))
+		for streamtagsIndex65 := range r.OutputDynatraceOtlp.Streamtags {
+			streamtags65 = append(streamtags65, r.OutputDynatraceOtlp.Streamtags[streamtagsIndex65].ValueString())
 		}
 		protocol6 := shared.OutputDynatraceOtlpProtocol(r.OutputDynatraceOtlp.Protocol.ValueString())
 		var endpoint15 string
 		endpoint15 = r.OutputDynatraceOtlp.Endpoint.ValueString()
 
 		otlpVersion2 := shared.OtlpVersionOptions131(r.OutputDynatraceOtlp.OtlpVersion.ValueString())
-		compress38 := new(shared.CompressionOptionsDeflateGzip)
+		compress37 := new(shared.CompressionOptionsDeflateGzip)
 		if !r.OutputDynatraceOtlp.Compress.IsUnknown() && !r.OutputDynatraceOtlp.Compress.IsNull() {
-			*compress38 = shared.CompressionOptionsDeflateGzip(r.OutputDynatraceOtlp.Compress.ValueString())
+			*compress37 = shared.CompressionOptionsDeflateGzip(r.OutputDynatraceOtlp.Compress.ValueString())
 		} else {
-			compress38 = nil
+			compress37 = nil
 		}
 		httpCompress2 := new(shared.CompressionOptionsMessages)
 		if !r.OutputDynatraceOtlp.HTTPCompress.IsUnknown() && !r.OutputDynatraceOtlp.HTTPCompress.IsNull() {
@@ -34135,43 +33758,43 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key12 string
 			key12 = r.OutputDynatraceOtlp.Metadata[metadataIndex3].Key.ValueString()
 
-			var value65 string
-			value65 = r.OutputDynatraceOtlp.Metadata[metadataIndex3].Value.ValueString()
+			var value63 string
+			value63 = r.OutputDynatraceOtlp.Metadata[metadataIndex3].Value.ValueString()
 
 			metadata3 = append(metadata3, shared.ItemsTypeKeyValueMetadata{
 				Key:   key12,
-				Value: value65,
+				Value: value63,
 			})
 		}
-		concurrency34 := new(float64)
+		concurrency33 := new(float64)
 		if !r.OutputDynatraceOtlp.Concurrency.IsUnknown() && !r.OutputDynatraceOtlp.Concurrency.IsNull() {
-			*concurrency34 = r.OutputDynatraceOtlp.Concurrency.ValueFloat64()
+			*concurrency33 = r.OutputDynatraceOtlp.Concurrency.ValueFloat64()
 		} else {
-			concurrency34 = nil
+			concurrency33 = nil
 		}
-		maxPayloadSizeKb33 := new(float64)
+		maxPayloadSizeKb32 := new(float64)
 		if !r.OutputDynatraceOtlp.MaxPayloadSizeKB.IsUnknown() && !r.OutputDynatraceOtlp.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb33 = r.OutputDynatraceOtlp.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb32 = r.OutputDynatraceOtlp.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb33 = nil
+			maxPayloadSizeKb32 = nil
 		}
-		timeoutSec33 := new(float64)
+		timeoutSec32 := new(float64)
 		if !r.OutputDynatraceOtlp.TimeoutSec.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutSec.IsNull() {
-			*timeoutSec33 = r.OutputDynatraceOtlp.TimeoutSec.ValueFloat64()
+			*timeoutSec32 = r.OutputDynatraceOtlp.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec33 = nil
+			timeoutSec32 = nil
 		}
-		flushPeriodSec44 := new(float64)
+		flushPeriodSec43 := new(float64)
 		if !r.OutputDynatraceOtlp.FlushPeriodSec.IsUnknown() && !r.OutputDynatraceOtlp.FlushPeriodSec.IsNull() {
-			*flushPeriodSec44 = r.OutputDynatraceOtlp.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec43 = r.OutputDynatraceOtlp.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec44 = nil
+			flushPeriodSec43 = nil
 		}
-		failedRequestLoggingMode31 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode30 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputDynatraceOtlp.FailedRequestLoggingMode.IsUnknown() && !r.OutputDynatraceOtlp.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode31 = shared.FailedRequestLoggingModeOptions(r.OutputDynatraceOtlp.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode30 = shared.FailedRequestLoggingModeOptions(r.OutputDynatraceOtlp.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode31 = nil
+			failedRequestLoggingMode30 = nil
 		}
 		connectionTimeout18 := new(float64)
 		if !r.OutputDynatraceOtlp.ConnectionTimeout.IsUnknown() && !r.OutputDynatraceOtlp.ConnectionTimeout.IsNull() {
@@ -34201,70 +33824,366 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			authTokenName1 = nil
 		}
-		onBackpressure60 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure59 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputDynatraceOtlp.OnBackpressure.IsUnknown() && !r.OutputDynatraceOtlp.OnBackpressure.IsNull() {
-			*onBackpressure60 = shared.BackpressureBehaviorOptions(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
+			*onBackpressure59 = shared.BackpressureBehaviorOptions(r.OutputDynatraceOtlp.OnBackpressure.ValueString())
 		} else {
-			onBackpressure60 = nil
+			onBackpressure59 = nil
 		}
-		description69 := new(string)
+		description68 := new(string)
 		if !r.OutputDynatraceOtlp.Description.IsUnknown() && !r.OutputDynatraceOtlp.Description.IsNull() {
-			*description69 = r.OutputDynatraceOtlp.Description.ValueString()
+			*description68 = r.OutputDynatraceOtlp.Description.ValueString()
 		} else {
-			description69 = nil
+			description68 = nil
+		}
+		rejectUnauthorized60 := new(bool)
+		if !r.OutputDynatraceOtlp.RejectUnauthorized.IsUnknown() && !r.OutputDynatraceOtlp.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized60 = r.OutputDynatraceOtlp.RejectUnauthorized.ValueBool()
+		} else {
+			rejectUnauthorized60 = nil
+		}
+		useRoundRobinDns29 := new(bool)
+		if !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsUnknown() && !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsNull() {
+			*useRoundRobinDns29 = r.OutputDynatraceOtlp.UseRoundRobinDNS.ValueBool()
+		} else {
+			useRoundRobinDns29 = nil
+		}
+		extraHTTPHeaders30 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDynatraceOtlp.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex30 := range r.OutputDynatraceOtlp.ExtraHTTPHeaders {
+			name49 := new(string)
+			if !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsUnknown() && !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.IsNull() {
+				*name49 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Name.ValueString()
+			} else {
+				name49 = nil
+			}
+			var value64 string
+			value64 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex30].Value.ValueString()
+
+			extraHTTPHeaders30 = append(extraHTTPHeaders30, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name49,
+				Value: value64,
+			})
+		}
+		safeHeaders30 := make([]string, 0, len(r.OutputDynatraceOtlp.SafeHeaders))
+		for safeHeadersIndex30 := range r.OutputDynatraceOtlp.SafeHeaders {
+			safeHeaders30 = append(safeHeaders30, r.OutputDynatraceOtlp.SafeHeaders[safeHeadersIndex30].ValueString())
+		}
+		responseRetrySettings31 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDynatraceOtlp.ResponseRetrySettings))
+		for responseRetrySettingsIndex31 := range r.OutputDynatraceOtlp.ResponseRetrySettings {
+			var httpStatus31 float64
+			httpStatus31 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].HTTPStatus.ValueFloat64()
+
+			initialBackoff66 := new(float64)
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.IsNull() {
+				*initialBackoff66 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff66 = nil
+			}
+			backoffRate66 := new(float64)
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.IsNull() {
+				*backoffRate66 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].BackoffRate.ValueFloat64()
+			} else {
+				backoffRate66 = nil
+			}
+			maxBackoff62 := new(float64)
+			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.IsNull() {
+				*maxBackoff62 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex31].MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff62 = nil
+			}
+			responseRetrySettings31 = append(responseRetrySettings31, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus31,
+				InitialBackoff: initialBackoff66,
+				BackoffRate:    backoffRate66,
+				MaxBackoff:     maxBackoff62,
+			})
+		}
+		var timeoutRetrySettings31 *shared.TimeoutRetrySettingsType
+		if r.OutputDynatraceOtlp.TimeoutRetrySettings != nil {
+			var timeoutRetry31 bool
+			timeoutRetry31 = r.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+
+			initialBackoff67 := new(float64)
+			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff67 = r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			} else {
+				initialBackoff67 = nil
+			}
+			backoffRate67 := new(float64)
+			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate67 = r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			} else {
+				backoffRate67 = nil
+			}
+			maxBackoff63 := new(float64)
+			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff63 = r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			} else {
+				maxBackoff63 = nil
+			}
+			timeoutRetrySettings31 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry31,
+				InitialBackoff: initialBackoff67,
+				BackoffRate:    backoffRate67,
+				MaxBackoff:     maxBackoff63,
+			}
+		}
+		responseHonorRetryAfterHeader31 := new(bool)
+		if !r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader31 = r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.ValueBool()
+		} else {
+			responseHonorRetryAfterHeader31 = nil
+		}
+		pqStrictOrdering48 := new(bool)
+		if !r.OutputDynatraceOtlp.PqStrictOrdering.IsUnknown() && !r.OutputDynatraceOtlp.PqStrictOrdering.IsNull() {
+			*pqStrictOrdering48 = r.OutputDynatraceOtlp.PqStrictOrdering.ValueBool()
+		} else {
+			pqStrictOrdering48 = nil
+		}
+		pqRatePerSec48 := new(float64)
+		if !r.OutputDynatraceOtlp.PqRatePerSec.IsUnknown() && !r.OutputDynatraceOtlp.PqRatePerSec.IsNull() {
+			*pqRatePerSec48 = r.OutputDynatraceOtlp.PqRatePerSec.ValueFloat64()
+		} else {
+			pqRatePerSec48 = nil
+		}
+		pqMode49 := new(shared.ModeOptions)
+		if !r.OutputDynatraceOtlp.PqMode.IsUnknown() && !r.OutputDynatraceOtlp.PqMode.IsNull() {
+			*pqMode49 = shared.ModeOptions(r.OutputDynatraceOtlp.PqMode.ValueString())
+		} else {
+			pqMode49 = nil
+		}
+		pqMaxBufferSize48 := new(float64)
+		if !r.OutputDynatraceOtlp.PqMaxBufferSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBufferSize.IsNull() {
+			*pqMaxBufferSize48 = r.OutputDynatraceOtlp.PqMaxBufferSize.ValueFloat64()
+		} else {
+			pqMaxBufferSize48 = nil
+		}
+		pqMaxBackpressureSec48 := new(float64)
+		if !r.OutputDynatraceOtlp.PqMaxBackpressureSec.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBackpressureSec.IsNull() {
+			*pqMaxBackpressureSec48 = r.OutputDynatraceOtlp.PqMaxBackpressureSec.ValueFloat64()
+		} else {
+			pqMaxBackpressureSec48 = nil
+		}
+		pqMaxFileSize49 := new(string)
+		if !r.OutputDynatraceOtlp.PqMaxFileSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxFileSize.IsNull() {
+			*pqMaxFileSize49 = r.OutputDynatraceOtlp.PqMaxFileSize.ValueString()
+		} else {
+			pqMaxFileSize49 = nil
+		}
+		pqMaxSize49 := new(string)
+		if !r.OutputDynatraceOtlp.PqMaxSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxSize.IsNull() {
+			*pqMaxSize49 = r.OutputDynatraceOtlp.PqMaxSize.ValueString()
+		} else {
+			pqMaxSize49 = nil
+		}
+		pqPath49 := new(string)
+		if !r.OutputDynatraceOtlp.PqPath.IsUnknown() && !r.OutputDynatraceOtlp.PqPath.IsNull() {
+			*pqPath49 = r.OutputDynatraceOtlp.PqPath.ValueString()
+		} else {
+			pqPath49 = nil
+		}
+		pqCompress49 := new(shared.CompressionOptionsPq)
+		if !r.OutputDynatraceOtlp.PqCompress.IsUnknown() && !r.OutputDynatraceOtlp.PqCompress.IsNull() {
+			*pqCompress49 = shared.CompressionOptionsPq(r.OutputDynatraceOtlp.PqCompress.ValueString())
+		} else {
+			pqCompress49 = nil
+		}
+		pqOnBackpressure49 := new(shared.QueueFullBehaviorOptions)
+		if !r.OutputDynatraceOtlp.PqOnBackpressure.IsUnknown() && !r.OutputDynatraceOtlp.PqOnBackpressure.IsNull() {
+			*pqOnBackpressure49 = shared.QueueFullBehaviorOptions(r.OutputDynatraceOtlp.PqOnBackpressure.ValueString())
+		} else {
+			pqOnBackpressure49 = nil
+		}
+		pqMaxBufferSizeBytes48 := new(string)
+		if !r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.IsNull() {
+			*pqMaxBufferSizeBytes48 = r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.ValueString()
+		} else {
+			pqMaxBufferSizeBytes48 = nil
+		}
+		var pqControls49 *shared.OutputDynatraceOtlpPqControls
+		if r.OutputDynatraceOtlp.PqControls != nil {
+			pqControls49 = &shared.OutputDynatraceOtlpPqControls{}
+		}
+		outputDynatraceOtlp = &shared.OutputDynatraceOtlp{
+			ID:                            id65,
+			Type:                          typeVar65,
+			Pipeline:                      pipeline65,
+			SystemFields:                  systemFields65,
+			Environment:                   environment65,
+			Streamtags:                    streamtags65,
+			Protocol:                      protocol6,
+			Endpoint:                      endpoint15,
+			OtlpVersion:                   otlpVersion2,
+			Compress:                      compress37,
+			HTTPCompress:                  httpCompress2,
+			HTTPTracesEndpointOverride:    httpTracesEndpointOverride2,
+			HTTPMetricsEndpointOverride:   httpMetricsEndpointOverride2,
+			HTTPLogsEndpointOverride:      httpLogsEndpointOverride2,
+			Metadata:                      metadata3,
+			Concurrency:                   concurrency33,
+			MaxPayloadSizeKB:              maxPayloadSizeKb32,
+			TimeoutSec:                    timeoutSec32,
+			FlushPeriodSec:                flushPeriodSec43,
+			FailedRequestLoggingMode:      failedRequestLoggingMode30,
+			ConnectionTimeout:             connectionTimeout18,
+			KeepAliveTime:                 keepAliveTime2,
+			KeepAlive:                     keepAlive6,
+			EndpointType:                  endpointType,
+			TokenSecret:                   tokenSecret4,
+			AuthTokenName:                 authTokenName1,
+			OnBackpressure:                onBackpressure59,
+			Description:                   description68,
+			RejectUnauthorized:            rejectUnauthorized60,
+			UseRoundRobinDNS:              useRoundRobinDns29,
+			ExtraHTTPHeaders:              extraHTTPHeaders30,
+			SafeHeaders:                   safeHeaders30,
+			ResponseRetrySettings:         responseRetrySettings31,
+			TimeoutRetrySettings:          timeoutRetrySettings31,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader31,
+			PqStrictOrdering:              pqStrictOrdering48,
+			PqRatePerSec:                  pqRatePerSec48,
+			PqMode:                        pqMode49,
+			PqMaxBufferSize:               pqMaxBufferSize48,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec48,
+			PqMaxFileSize:                 pqMaxFileSize49,
+			PqMaxSize:                     pqMaxSize49,
+			PqPath:                        pqPath49,
+			PqCompress:                    pqCompress49,
+			PqOnBackpressure:              pqOnBackpressure49,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes48,
+			PqControls:                    pqControls49,
+		}
+	}
+	if outputDynatraceOtlp != nil {
+		out = shared.Output{
+			OutputDynatraceOtlp: outputDynatraceOtlp,
+		}
+	}
+	var outputSentinelOneAiSiem *shared.OutputSentinelOneAiSiem
+	if r.OutputSentinelOneAiSiem != nil {
+		id66 := new(string)
+		if !r.OutputSentinelOneAiSiem.ID.IsUnknown() && !r.OutputSentinelOneAiSiem.ID.IsNull() {
+			*id66 = r.OutputSentinelOneAiSiem.ID.ValueString()
+		} else {
+			id66 = nil
+		}
+		typeVar66 := shared.OutputSentinelOneAiSiemType(r.OutputSentinelOneAiSiem.Type.ValueString())
+		pipeline66 := new(string)
+		if !r.OutputSentinelOneAiSiem.Pipeline.IsUnknown() && !r.OutputSentinelOneAiSiem.Pipeline.IsNull() {
+			*pipeline66 = r.OutputSentinelOneAiSiem.Pipeline.ValueString()
+		} else {
+			pipeline66 = nil
+		}
+		systemFields66 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SystemFields))
+		for systemFieldsIndex66 := range r.OutputSentinelOneAiSiem.SystemFields {
+			systemFields66 = append(systemFields66, r.OutputSentinelOneAiSiem.SystemFields[systemFieldsIndex66].ValueString())
+		}
+		environment66 := new(string)
+		if !r.OutputSentinelOneAiSiem.Environment.IsUnknown() && !r.OutputSentinelOneAiSiem.Environment.IsNull() {
+			*environment66 = r.OutputSentinelOneAiSiem.Environment.ValueString()
+		} else {
+			environment66 = nil
+		}
+		streamtags66 := make([]string, 0, len(r.OutputSentinelOneAiSiem.Streamtags))
+		for streamtagsIndex66 := range r.OutputSentinelOneAiSiem.Streamtags {
+			streamtags66 = append(streamtags66, r.OutputSentinelOneAiSiem.Streamtags[streamtagsIndex66].ValueString())
+		}
+		region16 := shared.OutputSentinelOneAiSiemRegion(r.OutputSentinelOneAiSiem.Region.ValueString())
+		endpoint16 := shared.AISIEMEndpointPath(r.OutputSentinelOneAiSiem.Endpoint.ValueString())
+		concurrency34 := new(float64)
+		if !r.OutputSentinelOneAiSiem.Concurrency.IsUnknown() && !r.OutputSentinelOneAiSiem.Concurrency.IsNull() {
+			*concurrency34 = r.OutputSentinelOneAiSiem.Concurrency.ValueFloat64()
+		} else {
+			concurrency34 = nil
+		}
+		maxPayloadSizeKb33 := new(float64)
+		if !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsNull() {
+			*maxPayloadSizeKb33 = r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.ValueFloat64()
+		} else {
+			maxPayloadSizeKb33 = nil
+		}
+		maxPayloadEvents30 := new(float64)
+		if !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsNull() {
+			*maxPayloadEvents30 = r.OutputSentinelOneAiSiem.MaxPayloadEvents.ValueFloat64()
+		} else {
+			maxPayloadEvents30 = nil
+		}
+		compress38 := new(bool)
+		if !r.OutputSentinelOneAiSiem.Compress.IsUnknown() && !r.OutputSentinelOneAiSiem.Compress.IsNull() {
+			*compress38 = r.OutputSentinelOneAiSiem.Compress.ValueBool()
+		} else {
+			compress38 = nil
 		}
 		rejectUnauthorized61 := new(bool)
-		if !r.OutputDynatraceOtlp.RejectUnauthorized.IsUnknown() && !r.OutputDynatraceOtlp.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized61 = r.OutputDynatraceOtlp.RejectUnauthorized.ValueBool()
+		if !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsUnknown() && !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsNull() {
+			*rejectUnauthorized61 = r.OutputSentinelOneAiSiem.RejectUnauthorized.ValueBool()
 		} else {
 			rejectUnauthorized61 = nil
 		}
-		useRoundRobinDns30 := new(bool)
-		if !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsUnknown() && !r.OutputDynatraceOtlp.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns30 = r.OutputDynatraceOtlp.UseRoundRobinDNS.ValueBool()
+		timeoutSec33 := new(float64)
+		if !r.OutputSentinelOneAiSiem.TimeoutSec.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutSec.IsNull() {
+			*timeoutSec33 = r.OutputSentinelOneAiSiem.TimeoutSec.ValueFloat64()
 		} else {
-			useRoundRobinDns30 = nil
+			timeoutSec33 = nil
 		}
-		extraHTTPHeaders31 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputDynatraceOtlp.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex31 := range r.OutputDynatraceOtlp.ExtraHTTPHeaders {
-			name51 := new(string)
-			if !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.IsUnknown() && !r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.IsNull() {
-				*name51 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.ValueString()
+		flushPeriodSec44 := new(float64)
+		if !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsUnknown() && !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsNull() {
+			*flushPeriodSec44 = r.OutputSentinelOneAiSiem.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec44 = nil
+		}
+		extraHTTPHeaders31 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex31 := range r.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
+			name50 := new(string)
+			if !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.IsUnknown() && !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.IsNull() {
+				*name50 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Name.ValueString()
 			} else {
-				name51 = nil
+				name50 = nil
 			}
-			var value66 string
-			value66 = r.OutputDynatraceOtlp.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Value.ValueString()
+			var value65 string
+			value65 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex31].Value.ValueString()
 
 			extraHTTPHeaders31 = append(extraHTTPHeaders31, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name51,
-				Value: value66,
+				Name:  name50,
+				Value: value65,
 			})
 		}
-		safeHeaders31 := make([]string, 0, len(r.OutputDynatraceOtlp.SafeHeaders))
-		for safeHeadersIndex31 := range r.OutputDynatraceOtlp.SafeHeaders {
-			safeHeaders31 = append(safeHeaders31, r.OutputDynatraceOtlp.SafeHeaders[safeHeadersIndex31].ValueString())
+		failedRequestLoggingMode31 := new(shared.FailedRequestLoggingModeOptions)
+		if !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsUnknown() && !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsNull() {
+			*failedRequestLoggingMode31 = shared.FailedRequestLoggingModeOptions(r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.ValueString())
+		} else {
+			failedRequestLoggingMode31 = nil
 		}
-		responseRetrySettings32 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputDynatraceOtlp.ResponseRetrySettings))
-		for responseRetrySettingsIndex32 := range r.OutputDynatraceOtlp.ResponseRetrySettings {
+		safeHeaders31 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SafeHeaders))
+		for safeHeadersIndex31 := range r.OutputSentinelOneAiSiem.SafeHeaders {
+			safeHeaders31 = append(safeHeaders31, r.OutputSentinelOneAiSiem.SafeHeaders[safeHeadersIndex31].ValueString())
+		}
+		authType36 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
+		if !r.OutputSentinelOneAiSiem.AuthType.IsUnknown() && !r.OutputSentinelOneAiSiem.AuthType.IsNull() {
+			*authType36 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputSentinelOneAiSiem.AuthType.ValueString())
+		} else {
+			authType36 = nil
+		}
+		responseRetrySettings32 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputSentinelOneAiSiem.ResponseRetrySettings))
+		for responseRetrySettingsIndex32 := range r.OutputSentinelOneAiSiem.ResponseRetrySettings {
 			var httpStatus32 float64
-			httpStatus32 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].HTTPStatus.ValueFloat64()
+			httpStatus32 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].HTTPStatus.ValueFloat64()
 
 			initialBackoff68 := new(float64)
-			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.IsNull() {
-				*initialBackoff68 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.IsNull() {
+				*initialBackoff68 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff68 = nil
 			}
 			backoffRate68 := new(float64)
-			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.IsNull() {
-				*backoffRate68 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.IsNull() {
+				*backoffRate68 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].BackoffRate.ValueFloat64()
 			} else {
 				backoffRate68 = nil
 			}
 			maxBackoff64 := new(float64)
-			if !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.IsUnknown() && !r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.IsNull() {
-				*maxBackoff64 = r.OutputDynatraceOtlp.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.IsNull() {
+				*maxBackoff64 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex32].MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff64 = nil
 			}
@@ -34276,25 +34195,25 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			})
 		}
 		var timeoutRetrySettings32 *shared.TimeoutRetrySettingsType
-		if r.OutputDynatraceOtlp.TimeoutRetrySettings != nil {
+		if r.OutputSentinelOneAiSiem.TimeoutRetrySettings != nil {
 			var timeoutRetry32 bool
-			timeoutRetry32 = r.OutputDynatraceOtlp.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			timeoutRetry32 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
 			initialBackoff69 := new(float64)
-			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff69 = r.OutputDynatraceOtlp.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsNull() {
+				*initialBackoff69 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
 				initialBackoff69 = nil
 			}
 			backoffRate69 := new(float64)
-			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate69 = r.OutputDynatraceOtlp.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsNull() {
+				*backoffRate69 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
 				backoffRate69 = nil
 			}
 			maxBackoff65 := new(float64)
-			if !r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff65 = r.OutputDynatraceOtlp.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsNull() {
+				*maxBackoff65 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
 				maxBackoff65 = nil
 			}
@@ -34306,330 +34225,34 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 		}
 		responseHonorRetryAfterHeader32 := new(bool)
-		if !r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader32 = r.OutputDynatraceOtlp.ResponseHonorRetryAfterHeader.ValueBool()
+		if !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() {
+			*responseHonorRetryAfterHeader32 = r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
 			responseHonorRetryAfterHeader32 = nil
 		}
-		pqStrictOrdering50 := new(bool)
-		if !r.OutputDynatraceOtlp.PqStrictOrdering.IsUnknown() && !r.OutputDynatraceOtlp.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering50 = r.OutputDynatraceOtlp.PqStrictOrdering.ValueBool()
-		} else {
-			pqStrictOrdering50 = nil
-		}
-		pqRatePerSec50 := new(float64)
-		if !r.OutputDynatraceOtlp.PqRatePerSec.IsUnknown() && !r.OutputDynatraceOtlp.PqRatePerSec.IsNull() {
-			*pqRatePerSec50 = r.OutputDynatraceOtlp.PqRatePerSec.ValueFloat64()
-		} else {
-			pqRatePerSec50 = nil
-		}
-		pqMode50 := new(shared.ModeOptions)
-		if !r.OutputDynatraceOtlp.PqMode.IsUnknown() && !r.OutputDynatraceOtlp.PqMode.IsNull() {
-			*pqMode50 = shared.ModeOptions(r.OutputDynatraceOtlp.PqMode.ValueString())
-		} else {
-			pqMode50 = nil
-		}
-		pqMaxBufferSize50 := new(float64)
-		if !r.OutputDynatraceOtlp.PqMaxBufferSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize50 = r.OutputDynatraceOtlp.PqMaxBufferSize.ValueFloat64()
-		} else {
-			pqMaxBufferSize50 = nil
-		}
-		pqMaxBackpressureSec50 := new(float64)
-		if !r.OutputDynatraceOtlp.PqMaxBackpressureSec.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec50 = r.OutputDynatraceOtlp.PqMaxBackpressureSec.ValueFloat64()
-		} else {
-			pqMaxBackpressureSec50 = nil
-		}
-		pqMaxFileSize50 := new(string)
-		if !r.OutputDynatraceOtlp.PqMaxFileSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize50 = r.OutputDynatraceOtlp.PqMaxFileSize.ValueString()
-		} else {
-			pqMaxFileSize50 = nil
-		}
-		pqMaxSize50 := new(string)
-		if !r.OutputDynatraceOtlp.PqMaxSize.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxSize.IsNull() {
-			*pqMaxSize50 = r.OutputDynatraceOtlp.PqMaxSize.ValueString()
-		} else {
-			pqMaxSize50 = nil
-		}
-		pqPath50 := new(string)
-		if !r.OutputDynatraceOtlp.PqPath.IsUnknown() && !r.OutputDynatraceOtlp.PqPath.IsNull() {
-			*pqPath50 = r.OutputDynatraceOtlp.PqPath.ValueString()
-		} else {
-			pqPath50 = nil
-		}
-		pqCompress50 := new(shared.CompressionOptionsPq)
-		if !r.OutputDynatraceOtlp.PqCompress.IsUnknown() && !r.OutputDynatraceOtlp.PqCompress.IsNull() {
-			*pqCompress50 = shared.CompressionOptionsPq(r.OutputDynatraceOtlp.PqCompress.ValueString())
-		} else {
-			pqCompress50 = nil
-		}
-		pqOnBackpressure50 := new(shared.QueueFullBehaviorOptions)
-		if !r.OutputDynatraceOtlp.PqOnBackpressure.IsUnknown() && !r.OutputDynatraceOtlp.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure50 = shared.QueueFullBehaviorOptions(r.OutputDynatraceOtlp.PqOnBackpressure.ValueString())
-		} else {
-			pqOnBackpressure50 = nil
-		}
-		pqMaxBufferSizeBytes50 := new(string)
-		if !r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes50 = r.OutputDynatraceOtlp.PqMaxBufferSizeBytes.ValueString()
-		} else {
-			pqMaxBufferSizeBytes50 = nil
-		}
-		var pqControls50 *shared.OutputDynatraceOtlpPqControls
-		if r.OutputDynatraceOtlp.PqControls != nil {
-			pqControls50 = &shared.OutputDynatraceOtlpPqControls{}
-		}
-		outputDynatraceOtlp = &shared.OutputDynatraceOtlp{
-			ID:                            id66,
-			Type:                          typeVar66,
-			Pipeline:                      pipeline66,
-			SystemFields:                  systemFields66,
-			Environment:                   environment66,
-			Streamtags:                    streamtags66,
-			Protocol:                      protocol6,
-			Endpoint:                      endpoint15,
-			OtlpVersion:                   otlpVersion2,
-			Compress:                      compress38,
-			HTTPCompress:                  httpCompress2,
-			HTTPTracesEndpointOverride:    httpTracesEndpointOverride2,
-			HTTPMetricsEndpointOverride:   httpMetricsEndpointOverride2,
-			HTTPLogsEndpointOverride:      httpLogsEndpointOverride2,
-			Metadata:                      metadata3,
-			Concurrency:                   concurrency34,
-			MaxPayloadSizeKB:              maxPayloadSizeKb33,
-			TimeoutSec:                    timeoutSec33,
-			FlushPeriodSec:                flushPeriodSec44,
-			FailedRequestLoggingMode:      failedRequestLoggingMode31,
-			ConnectionTimeout:             connectionTimeout18,
-			KeepAliveTime:                 keepAliveTime2,
-			KeepAlive:                     keepAlive6,
-			EndpointType:                  endpointType,
-			TokenSecret:                   tokenSecret4,
-			AuthTokenName:                 authTokenName1,
-			OnBackpressure:                onBackpressure60,
-			Description:                   description69,
-			RejectUnauthorized:            rejectUnauthorized61,
-			UseRoundRobinDNS:              useRoundRobinDns30,
-			ExtraHTTPHeaders:              extraHTTPHeaders31,
-			SafeHeaders:                   safeHeaders31,
-			ResponseRetrySettings:         responseRetrySettings32,
-			TimeoutRetrySettings:          timeoutRetrySettings32,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader32,
-			PqStrictOrdering:              pqStrictOrdering50,
-			PqRatePerSec:                  pqRatePerSec50,
-			PqMode:                        pqMode50,
-			PqMaxBufferSize:               pqMaxBufferSize50,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec50,
-			PqMaxFileSize:                 pqMaxFileSize50,
-			PqMaxSize:                     pqMaxSize50,
-			PqPath:                        pqPath50,
-			PqCompress:                    pqCompress50,
-			PqOnBackpressure:              pqOnBackpressure50,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes50,
-			PqControls:                    pqControls50,
-		}
-	}
-	if outputDynatraceOtlp != nil {
-		out = shared.Output{
-			OutputDynatraceOtlp: outputDynatraceOtlp,
-		}
-	}
-	var outputSentinelOneAiSiem *shared.OutputSentinelOneAiSiem
-	if r.OutputSentinelOneAiSiem != nil {
-		id67 := new(string)
-		if !r.OutputSentinelOneAiSiem.ID.IsUnknown() && !r.OutputSentinelOneAiSiem.ID.IsNull() {
-			*id67 = r.OutputSentinelOneAiSiem.ID.ValueString()
-		} else {
-			id67 = nil
-		}
-		typeVar67 := shared.OutputSentinelOneAiSiemType(r.OutputSentinelOneAiSiem.Type.ValueString())
-		pipeline67 := new(string)
-		if !r.OutputSentinelOneAiSiem.Pipeline.IsUnknown() && !r.OutputSentinelOneAiSiem.Pipeline.IsNull() {
-			*pipeline67 = r.OutputSentinelOneAiSiem.Pipeline.ValueString()
-		} else {
-			pipeline67 = nil
-		}
-		systemFields67 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SystemFields))
-		for systemFieldsIndex67 := range r.OutputSentinelOneAiSiem.SystemFields {
-			systemFields67 = append(systemFields67, r.OutputSentinelOneAiSiem.SystemFields[systemFieldsIndex67].ValueString())
-		}
-		environment67 := new(string)
-		if !r.OutputSentinelOneAiSiem.Environment.IsUnknown() && !r.OutputSentinelOneAiSiem.Environment.IsNull() {
-			*environment67 = r.OutputSentinelOneAiSiem.Environment.ValueString()
-		} else {
-			environment67 = nil
-		}
-		streamtags67 := make([]string, 0, len(r.OutputSentinelOneAiSiem.Streamtags))
-		for streamtagsIndex67 := range r.OutputSentinelOneAiSiem.Streamtags {
-			streamtags67 = append(streamtags67, r.OutputSentinelOneAiSiem.Streamtags[streamtagsIndex67].ValueString())
-		}
-		region16 := shared.OutputSentinelOneAiSiemRegion(r.OutputSentinelOneAiSiem.Region.ValueString())
-		endpoint16 := shared.AISIEMEndpointPath(r.OutputSentinelOneAiSiem.Endpoint.ValueString())
-		concurrency35 := new(float64)
-		if !r.OutputSentinelOneAiSiem.Concurrency.IsUnknown() && !r.OutputSentinelOneAiSiem.Concurrency.IsNull() {
-			*concurrency35 = r.OutputSentinelOneAiSiem.Concurrency.ValueFloat64()
-		} else {
-			concurrency35 = nil
-		}
-		maxPayloadSizeKb34 := new(float64)
-		if !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb34 = r.OutputSentinelOneAiSiem.MaxPayloadSizeKB.ValueFloat64()
-		} else {
-			maxPayloadSizeKb34 = nil
-		}
-		maxPayloadEvents31 := new(float64)
-		if !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsUnknown() && !r.OutputSentinelOneAiSiem.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents31 = r.OutputSentinelOneAiSiem.MaxPayloadEvents.ValueFloat64()
-		} else {
-			maxPayloadEvents31 = nil
-		}
-		compress39 := new(bool)
-		if !r.OutputSentinelOneAiSiem.Compress.IsUnknown() && !r.OutputSentinelOneAiSiem.Compress.IsNull() {
-			*compress39 = r.OutputSentinelOneAiSiem.Compress.ValueBool()
-		} else {
-			compress39 = nil
-		}
-		rejectUnauthorized62 := new(bool)
-		if !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsUnknown() && !r.OutputSentinelOneAiSiem.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized62 = r.OutputSentinelOneAiSiem.RejectUnauthorized.ValueBool()
-		} else {
-			rejectUnauthorized62 = nil
-		}
-		timeoutSec34 := new(float64)
-		if !r.OutputSentinelOneAiSiem.TimeoutSec.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutSec.IsNull() {
-			*timeoutSec34 = r.OutputSentinelOneAiSiem.TimeoutSec.ValueFloat64()
-		} else {
-			timeoutSec34 = nil
-		}
-		flushPeriodSec45 := new(float64)
-		if !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsUnknown() && !r.OutputSentinelOneAiSiem.FlushPeriodSec.IsNull() {
-			*flushPeriodSec45 = r.OutputSentinelOneAiSiem.FlushPeriodSec.ValueFloat64()
-		} else {
-			flushPeriodSec45 = nil
-		}
-		extraHTTPHeaders32 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputSentinelOneAiSiem.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex32 := range r.OutputSentinelOneAiSiem.ExtraHTTPHeaders {
-			name52 := new(string)
-			if !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.IsUnknown() && !r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.IsNull() {
-				*name52 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.ValueString()
-			} else {
-				name52 = nil
-			}
-			var value67 string
-			value67 = r.OutputSentinelOneAiSiem.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Value.ValueString()
-
-			extraHTTPHeaders32 = append(extraHTTPHeaders32, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name52,
-				Value: value67,
-			})
-		}
-		failedRequestLoggingMode32 := new(shared.FailedRequestLoggingModeOptions)
-		if !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsUnknown() && !r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode32 = shared.FailedRequestLoggingModeOptions(r.OutputSentinelOneAiSiem.FailedRequestLoggingMode.ValueString())
-		} else {
-			failedRequestLoggingMode32 = nil
-		}
-		safeHeaders32 := make([]string, 0, len(r.OutputSentinelOneAiSiem.SafeHeaders))
-		for safeHeadersIndex32 := range r.OutputSentinelOneAiSiem.SafeHeaders {
-			safeHeaders32 = append(safeHeaders32, r.OutputSentinelOneAiSiem.SafeHeaders[safeHeadersIndex32].ValueString())
-		}
-		authType38 := new(shared.AuthenticationMethodOptionsAuthTokensItems)
-		if !r.OutputSentinelOneAiSiem.AuthType.IsUnknown() && !r.OutputSentinelOneAiSiem.AuthType.IsNull() {
-			*authType38 = shared.AuthenticationMethodOptionsAuthTokensItems(r.OutputSentinelOneAiSiem.AuthType.ValueString())
-		} else {
-			authType38 = nil
-		}
-		responseRetrySettings33 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputSentinelOneAiSiem.ResponseRetrySettings))
-		for responseRetrySettingsIndex33 := range r.OutputSentinelOneAiSiem.ResponseRetrySettings {
-			var httpStatus33 float64
-			httpStatus33 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].HTTPStatus.ValueFloat64()
-
-			initialBackoff70 := new(float64)
-			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.IsNull() {
-				*initialBackoff70 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff70 = nil
-			}
-			backoffRate70 := new(float64)
-			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.IsNull() {
-				*backoffRate70 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.ValueFloat64()
-			} else {
-				backoffRate70 = nil
-			}
-			maxBackoff66 := new(float64)
-			if !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.IsNull() {
-				*maxBackoff66 = r.OutputSentinelOneAiSiem.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff66 = nil
-			}
-			responseRetrySettings33 = append(responseRetrySettings33, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus33,
-				InitialBackoff: initialBackoff70,
-				BackoffRate:    backoffRate70,
-				MaxBackoff:     maxBackoff66,
-			})
-		}
-		var timeoutRetrySettings33 *shared.TimeoutRetrySettingsType
-		if r.OutputSentinelOneAiSiem.TimeoutRetrySettings != nil {
-			var timeoutRetry33 bool
-			timeoutRetry33 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.TimeoutRetry.ValueBool()
-
-			initialBackoff71 := new(float64)
-			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff71 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
-			} else {
-				initialBackoff71 = nil
-			}
-			backoffRate71 := new(float64)
-			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate71 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.BackoffRate.ValueFloat64()
-			} else {
-				backoffRate71 = nil
-			}
-			maxBackoff67 := new(float64)
-			if !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff67 = r.OutputSentinelOneAiSiem.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
-			} else {
-				maxBackoff67 = nil
-			}
-			timeoutRetrySettings33 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry33,
-				InitialBackoff: initialBackoff71,
-				BackoffRate:    backoffRate71,
-				MaxBackoff:     maxBackoff67,
-			}
-		}
-		responseHonorRetryAfterHeader33 := new(bool)
-		if !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader33 = r.OutputSentinelOneAiSiem.ResponseHonorRetryAfterHeader.ValueBool()
-		} else {
-			responseHonorRetryAfterHeader33 = nil
-		}
-		onBackpressure61 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure60 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputSentinelOneAiSiem.OnBackpressure.IsUnknown() && !r.OutputSentinelOneAiSiem.OnBackpressure.IsNull() {
-			*onBackpressure61 = shared.BackpressureBehaviorOptions(r.OutputSentinelOneAiSiem.OnBackpressure.ValueString())
+			*onBackpressure60 = shared.BackpressureBehaviorOptions(r.OutputSentinelOneAiSiem.OnBackpressure.ValueString())
 		} else {
-			onBackpressure61 = nil
+			onBackpressure60 = nil
 		}
-		description70 := new(string)
+		description69 := new(string)
 		if !r.OutputSentinelOneAiSiem.Description.IsUnknown() && !r.OutputSentinelOneAiSiem.Description.IsNull() {
-			*description70 = r.OutputSentinelOneAiSiem.Description.ValueString()
+			*description69 = r.OutputSentinelOneAiSiem.Description.ValueString()
 		} else {
-			description70 = nil
+			description69 = nil
 		}
-		token18 := new(string)
+		token16 := new(string)
 		if !r.OutputSentinelOneAiSiem.Token.IsUnknown() && !r.OutputSentinelOneAiSiem.Token.IsNull() {
-			*token18 = r.OutputSentinelOneAiSiem.Token.ValueString()
+			*token16 = r.OutputSentinelOneAiSiem.Token.ValueString()
 		} else {
-			token18 = nil
+			token16 = nil
 		}
-		textSecret33 := new(string)
+		textSecret31 := new(string)
 		if !r.OutputSentinelOneAiSiem.TextSecret.IsUnknown() && !r.OutputSentinelOneAiSiem.TextSecret.IsNull() {
-			*textSecret33 = r.OutputSentinelOneAiSiem.TextSecret.ValueString()
+			*textSecret31 = r.OutputSentinelOneAiSiem.TextSecret.ValueString()
 		} else {
-			textSecret33 = nil
+			textSecret31 = nil
 		}
 		baseURL := new(string)
 		if !r.OutputSentinelOneAiSiem.BaseURL.IsUnknown() && !r.OutputSentinelOneAiSiem.BaseURL.IsNull() {
@@ -34721,103 +34344,103 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			eventType1 = nil
 		}
-		pqStrictOrdering51 := new(bool)
+		pqStrictOrdering49 := new(bool)
 		if !r.OutputSentinelOneAiSiem.PqStrictOrdering.IsUnknown() && !r.OutputSentinelOneAiSiem.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering51 = r.OutputSentinelOneAiSiem.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering49 = r.OutputSentinelOneAiSiem.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering51 = nil
+			pqStrictOrdering49 = nil
 		}
-		pqRatePerSec51 := new(float64)
+		pqRatePerSec49 := new(float64)
 		if !r.OutputSentinelOneAiSiem.PqRatePerSec.IsUnknown() && !r.OutputSentinelOneAiSiem.PqRatePerSec.IsNull() {
-			*pqRatePerSec51 = r.OutputSentinelOneAiSiem.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec49 = r.OutputSentinelOneAiSiem.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec51 = nil
+			pqRatePerSec49 = nil
 		}
-		pqMode51 := new(shared.ModeOptions)
+		pqMode50 := new(shared.ModeOptions)
 		if !r.OutputSentinelOneAiSiem.PqMode.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMode.IsNull() {
-			*pqMode51 = shared.ModeOptions(r.OutputSentinelOneAiSiem.PqMode.ValueString())
+			*pqMode50 = shared.ModeOptions(r.OutputSentinelOneAiSiem.PqMode.ValueString())
 		} else {
-			pqMode51 = nil
+			pqMode50 = nil
 		}
-		pqMaxBufferSize51 := new(float64)
+		pqMaxBufferSize49 := new(float64)
 		if !r.OutputSentinelOneAiSiem.PqMaxBufferSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize51 = r.OutputSentinelOneAiSiem.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize49 = r.OutputSentinelOneAiSiem.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize51 = nil
+			pqMaxBufferSize49 = nil
 		}
-		pqMaxBackpressureSec51 := new(float64)
+		pqMaxBackpressureSec49 := new(float64)
 		if !r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec51 = r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec49 = r.OutputSentinelOneAiSiem.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec51 = nil
+			pqMaxBackpressureSec49 = nil
 		}
-		pqMaxFileSize51 := new(string)
+		pqMaxFileSize50 := new(string)
 		if !r.OutputSentinelOneAiSiem.PqMaxFileSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize51 = r.OutputSentinelOneAiSiem.PqMaxFileSize.ValueString()
+			*pqMaxFileSize50 = r.OutputSentinelOneAiSiem.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize51 = nil
+			pqMaxFileSize50 = nil
 		}
-		pqMaxSize51 := new(string)
+		pqMaxSize50 := new(string)
 		if !r.OutputSentinelOneAiSiem.PqMaxSize.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxSize.IsNull() {
-			*pqMaxSize51 = r.OutputSentinelOneAiSiem.PqMaxSize.ValueString()
+			*pqMaxSize50 = r.OutputSentinelOneAiSiem.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize51 = nil
+			pqMaxSize50 = nil
 		}
-		pqPath51 := new(string)
+		pqPath50 := new(string)
 		if !r.OutputSentinelOneAiSiem.PqPath.IsUnknown() && !r.OutputSentinelOneAiSiem.PqPath.IsNull() {
-			*pqPath51 = r.OutputSentinelOneAiSiem.PqPath.ValueString()
+			*pqPath50 = r.OutputSentinelOneAiSiem.PqPath.ValueString()
 		} else {
-			pqPath51 = nil
+			pqPath50 = nil
 		}
-		pqCompress51 := new(shared.CompressionOptionsPq)
+		pqCompress50 := new(shared.CompressionOptionsPq)
 		if !r.OutputSentinelOneAiSiem.PqCompress.IsUnknown() && !r.OutputSentinelOneAiSiem.PqCompress.IsNull() {
-			*pqCompress51 = shared.CompressionOptionsPq(r.OutputSentinelOneAiSiem.PqCompress.ValueString())
+			*pqCompress50 = shared.CompressionOptionsPq(r.OutputSentinelOneAiSiem.PqCompress.ValueString())
 		} else {
-			pqCompress51 = nil
+			pqCompress50 = nil
 		}
-		pqOnBackpressure51 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure50 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputSentinelOneAiSiem.PqOnBackpressure.IsUnknown() && !r.OutputSentinelOneAiSiem.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure51 = shared.QueueFullBehaviorOptions(r.OutputSentinelOneAiSiem.PqOnBackpressure.ValueString())
+			*pqOnBackpressure50 = shared.QueueFullBehaviorOptions(r.OutputSentinelOneAiSiem.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure51 = nil
+			pqOnBackpressure50 = nil
 		}
-		pqMaxBufferSizeBytes51 := new(string)
+		pqMaxBufferSizeBytes49 := new(string)
 		if !r.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes51 = r.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes49 = r.OutputSentinelOneAiSiem.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes51 = nil
+			pqMaxBufferSizeBytes49 = nil
 		}
-		var pqControls51 *shared.OutputSentinelOneAiSiemPqControls
+		var pqControls50 *shared.OutputSentinelOneAiSiemPqControls
 		if r.OutputSentinelOneAiSiem.PqControls != nil {
-			pqControls51 = &shared.OutputSentinelOneAiSiemPqControls{}
+			pqControls50 = &shared.OutputSentinelOneAiSiemPqControls{}
 		}
 		outputSentinelOneAiSiem = &shared.OutputSentinelOneAiSiem{
-			ID:                            id67,
-			Type:                          typeVar67,
-			Pipeline:                      pipeline67,
-			SystemFields:                  systemFields67,
-			Environment:                   environment67,
-			Streamtags:                    streamtags67,
+			ID:                            id66,
+			Type:                          typeVar66,
+			Pipeline:                      pipeline66,
+			SystemFields:                  systemFields66,
+			Environment:                   environment66,
+			Streamtags:                    streamtags66,
 			Region:                        region16,
 			Endpoint:                      endpoint16,
-			Concurrency:                   concurrency35,
-			MaxPayloadSizeKB:              maxPayloadSizeKb34,
-			MaxPayloadEvents:              maxPayloadEvents31,
-			Compress:                      compress39,
-			RejectUnauthorized:            rejectUnauthorized62,
-			TimeoutSec:                    timeoutSec34,
-			FlushPeriodSec:                flushPeriodSec45,
-			ExtraHTTPHeaders:              extraHTTPHeaders32,
-			FailedRequestLoggingMode:      failedRequestLoggingMode32,
-			SafeHeaders:                   safeHeaders32,
-			AuthType:                      authType38,
-			ResponseRetrySettings:         responseRetrySettings33,
-			TimeoutRetrySettings:          timeoutRetrySettings33,
-			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader33,
-			OnBackpressure:                onBackpressure61,
-			Description:                   description70,
-			Token:                         token18,
-			TextSecret:                    textSecret33,
+			Concurrency:                   concurrency34,
+			MaxPayloadSizeKB:              maxPayloadSizeKb33,
+			MaxPayloadEvents:              maxPayloadEvents30,
+			Compress:                      compress38,
+			RejectUnauthorized:            rejectUnauthorized61,
+			TimeoutSec:                    timeoutSec33,
+			FlushPeriodSec:                flushPeriodSec44,
+			ExtraHTTPHeaders:              extraHTTPHeaders31,
+			FailedRequestLoggingMode:      failedRequestLoggingMode31,
+			SafeHeaders:                   safeHeaders31,
+			AuthType:                      authType36,
+			ResponseRetrySettings:         responseRetrySettings32,
+			TimeoutRetrySettings:          timeoutRetrySettings32,
+			ResponseHonorRetryAfterHeader: responseHonorRetryAfterHeader32,
+			OnBackpressure:                onBackpressure60,
+			Description:                   description69,
+			Token:                         token16,
+			TextSecret:                    textSecret31,
 			BaseURL:                       baseURL,
 			HostExpression:                hostExpression,
 			SourceExpression:              sourceExpression,
@@ -34833,18 +34456,18 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DataSourceName:                dataSourceName,
 			DataSourceVendor:              dataSourceVendor,
 			EventType:                     eventType1,
-			PqStrictOrdering:              pqStrictOrdering51,
-			PqRatePerSec:                  pqRatePerSec51,
-			PqMode:                        pqMode51,
-			PqMaxBufferSize:               pqMaxBufferSize51,
-			PqMaxBackpressureSec:          pqMaxBackpressureSec51,
-			PqMaxFileSize:                 pqMaxFileSize51,
-			PqMaxSize:                     pqMaxSize51,
-			PqPath:                        pqPath51,
-			PqCompress:                    pqCompress51,
-			PqOnBackpressure:              pqOnBackpressure51,
-			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes51,
-			PqControls:                    pqControls51,
+			PqStrictOrdering:              pqStrictOrdering49,
+			PqRatePerSec:                  pqRatePerSec49,
+			PqMode:                        pqMode50,
+			PqMaxBufferSize:               pqMaxBufferSize49,
+			PqMaxBackpressureSec:          pqMaxBackpressureSec49,
+			PqMaxFileSize:                 pqMaxFileSize50,
+			PqMaxSize:                     pqMaxSize50,
+			PqPath:                        pqPath50,
+			PqCompress:                    pqCompress50,
+			PqOnBackpressure:              pqOnBackpressure50,
+			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes49,
+			PqControls:                    pqControls50,
 		}
 	}
 	if outputSentinelOneAiSiem != nil {
@@ -34854,32 +34477,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputChronicle *shared.OutputChronicle
 	if r.OutputChronicle != nil {
-		id68 := new(string)
+		id67 := new(string)
 		if !r.OutputChronicle.ID.IsUnknown() && !r.OutputChronicle.ID.IsNull() {
-			*id68 = r.OutputChronicle.ID.ValueString()
+			*id67 = r.OutputChronicle.ID.ValueString()
 		} else {
-			id68 = nil
+			id67 = nil
 		}
-		typeVar68 := shared.OutputChronicleType(r.OutputChronicle.Type.ValueString())
-		pipeline68 := new(string)
+		typeVar67 := shared.OutputChronicleType(r.OutputChronicle.Type.ValueString())
+		pipeline67 := new(string)
 		if !r.OutputChronicle.Pipeline.IsUnknown() && !r.OutputChronicle.Pipeline.IsNull() {
-			*pipeline68 = r.OutputChronicle.Pipeline.ValueString()
+			*pipeline67 = r.OutputChronicle.Pipeline.ValueString()
 		} else {
-			pipeline68 = nil
+			pipeline67 = nil
 		}
-		systemFields68 := make([]string, 0, len(r.OutputChronicle.SystemFields))
-		for systemFieldsIndex68 := range r.OutputChronicle.SystemFields {
-			systemFields68 = append(systemFields68, r.OutputChronicle.SystemFields[systemFieldsIndex68].ValueString())
+		systemFields67 := make([]string, 0, len(r.OutputChronicle.SystemFields))
+		for systemFieldsIndex67 := range r.OutputChronicle.SystemFields {
+			systemFields67 = append(systemFields67, r.OutputChronicle.SystemFields[systemFieldsIndex67].ValueString())
 		}
-		environment68 := new(string)
+		environment67 := new(string)
 		if !r.OutputChronicle.Environment.IsUnknown() && !r.OutputChronicle.Environment.IsNull() {
-			*environment68 = r.OutputChronicle.Environment.ValueString()
+			*environment67 = r.OutputChronicle.Environment.ValueString()
 		} else {
-			environment68 = nil
+			environment67 = nil
 		}
-		streamtags68 := make([]string, 0, len(r.OutputChronicle.Streamtags))
-		for streamtagsIndex68 := range r.OutputChronicle.Streamtags {
-			streamtags68 = append(streamtags68, r.OutputChronicle.Streamtags[streamtagsIndex68].ValueString())
+		streamtags67 := make([]string, 0, len(r.OutputChronicle.Streamtags))
+		for streamtagsIndex67 := range r.OutputChronicle.Streamtags {
+			streamtags67 = append(streamtags67, r.OutputChronicle.Streamtags[streamtagsIndex67].ValueString())
 		}
 		apiVersion1 := new(string)
 		if !r.OutputChronicle.APIVersion.IsUnknown() && !r.OutputChronicle.APIVersion.IsNull() {
@@ -34893,154 +34516,154 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			authenticationMethod1 = nil
 		}
-		responseRetrySettings34 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputChronicle.ResponseRetrySettings))
-		for responseRetrySettingsIndex34 := range r.OutputChronicle.ResponseRetrySettings {
-			var httpStatus34 float64
-			httpStatus34 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].HTTPStatus.ValueFloat64()
+		responseRetrySettings33 := make([]shared.ItemsTypeResponseRetrySettings, 0, len(r.OutputChronicle.ResponseRetrySettings))
+		for responseRetrySettingsIndex33 := range r.OutputChronicle.ResponseRetrySettings {
+			var httpStatus33 float64
+			httpStatus33 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].HTTPStatus.ValueFloat64()
 
-			initialBackoff72 := new(float64)
-			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].InitialBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].InitialBackoff.IsNull() {
-				*initialBackoff72 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].InitialBackoff.ValueFloat64()
+			initialBackoff70 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.IsNull() {
+				*initialBackoff70 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff72 = nil
+				initialBackoff70 = nil
 			}
-			backoffRate72 := new(float64)
-			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].BackoffRate.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].BackoffRate.IsNull() {
-				*backoffRate72 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].BackoffRate.ValueFloat64()
+			backoffRate70 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.IsNull() {
+				*backoffRate70 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].BackoffRate.ValueFloat64()
 			} else {
-				backoffRate72 = nil
+				backoffRate70 = nil
 			}
-			maxBackoff68 := new(float64)
-			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].MaxBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].MaxBackoff.IsNull() {
-				*maxBackoff68 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex34].MaxBackoff.ValueFloat64()
+			maxBackoff66 := new(float64)
+			if !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.IsUnknown() && !r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.IsNull() {
+				*maxBackoff66 = r.OutputChronicle.ResponseRetrySettings[responseRetrySettingsIndex33].MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff68 = nil
+				maxBackoff66 = nil
 			}
-			responseRetrySettings34 = append(responseRetrySettings34, shared.ItemsTypeResponseRetrySettings{
-				HTTPStatus:     httpStatus34,
-				InitialBackoff: initialBackoff72,
-				BackoffRate:    backoffRate72,
-				MaxBackoff:     maxBackoff68,
+			responseRetrySettings33 = append(responseRetrySettings33, shared.ItemsTypeResponseRetrySettings{
+				HTTPStatus:     httpStatus33,
+				InitialBackoff: initialBackoff70,
+				BackoffRate:    backoffRate70,
+				MaxBackoff:     maxBackoff66,
 			})
 		}
-		var timeoutRetrySettings34 *shared.TimeoutRetrySettingsType
+		var timeoutRetrySettings33 *shared.TimeoutRetrySettingsType
 		if r.OutputChronicle.TimeoutRetrySettings != nil {
-			var timeoutRetry34 bool
-			timeoutRetry34 = r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry.ValueBool()
+			var timeoutRetry33 bool
+			timeoutRetry33 = r.OutputChronicle.TimeoutRetrySettings.TimeoutRetry.ValueBool()
 
-			initialBackoff73 := new(float64)
+			initialBackoff71 := new(float64)
 			if !r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.IsNull() {
-				*initialBackoff73 = r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
+				*initialBackoff71 = r.OutputChronicle.TimeoutRetrySettings.InitialBackoff.ValueFloat64()
 			} else {
-				initialBackoff73 = nil
+				initialBackoff71 = nil
 			}
-			backoffRate73 := new(float64)
+			backoffRate71 := new(float64)
 			if !r.OutputChronicle.TimeoutRetrySettings.BackoffRate.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.BackoffRate.IsNull() {
-				*backoffRate73 = r.OutputChronicle.TimeoutRetrySettings.BackoffRate.ValueFloat64()
+				*backoffRate71 = r.OutputChronicle.TimeoutRetrySettings.BackoffRate.ValueFloat64()
 			} else {
-				backoffRate73 = nil
+				backoffRate71 = nil
 			}
-			maxBackoff69 := new(float64)
+			maxBackoff67 := new(float64)
 			if !r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.IsUnknown() && !r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.IsNull() {
-				*maxBackoff69 = r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
+				*maxBackoff67 = r.OutputChronicle.TimeoutRetrySettings.MaxBackoff.ValueFloat64()
 			} else {
-				maxBackoff69 = nil
+				maxBackoff67 = nil
 			}
-			timeoutRetrySettings34 = &shared.TimeoutRetrySettingsType{
-				TimeoutRetry:   timeoutRetry34,
-				InitialBackoff: initialBackoff73,
-				BackoffRate:    backoffRate73,
-				MaxBackoff:     maxBackoff69,
+			timeoutRetrySettings33 = &shared.TimeoutRetrySettingsType{
+				TimeoutRetry:   timeoutRetry33,
+				InitialBackoff: initialBackoff71,
+				BackoffRate:    backoffRate71,
+				MaxBackoff:     maxBackoff67,
 			}
 		}
-		responseHonorRetryAfterHeader34 := new(bool)
+		responseHonorRetryAfterHeader33 := new(bool)
 		if !r.OutputChronicle.ResponseHonorRetryAfterHeader.IsUnknown() && !r.OutputChronicle.ResponseHonorRetryAfterHeader.IsNull() {
-			*responseHonorRetryAfterHeader34 = r.OutputChronicle.ResponseHonorRetryAfterHeader.ValueBool()
+			*responseHonorRetryAfterHeader33 = r.OutputChronicle.ResponseHonorRetryAfterHeader.ValueBool()
 		} else {
-			responseHonorRetryAfterHeader34 = nil
+			responseHonorRetryAfterHeader33 = nil
 		}
 		var region17 string
 		region17 = r.OutputChronicle.Region.ValueString()
 
-		concurrency36 := new(float64)
+		concurrency35 := new(float64)
 		if !r.OutputChronicle.Concurrency.IsUnknown() && !r.OutputChronicle.Concurrency.IsNull() {
-			*concurrency36 = r.OutputChronicle.Concurrency.ValueFloat64()
+			*concurrency35 = r.OutputChronicle.Concurrency.ValueFloat64()
 		} else {
-			concurrency36 = nil
+			concurrency35 = nil
 		}
-		maxPayloadSizeKb35 := new(float64)
+		maxPayloadSizeKb34 := new(float64)
 		if !r.OutputChronicle.MaxPayloadSizeKB.IsUnknown() && !r.OutputChronicle.MaxPayloadSizeKB.IsNull() {
-			*maxPayloadSizeKb35 = r.OutputChronicle.MaxPayloadSizeKB.ValueFloat64()
+			*maxPayloadSizeKb34 = r.OutputChronicle.MaxPayloadSizeKB.ValueFloat64()
 		} else {
-			maxPayloadSizeKb35 = nil
+			maxPayloadSizeKb34 = nil
 		}
-		maxPayloadEvents32 := new(float64)
+		maxPayloadEvents31 := new(float64)
 		if !r.OutputChronicle.MaxPayloadEvents.IsUnknown() && !r.OutputChronicle.MaxPayloadEvents.IsNull() {
-			*maxPayloadEvents32 = r.OutputChronicle.MaxPayloadEvents.ValueFloat64()
+			*maxPayloadEvents31 = r.OutputChronicle.MaxPayloadEvents.ValueFloat64()
 		} else {
-			maxPayloadEvents32 = nil
+			maxPayloadEvents31 = nil
 		}
-		compress40 := new(bool)
+		compress39 := new(bool)
 		if !r.OutputChronicle.Compress.IsUnknown() && !r.OutputChronicle.Compress.IsNull() {
-			*compress40 = r.OutputChronicle.Compress.ValueBool()
+			*compress39 = r.OutputChronicle.Compress.ValueBool()
 		} else {
-			compress40 = nil
+			compress39 = nil
 		}
-		rejectUnauthorized63 := new(bool)
+		rejectUnauthorized62 := new(bool)
 		if !r.OutputChronicle.RejectUnauthorized.IsUnknown() && !r.OutputChronicle.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized63 = r.OutputChronicle.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized62 = r.OutputChronicle.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized63 = nil
+			rejectUnauthorized62 = nil
 		}
-		timeoutSec35 := new(float64)
+		timeoutSec34 := new(float64)
 		if !r.OutputChronicle.TimeoutSec.IsUnknown() && !r.OutputChronicle.TimeoutSec.IsNull() {
-			*timeoutSec35 = r.OutputChronicle.TimeoutSec.ValueFloat64()
+			*timeoutSec34 = r.OutputChronicle.TimeoutSec.ValueFloat64()
 		} else {
-			timeoutSec35 = nil
+			timeoutSec34 = nil
 		}
-		flushPeriodSec46 := new(float64)
+		flushPeriodSec45 := new(float64)
 		if !r.OutputChronicle.FlushPeriodSec.IsUnknown() && !r.OutputChronicle.FlushPeriodSec.IsNull() {
-			*flushPeriodSec46 = r.OutputChronicle.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec45 = r.OutputChronicle.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec46 = nil
+			flushPeriodSec45 = nil
 		}
-		extraHTTPHeaders33 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputChronicle.ExtraHTTPHeaders))
-		for extraHTTPHeadersIndex33 := range r.OutputChronicle.ExtraHTTPHeaders {
-			name53 := new(string)
-			if !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex33].Name.IsUnknown() && !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex33].Name.IsNull() {
-				*name53 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex33].Name.ValueString()
+		extraHTTPHeaders32 := make([]shared.ItemsTypeExtraHTTPHeaders, 0, len(r.OutputChronicle.ExtraHTTPHeaders))
+		for extraHTTPHeadersIndex32 := range r.OutputChronicle.ExtraHTTPHeaders {
+			name51 := new(string)
+			if !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.IsUnknown() && !r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.IsNull() {
+				*name51 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Name.ValueString()
 			} else {
-				name53 = nil
+				name51 = nil
 			}
-			var value68 string
-			value68 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex33].Value.ValueString()
+			var value66 string
+			value66 = r.OutputChronicle.ExtraHTTPHeaders[extraHTTPHeadersIndex32].Value.ValueString()
 
-			extraHTTPHeaders33 = append(extraHTTPHeaders33, shared.ItemsTypeExtraHTTPHeaders{
-				Name:  name53,
-				Value: value68,
+			extraHTTPHeaders32 = append(extraHTTPHeaders32, shared.ItemsTypeExtraHTTPHeaders{
+				Name:  name51,
+				Value: value66,
 			})
 		}
-		failedRequestLoggingMode33 := new(shared.FailedRequestLoggingModeOptions)
+		failedRequestLoggingMode32 := new(shared.FailedRequestLoggingModeOptions)
 		if !r.OutputChronicle.FailedRequestLoggingMode.IsUnknown() && !r.OutputChronicle.FailedRequestLoggingMode.IsNull() {
-			*failedRequestLoggingMode33 = shared.FailedRequestLoggingModeOptions(r.OutputChronicle.FailedRequestLoggingMode.ValueString())
+			*failedRequestLoggingMode32 = shared.FailedRequestLoggingModeOptions(r.OutputChronicle.FailedRequestLoggingMode.ValueString())
 		} else {
-			failedRequestLoggingMode33 = nil
+			failedRequestLoggingMode32 = nil
 		}
-		safeHeaders33 := make([]string, 0, len(r.OutputChronicle.SafeHeaders))
-		for safeHeadersIndex33 := range r.OutputChronicle.SafeHeaders {
-			safeHeaders33 = append(safeHeaders33, r.OutputChronicle.SafeHeaders[safeHeadersIndex33].ValueString())
+		safeHeaders32 := make([]string, 0, len(r.OutputChronicle.SafeHeaders))
+		for safeHeadersIndex32 := range r.OutputChronicle.SafeHeaders {
+			safeHeaders32 = append(safeHeaders32, r.OutputChronicle.SafeHeaders[safeHeadersIndex32].ValueString())
 		}
-		useRoundRobinDns31 := new(bool)
+		useRoundRobinDns30 := new(bool)
 		if !r.OutputChronicle.UseRoundRobinDNS.IsUnknown() && !r.OutputChronicle.UseRoundRobinDNS.IsNull() {
-			*useRoundRobinDns31 = r.OutputChronicle.UseRoundRobinDNS.ValueBool()
+			*useRoundRobinDns30 = r.OutputChronicle.UseRoundRobinDNS.ValueBool()
 		} else {
-			useRoundRobinDns31 = nil
+			useRoundRobinDns30 = nil
 		}
-		onBackpressure62 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure61 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputChronicle.OnBackpressure.IsUnknown() && !r.OutputChronicle.OnBackpressure.IsNull() {
-			*onBackpressure62 = shared.BackpressureBehaviorOptions(r.OutputChronicle.OnBackpressure.ValueString())
+			*onBackpressure61 = shared.BackpressureBehaviorOptions(r.OutputChronicle.OnBackpressure.ValueString())
 		} else {
-			onBackpressure62 = nil
+			onBackpressure61 = nil
 		}
 		totalMemoryLimitKb11 := new(float64)
 		if !r.OutputChronicle.TotalMemoryLimitKB.IsUnknown() && !r.OutputChronicle.TotalMemoryLimitKB.IsNull() {
@@ -35080,8 +34703,8 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key13 string
 			key13 = r.OutputChronicle.CustomLabels[customLabelsIndex1].Key.ValueString()
 
-			var value69 string
-			value69 = r.OutputChronicle.CustomLabels[customLabelsIndex1].Value.ValueString()
+			var value67 string
+			value67 = r.OutputChronicle.CustomLabels[customLabelsIndex1].Value.ValueString()
 
 			rbacEnabled := new(bool)
 			if !r.OutputChronicle.CustomLabels[customLabelsIndex1].RbacEnabled.IsUnknown() && !r.OutputChronicle.CustomLabels[customLabelsIndex1].RbacEnabled.IsNull() {
@@ -35091,7 +34714,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			}
 			customLabels1 = append(customLabels1, shared.CustomLabel{
 				Key:         key13,
-				Value:       value69,
+				Value:       value67,
 				RbacEnabled: rbacEnabled,
 			})
 		}
@@ -35101,11 +34724,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			endpoint17 = nil
 		}
-		description71 := new(string)
+		description70 := new(string)
 		if !r.OutputChronicle.Description.IsUnknown() && !r.OutputChronicle.Description.IsNull() {
-			*description71 = r.OutputChronicle.Description.ValueString()
+			*description70 = r.OutputChronicle.Description.ValueString()
 		} else {
-			description71 = nil
+			description70 = nil
 		}
 		serviceAccountCredentials3 := new(string)
 		if !r.OutputChronicle.ServiceAccountCredentials.IsUnknown() && !r.OutputChronicle.ServiceAccountCredentials.IsNull() {
@@ -35119,75 +34742,75 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			serviceAccountCredentialsSecret1 = nil
 		}
-		pqStrictOrdering52 := new(bool)
+		pqStrictOrdering50 := new(bool)
 		if !r.OutputChronicle.PqStrictOrdering.IsUnknown() && !r.OutputChronicle.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering52 = r.OutputChronicle.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering50 = r.OutputChronicle.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering52 = nil
+			pqStrictOrdering50 = nil
 		}
-		pqRatePerSec52 := new(float64)
+		pqRatePerSec50 := new(float64)
 		if !r.OutputChronicle.PqRatePerSec.IsUnknown() && !r.OutputChronicle.PqRatePerSec.IsNull() {
-			*pqRatePerSec52 = r.OutputChronicle.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec50 = r.OutputChronicle.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec52 = nil
+			pqRatePerSec50 = nil
 		}
-		pqMode52 := new(shared.ModeOptions)
+		pqMode51 := new(shared.ModeOptions)
 		if !r.OutputChronicle.PqMode.IsUnknown() && !r.OutputChronicle.PqMode.IsNull() {
-			*pqMode52 = shared.ModeOptions(r.OutputChronicle.PqMode.ValueString())
+			*pqMode51 = shared.ModeOptions(r.OutputChronicle.PqMode.ValueString())
 		} else {
-			pqMode52 = nil
+			pqMode51 = nil
 		}
-		pqMaxBufferSize52 := new(float64)
+		pqMaxBufferSize50 := new(float64)
 		if !r.OutputChronicle.PqMaxBufferSize.IsUnknown() && !r.OutputChronicle.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize52 = r.OutputChronicle.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize50 = r.OutputChronicle.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize52 = nil
+			pqMaxBufferSize50 = nil
 		}
-		pqMaxBackpressureSec52 := new(float64)
+		pqMaxBackpressureSec50 := new(float64)
 		if !r.OutputChronicle.PqMaxBackpressureSec.IsUnknown() && !r.OutputChronicle.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec52 = r.OutputChronicle.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec50 = r.OutputChronicle.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec52 = nil
+			pqMaxBackpressureSec50 = nil
 		}
-		pqMaxFileSize52 := new(string)
+		pqMaxFileSize51 := new(string)
 		if !r.OutputChronicle.PqMaxFileSize.IsUnknown() && !r.OutputChronicle.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize52 = r.OutputChronicle.PqMaxFileSize.ValueString()
+			*pqMaxFileSize51 = r.OutputChronicle.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize52 = nil
+			pqMaxFileSize51 = nil
 		}
-		pqMaxSize52 := new(string)
+		pqMaxSize51 := new(string)
 		if !r.OutputChronicle.PqMaxSize.IsUnknown() && !r.OutputChronicle.PqMaxSize.IsNull() {
-			*pqMaxSize52 = r.OutputChronicle.PqMaxSize.ValueString()
+			*pqMaxSize51 = r.OutputChronicle.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize52 = nil
+			pqMaxSize51 = nil
 		}
-		pqPath52 := new(string)
+		pqPath51 := new(string)
 		if !r.OutputChronicle.PqPath.IsUnknown() && !r.OutputChronicle.PqPath.IsNull() {
-			*pqPath52 = r.OutputChronicle.PqPath.ValueString()
+			*pqPath51 = r.OutputChronicle.PqPath.ValueString()
 		} else {
-			pqPath52 = nil
+			pqPath51 = nil
 		}
-		pqCompress52 := new(shared.CompressionOptionsPq)
+		pqCompress51 := new(shared.CompressionOptionsPq)
 		if !r.OutputChronicle.PqCompress.IsUnknown() && !r.OutputChronicle.PqCompress.IsNull() {
-			*pqCompress52 = shared.CompressionOptionsPq(r.OutputChronicle.PqCompress.ValueString())
+			*pqCompress51 = shared.CompressionOptionsPq(r.OutputChronicle.PqCompress.ValueString())
 		} else {
-			pqCompress52 = nil
+			pqCompress51 = nil
 		}
-		pqOnBackpressure52 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure51 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputChronicle.PqOnBackpressure.IsUnknown() && !r.OutputChronicle.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure52 = shared.QueueFullBehaviorOptions(r.OutputChronicle.PqOnBackpressure.ValueString())
+			*pqOnBackpressure51 = shared.QueueFullBehaviorOptions(r.OutputChronicle.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure52 = nil
+			pqOnBackpressure51 = nil
 		}
-		pqMaxBufferSizeBytes52 := new(string)
+		pqMaxBufferSizeBytes50 := new(string)
 		if !r.OutputChronicle.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputChronicle.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes52 = r.OutputChronicle.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes50 = r.OutputChronicle.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes52 = nil
+			pqMaxBufferSizeBytes50 = nil
 		}
-		var pqControls52 *shared.OutputChroniclePqControls
+		var pqControls51 *shared.OutputChroniclePqControls
 		if r.OutputChronicle.PqControls != nil {
-			pqControls52 = &shared.OutputChroniclePqControls{}
+			pqControls51 = &shared.OutputChroniclePqControls{}
 		}
 		templateRegion16 := new(string)
 		if !r.OutputChronicle.TemplateRegion.IsUnknown() && !r.OutputChronicle.TemplateRegion.IsNull() {
@@ -35202,30 +34825,30 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateEndpoint = nil
 		}
 		outputChronicle = &shared.OutputChronicle{
-			ID:                              id68,
-			Type:                            typeVar68,
-			Pipeline:                        pipeline68,
-			SystemFields:                    systemFields68,
-			Environment:                     environment68,
-			Streamtags:                      streamtags68,
+			ID:                              id67,
+			Type:                            typeVar67,
+			Pipeline:                        pipeline67,
+			SystemFields:                    systemFields67,
+			Environment:                     environment67,
+			Streamtags:                      streamtags67,
 			APIVersion:                      apiVersion1,
 			AuthenticationMethod:            authenticationMethod1,
-			ResponseRetrySettings:           responseRetrySettings34,
-			TimeoutRetrySettings:            timeoutRetrySettings34,
-			ResponseHonorRetryAfterHeader:   responseHonorRetryAfterHeader34,
+			ResponseRetrySettings:           responseRetrySettings33,
+			TimeoutRetrySettings:            timeoutRetrySettings33,
+			ResponseHonorRetryAfterHeader:   responseHonorRetryAfterHeader33,
 			Region:                          region17,
-			Concurrency:                     concurrency36,
-			MaxPayloadSizeKB:                maxPayloadSizeKb35,
-			MaxPayloadEvents:                maxPayloadEvents32,
-			Compress:                        compress40,
-			RejectUnauthorized:              rejectUnauthorized63,
-			TimeoutSec:                      timeoutSec35,
-			FlushPeriodSec:                  flushPeriodSec46,
-			ExtraHTTPHeaders:                extraHTTPHeaders33,
-			FailedRequestLoggingMode:        failedRequestLoggingMode33,
-			SafeHeaders:                     safeHeaders33,
-			UseRoundRobinDNS:                useRoundRobinDns31,
-			OnBackpressure:                  onBackpressure62,
+			Concurrency:                     concurrency35,
+			MaxPayloadSizeKB:                maxPayloadSizeKb34,
+			MaxPayloadEvents:                maxPayloadEvents31,
+			Compress:                        compress39,
+			RejectUnauthorized:              rejectUnauthorized62,
+			TimeoutSec:                      timeoutSec34,
+			FlushPeriodSec:                  flushPeriodSec45,
+			ExtraHTTPHeaders:                extraHTTPHeaders32,
+			FailedRequestLoggingMode:        failedRequestLoggingMode32,
+			SafeHeaders:                     safeHeaders32,
+			UseRoundRobinDNS:                useRoundRobinDns30,
+			OnBackpressure:                  onBackpressure61,
 			TotalMemoryLimitKB:              totalMemoryLimitKb11,
 			IngestionMethod:                 ingestionMethod,
 			Namespace:                       namespace1,
@@ -35235,21 +34858,21 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			GcpInstance:                     gcpInstance,
 			CustomLabels:                    customLabels1,
 			Endpoint:                        endpoint17,
-			Description:                     description71,
+			Description:                     description70,
 			ServiceAccountCredentials:       serviceAccountCredentials3,
 			ServiceAccountCredentialsSecret: serviceAccountCredentialsSecret1,
-			PqStrictOrdering:                pqStrictOrdering52,
-			PqRatePerSec:                    pqRatePerSec52,
-			PqMode:                          pqMode52,
-			PqMaxBufferSize:                 pqMaxBufferSize52,
-			PqMaxBackpressureSec:            pqMaxBackpressureSec52,
-			PqMaxFileSize:                   pqMaxFileSize52,
-			PqMaxSize:                       pqMaxSize52,
-			PqPath:                          pqPath52,
-			PqCompress:                      pqCompress52,
-			PqOnBackpressure:                pqOnBackpressure52,
-			PqMaxBufferSizeBytes:            pqMaxBufferSizeBytes52,
-			PqControls:                      pqControls52,
+			PqStrictOrdering:                pqStrictOrdering50,
+			PqRatePerSec:                    pqRatePerSec50,
+			PqMode:                          pqMode51,
+			PqMaxBufferSize:                 pqMaxBufferSize50,
+			PqMaxBackpressureSec:            pqMaxBackpressureSec50,
+			PqMaxFileSize:                   pqMaxFileSize51,
+			PqMaxSize:                       pqMaxSize51,
+			PqPath:                          pqPath51,
+			PqCompress:                      pqCompress51,
+			PqOnBackpressure:                pqOnBackpressure51,
+			PqMaxBufferSizeBytes:            pqMaxBufferSizeBytes50,
+			PqControls:                      pqControls51,
 			TemplateRegion:                  templateRegion16,
 			TemplateEndpoint:                templateEndpoint,
 		}
@@ -35261,32 +34884,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputDatabricks *shared.OutputDatabricks
 	if r.OutputDatabricks != nil {
-		id69 := new(string)
+		id68 := new(string)
 		if !r.OutputDatabricks.ID.IsUnknown() && !r.OutputDatabricks.ID.IsNull() {
-			*id69 = r.OutputDatabricks.ID.ValueString()
+			*id68 = r.OutputDatabricks.ID.ValueString()
 		} else {
-			id69 = nil
+			id68 = nil
 		}
-		typeVar69 := shared.OutputDatabricksType(r.OutputDatabricks.Type.ValueString())
-		pipeline69 := new(string)
+		typeVar68 := shared.OutputDatabricksType(r.OutputDatabricks.Type.ValueString())
+		pipeline68 := new(string)
 		if !r.OutputDatabricks.Pipeline.IsUnknown() && !r.OutputDatabricks.Pipeline.IsNull() {
-			*pipeline69 = r.OutputDatabricks.Pipeline.ValueString()
+			*pipeline68 = r.OutputDatabricks.Pipeline.ValueString()
 		} else {
-			pipeline69 = nil
+			pipeline68 = nil
 		}
-		systemFields69 := make([]string, 0, len(r.OutputDatabricks.SystemFields))
-		for systemFieldsIndex69 := range r.OutputDatabricks.SystemFields {
-			systemFields69 = append(systemFields69, r.OutputDatabricks.SystemFields[systemFieldsIndex69].ValueString())
+		systemFields68 := make([]string, 0, len(r.OutputDatabricks.SystemFields))
+		for systemFieldsIndex68 := range r.OutputDatabricks.SystemFields {
+			systemFields68 = append(systemFields68, r.OutputDatabricks.SystemFields[systemFieldsIndex68].ValueString())
 		}
-		environment69 := new(string)
+		environment68 := new(string)
 		if !r.OutputDatabricks.Environment.IsUnknown() && !r.OutputDatabricks.Environment.IsNull() {
-			*environment69 = r.OutputDatabricks.Environment.ValueString()
+			*environment68 = r.OutputDatabricks.Environment.ValueString()
 		} else {
-			environment69 = nil
+			environment68 = nil
 		}
-		streamtags69 := make([]string, 0, len(r.OutputDatabricks.Streamtags))
-		for streamtagsIndex69 := range r.OutputDatabricks.Streamtags {
-			streamtags69 = append(streamtags69, r.OutputDatabricks.Streamtags[streamtagsIndex69].ValueString())
+		streamtags68 := make([]string, 0, len(r.OutputDatabricks.Streamtags))
+		for streamtagsIndex68 := range r.OutputDatabricks.Streamtags {
+			streamtags68 = append(streamtags68, r.OutputDatabricks.Streamtags[streamtagsIndex68].ValueString())
 		}
 		destPath8 := new(string)
 		if !r.OutputDatabricks.DestPath.IsUnknown() && !r.OutputDatabricks.DestPath.IsNull() {
@@ -35372,11 +34995,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark8 = nil
 		}
-		onBackpressure63 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure62 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputDatabricks.OnBackpressure.IsUnknown() && !r.OutputDatabricks.OnBackpressure.IsNull() {
-			*onBackpressure63 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputDatabricks.OnBackpressure.ValueString())
+			*onBackpressure62 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputDatabricks.OnBackpressure.ValueString())
 		} else {
-			onBackpressure63 = nil
+			onBackpressure62 = nil
 		}
 		deadletterEnabled10 := new(bool)
 		if !r.OutputDatabricks.DeadletterEnabled.IsUnknown() && !r.OutputDatabricks.DeadletterEnabled.IsNull() {
@@ -35457,23 +35080,23 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		var clientTextSecret4 string
 		clientTextSecret4 = r.OutputDatabricks.ClientTextSecret.ValueString()
 
-		timeoutSec36 := new(int64)
+		timeoutSec35 := new(int64)
 		if !r.OutputDatabricks.TimeoutSec.IsUnknown() && !r.OutputDatabricks.TimeoutSec.IsNull() {
-			*timeoutSec36 = r.OutputDatabricks.TimeoutSec.ValueInt64()
+			*timeoutSec35 = r.OutputDatabricks.TimeoutSec.ValueInt64()
 		} else {
-			timeoutSec36 = nil
+			timeoutSec35 = nil
 		}
-		description72 := new(string)
+		description71 := new(string)
 		if !r.OutputDatabricks.Description.IsUnknown() && !r.OutputDatabricks.Description.IsNull() {
-			*description72 = r.OutputDatabricks.Description.ValueString()
+			*description71 = r.OutputDatabricks.Description.ValueString()
 		} else {
-			description72 = nil
+			description71 = nil
 		}
-		compress41 := new(shared.CompressionOptionsHTTP)
+		compress40 := new(shared.CompressionOptionsHTTP)
 		if !r.OutputDatabricks.Compress.IsUnknown() && !r.OutputDatabricks.Compress.IsNull() {
-			*compress41 = shared.CompressionOptionsHTTP(r.OutputDatabricks.Compress.ValueString())
+			*compress40 = shared.CompressionOptionsHTTP(r.OutputDatabricks.Compress.ValueString())
 		} else {
-			compress41 = nil
+			compress40 = nil
 		}
 		compressionLevel7 := new(shared.CompressionLevelOptions)
 		if !r.OutputDatabricks.CompressionLevel.IsUnknown() && !r.OutputDatabricks.CompressionLevel.IsNull() {
@@ -35528,12 +35151,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key14 string
 			key14 = r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex8].Key.ValueString()
 
-			var value70 string
-			value70 = r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex8].Value.ValueString()
+			var value68 string
+			value68 = r.OutputDatabricks.KeyValueMetadata[keyValueMetadataIndex8].Value.ValueString()
 
 			keyValueMetadata8 = append(keyValueMetadata8, shared.ItemsTypeKeyValueMetadata{
 				Key:   key14,
-				Value: value70,
+				Value: value68,
 			})
 		}
 		enableStatistics8 := new(bool)
@@ -35585,12 +35208,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateFormat7 = nil
 		}
 		outputDatabricks = &shared.OutputDatabricks{
-			ID:                     id69,
-			Type:                   typeVar69,
-			Pipeline:               pipeline69,
-			SystemFields:           systemFields69,
-			Environment:            environment69,
-			Streamtags:             streamtags69,
+			ID:                     id68,
+			Type:                   typeVar68,
+			Pipeline:               pipeline68,
+			SystemFields:           systemFields68,
+			Environment:            environment68,
+			Streamtags:             streamtags68,
 			DestPath:               destPath8,
 			StagePath:              stagePath10,
 			AddIDToStagePath:       addIDToStagePath10,
@@ -35605,7 +35228,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:           maxOpenFiles10,
 			HeaderLine:             headerLine8,
 			WriteHighWaterMark:     writeHighWaterMark8,
-			OnBackpressure:         onBackpressure63,
+			OnBackpressure:         onBackpressure62,
 			DeadletterEnabled:      deadletterEnabled10,
 			OnDiskFullBackpressure: onDiskFullBackpressure10,
 			ForceCloseOnShutdown:   forceCloseOnShutdown8,
@@ -35617,9 +35240,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Schema:                 schema,
 			EventsVolumeName:       eventsVolumeName,
 			ClientTextSecret:       clientTextSecret4,
-			TimeoutSec:             timeoutSec36,
-			Description:            description72,
-			Compress:               compress41,
+			TimeoutSec:             timeoutSec35,
+			Description:            description71,
+			Compress:               compress40,
 			CompressionLevel:       compressionLevel7,
 			AutomaticSchema:        automaticSchema8,
 			ParquetSchema:          parquetSchema8,
@@ -35646,32 +35269,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputMicrosoftFabric *shared.OutputMicrosoftFabric
 	if r.OutputMicrosoftFabric != nil {
-		id70 := new(string)
+		id69 := new(string)
 		if !r.OutputMicrosoftFabric.ID.IsUnknown() && !r.OutputMicrosoftFabric.ID.IsNull() {
-			*id70 = r.OutputMicrosoftFabric.ID.ValueString()
+			*id69 = r.OutputMicrosoftFabric.ID.ValueString()
 		} else {
-			id70 = nil
+			id69 = nil
 		}
-		typeVar70 := shared.OutputMicrosoftFabricType(r.OutputMicrosoftFabric.Type.ValueString())
-		pipeline70 := new(string)
+		typeVar69 := shared.OutputMicrosoftFabricType(r.OutputMicrosoftFabric.Type.ValueString())
+		pipeline69 := new(string)
 		if !r.OutputMicrosoftFabric.Pipeline.IsUnknown() && !r.OutputMicrosoftFabric.Pipeline.IsNull() {
-			*pipeline70 = r.OutputMicrosoftFabric.Pipeline.ValueString()
+			*pipeline69 = r.OutputMicrosoftFabric.Pipeline.ValueString()
 		} else {
-			pipeline70 = nil
+			pipeline69 = nil
 		}
-		systemFields70 := make([]string, 0, len(r.OutputMicrosoftFabric.SystemFields))
-		for systemFieldsIndex70 := range r.OutputMicrosoftFabric.SystemFields {
-			systemFields70 = append(systemFields70, r.OutputMicrosoftFabric.SystemFields[systemFieldsIndex70].ValueString())
+		systemFields69 := make([]string, 0, len(r.OutputMicrosoftFabric.SystemFields))
+		for systemFieldsIndex69 := range r.OutputMicrosoftFabric.SystemFields {
+			systemFields69 = append(systemFields69, r.OutputMicrosoftFabric.SystemFields[systemFieldsIndex69].ValueString())
 		}
-		environment70 := new(string)
+		environment69 := new(string)
 		if !r.OutputMicrosoftFabric.Environment.IsUnknown() && !r.OutputMicrosoftFabric.Environment.IsNull() {
-			*environment70 = r.OutputMicrosoftFabric.Environment.ValueString()
+			*environment69 = r.OutputMicrosoftFabric.Environment.ValueString()
 		} else {
-			environment70 = nil
+			environment69 = nil
 		}
-		streamtags70 := make([]string, 0, len(r.OutputMicrosoftFabric.Streamtags))
-		for streamtagsIndex70 := range r.OutputMicrosoftFabric.Streamtags {
-			streamtags70 = append(streamtags70, r.OutputMicrosoftFabric.Streamtags[streamtagsIndex70].ValueString())
+		streamtags69 := make([]string, 0, len(r.OutputMicrosoftFabric.Streamtags))
+		for streamtagsIndex69 := range r.OutputMicrosoftFabric.Streamtags {
+			streamtags69 = append(streamtags69, r.OutputMicrosoftFabric.Streamtags[streamtagsIndex69].ValueString())
 		}
 		var topic4 string
 		topic4 = r.OutputMicrosoftFabric.Topic.ValueString()
@@ -35700,11 +35323,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			flushEventCount4 = nil
 		}
-		flushPeriodSec47 := new(float64)
+		flushPeriodSec46 := new(float64)
 		if !r.OutputMicrosoftFabric.FlushPeriodSec.IsUnknown() && !r.OutputMicrosoftFabric.FlushPeriodSec.IsNull() {
-			*flushPeriodSec47 = r.OutputMicrosoftFabric.FlushPeriodSec.ValueFloat64()
+			*flushPeriodSec46 = r.OutputMicrosoftFabric.FlushPeriodSec.ValueFloat64()
 		} else {
-			flushPeriodSec47 = nil
+			flushPeriodSec46 = nil
 		}
 		connectionTimeout19 := new(float64)
 		if !r.OutputMicrosoftFabric.ConnectionTimeout.IsUnknown() && !r.OutputMicrosoftFabric.ConnectionTimeout.IsNull() {
@@ -35730,17 +35353,17 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxBackOff4 = nil
 		}
-		initialBackoff74 := new(float64)
+		initialBackoff72 := new(float64)
 		if !r.OutputMicrosoftFabric.InitialBackoff.IsUnknown() && !r.OutputMicrosoftFabric.InitialBackoff.IsNull() {
-			*initialBackoff74 = r.OutputMicrosoftFabric.InitialBackoff.ValueFloat64()
+			*initialBackoff72 = r.OutputMicrosoftFabric.InitialBackoff.ValueFloat64()
 		} else {
-			initialBackoff74 = nil
+			initialBackoff72 = nil
 		}
-		backoffRate74 := new(float64)
+		backoffRate72 := new(float64)
 		if !r.OutputMicrosoftFabric.BackoffRate.IsUnknown() && !r.OutputMicrosoftFabric.BackoffRate.IsNull() {
-			*backoffRate74 = r.OutputMicrosoftFabric.BackoffRate.ValueFloat64()
+			*backoffRate72 = r.OutputMicrosoftFabric.BackoffRate.ValueFloat64()
 		} else {
-			backoffRate74 = nil
+			backoffRate72 = nil
 		}
 		authenticationTimeout4 := new(float64)
 		if !r.OutputMicrosoftFabric.AuthenticationTimeout.IsUnknown() && !r.OutputMicrosoftFabric.AuthenticationTimeout.IsNull() {
@@ -35765,17 +35388,17 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				mechanism3 = nil
 			}
-			username17 := new(string)
+			username15 := new(string)
 			if !r.OutputMicrosoftFabric.Sasl.Username.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.Username.IsNull() {
-				*username17 = r.OutputMicrosoftFabric.Sasl.Username.ValueString()
+				*username15 = r.OutputMicrosoftFabric.Sasl.Username.ValueString()
 			} else {
-				username17 = nil
+				username15 = nil
 			}
-			textSecret34 := new(string)
+			textSecret32 := new(string)
 			if !r.OutputMicrosoftFabric.Sasl.TextSecret.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.TextSecret.IsNull() {
-				*textSecret34 = r.OutputMicrosoftFabric.Sasl.TextSecret.ValueString()
+				*textSecret32 = r.OutputMicrosoftFabric.Sasl.TextSecret.ValueString()
 			} else {
-				textSecret34 = nil
+				textSecret32 = nil
 			}
 			clientSecretAuthType1 := new(shared.OutputMicrosoftFabricAuthenticationMethod)
 			if !r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType.IsUnknown() && !r.OutputMicrosoftFabric.Sasl.ClientSecretAuthType.IsNull() {
@@ -35840,8 +35463,8 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			sasl3 = &shared.OutputMicrosoftFabricAuthentication{
 				Disabled:             disabled32,
 				Mechanism:            mechanism3,
-				Username:             username17,
-				TextSecret:           textSecret34,
+				Username:             username15,
+				TextSecret:           textSecret32,
 				ClientSecretAuthType: clientSecretAuthType1,
 				ClientTextSecret:     clientTextSecret5,
 				CertificateName:      certificateName23,
@@ -35859,101 +35482,101 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var disabled33 bool
 			disabled33 = r.OutputMicrosoftFabric.TLS.Disabled.ValueBool()
 
-			rejectUnauthorized64 := new(bool)
+			rejectUnauthorized63 := new(bool)
 			if !r.OutputMicrosoftFabric.TLS.RejectUnauthorized.IsUnknown() && !r.OutputMicrosoftFabric.TLS.RejectUnauthorized.IsNull() {
-				*rejectUnauthorized64 = r.OutputMicrosoftFabric.TLS.RejectUnauthorized.ValueBool()
+				*rejectUnauthorized63 = r.OutputMicrosoftFabric.TLS.RejectUnauthorized.ValueBool()
 			} else {
-				rejectUnauthorized64 = nil
+				rejectUnauthorized63 = nil
 			}
 			tls25 = &shared.TLSSettingsClientSideType{
 				Disabled:           disabled33,
-				RejectUnauthorized: rejectUnauthorized64,
+				RejectUnauthorized: rejectUnauthorized63,
 			}
 		}
-		onBackpressure64 := new(shared.BackpressureBehaviorOptions)
+		onBackpressure63 := new(shared.BackpressureBehaviorOptions)
 		if !r.OutputMicrosoftFabric.OnBackpressure.IsUnknown() && !r.OutputMicrosoftFabric.OnBackpressure.IsNull() {
-			*onBackpressure64 = shared.BackpressureBehaviorOptions(r.OutputMicrosoftFabric.OnBackpressure.ValueString())
+			*onBackpressure63 = shared.BackpressureBehaviorOptions(r.OutputMicrosoftFabric.OnBackpressure.ValueString())
 		} else {
-			onBackpressure64 = nil
+			onBackpressure63 = nil
 		}
 		var bootstrapServer string
 		bootstrapServer = r.OutputMicrosoftFabric.BootstrapServer.ValueString()
 
-		description73 := new(string)
+		description72 := new(string)
 		if !r.OutputMicrosoftFabric.Description.IsUnknown() && !r.OutputMicrosoftFabric.Description.IsNull() {
-			*description73 = r.OutputMicrosoftFabric.Description.ValueString()
+			*description72 = r.OutputMicrosoftFabric.Description.ValueString()
 		} else {
-			description73 = nil
+			description72 = nil
 		}
-		pqStrictOrdering53 := new(bool)
+		pqStrictOrdering51 := new(bool)
 		if !r.OutputMicrosoftFabric.PqStrictOrdering.IsUnknown() && !r.OutputMicrosoftFabric.PqStrictOrdering.IsNull() {
-			*pqStrictOrdering53 = r.OutputMicrosoftFabric.PqStrictOrdering.ValueBool()
+			*pqStrictOrdering51 = r.OutputMicrosoftFabric.PqStrictOrdering.ValueBool()
 		} else {
-			pqStrictOrdering53 = nil
+			pqStrictOrdering51 = nil
 		}
-		pqRatePerSec53 := new(float64)
+		pqRatePerSec51 := new(float64)
 		if !r.OutputMicrosoftFabric.PqRatePerSec.IsUnknown() && !r.OutputMicrosoftFabric.PqRatePerSec.IsNull() {
-			*pqRatePerSec53 = r.OutputMicrosoftFabric.PqRatePerSec.ValueFloat64()
+			*pqRatePerSec51 = r.OutputMicrosoftFabric.PqRatePerSec.ValueFloat64()
 		} else {
-			pqRatePerSec53 = nil
+			pqRatePerSec51 = nil
 		}
-		pqMode53 := new(shared.ModeOptions)
+		pqMode52 := new(shared.ModeOptions)
 		if !r.OutputMicrosoftFabric.PqMode.IsUnknown() && !r.OutputMicrosoftFabric.PqMode.IsNull() {
-			*pqMode53 = shared.ModeOptions(r.OutputMicrosoftFabric.PqMode.ValueString())
+			*pqMode52 = shared.ModeOptions(r.OutputMicrosoftFabric.PqMode.ValueString())
 		} else {
-			pqMode53 = nil
+			pqMode52 = nil
 		}
-		pqMaxBufferSize53 := new(float64)
+		pqMaxBufferSize51 := new(float64)
 		if !r.OutputMicrosoftFabric.PqMaxBufferSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxBufferSize.IsNull() {
-			*pqMaxBufferSize53 = r.OutputMicrosoftFabric.PqMaxBufferSize.ValueFloat64()
+			*pqMaxBufferSize51 = r.OutputMicrosoftFabric.PqMaxBufferSize.ValueFloat64()
 		} else {
-			pqMaxBufferSize53 = nil
+			pqMaxBufferSize51 = nil
 		}
-		pqMaxBackpressureSec53 := new(float64)
+		pqMaxBackpressureSec51 := new(float64)
 		if !r.OutputMicrosoftFabric.PqMaxBackpressureSec.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxBackpressureSec.IsNull() {
-			*pqMaxBackpressureSec53 = r.OutputMicrosoftFabric.PqMaxBackpressureSec.ValueFloat64()
+			*pqMaxBackpressureSec51 = r.OutputMicrosoftFabric.PqMaxBackpressureSec.ValueFloat64()
 		} else {
-			pqMaxBackpressureSec53 = nil
+			pqMaxBackpressureSec51 = nil
 		}
-		pqMaxFileSize53 := new(string)
+		pqMaxFileSize52 := new(string)
 		if !r.OutputMicrosoftFabric.PqMaxFileSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxFileSize.IsNull() {
-			*pqMaxFileSize53 = r.OutputMicrosoftFabric.PqMaxFileSize.ValueString()
+			*pqMaxFileSize52 = r.OutputMicrosoftFabric.PqMaxFileSize.ValueString()
 		} else {
-			pqMaxFileSize53 = nil
+			pqMaxFileSize52 = nil
 		}
-		pqMaxSize53 := new(string)
+		pqMaxSize52 := new(string)
 		if !r.OutputMicrosoftFabric.PqMaxSize.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxSize.IsNull() {
-			*pqMaxSize53 = r.OutputMicrosoftFabric.PqMaxSize.ValueString()
+			*pqMaxSize52 = r.OutputMicrosoftFabric.PqMaxSize.ValueString()
 		} else {
-			pqMaxSize53 = nil
+			pqMaxSize52 = nil
 		}
-		pqPath53 := new(string)
+		pqPath52 := new(string)
 		if !r.OutputMicrosoftFabric.PqPath.IsUnknown() && !r.OutputMicrosoftFabric.PqPath.IsNull() {
-			*pqPath53 = r.OutputMicrosoftFabric.PqPath.ValueString()
+			*pqPath52 = r.OutputMicrosoftFabric.PqPath.ValueString()
 		} else {
-			pqPath53 = nil
+			pqPath52 = nil
 		}
-		pqCompress53 := new(shared.CompressionOptionsPq)
+		pqCompress52 := new(shared.CompressionOptionsPq)
 		if !r.OutputMicrosoftFabric.PqCompress.IsUnknown() && !r.OutputMicrosoftFabric.PqCompress.IsNull() {
-			*pqCompress53 = shared.CompressionOptionsPq(r.OutputMicrosoftFabric.PqCompress.ValueString())
+			*pqCompress52 = shared.CompressionOptionsPq(r.OutputMicrosoftFabric.PqCompress.ValueString())
 		} else {
-			pqCompress53 = nil
+			pqCompress52 = nil
 		}
-		pqOnBackpressure53 := new(shared.QueueFullBehaviorOptions)
+		pqOnBackpressure52 := new(shared.QueueFullBehaviorOptions)
 		if !r.OutputMicrosoftFabric.PqOnBackpressure.IsUnknown() && !r.OutputMicrosoftFabric.PqOnBackpressure.IsNull() {
-			*pqOnBackpressure53 = shared.QueueFullBehaviorOptions(r.OutputMicrosoftFabric.PqOnBackpressure.ValueString())
+			*pqOnBackpressure52 = shared.QueueFullBehaviorOptions(r.OutputMicrosoftFabric.PqOnBackpressure.ValueString())
 		} else {
-			pqOnBackpressure53 = nil
+			pqOnBackpressure52 = nil
 		}
-		pqMaxBufferSizeBytes53 := new(string)
+		pqMaxBufferSizeBytes51 := new(string)
 		if !r.OutputMicrosoftFabric.PqMaxBufferSizeBytes.IsUnknown() && !r.OutputMicrosoftFabric.PqMaxBufferSizeBytes.IsNull() {
-			*pqMaxBufferSizeBytes53 = r.OutputMicrosoftFabric.PqMaxBufferSizeBytes.ValueString()
+			*pqMaxBufferSizeBytes51 = r.OutputMicrosoftFabric.PqMaxBufferSizeBytes.ValueString()
 		} else {
-			pqMaxBufferSizeBytes53 = nil
+			pqMaxBufferSizeBytes51 = nil
 		}
-		var pqControls53 *shared.OutputMicrosoftFabricPqControls
+		var pqControls52 *shared.OutputMicrosoftFabricPqControls
 		if r.OutputMicrosoftFabric.PqControls != nil {
-			pqControls53 = &shared.OutputMicrosoftFabricPqControls{}
+			pqControls52 = &shared.OutputMicrosoftFabricPqControls{}
 		}
 		templateTopic4 := new(string)
 		if !r.OutputMicrosoftFabric.TemplateTopic.IsUnknown() && !r.OutputMicrosoftFabric.TemplateTopic.IsNull() {
@@ -35968,43 +35591,43 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			templateBootstrapServer = nil
 		}
 		outputMicrosoftFabric = &shared.OutputMicrosoftFabric{
-			ID:                        id70,
-			Type:                      typeVar70,
-			Pipeline:                  pipeline70,
-			SystemFields:              systemFields70,
-			Environment:               environment70,
-			Streamtags:                streamtags70,
+			ID:                        id69,
+			Type:                      typeVar69,
+			Pipeline:                  pipeline69,
+			SystemFields:              systemFields69,
+			Environment:               environment69,
+			Streamtags:                streamtags69,
 			Topic:                     topic4,
 			Ack:                       ack4,
 			Format:                    format22,
 			MaxRecordSizeKB:           maxRecordSizeKb8,
 			FlushEventCount:           flushEventCount4,
-			FlushPeriodSec:            flushPeriodSec47,
+			FlushPeriodSec:            flushPeriodSec46,
 			ConnectionTimeout:         connectionTimeout19,
 			RequestTimeout:            requestTimeout7,
 			MaxRetries:                maxRetries8,
 			MaxBackOff:                maxBackOff4,
-			InitialBackoff:            initialBackoff74,
-			BackoffRate:               backoffRate74,
+			InitialBackoff:            initialBackoff72,
+			BackoffRate:               backoffRate72,
 			AuthenticationTimeout:     authenticationTimeout4,
 			ReauthenticationThreshold: reauthenticationThreshold4,
 			Sasl:                      sasl3,
 			TLS:                       tls25,
-			OnBackpressure:            onBackpressure64,
+			OnBackpressure:            onBackpressure63,
 			BootstrapServer:           bootstrapServer,
-			Description:               description73,
-			PqStrictOrdering:          pqStrictOrdering53,
-			PqRatePerSec:              pqRatePerSec53,
-			PqMode:                    pqMode53,
-			PqMaxBufferSize:           pqMaxBufferSize53,
-			PqMaxBackpressureSec:      pqMaxBackpressureSec53,
-			PqMaxFileSize:             pqMaxFileSize53,
-			PqMaxSize:                 pqMaxSize53,
-			PqPath:                    pqPath53,
-			PqCompress:                pqCompress53,
-			PqOnBackpressure:          pqOnBackpressure53,
-			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes53,
-			PqControls:                pqControls53,
+			Description:               description72,
+			PqStrictOrdering:          pqStrictOrdering51,
+			PqRatePerSec:              pqRatePerSec51,
+			PqMode:                    pqMode52,
+			PqMaxBufferSize:           pqMaxBufferSize51,
+			PqMaxBackpressureSec:      pqMaxBackpressureSec51,
+			PqMaxFileSize:             pqMaxFileSize52,
+			PqMaxSize:                 pqMaxSize52,
+			PqPath:                    pqPath52,
+			PqCompress:                pqCompress52,
+			PqOnBackpressure:          pqOnBackpressure52,
+			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes51,
+			PqControls:                pqControls52,
 			TemplateTopic:             templateTopic4,
 			TemplateBootstrapServer:   templateBootstrapServer,
 		}
@@ -36016,32 +35639,32 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 	}
 	var outputCloudflareR2 *shared.OutputCloudflareR2
 	if r.OutputCloudflareR2 != nil {
-		id71 := new(string)
+		id70 := new(string)
 		if !r.OutputCloudflareR2.ID.IsUnknown() && !r.OutputCloudflareR2.ID.IsNull() {
-			*id71 = r.OutputCloudflareR2.ID.ValueString()
+			*id70 = r.OutputCloudflareR2.ID.ValueString()
 		} else {
-			id71 = nil
+			id70 = nil
 		}
-		typeVar71 := shared.OutputCloudflareR2Type(r.OutputCloudflareR2.Type.ValueString())
-		pipeline71 := new(string)
+		typeVar70 := shared.OutputCloudflareR2Type(r.OutputCloudflareR2.Type.ValueString())
+		pipeline70 := new(string)
 		if !r.OutputCloudflareR2.Pipeline.IsUnknown() && !r.OutputCloudflareR2.Pipeline.IsNull() {
-			*pipeline71 = r.OutputCloudflareR2.Pipeline.ValueString()
+			*pipeline70 = r.OutputCloudflareR2.Pipeline.ValueString()
 		} else {
-			pipeline71 = nil
+			pipeline70 = nil
 		}
-		systemFields71 := make([]string, 0, len(r.OutputCloudflareR2.SystemFields))
-		for systemFieldsIndex71 := range r.OutputCloudflareR2.SystemFields {
-			systemFields71 = append(systemFields71, r.OutputCloudflareR2.SystemFields[systemFieldsIndex71].ValueString())
+		systemFields70 := make([]string, 0, len(r.OutputCloudflareR2.SystemFields))
+		for systemFieldsIndex70 := range r.OutputCloudflareR2.SystemFields {
+			systemFields70 = append(systemFields70, r.OutputCloudflareR2.SystemFields[systemFieldsIndex70].ValueString())
 		}
-		environment71 := new(string)
+		environment70 := new(string)
 		if !r.OutputCloudflareR2.Environment.IsUnknown() && !r.OutputCloudflareR2.Environment.IsNull() {
-			*environment71 = r.OutputCloudflareR2.Environment.ValueString()
+			*environment70 = r.OutputCloudflareR2.Environment.ValueString()
 		} else {
-			environment71 = nil
+			environment70 = nil
 		}
-		streamtags71 := make([]string, 0, len(r.OutputCloudflareR2.Streamtags))
-		for streamtagsIndex71 := range r.OutputCloudflareR2.Streamtags {
-			streamtags71 = append(streamtags71, r.OutputCloudflareR2.Streamtags[streamtagsIndex71].ValueString())
+		streamtags70 := make([]string, 0, len(r.OutputCloudflareR2.Streamtags))
+		for streamtagsIndex70 := range r.OutputCloudflareR2.Streamtags {
+			streamtags70 = append(streamtags70, r.OutputCloudflareR2.Streamtags[streamtagsIndex70].ValueString())
 		}
 		var endpoint18 string
 		endpoint18 = r.OutputCloudflareR2.Endpoint.ValueString()
@@ -36100,11 +35723,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			reuseConnections12 = nil
 		}
-		rejectUnauthorized65 := new(bool)
+		rejectUnauthorized64 := new(bool)
 		if !r.OutputCloudflareR2.RejectUnauthorized.IsUnknown() && !r.OutputCloudflareR2.RejectUnauthorized.IsNull() {
-			*rejectUnauthorized65 = r.OutputCloudflareR2.RejectUnauthorized.ValueBool()
+			*rejectUnauthorized64 = r.OutputCloudflareR2.RejectUnauthorized.ValueBool()
 		} else {
-			rejectUnauthorized65 = nil
+			rejectUnauthorized64 = nil
 		}
 		verifyPermissions6 := new(bool)
 		if !r.OutputCloudflareR2.VerifyPermissions.IsUnknown() && !r.OutputCloudflareR2.VerifyPermissions.IsNull() {
@@ -36166,11 +35789,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			writeHighWaterMark9 = nil
 		}
-		onBackpressure65 := new(shared.BackpressureBehaviorOptionsBlockDrop)
+		onBackpressure64 := new(shared.BackpressureBehaviorOptionsBlockDrop)
 		if !r.OutputCloudflareR2.OnBackpressure.IsUnknown() && !r.OutputCloudflareR2.OnBackpressure.IsNull() {
-			*onBackpressure65 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputCloudflareR2.OnBackpressure.ValueString())
+			*onBackpressure64 = shared.BackpressureBehaviorOptionsBlockDrop(r.OutputCloudflareR2.OnBackpressure.ValueString())
 		} else {
-			onBackpressure65 = nil
+			onBackpressure64 = nil
 		}
 		deadletterEnabled11 := new(bool)
 		if !r.OutputCloudflareR2.DeadletterEnabled.IsUnknown() && !r.OutputCloudflareR2.DeadletterEnabled.IsNull() {
@@ -36248,11 +35871,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxConcurrentFileParts7 = nil
 		}
-		description74 := new(string)
+		description73 := new(string)
 		if !r.OutputCloudflareR2.Description.IsUnknown() && !r.OutputCloudflareR2.Description.IsNull() {
-			*description74 = r.OutputCloudflareR2.Description.ValueString()
+			*description73 = r.OutputCloudflareR2.Description.ValueString()
 		} else {
-			description74 = nil
+			description73 = nil
 		}
 		awsSecret10 := new(string)
 		if !r.OutputCloudflareR2.AwsSecret.IsUnknown() && !r.OutputCloudflareR2.AwsSecret.IsNull() {
@@ -36260,11 +35883,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			awsSecret10 = nil
 		}
-		compress42 := new(shared.CompressionOptionsHTTP)
+		compress41 := new(shared.CompressionOptionsHTTP)
 		if !r.OutputCloudflareR2.Compress.IsUnknown() && !r.OutputCloudflareR2.Compress.IsNull() {
-			*compress42 = shared.CompressionOptionsHTTP(r.OutputCloudflareR2.Compress.ValueString())
+			*compress41 = shared.CompressionOptionsHTTP(r.OutputCloudflareR2.Compress.ValueString())
 		} else {
-			compress42 = nil
+			compress41 = nil
 		}
 		compressionLevel8 := new(shared.CompressionLevelOptions)
 		if !r.OutputCloudflareR2.CompressionLevel.IsUnknown() && !r.OutputCloudflareR2.CompressionLevel.IsNull() {
@@ -36319,12 +35942,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var key15 string
 			key15 = r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex9].Key.ValueString()
 
-			var value71 string
-			value71 = r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex9].Value.ValueString()
+			var value69 string
+			value69 = r.OutputCloudflareR2.KeyValueMetadata[keyValueMetadataIndex9].Value.ValueString()
 
 			keyValueMetadata9 = append(keyValueMetadata9, shared.ItemsTypeKeyValueMetadata{
 				Key:   key15,
-				Value: value71,
+				Value: value69,
 			})
 		}
 		enableStatistics9 := new(bool)
@@ -36394,12 +36017,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.AwsAPIKey.ValueString()), &awsAPIKey11)
 		}
 		outputCloudflareR2 = &shared.OutputCloudflareR2{
-			ID:                      id71,
-			Type:                    typeVar71,
-			Pipeline:                pipeline71,
-			SystemFields:            systemFields71,
-			Environment:             environment71,
-			Streamtags:              streamtags71,
+			ID:                      id70,
+			Type:                    typeVar70,
+			Pipeline:                pipeline70,
+			SystemFields:            systemFields70,
+			Environment:             environment70,
+			Streamtags:              streamtags70,
 			Endpoint:                endpoint18,
 			Bucket:                  bucket8,
 			AwsAuthenticationMethod: awsAuthenticationMethod11,
@@ -36411,7 +36034,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			StorageClass:            storageClass8,
 			ServerSideEncryption:    serverSideEncryption5,
 			ReuseConnections:        reuseConnections12,
-			RejectUnauthorized:      rejectUnauthorized65,
+			RejectUnauthorized:      rejectUnauthorized64,
 			VerifyPermissions:       verifyPermissions6,
 			RemoveEmptyDirs:         removeEmptyDirs11,
 			PartitionExpr:           partitionExpr8,
@@ -36422,7 +36045,7 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxOpenFiles:            maxOpenFiles11,
 			HeaderLine:              headerLine9,
 			WriteHighWaterMark:      writeHighWaterMark9,
-			OnBackpressure:          onBackpressure65,
+			OnBackpressure:          onBackpressure64,
 			DeadletterEnabled:       deadletterEnabled11,
 			OnDiskFullBackpressure:  onDiskFullBackpressure11,
 			ForceCloseOnShutdown:    forceCloseOnShutdown9,
@@ -36430,9 +36053,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			MaxFileOpenTimeSec:      maxFileOpenTimeSec11,
 			MaxFileIdleTimeSec:      maxFileIdleTimeSec11,
 			MaxConcurrentFileParts:  maxConcurrentFileParts7,
-			Description:             description74,
+			Description:             description73,
 			AwsSecret:               awsSecret10,
-			Compress:                compress42,
+			Compress:                compress41,
 			CompressionLevel:        compressionLevel8,
 			AutomaticSchema:         automaticSchema9,
 			ParquetSchema:           parquetSchema9,

@@ -183,6 +183,7 @@ func (r *PackPipelineDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
 	res, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

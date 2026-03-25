@@ -25,17 +25,13 @@ data "criblio_certificate" "my_certificate" {
 ### Required
 
 - `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique identifier for the certificate.
+- `id` (String) Unique ID to GET
 
 ### Read-Only
 
-- `ca` (String) Certificate Authority (CA) certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple CA certificates in a single JSON string, each beginning and ending with its own delimiters.
-- `ca_path` (String) Path to the Certificate Authority (CA) certificate file.
-- `cert` (String) Certificate in PEM format:<br/><br/> Base64-encoded data enclosed by <code>-----BEGIN CERTIFICATE-----</code> and <code>-----END CERTIFICATE-----</code> delimiters.<br/><br/> If you need to provide a chain, concatenate multiple certificates in a single JSON string, each beginning and ending with its own delimiters.
-- `cert_expiry_date` (String) Certificate expiration date and time as an ISO-8601 UTC string.
-- `cert_path` (String) Path to the certificate file.
-- `description` (String) Brief description of the certificate.
-- `passphrase` (String) If the private key is encrypted, the decryption passphrase.
-- `passphrase_path` (String) Path to the passphrase file.
-- `priv_key` (String) Private key for the certificate in PEM format:<br/><br/> Base64-encoded data enclosed by the appropriate delimiters for the key type, such as <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.<br/><br/> Responses do not include the <code>privKey</code> value.
-- `priv_key_path` (String) Path to the private key file.
+- `ca` (String) Optionally, drag/drop or upload all CA certificates in PEM/Base64 format. Or, paste certificate contents here. Certificates can be used for client and/or server authentication.
+- `cert` (String) Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
+- `description` (String)
+- `in_use` (List of String) List of configurations that reference this certificate
+- `passphrase` (String, Sensitive)
+- `priv_key` (String, Sensitive)

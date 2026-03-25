@@ -295,6 +295,15 @@ func (r *RoutesResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByGroupIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -350,7 +359,7 @@ func (r *RoutesResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
@@ -400,6 +409,15 @@ func (r *RoutesResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	if !(res.Object != nil && res.Object.Items != nil && len(res.Object.Items) > 0) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByGroupIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -428,6 +446,18 @@ func (r *RoutesResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// Set default route on delete to restore default state
+	defaultRoute := tfTypes.RoutesRoute{
+		Name:                   types.StringValue("Default"),
+		Filter:                 types.StringValue("true"),
+		Pipeline:               types.StringValue("main"),
+		Final:                  types.BoolValue(true),
+		Disabled:               types.BoolValue(false),
+		Description:            types.StringValue(""),
+		EnableOutputExpression: types.BoolValue(false),
+	}
+	data.Routes = []tfTypes.RoutesRoute{defaultRoute}
 
 	request, requestDiags := data.ToOperationsCreateRoutesByGroupIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

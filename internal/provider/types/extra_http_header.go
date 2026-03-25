@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type InputElementConfig struct {
-	DefaultValue *DefaultValueUnion `tfsdk:"default_value"`
-	Multiselect  types.Bool         `tfsdk:"multiselect"`
+type ExtraHTTPHeader struct {
+	Name  types.String `tfsdk:"name"`
+	Value types.String `tfsdk:"value"`
 }

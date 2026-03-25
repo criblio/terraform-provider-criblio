@@ -4,39 +4,38 @@ package shared
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type InputSyslogType2 string
+type InputSyslogType string
 
 const (
-	InputSyslogType2Syslog InputSyslogType2 = "syslog"
+	InputSyslogTypeSyslog InputSyslogType = "syslog"
 )
 
-func (e InputSyslogType2) ToPointer() *InputSyslogType2 {
+func (e InputSyslogType) ToPointer() *InputSyslogType {
 	return &e
 }
-func (e *InputSyslogType2) UnmarshalJSON(data []byte) error {
+func (e *InputSyslogType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "syslog":
-		*e = InputSyslogType2(v)
+		*e = InputSyslogType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InputSyslogType2: %v", v)
+		return fmt.Errorf("invalid value for InputSyslogType: %v", v)
 	}
 }
 
-type InputSyslogSyslog2 struct {
+type InputSyslog struct {
 	// Unique ID for this input
-	ID       *string          `json:"id,omitempty"`
-	Type     InputSyslogType2 `json:"type"`
-	Disabled *bool            `json:"disabled,omitempty"`
+	ID       *string         `json:"id,omitempty"`
+	Type     InputSyslogType `json:"type"`
+	Disabled *bool           `json:"disabled,omitempty"`
 	// Pipeline to process data from this Source before sending it through the Routes
 	Pipeline *string `json:"pipeline,omitempty"`
 	// Select whether to send data to Routes, or directly to Destinations.
@@ -54,365 +53,6 @@ type InputSyslogSyslog2 struct {
 	Host string `json:"host"`
 	// Enter UDP port number to listen on. Not required if listening on TCP.
 	UDPPort *float64 `json:"udpPort,omitempty"`
-	// Enter TCP port number to listen on. Not required if listening on UDP.
-	TCPPort float64 `json:"tcpPort"`
-	// Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-	MaxBufferSize *float64 `json:"maxBufferSize,omitempty"`
-	// Regex matching IP addresses that are allowed to send data
-	IPWhitelistRegex *string `json:"ipWhitelistRegex,omitempty"`
-	// Timezone to assign to timestamps without timezone info
-	TimestampTimezone *string `json:"timestampTimezone,omitempty"`
-	// Treat UDP packet data received as full syslog message
-	SingleMsgUDPPackets *bool `json:"singleMsgUdpPackets,omitempty"`
-	// Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
-	EnableProxyHeader *bool `json:"enableProxyHeader,omitempty"`
-	// Wildcard list of fields to keep from source data; * = ALL (default)
-	KeepFieldsList []string `json:"keepFieldsList,omitempty"`
-	// Enable if incoming messages use octet counting per RFC 6587.
-	OctetCounting *bool `json:"octetCounting,omitempty"`
-	// Enable if we should infer the syslog framing of the incoming messages.
-	InferFraming *bool `json:"inferFraming,omitempty"`
-	// Enable if we should infer octet counting only if the messages comply with RFC 5424.
-	StrictlyInferOctetCounting *bool `json:"strictlyInferOctetCounting,omitempty"`
-	// Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-	AllowNonStandardAppName *bool `json:"allowNonStandardAppName,omitempty"`
-	// Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
-	MaxActiveCxn *float64 `json:"maxActiveCxn,omitempty"`
-	// How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
-	SocketIdleTimeout *float64 `json:"socketIdleTimeout,omitempty"`
-	// How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
-	SocketEndingMaxWait *float64 `json:"socketEndingMaxWait,omitempty"`
-	// The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-	SocketMaxLifespan *float64                   `json:"socketMaxLifespan,omitempty"`
-	TLS               *TLSSettingsServerSideType `json:"tls,omitempty"`
-	// Fields to add to events from this input
-	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
-	// Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
-	UDPSocketRxBufSize *float64 `json:"udpSocketRxBufSize,omitempty"`
-	// Load balance traffic across all Worker Processes
-	EnableLoadBalancing *bool   `json:"enableLoadBalancing,omitempty"`
-	Description         *string `json:"description,omitempty"`
-	// When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
-	EnableEnhancedProxyHeaderParsing *bool `json:"enableEnhancedProxyHeaderParsing,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
-	TemplateUDPPort *string `json:"__template_udpPort,omitempty"`
-	// Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-	TemplateTCPPort *string `json:"__template_tcpPort,omitempty"`
-}
-
-func (i InputSyslogSyslog2) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(i, "", false)
-}
-
-func (i *InputSyslogSyslog2) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *InputSyslogSyslog2) GetID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.ID
-}
-
-func (i *InputSyslogSyslog2) GetType() InputSyslogType2 {
-	if i == nil {
-		return InputSyslogType2("")
-	}
-	return i.Type
-}
-
-func (i *InputSyslogSyslog2) GetDisabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.Disabled
-}
-
-func (i *InputSyslogSyslog2) GetPipeline() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Pipeline
-}
-
-func (i *InputSyslogSyslog2) GetSendToRoutes() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.SendToRoutes
-}
-
-func (i *InputSyslogSyslog2) GetEnvironment() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Environment
-}
-
-func (i *InputSyslogSyslog2) GetPqEnabled() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.PqEnabled
-}
-
-func (i *InputSyslogSyslog2) GetStreamtags() []string {
-	if i == nil {
-		return nil
-	}
-	return i.Streamtags
-}
-
-func (i *InputSyslogSyslog2) GetConnections() []ItemsTypeConnectionsOptional {
-	if i == nil {
-		return nil
-	}
-	return i.Connections
-}
-
-func (i *InputSyslogSyslog2) GetPq() *PqType {
-	if i == nil {
-		return nil
-	}
-	return i.Pq
-}
-
-func (i *InputSyslogSyslog2) GetHost() string {
-	if i == nil {
-		return ""
-	}
-	return i.Host
-}
-
-func (i *InputSyslogSyslog2) GetUDPPort() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.UDPPort
-}
-
-func (i *InputSyslogSyslog2) GetTCPPort() float64 {
-	if i == nil {
-		return 0.0
-	}
-	return i.TCPPort
-}
-
-func (i *InputSyslogSyslog2) GetMaxBufferSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxBufferSize
-}
-
-func (i *InputSyslogSyslog2) GetIPWhitelistRegex() *string {
-	if i == nil {
-		return nil
-	}
-	return i.IPWhitelistRegex
-}
-
-func (i *InputSyslogSyslog2) GetTimestampTimezone() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TimestampTimezone
-}
-
-func (i *InputSyslogSyslog2) GetSingleMsgUDPPackets() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.SingleMsgUDPPackets
-}
-
-func (i *InputSyslogSyslog2) GetEnableProxyHeader() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.EnableProxyHeader
-}
-
-func (i *InputSyslogSyslog2) GetKeepFieldsList() []string {
-	if i == nil {
-		return nil
-	}
-	return i.KeepFieldsList
-}
-
-func (i *InputSyslogSyslog2) GetOctetCounting() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.OctetCounting
-}
-
-func (i *InputSyslogSyslog2) GetInferFraming() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.InferFraming
-}
-
-func (i *InputSyslogSyslog2) GetStrictlyInferOctetCounting() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.StrictlyInferOctetCounting
-}
-
-func (i *InputSyslogSyslog2) GetAllowNonStandardAppName() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.AllowNonStandardAppName
-}
-
-func (i *InputSyslogSyslog2) GetMaxActiveCxn() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.MaxActiveCxn
-}
-
-func (i *InputSyslogSyslog2) GetSocketIdleTimeout() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.SocketIdleTimeout
-}
-
-func (i *InputSyslogSyslog2) GetSocketEndingMaxWait() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.SocketEndingMaxWait
-}
-
-func (i *InputSyslogSyslog2) GetSocketMaxLifespan() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.SocketMaxLifespan
-}
-
-func (i *InputSyslogSyslog2) GetTLS() *TLSSettingsServerSideType {
-	if i == nil {
-		return nil
-	}
-	return i.TLS
-}
-
-func (i *InputSyslogSyslog2) GetMetadata() []ItemsTypeMetadata {
-	if i == nil {
-		return nil
-	}
-	return i.Metadata
-}
-
-func (i *InputSyslogSyslog2) GetUDPSocketRxBufSize() *float64 {
-	if i == nil {
-		return nil
-	}
-	return i.UDPSocketRxBufSize
-}
-
-func (i *InputSyslogSyslog2) GetEnableLoadBalancing() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.EnableLoadBalancing
-}
-
-func (i *InputSyslogSyslog2) GetDescription() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Description
-}
-
-func (i *InputSyslogSyslog2) GetEnableEnhancedProxyHeaderParsing() *bool {
-	if i == nil {
-		return nil
-	}
-	return i.EnableEnhancedProxyHeaderParsing
-}
-
-func (i *InputSyslogSyslog2) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputSyslogSyslog2) GetTemplateUDPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateUDPPort
-}
-
-func (i *InputSyslogSyslog2) GetTemplateTCPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTCPPort
-}
-
-// #region class-body-inputsyslogsyslog2
-// #endregion class-body-inputsyslogsyslog2
-
-type InputSyslogType1 string
-
-const (
-	InputSyslogType1Syslog InputSyslogType1 = "syslog"
-)
-
-func (e InputSyslogType1) ToPointer() *InputSyslogType1 {
-	return &e
-}
-func (e *InputSyslogType1) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "syslog":
-		*e = InputSyslogType1(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSyslogType1: %v", v)
-	}
-}
-
-type InputSyslogSyslog1 struct {
-	// Unique ID for this input
-	ID       *string          `json:"id,omitempty"`
-	Type     InputSyslogType1 `json:"type"`
-	Disabled *bool            `json:"disabled,omitempty"`
-	// Pipeline to process data from this Source before sending it through the Routes
-	Pipeline *string `json:"pipeline,omitempty"`
-	// Select whether to send data to Routes, or directly to Destinations.
-	SendToRoutes *bool `json:"sendToRoutes,omitempty"`
-	// Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-	Environment *string `json:"environment,omitempty"`
-	// Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-	PqEnabled *bool `json:"pqEnabled,omitempty"`
-	// Tags for filtering and grouping in @{product}
-	Streamtags []string `json:"streamtags,omitempty"`
-	// Direct connections to Destinations, and optionally via a Pipeline or a Pack
-	Connections []ItemsTypeConnectionsOptional `json:"connections,omitempty"`
-	Pq          *PqType                        `json:"pq,omitempty"`
-	// Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
-	Host string `json:"host"`
-	// Enter UDP port number to listen on. Not required if listening on TCP.
-	UDPPort float64 `json:"udpPort"`
 	// Enter TCP port number to listen on. Not required if listening on UDP.
 	TCPPort *float64 `json:"tcpPort,omitempty"`
 	// Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
@@ -461,357 +101,265 @@ type InputSyslogSyslog1 struct {
 	TemplateTCPPort *string `json:"__template_tcpPort,omitempty"`
 }
 
-func (i InputSyslogSyslog1) MarshalJSON() ([]byte, error) {
+func (i InputSyslog) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(i, "", false)
 }
 
-func (i *InputSyslogSyslog1) UnmarshalJSON(data []byte) error {
+func (i *InputSyslog) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (i *InputSyslogSyslog1) GetID() *string {
+func (i *InputSyslog) GetID() *string {
 	if i == nil {
 		return nil
 	}
 	return i.ID
 }
 
-func (i *InputSyslogSyslog1) GetType() InputSyslogType1 {
+func (i *InputSyslog) GetType() InputSyslogType {
 	if i == nil {
-		return InputSyslogType1("")
+		return InputSyslogType("")
 	}
 	return i.Type
 }
 
-func (i *InputSyslogSyslog1) GetDisabled() *bool {
+func (i *InputSyslog) GetDisabled() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.Disabled
 }
 
-func (i *InputSyslogSyslog1) GetPipeline() *string {
+func (i *InputSyslog) GetPipeline() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Pipeline
 }
 
-func (i *InputSyslogSyslog1) GetSendToRoutes() *bool {
+func (i *InputSyslog) GetSendToRoutes() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.SendToRoutes
 }
 
-func (i *InputSyslogSyslog1) GetEnvironment() *string {
+func (i *InputSyslog) GetEnvironment() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Environment
 }
 
-func (i *InputSyslogSyslog1) GetPqEnabled() *bool {
+func (i *InputSyslog) GetPqEnabled() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.PqEnabled
 }
 
-func (i *InputSyslogSyslog1) GetStreamtags() []string {
+func (i *InputSyslog) GetStreamtags() []string {
 	if i == nil {
 		return nil
 	}
 	return i.Streamtags
 }
 
-func (i *InputSyslogSyslog1) GetConnections() []ItemsTypeConnectionsOptional {
+func (i *InputSyslog) GetConnections() []ItemsTypeConnectionsOptional {
 	if i == nil {
 		return nil
 	}
 	return i.Connections
 }
 
-func (i *InputSyslogSyslog1) GetPq() *PqType {
+func (i *InputSyslog) GetPq() *PqType {
 	if i == nil {
 		return nil
 	}
 	return i.Pq
 }
 
-func (i *InputSyslogSyslog1) GetHost() string {
+func (i *InputSyslog) GetHost() string {
 	if i == nil {
 		return ""
 	}
 	return i.Host
 }
 
-func (i *InputSyslogSyslog1) GetUDPPort() float64 {
+func (i *InputSyslog) GetUDPPort() *float64 {
 	if i == nil {
-		return 0.0
+		return nil
 	}
 	return i.UDPPort
 }
 
-func (i *InputSyslogSyslog1) GetTCPPort() *float64 {
+func (i *InputSyslog) GetTCPPort() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.TCPPort
 }
 
-func (i *InputSyslogSyslog1) GetMaxBufferSize() *float64 {
+func (i *InputSyslog) GetMaxBufferSize() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.MaxBufferSize
 }
 
-func (i *InputSyslogSyslog1) GetIPWhitelistRegex() *string {
+func (i *InputSyslog) GetIPWhitelistRegex() *string {
 	if i == nil {
 		return nil
 	}
 	return i.IPWhitelistRegex
 }
 
-func (i *InputSyslogSyslog1) GetTimestampTimezone() *string {
+func (i *InputSyslog) GetTimestampTimezone() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TimestampTimezone
 }
 
-func (i *InputSyslogSyslog1) GetSingleMsgUDPPackets() *bool {
+func (i *InputSyslog) GetSingleMsgUDPPackets() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.SingleMsgUDPPackets
 }
 
-func (i *InputSyslogSyslog1) GetEnableProxyHeader() *bool {
+func (i *InputSyslog) GetEnableProxyHeader() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.EnableProxyHeader
 }
 
-func (i *InputSyslogSyslog1) GetKeepFieldsList() []string {
+func (i *InputSyslog) GetKeepFieldsList() []string {
 	if i == nil {
 		return nil
 	}
 	return i.KeepFieldsList
 }
 
-func (i *InputSyslogSyslog1) GetOctetCounting() *bool {
+func (i *InputSyslog) GetOctetCounting() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.OctetCounting
 }
 
-func (i *InputSyslogSyslog1) GetInferFraming() *bool {
+func (i *InputSyslog) GetInferFraming() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.InferFraming
 }
 
-func (i *InputSyslogSyslog1) GetStrictlyInferOctetCounting() *bool {
+func (i *InputSyslog) GetStrictlyInferOctetCounting() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.StrictlyInferOctetCounting
 }
 
-func (i *InputSyslogSyslog1) GetAllowNonStandardAppName() *bool {
+func (i *InputSyslog) GetAllowNonStandardAppName() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.AllowNonStandardAppName
 }
 
-func (i *InputSyslogSyslog1) GetMaxActiveCxn() *float64 {
+func (i *InputSyslog) GetMaxActiveCxn() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.MaxActiveCxn
 }
 
-func (i *InputSyslogSyslog1) GetSocketIdleTimeout() *float64 {
+func (i *InputSyslog) GetSocketIdleTimeout() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.SocketIdleTimeout
 }
 
-func (i *InputSyslogSyslog1) GetSocketEndingMaxWait() *float64 {
+func (i *InputSyslog) GetSocketEndingMaxWait() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.SocketEndingMaxWait
 }
 
-func (i *InputSyslogSyslog1) GetSocketMaxLifespan() *float64 {
+func (i *InputSyslog) GetSocketMaxLifespan() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.SocketMaxLifespan
 }
 
-func (i *InputSyslogSyslog1) GetTLS() *TLSSettingsServerSideType {
+func (i *InputSyslog) GetTLS() *TLSSettingsServerSideType {
 	if i == nil {
 		return nil
 	}
 	return i.TLS
 }
 
-func (i *InputSyslogSyslog1) GetMetadata() []ItemsTypeMetadata {
+func (i *InputSyslog) GetMetadata() []ItemsTypeMetadata {
 	if i == nil {
 		return nil
 	}
 	return i.Metadata
 }
 
-func (i *InputSyslogSyslog1) GetUDPSocketRxBufSize() *float64 {
+func (i *InputSyslog) GetUDPSocketRxBufSize() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.UDPSocketRxBufSize
 }
 
-func (i *InputSyslogSyslog1) GetEnableLoadBalancing() *bool {
+func (i *InputSyslog) GetEnableLoadBalancing() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.EnableLoadBalancing
 }
 
-func (i *InputSyslogSyslog1) GetDescription() *string {
+func (i *InputSyslog) GetDescription() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Description
 }
 
-func (i *InputSyslogSyslog1) GetEnableEnhancedProxyHeaderParsing() *bool {
+func (i *InputSyslog) GetEnableEnhancedProxyHeaderParsing() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.EnableEnhancedProxyHeaderParsing
 }
 
-func (i *InputSyslogSyslog1) GetTemplateHost() *string {
+func (i *InputSyslog) GetTemplateHost() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TemplateHost
 }
 
-func (i *InputSyslogSyslog1) GetTemplateUDPPort() *string {
+func (i *InputSyslog) GetTemplateUDPPort() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TemplateUDPPort
 }
 
-func (i *InputSyslogSyslog1) GetTemplateTCPPort() *string {
+func (i *InputSyslog) GetTemplateTCPPort() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TemplateTCPPort
-}
-
-// #region class-body-inputsyslogsyslog1
-// #endregion class-body-inputsyslogsyslog1
-
-type InputSyslogType string
-
-const (
-	InputSyslogTypeInputSyslogSyslog1 InputSyslogType = "InputSyslog_Syslog_1"
-	InputSyslogTypeInputSyslogSyslog2 InputSyslogType = "InputSyslog_Syslog_2"
-)
-
-type InputSyslog struct {
-	InputSyslogSyslog1 *InputSyslogSyslog1 `queryParam:"inline" union:"member"`
-	InputSyslogSyslog2 *InputSyslogSyslog2 `queryParam:"inline" union:"member"`
-
-	Type InputSyslogType
-}
-
-func CreateInputSyslogInputSyslogSyslog1(inputSyslogSyslog1 InputSyslogSyslog1) InputSyslog {
-	typ := InputSyslogTypeInputSyslogSyslog1
-
-	return InputSyslog{
-		InputSyslogSyslog1: &inputSyslogSyslog1,
-		Type:               typ,
-	}
-}
-
-func CreateInputSyslogInputSyslogSyslog2(inputSyslogSyslog2 InputSyslogSyslog2) InputSyslog {
-	typ := InputSyslogTypeInputSyslogSyslog2
-
-	return InputSyslog{
-		InputSyslogSyslog2: &inputSyslogSyslog2,
-		Type:               typ,
-	}
-}
-
-func (u *InputSyslog) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var inputSyslogSyslog1 InputSyslogSyslog1 = InputSyslogSyslog1{}
-	if err := utils.UnmarshalJSON(data, &inputSyslogSyslog1, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputSyslogTypeInputSyslogSyslog1,
-			Value: &inputSyslogSyslog1,
-		})
-	}
-
-	var inputSyslogSyslog2 InputSyslogSyslog2 = InputSyslogSyslog2{}
-	if err := utils.UnmarshalJSON(data, &inputSyslogSyslog2, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  InputSyslogTypeInputSyslogSyslog2,
-			Value: &inputSyslogSyslog2,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputSyslog", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestUnionCandidate(candidates, data)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputSyslog", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(InputSyslogType)
-	switch best.Type {
-	case InputSyslogTypeInputSyslogSyslog1:
-		u.InputSyslogSyslog1 = best.Value.(*InputSyslogSyslog1)
-		return nil
-	case InputSyslogTypeInputSyslogSyslog2:
-		u.InputSyslogSyslog2 = best.Value.(*InputSyslogSyslog2)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for InputSyslog", string(data))
-}
-
-func (u InputSyslog) MarshalJSON() ([]byte, error) {
-	if u.InputSyslogSyslog1 != nil {
-		return utils.MarshalJSON(u.InputSyslogSyslog1, "", true)
-	}
-
-	if u.InputSyslogSyslog2 != nil {
-		return utils.MarshalJSON(u.InputSyslogSyslog2, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type InputSyslog: all fields are null")
 }

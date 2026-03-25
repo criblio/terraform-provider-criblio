@@ -74,16 +74,15 @@ func (r *CertificateResourceModel) RefreshFromSharedCertificate(ctx context.Cont
 	var diags diag.Diagnostics
 
 	r.Ca = types.StringPointerValue(resp.Ca)
-	r.CaPath = types.StringPointerValue(resp.CaPath)
 	r.Cert = types.StringValue(resp.Cert)
-	r.CertExpiryDate = types.StringPointerValue(resp.CertExpiryDate)
-	r.CertPath = types.StringPointerValue(resp.CertPath)
 	r.Description = types.StringPointerValue(resp.Description)
 	r.ID = types.StringValue(resp.ID)
+	r.InUse = make([]types.String, 0, len(resp.InUse))
+	for _, v := range resp.InUse {
+		r.InUse = append(r.InUse, types.StringValue(v))
+	}
 	r.Passphrase = types.StringPointerValue(resp.Passphrase)
-	r.PassphrasePath = types.StringPointerValue(resp.PassphrasePath)
 	r.PrivKey = types.StringValue(resp.PrivKey)
-	r.PrivKeyPath = types.StringPointerValue(resp.PrivKeyPath)
 
 	return diags
 }
@@ -171,41 +170,20 @@ func (r *CertificateResourceModel) ToOperationsUpdateCertificateByIDRequest(ctx 
 func (r *CertificateResourceModel) ToSharedCertificate(ctx context.Context) (*shared.Certificate, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	ca := new(string)
-	if !r.Ca.IsUnknown() && !r.Ca.IsNull() {
-		*ca = r.Ca.ValueString()
-	} else {
-		ca = nil
-	}
-	caPath := new(string)
-	if !r.CaPath.IsUnknown() && !r.CaPath.IsNull() {
-		*caPath = r.CaPath.ValueString()
-	} else {
-		caPath = nil
-	}
-	var cert string
-	cert = r.Cert.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
-	certExpiryDate := new(string)
-	if !r.CertExpiryDate.IsUnknown() && !r.CertExpiryDate.IsNull() {
-		*certExpiryDate = r.CertExpiryDate.ValueString()
-	} else {
-		certExpiryDate = nil
-	}
-	certPath := new(string)
-	if !r.CertPath.IsUnknown() && !r.CertPath.IsNull() {
-		*certPath = r.CertPath.ValueString()
-	} else {
-		certPath = nil
-	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
-	var id string
-	id = r.ID.ValueString()
+	var cert string
+	cert = r.Cert.ValueString()
+
+	var privKey string
+	privKey = r.PrivKey.ValueString()
 
 	passphrase := new(string)
 	if !r.Passphrase.IsUnknown() && !r.Passphrase.IsNull() {
@@ -213,33 +191,24 @@ func (r *CertificateResourceModel) ToSharedCertificate(ctx context.Context) (*sh
 	} else {
 		passphrase = nil
 	}
-	passphrasePath := new(string)
-	if !r.PassphrasePath.IsUnknown() && !r.PassphrasePath.IsNull() {
-		*passphrasePath = r.PassphrasePath.ValueString()
+	ca := new(string)
+	if !r.Ca.IsUnknown() && !r.Ca.IsNull() {
+		*ca = r.Ca.ValueString()
 	} else {
-		passphrasePath = nil
+		ca = nil
 	}
-	var privKey string
-	privKey = r.PrivKey.ValueString()
-
-	privKeyPath := new(string)
-	if !r.PrivKeyPath.IsUnknown() && !r.PrivKeyPath.IsNull() {
-		*privKeyPath = r.PrivKeyPath.ValueString()
-	} else {
-		privKeyPath = nil
+	inUse := make([]string, 0, len(r.InUse))
+	for inUseIndex := range r.InUse {
+		inUse = append(inUse, r.InUse[inUseIndex].ValueString())
 	}
 	out := shared.Certificate{
-		Ca:             ca,
-		CaPath:         caPath,
-		Cert:           cert,
-		CertExpiryDate: certExpiryDate,
-		CertPath:       certPath,
-		Description:    description,
-		ID:             id,
-		Passphrase:     passphrase,
-		PassphrasePath: passphrasePath,
-		PrivKey:        privKey,
-		PrivKeyPath:    privKeyPath,
+		ID:          id,
+		Description: description,
+		Cert:        cert,
+		PrivKey:     privKey,
+		Passphrase:  passphrase,
+		Ca:          ca,
+		InUse:       inUse,
 	}
 
 	return &out, diags

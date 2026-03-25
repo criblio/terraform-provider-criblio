@@ -152,6 +152,10 @@ func BuildValue(ctx context.Context, typ attr.Type, val tftypes.Value, target re
 		// we checked that target isn't an attr.Value
 		// all that's left to us now is to set it as an empty value or
 		// throw an error, depending on what's in opts
+		// Preserve empty slices/maps when plan has null during refreshPlan.
+		if opts.SourceType == SourceTypePlan && (target.Kind() == reflect.Slice || target.Kind() == reflect.Map) && target.Len() == 0 {
+			return target, diags
+		}
 		if canBeNil(target) || opts.UnhandledNullAsEmpty {
 			return reflect.Zero(target.Type()), nil
 		}

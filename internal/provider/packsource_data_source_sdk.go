@@ -2307,577 +2307,287 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 			}
 			if itemsItem.InputGrafana != nil {
 				items.InputGrafana = &tfTypes.InputGrafana{}
-				if items.InputGrafana == nil {
-					items.InputGrafana = &tfTypes.InputGrafana{}
+				items.InputGrafana.TemplateHost = types.StringPointerValue(itemsItem.InputGrafana.TemplateHost)
+				items.InputGrafana.TemplatePort = types.StringPointerValue(itemsItem.InputGrafana.TemplatePort)
+				items.InputGrafana.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputGrafana.ActivityLogSampleRate)
+				items.InputGrafana.CaptureHeaders = types.BoolPointerValue(itemsItem.InputGrafana.CaptureHeaders)
+				items.InputGrafana.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+
+				for _, connectionsItem20 := range itemsItem.InputGrafana.Connections {
+					var connections20 tfTypes.ItemsTypeConnectionsOptional
+
+					connections20.Output = types.StringPointerValue(connectionsItem20.Output)
+					connections20.Pipeline = types.StringPointerValue(connectionsItem20.Pipeline)
+
+					items.InputGrafana.Connections = append(items.InputGrafana.Connections, connections20)
 				}
-				if itemsItem.InputGrafana.InputGrafanaGrafana1 != nil {
-					items.InputGrafana.InputGrafanaGrafana1 = &tfTypes.InputGrafanaGrafana1{}
-					items.InputGrafana.InputGrafanaGrafana1.TemplateHost = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TemplateHost)
-					items.InputGrafana.InputGrafanaGrafana1.TemplatePort = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TemplatePort)
-					items.InputGrafana.InputGrafanaGrafana1.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.ActivityLogSampleRate)
-					items.InputGrafana.InputGrafanaGrafana1.CaptureHeaders = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.CaptureHeaders)
-					items.InputGrafana.InputGrafanaGrafana1.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
-
-					for _, connectionsItem20 := range itemsItem.InputGrafana.InputGrafanaGrafana1.Connections {
-						var connections20 tfTypes.ItemsTypeConnectionsOptional
-
-						connections20.Output = types.StringPointerValue(connectionsItem20.Output)
-						connections20.Pipeline = types.StringPointerValue(connectionsItem20.Pipeline)
-
-						items.InputGrafana.InputGrafanaGrafana1.Connections = append(items.InputGrafana.InputGrafanaGrafana1.Connections, connections20)
-					}
-					items.InputGrafana.InputGrafanaGrafana1.Description = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Description)
-					items.InputGrafana.InputGrafanaGrafana1.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Disabled)
-					items.InputGrafana.InputGrafanaGrafana1.EnableHealthCheck = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.EnableHealthCheck)
-					items.InputGrafana.InputGrafanaGrafana1.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.EnableProxyHeader)
-					items.InputGrafana.InputGrafanaGrafana1.Environment = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Environment)
-					items.InputGrafana.InputGrafanaGrafana1.Host = types.StringValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Host)
-					items.InputGrafana.InputGrafanaGrafana1.ID = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.ID)
-					items.InputGrafana.InputGrafanaGrafana1.IPAllowlistRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.IPAllowlistRegex)
-					items.InputGrafana.InputGrafanaGrafana1.IPDenylistRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.IPDenylistRegex)
-					items.InputGrafana.InputGrafanaGrafana1.KeepAliveTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.KeepAliveTimeout)
-					items.InputGrafana.InputGrafanaGrafana1.LokiAPI = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAPI)
-					if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth == nil {
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth = nil
+				items.InputGrafana.Description = types.StringPointerValue(itemsItem.InputGrafana.Description)
+				items.InputGrafana.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.Disabled)
+				items.InputGrafana.EnableHealthCheck = types.BoolPointerValue(itemsItem.InputGrafana.EnableHealthCheck)
+				items.InputGrafana.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputGrafana.EnableProxyHeader)
+				items.InputGrafana.Environment = types.StringPointerValue(itemsItem.InputGrafana.Environment)
+				items.InputGrafana.Host = types.StringValue(itemsItem.InputGrafana.Host)
+				items.InputGrafana.ID = types.StringPointerValue(itemsItem.InputGrafana.ID)
+				items.InputGrafana.IPAllowlistRegex = types.StringPointerValue(itemsItem.InputGrafana.IPAllowlistRegex)
+				items.InputGrafana.IPDenylistRegex = types.StringPointerValue(itemsItem.InputGrafana.IPDenylistRegex)
+				items.InputGrafana.KeepAliveTimeout = types.Float64PointerValue(itemsItem.InputGrafana.KeepAliveTimeout)
+				items.InputGrafana.LokiAPI = types.StringPointerValue(itemsItem.InputGrafana.LokiAPI)
+				if itemsItem.InputGrafana.LokiAuth == nil {
+					items.InputGrafana.LokiAuth = nil
+				} else {
+					items.InputGrafana.LokiAuth = &tfTypes.InputGrafanaLokiAuth{}
+					if itemsItem.InputGrafana.LokiAuth.AuthHeaderExpr == nil {
+						items.InputGrafana.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
 					} else {
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth = &tfTypes.LokiAuth1{}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-						} else {
-							authHeaderExprResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType != nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.AuthType = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.CredentialsSecret)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL = jsontypes.NewNormalizedNull()
-						} else {
-							loginURLResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders = []tfTypes.LokiAuthOauthHeader1{}
-
-						for _, oauthHeadersItem := range itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders {
-							var oauthHeaders tfTypes.LokiAuthOauthHeader1
-
-							if oauthHeadersItem.Name == nil {
-								oauthHeaders.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult, _ := json.Marshal(oauthHeadersItem.Name)
-								oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
-							}
-							if oauthHeadersItem.Value == nil {
-								oauthHeaders.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult, _ := json.Marshal(oauthHeadersItem.Value)
-								oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders = append(items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthHeaders, oauthHeaders)
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams = []tfTypes.LokiAuthOauthParam1{}
-
-						for _, oauthParamsItem1 := range itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams {
-							var oauthParams1 tfTypes.LokiAuthOauthParam1
-
-							if oauthParamsItem1.Name == nil {
-								oauthParams1.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult1, _ := json.Marshal(oauthParamsItem1.Name)
-								oauthParams1.Name = jsontypes.NewNormalizedValue(string(nameResult1))
-							}
-							if oauthParamsItem1.Value == nil {
-								oauthParams1.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult1, _ := json.Marshal(oauthParamsItem1.Value)
-								oauthParams1.Value = jsontypes.NewNormalizedValue(string(valueResult1))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams = append(items.InputGrafana.InputGrafanaGrafana1.LokiAuth.OauthParams, oauthParams1)
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.Password)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret = jsontypes.NewNormalizedNull()
-						} else {
-							secretResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName = jsontypes.NewNormalizedNull()
-						} else {
-							secretParamNameResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.TextSecret)
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.Token)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
-						} else {
-							tokenAttributeNameResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs == nil {
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-						} else {
-							tokenTimeoutSecsResult, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs)
-							items.InputGrafana.InputGrafanaGrafana1.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.LokiAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.LokiAuth.Username)
+						authHeaderExprResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.AuthHeaderExpr)
+						items.InputGrafana.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
 					}
-					items.InputGrafana.InputGrafanaGrafana1.MaxActiveReq = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.MaxActiveReq)
-					items.InputGrafana.InputGrafanaGrafana1.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.MaxRequestsPerSocket)
-					items.InputGrafana.InputGrafanaGrafana1.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-					for _, metadataItem22 := range itemsItem.InputGrafana.InputGrafanaGrafana1.Metadata {
-						var metadata22 tfTypes.ItemsTypeMetadata
-
-						metadata22.Name = types.StringValue(metadataItem22.Name)
-						metadata22.Value = types.StringValue(metadataItem22.Value)
-
-						items.InputGrafana.InputGrafanaGrafana1.Metadata = append(items.InputGrafana.InputGrafanaGrafana1.Metadata, metadata22)
-					}
-					items.InputGrafana.InputGrafanaGrafana1.Pipeline = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pipeline)
-					items.InputGrafana.InputGrafanaGrafana1.Port = types.Float64Value(itemsItem.InputGrafana.InputGrafanaGrafana1.Port)
-					if itemsItem.InputGrafana.InputGrafanaGrafana1.Pq == nil {
-						items.InputGrafana.InputGrafanaGrafana1.Pq = nil
+					if itemsItem.InputGrafana.LokiAuth.AuthType != nil {
+						items.InputGrafana.LokiAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.LokiAuth.AuthType))
 					} else {
-						items.InputGrafana.InputGrafanaGrafana1.Pq = &tfTypes.PqType{}
-						items.InputGrafana.InputGrafanaGrafana1.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.CommitFrequency)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.Compress != nil {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.Compress = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.Compress))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.Compress = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSize)
-						items.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.MaxBufferSizeBytes)
-						items.InputGrafana.InputGrafanaGrafana1.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.MaxFileSize)
-						items.InputGrafana.InputGrafanaGrafana1.Pq.MaxSize = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.MaxSize)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.Mode != nil {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.Mode = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.Mode))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.Mode = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana1.Pq.Path = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.Path)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.Pq.PqControls == nil {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.PqControls = nil
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.Pq.PqControls = &tfTypes.PqTypePqControls{}
-						}
+						items.InputGrafana.LokiAuth.AuthType = types.StringNull()
 					}
-					items.InputGrafana.InputGrafanaGrafana1.PqEnabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PqEnabled)
-					items.InputGrafana.InputGrafanaGrafana1.PrometheusAPI = types.StringValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAPI)
-					if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth == nil {
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth = nil
+					items.InputGrafana.LokiAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.LokiAuth.CredentialsSecret)
+					if itemsItem.InputGrafana.LokiAuth.LoginURL == nil {
+						items.InputGrafana.LokiAuth.LoginURL = jsontypes.NewNormalizedNull()
 					} else {
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth = &tfTypes.PrometheusAuth1{}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-						} else {
-							authHeaderExprResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType != nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.AuthType = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.CredentialsSecret)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL = jsontypes.NewNormalizedNull()
-						} else {
-							loginURLResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders = []tfTypes.PrometheusAuthOauthHeader1{}
-
-						for _, oauthHeadersItem1 := range itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders {
-							var oauthHeaders1 tfTypes.PrometheusAuthOauthHeader1
-
-							if oauthHeadersItem1.Name == nil {
-								oauthHeaders1.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
-								oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
-							}
-							if oauthHeadersItem1.Value == nil {
-								oauthHeaders1.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
-								oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders = append(items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthHeaders, oauthHeaders1)
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams = []tfTypes.PrometheusAuthOauthParam1{}
-
-						for _, oauthParamsItem2 := range itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams {
-							var oauthParams2 tfTypes.PrometheusAuthOauthParam1
-
-							if oauthParamsItem2.Name == nil {
-								oauthParams2.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
-								oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
-							}
-							if oauthParamsItem2.Value == nil {
-								oauthParams2.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
-								oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams = append(items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.OauthParams, oauthParams2)
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Password)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret = jsontypes.NewNormalizedNull()
-						} else {
-							secretResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedNull()
-						} else {
-							secretParamNameResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TextSecret)
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Token)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
-						} else {
-							tokenAttributeNameResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs == nil {
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-						} else {
-							tokenTimeoutSecsResult1, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs)
-							items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
-						}
-						items.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.PrometheusAuth.Username)
+						loginURLResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.LoginURL)
+						items.InputGrafana.LokiAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
 					}
-					items.InputGrafana.InputGrafanaGrafana1.RequestTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.RequestTimeout)
-					items.InputGrafana.InputGrafanaGrafana1.SendToRoutes = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.SendToRoutes)
-					items.InputGrafana.InputGrafanaGrafana1.SocketTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.SocketTimeout)
-					items.InputGrafana.InputGrafanaGrafana1.Streamtags = make([]types.String, 0, len(itemsItem.InputGrafana.InputGrafanaGrafana1.Streamtags))
-					for _, v := range itemsItem.InputGrafana.InputGrafanaGrafana1.Streamtags {
-						items.InputGrafana.InputGrafanaGrafana1.Streamtags = append(items.InputGrafana.InputGrafanaGrafana1.Streamtags, types.StringValue(v))
+					items.InputGrafana.LokiAuth.OauthHeaders = []tfTypes.LokiAuthOauthHeader{}
+
+					for _, oauthHeadersItem := range itemsItem.InputGrafana.LokiAuth.OauthHeaders {
+						var oauthHeaders tfTypes.LokiAuthOauthHeader
+
+						if oauthHeadersItem.Name == nil {
+							oauthHeaders.Name = jsontypes.NewNormalizedNull()
+						} else {
+							nameResult, _ := json.Marshal(oauthHeadersItem.Name)
+							oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
+						}
+						if oauthHeadersItem.Value == nil {
+							oauthHeaders.Value = jsontypes.NewNormalizedNull()
+						} else {
+							valueResult, _ := json.Marshal(oauthHeadersItem.Value)
+							oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
+						}
+
+						items.InputGrafana.LokiAuth.OauthHeaders = append(items.InputGrafana.LokiAuth.OauthHeaders, oauthHeaders)
 					}
-					if itemsItem.InputGrafana.InputGrafanaGrafana1.TLS == nil {
-						items.InputGrafana.InputGrafanaGrafana1.TLS = nil
+					items.InputGrafana.LokiAuth.OauthParams = []tfTypes.LokiAuthOauthParam{}
+
+					for _, oauthParamsItem1 := range itemsItem.InputGrafana.LokiAuth.OauthParams {
+						var oauthParams1 tfTypes.LokiAuthOauthParam
+
+						if oauthParamsItem1.Name == nil {
+							oauthParams1.Name = jsontypes.NewNormalizedNull()
+						} else {
+							nameResult1, _ := json.Marshal(oauthParamsItem1.Name)
+							oauthParams1.Name = jsontypes.NewNormalizedValue(string(nameResult1))
+						}
+						if oauthParamsItem1.Value == nil {
+							oauthParams1.Value = jsontypes.NewNormalizedNull()
+						} else {
+							valueResult1, _ := json.Marshal(oauthParamsItem1.Value)
+							oauthParams1.Value = jsontypes.NewNormalizedValue(string(valueResult1))
+						}
+
+						items.InputGrafana.LokiAuth.OauthParams = append(items.InputGrafana.LokiAuth.OauthParams, oauthParams1)
+					}
+					items.InputGrafana.LokiAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.LokiAuth.Password)
+					if itemsItem.InputGrafana.LokiAuth.Secret == nil {
+						items.InputGrafana.LokiAuth.Secret = jsontypes.NewNormalizedNull()
 					} else {
-						items.InputGrafana.InputGrafanaGrafana1.TLS = &tfTypes.TLSSettingsServerSideType{}
-						items.InputGrafana.InputGrafanaGrafana1.TLS.CaPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.CaPath)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.CertificateName = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.CertificateName)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.CertPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.CertPath)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.CommonNameRegex)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.Disabled)
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion != nil {
-							items.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.TLS.MaxVersion = types.StringNull()
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion != nil {
-							items.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana1.TLS.MinVersion = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana1.TLS.Passphrase = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.Passphrase)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.PrivKeyPath)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.RejectUnauthorized)
-						items.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana1.TLS.RequestCert)
+						secretResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.Secret)
+						items.InputGrafana.LokiAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult))
 					}
-					items.InputGrafana.InputGrafanaGrafana1.Type = types.StringValue(string(itemsItem.InputGrafana.InputGrafanaGrafana1.Type))
+					if itemsItem.InputGrafana.LokiAuth.SecretParamName == nil {
+						items.InputGrafana.LokiAuth.SecretParamName = jsontypes.NewNormalizedNull()
+					} else {
+						secretParamNameResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.SecretParamName)
+						items.InputGrafana.LokiAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
+					}
+					items.InputGrafana.LokiAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.LokiAuth.TextSecret)
+					items.InputGrafana.LokiAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.LokiAuth.Token)
+					if itemsItem.InputGrafana.LokiAuth.TokenAttributeName == nil {
+						items.InputGrafana.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
+					} else {
+						tokenAttributeNameResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.TokenAttributeName)
+						items.InputGrafana.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
+					}
+					if itemsItem.InputGrafana.LokiAuth.TokenTimeoutSecs == nil {
+						items.InputGrafana.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+					} else {
+						tokenTimeoutSecsResult, _ := json.Marshal(itemsItem.InputGrafana.LokiAuth.TokenTimeoutSecs)
+						items.InputGrafana.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
+					}
+					items.InputGrafana.LokiAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.LokiAuth.Username)
 				}
-				if itemsItem.InputGrafana.InputGrafanaGrafana2 != nil {
-					items.InputGrafana.InputGrafanaGrafana2 = &tfTypes.InputGrafanaGrafana2{}
-					items.InputGrafana.InputGrafanaGrafana2.TemplateHost = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TemplateHost)
-					items.InputGrafana.InputGrafanaGrafana2.TemplatePort = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TemplatePort)
-					items.InputGrafana.InputGrafanaGrafana2.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.ActivityLogSampleRate)
-					items.InputGrafana.InputGrafanaGrafana2.CaptureHeaders = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.CaptureHeaders)
-					items.InputGrafana.InputGrafanaGrafana2.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+				items.InputGrafana.MaxActiveReq = types.Float64PointerValue(itemsItem.InputGrafana.MaxActiveReq)
+				items.InputGrafana.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputGrafana.MaxRequestsPerSocket)
+				items.InputGrafana.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, connectionsItem21 := range itemsItem.InputGrafana.InputGrafanaGrafana2.Connections {
-						var connections21 tfTypes.ItemsTypeConnectionsOptional
+				for _, metadataItem22 := range itemsItem.InputGrafana.Metadata {
+					var metadata22 tfTypes.ItemsTypeMetadata
 
-						connections21.Output = types.StringPointerValue(connectionsItem21.Output)
-						connections21.Pipeline = types.StringPointerValue(connectionsItem21.Pipeline)
+					metadata22.Name = types.StringValue(metadataItem22.Name)
+					metadata22.Value = types.StringValue(metadataItem22.Value)
 
-						items.InputGrafana.InputGrafanaGrafana2.Connections = append(items.InputGrafana.InputGrafanaGrafana2.Connections, connections21)
-					}
-					items.InputGrafana.InputGrafanaGrafana2.Description = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Description)
-					items.InputGrafana.InputGrafanaGrafana2.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Disabled)
-					items.InputGrafana.InputGrafanaGrafana2.EnableHealthCheck = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.EnableHealthCheck)
-					items.InputGrafana.InputGrafanaGrafana2.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.EnableProxyHeader)
-					items.InputGrafana.InputGrafanaGrafana2.Environment = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Environment)
-					items.InputGrafana.InputGrafanaGrafana2.Host = types.StringValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Host)
-					items.InputGrafana.InputGrafanaGrafana2.ID = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.ID)
-					items.InputGrafana.InputGrafanaGrafana2.IPAllowlistRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.IPAllowlistRegex)
-					items.InputGrafana.InputGrafanaGrafana2.IPDenylistRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.IPDenylistRegex)
-					items.InputGrafana.InputGrafanaGrafana2.KeepAliveTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.KeepAliveTimeout)
-					items.InputGrafana.InputGrafanaGrafana2.LokiAPI = types.StringValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAPI)
-					if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth == nil {
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth = nil
-					} else {
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth = &tfTypes.LokiAuth2{}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-						} else {
-							authHeaderExprResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType != nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.AuthType = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.CredentialsSecret)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL = jsontypes.NewNormalizedNull()
-						} else {
-							loginURLResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders = []tfTypes.LokiAuthOauthHeader2{}
-
-						for _, oauthHeadersItem2 := range itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders {
-							var oauthHeaders2 tfTypes.LokiAuthOauthHeader2
-
-							if oauthHeadersItem2.Name == nil {
-								oauthHeaders2.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
-								oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
-							}
-							if oauthHeadersItem2.Value == nil {
-								oauthHeaders2.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
-								oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders = append(items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthHeaders, oauthHeaders2)
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams = []tfTypes.LokiAuthOauthParam2{}
-
-						for _, oauthParamsItem3 := range itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams {
-							var oauthParams3 tfTypes.LokiAuthOauthParam2
-
-							if oauthParamsItem3.Name == nil {
-								oauthParams3.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult5, _ := json.Marshal(oauthParamsItem3.Name)
-								oauthParams3.Name = jsontypes.NewNormalizedValue(string(nameResult5))
-							}
-							if oauthParamsItem3.Value == nil {
-								oauthParams3.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult5, _ := json.Marshal(oauthParamsItem3.Value)
-								oauthParams3.Value = jsontypes.NewNormalizedValue(string(valueResult5))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams = append(items.InputGrafana.InputGrafanaGrafana2.LokiAuth.OauthParams, oauthParams3)
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.Password)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret = jsontypes.NewNormalizedNull()
-						} else {
-							secretResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName = jsontypes.NewNormalizedNull()
-						} else {
-							secretParamNameResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.TextSecret)
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.Token)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
-						} else {
-							tokenAttributeNameResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs == nil {
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-						} else {
-							tokenTimeoutSecsResult2, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs)
-							items.InputGrafana.InputGrafanaGrafana2.LokiAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.LokiAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.LokiAuth.Username)
-					}
-					items.InputGrafana.InputGrafanaGrafana2.MaxActiveReq = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.MaxActiveReq)
-					items.InputGrafana.InputGrafanaGrafana2.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.MaxRequestsPerSocket)
-					items.InputGrafana.InputGrafanaGrafana2.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-					for _, metadataItem23 := range itemsItem.InputGrafana.InputGrafanaGrafana2.Metadata {
-						var metadata23 tfTypes.ItemsTypeMetadata
-
-						metadata23.Name = types.StringValue(metadataItem23.Name)
-						metadata23.Value = types.StringValue(metadataItem23.Value)
-
-						items.InputGrafana.InputGrafanaGrafana2.Metadata = append(items.InputGrafana.InputGrafanaGrafana2.Metadata, metadata23)
-					}
-					items.InputGrafana.InputGrafanaGrafana2.Pipeline = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pipeline)
-					items.InputGrafana.InputGrafanaGrafana2.Port = types.Float64Value(itemsItem.InputGrafana.InputGrafanaGrafana2.Port)
-					if itemsItem.InputGrafana.InputGrafanaGrafana2.Pq == nil {
-						items.InputGrafana.InputGrafanaGrafana2.Pq = nil
-					} else {
-						items.InputGrafana.InputGrafanaGrafana2.Pq = &tfTypes.PqType{}
-						items.InputGrafana.InputGrafanaGrafana2.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.CommitFrequency)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.Compress != nil {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.Compress = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.Compress))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.Compress = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSize)
-						items.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.MaxBufferSizeBytes)
-						items.InputGrafana.InputGrafanaGrafana2.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.MaxFileSize)
-						items.InputGrafana.InputGrafanaGrafana2.Pq.MaxSize = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.MaxSize)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.Mode != nil {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.Mode = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.Mode))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.Mode = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana2.Pq.Path = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.Path)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.Pq.PqControls == nil {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.PqControls = nil
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.Pq.PqControls = &tfTypes.PqTypePqControls{}
-						}
-					}
-					items.InputGrafana.InputGrafanaGrafana2.PqEnabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PqEnabled)
-					items.InputGrafana.InputGrafanaGrafana2.PrometheusAPI = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAPI)
-					if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth == nil {
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth = nil
-					} else {
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth = &tfTypes.PrometheusAuth2{}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-						} else {
-							authHeaderExprResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType != nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.AuthType = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.CredentialsSecret)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL = jsontypes.NewNormalizedNull()
-						} else {
-							loginURLResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders = []tfTypes.PrometheusAuthOauthHeader2{}
-
-						for _, oauthHeadersItem3 := range itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders {
-							var oauthHeaders3 tfTypes.PrometheusAuthOauthHeader2
-
-							if oauthHeadersItem3.Name == nil {
-								oauthHeaders3.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
-								oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
-							}
-							if oauthHeadersItem3.Value == nil {
-								oauthHeaders3.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
-								oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders = append(items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthHeaders, oauthHeaders3)
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams = []tfTypes.PrometheusAuthOauthParam2{}
-
-						for _, oauthParamsItem4 := range itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams {
-							var oauthParams4 tfTypes.PrometheusAuthOauthParam2
-
-							if oauthParamsItem4.Name == nil {
-								oauthParams4.Name = jsontypes.NewNormalizedNull()
-							} else {
-								nameResult7, _ := json.Marshal(oauthParamsItem4.Name)
-								oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult7))
-							}
-							if oauthParamsItem4.Value == nil {
-								oauthParams4.Value = jsontypes.NewNormalizedNull()
-							} else {
-								valueResult7, _ := json.Marshal(oauthParamsItem4.Value)
-								oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult7))
-							}
-
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams = append(items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.OauthParams, oauthParams4)
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Password)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret = jsontypes.NewNormalizedNull()
-						} else {
-							secretResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedNull()
-						} else {
-							secretParamNameResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TextSecret)
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Token)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
-						} else {
-							tokenAttributeNameResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs == nil {
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-						} else {
-							tokenTimeoutSecsResult3, _ := json.Marshal(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs)
-							items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
-						}
-						items.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.PrometheusAuth.Username)
-					}
-					items.InputGrafana.InputGrafanaGrafana2.RequestTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.RequestTimeout)
-					items.InputGrafana.InputGrafanaGrafana2.SendToRoutes = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.SendToRoutes)
-					items.InputGrafana.InputGrafanaGrafana2.SocketTimeout = types.Float64PointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.SocketTimeout)
-					items.InputGrafana.InputGrafanaGrafana2.Streamtags = make([]types.String, 0, len(itemsItem.InputGrafana.InputGrafanaGrafana2.Streamtags))
-					for _, v := range itemsItem.InputGrafana.InputGrafanaGrafana2.Streamtags {
-						items.InputGrafana.InputGrafanaGrafana2.Streamtags = append(items.InputGrafana.InputGrafanaGrafana2.Streamtags, types.StringValue(v))
-					}
-					if itemsItem.InputGrafana.InputGrafanaGrafana2.TLS == nil {
-						items.InputGrafana.InputGrafanaGrafana2.TLS = nil
-					} else {
-						items.InputGrafana.InputGrafanaGrafana2.TLS = &tfTypes.TLSSettingsServerSideType{}
-						items.InputGrafana.InputGrafanaGrafana2.TLS.CaPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.CaPath)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.CertificateName = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.CertificateName)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.CertPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.CertPath)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.CommonNameRegex)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.Disabled)
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion != nil {
-							items.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.TLS.MaxVersion = types.StringNull()
-						}
-						if itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion != nil {
-							items.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion = types.StringValue(string(*itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion))
-						} else {
-							items.InputGrafana.InputGrafanaGrafana2.TLS.MinVersion = types.StringNull()
-						}
-						items.InputGrafana.InputGrafanaGrafana2.TLS.Passphrase = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.Passphrase)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.PrivKeyPath)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.RejectUnauthorized)
-						items.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputGrafana.InputGrafanaGrafana2.TLS.RequestCert)
-					}
-					items.InputGrafana.InputGrafanaGrafana2.Type = types.StringValue(string(itemsItem.InputGrafana.InputGrafanaGrafana2.Type))
+					items.InputGrafana.Metadata = append(items.InputGrafana.Metadata, metadata22)
 				}
+				items.InputGrafana.Pipeline = types.StringPointerValue(itemsItem.InputGrafana.Pipeline)
+				items.InputGrafana.Port = types.Float64Value(itemsItem.InputGrafana.Port)
+				if itemsItem.InputGrafana.Pq == nil {
+					items.InputGrafana.Pq = nil
+				} else {
+					items.InputGrafana.Pq = &tfTypes.PqType{}
+					items.InputGrafana.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputGrafana.Pq.CommitFrequency)
+					if itemsItem.InputGrafana.Pq.Compress != nil {
+						items.InputGrafana.Pq.Compress = types.StringValue(string(*itemsItem.InputGrafana.Pq.Compress))
+					} else {
+						items.InputGrafana.Pq.Compress = types.StringNull()
+					}
+					items.InputGrafana.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputGrafana.Pq.MaxBufferSize)
+					items.InputGrafana.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputGrafana.Pq.MaxBufferSizeBytes)
+					items.InputGrafana.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputGrafana.Pq.MaxFileSize)
+					items.InputGrafana.Pq.MaxSize = types.StringPointerValue(itemsItem.InputGrafana.Pq.MaxSize)
+					if itemsItem.InputGrafana.Pq.Mode != nil {
+						items.InputGrafana.Pq.Mode = types.StringValue(string(*itemsItem.InputGrafana.Pq.Mode))
+					} else {
+						items.InputGrafana.Pq.Mode = types.StringNull()
+					}
+					items.InputGrafana.Pq.Path = types.StringPointerValue(itemsItem.InputGrafana.Pq.Path)
+					if itemsItem.InputGrafana.Pq.PqControls == nil {
+						items.InputGrafana.Pq.PqControls = nil
+					} else {
+						items.InputGrafana.Pq.PqControls = &tfTypes.PqTypePqControls{}
+					}
+				}
+				items.InputGrafana.PqEnabled = types.BoolPointerValue(itemsItem.InputGrafana.PqEnabled)
+				items.InputGrafana.PrometheusAPI = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAPI)
+				if itemsItem.InputGrafana.PrometheusAuth == nil {
+					items.InputGrafana.PrometheusAuth = nil
+				} else {
+					items.InputGrafana.PrometheusAuth = &tfTypes.InputGrafanaPrometheusAuth{}
+					if itemsItem.InputGrafana.PrometheusAuth.AuthHeaderExpr == nil {
+						items.InputGrafana.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedNull()
+					} else {
+						authHeaderExprResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.AuthHeaderExpr)
+						items.InputGrafana.PrometheusAuth.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
+					}
+					if itemsItem.InputGrafana.PrometheusAuth.AuthType != nil {
+						items.InputGrafana.PrometheusAuth.AuthType = types.StringValue(string(*itemsItem.InputGrafana.PrometheusAuth.AuthType))
+					} else {
+						items.InputGrafana.PrometheusAuth.AuthType = types.StringNull()
+					}
+					items.InputGrafana.PrometheusAuth.CredentialsSecret = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAuth.CredentialsSecret)
+					if itemsItem.InputGrafana.PrometheusAuth.LoginURL == nil {
+						items.InputGrafana.PrometheusAuth.LoginURL = jsontypes.NewNormalizedNull()
+					} else {
+						loginURLResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.LoginURL)
+						items.InputGrafana.PrometheusAuth.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
+					}
+					items.InputGrafana.PrometheusAuth.OauthHeaders = []tfTypes.PrometheusAuthOauthHeader{}
+
+					for _, oauthHeadersItem1 := range itemsItem.InputGrafana.PrometheusAuth.OauthHeaders {
+						var oauthHeaders1 tfTypes.PrometheusAuthOauthHeader
+
+						if oauthHeadersItem1.Name == nil {
+							oauthHeaders1.Name = jsontypes.NewNormalizedNull()
+						} else {
+							nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
+							oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
+						}
+						if oauthHeadersItem1.Value == nil {
+							oauthHeaders1.Value = jsontypes.NewNormalizedNull()
+						} else {
+							valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
+							oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
+						}
+
+						items.InputGrafana.PrometheusAuth.OauthHeaders = append(items.InputGrafana.PrometheusAuth.OauthHeaders, oauthHeaders1)
+					}
+					items.InputGrafana.PrometheusAuth.OauthParams = []tfTypes.PrometheusAuthOauthParam{}
+
+					for _, oauthParamsItem2 := range itemsItem.InputGrafana.PrometheusAuth.OauthParams {
+						var oauthParams2 tfTypes.PrometheusAuthOauthParam
+
+						if oauthParamsItem2.Name == nil {
+							oauthParams2.Name = jsontypes.NewNormalizedNull()
+						} else {
+							nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
+							oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
+						}
+						if oauthParamsItem2.Value == nil {
+							oauthParams2.Value = jsontypes.NewNormalizedNull()
+						} else {
+							valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
+							oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
+						}
+
+						items.InputGrafana.PrometheusAuth.OauthParams = append(items.InputGrafana.PrometheusAuth.OauthParams, oauthParams2)
+					}
+					items.InputGrafana.PrometheusAuth.Password = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAuth.Password)
+					if itemsItem.InputGrafana.PrometheusAuth.Secret == nil {
+						items.InputGrafana.PrometheusAuth.Secret = jsontypes.NewNormalizedNull()
+					} else {
+						secretResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.Secret)
+						items.InputGrafana.PrometheusAuth.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
+					}
+					if itemsItem.InputGrafana.PrometheusAuth.SecretParamName == nil {
+						items.InputGrafana.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedNull()
+					} else {
+						secretParamNameResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.SecretParamName)
+						items.InputGrafana.PrometheusAuth.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
+					}
+					items.InputGrafana.PrometheusAuth.TextSecret = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAuth.TextSecret)
+					items.InputGrafana.PrometheusAuth.Token = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAuth.Token)
+					if itemsItem.InputGrafana.PrometheusAuth.TokenAttributeName == nil {
+						items.InputGrafana.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedNull()
+					} else {
+						tokenAttributeNameResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.TokenAttributeName)
+						items.InputGrafana.PrometheusAuth.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
+					}
+					if itemsItem.InputGrafana.PrometheusAuth.TokenTimeoutSecs == nil {
+						items.InputGrafana.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
+					} else {
+						tokenTimeoutSecsResult1, _ := json.Marshal(itemsItem.InputGrafana.PrometheusAuth.TokenTimeoutSecs)
+						items.InputGrafana.PrometheusAuth.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
+					}
+					items.InputGrafana.PrometheusAuth.Username = types.StringPointerValue(itemsItem.InputGrafana.PrometheusAuth.Username)
+				}
+				items.InputGrafana.RequestTimeout = types.Float64PointerValue(itemsItem.InputGrafana.RequestTimeout)
+				items.InputGrafana.SendToRoutes = types.BoolPointerValue(itemsItem.InputGrafana.SendToRoutes)
+				items.InputGrafana.SocketTimeout = types.Float64PointerValue(itemsItem.InputGrafana.SocketTimeout)
+				items.InputGrafana.Streamtags = make([]types.String, 0, len(itemsItem.InputGrafana.Streamtags))
+				for _, v := range itemsItem.InputGrafana.Streamtags {
+					items.InputGrafana.Streamtags = append(items.InputGrafana.Streamtags, types.StringValue(v))
+				}
+				if itemsItem.InputGrafana.TLS == nil {
+					items.InputGrafana.TLS = nil
+				} else {
+					items.InputGrafana.TLS = &tfTypes.TLSSettingsServerSideType{}
+					items.InputGrafana.TLS.CaPath = types.StringPointerValue(itemsItem.InputGrafana.TLS.CaPath)
+					items.InputGrafana.TLS.CertificateName = types.StringPointerValue(itemsItem.InputGrafana.TLS.CertificateName)
+					items.InputGrafana.TLS.CertPath = types.StringPointerValue(itemsItem.InputGrafana.TLS.CertPath)
+					items.InputGrafana.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputGrafana.TLS.CommonNameRegex)
+					items.InputGrafana.TLS.Disabled = types.BoolPointerValue(itemsItem.InputGrafana.TLS.Disabled)
+					if itemsItem.InputGrafana.TLS.MaxVersion != nil {
+						items.InputGrafana.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputGrafana.TLS.MaxVersion))
+					} else {
+						items.InputGrafana.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.InputGrafana.TLS.MinVersion != nil {
+						items.InputGrafana.TLS.MinVersion = types.StringValue(string(*itemsItem.InputGrafana.TLS.MinVersion))
+					} else {
+						items.InputGrafana.TLS.MinVersion = types.StringNull()
+					}
+					items.InputGrafana.TLS.Passphrase = types.StringPointerValue(itemsItem.InputGrafana.TLS.Passphrase)
+					items.InputGrafana.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputGrafana.TLS.PrivKeyPath)
+					items.InputGrafana.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputGrafana.TLS.RejectUnauthorized)
+					items.InputGrafana.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputGrafana.TLS.RequestCert)
+				}
+				items.InputGrafana.Type = types.StringValue(string(itemsItem.InputGrafana.Type))
 			}
 			if itemsItem.InputHTTP != nil {
 				items.InputHTTP = &tfTypes.InputHTTP{}
@@ -2897,13 +2607,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					authTokensExt1.Description = types.StringPointerValue(authTokensExtItem1.Description)
 					authTokensExt1.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem24 := range authTokensExtItem1.Metadata {
-						var metadata24 tfTypes.ItemsTypeMetadata
+					for _, metadataItem23 := range authTokensExtItem1.Metadata {
+						var metadata23 tfTypes.ItemsTypeMetadata
 
-						metadata24.Name = types.StringValue(metadataItem24.Name)
-						metadata24.Value = types.StringValue(metadataItem24.Value)
+						metadata23.Name = types.StringValue(metadataItem23.Name)
+						metadata23.Value = types.StringValue(metadataItem23.Value)
 
-						authTokensExt1.Metadata = append(authTokensExt1.Metadata, metadata24)
+						authTokensExt1.Metadata = append(authTokensExt1.Metadata, metadata23)
 					}
 					authTokensExt1.Token = types.StringValue(authTokensExtItem1.Token)
 
@@ -2912,13 +2622,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputHTTP.CaptureHeaders = types.BoolPointerValue(itemsItem.InputHTTP.CaptureHeaders)
 				items.InputHTTP.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem22 := range itemsItem.InputHTTP.Connections {
-					var connections22 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem21 := range itemsItem.InputHTTP.Connections {
+					var connections21 tfTypes.ItemsTypeConnectionsOptional
 
-					connections22.Output = types.StringPointerValue(connectionsItem22.Output)
-					connections22.Pipeline = types.StringPointerValue(connectionsItem22.Pipeline)
+					connections21.Output = types.StringPointerValue(connectionsItem21.Output)
+					connections21.Pipeline = types.StringPointerValue(connectionsItem21.Pipeline)
 
-					items.InputHTTP.Connections = append(items.InputHTTP.Connections, connections22)
+					items.InputHTTP.Connections = append(items.InputHTTP.Connections, connections21)
 				}
 				items.InputHTTP.CriblAPI = types.StringPointerValue(itemsItem.InputHTTP.CriblAPI)
 				items.InputHTTP.Description = types.StringPointerValue(itemsItem.InputHTTP.Description)
@@ -2936,13 +2646,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputHTTP.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputHTTP.MaxRequestsPerSocket)
 				items.InputHTTP.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem25 := range itemsItem.InputHTTP.Metadata {
-					var metadata25 tfTypes.ItemsTypeMetadata
+				for _, metadataItem24 := range itemsItem.InputHTTP.Metadata {
+					var metadata24 tfTypes.ItemsTypeMetadata
 
-					metadata25.Name = types.StringValue(metadataItem25.Name)
-					metadata25.Value = types.StringValue(metadataItem25.Value)
+					metadata24.Name = types.StringValue(metadataItem24.Name)
+					metadata24.Value = types.StringValue(metadataItem24.Value)
 
-					items.InputHTTP.Metadata = append(items.InputHTTP.Metadata, metadata25)
+					items.InputHTTP.Metadata = append(items.InputHTTP.Metadata, metadata24)
 				}
 				items.InputHTTP.Pipeline = types.StringPointerValue(itemsItem.InputHTTP.Pipeline)
 				items.InputHTTP.Port = types.Float64Value(itemsItem.InputHTTP.Port)
@@ -3033,13 +2743,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					authTokensExt2.Description = types.StringPointerValue(authTokensExtItem2.Description)
 					authTokensExt2.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem26 := range authTokensExtItem2.Metadata {
-						var metadata26 tfTypes.ItemsTypeMetadata
+					for _, metadataItem25 := range authTokensExtItem2.Metadata {
+						var metadata25 tfTypes.ItemsTypeMetadata
 
-						metadata26.Name = types.StringValue(metadataItem26.Name)
-						metadata26.Value = types.StringValue(metadataItem26.Value)
+						metadata25.Name = types.StringValue(metadataItem25.Name)
+						metadata25.Value = types.StringValue(metadataItem25.Value)
 
-						authTokensExt2.Metadata = append(authTokensExt2.Metadata, metadata26)
+						authTokensExt2.Metadata = append(authTokensExt2.Metadata, metadata25)
 					}
 					authTokensExt2.Token = types.StringValue(authTokensExtItem2.Token)
 
@@ -3052,13 +2762,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputHTTPRaw.CaptureHeaders = types.BoolPointerValue(itemsItem.InputHTTPRaw.CaptureHeaders)
 				items.InputHTTPRaw.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem23 := range itemsItem.InputHTTPRaw.Connections {
-					var connections23 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem22 := range itemsItem.InputHTTPRaw.Connections {
+					var connections22 tfTypes.ItemsTypeConnectionsOptional
 
-					connections23.Output = types.StringPointerValue(connectionsItem23.Output)
-					connections23.Pipeline = types.StringPointerValue(connectionsItem23.Pipeline)
+					connections22.Output = types.StringPointerValue(connectionsItem22.Output)
+					connections22.Pipeline = types.StringPointerValue(connectionsItem22.Pipeline)
 
-					items.InputHTTPRaw.Connections = append(items.InputHTTPRaw.Connections, connections23)
+					items.InputHTTPRaw.Connections = append(items.InputHTTPRaw.Connections, connections22)
 				}
 				items.InputHTTPRaw.Description = types.StringPointerValue(itemsItem.InputHTTPRaw.Description)
 				items.InputHTTPRaw.Disabled = types.BoolPointerValue(itemsItem.InputHTTPRaw.Disabled)
@@ -3074,13 +2784,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputHTTPRaw.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputHTTPRaw.MaxRequestsPerSocket)
 				items.InputHTTPRaw.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem27 := range itemsItem.InputHTTPRaw.Metadata {
-					var metadata27 tfTypes.ItemsTypeMetadata
+				for _, metadataItem26 := range itemsItem.InputHTTPRaw.Metadata {
+					var metadata26 tfTypes.ItemsTypeMetadata
 
-					metadata27.Name = types.StringValue(metadataItem27.Name)
-					metadata27.Value = types.StringValue(metadataItem27.Value)
+					metadata26.Name = types.StringValue(metadataItem26.Name)
+					metadata26.Value = types.StringValue(metadataItem26.Value)
 
-					items.InputHTTPRaw.Metadata = append(items.InputHTTPRaw.Metadata, metadata27)
+					items.InputHTTPRaw.Metadata = append(items.InputHTTPRaw.Metadata, metadata26)
 				}
 				items.InputHTTPRaw.Pipeline = types.StringPointerValue(itemsItem.InputHTTPRaw.Pipeline)
 				items.InputHTTPRaw.Port = types.Float64Value(itemsItem.InputHTTPRaw.Port)
@@ -3149,13 +2859,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputJournalFiles = &tfTypes.InputJournalFiles{}
 				items.InputJournalFiles.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem24 := range itemsItem.InputJournalFiles.Connections {
-					var connections24 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem23 := range itemsItem.InputJournalFiles.Connections {
+					var connections23 tfTypes.ItemsTypeConnectionsOptional
 
-					connections24.Output = types.StringPointerValue(connectionsItem24.Output)
-					connections24.Pipeline = types.StringPointerValue(connectionsItem24.Pipeline)
+					connections23.Output = types.StringPointerValue(connectionsItem23.Output)
+					connections23.Pipeline = types.StringPointerValue(connectionsItem23.Pipeline)
 
-					items.InputJournalFiles.Connections = append(items.InputJournalFiles.Connections, connections24)
+					items.InputJournalFiles.Connections = append(items.InputJournalFiles.Connections, connections23)
 				}
 				items.InputJournalFiles.CurrentBoot = types.BoolPointerValue(itemsItem.InputJournalFiles.CurrentBoot)
 				items.InputJournalFiles.Description = types.StringPointerValue(itemsItem.InputJournalFiles.Description)
@@ -3170,13 +2880,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputJournalFiles.MaxAgeDur = types.StringPointerValue(itemsItem.InputJournalFiles.MaxAgeDur)
 				items.InputJournalFiles.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem28 := range itemsItem.InputJournalFiles.Metadata {
-					var metadata28 tfTypes.ItemsTypeMetadata
+				for _, metadataItem27 := range itemsItem.InputJournalFiles.Metadata {
+					var metadata27 tfTypes.ItemsTypeMetadata
 
-					metadata28.Name = types.StringValue(metadataItem28.Name)
-					metadata28.Value = types.StringValue(metadataItem28.Value)
+					metadata27.Name = types.StringValue(metadataItem27.Name)
+					metadata27.Value = types.StringValue(metadataItem27.Value)
 
-					items.InputJournalFiles.Metadata = append(items.InputJournalFiles.Metadata, metadata28)
+					items.InputJournalFiles.Metadata = append(items.InputJournalFiles.Metadata, metadata27)
 				}
 				items.InputJournalFiles.Path = types.StringValue(itemsItem.InputJournalFiles.Path)
 				items.InputJournalFiles.Pipeline = types.StringPointerValue(itemsItem.InputJournalFiles.Pipeline)
@@ -3236,13 +2946,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputKafka.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem25 := range itemsItem.InputKafka.Connections {
-					var connections25 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem24 := range itemsItem.InputKafka.Connections {
+					var connections24 tfTypes.ItemsTypeConnectionsOptional
 
-					connections25.Output = types.StringPointerValue(connectionsItem25.Output)
-					connections25.Pipeline = types.StringPointerValue(connectionsItem25.Pipeline)
+					connections24.Output = types.StringPointerValue(connectionsItem24.Output)
+					connections24.Pipeline = types.StringPointerValue(connectionsItem24.Pipeline)
 
-					items.InputKafka.Connections = append(items.InputKafka.Connections, connections25)
+					items.InputKafka.Connections = append(items.InputKafka.Connections, connections24)
 				}
 				items.InputKafka.ConnectionTimeout = types.Float64PointerValue(itemsItem.InputKafka.ConnectionTimeout)
 				items.InputKafka.Description = types.StringPointerValue(itemsItem.InputKafka.Description)
@@ -3300,13 +3010,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKafka.MaxSocketErrors = types.Float64PointerValue(itemsItem.InputKafka.MaxSocketErrors)
 				items.InputKafka.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem29 := range itemsItem.InputKafka.Metadata {
-					var metadata29 tfTypes.ItemsTypeMetadata
+				for _, metadataItem28 := range itemsItem.InputKafka.Metadata {
+					var metadata28 tfTypes.ItemsTypeMetadata
 
-					metadata29.Name = types.StringValue(metadataItem29.Name)
-					metadata29.Value = types.StringValue(metadataItem29.Value)
+					metadata28.Name = types.StringValue(metadataItem28.Name)
+					metadata28.Value = types.StringValue(metadataItem28.Value)
 
-					items.InputKafka.Metadata = append(items.InputKafka.Metadata, metadata29)
+					items.InputKafka.Metadata = append(items.InputKafka.Metadata, metadata28)
 				}
 				items.InputKafka.Pipeline = types.StringPointerValue(itemsItem.InputKafka.Pipeline)
 				if itemsItem.InputKafka.Pq == nil {
@@ -3362,13 +3072,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					items.InputKafka.Sasl.OauthEnabled = types.BoolPointerValue(itemsItem.InputKafka.Sasl.OauthEnabled)
 					items.InputKafka.Sasl.OauthParams = []tfTypes.ItemsTypeSaslOauthParams{}
 
-					for _, oauthParamsItem5 := range itemsItem.InputKafka.Sasl.OauthParams {
-						var oauthParams5 tfTypes.ItemsTypeSaslOauthParams
+					for _, oauthParamsItem3 := range itemsItem.InputKafka.Sasl.OauthParams {
+						var oauthParams3 tfTypes.ItemsTypeSaslOauthParams
 
-						oauthParams5.Name = types.StringValue(oauthParamsItem5.Name)
-						oauthParams5.Value = types.StringValue(oauthParamsItem5.Value)
+						oauthParams3.Name = types.StringValue(oauthParamsItem3.Name)
+						oauthParams3.Value = types.StringValue(oauthParamsItem3.Value)
 
-						items.InputKafka.Sasl.OauthParams = append(items.InputKafka.Sasl.OauthParams, oauthParams5)
+						items.InputKafka.Sasl.OauthParams = append(items.InputKafka.Sasl.OauthParams, oauthParams3)
 					}
 					items.InputKafka.Sasl.OauthSecretType = types.StringPointerValue(itemsItem.InputKafka.Sasl.OauthSecretType)
 					items.InputKafka.Sasl.Password = types.StringPointerValue(itemsItem.InputKafka.Sasl.Password)
@@ -3442,13 +3152,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKinesis.AwsSecretKey = types.StringPointerValue(itemsItem.InputKinesis.AwsSecretKey)
 				items.InputKinesis.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem26 := range itemsItem.InputKinesis.Connections {
-					var connections26 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem25 := range itemsItem.InputKinesis.Connections {
+					var connections25 tfTypes.ItemsTypeConnectionsOptional
 
-					connections26.Output = types.StringPointerValue(connectionsItem26.Output)
-					connections26.Pipeline = types.StringPointerValue(connectionsItem26.Pipeline)
+					connections25.Output = types.StringPointerValue(connectionsItem25.Output)
+					connections25.Pipeline = types.StringPointerValue(connectionsItem25.Pipeline)
 
-					items.InputKinesis.Connections = append(items.InputKinesis.Connections, connections26)
+					items.InputKinesis.Connections = append(items.InputKinesis.Connections, connections25)
 				}
 				items.InputKinesis.Description = types.StringPointerValue(itemsItem.InputKinesis.Description)
 				items.InputKinesis.Disabled = types.BoolPointerValue(itemsItem.InputKinesis.Disabled)
@@ -3466,13 +3176,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputKinesis.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem30 := range itemsItem.InputKinesis.Metadata {
-					var metadata30 tfTypes.ItemsTypeMetadata
+				for _, metadataItem29 := range itemsItem.InputKinesis.Metadata {
+					var metadata29 tfTypes.ItemsTypeMetadata
 
-					metadata30.Name = types.StringValue(metadataItem30.Name)
-					metadata30.Value = types.StringValue(metadataItem30.Value)
+					metadata29.Name = types.StringValue(metadataItem29.Name)
+					metadata29.Value = types.StringValue(metadataItem29.Value)
 
-					items.InputKinesis.Metadata = append(items.InputKinesis.Metadata, metadata30)
+					items.InputKinesis.Metadata = append(items.InputKinesis.Metadata, metadata29)
 				}
 				if itemsItem.InputKinesis.PayloadFormat != nil {
 					items.InputKinesis.PayloadFormat = types.StringValue(string(*itemsItem.InputKinesis.PayloadFormat))
@@ -3535,13 +3245,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKubeEvents = &tfTypes.InputKubeEvents{}
 				items.InputKubeEvents.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem27 := range itemsItem.InputKubeEvents.Connections {
-					var connections27 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem26 := range itemsItem.InputKubeEvents.Connections {
+					var connections26 tfTypes.ItemsTypeConnectionsOptional
 
-					connections27.Output = types.StringPointerValue(connectionsItem27.Output)
-					connections27.Pipeline = types.StringPointerValue(connectionsItem27.Pipeline)
+					connections26.Output = types.StringPointerValue(connectionsItem26.Output)
+					connections26.Pipeline = types.StringPointerValue(connectionsItem26.Pipeline)
 
-					items.InputKubeEvents.Connections = append(items.InputKubeEvents.Connections, connections27)
+					items.InputKubeEvents.Connections = append(items.InputKubeEvents.Connections, connections26)
 				}
 				items.InputKubeEvents.Description = types.StringPointerValue(itemsItem.InputKubeEvents.Description)
 				items.InputKubeEvents.Disabled = types.BoolPointerValue(itemsItem.InputKubeEvents.Disabled)
@@ -3549,13 +3259,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKubeEvents.ID = types.StringPointerValue(itemsItem.InputKubeEvents.ID)
 				items.InputKubeEvents.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem31 := range itemsItem.InputKubeEvents.Metadata {
-					var metadata31 tfTypes.ItemsTypeMetadata
+				for _, metadataItem30 := range itemsItem.InputKubeEvents.Metadata {
+					var metadata30 tfTypes.ItemsTypeMetadata
 
-					metadata31.Name = types.StringValue(metadataItem31.Name)
-					metadata31.Value = types.StringValue(metadataItem31.Value)
+					metadata30.Name = types.StringValue(metadataItem30.Name)
+					metadata30.Value = types.StringValue(metadataItem30.Value)
 
-					items.InputKubeEvents.Metadata = append(items.InputKubeEvents.Metadata, metadata31)
+					items.InputKubeEvents.Metadata = append(items.InputKubeEvents.Metadata, metadata30)
 				}
 				items.InputKubeEvents.Pipeline = types.StringPointerValue(itemsItem.InputKubeEvents.Pipeline)
 				if itemsItem.InputKubeEvents.Pq == nil {
@@ -3610,13 +3320,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputKubeLogs.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem28 := range itemsItem.InputKubeLogs.Connections {
-					var connections28 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem27 := range itemsItem.InputKubeLogs.Connections {
+					var connections27 tfTypes.ItemsTypeConnectionsOptional
 
-					connections28.Output = types.StringPointerValue(connectionsItem28.Output)
-					connections28.Pipeline = types.StringPointerValue(connectionsItem28.Pipeline)
+					connections27.Output = types.StringPointerValue(connectionsItem27.Output)
+					connections27.Pipeline = types.StringPointerValue(connectionsItem27.Pipeline)
 
-					items.InputKubeLogs.Connections = append(items.InputKubeLogs.Connections, connections28)
+					items.InputKubeLogs.Connections = append(items.InputKubeLogs.Connections, connections27)
 				}
 				items.InputKubeLogs.Description = types.StringPointerValue(itemsItem.InputKubeLogs.Description)
 				items.InputKubeLogs.Disabled = types.BoolPointerValue(itemsItem.InputKubeLogs.Disabled)
@@ -3626,13 +3336,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKubeLogs.Interval = types.Float64PointerValue(itemsItem.InputKubeLogs.Interval)
 				items.InputKubeLogs.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem32 := range itemsItem.InputKubeLogs.Metadata {
-					var metadata32 tfTypes.ItemsTypeMetadata
+				for _, metadataItem31 := range itemsItem.InputKubeLogs.Metadata {
+					var metadata31 tfTypes.ItemsTypeMetadata
 
-					metadata32.Name = types.StringValue(metadataItem32.Name)
-					metadata32.Value = types.StringValue(metadataItem32.Value)
+					metadata31.Name = types.StringValue(metadataItem31.Name)
+					metadata31.Value = types.StringValue(metadataItem31.Value)
 
-					items.InputKubeLogs.Metadata = append(items.InputKubeLogs.Metadata, metadata32)
+					items.InputKubeLogs.Metadata = append(items.InputKubeLogs.Metadata, metadata31)
 				}
 				if itemsItem.InputKubeLogs.Persistence == nil {
 					items.InputKubeLogs.Persistence = nil
@@ -3699,13 +3409,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKubeMetrics = &tfTypes.InputKubeMetrics{}
 				items.InputKubeMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem29 := range itemsItem.InputKubeMetrics.Connections {
-					var connections29 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem28 := range itemsItem.InputKubeMetrics.Connections {
+					var connections28 tfTypes.ItemsTypeConnectionsOptional
 
-					connections29.Output = types.StringPointerValue(connectionsItem29.Output)
-					connections29.Pipeline = types.StringPointerValue(connectionsItem29.Pipeline)
+					connections28.Output = types.StringPointerValue(connectionsItem28.Output)
+					connections28.Pipeline = types.StringPointerValue(connectionsItem28.Pipeline)
 
-					items.InputKubeMetrics.Connections = append(items.InputKubeMetrics.Connections, connections29)
+					items.InputKubeMetrics.Connections = append(items.InputKubeMetrics.Connections, connections28)
 				}
 				items.InputKubeMetrics.Description = types.StringPointerValue(itemsItem.InputKubeMetrics.Description)
 				items.InputKubeMetrics.Disabled = types.BoolPointerValue(itemsItem.InputKubeMetrics.Disabled)
@@ -3714,13 +3424,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputKubeMetrics.Interval = types.Float64PointerValue(itemsItem.InputKubeMetrics.Interval)
 				items.InputKubeMetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem33 := range itemsItem.InputKubeMetrics.Metadata {
-					var metadata33 tfTypes.ItemsTypeMetadata
+				for _, metadataItem32 := range itemsItem.InputKubeMetrics.Metadata {
+					var metadata32 tfTypes.ItemsTypeMetadata
 
-					metadata33.Name = types.StringValue(metadataItem33.Name)
-					metadata33.Value = types.StringValue(metadataItem33.Value)
+					metadata32.Name = types.StringValue(metadataItem32.Name)
+					metadata32.Value = types.StringValue(metadataItem32.Value)
 
-					items.InputKubeMetrics.Metadata = append(items.InputKubeMetrics.Metadata, metadata33)
+					items.InputKubeMetrics.Metadata = append(items.InputKubeMetrics.Metadata, metadata32)
 				}
 				if itemsItem.InputKubeMetrics.Persistence == nil {
 					items.InputKubeMetrics.Persistence = nil
@@ -3790,8 +3500,8 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputLoki.AuthHeaderExpr == nil {
 					items.InputLoki.AuthHeaderExpr = jsontypes.NewNormalizedNull()
 				} else {
-					authHeaderExprResult4, _ := json.Marshal(itemsItem.InputLoki.AuthHeaderExpr)
-					items.InputLoki.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult4))
+					authHeaderExprResult2, _ := json.Marshal(itemsItem.InputLoki.AuthHeaderExpr)
+					items.InputLoki.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
 				}
 				if itemsItem.InputLoki.AuthType != nil {
 					items.InputLoki.AuthType = types.StringValue(string(*itemsItem.InputLoki.AuthType))
@@ -3801,13 +3511,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputLoki.CaptureHeaders = types.BoolPointerValue(itemsItem.InputLoki.CaptureHeaders)
 				items.InputLoki.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem30 := range itemsItem.InputLoki.Connections {
-					var connections30 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem29 := range itemsItem.InputLoki.Connections {
+					var connections29 tfTypes.ItemsTypeConnectionsOptional
 
-					connections30.Output = types.StringPointerValue(connectionsItem30.Output)
-					connections30.Pipeline = types.StringPointerValue(connectionsItem30.Pipeline)
+					connections29.Output = types.StringPointerValue(connectionsItem29.Output)
+					connections29.Pipeline = types.StringPointerValue(connectionsItem29.Pipeline)
 
-					items.InputLoki.Connections = append(items.InputLoki.Connections, connections30)
+					items.InputLoki.Connections = append(items.InputLoki.Connections, connections29)
 				}
 				items.InputLoki.CredentialsSecret = types.StringPointerValue(itemsItem.InputLoki.CredentialsSecret)
 				items.InputLoki.Description = types.StringPointerValue(itemsItem.InputLoki.Description)
@@ -3823,61 +3533,61 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputLoki.LoginURL == nil {
 					items.InputLoki.LoginURL = jsontypes.NewNormalizedNull()
 				} else {
-					loginURLResult4, _ := json.Marshal(itemsItem.InputLoki.LoginURL)
-					items.InputLoki.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult4))
+					loginURLResult2, _ := json.Marshal(itemsItem.InputLoki.LoginURL)
+					items.InputLoki.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
 				}
 				items.InputLoki.LokiAPI = types.StringValue(itemsItem.InputLoki.LokiAPI)
 				items.InputLoki.MaxActiveReq = types.Float64PointerValue(itemsItem.InputLoki.MaxActiveReq)
 				items.InputLoki.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputLoki.MaxRequestsPerSocket)
 				items.InputLoki.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem34 := range itemsItem.InputLoki.Metadata {
-					var metadata34 tfTypes.ItemsTypeMetadata
+				for _, metadataItem33 := range itemsItem.InputLoki.Metadata {
+					var metadata33 tfTypes.ItemsTypeMetadata
 
-					metadata34.Name = types.StringValue(metadataItem34.Name)
-					metadata34.Value = types.StringValue(metadataItem34.Value)
+					metadata33.Name = types.StringValue(metadataItem33.Name)
+					metadata33.Value = types.StringValue(metadataItem33.Value)
 
-					items.InputLoki.Metadata = append(items.InputLoki.Metadata, metadata34)
+					items.InputLoki.Metadata = append(items.InputLoki.Metadata, metadata33)
 				}
 				items.InputLoki.OauthHeaders = []tfTypes.InputLokiOauthHeader{}
 
-				for _, oauthHeadersItem4 := range itemsItem.InputLoki.OauthHeaders {
-					var oauthHeaders4 tfTypes.InputLokiOauthHeader
+				for _, oauthHeadersItem2 := range itemsItem.InputLoki.OauthHeaders {
+					var oauthHeaders2 tfTypes.InputLokiOauthHeader
 
-					if oauthHeadersItem4.Name == nil {
-						oauthHeaders4.Name = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem2.Name == nil {
+						oauthHeaders2.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult8, _ := json.Marshal(oauthHeadersItem4.Name)
-						oauthHeaders4.Name = jsontypes.NewNormalizedValue(string(nameResult8))
+						nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
+						oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
 					}
-					if oauthHeadersItem4.Value == nil {
-						oauthHeaders4.Value = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem2.Value == nil {
+						oauthHeaders2.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult8, _ := json.Marshal(oauthHeadersItem4.Value)
-						oauthHeaders4.Value = jsontypes.NewNormalizedValue(string(valueResult8))
+						valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
+						oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
 					}
 
-					items.InputLoki.OauthHeaders = append(items.InputLoki.OauthHeaders, oauthHeaders4)
+					items.InputLoki.OauthHeaders = append(items.InputLoki.OauthHeaders, oauthHeaders2)
 				}
 				items.InputLoki.OauthParams = []tfTypes.InputLokiOauthParam{}
 
-				for _, oauthParamsItem6 := range itemsItem.InputLoki.OauthParams {
-					var oauthParams6 tfTypes.InputLokiOauthParam
+				for _, oauthParamsItem4 := range itemsItem.InputLoki.OauthParams {
+					var oauthParams4 tfTypes.InputLokiOauthParam
 
-					if oauthParamsItem6.Name == nil {
-						oauthParams6.Name = jsontypes.NewNormalizedNull()
+					if oauthParamsItem4.Name == nil {
+						oauthParams4.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult9, _ := json.Marshal(oauthParamsItem6.Name)
-						oauthParams6.Name = jsontypes.NewNormalizedValue(string(nameResult9))
+						nameResult5, _ := json.Marshal(oauthParamsItem4.Name)
+						oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult5))
 					}
-					if oauthParamsItem6.Value == nil {
-						oauthParams6.Value = jsontypes.NewNormalizedNull()
+					if oauthParamsItem4.Value == nil {
+						oauthParams4.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult9, _ := json.Marshal(oauthParamsItem6.Value)
-						oauthParams6.Value = jsontypes.NewNormalizedValue(string(valueResult9))
+						valueResult5, _ := json.Marshal(oauthParamsItem4.Value)
+						oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult5))
 					}
 
-					items.InputLoki.OauthParams = append(items.InputLoki.OauthParams, oauthParams6)
+					items.InputLoki.OauthParams = append(items.InputLoki.OauthParams, oauthParams4)
 				}
 				items.InputLoki.Password = types.StringPointerValue(itemsItem.InputLoki.Password)
 				items.InputLoki.Pipeline = types.StringPointerValue(itemsItem.InputLoki.Pipeline)
@@ -3913,14 +3623,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputLoki.Secret == nil {
 					items.InputLoki.Secret = jsontypes.NewNormalizedNull()
 				} else {
-					secretResult4, _ := json.Marshal(itemsItem.InputLoki.Secret)
-					items.InputLoki.Secret = jsontypes.NewNormalizedValue(string(secretResult4))
+					secretResult2, _ := json.Marshal(itemsItem.InputLoki.Secret)
+					items.InputLoki.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
 				}
 				if itemsItem.InputLoki.SecretParamName == nil {
 					items.InputLoki.SecretParamName = jsontypes.NewNormalizedNull()
 				} else {
-					secretParamNameResult4, _ := json.Marshal(itemsItem.InputLoki.SecretParamName)
-					items.InputLoki.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult4))
+					secretParamNameResult2, _ := json.Marshal(itemsItem.InputLoki.SecretParamName)
+					items.InputLoki.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
 				}
 				items.InputLoki.SendToRoutes = types.BoolPointerValue(itemsItem.InputLoki.SendToRoutes)
 				items.InputLoki.SocketTimeout = types.Float64PointerValue(itemsItem.InputLoki.SocketTimeout)
@@ -3957,14 +3667,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputLoki.TokenAttributeName == nil {
 					items.InputLoki.TokenAttributeName = jsontypes.NewNormalizedNull()
 				} else {
-					tokenAttributeNameResult4, _ := json.Marshal(itemsItem.InputLoki.TokenAttributeName)
-					items.InputLoki.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult4))
+					tokenAttributeNameResult2, _ := json.Marshal(itemsItem.InputLoki.TokenAttributeName)
+					items.InputLoki.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
 				}
 				if itemsItem.InputLoki.TokenTimeoutSecs == nil {
 					items.InputLoki.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
 				} else {
-					tokenTimeoutSecsResult4, _ := json.Marshal(itemsItem.InputLoki.TokenTimeoutSecs)
-					items.InputLoki.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult4))
+					tokenTimeoutSecsResult2, _ := json.Marshal(itemsItem.InputLoki.TokenTimeoutSecs)
+					items.InputLoki.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
 				}
 				items.InputLoki.Type = types.StringValue(string(itemsItem.InputLoki.Type))
 				items.InputLoki.Username = types.StringPointerValue(itemsItem.InputLoki.Username)
@@ -3976,13 +3686,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputMetrics.TemplateUDPPort = types.StringPointerValue(itemsItem.InputMetrics.TemplateUDPPort)
 				items.InputMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem31 := range itemsItem.InputMetrics.Connections {
-					var connections31 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem30 := range itemsItem.InputMetrics.Connections {
+					var connections30 tfTypes.ItemsTypeConnectionsOptional
 
-					connections31.Output = types.StringPointerValue(connectionsItem31.Output)
-					connections31.Pipeline = types.StringPointerValue(connectionsItem31.Pipeline)
+					connections30.Output = types.StringPointerValue(connectionsItem30.Output)
+					connections30.Pipeline = types.StringPointerValue(connectionsItem30.Pipeline)
 
-					items.InputMetrics.Connections = append(items.InputMetrics.Connections, connections31)
+					items.InputMetrics.Connections = append(items.InputMetrics.Connections, connections30)
 				}
 				items.InputMetrics.Description = types.StringPointerValue(itemsItem.InputMetrics.Description)
 				items.InputMetrics.Disabled = types.BoolPointerValue(itemsItem.InputMetrics.Disabled)
@@ -3994,13 +3704,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputMetrics.MaxBufferSize = types.Float64PointerValue(itemsItem.InputMetrics.MaxBufferSize)
 				items.InputMetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem35 := range itemsItem.InputMetrics.Metadata {
-					var metadata35 tfTypes.ItemsTypeMetadata
+				for _, metadataItem34 := range itemsItem.InputMetrics.Metadata {
+					var metadata34 tfTypes.ItemsTypeMetadata
 
-					metadata35.Name = types.StringValue(metadataItem35.Name)
-					metadata35.Value = types.StringValue(metadataItem35.Value)
+					metadata34.Name = types.StringValue(metadataItem34.Name)
+					metadata34.Value = types.StringValue(metadataItem34.Value)
 
-					items.InputMetrics.Metadata = append(items.InputMetrics.Metadata, metadata35)
+					items.InputMetrics.Metadata = append(items.InputMetrics.Metadata, metadata34)
 				}
 				items.InputMetrics.Pipeline = types.StringPointerValue(itemsItem.InputMetrics.Pipeline)
 				if itemsItem.InputMetrics.Pq == nil {
@@ -4088,13 +3798,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputMicrosoftGraph.ClientSecret = types.StringPointerValue(itemsItem.InputMicrosoftGraph.ClientSecret)
 				items.InputMicrosoftGraph.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem32 := range itemsItem.InputMicrosoftGraph.Connections {
-					var connections32 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem31 := range itemsItem.InputMicrosoftGraph.Connections {
+					var connections31 tfTypes.ItemsTypeConnectionsOptional
 
-					connections32.Output = types.StringPointerValue(connectionsItem32.Output)
-					connections32.Pipeline = types.StringPointerValue(connectionsItem32.Pipeline)
+					connections31.Output = types.StringPointerValue(connectionsItem31.Output)
+					connections31.Pipeline = types.StringPointerValue(connectionsItem31.Pipeline)
 
-					items.InputMicrosoftGraph.Connections = append(items.InputMicrosoftGraph.Connections, connections32)
+					items.InputMicrosoftGraph.Connections = append(items.InputMicrosoftGraph.Connections, connections31)
 				}
 				items.InputMicrosoftGraph.CredentialsSecret = types.StringPointerValue(itemsItem.InputMicrosoftGraph.CredentialsSecret)
 				items.InputMicrosoftGraph.Description = types.StringPointerValue(itemsItem.InputMicrosoftGraph.Description)
@@ -4116,13 +3826,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputMicrosoftGraph.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputMicrosoftGraph.MaxTaskReschedule)
 				items.InputMicrosoftGraph.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem36 := range itemsItem.InputMicrosoftGraph.Metadata {
-					var metadata36 tfTypes.ItemsTypeMetadata
+				for _, metadataItem35 := range itemsItem.InputMicrosoftGraph.Metadata {
+					var metadata35 tfTypes.ItemsTypeMetadata
 
-					metadata36.Name = types.StringValue(metadataItem36.Name)
-					metadata36.Value = types.StringValue(metadataItem36.Value)
+					metadata35.Name = types.StringValue(metadataItem35.Name)
+					metadata35.Value = types.StringValue(metadataItem35.Value)
 
-					items.InputMicrosoftGraph.Metadata = append(items.InputMicrosoftGraph.Metadata, metadata36)
+					items.InputMicrosoftGraph.Metadata = append(items.InputMicrosoftGraph.Metadata, metadata35)
 				}
 				items.InputMicrosoftGraph.Password = types.StringPointerValue(itemsItem.InputMicrosoftGraph.Password)
 				items.InputMicrosoftGraph.Pipeline = types.StringPointerValue(itemsItem.InputMicrosoftGraph.Pipeline)
@@ -4196,13 +3906,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputModelDrivenTelemetry.TemplatePort = types.StringPointerValue(itemsItem.InputModelDrivenTelemetry.TemplatePort)
 				items.InputModelDrivenTelemetry.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem33 := range itemsItem.InputModelDrivenTelemetry.Connections {
-					var connections33 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem32 := range itemsItem.InputModelDrivenTelemetry.Connections {
+					var connections32 tfTypes.ItemsTypeConnectionsOptional
 
-					connections33.Output = types.StringPointerValue(connectionsItem33.Output)
-					connections33.Pipeline = types.StringPointerValue(connectionsItem33.Pipeline)
+					connections32.Output = types.StringPointerValue(connectionsItem32.Output)
+					connections32.Pipeline = types.StringPointerValue(connectionsItem32.Pipeline)
 
-					items.InputModelDrivenTelemetry.Connections = append(items.InputModelDrivenTelemetry.Connections, connections33)
+					items.InputModelDrivenTelemetry.Connections = append(items.InputModelDrivenTelemetry.Connections, connections32)
 				}
 				items.InputModelDrivenTelemetry.Description = types.StringPointerValue(itemsItem.InputModelDrivenTelemetry.Description)
 				items.InputModelDrivenTelemetry.Disabled = types.BoolPointerValue(itemsItem.InputModelDrivenTelemetry.Disabled)
@@ -4212,13 +3922,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputModelDrivenTelemetry.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputModelDrivenTelemetry.MaxActiveCxn)
 				items.InputModelDrivenTelemetry.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem37 := range itemsItem.InputModelDrivenTelemetry.Metadata {
-					var metadata37 tfTypes.ItemsTypeMetadata
+				for _, metadataItem36 := range itemsItem.InputModelDrivenTelemetry.Metadata {
+					var metadata36 tfTypes.ItemsTypeMetadata
 
-					metadata37.Name = types.StringValue(metadataItem37.Name)
-					metadata37.Value = types.StringValue(metadataItem37.Value)
+					metadata36.Name = types.StringValue(metadataItem36.Name)
+					metadata36.Value = types.StringValue(metadataItem36.Value)
 
-					items.InputModelDrivenTelemetry.Metadata = append(items.InputModelDrivenTelemetry.Metadata, metadata37)
+					items.InputModelDrivenTelemetry.Metadata = append(items.InputModelDrivenTelemetry.Metadata, metadata36)
 				}
 				items.InputModelDrivenTelemetry.Pipeline = types.StringPointerValue(itemsItem.InputModelDrivenTelemetry.Pipeline)
 				items.InputModelDrivenTelemetry.Port = types.Float64Value(itemsItem.InputModelDrivenTelemetry.Port)
@@ -4304,13 +4014,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputMsk.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem34 := range itemsItem.InputMsk.Connections {
-					var connections34 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem33 := range itemsItem.InputMsk.Connections {
+					var connections33 tfTypes.ItemsTypeConnectionsOptional
 
-					connections34.Output = types.StringPointerValue(connectionsItem34.Output)
-					connections34.Pipeline = types.StringPointerValue(connectionsItem34.Pipeline)
+					connections33.Output = types.StringPointerValue(connectionsItem33.Output)
+					connections33.Pipeline = types.StringPointerValue(connectionsItem33.Pipeline)
 
-					items.InputMsk.Connections = append(items.InputMsk.Connections, connections34)
+					items.InputMsk.Connections = append(items.InputMsk.Connections, connections33)
 				}
 				items.InputMsk.ConnectionTimeout = types.Float64PointerValue(itemsItem.InputMsk.ConnectionTimeout)
 				items.InputMsk.Description = types.StringPointerValue(itemsItem.InputMsk.Description)
@@ -4371,13 +4081,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputMsk.MaxSocketErrors = types.Float64PointerValue(itemsItem.InputMsk.MaxSocketErrors)
 				items.InputMsk.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem38 := range itemsItem.InputMsk.Metadata {
-					var metadata38 tfTypes.ItemsTypeMetadata
+				for _, metadataItem37 := range itemsItem.InputMsk.Metadata {
+					var metadata37 tfTypes.ItemsTypeMetadata
 
-					metadata38.Name = types.StringValue(metadataItem38.Name)
-					metadata38.Value = types.StringValue(metadataItem38.Value)
+					metadata37.Name = types.StringValue(metadataItem37.Name)
+					metadata37.Value = types.StringValue(metadataItem37.Value)
 
-					items.InputMsk.Metadata = append(items.InputMsk.Metadata, metadata38)
+					items.InputMsk.Metadata = append(items.InputMsk.Metadata, metadata37)
 				}
 				items.InputMsk.Pipeline = types.StringPointerValue(itemsItem.InputMsk.Pipeline)
 				if itemsItem.InputMsk.Pq == nil {
@@ -4459,13 +4169,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputNetflow.TemplatePort = types.StringPointerValue(itemsItem.InputNetflow.TemplatePort)
 				items.InputNetflow.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem35 := range itemsItem.InputNetflow.Connections {
-					var connections35 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem34 := range itemsItem.InputNetflow.Connections {
+					var connections34 tfTypes.ItemsTypeConnectionsOptional
 
-					connections35.Output = types.StringPointerValue(connectionsItem35.Output)
-					connections35.Pipeline = types.StringPointerValue(connectionsItem35.Pipeline)
+					connections34.Output = types.StringPointerValue(connectionsItem34.Output)
+					connections34.Pipeline = types.StringPointerValue(connectionsItem34.Pipeline)
 
-					items.InputNetflow.Connections = append(items.InputNetflow.Connections, connections35)
+					items.InputNetflow.Connections = append(items.InputNetflow.Connections, connections34)
 				}
 				items.InputNetflow.Description = types.StringPointerValue(itemsItem.InputNetflow.Description)
 				items.InputNetflow.Disabled = types.BoolPointerValue(itemsItem.InputNetflow.Disabled)
@@ -4478,13 +4188,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputNetflow.IpfixEnabled = types.BoolPointerValue(itemsItem.InputNetflow.IpfixEnabled)
 				items.InputNetflow.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem39 := range itemsItem.InputNetflow.Metadata {
-					var metadata39 tfTypes.ItemsTypeMetadata
+				for _, metadataItem38 := range itemsItem.InputNetflow.Metadata {
+					var metadata38 tfTypes.ItemsTypeMetadata
 
-					metadata39.Name = types.StringValue(metadataItem39.Name)
-					metadata39.Value = types.StringValue(metadataItem39.Value)
+					metadata38.Name = types.StringValue(metadataItem38.Name)
+					metadata38.Value = types.StringValue(metadataItem38.Value)
 
-					items.InputNetflow.Metadata = append(items.InputNetflow.Metadata, metadata39)
+					items.InputNetflow.Metadata = append(items.InputNetflow.Metadata, metadata38)
 				}
 				items.InputNetflow.Pipeline = types.StringPointerValue(itemsItem.InputNetflow.Pipeline)
 				items.InputNetflow.Port = types.Float64Value(itemsItem.InputNetflow.Port)
@@ -4541,13 +4251,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365Mgmt.ClientSecret = types.StringPointerValue(itemsItem.InputOffice365Mgmt.ClientSecret)
 				items.InputOffice365Mgmt.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem36 := range itemsItem.InputOffice365Mgmt.Connections {
-					var connections36 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem35 := range itemsItem.InputOffice365Mgmt.Connections {
+					var connections35 tfTypes.ItemsTypeConnectionsOptional
 
-					connections36.Output = types.StringPointerValue(connectionsItem36.Output)
-					connections36.Pipeline = types.StringPointerValue(connectionsItem36.Pipeline)
+					connections35.Output = types.StringPointerValue(connectionsItem35.Output)
+					connections35.Pipeline = types.StringPointerValue(connectionsItem35.Pipeline)
 
-					items.InputOffice365Mgmt.Connections = append(items.InputOffice365Mgmt.Connections, connections36)
+					items.InputOffice365Mgmt.Connections = append(items.InputOffice365Mgmt.Connections, connections35)
 				}
 				items.InputOffice365Mgmt.ContentConfig = []tfTypes.InputOffice365MgmtContentConfig{}
 
@@ -4577,13 +4287,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365Mgmt.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputOffice365Mgmt.MaxMissedKeepAlives)
 				items.InputOffice365Mgmt.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem40 := range itemsItem.InputOffice365Mgmt.Metadata {
-					var metadata40 tfTypes.ItemsTypeMetadata
+				for _, metadataItem39 := range itemsItem.InputOffice365Mgmt.Metadata {
+					var metadata39 tfTypes.ItemsTypeMetadata
 
-					metadata40.Name = types.StringValue(metadataItem40.Name)
-					metadata40.Value = types.StringValue(metadataItem40.Value)
+					metadata39.Name = types.StringValue(metadataItem39.Name)
+					metadata39.Value = types.StringValue(metadataItem39.Value)
 
-					items.InputOffice365Mgmt.Metadata = append(items.InputOffice365Mgmt.Metadata, metadata40)
+					items.InputOffice365Mgmt.Metadata = append(items.InputOffice365Mgmt.Metadata, metadata39)
 				}
 				items.InputOffice365Mgmt.Pipeline = types.StringPointerValue(itemsItem.InputOffice365Mgmt.Pipeline)
 				items.InputOffice365Mgmt.PlanType = types.StringValue(string(itemsItem.InputOffice365Mgmt.PlanType))
@@ -4666,13 +4376,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365MsgTrace.ClientSecret = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.ClientSecret)
 				items.InputOffice365MsgTrace.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem37 := range itemsItem.InputOffice365MsgTrace.Connections {
-					var connections37 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem36 := range itemsItem.InputOffice365MsgTrace.Connections {
+					var connections36 tfTypes.ItemsTypeConnectionsOptional
 
-					connections37.Output = types.StringPointerValue(connectionsItem37.Output)
-					connections37.Pipeline = types.StringPointerValue(connectionsItem37.Pipeline)
+					connections36.Output = types.StringPointerValue(connectionsItem36.Output)
+					connections36.Pipeline = types.StringPointerValue(connectionsItem36.Pipeline)
 
-					items.InputOffice365MsgTrace.Connections = append(items.InputOffice365MsgTrace.Connections, connections37)
+					items.InputOffice365MsgTrace.Connections = append(items.InputOffice365MsgTrace.Connections, connections36)
 				}
 				items.InputOffice365MsgTrace.CredentialsSecret = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.CredentialsSecret)
 				items.InputOffice365MsgTrace.Description = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.Description)
@@ -4694,13 +4404,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365MsgTrace.MaxTaskReschedule = types.Float64PointerValue(itemsItem.InputOffice365MsgTrace.MaxTaskReschedule)
 				items.InputOffice365MsgTrace.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem41 := range itemsItem.InputOffice365MsgTrace.Metadata {
-					var metadata41 tfTypes.ItemsTypeMetadata
+				for _, metadataItem40 := range itemsItem.InputOffice365MsgTrace.Metadata {
+					var metadata40 tfTypes.ItemsTypeMetadata
 
-					metadata41.Name = types.StringValue(metadataItem41.Name)
-					metadata41.Value = types.StringValue(metadataItem41.Value)
+					metadata40.Name = types.StringValue(metadataItem40.Name)
+					metadata40.Value = types.StringValue(metadataItem40.Value)
 
-					items.InputOffice365MsgTrace.Metadata = append(items.InputOffice365MsgTrace.Metadata, metadata41)
+					items.InputOffice365MsgTrace.Metadata = append(items.InputOffice365MsgTrace.Metadata, metadata40)
 				}
 				items.InputOffice365MsgTrace.Password = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.Password)
 				items.InputOffice365MsgTrace.Pipeline = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.Pipeline)
@@ -4782,13 +4492,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365Service.ClientSecret = types.StringPointerValue(itemsItem.InputOffice365Service.ClientSecret)
 				items.InputOffice365Service.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem38 := range itemsItem.InputOffice365Service.Connections {
-					var connections38 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem37 := range itemsItem.InputOffice365Service.Connections {
+					var connections37 tfTypes.ItemsTypeConnectionsOptional
 
-					connections38.Output = types.StringPointerValue(connectionsItem38.Output)
-					connections38.Pipeline = types.StringPointerValue(connectionsItem38.Pipeline)
+					connections37.Output = types.StringPointerValue(connectionsItem37.Output)
+					connections37.Pipeline = types.StringPointerValue(connectionsItem37.Pipeline)
 
-					items.InputOffice365Service.Connections = append(items.InputOffice365Service.Connections, connections38)
+					items.InputOffice365Service.Connections = append(items.InputOffice365Service.Connections, connections37)
 				}
 				items.InputOffice365Service.ContentConfig = []tfTypes.InputOffice365ServiceContentConfig{}
 
@@ -4817,13 +4527,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOffice365Service.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputOffice365Service.MaxMissedKeepAlives)
 				items.InputOffice365Service.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem42 := range itemsItem.InputOffice365Service.Metadata {
-					var metadata42 tfTypes.ItemsTypeMetadata
+				for _, metadataItem41 := range itemsItem.InputOffice365Service.Metadata {
+					var metadata41 tfTypes.ItemsTypeMetadata
 
-					metadata42.Name = types.StringValue(metadataItem42.Name)
-					metadata42.Value = types.StringValue(metadataItem42.Value)
+					metadata41.Name = types.StringValue(metadataItem41.Name)
+					metadata41.Value = types.StringValue(metadataItem41.Value)
 
-					items.InputOffice365Service.Metadata = append(items.InputOffice365Service.Metadata, metadata42)
+					items.InputOffice365Service.Metadata = append(items.InputOffice365Service.Metadata, metadata41)
 				}
 				items.InputOffice365Service.Pipeline = types.StringPointerValue(itemsItem.InputOffice365Service.Pipeline)
 				if itemsItem.InputOffice365Service.PlanType != nil {
@@ -4898,8 +4608,8 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputOpenTelemetry.AuthHeaderExpr == nil {
 					items.InputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedNull()
 				} else {
-					authHeaderExprResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.AuthHeaderExpr)
-					items.InputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult5))
+					authHeaderExprResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.AuthHeaderExpr)
+					items.InputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
 				}
 				if itemsItem.InputOpenTelemetry.AuthType != nil {
 					items.InputOpenTelemetry.AuthType = types.StringValue(string(*itemsItem.InputOpenTelemetry.AuthType))
@@ -4914,13 +4624,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputOpenTelemetry.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem39 := range itemsItem.InputOpenTelemetry.Connections {
-					var connections39 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem38 := range itemsItem.InputOpenTelemetry.Connections {
+					var connections38 tfTypes.ItemsTypeConnectionsOptional
 
-					connections39.Output = types.StringPointerValue(connectionsItem39.Output)
-					connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
+					connections38.Output = types.StringPointerValue(connectionsItem38.Output)
+					connections38.Pipeline = types.StringPointerValue(connectionsItem38.Pipeline)
 
-					items.InputOpenTelemetry.Connections = append(items.InputOpenTelemetry.Connections, connections39)
+					items.InputOpenTelemetry.Connections = append(items.InputOpenTelemetry.Connections, connections38)
 				}
 				items.InputOpenTelemetry.CredentialsSecret = types.StringPointerValue(itemsItem.InputOpenTelemetry.CredentialsSecret)
 				items.InputOpenTelemetry.Description = types.StringPointerValue(itemsItem.InputOpenTelemetry.Description)
@@ -4944,61 +4654,61 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputOpenTelemetry.LoginURL == nil {
 					items.InputOpenTelemetry.LoginURL = jsontypes.NewNormalizedNull()
 				} else {
-					loginURLResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.LoginURL)
-					items.InputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult5))
+					loginURLResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.LoginURL)
+					items.InputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
 				}
 				items.InputOpenTelemetry.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputOpenTelemetry.MaxActiveCxn)
 				items.InputOpenTelemetry.MaxActiveReq = types.Float64PointerValue(itemsItem.InputOpenTelemetry.MaxActiveReq)
 				items.InputOpenTelemetry.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputOpenTelemetry.MaxRequestsPerSocket)
 				items.InputOpenTelemetry.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem43 := range itemsItem.InputOpenTelemetry.Metadata {
-					var metadata43 tfTypes.ItemsTypeMetadata
+				for _, metadataItem42 := range itemsItem.InputOpenTelemetry.Metadata {
+					var metadata42 tfTypes.ItemsTypeMetadata
 
-					metadata43.Name = types.StringValue(metadataItem43.Name)
-					metadata43.Value = types.StringValue(metadataItem43.Value)
+					metadata42.Name = types.StringValue(metadataItem42.Name)
+					metadata42.Value = types.StringValue(metadataItem42.Value)
 
-					items.InputOpenTelemetry.Metadata = append(items.InputOpenTelemetry.Metadata, metadata43)
+					items.InputOpenTelemetry.Metadata = append(items.InputOpenTelemetry.Metadata, metadata42)
 				}
 				items.InputOpenTelemetry.OauthHeaders = []tfTypes.InputOpenTelemetryOauthHeader{}
 
-				for _, oauthHeadersItem5 := range itemsItem.InputOpenTelemetry.OauthHeaders {
-					var oauthHeaders5 tfTypes.InputOpenTelemetryOauthHeader
+				for _, oauthHeadersItem3 := range itemsItem.InputOpenTelemetry.OauthHeaders {
+					var oauthHeaders3 tfTypes.InputOpenTelemetryOauthHeader
 
-					if oauthHeadersItem5.Name == nil {
-						oauthHeaders5.Name = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem3.Name == nil {
+						oauthHeaders3.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult10, _ := json.Marshal(oauthHeadersItem5.Name)
-						oauthHeaders5.Name = jsontypes.NewNormalizedValue(string(nameResult10))
+						nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
+						oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
 					}
-					if oauthHeadersItem5.Value == nil {
-						oauthHeaders5.Value = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem3.Value == nil {
+						oauthHeaders3.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult10, _ := json.Marshal(oauthHeadersItem5.Value)
-						oauthHeaders5.Value = jsontypes.NewNormalizedValue(string(valueResult10))
+						valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
+						oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
 					}
 
-					items.InputOpenTelemetry.OauthHeaders = append(items.InputOpenTelemetry.OauthHeaders, oauthHeaders5)
+					items.InputOpenTelemetry.OauthHeaders = append(items.InputOpenTelemetry.OauthHeaders, oauthHeaders3)
 				}
 				items.InputOpenTelemetry.OauthParams = []tfTypes.InputOpenTelemetryOauthParam{}
 
-				for _, oauthParamsItem7 := range itemsItem.InputOpenTelemetry.OauthParams {
-					var oauthParams7 tfTypes.InputOpenTelemetryOauthParam
+				for _, oauthParamsItem5 := range itemsItem.InputOpenTelemetry.OauthParams {
+					var oauthParams5 tfTypes.InputOpenTelemetryOauthParam
 
-					if oauthParamsItem7.Name == nil {
-						oauthParams7.Name = jsontypes.NewNormalizedNull()
+					if oauthParamsItem5.Name == nil {
+						oauthParams5.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult11, _ := json.Marshal(oauthParamsItem7.Name)
-						oauthParams7.Name = jsontypes.NewNormalizedValue(string(nameResult11))
+						nameResult7, _ := json.Marshal(oauthParamsItem5.Name)
+						oauthParams5.Name = jsontypes.NewNormalizedValue(string(nameResult7))
 					}
-					if oauthParamsItem7.Value == nil {
-						oauthParams7.Value = jsontypes.NewNormalizedNull()
+					if oauthParamsItem5.Value == nil {
+						oauthParams5.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult11, _ := json.Marshal(oauthParamsItem7.Value)
-						oauthParams7.Value = jsontypes.NewNormalizedValue(string(valueResult11))
+						valueResult7, _ := json.Marshal(oauthParamsItem5.Value)
+						oauthParams5.Value = jsontypes.NewNormalizedValue(string(valueResult7))
 					}
 
-					items.InputOpenTelemetry.OauthParams = append(items.InputOpenTelemetry.OauthParams, oauthParams7)
+					items.InputOpenTelemetry.OauthParams = append(items.InputOpenTelemetry.OauthParams, oauthParams5)
 				}
 				if itemsItem.InputOpenTelemetry.OtlpVersion != nil {
 					items.InputOpenTelemetry.OtlpVersion = types.StringValue(string(*itemsItem.InputOpenTelemetry.OtlpVersion))
@@ -5044,14 +4754,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputOpenTelemetry.Secret == nil {
 					items.InputOpenTelemetry.Secret = jsontypes.NewNormalizedNull()
 				} else {
-					secretResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.Secret)
-					items.InputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult5))
+					secretResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.Secret)
+					items.InputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
 				}
 				if itemsItem.InputOpenTelemetry.SecretParamName == nil {
 					items.InputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedNull()
 				} else {
-					secretParamNameResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.SecretParamName)
-					items.InputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult5))
+					secretParamNameResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.SecretParamName)
+					items.InputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
 				}
 				items.InputOpenTelemetry.SendToRoutes = types.BoolPointerValue(itemsItem.InputOpenTelemetry.SendToRoutes)
 				items.InputOpenTelemetry.SocketTimeout = types.Float64PointerValue(itemsItem.InputOpenTelemetry.SocketTimeout)
@@ -5088,14 +4798,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputOpenTelemetry.TokenAttributeName == nil {
 					items.InputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedNull()
 				} else {
-					tokenAttributeNameResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.TokenAttributeName)
-					items.InputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult5))
+					tokenAttributeNameResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.TokenAttributeName)
+					items.InputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
 				}
 				if itemsItem.InputOpenTelemetry.TokenTimeoutSecs == nil {
 					items.InputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
 				} else {
-					tokenTimeoutSecsResult5, _ := json.Marshal(itemsItem.InputOpenTelemetry.TokenTimeoutSecs)
-					items.InputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult5))
+					tokenTimeoutSecsResult3, _ := json.Marshal(itemsItem.InputOpenTelemetry.TokenTimeoutSecs)
+					items.InputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
 				}
 				items.InputOpenTelemetry.Type = types.StringValue(string(itemsItem.InputOpenTelemetry.Type))
 				items.InputOpenTelemetry.Username = types.StringPointerValue(itemsItem.InputOpenTelemetry.Username)
@@ -5107,13 +4817,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOpenai.APIKey = types.StringPointerValue(itemsItem.InputOpenai.APIKey)
 				items.InputOpenai.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem40 := range itemsItem.InputOpenai.Connections {
-					var connections40 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem39 := range itemsItem.InputOpenai.Connections {
+					var connections39 tfTypes.ItemsTypeConnectionsOptional
 
-					connections40.Output = types.StringPointerValue(connectionsItem40.Output)
-					connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
+					connections39.Output = types.StringPointerValue(connectionsItem39.Output)
+					connections39.Pipeline = types.StringPointerValue(connectionsItem39.Pipeline)
 
-					items.InputOpenai.Connections = append(items.InputOpenai.Connections, connections40)
+					items.InputOpenai.Connections = append(items.InputOpenai.Connections, connections39)
 				}
 				items.InputOpenai.ContentConfig = []tfTypes.InputOpenaiContentConfig{}
 
@@ -5183,13 +4893,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputOpenai.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputOpenai.MaxMissedKeepAlives)
 				items.InputOpenai.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem44 := range itemsItem.InputOpenai.Metadata {
-					var metadata44 tfTypes.ItemsTypeMetadata
+				for _, metadataItem43 := range itemsItem.InputOpenai.Metadata {
+					var metadata43 tfTypes.ItemsTypeMetadata
 
-					metadata44.Name = types.StringValue(metadataItem44.Name)
-					metadata44.Value = types.StringValue(metadataItem44.Value)
+					metadata43.Name = types.StringValue(metadataItem43.Name)
+					metadata43.Value = types.StringValue(metadataItem43.Value)
 
-					items.InputOpenai.Metadata = append(items.InputOpenai.Metadata, metadata44)
+					items.InputOpenai.Metadata = append(items.InputOpenai.Metadata, metadata43)
 				}
 				items.InputOpenai.OpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.OpenaiOrganization)
 				items.InputOpenai.OpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.OpenaiProject)
@@ -5275,13 +4985,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputPrometheus.AwsSecretKey = types.StringPointerValue(itemsItem.InputPrometheus.AwsSecretKey)
 				items.InputPrometheus.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem41 := range itemsItem.InputPrometheus.Connections {
-					var connections41 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem40 := range itemsItem.InputPrometheus.Connections {
+					var connections40 tfTypes.ItemsTypeConnectionsOptional
 
-					connections41.Output = types.StringPointerValue(connectionsItem41.Output)
-					connections41.Pipeline = types.StringPointerValue(connectionsItem41.Pipeline)
+					connections40.Output = types.StringPointerValue(connectionsItem40.Output)
+					connections40.Pipeline = types.StringPointerValue(connectionsItem40.Pipeline)
 
-					items.InputPrometheus.Connections = append(items.InputPrometheus.Connections, connections41)
+					items.InputPrometheus.Connections = append(items.InputPrometheus.Connections, connections40)
 				}
 				items.InputPrometheus.CredentialsSecret = types.StringPointerValue(itemsItem.InputPrometheus.CredentialsSecret)
 				items.InputPrometheus.Description = types.StringPointerValue(itemsItem.InputPrometheus.Description)
@@ -5308,13 +5018,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputPrometheus.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputPrometheus.MaxMissedKeepAlives)
 				items.InputPrometheus.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem45 := range itemsItem.InputPrometheus.Metadata {
-					var metadata45 tfTypes.ItemsTypeMetadata
+				for _, metadataItem44 := range itemsItem.InputPrometheus.Metadata {
+					var metadata44 tfTypes.ItemsTypeMetadata
 
-					metadata45.Name = types.StringValue(metadataItem45.Name)
-					metadata45.Value = types.StringValue(metadataItem45.Value)
+					metadata44.Name = types.StringValue(metadataItem44.Name)
+					metadata44.Value = types.StringValue(metadataItem44.Value)
 
-					items.InputPrometheus.Metadata = append(items.InputPrometheus.Metadata, metadata45)
+					items.InputPrometheus.Metadata = append(items.InputPrometheus.Metadata, metadata44)
 				}
 				items.InputPrometheus.NameList = make([]types.String, 0, len(itemsItem.InputPrometheus.NameList))
 				for _, v := range itemsItem.InputPrometheus.NameList {
@@ -5407,8 +5117,8 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputPrometheusRw.AuthHeaderExpr == nil {
 					items.InputPrometheusRw.AuthHeaderExpr = jsontypes.NewNormalizedNull()
 				} else {
-					authHeaderExprResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.AuthHeaderExpr)
-					items.InputPrometheusRw.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult6))
+					authHeaderExprResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.AuthHeaderExpr)
+					items.InputPrometheusRw.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult4))
 				}
 				if itemsItem.InputPrometheusRw.AuthType != nil {
 					items.InputPrometheusRw.AuthType = types.StringValue(string(*itemsItem.InputPrometheusRw.AuthType))
@@ -5418,13 +5128,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputPrometheusRw.CaptureHeaders = types.BoolPointerValue(itemsItem.InputPrometheusRw.CaptureHeaders)
 				items.InputPrometheusRw.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem42 := range itemsItem.InputPrometheusRw.Connections {
-					var connections42 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem41 := range itemsItem.InputPrometheusRw.Connections {
+					var connections41 tfTypes.ItemsTypeConnectionsOptional
 
-					connections42.Output = types.StringPointerValue(connectionsItem42.Output)
-					connections42.Pipeline = types.StringPointerValue(connectionsItem42.Pipeline)
+					connections41.Output = types.StringPointerValue(connectionsItem41.Output)
+					connections41.Pipeline = types.StringPointerValue(connectionsItem41.Pipeline)
 
-					items.InputPrometheusRw.Connections = append(items.InputPrometheusRw.Connections, connections42)
+					items.InputPrometheusRw.Connections = append(items.InputPrometheusRw.Connections, connections41)
 				}
 				items.InputPrometheusRw.CredentialsSecret = types.StringPointerValue(itemsItem.InputPrometheusRw.CredentialsSecret)
 				items.InputPrometheusRw.Description = types.StringPointerValue(itemsItem.InputPrometheusRw.Description)
@@ -5440,60 +5150,60 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputPrometheusRw.LoginURL == nil {
 					items.InputPrometheusRw.LoginURL = jsontypes.NewNormalizedNull()
 				} else {
-					loginURLResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.LoginURL)
-					items.InputPrometheusRw.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult6))
+					loginURLResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.LoginURL)
+					items.InputPrometheusRw.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult4))
 				}
 				items.InputPrometheusRw.MaxActiveReq = types.Float64PointerValue(itemsItem.InputPrometheusRw.MaxActiveReq)
 				items.InputPrometheusRw.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputPrometheusRw.MaxRequestsPerSocket)
 				items.InputPrometheusRw.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem46 := range itemsItem.InputPrometheusRw.Metadata {
-					var metadata46 tfTypes.ItemsTypeMetadata
+				for _, metadataItem45 := range itemsItem.InputPrometheusRw.Metadata {
+					var metadata45 tfTypes.ItemsTypeMetadata
 
-					metadata46.Name = types.StringValue(metadataItem46.Name)
-					metadata46.Value = types.StringValue(metadataItem46.Value)
+					metadata45.Name = types.StringValue(metadataItem45.Name)
+					metadata45.Value = types.StringValue(metadataItem45.Value)
 
-					items.InputPrometheusRw.Metadata = append(items.InputPrometheusRw.Metadata, metadata46)
+					items.InputPrometheusRw.Metadata = append(items.InputPrometheusRw.Metadata, metadata45)
 				}
 				items.InputPrometheusRw.OauthHeaders = []tfTypes.InputPrometheusRwOauthHeader{}
 
-				for _, oauthHeadersItem6 := range itemsItem.InputPrometheusRw.OauthHeaders {
-					var oauthHeaders6 tfTypes.InputPrometheusRwOauthHeader
+				for _, oauthHeadersItem4 := range itemsItem.InputPrometheusRw.OauthHeaders {
+					var oauthHeaders4 tfTypes.InputPrometheusRwOauthHeader
 
-					if oauthHeadersItem6.Name == nil {
-						oauthHeaders6.Name = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem4.Name == nil {
+						oauthHeaders4.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult12, _ := json.Marshal(oauthHeadersItem6.Name)
-						oauthHeaders6.Name = jsontypes.NewNormalizedValue(string(nameResult12))
+						nameResult8, _ := json.Marshal(oauthHeadersItem4.Name)
+						oauthHeaders4.Name = jsontypes.NewNormalizedValue(string(nameResult8))
 					}
-					if oauthHeadersItem6.Value == nil {
-						oauthHeaders6.Value = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem4.Value == nil {
+						oauthHeaders4.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult12, _ := json.Marshal(oauthHeadersItem6.Value)
-						oauthHeaders6.Value = jsontypes.NewNormalizedValue(string(valueResult12))
+						valueResult8, _ := json.Marshal(oauthHeadersItem4.Value)
+						oauthHeaders4.Value = jsontypes.NewNormalizedValue(string(valueResult8))
 					}
 
-					items.InputPrometheusRw.OauthHeaders = append(items.InputPrometheusRw.OauthHeaders, oauthHeaders6)
+					items.InputPrometheusRw.OauthHeaders = append(items.InputPrometheusRw.OauthHeaders, oauthHeaders4)
 				}
 				items.InputPrometheusRw.OauthParams = []tfTypes.InputPrometheusRwOauthParam{}
 
-				for _, oauthParamsItem8 := range itemsItem.InputPrometheusRw.OauthParams {
-					var oauthParams8 tfTypes.InputPrometheusRwOauthParam
+				for _, oauthParamsItem6 := range itemsItem.InputPrometheusRw.OauthParams {
+					var oauthParams6 tfTypes.InputPrometheusRwOauthParam
 
-					if oauthParamsItem8.Name == nil {
-						oauthParams8.Name = jsontypes.NewNormalizedNull()
+					if oauthParamsItem6.Name == nil {
+						oauthParams6.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult13, _ := json.Marshal(oauthParamsItem8.Name)
-						oauthParams8.Name = jsontypes.NewNormalizedValue(string(nameResult13))
+						nameResult9, _ := json.Marshal(oauthParamsItem6.Name)
+						oauthParams6.Name = jsontypes.NewNormalizedValue(string(nameResult9))
 					}
-					if oauthParamsItem8.Value == nil {
-						oauthParams8.Value = jsontypes.NewNormalizedNull()
+					if oauthParamsItem6.Value == nil {
+						oauthParams6.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult13, _ := json.Marshal(oauthParamsItem8.Value)
-						oauthParams8.Value = jsontypes.NewNormalizedValue(string(valueResult13))
+						valueResult9, _ := json.Marshal(oauthParamsItem6.Value)
+						oauthParams6.Value = jsontypes.NewNormalizedValue(string(valueResult9))
 					}
 
-					items.InputPrometheusRw.OauthParams = append(items.InputPrometheusRw.OauthParams, oauthParams8)
+					items.InputPrometheusRw.OauthParams = append(items.InputPrometheusRw.OauthParams, oauthParams6)
 				}
 				items.InputPrometheusRw.Password = types.StringPointerValue(itemsItem.InputPrometheusRw.Password)
 				items.InputPrometheusRw.Pipeline = types.StringPointerValue(itemsItem.InputPrometheusRw.Pipeline)
@@ -5530,14 +5240,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputPrometheusRw.Secret == nil {
 					items.InputPrometheusRw.Secret = jsontypes.NewNormalizedNull()
 				} else {
-					secretResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.Secret)
-					items.InputPrometheusRw.Secret = jsontypes.NewNormalizedValue(string(secretResult6))
+					secretResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.Secret)
+					items.InputPrometheusRw.Secret = jsontypes.NewNormalizedValue(string(secretResult4))
 				}
 				if itemsItem.InputPrometheusRw.SecretParamName == nil {
 					items.InputPrometheusRw.SecretParamName = jsontypes.NewNormalizedNull()
 				} else {
-					secretParamNameResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.SecretParamName)
-					items.InputPrometheusRw.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult6))
+					secretParamNameResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.SecretParamName)
+					items.InputPrometheusRw.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult4))
 				}
 				items.InputPrometheusRw.SendToRoutes = types.BoolPointerValue(itemsItem.InputPrometheusRw.SendToRoutes)
 				items.InputPrometheusRw.SocketTimeout = types.Float64PointerValue(itemsItem.InputPrometheusRw.SocketTimeout)
@@ -5574,14 +5284,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputPrometheusRw.TokenAttributeName == nil {
 					items.InputPrometheusRw.TokenAttributeName = jsontypes.NewNormalizedNull()
 				} else {
-					tokenAttributeNameResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.TokenAttributeName)
-					items.InputPrometheusRw.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult6))
+					tokenAttributeNameResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.TokenAttributeName)
+					items.InputPrometheusRw.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult4))
 				}
 				if itemsItem.InputPrometheusRw.TokenTimeoutSecs == nil {
 					items.InputPrometheusRw.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
 				} else {
-					tokenTimeoutSecsResult6, _ := json.Marshal(itemsItem.InputPrometheusRw.TokenTimeoutSecs)
-					items.InputPrometheusRw.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult6))
+					tokenTimeoutSecsResult4, _ := json.Marshal(itemsItem.InputPrometheusRw.TokenTimeoutSecs)
+					items.InputPrometheusRw.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult4))
 				}
 				items.InputPrometheusRw.Type = types.StringValue(string(itemsItem.InputPrometheusRw.Type))
 				items.InputPrometheusRw.Username = types.StringPointerValue(itemsItem.InputPrometheusRw.Username)
@@ -5592,13 +5302,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputRawUDP.TemplatePort = types.StringPointerValue(itemsItem.InputRawUDP.TemplatePort)
 				items.InputRawUDP.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem43 := range itemsItem.InputRawUDP.Connections {
-					var connections43 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem42 := range itemsItem.InputRawUDP.Connections {
+					var connections42 tfTypes.ItemsTypeConnectionsOptional
 
-					connections43.Output = types.StringPointerValue(connectionsItem43.Output)
-					connections43.Pipeline = types.StringPointerValue(connectionsItem43.Pipeline)
+					connections42.Output = types.StringPointerValue(connectionsItem42.Output)
+					connections42.Pipeline = types.StringPointerValue(connectionsItem42.Pipeline)
 
-					items.InputRawUDP.Connections = append(items.InputRawUDP.Connections, connections43)
+					items.InputRawUDP.Connections = append(items.InputRawUDP.Connections, connections42)
 				}
 				items.InputRawUDP.Description = types.StringPointerValue(itemsItem.InputRawUDP.Description)
 				items.InputRawUDP.Disabled = types.BoolPointerValue(itemsItem.InputRawUDP.Disabled)
@@ -5610,13 +5320,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputRawUDP.MaxBufferSize = types.Float64PointerValue(itemsItem.InputRawUDP.MaxBufferSize)
 				items.InputRawUDP.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem47 := range itemsItem.InputRawUDP.Metadata {
-					var metadata47 tfTypes.ItemsTypeMetadata
+				for _, metadataItem46 := range itemsItem.InputRawUDP.Metadata {
+					var metadata46 tfTypes.ItemsTypeMetadata
 
-					metadata47.Name = types.StringValue(metadataItem47.Name)
-					metadata47.Value = types.StringValue(metadataItem47.Value)
+					metadata46.Name = types.StringValue(metadataItem46.Name)
+					metadata46.Value = types.StringValue(metadataItem46.Value)
 
-					items.InputRawUDP.Metadata = append(items.InputRawUDP.Metadata, metadata47)
+					items.InputRawUDP.Metadata = append(items.InputRawUDP.Metadata, metadata46)
 				}
 				items.InputRawUDP.Pipeline = types.StringPointerValue(itemsItem.InputRawUDP.Pipeline)
 				items.InputRawUDP.Port = types.Float64Value(itemsItem.InputRawUDP.Port)
@@ -5689,13 +5399,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputS3.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem44 := range itemsItem.InputS3.Connections {
-					var connections44 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem43 := range itemsItem.InputS3.Connections {
+					var connections43 tfTypes.ItemsTypeConnectionsOptional
 
-					connections44.Output = types.StringPointerValue(connectionsItem44.Output)
-					connections44.Pipeline = types.StringPointerValue(connectionsItem44.Pipeline)
+					connections43.Output = types.StringPointerValue(connectionsItem43.Output)
+					connections43.Pipeline = types.StringPointerValue(connectionsItem43.Pipeline)
 
-					items.InputS3.Connections = append(items.InputS3.Connections, connections44)
+					items.InputS3.Connections = append(items.InputS3.Connections, connections43)
 				}
 				items.InputS3.Description = types.StringPointerValue(itemsItem.InputS3.Description)
 				items.InputS3.Disabled = types.BoolPointerValue(itemsItem.InputS3.Disabled)
@@ -5711,13 +5421,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputS3.MaxMessages = types.Float64PointerValue(itemsItem.InputS3.MaxMessages)
 				items.InputS3.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem48 := range itemsItem.InputS3.Metadata {
-					var metadata48 tfTypes.ItemsTypeMetadata
+				for _, metadataItem47 := range itemsItem.InputS3.Metadata {
+					var metadata47 tfTypes.ItemsTypeMetadata
 
-					metadata48.Name = types.StringValue(metadataItem48.Name)
-					metadata48.Value = types.StringValue(metadataItem48.Value)
+					metadata47.Name = types.StringValue(metadataItem47.Name)
+					metadata47.Value = types.StringValue(metadataItem47.Value)
 
-					items.InputS3.Metadata = append(items.InputS3.Metadata, metadata48)
+					items.InputS3.Metadata = append(items.InputS3.Metadata, metadata47)
 				}
 				items.InputS3.NumReceivers = types.Float64PointerValue(itemsItem.InputS3.NumReceivers)
 				items.InputS3.ParquetChunkDownloadTimeout = types.Float64PointerValue(itemsItem.InputS3.ParquetChunkDownloadTimeout)
@@ -5819,13 +5529,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputS3Inventory.ChecksumSuffix = types.StringPointerValue(itemsItem.InputS3Inventory.ChecksumSuffix)
 				items.InputS3Inventory.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem45 := range itemsItem.InputS3Inventory.Connections {
-					var connections45 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem44 := range itemsItem.InputS3Inventory.Connections {
+					var connections44 tfTypes.ItemsTypeConnectionsOptional
 
-					connections45.Output = types.StringPointerValue(connectionsItem45.Output)
-					connections45.Pipeline = types.StringPointerValue(connectionsItem45.Pipeline)
+					connections44.Output = types.StringPointerValue(connectionsItem44.Output)
+					connections44.Pipeline = types.StringPointerValue(connectionsItem44.Pipeline)
 
-					items.InputS3Inventory.Connections = append(items.InputS3Inventory.Connections, connections45)
+					items.InputS3Inventory.Connections = append(items.InputS3Inventory.Connections, connections44)
 				}
 				items.InputS3Inventory.Description = types.StringPointerValue(itemsItem.InputS3Inventory.Description)
 				items.InputS3Inventory.Disabled = types.BoolPointerValue(itemsItem.InputS3Inventory.Disabled)
@@ -5841,13 +5551,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputS3Inventory.MaxMessages = types.Float64PointerValue(itemsItem.InputS3Inventory.MaxMessages)
 				items.InputS3Inventory.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem49 := range itemsItem.InputS3Inventory.Metadata {
-					var metadata49 tfTypes.ItemsTypeMetadata
+				for _, metadataItem48 := range itemsItem.InputS3Inventory.Metadata {
+					var metadata48 tfTypes.ItemsTypeMetadata
 
-					metadata49.Name = types.StringValue(metadataItem49.Name)
-					metadata49.Value = types.StringValue(metadataItem49.Value)
+					metadata48.Name = types.StringValue(metadataItem48.Name)
+					metadata48.Value = types.StringValue(metadataItem48.Value)
 
-					items.InputS3Inventory.Metadata = append(items.InputS3Inventory.Metadata, metadata49)
+					items.InputS3Inventory.Metadata = append(items.InputS3Inventory.Metadata, metadata48)
 				}
 				items.InputS3Inventory.NumReceivers = types.Float64PointerValue(itemsItem.InputS3Inventory.NumReceivers)
 				items.InputS3Inventory.ParquetChunkDownloadTimeout = types.Float64PointerValue(itemsItem.InputS3Inventory.ParquetChunkDownloadTimeout)
@@ -5953,13 +5663,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputSecurityLake.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem46 := range itemsItem.InputSecurityLake.Connections {
-					var connections46 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem45 := range itemsItem.InputSecurityLake.Connections {
+					var connections45 tfTypes.ItemsTypeConnectionsOptional
 
-					connections46.Output = types.StringPointerValue(connectionsItem46.Output)
-					connections46.Pipeline = types.StringPointerValue(connectionsItem46.Pipeline)
+					connections45.Output = types.StringPointerValue(connectionsItem45.Output)
+					connections45.Pipeline = types.StringPointerValue(connectionsItem45.Pipeline)
 
-					items.InputSecurityLake.Connections = append(items.InputSecurityLake.Connections, connections46)
+					items.InputSecurityLake.Connections = append(items.InputSecurityLake.Connections, connections45)
 				}
 				items.InputSecurityLake.Description = types.StringPointerValue(itemsItem.InputSecurityLake.Description)
 				items.InputSecurityLake.Disabled = types.BoolPointerValue(itemsItem.InputSecurityLake.Disabled)
@@ -5975,13 +5685,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSecurityLake.MaxMessages = types.Float64PointerValue(itemsItem.InputSecurityLake.MaxMessages)
 				items.InputSecurityLake.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem50 := range itemsItem.InputSecurityLake.Metadata {
-					var metadata50 tfTypes.ItemsTypeMetadata
+				for _, metadataItem49 := range itemsItem.InputSecurityLake.Metadata {
+					var metadata49 tfTypes.ItemsTypeMetadata
 
-					metadata50.Name = types.StringValue(metadataItem50.Name)
-					metadata50.Value = types.StringValue(metadataItem50.Value)
+					metadata49.Name = types.StringValue(metadataItem49.Name)
+					metadata49.Value = types.StringValue(metadataItem49.Value)
 
-					items.InputSecurityLake.Metadata = append(items.InputSecurityLake.Metadata, metadata50)
+					items.InputSecurityLake.Metadata = append(items.InputSecurityLake.Metadata, metadata49)
 				}
 				items.InputSecurityLake.NumReceivers = types.Float64PointerValue(itemsItem.InputSecurityLake.NumReceivers)
 				items.InputSecurityLake.ParquetChunkDownloadTimeout = types.Float64PointerValue(itemsItem.InputSecurityLake.ParquetChunkDownloadTimeout)
@@ -6060,13 +5770,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSnmp.BestEffortParsing = types.BoolPointerValue(itemsItem.InputSnmp.BestEffortParsing)
 				items.InputSnmp.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem47 := range itemsItem.InputSnmp.Connections {
-					var connections47 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem46 := range itemsItem.InputSnmp.Connections {
+					var connections46 tfTypes.ItemsTypeConnectionsOptional
 
-					connections47.Output = types.StringPointerValue(connectionsItem47.Output)
-					connections47.Pipeline = types.StringPointerValue(connectionsItem47.Pipeline)
+					connections46.Output = types.StringPointerValue(connectionsItem46.Output)
+					connections46.Pipeline = types.StringPointerValue(connectionsItem46.Pipeline)
 
-					items.InputSnmp.Connections = append(items.InputSnmp.Connections, connections47)
+					items.InputSnmp.Connections = append(items.InputSnmp.Connections, connections46)
 				}
 				items.InputSnmp.Description = types.StringPointerValue(itemsItem.InputSnmp.Description)
 				items.InputSnmp.Disabled = types.BoolPointerValue(itemsItem.InputSnmp.Disabled)
@@ -6077,13 +5787,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSnmp.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSnmp.MaxBufferSize)
 				items.InputSnmp.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem51 := range itemsItem.InputSnmp.Metadata {
-					var metadata51 tfTypes.ItemsTypeMetadata
+				for _, metadataItem50 := range itemsItem.InputSnmp.Metadata {
+					var metadata50 tfTypes.ItemsTypeMetadata
 
-					metadata51.Name = types.StringValue(metadataItem51.Name)
-					metadata51.Value = types.StringValue(metadataItem51.Value)
+					metadata50.Name = types.StringValue(metadataItem50.Name)
+					metadata50.Value = types.StringValue(metadataItem50.Value)
 
-					items.InputSnmp.Metadata = append(items.InputSnmp.Metadata, metadata51)
+					items.InputSnmp.Metadata = append(items.InputSnmp.Metadata, metadata50)
 				}
 				items.InputSnmp.Pipeline = types.StringPointerValue(itemsItem.InputSnmp.Pipeline)
 				items.InputSnmp.Port = types.Float64Value(itemsItem.InputSnmp.Port)
@@ -6176,13 +5886,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputSplunk.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem48 := range itemsItem.InputSplunk.Connections {
-					var connections48 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem47 := range itemsItem.InputSplunk.Connections {
+					var connections47 tfTypes.ItemsTypeConnectionsOptional
 
-					connections48.Output = types.StringPointerValue(connectionsItem48.Output)
-					connections48.Pipeline = types.StringPointerValue(connectionsItem48.Pipeline)
+					connections47.Output = types.StringPointerValue(connectionsItem47.Output)
+					connections47.Pipeline = types.StringPointerValue(connectionsItem47.Pipeline)
 
-					items.InputSplunk.Connections = append(items.InputSplunk.Connections, connections48)
+					items.InputSplunk.Connections = append(items.InputSplunk.Connections, connections47)
 				}
 				items.InputSplunk.Description = types.StringPointerValue(itemsItem.InputSplunk.Description)
 				items.InputSplunk.Disabled = types.BoolPointerValue(itemsItem.InputSplunk.Disabled)
@@ -6201,13 +5911,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputSplunk.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem52 := range itemsItem.InputSplunk.Metadata {
-					var metadata52 tfTypes.ItemsTypeMetadata
+				for _, metadataItem51 := range itemsItem.InputSplunk.Metadata {
+					var metadata51 tfTypes.ItemsTypeMetadata
 
-					metadata52.Name = types.StringValue(metadataItem52.Name)
-					metadata52.Value = types.StringValue(metadataItem52.Value)
+					metadata51.Name = types.StringValue(metadataItem51.Name)
+					metadata51.Value = types.StringValue(metadataItem51.Value)
 
-					items.InputSplunk.Metadata = append(items.InputSplunk.Metadata, metadata52)
+					items.InputSplunk.Metadata = append(items.InputSplunk.Metadata, metadata51)
 				}
 				items.InputSplunk.Pipeline = types.StringPointerValue(itemsItem.InputSplunk.Pipeline)
 				items.InputSplunk.Port = types.Float64Value(itemsItem.InputSplunk.Port)
@@ -6310,13 +6020,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					authTokens4.Enabled = types.BoolPointerValue(authTokensItem4.Enabled)
 					authTokens4.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem53 := range authTokensItem4.Metadata {
-						var metadata53 tfTypes.ItemsTypeMetadata
+					for _, metadataItem52 := range authTokensItem4.Metadata {
+						var metadata52 tfTypes.ItemsTypeMetadata
 
-						metadata53.Name = types.StringValue(metadataItem53.Name)
-						metadata53.Value = types.StringValue(metadataItem53.Value)
+						metadata52.Name = types.StringValue(metadataItem52.Name)
+						metadata52.Value = types.StringValue(metadataItem52.Value)
 
-						authTokens4.Metadata = append(authTokens4.Metadata, metadata53)
+						authTokens4.Metadata = append(authTokens4.Metadata, metadata52)
 					}
 					authTokens4.Token = types.StringValue(authTokensItem4.Token)
 					authTokens4.TokenSecret = types.StringPointerValue(authTokensItem4.TokenSecret)
@@ -6330,13 +6040,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSplunkHec.CaptureHeaders = types.BoolPointerValue(itemsItem.InputSplunkHec.CaptureHeaders)
 				items.InputSplunkHec.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem49 := range itemsItem.InputSplunkHec.Connections {
-					var connections49 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem48 := range itemsItem.InputSplunkHec.Connections {
+					var connections48 tfTypes.ItemsTypeConnectionsOptional
 
-					connections49.Output = types.StringPointerValue(connectionsItem49.Output)
-					connections49.Pipeline = types.StringPointerValue(connectionsItem49.Pipeline)
+					connections48.Output = types.StringPointerValue(connectionsItem48.Output)
+					connections48.Pipeline = types.StringPointerValue(connectionsItem48.Pipeline)
 
-					items.InputSplunkHec.Connections = append(items.InputSplunkHec.Connections, connections49)
+					items.InputSplunkHec.Connections = append(items.InputSplunkHec.Connections, connections48)
 				}
 				items.InputSplunkHec.Description = types.StringPointerValue(itemsItem.InputSplunkHec.Description)
 				items.InputSplunkHec.Disabled = types.BoolPointerValue(itemsItem.InputSplunkHec.Disabled)
@@ -6360,13 +6070,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSplunkHec.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputSplunkHec.MaxRequestsPerSocket)
 				items.InputSplunkHec.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem54 := range itemsItem.InputSplunkHec.Metadata {
-					var metadata54 tfTypes.ItemsTypeMetadata
+				for _, metadataItem53 := range itemsItem.InputSplunkHec.Metadata {
+					var metadata53 tfTypes.ItemsTypeMetadata
 
-					metadata54.Name = types.StringValue(metadataItem54.Name)
-					metadata54.Value = types.StringValue(metadataItem54.Value)
+					metadata53.Name = types.StringValue(metadataItem53.Name)
+					metadata53.Value = types.StringValue(metadataItem53.Value)
 
-					items.InputSplunkHec.Metadata = append(items.InputSplunkHec.Metadata, metadata54)
+					items.InputSplunkHec.Metadata = append(items.InputSplunkHec.Metadata, metadata53)
 				}
 				items.InputSplunkHec.Pipeline = types.StringPointerValue(itemsItem.InputSplunkHec.Pipeline)
 				items.InputSplunkHec.Port = types.Float64Value(itemsItem.InputSplunkHec.Port)
@@ -6439,8 +6149,8 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputSplunkSearch.AuthHeaderExpr == nil {
 					items.InputSplunkSearch.AuthHeaderExpr = jsontypes.NewNormalizedNull()
 				} else {
-					authHeaderExprResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.AuthHeaderExpr)
-					items.InputSplunkSearch.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult7))
+					authHeaderExprResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.AuthHeaderExpr)
+					items.InputSplunkSearch.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult5))
 				}
 				if itemsItem.InputSplunkSearch.AuthType != nil {
 					items.InputSplunkSearch.AuthType = types.StringValue(string(*itemsItem.InputSplunkSearch.AuthType))
@@ -6453,13 +6163,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputSplunkSearch.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem50 := range itemsItem.InputSplunkSearch.Connections {
-					var connections50 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem49 := range itemsItem.InputSplunkSearch.Connections {
+					var connections49 tfTypes.ItemsTypeConnectionsOptional
 
-					connections50.Output = types.StringPointerValue(connectionsItem50.Output)
-					connections50.Pipeline = types.StringPointerValue(connectionsItem50.Pipeline)
+					connections49.Output = types.StringPointerValue(connectionsItem49.Output)
+					connections49.Pipeline = types.StringPointerValue(connectionsItem49.Pipeline)
 
-					items.InputSplunkSearch.Connections = append(items.InputSplunkSearch.Connections, connections50)
+					items.InputSplunkSearch.Connections = append(items.InputSplunkSearch.Connections, connections49)
 				}
 				items.InputSplunkSearch.CredentialsSecret = types.StringPointerValue(itemsItem.InputSplunkSearch.CredentialsSecret)
 				items.InputSplunkSearch.CronSchedule = types.StringValue(itemsItem.InputSplunkSearch.CronSchedule)
@@ -6497,8 +6207,8 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputSplunkSearch.LoginURL == nil {
 					items.InputSplunkSearch.LoginURL = jsontypes.NewNormalizedNull()
 				} else {
-					loginURLResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.LoginURL)
-					items.InputSplunkSearch.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult7))
+					loginURLResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.LoginURL)
+					items.InputSplunkSearch.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult5))
 				}
 				if itemsItem.InputSplunkSearch.LogLevel != nil {
 					items.InputSplunkSearch.LogLevel = types.StringValue(string(*itemsItem.InputSplunkSearch.LogLevel))
@@ -6508,53 +6218,53 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSplunkSearch.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputSplunkSearch.MaxMissedKeepAlives)
 				items.InputSplunkSearch.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem55 := range itemsItem.InputSplunkSearch.Metadata {
-					var metadata55 tfTypes.ItemsTypeMetadata
+				for _, metadataItem54 := range itemsItem.InputSplunkSearch.Metadata {
+					var metadata54 tfTypes.ItemsTypeMetadata
 
-					metadata55.Name = types.StringValue(metadataItem55.Name)
-					metadata55.Value = types.StringValue(metadataItem55.Value)
+					metadata54.Name = types.StringValue(metadataItem54.Name)
+					metadata54.Value = types.StringValue(metadataItem54.Value)
 
-					items.InputSplunkSearch.Metadata = append(items.InputSplunkSearch.Metadata, metadata55)
+					items.InputSplunkSearch.Metadata = append(items.InputSplunkSearch.Metadata, metadata54)
 				}
 				items.InputSplunkSearch.OauthHeaders = []tfTypes.InputSplunkSearchOauthHeader{}
 
-				for _, oauthHeadersItem7 := range itemsItem.InputSplunkSearch.OauthHeaders {
-					var oauthHeaders7 tfTypes.InputSplunkSearchOauthHeader
+				for _, oauthHeadersItem5 := range itemsItem.InputSplunkSearch.OauthHeaders {
+					var oauthHeaders5 tfTypes.InputSplunkSearchOauthHeader
 
-					if oauthHeadersItem7.Name == nil {
-						oauthHeaders7.Name = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem5.Name == nil {
+						oauthHeaders5.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult14, _ := json.Marshal(oauthHeadersItem7.Name)
-						oauthHeaders7.Name = jsontypes.NewNormalizedValue(string(nameResult14))
+						nameResult10, _ := json.Marshal(oauthHeadersItem5.Name)
+						oauthHeaders5.Name = jsontypes.NewNormalizedValue(string(nameResult10))
 					}
-					if oauthHeadersItem7.Value == nil {
-						oauthHeaders7.Value = jsontypes.NewNormalizedNull()
+					if oauthHeadersItem5.Value == nil {
+						oauthHeaders5.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult14, _ := json.Marshal(oauthHeadersItem7.Value)
-						oauthHeaders7.Value = jsontypes.NewNormalizedValue(string(valueResult14))
+						valueResult10, _ := json.Marshal(oauthHeadersItem5.Value)
+						oauthHeaders5.Value = jsontypes.NewNormalizedValue(string(valueResult10))
 					}
 
-					items.InputSplunkSearch.OauthHeaders = append(items.InputSplunkSearch.OauthHeaders, oauthHeaders7)
+					items.InputSplunkSearch.OauthHeaders = append(items.InputSplunkSearch.OauthHeaders, oauthHeaders5)
 				}
 				items.InputSplunkSearch.OauthParams = []tfTypes.InputSplunkSearchOauthParam{}
 
-				for _, oauthParamsItem9 := range itemsItem.InputSplunkSearch.OauthParams {
-					var oauthParams9 tfTypes.InputSplunkSearchOauthParam
+				for _, oauthParamsItem7 := range itemsItem.InputSplunkSearch.OauthParams {
+					var oauthParams7 tfTypes.InputSplunkSearchOauthParam
 
-					if oauthParamsItem9.Name == nil {
-						oauthParams9.Name = jsontypes.NewNormalizedNull()
+					if oauthParamsItem7.Name == nil {
+						oauthParams7.Name = jsontypes.NewNormalizedNull()
 					} else {
-						nameResult15, _ := json.Marshal(oauthParamsItem9.Name)
-						oauthParams9.Name = jsontypes.NewNormalizedValue(string(nameResult15))
+						nameResult11, _ := json.Marshal(oauthParamsItem7.Name)
+						oauthParams7.Name = jsontypes.NewNormalizedValue(string(nameResult11))
 					}
-					if oauthParamsItem9.Value == nil {
-						oauthParams9.Value = jsontypes.NewNormalizedNull()
+					if oauthParamsItem7.Value == nil {
+						oauthParams7.Value = jsontypes.NewNormalizedNull()
 					} else {
-						valueResult15, _ := json.Marshal(oauthParamsItem9.Value)
-						oauthParams9.Value = jsontypes.NewNormalizedValue(string(valueResult15))
+						valueResult11, _ := json.Marshal(oauthParamsItem7.Value)
+						oauthParams7.Value = jsontypes.NewNormalizedValue(string(valueResult11))
 					}
 
-					items.InputSplunkSearch.OauthParams = append(items.InputSplunkSearch.OauthParams, oauthParams9)
+					items.InputSplunkSearch.OauthParams = append(items.InputSplunkSearch.OauthParams, oauthParams7)
 				}
 				items.InputSplunkSearch.OutputMode = types.StringValue(string(itemsItem.InputSplunkSearch.OutputMode))
 				items.InputSplunkSearch.Password = types.StringPointerValue(itemsItem.InputSplunkSearch.Password)
@@ -6609,14 +6319,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputSplunkSearch.Secret == nil {
 					items.InputSplunkSearch.Secret = jsontypes.NewNormalizedNull()
 				} else {
-					secretResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.Secret)
-					items.InputSplunkSearch.Secret = jsontypes.NewNormalizedValue(string(secretResult7))
+					secretResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.Secret)
+					items.InputSplunkSearch.Secret = jsontypes.NewNormalizedValue(string(secretResult5))
 				}
 				if itemsItem.InputSplunkSearch.SecretParamName == nil {
 					items.InputSplunkSearch.SecretParamName = jsontypes.NewNormalizedNull()
 				} else {
-					secretParamNameResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.SecretParamName)
-					items.InputSplunkSearch.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult7))
+					secretParamNameResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.SecretParamName)
+					items.InputSplunkSearch.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult5))
 				}
 				items.InputSplunkSearch.SendToRoutes = types.BoolPointerValue(itemsItem.InputSplunkSearch.SendToRoutes)
 				items.InputSplunkSearch.StaleChannelFlushMs = types.Float64PointerValue(itemsItem.InputSplunkSearch.StaleChannelFlushMs)
@@ -6629,14 +6339,14 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				if itemsItem.InputSplunkSearch.TokenAttributeName == nil {
 					items.InputSplunkSearch.TokenAttributeName = jsontypes.NewNormalizedNull()
 				} else {
-					tokenAttributeNameResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.TokenAttributeName)
-					items.InputSplunkSearch.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult7))
+					tokenAttributeNameResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.TokenAttributeName)
+					items.InputSplunkSearch.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult5))
 				}
 				if itemsItem.InputSplunkSearch.TokenTimeoutSecs == nil {
 					items.InputSplunkSearch.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
 				} else {
-					tokenTimeoutSecsResult7, _ := json.Marshal(itemsItem.InputSplunkSearch.TokenTimeoutSecs)
-					items.InputSplunkSearch.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult7))
+					tokenTimeoutSecsResult5, _ := json.Marshal(itemsItem.InputSplunkSearch.TokenTimeoutSecs)
+					items.InputSplunkSearch.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult5))
 				}
 				items.InputSplunkSearch.TTL = types.StringPointerValue(itemsItem.InputSplunkSearch.TTL)
 				items.InputSplunkSearch.Type = types.StringValue(string(itemsItem.InputSplunkSearch.Type))
@@ -6665,13 +6375,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSqs.AwsSecretKey = types.StringPointerValue(itemsItem.InputSqs.AwsSecretKey)
 				items.InputSqs.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem51 := range itemsItem.InputSqs.Connections {
-					var connections51 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem50 := range itemsItem.InputSqs.Connections {
+					var connections50 tfTypes.ItemsTypeConnectionsOptional
 
-					connections51.Output = types.StringPointerValue(connectionsItem51.Output)
-					connections51.Pipeline = types.StringPointerValue(connectionsItem51.Pipeline)
+					connections50.Output = types.StringPointerValue(connectionsItem50.Output)
+					connections50.Pipeline = types.StringPointerValue(connectionsItem50.Pipeline)
 
-					items.InputSqs.Connections = append(items.InputSqs.Connections, connections51)
+					items.InputSqs.Connections = append(items.InputSqs.Connections, connections50)
 				}
 				items.InputSqs.CreateQueue = types.BoolPointerValue(itemsItem.InputSqs.CreateQueue)
 				items.InputSqs.Description = types.StringPointerValue(itemsItem.InputSqs.Description)
@@ -6684,13 +6394,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSqs.MaxMessages = types.Float64PointerValue(itemsItem.InputSqs.MaxMessages)
 				items.InputSqs.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem56 := range itemsItem.InputSqs.Metadata {
-					var metadata56 tfTypes.ItemsTypeMetadata
+				for _, metadataItem55 := range itemsItem.InputSqs.Metadata {
+					var metadata55 tfTypes.ItemsTypeMetadata
 
-					metadata56.Name = types.StringValue(metadataItem56.Name)
-					metadata56.Value = types.StringValue(metadataItem56.Value)
+					metadata55.Name = types.StringValue(metadataItem55.Name)
+					metadata55.Value = types.StringValue(metadataItem55.Value)
 
-					items.InputSqs.Metadata = append(items.InputSqs.Metadata, metadata56)
+					items.InputSqs.Metadata = append(items.InputSqs.Metadata, metadata55)
 				}
 				items.InputSqs.NumReceivers = types.Float64PointerValue(itemsItem.InputSqs.NumReceivers)
 				items.InputSqs.Pipeline = types.StringPointerValue(itemsItem.InputSqs.Pipeline)
@@ -6742,243 +6452,126 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 			}
 			if itemsItem.InputSyslog != nil {
 				items.InputSyslog = &tfTypes.InputSyslog{}
-				if items.InputSyslog == nil {
-					items.InputSyslog = &tfTypes.InputSyslog{}
+				items.InputSyslog.TemplateHost = types.StringPointerValue(itemsItem.InputSyslog.TemplateHost)
+				items.InputSyslog.TemplateTCPPort = types.StringPointerValue(itemsItem.InputSyslog.TemplateTCPPort)
+				items.InputSyslog.TemplateUDPPort = types.StringPointerValue(itemsItem.InputSyslog.TemplateUDPPort)
+				items.InputSyslog.AllowNonStandardAppName = types.BoolPointerValue(itemsItem.InputSyslog.AllowNonStandardAppName)
+				items.InputSyslog.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+
+				for _, connectionsItem51 := range itemsItem.InputSyslog.Connections {
+					var connections51 tfTypes.ItemsTypeConnectionsOptional
+
+					connections51.Output = types.StringPointerValue(connectionsItem51.Output)
+					connections51.Pipeline = types.StringPointerValue(connectionsItem51.Pipeline)
+
+					items.InputSyslog.Connections = append(items.InputSyslog.Connections, connections51)
 				}
-				if itemsItem.InputSyslog.InputSyslogSyslog1 != nil {
-					items.InputSyslog.InputSyslogSyslog1 = &tfTypes.InputSyslogSyslog1{}
-					items.InputSyslog.InputSyslogSyslog1.TemplateHost = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TemplateHost)
-					items.InputSyslog.InputSyslogSyslog1.TemplateTCPPort = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TemplateTCPPort)
-					items.InputSyslog.InputSyslogSyslog1.TemplateUDPPort = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TemplateUDPPort)
-					items.InputSyslog.InputSyslogSyslog1.AllowNonStandardAppName = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.AllowNonStandardAppName)
-					items.InputSyslog.InputSyslogSyslog1.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
-
-					for _, connectionsItem52 := range itemsItem.InputSyslog.InputSyslogSyslog1.Connections {
-						var connections52 tfTypes.ItemsTypeConnectionsOptional
-
-						connections52.Output = types.StringPointerValue(connectionsItem52.Output)
-						connections52.Pipeline = types.StringPointerValue(connectionsItem52.Pipeline)
-
-						items.InputSyslog.InputSyslogSyslog1.Connections = append(items.InputSyslog.InputSyslogSyslog1.Connections, connections52)
-					}
-					items.InputSyslog.InputSyslogSyslog1.Description = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Description)
-					items.InputSyslog.InputSyslogSyslog1.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Disabled)
-					items.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.EnableEnhancedProxyHeaderParsing)
-					items.InputSyslog.InputSyslogSyslog1.EnableLoadBalancing = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.EnableLoadBalancing)
-					items.InputSyslog.InputSyslogSyslog1.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.EnableProxyHeader)
-					items.InputSyslog.InputSyslogSyslog1.Environment = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Environment)
-					items.InputSyslog.InputSyslogSyslog1.Host = types.StringValue(itemsItem.InputSyslog.InputSyslogSyslog1.Host)
-					items.InputSyslog.InputSyslogSyslog1.ID = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.ID)
-					items.InputSyslog.InputSyslogSyslog1.InferFraming = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.InferFraming)
-					items.InputSyslog.InputSyslogSyslog1.IPWhitelistRegex = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.IPWhitelistRegex)
-					items.InputSyslog.InputSyslogSyslog1.KeepFieldsList = make([]types.String, 0, len(itemsItem.InputSyslog.InputSyslogSyslog1.KeepFieldsList))
-					for _, v := range itemsItem.InputSyslog.InputSyslogSyslog1.KeepFieldsList {
-						items.InputSyslog.InputSyslogSyslog1.KeepFieldsList = append(items.InputSyslog.InputSyslogSyslog1.KeepFieldsList, types.StringValue(v))
-					}
-					items.InputSyslog.InputSyslogSyslog1.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.MaxActiveCxn)
-					items.InputSyslog.InputSyslogSyslog1.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.MaxBufferSize)
-					items.InputSyslog.InputSyslogSyslog1.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-					for _, metadataItem57 := range itemsItem.InputSyslog.InputSyslogSyslog1.Metadata {
-						var metadata57 tfTypes.ItemsTypeMetadata
-
-						metadata57.Name = types.StringValue(metadataItem57.Name)
-						metadata57.Value = types.StringValue(metadataItem57.Value)
-
-						items.InputSyslog.InputSyslogSyslog1.Metadata = append(items.InputSyslog.InputSyslogSyslog1.Metadata, metadata57)
-					}
-					items.InputSyslog.InputSyslogSyslog1.OctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.OctetCounting)
-					items.InputSyslog.InputSyslogSyslog1.Pipeline = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pipeline)
-					if itemsItem.InputSyslog.InputSyslogSyslog1.Pq == nil {
-						items.InputSyslog.InputSyslogSyslog1.Pq = nil
-					} else {
-						items.InputSyslog.InputSyslogSyslog1.Pq = &tfTypes.PqType{}
-						items.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.CommitFrequency)
-						if itemsItem.InputSyslog.InputSyslogSyslog1.Pq.Compress != nil {
-							items.InputSyslog.InputSyslogSyslog1.Pq.Compress = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog1.Pq.Compress))
-						} else {
-							items.InputSyslog.InputSyslogSyslog1.Pq.Compress = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSize)
-						items.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.MaxBufferSizeBytes)
-						items.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.MaxFileSize)
-						items.InputSyslog.InputSyslogSyslog1.Pq.MaxSize = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.MaxSize)
-						if itemsItem.InputSyslog.InputSyslogSyslog1.Pq.Mode != nil {
-							items.InputSyslog.InputSyslogSyslog1.Pq.Mode = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog1.Pq.Mode))
-						} else {
-							items.InputSyslog.InputSyslogSyslog1.Pq.Mode = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog1.Pq.Path = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.Pq.Path)
-						if itemsItem.InputSyslog.InputSyslogSyslog1.Pq.PqControls == nil {
-							items.InputSyslog.InputSyslogSyslog1.Pq.PqControls = nil
-						} else {
-							items.InputSyslog.InputSyslogSyslog1.Pq.PqControls = &tfTypes.PqTypePqControls{}
-						}
-					}
-					items.InputSyslog.InputSyslogSyslog1.PqEnabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.PqEnabled)
-					items.InputSyslog.InputSyslogSyslog1.SendToRoutes = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.SendToRoutes)
-					items.InputSyslog.InputSyslogSyslog1.SingleMsgUDPPackets = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.SingleMsgUDPPackets)
-					items.InputSyslog.InputSyslogSyslog1.SocketEndingMaxWait = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.SocketEndingMaxWait)
-					items.InputSyslog.InputSyslogSyslog1.SocketIdleTimeout = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.SocketIdleTimeout)
-					items.InputSyslog.InputSyslogSyslog1.SocketMaxLifespan = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.SocketMaxLifespan)
-					items.InputSyslog.InputSyslogSyslog1.Streamtags = make([]types.String, 0, len(itemsItem.InputSyslog.InputSyslogSyslog1.Streamtags))
-					for _, v := range itemsItem.InputSyslog.InputSyslogSyslog1.Streamtags {
-						items.InputSyslog.InputSyslogSyslog1.Streamtags = append(items.InputSyslog.InputSyslogSyslog1.Streamtags, types.StringValue(v))
-					}
-					items.InputSyslog.InputSyslogSyslog1.StrictlyInferOctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.StrictlyInferOctetCounting)
-					items.InputSyslog.InputSyslogSyslog1.TCPPort = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TCPPort)
-					items.InputSyslog.InputSyslogSyslog1.TimestampTimezone = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TimestampTimezone)
-					if itemsItem.InputSyslog.InputSyslogSyslog1.TLS == nil {
-						items.InputSyslog.InputSyslogSyslog1.TLS = nil
-					} else {
-						items.InputSyslog.InputSyslogSyslog1.TLS = &tfTypes.TLSSettingsServerSideType{}
-						items.InputSyslog.InputSyslogSyslog1.TLS.CaPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.CaPath)
-						items.InputSyslog.InputSyslogSyslog1.TLS.CertificateName = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.CertificateName)
-						items.InputSyslog.InputSyslogSyslog1.TLS.CertPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.CertPath)
-						items.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.CommonNameRegex)
-						items.InputSyslog.InputSyslogSyslog1.TLS.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.Disabled)
-						if itemsItem.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion != nil {
-							items.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion))
-						} else {
-							items.InputSyslog.InputSyslogSyslog1.TLS.MaxVersion = types.StringNull()
-						}
-						if itemsItem.InputSyslog.InputSyslogSyslog1.TLS.MinVersion != nil {
-							items.InputSyslog.InputSyslogSyslog1.TLS.MinVersion = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog1.TLS.MinVersion))
-						} else {
-							items.InputSyslog.InputSyslogSyslog1.TLS.MinVersion = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog1.TLS.Passphrase = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.Passphrase)
-						items.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.PrivKeyPath)
-						items.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.RejectUnauthorized)
-						items.InputSyslog.InputSyslogSyslog1.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.TLS.RequestCert)
-					}
-					items.InputSyslog.InputSyslogSyslog1.Type = types.StringValue(string(itemsItem.InputSyslog.InputSyslogSyslog1.Type))
-					items.InputSyslog.InputSyslogSyslog1.UDPPort = types.Float64Value(itemsItem.InputSyslog.InputSyslogSyslog1.UDPPort)
-					items.InputSyslog.InputSyslogSyslog1.UDPSocketRxBufSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog1.UDPSocketRxBufSize)
+				items.InputSyslog.Description = types.StringPointerValue(itemsItem.InputSyslog.Description)
+				items.InputSyslog.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.Disabled)
+				items.InputSyslog.EnableEnhancedProxyHeaderParsing = types.BoolPointerValue(itemsItem.InputSyslog.EnableEnhancedProxyHeaderParsing)
+				items.InputSyslog.EnableLoadBalancing = types.BoolPointerValue(itemsItem.InputSyslog.EnableLoadBalancing)
+				items.InputSyslog.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputSyslog.EnableProxyHeader)
+				items.InputSyslog.Environment = types.StringPointerValue(itemsItem.InputSyslog.Environment)
+				items.InputSyslog.Host = types.StringValue(itemsItem.InputSyslog.Host)
+				items.InputSyslog.ID = types.StringPointerValue(itemsItem.InputSyslog.ID)
+				items.InputSyslog.InferFraming = types.BoolPointerValue(itemsItem.InputSyslog.InferFraming)
+				items.InputSyslog.IPWhitelistRegex = types.StringPointerValue(itemsItem.InputSyslog.IPWhitelistRegex)
+				items.InputSyslog.KeepFieldsList = make([]types.String, 0, len(itemsItem.InputSyslog.KeepFieldsList))
+				for _, v := range itemsItem.InputSyslog.KeepFieldsList {
+					items.InputSyslog.KeepFieldsList = append(items.InputSyslog.KeepFieldsList, types.StringValue(v))
 				}
-				if itemsItem.InputSyslog.InputSyslogSyslog2 != nil {
-					items.InputSyslog.InputSyslogSyslog2 = &tfTypes.InputSyslogSyslog2{}
-					items.InputSyslog.InputSyslogSyslog2.TemplateHost = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TemplateHost)
-					items.InputSyslog.InputSyslogSyslog2.TemplateTCPPort = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TemplateTCPPort)
-					items.InputSyslog.InputSyslogSyslog2.TemplateUDPPort = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TemplateUDPPort)
-					items.InputSyslog.InputSyslogSyslog2.AllowNonStandardAppName = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.AllowNonStandardAppName)
-					items.InputSyslog.InputSyslogSyslog2.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
+				items.InputSyslog.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputSyslog.MaxActiveCxn)
+				items.InputSyslog.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.MaxBufferSize)
+				items.InputSyslog.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, connectionsItem53 := range itemsItem.InputSyslog.InputSyslogSyslog2.Connections {
-						var connections53 tfTypes.ItemsTypeConnectionsOptional
+				for _, metadataItem56 := range itemsItem.InputSyslog.Metadata {
+					var metadata56 tfTypes.ItemsTypeMetadata
 
-						connections53.Output = types.StringPointerValue(connectionsItem53.Output)
-						connections53.Pipeline = types.StringPointerValue(connectionsItem53.Pipeline)
+					metadata56.Name = types.StringValue(metadataItem56.Name)
+					metadata56.Value = types.StringValue(metadataItem56.Value)
 
-						items.InputSyslog.InputSyslogSyslog2.Connections = append(items.InputSyslog.InputSyslogSyslog2.Connections, connections53)
-					}
-					items.InputSyslog.InputSyslogSyslog2.Description = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Description)
-					items.InputSyslog.InputSyslogSyslog2.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Disabled)
-					items.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.EnableEnhancedProxyHeaderParsing)
-					items.InputSyslog.InputSyslogSyslog2.EnableLoadBalancing = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.EnableLoadBalancing)
-					items.InputSyslog.InputSyslogSyslog2.EnableProxyHeader = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.EnableProxyHeader)
-					items.InputSyslog.InputSyslogSyslog2.Environment = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Environment)
-					items.InputSyslog.InputSyslogSyslog2.Host = types.StringValue(itemsItem.InputSyslog.InputSyslogSyslog2.Host)
-					items.InputSyslog.InputSyslogSyslog2.ID = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.ID)
-					items.InputSyslog.InputSyslogSyslog2.InferFraming = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.InferFraming)
-					items.InputSyslog.InputSyslogSyslog2.IPWhitelistRegex = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.IPWhitelistRegex)
-					items.InputSyslog.InputSyslogSyslog2.KeepFieldsList = make([]types.String, 0, len(itemsItem.InputSyslog.InputSyslogSyslog2.KeepFieldsList))
-					for _, v := range itemsItem.InputSyslog.InputSyslogSyslog2.KeepFieldsList {
-						items.InputSyslog.InputSyslogSyslog2.KeepFieldsList = append(items.InputSyslog.InputSyslogSyslog2.KeepFieldsList, types.StringValue(v))
-					}
-					items.InputSyslog.InputSyslogSyslog2.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.MaxActiveCxn)
-					items.InputSyslog.InputSyslogSyslog2.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.MaxBufferSize)
-					items.InputSyslog.InputSyslogSyslog2.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-					for _, metadataItem58 := range itemsItem.InputSyslog.InputSyslogSyslog2.Metadata {
-						var metadata58 tfTypes.ItemsTypeMetadata
-
-						metadata58.Name = types.StringValue(metadataItem58.Name)
-						metadata58.Value = types.StringValue(metadataItem58.Value)
-
-						items.InputSyslog.InputSyslogSyslog2.Metadata = append(items.InputSyslog.InputSyslogSyslog2.Metadata, metadata58)
-					}
-					items.InputSyslog.InputSyslogSyslog2.OctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.OctetCounting)
-					items.InputSyslog.InputSyslogSyslog2.Pipeline = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pipeline)
-					if itemsItem.InputSyslog.InputSyslogSyslog2.Pq == nil {
-						items.InputSyslog.InputSyslogSyslog2.Pq = nil
-					} else {
-						items.InputSyslog.InputSyslogSyslog2.Pq = &tfTypes.PqType{}
-						items.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.CommitFrequency)
-						if itemsItem.InputSyslog.InputSyslogSyslog2.Pq.Compress != nil {
-							items.InputSyslog.InputSyslogSyslog2.Pq.Compress = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog2.Pq.Compress))
-						} else {
-							items.InputSyslog.InputSyslogSyslog2.Pq.Compress = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSize)
-						items.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.MaxBufferSizeBytes)
-						items.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.MaxFileSize)
-						items.InputSyslog.InputSyslogSyslog2.Pq.MaxSize = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.MaxSize)
-						if itemsItem.InputSyslog.InputSyslogSyslog2.Pq.Mode != nil {
-							items.InputSyslog.InputSyslogSyslog2.Pq.Mode = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog2.Pq.Mode))
-						} else {
-							items.InputSyslog.InputSyslogSyslog2.Pq.Mode = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog2.Pq.Path = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.Pq.Path)
-						if itemsItem.InputSyslog.InputSyslogSyslog2.Pq.PqControls == nil {
-							items.InputSyslog.InputSyslogSyslog2.Pq.PqControls = nil
-						} else {
-							items.InputSyslog.InputSyslogSyslog2.Pq.PqControls = &tfTypes.PqTypePqControls{}
-						}
-					}
-					items.InputSyslog.InputSyslogSyslog2.PqEnabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.PqEnabled)
-					items.InputSyslog.InputSyslogSyslog2.SendToRoutes = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.SendToRoutes)
-					items.InputSyslog.InputSyslogSyslog2.SingleMsgUDPPackets = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.SingleMsgUDPPackets)
-					items.InputSyslog.InputSyslogSyslog2.SocketEndingMaxWait = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.SocketEndingMaxWait)
-					items.InputSyslog.InputSyslogSyslog2.SocketIdleTimeout = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.SocketIdleTimeout)
-					items.InputSyslog.InputSyslogSyslog2.SocketMaxLifespan = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.SocketMaxLifespan)
-					items.InputSyslog.InputSyslogSyslog2.Streamtags = make([]types.String, 0, len(itemsItem.InputSyslog.InputSyslogSyslog2.Streamtags))
-					for _, v := range itemsItem.InputSyslog.InputSyslogSyslog2.Streamtags {
-						items.InputSyslog.InputSyslogSyslog2.Streamtags = append(items.InputSyslog.InputSyslogSyslog2.Streamtags, types.StringValue(v))
-					}
-					items.InputSyslog.InputSyslogSyslog2.StrictlyInferOctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.StrictlyInferOctetCounting)
-					items.InputSyslog.InputSyslogSyslog2.TCPPort = types.Float64Value(itemsItem.InputSyslog.InputSyslogSyslog2.TCPPort)
-					items.InputSyslog.InputSyslogSyslog2.TimestampTimezone = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TimestampTimezone)
-					if itemsItem.InputSyslog.InputSyslogSyslog2.TLS == nil {
-						items.InputSyslog.InputSyslogSyslog2.TLS = nil
-					} else {
-						items.InputSyslog.InputSyslogSyslog2.TLS = &tfTypes.TLSSettingsServerSideType{}
-						items.InputSyslog.InputSyslogSyslog2.TLS.CaPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.CaPath)
-						items.InputSyslog.InputSyslogSyslog2.TLS.CertificateName = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.CertificateName)
-						items.InputSyslog.InputSyslogSyslog2.TLS.CertPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.CertPath)
-						items.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.CommonNameRegex)
-						items.InputSyslog.InputSyslogSyslog2.TLS.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.Disabled)
-						if itemsItem.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion != nil {
-							items.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion))
-						} else {
-							items.InputSyslog.InputSyslogSyslog2.TLS.MaxVersion = types.StringNull()
-						}
-						if itemsItem.InputSyslog.InputSyslogSyslog2.TLS.MinVersion != nil {
-							items.InputSyslog.InputSyslogSyslog2.TLS.MinVersion = types.StringValue(string(*itemsItem.InputSyslog.InputSyslogSyslog2.TLS.MinVersion))
-						} else {
-							items.InputSyslog.InputSyslogSyslog2.TLS.MinVersion = types.StringNull()
-						}
-						items.InputSyslog.InputSyslogSyslog2.TLS.Passphrase = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.Passphrase)
-						items.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.PrivKeyPath)
-						items.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.RejectUnauthorized)
-						items.InputSyslog.InputSyslogSyslog2.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.TLS.RequestCert)
-					}
-					items.InputSyslog.InputSyslogSyslog2.Type = types.StringValue(string(itemsItem.InputSyslog.InputSyslogSyslog2.Type))
-					items.InputSyslog.InputSyslogSyslog2.UDPPort = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.UDPPort)
-					items.InputSyslog.InputSyslogSyslog2.UDPSocketRxBufSize = types.Float64PointerValue(itemsItem.InputSyslog.InputSyslogSyslog2.UDPSocketRxBufSize)
+					items.InputSyslog.Metadata = append(items.InputSyslog.Metadata, metadata56)
 				}
+				items.InputSyslog.OctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.OctetCounting)
+				items.InputSyslog.Pipeline = types.StringPointerValue(itemsItem.InputSyslog.Pipeline)
+				if itemsItem.InputSyslog.Pq == nil {
+					items.InputSyslog.Pq = nil
+				} else {
+					items.InputSyslog.Pq = &tfTypes.PqType{}
+					items.InputSyslog.Pq.CommitFrequency = types.Float64PointerValue(itemsItem.InputSyslog.Pq.CommitFrequency)
+					if itemsItem.InputSyslog.Pq.Compress != nil {
+						items.InputSyslog.Pq.Compress = types.StringValue(string(*itemsItem.InputSyslog.Pq.Compress))
+					} else {
+						items.InputSyslog.Pq.Compress = types.StringNull()
+					}
+					items.InputSyslog.Pq.MaxBufferSize = types.Float64PointerValue(itemsItem.InputSyslog.Pq.MaxBufferSize)
+					items.InputSyslog.Pq.MaxBufferSizeBytes = types.StringPointerValue(itemsItem.InputSyslog.Pq.MaxBufferSizeBytes)
+					items.InputSyslog.Pq.MaxFileSize = types.StringPointerValue(itemsItem.InputSyslog.Pq.MaxFileSize)
+					items.InputSyslog.Pq.MaxSize = types.StringPointerValue(itemsItem.InputSyslog.Pq.MaxSize)
+					if itemsItem.InputSyslog.Pq.Mode != nil {
+						items.InputSyslog.Pq.Mode = types.StringValue(string(*itemsItem.InputSyslog.Pq.Mode))
+					} else {
+						items.InputSyslog.Pq.Mode = types.StringNull()
+					}
+					items.InputSyslog.Pq.Path = types.StringPointerValue(itemsItem.InputSyslog.Pq.Path)
+					if itemsItem.InputSyslog.Pq.PqControls == nil {
+						items.InputSyslog.Pq.PqControls = nil
+					} else {
+						items.InputSyslog.Pq.PqControls = &tfTypes.PqTypePqControls{}
+					}
+				}
+				items.InputSyslog.PqEnabled = types.BoolPointerValue(itemsItem.InputSyslog.PqEnabled)
+				items.InputSyslog.SendToRoutes = types.BoolPointerValue(itemsItem.InputSyslog.SendToRoutes)
+				items.InputSyslog.SingleMsgUDPPackets = types.BoolPointerValue(itemsItem.InputSyslog.SingleMsgUDPPackets)
+				items.InputSyslog.SocketEndingMaxWait = types.Float64PointerValue(itemsItem.InputSyslog.SocketEndingMaxWait)
+				items.InputSyslog.SocketIdleTimeout = types.Float64PointerValue(itemsItem.InputSyslog.SocketIdleTimeout)
+				items.InputSyslog.SocketMaxLifespan = types.Float64PointerValue(itemsItem.InputSyslog.SocketMaxLifespan)
+				items.InputSyslog.Streamtags = make([]types.String, 0, len(itemsItem.InputSyslog.Streamtags))
+				for _, v := range itemsItem.InputSyslog.Streamtags {
+					items.InputSyslog.Streamtags = append(items.InputSyslog.Streamtags, types.StringValue(v))
+				}
+				items.InputSyslog.StrictlyInferOctetCounting = types.BoolPointerValue(itemsItem.InputSyslog.StrictlyInferOctetCounting)
+				items.InputSyslog.TCPPort = types.Float64PointerValue(itemsItem.InputSyslog.TCPPort)
+				items.InputSyslog.TimestampTimezone = types.StringPointerValue(itemsItem.InputSyslog.TimestampTimezone)
+				if itemsItem.InputSyslog.TLS == nil {
+					items.InputSyslog.TLS = nil
+				} else {
+					items.InputSyslog.TLS = &tfTypes.TLSSettingsServerSideType{}
+					items.InputSyslog.TLS.CaPath = types.StringPointerValue(itemsItem.InputSyslog.TLS.CaPath)
+					items.InputSyslog.TLS.CertificateName = types.StringPointerValue(itemsItem.InputSyslog.TLS.CertificateName)
+					items.InputSyslog.TLS.CertPath = types.StringPointerValue(itemsItem.InputSyslog.TLS.CertPath)
+					items.InputSyslog.TLS.CommonNameRegex = types.StringPointerValue(itemsItem.InputSyslog.TLS.CommonNameRegex)
+					items.InputSyslog.TLS.Disabled = types.BoolPointerValue(itemsItem.InputSyslog.TLS.Disabled)
+					if itemsItem.InputSyslog.TLS.MaxVersion != nil {
+						items.InputSyslog.TLS.MaxVersion = types.StringValue(string(*itemsItem.InputSyslog.TLS.MaxVersion))
+					} else {
+						items.InputSyslog.TLS.MaxVersion = types.StringNull()
+					}
+					if itemsItem.InputSyslog.TLS.MinVersion != nil {
+						items.InputSyslog.TLS.MinVersion = types.StringValue(string(*itemsItem.InputSyslog.TLS.MinVersion))
+					} else {
+						items.InputSyslog.TLS.MinVersion = types.StringNull()
+					}
+					items.InputSyslog.TLS.Passphrase = types.StringPointerValue(itemsItem.InputSyslog.TLS.Passphrase)
+					items.InputSyslog.TLS.PrivKeyPath = types.StringPointerValue(itemsItem.InputSyslog.TLS.PrivKeyPath)
+					items.InputSyslog.TLS.RejectUnauthorized = types.BoolPointerValue(itemsItem.InputSyslog.TLS.RejectUnauthorized)
+					items.InputSyslog.TLS.RequestCert = types.BoolPointerValue(itemsItem.InputSyslog.TLS.RequestCert)
+				}
+				items.InputSyslog.Type = types.StringValue(string(itemsItem.InputSyslog.Type))
+				items.InputSyslog.UDPPort = types.Float64PointerValue(itemsItem.InputSyslog.UDPPort)
+				items.InputSyslog.UDPSocketRxBufSize = types.Float64PointerValue(itemsItem.InputSyslog.UDPSocketRxBufSize)
 			}
 			if itemsItem.InputSystemMetrics != nil {
 				items.InputSystemMetrics = &tfTypes.InputSystemMetrics{}
 				items.InputSystemMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem54 := range itemsItem.InputSystemMetrics.Connections {
-					var connections54 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem52 := range itemsItem.InputSystemMetrics.Connections {
+					var connections52 tfTypes.ItemsTypeConnectionsOptional
 
-					connections54.Output = types.StringPointerValue(connectionsItem54.Output)
-					connections54.Pipeline = types.StringPointerValue(connectionsItem54.Pipeline)
+					connections52.Output = types.StringPointerValue(connectionsItem52.Output)
+					connections52.Pipeline = types.StringPointerValue(connectionsItem52.Pipeline)
 
-					items.InputSystemMetrics.Connections = append(items.InputSystemMetrics.Connections, connections54)
+					items.InputSystemMetrics.Connections = append(items.InputSystemMetrics.Connections, connections52)
 				}
 				if itemsItem.InputSystemMetrics.Container == nil {
 					items.InputSystemMetrics.Container = nil
@@ -7106,13 +6699,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSystemMetrics.Interval = types.Float64PointerValue(itemsItem.InputSystemMetrics.Interval)
 				items.InputSystemMetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem59 := range itemsItem.InputSystemMetrics.Metadata {
-					var metadata59 tfTypes.ItemsTypeMetadata
+				for _, metadataItem57 := range itemsItem.InputSystemMetrics.Metadata {
+					var metadata57 tfTypes.ItemsTypeMetadata
 
-					metadata59.Name = types.StringValue(metadataItem59.Name)
-					metadata59.Value = types.StringValue(metadataItem59.Value)
+					metadata57.Name = types.StringValue(metadataItem57.Name)
+					metadata57.Value = types.StringValue(metadataItem57.Value)
 
-					items.InputSystemMetrics.Metadata = append(items.InputSystemMetrics.Metadata, metadata59)
+					items.InputSystemMetrics.Metadata = append(items.InputSystemMetrics.Metadata, metadata57)
 				}
 				if itemsItem.InputSystemMetrics.Persistence == nil {
 					items.InputSystemMetrics.Persistence = nil
@@ -7255,13 +6848,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputSystemState.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem55 := range itemsItem.InputSystemState.Connections {
-					var connections55 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem53 := range itemsItem.InputSystemState.Connections {
+					var connections53 tfTypes.ItemsTypeConnectionsOptional
 
-					connections55.Output = types.StringPointerValue(connectionsItem55.Output)
-					connections55.Pipeline = types.StringPointerValue(connectionsItem55.Pipeline)
+					connections53.Output = types.StringPointerValue(connectionsItem53.Output)
+					connections53.Pipeline = types.StringPointerValue(connectionsItem53.Pipeline)
 
-					items.InputSystemState.Connections = append(items.InputSystemState.Connections, connections55)
+					items.InputSystemState.Connections = append(items.InputSystemState.Connections, connections53)
 				}
 				items.InputSystemState.Description = types.StringPointerValue(itemsItem.InputSystemState.Description)
 				items.InputSystemState.Disabled = types.BoolPointerValue(itemsItem.InputSystemState.Disabled)
@@ -7272,13 +6865,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputSystemState.Interval = types.Float64PointerValue(itemsItem.InputSystemState.Interval)
 				items.InputSystemState.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem60 := range itemsItem.InputSystemState.Metadata {
-					var metadata60 tfTypes.ItemsTypeMetadata
+				for _, metadataItem58 := range itemsItem.InputSystemState.Metadata {
+					var metadata58 tfTypes.ItemsTypeMetadata
 
-					metadata60.Name = types.StringValue(metadataItem60.Name)
-					metadata60.Value = types.StringValue(metadataItem60.Value)
+					metadata58.Name = types.StringValue(metadataItem58.Name)
+					metadata58.Value = types.StringValue(metadataItem58.Value)
 
-					items.InputSystemState.Metadata = append(items.InputSystemState.Metadata, metadata60)
+					items.InputSystemState.Metadata = append(items.InputSystemState.Metadata, metadata58)
 				}
 				if itemsItem.InputSystemState.Persistence == nil {
 					items.InputSystemState.Persistence = nil
@@ -7346,13 +6939,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputTCP.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem56 := range itemsItem.InputTCP.Connections {
-					var connections56 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem54 := range itemsItem.InputTCP.Connections {
+					var connections54 tfTypes.ItemsTypeConnectionsOptional
 
-					connections56.Output = types.StringPointerValue(connectionsItem56.Output)
-					connections56.Pipeline = types.StringPointerValue(connectionsItem56.Pipeline)
+					connections54.Output = types.StringPointerValue(connectionsItem54.Output)
+					connections54.Pipeline = types.StringPointerValue(connectionsItem54.Pipeline)
 
-					items.InputTCP.Connections = append(items.InputTCP.Connections, connections56)
+					items.InputTCP.Connections = append(items.InputTCP.Connections, connections54)
 				}
 				items.InputTCP.Description = types.StringPointerValue(itemsItem.InputTCP.Description)
 				items.InputTCP.Disabled = types.BoolPointerValue(itemsItem.InputTCP.Disabled)
@@ -7365,13 +6958,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputTCP.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputTCP.MaxActiveCxn)
 				items.InputTCP.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem61 := range itemsItem.InputTCP.Metadata {
-					var metadata61 tfTypes.ItemsTypeMetadata
+				for _, metadataItem59 := range itemsItem.InputTCP.Metadata {
+					var metadata59 tfTypes.ItemsTypeMetadata
 
-					metadata61.Name = types.StringValue(metadataItem61.Name)
-					metadata61.Value = types.StringValue(metadataItem61.Value)
+					metadata59.Name = types.StringValue(metadataItem59.Name)
+					metadata59.Value = types.StringValue(metadataItem59.Value)
 
-					items.InputTCP.Metadata = append(items.InputTCP.Metadata, metadata61)
+					items.InputTCP.Metadata = append(items.InputTCP.Metadata, metadata59)
 				}
 				items.InputTCP.Pipeline = types.StringPointerValue(itemsItem.InputTCP.Pipeline)
 				items.InputTCP.Port = types.Float64Value(itemsItem.InputTCP.Port)
@@ -7461,13 +7054,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				}
 				items.InputTcpjson.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem57 := range itemsItem.InputTcpjson.Connections {
-					var connections57 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem55 := range itemsItem.InputTcpjson.Connections {
+					var connections55 tfTypes.ItemsTypeConnectionsOptional
 
-					connections57.Output = types.StringPointerValue(connectionsItem57.Output)
-					connections57.Pipeline = types.StringPointerValue(connectionsItem57.Pipeline)
+					connections55.Output = types.StringPointerValue(connectionsItem55.Output)
+					connections55.Pipeline = types.StringPointerValue(connectionsItem55.Pipeline)
 
-					items.InputTcpjson.Connections = append(items.InputTcpjson.Connections, connections57)
+					items.InputTcpjson.Connections = append(items.InputTcpjson.Connections, connections55)
 				}
 				items.InputTcpjson.Description = types.StringPointerValue(itemsItem.InputTcpjson.Description)
 				items.InputTcpjson.Disabled = types.BoolPointerValue(itemsItem.InputTcpjson.Disabled)
@@ -7480,13 +7073,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputTcpjson.MaxActiveCxn = types.Float64PointerValue(itemsItem.InputTcpjson.MaxActiveCxn)
 				items.InputTcpjson.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem62 := range itemsItem.InputTcpjson.Metadata {
-					var metadata62 tfTypes.ItemsTypeMetadata
+				for _, metadataItem60 := range itemsItem.InputTcpjson.Metadata {
+					var metadata60 tfTypes.ItemsTypeMetadata
 
-					metadata62.Name = types.StringValue(metadataItem62.Name)
-					metadata62.Value = types.StringValue(metadataItem62.Value)
+					metadata60.Name = types.StringValue(metadataItem60.Name)
+					metadata60.Value = types.StringValue(metadataItem60.Value)
 
-					items.InputTcpjson.Metadata = append(items.InputTcpjson.Metadata, metadata62)
+					items.InputTcpjson.Metadata = append(items.InputTcpjson.Metadata, metadata60)
 				}
 				items.InputTcpjson.Pipeline = types.StringPointerValue(itemsItem.InputTcpjson.Pipeline)
 				items.InputTcpjson.Port = types.Float64Value(itemsItem.InputTcpjson.Port)
@@ -7566,13 +7159,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWef.CaptureHeaders = types.BoolPointerValue(itemsItem.InputWef.CaptureHeaders)
 				items.InputWef.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem58 := range itemsItem.InputWef.Connections {
-					var connections58 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem56 := range itemsItem.InputWef.Connections {
+					var connections56 tfTypes.ItemsTypeConnectionsOptional
 
-					connections58.Output = types.StringPointerValue(connectionsItem58.Output)
-					connections58.Pipeline = types.StringPointerValue(connectionsItem58.Pipeline)
+					connections56.Output = types.StringPointerValue(connectionsItem56.Output)
+					connections56.Pipeline = types.StringPointerValue(connectionsItem56.Pipeline)
 
-					items.InputWef.Connections = append(items.InputWef.Connections, connections58)
+					items.InputWef.Connections = append(items.InputWef.Connections, connections56)
 				}
 				items.InputWef.Description = types.StringPointerValue(itemsItem.InputWef.Description)
 				items.InputWef.Disabled = types.BoolPointerValue(itemsItem.InputWef.Disabled)
@@ -7590,13 +7183,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWef.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputWef.MaxRequestsPerSocket)
 				items.InputWef.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem63 := range itemsItem.InputWef.Metadata {
-					var metadata63 tfTypes.ItemsTypeMetadata
+				for _, metadataItem61 := range itemsItem.InputWef.Metadata {
+					var metadata61 tfTypes.ItemsTypeMetadata
 
-					metadata63.Name = types.StringValue(metadataItem63.Name)
-					metadata63.Value = types.StringValue(metadataItem63.Value)
+					metadata61.Name = types.StringValue(metadataItem61.Name)
+					metadata61.Value = types.StringValue(metadataItem61.Value)
 
-					items.InputWef.Metadata = append(items.InputWef.Metadata, metadata63)
+					items.InputWef.Metadata = append(items.InputWef.Metadata, metadata61)
 				}
 				items.InputWef.Pipeline = types.StringPointerValue(itemsItem.InputWef.Pipeline)
 				items.InputWef.Port = types.Float64Value(itemsItem.InputWef.Port)
@@ -7652,13 +7245,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
 					subscriptions.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem64 := range subscriptionsItem.Metadata {
-						var metadata64 tfTypes.ItemsTypeMetadata
+					for _, metadataItem62 := range subscriptionsItem.Metadata {
+						var metadata62 tfTypes.ItemsTypeMetadata
 
-						metadata64.Name = types.StringValue(metadataItem64.Name)
-						metadata64.Value = types.StringValue(metadataItem64.Value)
+						metadata62.Name = types.StringValue(metadataItem62.Name)
+						metadata62.Value = types.StringValue(metadataItem62.Value)
 
-						subscriptions.Metadata = append(subscriptions.Metadata, metadata64)
+						subscriptions.Metadata = append(subscriptions.Metadata, metadata62)
 					}
 					subscriptions.Queries = []tfTypes.Query{}
 
@@ -7732,13 +7325,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWinEventLogs.BatchSize = types.Float64PointerValue(itemsItem.InputWinEventLogs.BatchSize)
 				items.InputWinEventLogs.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem59 := range itemsItem.InputWinEventLogs.Connections {
-					var connections59 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem57 := range itemsItem.InputWinEventLogs.Connections {
+					var connections57 tfTypes.ItemsTypeConnectionsOptional
 
-					connections59.Output = types.StringPointerValue(connectionsItem59.Output)
-					connections59.Pipeline = types.StringPointerValue(connectionsItem59.Pipeline)
+					connections57.Output = types.StringPointerValue(connectionsItem57.Output)
+					connections57.Pipeline = types.StringPointerValue(connectionsItem57.Pipeline)
 
-					items.InputWinEventLogs.Connections = append(items.InputWinEventLogs.Connections, connections59)
+					items.InputWinEventLogs.Connections = append(items.InputWinEventLogs.Connections, connections57)
 				}
 				items.InputWinEventLogs.Description = types.StringPointerValue(itemsItem.InputWinEventLogs.Description)
 				items.InputWinEventLogs.Disabled = types.BoolPointerValue(itemsItem.InputWinEventLogs.Disabled)
@@ -7760,13 +7353,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWinEventLogs.MaxEventBytes = types.Float64PointerValue(itemsItem.InputWinEventLogs.MaxEventBytes)
 				items.InputWinEventLogs.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem65 := range itemsItem.InputWinEventLogs.Metadata {
-					var metadata65 tfTypes.ItemsTypeMetadata
+				for _, metadataItem63 := range itemsItem.InputWinEventLogs.Metadata {
+					var metadata63 tfTypes.ItemsTypeMetadata
 
-					metadata65.Name = types.StringValue(metadataItem65.Name)
-					metadata65.Value = types.StringValue(metadataItem65.Value)
+					metadata63.Name = types.StringValue(metadataItem63.Name)
+					metadata63.Value = types.StringValue(metadataItem63.Value)
 
-					items.InputWinEventLogs.Metadata = append(items.InputWinEventLogs.Metadata, metadata65)
+					items.InputWinEventLogs.Metadata = append(items.InputWinEventLogs.Metadata, metadata63)
 				}
 				items.InputWinEventLogs.Pipeline = types.StringPointerValue(itemsItem.InputWinEventLogs.Pipeline)
 				if itemsItem.InputWinEventLogs.Pq == nil {
@@ -7812,13 +7405,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWindowsMetrics = &tfTypes.InputWindowsMetrics{}
 				items.InputWindowsMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem60 := range itemsItem.InputWindowsMetrics.Connections {
-					var connections60 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem58 := range itemsItem.InputWindowsMetrics.Connections {
+					var connections58 tfTypes.ItemsTypeConnectionsOptional
 
-					connections60.Output = types.StringPointerValue(connectionsItem60.Output)
-					connections60.Pipeline = types.StringPointerValue(connectionsItem60.Pipeline)
+					connections58.Output = types.StringPointerValue(connectionsItem58.Output)
+					connections58.Pipeline = types.StringPointerValue(connectionsItem58.Pipeline)
 
-					items.InputWindowsMetrics.Connections = append(items.InputWindowsMetrics.Connections, connections60)
+					items.InputWindowsMetrics.Connections = append(items.InputWindowsMetrics.Connections, connections58)
 				}
 				items.InputWindowsMetrics.Description = types.StringPointerValue(itemsItem.InputWindowsMetrics.Description)
 				items.InputWindowsMetrics.Disabled = types.BoolPointerValue(itemsItem.InputWindowsMetrics.Disabled)
@@ -7911,13 +7504,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWindowsMetrics.Interval = types.Float64PointerValue(itemsItem.InputWindowsMetrics.Interval)
 				items.InputWindowsMetrics.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem66 := range itemsItem.InputWindowsMetrics.Metadata {
-					var metadata66 tfTypes.ItemsTypeMetadata
+				for _, metadataItem64 := range itemsItem.InputWindowsMetrics.Metadata {
+					var metadata64 tfTypes.ItemsTypeMetadata
 
-					metadata66.Name = types.StringValue(metadataItem66.Name)
-					metadata66.Value = types.StringValue(metadataItem66.Value)
+					metadata64.Name = types.StringValue(metadataItem64.Name)
+					metadata64.Value = types.StringValue(metadataItem64.Value)
 
-					items.InputWindowsMetrics.Metadata = append(items.InputWindowsMetrics.Metadata, metadata66)
+					items.InputWindowsMetrics.Metadata = append(items.InputWindowsMetrics.Metadata, metadata64)
 				}
 				if itemsItem.InputWindowsMetrics.Persistence == nil {
 					items.InputWindowsMetrics.Persistence = nil
@@ -8001,13 +7594,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWiz.ClientSecret = types.StringPointerValue(itemsItem.InputWiz.ClientSecret)
 				items.InputWiz.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem61 := range itemsItem.InputWiz.Connections {
-					var connections61 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem59 := range itemsItem.InputWiz.Connections {
+					var connections59 tfTypes.ItemsTypeConnectionsOptional
 
-					connections61.Output = types.StringPointerValue(connectionsItem61.Output)
-					connections61.Pipeline = types.StringPointerValue(connectionsItem61.Pipeline)
+					connections59.Output = types.StringPointerValue(connectionsItem59.Output)
+					connections59.Pipeline = types.StringPointerValue(connectionsItem59.Pipeline)
 
-					items.InputWiz.Connections = append(items.InputWiz.Connections, connections61)
+					items.InputWiz.Connections = append(items.InputWiz.Connections, connections59)
 				}
 				items.InputWiz.ContentConfig = []tfTypes.InputWizContentConfig{}
 
@@ -8049,13 +7642,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWiz.MaxMissedKeepAlives = types.Float64PointerValue(itemsItem.InputWiz.MaxMissedKeepAlives)
 				items.InputWiz.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem67 := range itemsItem.InputWiz.Metadata {
-					var metadata67 tfTypes.ItemsTypeMetadata
+				for _, metadataItem65 := range itemsItem.InputWiz.Metadata {
+					var metadata65 tfTypes.ItemsTypeMetadata
 
-					metadata67.Name = types.StringValue(metadataItem67.Name)
-					metadata67.Value = types.StringValue(metadataItem67.Value)
+					metadata65.Name = types.StringValue(metadataItem65.Name)
+					metadata65.Value = types.StringValue(metadataItem65.Value)
 
-					items.InputWiz.Metadata = append(items.InputWiz.Metadata, metadata67)
+					items.InputWiz.Metadata = append(items.InputWiz.Metadata, metadata65)
 				}
 				items.InputWiz.Pipeline = types.StringPointerValue(itemsItem.InputWiz.Pipeline)
 				if itemsItem.InputWiz.Pq == nil {
@@ -8136,13 +7729,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					authTokensExt3.Description = types.StringPointerValue(authTokensExtItem3.Description)
 					authTokensExt3.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem68 := range authTokensExtItem3.Metadata {
-						var metadata68 tfTypes.ItemsTypeMetadata
+					for _, metadataItem66 := range authTokensExtItem3.Metadata {
+						var metadata66 tfTypes.ItemsTypeMetadata
 
-						metadata68.Name = types.StringValue(metadataItem68.Name)
-						metadata68.Value = types.StringValue(metadataItem68.Value)
+						metadata66.Name = types.StringValue(metadataItem66.Name)
+						metadata66.Value = types.StringValue(metadataItem66.Value)
 
-						authTokensExt3.Metadata = append(authTokensExt3.Metadata, metadata68)
+						authTokensExt3.Metadata = append(authTokensExt3.Metadata, metadata66)
 					}
 					authTokensExt3.Token = types.StringValue(authTokensExtItem3.Token)
 
@@ -8155,13 +7748,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWizWebhook.CaptureHeaders = types.BoolPointerValue(itemsItem.InputWizWebhook.CaptureHeaders)
 				items.InputWizWebhook.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem62 := range itemsItem.InputWizWebhook.Connections {
-					var connections62 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem60 := range itemsItem.InputWizWebhook.Connections {
+					var connections60 tfTypes.ItemsTypeConnectionsOptional
 
-					connections62.Output = types.StringPointerValue(connectionsItem62.Output)
-					connections62.Pipeline = types.StringPointerValue(connectionsItem62.Pipeline)
+					connections60.Output = types.StringPointerValue(connectionsItem60.Output)
+					connections60.Pipeline = types.StringPointerValue(connectionsItem60.Pipeline)
 
-					items.InputWizWebhook.Connections = append(items.InputWizWebhook.Connections, connections62)
+					items.InputWizWebhook.Connections = append(items.InputWizWebhook.Connections, connections60)
 				}
 				items.InputWizWebhook.Description = types.StringPointerValue(itemsItem.InputWizWebhook.Description)
 				items.InputWizWebhook.Disabled = types.BoolPointerValue(itemsItem.InputWizWebhook.Disabled)
@@ -8177,13 +7770,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputWizWebhook.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputWizWebhook.MaxRequestsPerSocket)
 				items.InputWizWebhook.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem69 := range itemsItem.InputWizWebhook.Metadata {
-					var metadata69 tfTypes.ItemsTypeMetadata
+				for _, metadataItem67 := range itemsItem.InputWizWebhook.Metadata {
+					var metadata67 tfTypes.ItemsTypeMetadata
 
-					metadata69.Name = types.StringValue(metadataItem69.Name)
-					metadata69.Value = types.StringValue(metadataItem69.Value)
+					metadata67.Name = types.StringValue(metadataItem67.Name)
+					metadata67.Value = types.StringValue(metadataItem67.Value)
 
-					items.InputWizWebhook.Metadata = append(items.InputWizWebhook.Metadata, metadata69)
+					items.InputWizWebhook.Metadata = append(items.InputWizWebhook.Metadata, metadata67)
 				}
 				items.InputWizWebhook.Pipeline = types.StringPointerValue(itemsItem.InputWizWebhook.Pipeline)
 				items.InputWizWebhook.Port = types.Float64Value(itemsItem.InputWizWebhook.Port)
@@ -8284,13 +7877,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 					authTokens5.Enabled = types.BoolPointerValue(authTokensItem5.Enabled)
 					authTokens5.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-					for _, metadataItem70 := range authTokensItem5.Metadata {
-						var metadata70 tfTypes.ItemsTypeMetadata
+					for _, metadataItem68 := range authTokensItem5.Metadata {
+						var metadata68 tfTypes.ItemsTypeMetadata
 
-						metadata70.Name = types.StringValue(metadataItem70.Name)
-						metadata70.Value = types.StringValue(metadataItem70.Value)
+						metadata68.Name = types.StringValue(metadataItem68.Name)
+						metadata68.Value = types.StringValue(metadataItem68.Value)
 
-						authTokens5.Metadata = append(authTokens5.Metadata, metadata70)
+						authTokens5.Metadata = append(authTokens5.Metadata, metadata68)
 					}
 					authTokens5.Token = types.StringValue(authTokensItem5.Token)
 					authTokens5.TokenSecret = types.StringPointerValue(authTokensItem5.TokenSecret)
@@ -8300,13 +7893,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputZscalerHec.CaptureHeaders = types.BoolPointerValue(itemsItem.InputZscalerHec.CaptureHeaders)
 				items.InputZscalerHec.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
-				for _, connectionsItem63 := range itemsItem.InputZscalerHec.Connections {
-					var connections63 tfTypes.ItemsTypeConnectionsOptional
+				for _, connectionsItem61 := range itemsItem.InputZscalerHec.Connections {
+					var connections61 tfTypes.ItemsTypeConnectionsOptional
 
-					connections63.Output = types.StringPointerValue(connectionsItem63.Output)
-					connections63.Pipeline = types.StringPointerValue(connectionsItem63.Pipeline)
+					connections61.Output = types.StringPointerValue(connectionsItem61.Output)
+					connections61.Pipeline = types.StringPointerValue(connectionsItem61.Pipeline)
 
-					items.InputZscalerHec.Connections = append(items.InputZscalerHec.Connections, connections63)
+					items.InputZscalerHec.Connections = append(items.InputZscalerHec.Connections, connections61)
 				}
 				items.InputZscalerHec.Description = types.StringPointerValue(itemsItem.InputZscalerHec.Description)
 				items.InputZscalerHec.Disabled = types.BoolPointerValue(itemsItem.InputZscalerHec.Disabled)
@@ -8330,13 +7923,13 @@ func (r *PackSourceDataSourceModel) RefreshFromOperationsGetSystemInputsByPackAn
 				items.InputZscalerHec.MaxRequestsPerSocket = types.Int64PointerValue(itemsItem.InputZscalerHec.MaxRequestsPerSocket)
 				items.InputZscalerHec.Metadata = []tfTypes.ItemsTypeMetadata{}
 
-				for _, metadataItem71 := range itemsItem.InputZscalerHec.Metadata {
-					var metadata71 tfTypes.ItemsTypeMetadata
+				for _, metadataItem69 := range itemsItem.InputZscalerHec.Metadata {
+					var metadata69 tfTypes.ItemsTypeMetadata
 
-					metadata71.Name = types.StringValue(metadataItem71.Name)
-					metadata71.Value = types.StringValue(metadataItem71.Value)
+					metadata69.Name = types.StringValue(metadataItem69.Name)
+					metadata69.Value = types.StringValue(metadataItem69.Value)
 
-					items.InputZscalerHec.Metadata = append(items.InputZscalerHec.Metadata, metadata71)
+					items.InputZscalerHec.Metadata = append(items.InputZscalerHec.Metadata, metadata69)
 				}
 				items.InputZscalerHec.Pipeline = types.StringPointerValue(itemsItem.InputZscalerHec.Pipeline)
 				items.InputZscalerHec.Port = types.Float64Value(itemsItem.InputZscalerHec.Port)

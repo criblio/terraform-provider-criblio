@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 )
 
-type LokiAuthOauthParam1 struct {
+type LokiAuthOauthHeader struct {
 	Name  jsontypes.Normalized `tfsdk:"name"`
 	Value jsontypes.Normalized `tfsdk:"value"`
 }

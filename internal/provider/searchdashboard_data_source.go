@@ -149,6 +149,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 										"default_value": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
+												"array_of_str": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
 												"default_value": schema.SingleNestedAttribute{
 													Computed: true,
 													Attributes: map[string]schema.Attribute{
@@ -186,6 +190,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 													Computed: true,
 												},
 											},
+										},
+										"multiselect": schema.BoolAttribute{
+											Computed:    true,
+											Description: `When true, the dropdown allows multiple values; defaultValue may be a string array.`,
 										},
 									},
 								},

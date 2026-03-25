@@ -20,16 +20,15 @@ func (r *CertificatesDataSourceModel) RefreshFromOperationsListCertificateRespon
 			var items tfTypes.Certificate
 
 			items.Ca = types.StringPointerValue(itemsItem.Ca)
-			items.CaPath = types.StringPointerValue(itemsItem.CaPath)
 			items.Cert = types.StringValue(itemsItem.Cert)
-			items.CertExpiryDate = types.StringPointerValue(itemsItem.CertExpiryDate)
-			items.CertPath = types.StringPointerValue(itemsItem.CertPath)
 			items.Description = types.StringPointerValue(itemsItem.Description)
 			items.ID = types.StringValue(itemsItem.ID)
+			items.InUse = make([]types.String, 0, len(itemsItem.InUse))
+			for _, v := range itemsItem.InUse {
+				items.InUse = append(items.InUse, types.StringValue(v))
+			}
 			items.Passphrase = types.StringPointerValue(itemsItem.Passphrase)
-			items.PassphrasePath = types.StringPointerValue(itemsItem.PassphrasePath)
 			items.PrivKey = types.StringValue(itemsItem.PrivKey)
-			items.PrivKeyPath = types.StringPointerValue(itemsItem.PrivKeyPath)
 
 			r.Items = append(r.Items, items)
 		}

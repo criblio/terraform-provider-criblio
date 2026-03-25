@@ -2135,17 +2135,9 @@ Read-Only:
 
 Read-Only:
 
-- `input_grafana_grafana1` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1))
-- `input_grafana_grafana2` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2))
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1`
-
-Read-Only:
-
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_grafana--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
@@ -2156,28 +2148,28 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
-- `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth))
+- `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth))
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_grafana--metadata))
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth))
+- `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Remote Write API endpoint, Logs API endpoint, or both must be configured.
+- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth))
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--tls))
 - `type` (String)
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--connections"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.connections`
+<a id="nestedatt--items--input_grafana--connections"></a>
+### Nested Schema for `items.input_grafana.connections`
 
 Read-Only:
 
@@ -2185,8 +2177,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.loki_auth`
+<a id="nestedatt--items--input_grafana--loki_auth"></a>
+### Nested Schema for `items.input_grafana.loki_auth`
 
 Read-Only:
 
@@ -2194,8 +2186,8 @@ Read-Only:
 - `auth_type` (String) Loki logs authentication type
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `login_url` (String) Parsed as JSON.
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--loki_auth--oauth_params))
 - `password` (String)
 - `secret` (String) Parsed as JSON.
 - `secret_param_name` (String) Parsed as JSON.
@@ -2205,8 +2197,8 @@ Read-Only:
 - `token_timeout_secs` (String) Parsed as JSON.
 - `username` (String)
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth--oauth_headers"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.loki_auth.oauth_headers`
+<a id="nestedatt--items--input_grafana--loki_auth--oauth_headers"></a>
+### Nested Schema for `items.input_grafana.loki_auth.oauth_headers`
 
 Read-Only:
 
@@ -2214,8 +2206,8 @@ Read-Only:
 - `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--loki_auth--oauth_params"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.loki_auth.oauth_params`
+<a id="nestedatt--items--input_grafana--loki_auth--oauth_params"></a>
+### Nested Schema for `items.input_grafana.loki_auth.oauth_params`
 
 Read-Only:
 
@@ -2224,8 +2216,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--metadata"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.metadata`
+<a id="nestedatt--items--input_grafana--metadata"></a>
+### Nested Schema for `items.input_grafana.metadata`
 
 Read-Only:
 
@@ -2233,8 +2225,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--pq"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.pq`
+<a id="nestedatt--items--input_grafana--pq"></a>
+### Nested Schema for `items.input_grafana.pq`
 
 Read-Only:
 
@@ -2246,15 +2238,15 @@ Read-Only:
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--pq--pq_controls))
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--pq--pq_controls))
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--pq--pq_controls"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.pq.pq_controls`
+<a id="nestedatt--items--input_grafana--pq--pq_controls"></a>
+### Nested Schema for `items.input_grafana.pq.pq_controls`
 
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.prometheus_auth`
+<a id="nestedatt--items--input_grafana--prometheus_auth"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth`
 
 Read-Only:
 
@@ -2262,8 +2254,8 @@ Read-Only:
 - `auth_type` (String) Remote Write authentication type
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `login_url` (String) Parsed as JSON.
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--prometheus_auth--oauth_params))
 - `password` (String)
 - `secret` (String) Parsed as JSON.
 - `secret_param_name` (String) Parsed as JSON.
@@ -2273,8 +2265,8 @@ Read-Only:
 - `token_timeout_secs` (String) Parsed as JSON.
 - `username` (String)
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth--oauth_headers"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.prometheus_auth.oauth_headers`
+<a id="nestedatt--items--input_grafana--prometheus_auth--oauth_headers"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth.oauth_headers`
 
 Read-Only:
 
@@ -2282,8 +2274,8 @@ Read-Only:
 - `value` (String) Parsed as JSON.
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--prometheus_auth--oauth_params"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.prometheus_auth.oauth_params`
+<a id="nestedatt--items--input_grafana--prometheus_auth--oauth_params"></a>
+### Nested Schema for `items.input_grafana.prometheus_auth.oauth_params`
 
 Read-Only:
 
@@ -2292,8 +2284,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--items--input_grafana--input_grafana_grafana1--tls"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana1.tls`
+<a id="nestedatt--items--input_grafana--tls"></a>
+### Nested Schema for `items.input_grafana.tls`
 
 Read-Only:
 
@@ -2308,180 +2300,6 @@ Read-Only:
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
-
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2`
-
-Read-Only:
-
-- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `capture_headers` (Boolean) Add request headers to events, in the __headers field
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--connections))
-- `description` (String)
-- `disabled` (Boolean)
-- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `host` (String) Address to bind on. Defaults to 0.0.0.0 (all addresses).
-- `id` (String) Unique ID for this input
-- `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
-- `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
-- `keep_alive_timeout` (Number) Maximum time to wait for additional data, after the last response was sent, before closing a socket connection. This can be very useful when Grafana Agent remote write's request frequency is high so, reusing connections, would help mitigating the cost of creating a new connection per request. Note that Grafana Agent's embedded Prometheus would attempt to keep connections open for up to 5 minutes.
-- `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'. Either this field or 'Remote Write API endpoint' must be configured.
-- `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth))
-- `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
-- `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--metadata))
-- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `port` (Number) Port to listen on
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--pq))
-- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `prometheus_api` (String) Absolute path on which to listen for Grafana Agent's Remote Write requests. Defaults to /api/prom/push, which will expand as: 'http://<your‑upstream‑URL>:<your‑port>/api/prom/push'. Either this field or 'Logs API endpoint' must be configured.
-- `prometheus_auth` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth))
-- `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--tls))
-- `type` (String)
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--connections"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.connections`
-
-Read-Only:
-
-- `output` (String)
-- `pipeline` (String)
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.loki_auth`
-
-Read-Only:
-
-- `auth_header_expr` (String) Parsed as JSON.
-- `auth_type` (String) Loki logs authentication type
-- `credentials_secret` (String) Select or create a secret that references your credentials
-- `login_url` (String) Parsed as JSON.
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth--oauth_params))
-- `password` (String)
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
-- `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
-- `username` (String)
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth--oauth_headers"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.loki_auth.oauth_headers`
-
-Read-Only:
-
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--loki_auth--oauth_params"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.loki_auth.oauth_params`
-
-Read-Only:
-
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
-
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--metadata"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--pq"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.pq`
-
-Read-Only:
-
-- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
-- `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
-- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
-- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--pq--pq_controls))
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--pq--pq_controls"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.pq.pq_controls`
-
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.prometheus_auth`
-
-Read-Only:
-
-- `auth_header_expr` (String) Parsed as JSON.
-- `auth_type` (String) Remote Write authentication type
-- `credentials_secret` (String) Select or create a secret that references your credentials
-- `login_url` (String) Parsed as JSON.
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth--oauth_params))
-- `password` (String)
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
-- `text_secret` (String) Select or create a stored text secret
-- `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
-- `username` (String)
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth--oauth_headers"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.prometheus_auth.oauth_headers`
-
-Read-Only:
-
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--prometheus_auth--oauth_params"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.prometheus_auth.oauth_params`
-
-Read-Only:
-
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
-
-
-
-<a id="nestedatt--items--input_grafana--input_grafana_grafana2--tls"></a>
-### Nested Schema for `items.input_grafana.input_grafana_grafana2.tls`
-
-Read-Only:
-
-- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
-- `disabled` (Boolean)
-- `max_version` (String)
-- `min_version` (String)
-- `passphrase` (String) Passphrase to use to decrypt private key
-- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
-- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
-
 
 
 
