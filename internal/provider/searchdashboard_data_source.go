@@ -70,13 +70,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 						"dashboard_element": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"markdown": schema.StringAttribute{
-											Computed: true,
-										},
-									},
+								"config": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,
@@ -143,59 +140,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 						"dashboard_element_input": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"default_value": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"array_of_str": schema.ListAttribute{
-													Computed:    true,
-													ElementType: types.StringType,
-												},
-												"default_value": schema.SingleNestedAttribute{
-													Computed: true,
-													Attributes: map[string]schema.Attribute{
-														"earliest": schema.SingleNestedAttribute{
-															Computed: true,
-															Attributes: map[string]schema.Attribute{
-																"number": schema.Float64Attribute{
-																	Computed: true,
-																},
-																"str": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														"latest": schema.SingleNestedAttribute{
-															Computed: true,
-															Attributes: map[string]schema.Attribute{
-																"number": schema.Float64Attribute{
-																	Computed: true,
-																},
-																"str": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														"timezone": schema.StringAttribute{
-															Computed: true,
-														},
-													},
-												},
-												"number": schema.Float64Attribute{
-													Computed: true,
-												},
-												"str": schema.StringAttribute{
-													Computed: true,
-												},
-											},
-										},
-										"multiselect": schema.BoolAttribute{
-											Computed:    true,
-											Description: `When true, the dropdown allows multiple values; defaultValue may be a string array.`,
-										},
-									},
+								"config": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,
@@ -330,40 +278,10 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 						"dashboard_element_visualization": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"additional_properties": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Computed:    true,
-											Description: `Parsed as JSON.`,
-										},
-										"columns": schema.StringAttribute{
-											Computed:    true,
-											Description: `Column configuration (e.g. auto)`,
-										},
-										"group_by": schema.StringAttribute{
-											Computed:    true,
-											Description: `Group-by field`,
-										},
-										"max_rows": schema.StringAttribute{
-											Computed:    true,
-											Description: `Max rows for tables`,
-										},
-										"series": schema.StringAttribute{
-											Computed:    true,
-											Description: `Series configuration`,
-										},
-										"x_axis": schema.StringAttribute{
-											Computed:    true,
-											Description: `X-axis field for charts`,
-										},
-										"y_axis": schema.StringAttribute{
-											Computed:    true,
-											Description: `Y-axis field for charts`,
-										},
-									},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, columns).`,
+								"config": schema.MapAttribute{
+									Computed:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,

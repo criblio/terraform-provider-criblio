@@ -6,12 +6,14 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -172,6 +174,33 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 		err := addOneOfBlockFromFirstItem(model, attrs, cfg)
 		assert.ErrorIs(t, err, ErrUnsupportedOneOfType)
 	})
+}
+
+func TestAddOneOfBlockFromFirstItem_inputUnionStruct(t *testing.T) {
+	cfg := &registry.OneOfConfig{
+		ReadOnlyAttr:        "items",
+		DiscriminatorField:  "type",
+		BlockNamePrefix:     "input_",
+		KeysToSkip:          []string{"status"},
+		SupportedBlockNames: []string{"input_cribl_http"},
+	}
+	model := &provider.SourceResourceModel{
+		Items: []ptypes.InputUnion1{
+			{InputCriblHTTP: &ptypes.InputCriblHTTP{
+				Type: types.StringValue("cribl_http"),
+				ID:   types.StringValue("in_test"),
+				Host: types.StringValue("0.0.0.0"),
+				Port: types.Float64Value(10080),
+			}},
+		},
+	}
+	attrs := make(map[string]hcl.Value)
+	err := addOneOfBlockFromFirstItem(model, attrs, cfg)
+	require.NoError(t, err)
+	v, ok := attrs["input_cribl_http"]
+	require.True(t, ok, "expected input_cribl_http block")
+	assert.Equal(t, hcl.KindMap, v.Kind)
+	assert.Equal(t, "in_test", v.Map["id"].String)
 }
 
 func TestSanitizeConvertError(t *testing.T) {

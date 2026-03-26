@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -84,7 +86,13 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			elements.DashboardElementVisualization.Config = tfElementConfigFromShared(elementsItem.DashboardElementVisualization.Config)
+			if len(elementsItem.DashboardElementVisualization.Config) > 0 {
+				elements.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElementVisualization.Config))
+				for key, value := range elementsItem.DashboardElementVisualization.Config {
+					result, _ := json.Marshal(value)
+					elements.DashboardElementVisualization.Config[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
 			elements.DashboardElementVisualization.ID = types.StringValue(elementsItem.DashboardElementVisualization.ID)
@@ -154,48 +162,12 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 		}
 		if elementsItem.DashboardElementInput != nil {
 			elements.DashboardElementInput = &tfTypes.DashboardElementInput{}
-			if elementsItem.DashboardElementInput.Config == nil {
-				elements.DashboardElementInput.Config = nil
-			} else {
-				elements.DashboardElementInput.Config = &tfTypes.InputElementConfig{}
-				if elementsItem.DashboardElementInput.Config.DefaultValue != nil {
-					elements.DashboardElementInput.Config.DefaultValue = &tfTypes.DefaultValueUnion{}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.Str != nil {
-						elements.DashboardElementInput.Config.DefaultValue.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.Str)
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.Number != nil {
-						elements.DashboardElementInput.Config.DefaultValue.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.Number)
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr != nil {
-						elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr = make([]types.String, 0, len(elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr))
-						for _, v := range elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr {
-							elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr = append(elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr, types.StringValue(v))
-						}
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue != nil {
-						elements.DashboardElementInput.Config.DefaultValue.DefaultValue = &tfTypes.DefaultValue{}
-						if elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest == nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest = &tfTypes.EarliestTypeSearchQuery{}
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str)
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number)
-						}
-						if elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest == nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest = &tfTypes.EarliestTypeSearchQuery{}
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str)
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number)
-						}
-						elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone)
-					}
+			if len(elementsItem.DashboardElementInput.Config) > 0 {
+				elements.DashboardElementInput.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElementInput.Config))
+				for key1, value1 := range elementsItem.DashboardElementInput.Config {
+					result1, _ := json.Marshal(value1)
+					elements.DashboardElementInput.Config[key1] = jsontypes.NewNormalizedValue(string(result1))
 				}
-				elements.DashboardElementInput.Config.Multiselect = types.BoolPointerValue(elementsItem.DashboardElementInput.Config.Multiselect)
 			}
 			elements.DashboardElementInput.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementInput.HidePanel)
 			elements.DashboardElementInput.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementInput.HorizontalChart)
@@ -267,11 +239,12 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 		}
 		if elementsItem.DashboardElement != nil {
 			elements.DashboardElement = &tfTypes.DashboardElement{}
-			if elementsItem.DashboardElement.Config == nil {
-				elements.DashboardElement.Config = nil
-			} else {
-				elements.DashboardElement.Config = &tfTypes.MarkdownElementConfig{}
-				elements.DashboardElement.Config.Markdown = types.StringValue(elementsItem.DashboardElement.Config.Markdown)
+			if len(elementsItem.DashboardElement.Config) > 0 {
+				elements.DashboardElement.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElement.Config))
+				for key2, value2 := range elementsItem.DashboardElement.Config {
+					result2, _ := json.Marshal(value2)
+					elements.DashboardElement.Config[key2] = jsontypes.NewNormalizedValue(string(result2))
+				}
 			}
 			elements.DashboardElement.HidePanel = types.BoolPointerValue(elementsItem.DashboardElement.HidePanel)
 			elements.DashboardElement.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElement.HorizontalChart)
@@ -303,6 +276,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		r.Elements = append(r.Elements, elements)
 	}
+	r.Groups = nil
 	if len(resp.Groups) > 0 {
 		r.Groups = make(map[string]tfTypes.DashboardGroups, len(resp.Groups))
 		for dashboardGroupsKey, dashboardGroupsValue := range resp.Groups {
@@ -314,8 +288,8 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 				dashboardGroupsResult.Action.Label = types.StringValue(dashboardGroupsValue.Action.Label)
 				if len(dashboardGroupsValue.Action.Params) > 0 {
 					dashboardGroupsResult.Action.Params = make(map[string]types.String, len(dashboardGroupsValue.Action.Params))
-					for key, value := range dashboardGroupsValue.Action.Params {
-						dashboardGroupsResult.Action.Params[key] = types.StringValue(value)
+					for key3, value3 := range dashboardGroupsValue.Action.Params {
+						dashboardGroupsResult.Action.Params[key3] = types.StringValue(value3)
 					}
 				}
 				dashboardGroupsResult.Action.Target = types.StringValue(dashboardGroupsValue.Action.Target)
@@ -416,9 +390,11 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	elements := make([]shared.DashboardElementUnion, 0, len(r.Elements))
 	for elementsItem := range r.Elements {
 		if r.Elements[elementsItem].DashboardElementVisualization != nil {
-			var config *shared.ElementConfigType
-			if r.Elements[elementsItem].DashboardElementVisualization.Config != nil {
-				config = sharedElementConfigFromTF(r.Elements[elementsItem].DashboardElementVisualization.Config)
+			config := make(map[string]interface{})
+			for configKey := range r.Elements[elementsItem].DashboardElementVisualization.Config {
+				var configInst interface{}
+				_ = json.Unmarshal([]byte(r.Elements[elementsItem].DashboardElementVisualization.Config[configKey].ValueString()), &configInst)
+				config[configKey] = configInst
 			}
 			hidePanel := new(bool)
 			if !r.Elements[elementsItem].DashboardElementVisualization.HidePanel.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.HidePanel.IsNull() {
@@ -633,120 +609,11 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			})
 		}
 		if r.Elements[elementsItem].DashboardElementInput != nil {
-			var config1 *shared.InputElementConfig
-			if r.Elements[elementsItem].DashboardElementInput.Config != nil {
-				var defaultValue *shared.DefaultValueUnion
-				if r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue != nil {
-					str2 := new(string)
-					if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.IsNull() {
-						*str2 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.ValueString()
-					} else {
-						str2 = nil
-					}
-					if str2 != nil {
-						defaultValue = &shared.DefaultValueUnion{
-							Str: str2,
-						}
-					}
-					number2 := new(float64)
-					if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.IsNull() {
-						*number2 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.ValueFloat64()
-					} else {
-						number2 = nil
-					}
-					if number2 != nil {
-						defaultValue = &shared.DefaultValueUnion{
-							Number: number2,
-						}
-					}
-					var arrayOfStr []string
-					if r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.ArrayOfStr != nil {
-						arrayOfStr = make([]string, 0, len(r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.ArrayOfStr))
-						for arrayOfStrIndex := range r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.ArrayOfStr {
-							arrayOfStr = append(arrayOfStr, r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.ArrayOfStr[arrayOfStrIndex].ValueString())
-						}
-					}
-					if arrayOfStr != nil {
-						defaultValue = &shared.DefaultValueUnion{
-							ArrayOfStr: arrayOfStr,
-						}
-					}
-					var defaultValue1 *shared.DefaultValue
-					if r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue != nil {
-						var earliest1 shared.EarliestTypeSearchQuery
-						str3 := new(string)
-						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.IsNull() {
-							*str3 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.ValueString()
-						} else {
-							str3 = nil
-						}
-						if str3 != nil {
-							earliest1 = shared.EarliestTypeSearchQuery{
-								Str: str3,
-							}
-						}
-						number3 := new(float64)
-						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.IsNull() {
-							*number3 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.ValueFloat64()
-						} else {
-							number3 = nil
-						}
-						if number3 != nil {
-							earliest1 = shared.EarliestTypeSearchQuery{
-								Number: number3,
-							}
-						}
-						var latest1 shared.EarliestTypeSearchQuery
-						str4 := new(string)
-						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.IsNull() {
-							*str4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.ValueString()
-						} else {
-							str4 = nil
-						}
-						if str4 != nil {
-							latest1 = shared.EarliestTypeSearchQuery{
-								Str: str4,
-							}
-						}
-						number4 := new(float64)
-						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.IsNull() {
-							*number4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.ValueFloat64()
-						} else {
-							number4 = nil
-						}
-						if number4 != nil {
-							latest1 = shared.EarliestTypeSearchQuery{
-								Number: number4,
-							}
-						}
-						timezone1 := new(string)
-						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone.IsNull() {
-							*timezone1 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone.ValueString()
-						} else {
-							timezone1 = nil
-						}
-						defaultValue1 = &shared.DefaultValue{
-							Earliest: earliest1,
-							Latest:   latest1,
-							Timezone: timezone1,
-						}
-					}
-					if defaultValue1 != nil {
-						defaultValue = &shared.DefaultValueUnion{
-							DefaultValue: defaultValue1,
-						}
-					}
-				}
-				multiselect := new(bool)
-				if !r.Elements[elementsItem].DashboardElementInput.Config.Multiselect.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.Multiselect.IsNull() {
-					*multiselect = r.Elements[elementsItem].DashboardElementInput.Config.Multiselect.ValueBool()
-				} else {
-					multiselect = nil
-				}
-				config1 = &shared.InputElementConfig{
-					DefaultValue: defaultValue,
-					Multiselect:  multiselect,
-				}
+			config1 := make(map[string]interface{})
+			for configKey1 := range r.Elements[elementsItem].DashboardElementInput.Config {
+				var configInst1 interface{}
+				_ = json.Unmarshal([]byte(r.Elements[elementsItem].DashboardElementInput.Config[configKey1].ValueString()), &configInst1)
+				config1[configKey1] = configInst1
 			}
 			hidePanel1 := new(bool)
 			if !r.Elements[elementsItem].DashboardElementInput.HidePanel.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.HidePanel.IsNull() {
@@ -818,53 +685,53 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				}
 				var searchQueryInline1 *shared.SearchQueryInline
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline != nil {
-					var earliest2 *shared.SearchQueryEarliest
+					var earliest1 *shared.SearchQueryEarliest
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest != nil {
-						str5 := new(string)
+						str2 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsNull() {
-							*str5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
+							*str2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
 						} else {
-							str5 = nil
+							str2 = nil
 						}
-						if str5 != nil {
-							earliest2 = &shared.SearchQueryEarliest{
-								Str: str5,
+						if str2 != nil {
+							earliest1 = &shared.SearchQueryEarliest{
+								Str: str2,
 							}
 						}
-						number5 := new(float64)
+						number2 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsNull() {
-							*number5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
+							*number2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
 						} else {
-							number5 = nil
+							number2 = nil
 						}
-						if number5 != nil {
-							earliest2 = &shared.SearchQueryEarliest{
-								Number: number5,
+						if number2 != nil {
+							earliest1 = &shared.SearchQueryEarliest{
+								Number: number2,
 							}
 						}
 					}
-					var latest2 *shared.SearchQueryLatest
+					var latest1 *shared.SearchQueryLatest
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest != nil {
-						str6 := new(string)
+						str3 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsNull() {
-							*str6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
+							*str3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
 						} else {
-							str6 = nil
+							str3 = nil
 						}
-						if str6 != nil {
-							latest2 = &shared.SearchQueryLatest{
-								Str: str6,
+						if str3 != nil {
+							latest1 = &shared.SearchQueryLatest{
+								Str: str3,
 							}
 						}
-						number6 := new(float64)
+						number3 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsNull() {
-							*number6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
+							*number3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
 						} else {
-							number6 = nil
+							number3 = nil
 						}
-						if number6 != nil {
-							latest2 = &shared.SearchQueryLatest{
-								Number: number6,
+						if number3 != nil {
+							latest1 = &shared.SearchQueryLatest{
+								Number: number3,
 							}
 						}
 					}
@@ -883,20 +750,20 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						sampleRate1 = nil
 					}
-					timezone2 := new(string)
+					timezone1 := new(string)
 					if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Timezone.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Timezone.IsNull() {
-						*timezone2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Timezone.ValueString()
+						*timezone1 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Timezone.ValueString()
 					} else {
-						timezone2 = nil
+						timezone1 = nil
 					}
 					typeVar5 := shared.TypeInline(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Type.ValueString())
 					searchQueryInline1 = &shared.SearchQueryInline{
-						Earliest:       earliest2,
-						Latest:         latest2,
+						Earliest:       earliest1,
+						Latest:         latest1,
 						ParentSearchID: parentSearchId1,
 						Query:          query3,
 						SampleRate:     sampleRate1,
-						Timezone:       timezone2,
+						Timezone:       timezone1,
 						Type:           typeVar5,
 					}
 				}
@@ -967,14 +834,11 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			})
 		}
 		if r.Elements[elementsItem].DashboardElement != nil {
-			var config2 *shared.MarkdownElementConfig
-			if r.Elements[elementsItem].DashboardElement.Config != nil {
-				var markdown string
-				markdown = r.Elements[elementsItem].DashboardElement.Config.Markdown.ValueString()
-
-				config2 = &shared.MarkdownElementConfig{
-					Markdown: markdown,
-				}
+			config2 := make(map[string]interface{})
+			for configKey2 := range r.Elements[elementsItem].DashboardElement.Config {
+				var configInst2 interface{}
+				_ = json.Unmarshal([]byte(r.Elements[elementsItem].DashboardElement.Config[configKey2].ValueString()), &configInst2)
+				config2[configKey2] = configInst2
 			}
 			hidePanel2 := new(bool)
 			if !r.Elements[elementsItem].DashboardElement.HidePanel.IsUnknown() && !r.Elements[elementsItem].DashboardElement.HidePanel.IsNull() {

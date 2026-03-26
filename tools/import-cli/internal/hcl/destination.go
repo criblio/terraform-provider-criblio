@@ -10,6 +10,72 @@ import (
 	"strings"
 )
 
+// snakeToCamel converts tfsdk snake_case (e.g. template_host, pq_enabled) to API camelCase (templateHost, pqEnabled).
+func snakeToCamel(s string) string {
+	parts := strings.Split(s, "_")
+	for i := 1; i < len(parts); i++ {
+		if len(parts[i]) == 0 {
+			continue
+		}
+		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+	}
+	return strings.Join(parts, "")
+}
+
+// TFBlockModelToAPIItemMap converts ModelToValue output for a single input/output block (snake_case keys)
+// into the camelCase JSON item map format expected by ItemMapToBlock.
+func TFBlockModelToAPIItemMap(block map[string]Value, keysToSkip []string) (map[string]string, error) {
+	skip := make(map[string]bool, len(keysToSkip))
+	for _, k := range keysToSkip {
+		skip[k] = true
+	}
+	out := make(map[string]string, len(block))
+	for k, v := range block {
+		if skip[k] {
+			continue
+		}
+		camel := snakeToCamel(k)
+		raw, err := json.Marshal(valueToJSONableForAPI(v))
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", k, err)
+		}
+		out[camel] = string(raw)
+	}
+	return out, nil
+}
+
+func valueToJSONableForAPI(v Value) interface{} {
+	switch v.Kind {
+	case KindString:
+		return v.String
+	case KindNumber:
+		return v.Number
+	case KindBool:
+		return v.Bool
+	case KindNull:
+		return nil
+	case KindList:
+		out := make([]interface{}, len(v.List))
+		for i, el := range v.List {
+			out[i] = valueToJSONableForAPI(el)
+		}
+		return out
+	case KindMap:
+		m := make(map[string]interface{}, len(v.Map))
+		for k, ev := range v.Map {
+			ck := snakeToCamel(k)
+			m[ck] = valueToJSONableForAPI(ev)
+		}
+		return m
+	case KindSensitive:
+		return v.Sensitive
+	case KindVariableRef:
+		return v.VarName
+	default:
+		return nil
+	}
+}
+
 // camelToSnake converts camelCase or PascalCase to snake_case.
 func camelToSnake(s string) string {
 	var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -24,6 +90,13 @@ func camelToSnake(s string) string {
 func normalizeDiscriminator(s string) string {
 	s = strings.ReplaceAll(s, "-", "_")
 	return camelToSnake(s)
+}
+
+// NormalizeDiscriminator is the exported form of normalizeDiscriminator: maps an API oneOf
+// discriminator (e.g. "cribl_http", "WebhookTarget") to the suffix used in Terraform block
+// names (e.g. "cribl_http", "webhook_target") together with a prefix like "input_" or "output_".
+func NormalizeDiscriminator(s string) string {
+	return normalizeDiscriminator(s)
 }
 
 // ResolveOneOfBlockName maps a normalized API discriminator to a provider block suffix using supportedBlockNames. blockNamePrefix is used to match supported names like "output_prometheus" to normalized "prometheus". Returns suffix and true when a match is found (suffix is the part after prefix, or full name when prefix is empty).
@@ -151,6 +224,12 @@ func jsonMapToValueMap(item map[string]string, keysToSkip map[string]bool) (map[
 		out[sk] = v
 	}
 	return out, nil
+}
+
+// OmitEmptyListsFromValue returns a copy of v with empty list values omitted from nested maps.
+// Used so nested attributes like urls = [] are not written (avoids SizeAtLeast(1) errors).
+func OmitEmptyListsFromValue(v Value) Value {
+	return omitEmptyListsFromValue(v)
 }
 
 // omitEmptyListsFromValue returns a copy of v with empty list values omitted from nested maps.

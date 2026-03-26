@@ -3,17 +3,18 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type DashboardElement struct {
-	Config          *MarkdownElementConfig `tfsdk:"config"`
-	HidePanel       types.Bool             `tfsdk:"hide_panel"`
-	HorizontalChart types.Bool             `tfsdk:"horizontal_chart"`
-	ID              types.String           `tfsdk:"id"`
-	Layout          *DashboardLayout       `tfsdk:"layout"`
-	Search          *PanelQueryDefinition  `tfsdk:"search"`
-	TitleAction     *TitleAction           `tfsdk:"title_action"`
-	Type            types.String           `tfsdk:"type"`
-	Variant         types.String           `tfsdk:"variant"`
+	Config          map[string]jsontypes.Normalized `tfsdk:"config"`
+	HidePanel       types.Bool                      `tfsdk:"hide_panel"`
+	HorizontalChart types.Bool                      `tfsdk:"horizontal_chart"`
+	ID              types.String                    `tfsdk:"id"`
+	Layout          *DashboardLayout                `tfsdk:"layout"`
+	Search          *PanelQueryDefinition           `tfsdk:"search"`
+	TitleAction     *TitleAction                    `tfsdk:"title_action"`
+	Type            types.String                    `tfsdk:"type"`
+	Variant         types.String                    `tfsdk:"variant"`
 }

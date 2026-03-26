@@ -6952,9 +6952,11 @@ components:
             - type
         - type: object
           properties:
+            # Use ElementConfigType for all branches so Speakeasy can merge read response shards (map)
+            # with the visualization branch; InputElementConfig/MarkdownElementConfig caused config type mismatch.
             config:
               x-speakeasy-param-suppress-computed-diff: true
-              $ref: '#/components/schemas/InputElementConfig'
+              $ref: '#/components/schemas/ElementConfigType'
               description: Configuration for the element. Optional.
             description:
               type: string
@@ -7013,7 +7015,7 @@ components:
         - type: object
           properties:
             config:
-              $ref: '#/components/schemas/MarkdownElementConfig'
+              $ref: '#/components/schemas/ElementConfigType'
               description: Configuration for the element. Optional.
             description:
               type: string
@@ -45822,6 +45824,8 @@ components:
           type: string
           description: Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
     InputOpenai:
+      # Suppress perpetual plan noise when state is normalized differently than items[0] / API round-trip.
+      x-speakeasy-param-suppress-computed-diff: true
       type: object
       required:
         - type
@@ -45877,6 +45881,7 @@ components:
           title: OpenAI Project
           description: Optional `OpenAI-Project` request header value, typically `proj_xxxxxxxxxxxxxxxxxxxxxxxx`
         contentConfig:
+          x-speakeasy-param-suppress-computed-diff: true
           type: array
           title: Content Types
           items:
