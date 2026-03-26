@@ -606,3 +606,162 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
   ]
 }
 
+resource "criblio_search_dashboard" "search_dashboard_default_search_l3wro0ghb" {
+  cache_ttl_seconds = 0
+  description       = ""
+  elements = [{
+    dashboard_element_input = {
+      config = {
+        defaultValue = "{\"earliest\":\"-6h\",\"latest\":\"now\",\"timezone\":\"local\"}"
+      }
+      hide_panel       = false
+      horizontal_chart = false
+      id               = "7z8tf73fk"
+      input_id         = "timerange"
+      layout = {
+        h = 2
+        w = 2
+        x = 0
+        y = 0
+      }
+      title = "Time Range"
+      type  = "input.timerange"
+    }
+    }, {
+    dashboard_element_visualization = {
+      config = {
+        color = "\"#336666\""
+      }
+      hide_panel       = false
+      horizontal_chart = false
+      id               = "tx2w91r2y"
+      layout = {
+        h = 2
+        w = 4
+        x = 0
+        y = 0
+      }
+      search = {
+        search_query_inline = {
+          earliest = {
+            str = "-1h"
+          }
+          latest = {
+            str = "now"
+          }
+          parent_search_id = "7vu8glgfy"
+          query            = "\n | where message in (\"query started\") \n | summarize distinctTenantCount=dcount(tenantId)\n "
+          sample_rate      = 1
+          timezone         = null
+          type             = "inline"
+        }
+      }
+      title = "Num of Orgs Interacted with SI in the Time Period"
+      type  = "counter.single"
+    }
+    }, {
+    dashboard_element_visualization = {
+      config = {
+        color = "\"#2fcdcc\""
+      }
+      hide_panel       = false
+      horizontal_chart = false
+      id               = "tx2w91r2y-copy"
+      layout = {
+        h = 2
+        w = 4
+        x = 4
+        y = 0
+      }
+      search = {
+        search_query_inline = {
+          earliest = {
+            str = "-1h"
+          }
+          latest = {
+            str = "now"
+          }
+          parent_search_id = "7vu8glgfy"
+          query            = "\n | where message in (\"query started\") \n | summarize distinctWorkspaceCount=dcount(workspace) by tenantId\n | summarize totalDistinctWorkspaceCount=sum(distinctWorkspaceCount)\n \n "
+          sample_rate      = 1
+          timezone         = null
+          type             = "inline"
+        }
+      }
+      title = "Num of Workspace Interacted with SI in the Time Period"
+      type  = "counter.single"
+    }
+    }, {
+    dashboard_element_visualization = {
+      config           = {}
+      hide_panel       = false
+      horizontal_chart = false
+      id               = "g1izebyro"
+      layout = {
+        h = 4
+        w = 12
+        x = 0
+        y = 2
+      }
+      search = {
+        search_query_inline = {
+          earliest = {
+            str = "$timerange.earliest$"
+          }
+          latest = {
+            str = "$timerange.latest$"
+          }
+          parent_search_id = "7vu8glgfy"
+          query            = "\n | where message in (\"query started\", \"Query failed\", \"Query completed\")\n | extend status=case(message==\"Query completed\",\"success\",\n                      message==\"Query failed\",\"failure\",\n                      message==\"query started\",\"requested\", \n                      \"others\")\n | summarize requested=countif(status==\"requested\"), success=countif(status==\"success\"), failure=countif(status==\"failure\") by tenantId, workspace\n | extend error_rate=100*failure/requested"
+          sample_rate      = 1
+          timezone         = "$timerange.timezone$"
+          type             = "inline"
+        }
+      }
+      title = "Query Stats"
+      type  = "list.table"
+    }
+    }, {
+    dashboard_element_visualization = {
+      config           = {}
+      hide_panel       = true
+      horizontal_chart = false
+      id               = "7vu8glgfy"
+      layout = {
+        h = 4
+        w = 12
+        x = 0
+        y = 6
+      }
+      search = {
+        search_query_inline = {
+          earliest = {
+            str = "$timerange.earliest$"
+          }
+          latest = {
+            str = "$timerange.latest$"
+          }
+          parent_search_id = ""
+          query            = "dataset=\"$vt_dummy\" event<42 | count"
+          sample_rate      = 1
+          timezone         = "$timerange.timezone$"
+          type             = "inline"
+        }
+      }
+      title = "Parent Query"
+      type  = "chart.column"
+    }
+  }]
+  id           = "test_dashboard"
+  name         = "Test Dashboard"
+  refresh_rate = 0
+  schedule = {
+    cron_schedule = "0 0 * * *"
+    enabled       = false
+    keep_last_n   = 2
+    notifications = {
+      disabled = false
+    }
+    tz = "UTC"
+  }
+}

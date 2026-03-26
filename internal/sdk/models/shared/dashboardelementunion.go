@@ -33,20 +33,21 @@ func (e *VariantMarkdown) UnmarshalJSON(data []byte) error {
 }
 
 type DashboardElement struct {
-	Config          *MarkdownElementConfig `json:"config,omitempty"`
-	Description     *string                `json:"description,omitempty"`
-	Empty           *bool                  `json:"empty,omitempty"`
-	Group           *string                `json:"group,omitempty"`
-	HidePanel       *bool                  `default:"false" json:"hidePanel"`
-	HorizontalChart *bool                  `default:"false" json:"horizontalChart"`
-	ID              string                 `json:"id"`
-	Index           *float64               `json:"index,omitempty"`
-	Layout          DashboardLayout        `json:"layout"`
-	Search          *PanelQueryDefinition  `json:"search,omitempty"`
-	Title           *string                `json:"title,omitempty"`
-	TitleAction     *TitleAction           `json:"titleAction,omitempty"`
-	Type            MarkdownElementType    `json:"type"`
-	Variant         VariantMarkdown        `json:"variant"`
+	// Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+	Config          map[string]any        `json:"config,omitempty"`
+	Description     *string               `json:"description,omitempty"`
+	Empty           *bool                 `json:"empty,omitempty"`
+	Group           *string               `json:"group,omitempty"`
+	HidePanel       *bool                 `default:"false" json:"hidePanel"`
+	HorizontalChart *bool                 `default:"false" json:"horizontalChart"`
+	ID              string                `json:"id"`
+	Index           *float64              `json:"index,omitempty"`
+	Layout          DashboardLayout       `json:"layout"`
+	Search          *PanelQueryDefinition `json:"search,omitempty"`
+	Title           *string               `json:"title,omitempty"`
+	TitleAction     *TitleAction          `json:"titleAction,omitempty"`
+	Type            MarkdownElementType   `json:"type"`
+	Variant         VariantMarkdown       `json:"variant"`
 }
 
 func (d DashboardElement) MarshalJSON() ([]byte, error) {
@@ -60,7 +61,7 @@ func (d *DashboardElement) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DashboardElement) GetConfig() *MarkdownElementConfig {
+func (d *DashboardElement) GetConfig() map[string]any {
 	if d == nil {
 		return nil
 	}
@@ -182,17 +183,18 @@ func (e *VariantInput) UnmarshalJSON(data []byte) error {
 }
 
 type DashboardElementInput struct {
-	Config          *InputElementConfig `json:"config,omitempty"`
-	Description     *string             `json:"description,omitempty"`
-	Empty           *bool               `json:"empty,omitempty"`
-	Group           *string             `json:"group,omitempty"`
-	HidePanel       *bool               `default:"false" json:"hidePanel"`
-	HorizontalChart *bool               `default:"false" json:"horizontalChart"`
-	ID              string              `json:"id"`
-	Index           *float64            `json:"index,omitempty"`
-	InputID         string              `json:"inputId"`
-	Layout          DashboardLayout     `json:"layout"`
-	Search          *SearchQuery        `json:"search,omitempty"`
+	// Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+	Config          map[string]any  `json:"config,omitempty"`
+	Description     *string         `json:"description,omitempty"`
+	Empty           *bool           `json:"empty,omitempty"`
+	Group           *string         `json:"group,omitempty"`
+	HidePanel       *bool           `default:"false" json:"hidePanel"`
+	HorizontalChart *bool           `default:"false" json:"horizontalChart"`
+	ID              string          `json:"id"`
+	Index           *float64        `json:"index,omitempty"`
+	InputID         string          `json:"inputId"`
+	Layout          DashboardLayout `json:"layout"`
+	Search          *SearchQuery    `json:"search,omitempty"`
 	// Title of the element.
 	Title       *string          `json:"title,omitempty"`
 	TitleAction *TitleAction     `json:"titleAction,omitempty"`
@@ -212,7 +214,7 @@ func (d *DashboardElementInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DashboardElementInput) GetConfig() *InputElementConfig {
+func (d *DashboardElementInput) GetConfig() map[string]any {
 	if d == nil {
 		return nil
 	}
@@ -348,17 +350,17 @@ func (e *VariantVisualization) UnmarshalJSON(data []byte) error {
 }
 
 type DashboardElementVisualization struct {
-	// Chart/visualization-specific config (e.g. xAxis, yAxis, columns).
-	Config          *ElementConfigType `json:"config,omitempty"`
-	Description     *string            `json:"description,omitempty"`
-	Empty           *bool              `json:"empty,omitempty"`
-	Group           *string            `json:"group,omitempty"`
-	HidePanel       *bool              `default:"false" json:"hidePanel"`
-	HorizontalChart *bool              `default:"false" json:"horizontalChart"`
-	ID              string             `json:"id"`
-	Index           *float64           `json:"index,omitempty"`
-	Layout          DashboardLayout    `json:"layout"`
-	Search          SearchQuery        `json:"search"`
+	// Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+	Config          map[string]any  `json:"config,omitempty"`
+	Description     *string         `json:"description,omitempty"`
+	Empty           *bool           `json:"empty,omitempty"`
+	Group           *string         `json:"group,omitempty"`
+	HidePanel       *bool           `default:"false" json:"hidePanel"`
+	HorizontalChart *bool           `default:"false" json:"horizontalChart"`
+	ID              string          `json:"id"`
+	Index           *float64        `json:"index,omitempty"`
+	Layout          DashboardLayout `json:"layout"`
+	Search          SearchQuery     `json:"search"`
 	// Title of the element.
 	Title       *string                  `json:"title,omitempty"`
 	TitleAction *TitleAction             `json:"titleAction,omitempty"`
@@ -377,7 +379,7 @@ func (d *DashboardElementVisualization) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DashboardElementVisualization) GetConfig() *ElementConfigType {
+func (d *DashboardElementVisualization) GetConfig() map[string]any {
 	if d == nil {
 		return nil
 	}

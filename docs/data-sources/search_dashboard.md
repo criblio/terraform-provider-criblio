@@ -50,7 +50,7 @@ Read-Only:
 
 Read-Only:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--config))
+- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String)
@@ -59,14 +59,6 @@ Read-Only:
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--title_action))
 - `type` (String)
 - `variant` (String)
-
-<a id="nestedatt--elements--dashboard_element--config"></a>
-### Nested Schema for `elements.dashboard_element.config`
-
-Read-Only:
-
-- `markdown` (String)
-
 
 <a id="nestedatt--elements--dashboard_element--layout"></a>
 ### Nested Schema for `elements.dashboard_element.layout`
@@ -105,7 +97,7 @@ Read-Only:
 
 Read-Only:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config))
+- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String)
@@ -115,54 +107,6 @@ Read-Only:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--title_action))
 - `type` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--config"></a>
-### Nested Schema for `elements.dashboard_element_input.config`
-
-Read-Only:
-
-- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value))
-- `multiselect` (Boolean) When true, the dropdown allows multiple values; defaultValue may be a string array.
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value`
-
-Read-Only:
-
-- `array_of_str` (List of String)
-- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value))
-- `number` (Number)
-- `str` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value`
-
-Read-Only:
-
-- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest))
-- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest))
-- `timezone` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.earliest`
-
-Read-Only:
-
-- `number` (Number)
-- `str` (String)
-
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.latest`
-
-Read-Only:
-
-- `number` (Number)
-- `str` (String)
-
-
-
-
 
 <a id="nestedatt--elements--dashboard_element_input--layout"></a>
 ### Nested Schema for `elements.dashboard_element_input.layout`
@@ -253,7 +197,7 @@ Read-Only:
 
 Read-Only:
 
-- `config` (Attributes) Chart/visualization-specific config (e.g. xAxis, yAxis, columns). (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
+- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
 - `hide_panel` (Boolean)
 - `horizontal_chart` (Boolean)
 - `id` (String)
@@ -262,20 +206,6 @@ Read-Only:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--title_action))
 - `type` (String)
-
-<a id="nestedatt--elements--dashboard_element_visualization--config"></a>
-### Nested Schema for `elements.dashboard_element_visualization.config`
-
-Read-Only:
-
-- `additional_properties` (String) Parsed as JSON.
-- `columns` (String) Column configuration (e.g. auto)
-- `group_by` (String) Group-by field
-- `max_rows` (String) Max rows for tables
-- `series` (String) Series configuration
-- `x_axis` (String) X-axis field for charts
-- `y_axis` (String) Y-axis field for charts
-
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.layout`

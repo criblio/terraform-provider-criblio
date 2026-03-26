@@ -2,9 +2,6 @@ name: e2e Tests
 on:
   workflow_call:
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
 
 concurrency:
   group: tfprovider2

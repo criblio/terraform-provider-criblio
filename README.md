@@ -1,4 +1,4 @@
-![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/determinism.yaml/badge.svg) ![workflow status](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg)
+[![Terraform provider release](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml/badge.svg?event=push)](https://github.com/criblio/terraform-provider-criblio/actions/workflows/tf_provider_release.yaml)
 
 
 # terraform-provider-criblio

@@ -21,7 +21,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     {
       dashboard_element = {
         config = {
-          markdown = "...my_markdown..."
+          key = jsonencode("value")
         }
         hide_panel       = false
         horizontal_chart = false
@@ -108,7 +108,7 @@ Optional:
 
 Optional:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--config))
+- `config` (Map of String) Markdown and other dashboard element config (JSON string per key).
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -117,14 +117,6 @@ Optional:
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element--title_action))
 - `type` (String) Not Null; must be one of ["markdown.copilot", "markdown.default"]
 - `variant` (String) Not Null; must be "markdown"
-
-<a id="nestedatt--elements--dashboard_element--config"></a>
-### Nested Schema for `elements.dashboard_element.config`
-
-Optional:
-
-- `markdown` (String) Not Null
-
 
 <a id="nestedatt--elements--dashboard_element--layout"></a>
 ### Nested Schema for `elements.dashboard_element.layout`
@@ -163,7 +155,7 @@ Optional:
 
 Optional:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config))
+- `config` (Map of String) Input element configuration (open JSON object per key).
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -173,54 +165,6 @@ Optional:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--title_action))
 - `type` (String) Not Null; must be one of ["input.timerange", "input.dropdown", "input.text", "input.number"]
-
-<a id="nestedatt--elements--dashboard_element_input--config"></a>
-### Nested Schema for `elements.dashboard_element_input.config`
-
-Optional:
-
-- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value))
-- `multiselect` (Boolean) When true, the dropdown allows multiple values; defaultValue may be a string array.
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value`
-
-Optional:
-
-- `array_of_str` (List of String)
-- `default_value` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value))
-- `number` (Number)
-- `str` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value`
-
-Optional:
-
-- `earliest` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest))
-- `latest` (Attributes) Not Null (see [below for nested schema](#nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest))
-- `timezone` (String)
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--earliest"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.earliest`
-
-Optional:
-
-- `number` (Number)
-- `str` (String)
-
-
-<a id="nestedatt--elements--dashboard_element_input--config--default_value--default_value--latest"></a>
-### Nested Schema for `elements.dashboard_element_input.config.default_value.default_value.latest`
-
-Optional:
-
-- `number` (Number)
-- `str` (String)
-
-
-
-
 
 <a id="nestedatt--elements--dashboard_element_input--layout"></a>
 ### Nested Schema for `elements.dashboard_element_input.layout`
@@ -311,7 +255,7 @@ Optional:
 
 Optional:
 
-- `config` (Attributes) Chart/visualization-specific config (e.g. xAxis, yAxis, columns). (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
+- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis); JSON string per key.
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -320,20 +264,6 @@ Optional:
 - `title` (String) Title of the element.
 - `title_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--title_action))
 - `type` (String) Not Null; must be one of ["chart.area", "chart.column", "chart.funnel", "chart.gauge", "chart.horizontalBar", "chart.line", "chart.map", "chart.pie", "chart.scatter", "counter.single", "list.events", "list.table", "custom.throughputMetrics", "custom.flowMatrix"]
-
-<a id="nestedatt--elements--dashboard_element_visualization--config"></a>
-### Nested Schema for `elements.dashboard_element_visualization.config`
-
-Optional:
-
-- `additional_properties` (String) Parsed as JSON.
-- `columns` (String) Column configuration (e.g. auto)
-- `group_by` (String) Group-by field
-- `max_rows` (String) Max rows for tables
-- `series` (String) Series configuration
-- `x_axis` (String) X-axis field for charts
-- `y_axis` (String) Y-axis field for charts
-
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>
 ### Nested Schema for `elements.dashboard_element_visualization.layout`

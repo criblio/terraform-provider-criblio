@@ -14,13 +14,16 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -72,6 +75,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 			"category": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -89,18 +95,14 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						"dashboard_element": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"markdown": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Not Null`,
-											Validators: []validator.String{
-												speakeasy_stringvalidators.NotNull(),
-											},
-										},
+								"config": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Markdown and other dashboard element config (JSON string per key).`,
+									PlanModifiers: []planmodifier.Map{
+										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -168,6 +170,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"alias": schema.StringAttribute{
 											Computed: true,
@@ -194,6 +199,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -249,120 +257,14 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						"dashboard_element_input": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"default_value": schema.SingleNestedAttribute{
-											Computed: true,
-											Optional: true,
-											Attributes: map[string]schema.Attribute{
-												"array_of_str": schema.ListAttribute{
-													Optional:    true,
-													ElementType: types.StringType,
-													Validators: []validator.List{
-														listvalidator.ConflictsWith(path.Expressions{
-															path.MatchRelative().AtParent().AtName("str"),
-															path.MatchRelative().AtParent().AtName("number"),
-															path.MatchRelative().AtParent().AtName("default_value"),
-														}...),
-													},
-												},
-												"default_value": schema.SingleNestedAttribute{
-													Optional: true,
-													Attributes: map[string]schema.Attribute{
-														"earliest": schema.SingleNestedAttribute{
-															Computed: true,
-															Optional: true,
-															Attributes: map[string]schema.Attribute{
-																"number": schema.Float64Attribute{
-																	Optional: true,
-																	Validators: []validator.Float64{
-																		float64validator.ConflictsWith(path.Expressions{
-																			path.MatchRelative().AtParent().AtName("str"),
-																		}...),
-																	},
-																},
-																"str": schema.StringAttribute{
-																	Optional: true,
-																	Validators: []validator.String{
-																		stringvalidator.ConflictsWith(path.Expressions{
-																			path.MatchRelative().AtParent().AtName("number"),
-																		}...),
-																	},
-																},
-															},
-															Description: `Not Null`,
-															Validators: []validator.Object{
-																speakeasy_objectvalidators.NotNull(),
-															},
-														},
-														"latest": schema.SingleNestedAttribute{
-															Computed: true,
-															Optional: true,
-															Attributes: map[string]schema.Attribute{
-																"number": schema.Float64Attribute{
-																	Optional: true,
-																	Validators: []validator.Float64{
-																		float64validator.ConflictsWith(path.Expressions{
-																			path.MatchRelative().AtParent().AtName("str"),
-																		}...),
-																	},
-																},
-																"str": schema.StringAttribute{
-																	Optional: true,
-																	Validators: []validator.String{
-																		stringvalidator.ConflictsWith(path.Expressions{
-																			path.MatchRelative().AtParent().AtName("number"),
-																		}...),
-																	},
-																},
-															},
-															Description: `Not Null`,
-															Validators: []validator.Object{
-																speakeasy_objectvalidators.NotNull(),
-															},
-														},
-														"timezone": schema.StringAttribute{
-															Computed: true,
-															Optional: true,
-														},
-													},
-													Validators: []validator.Object{
-														objectvalidator.ConflictsWith(path.Expressions{
-															path.MatchRelative().AtParent().AtName("str"),
-															path.MatchRelative().AtParent().AtName("number"),
-															path.MatchRelative().AtParent().AtName("array_of_str"),
-														}...),
-													},
-												},
-												"number": schema.Float64Attribute{
-													Optional: true,
-													Validators: []validator.Float64{
-														float64validator.ConflictsWith(path.Expressions{
-															path.MatchRelative().AtParent().AtName("str"),
-															path.MatchRelative().AtParent().AtName("array_of_str"),
-															path.MatchRelative().AtParent().AtName("default_value"),
-														}...),
-													},
-												},
-												"str": schema.StringAttribute{
-													Optional: true,
-													Validators: []validator.String{
-														stringvalidator.ConflictsWith(path.Expressions{
-															path.MatchRelative().AtParent().AtName("number"),
-															path.MatchRelative().AtParent().AtName("array_of_str"),
-															path.MatchRelative().AtParent().AtName("default_value"),
-														}...),
-													},
-												},
-											},
-										},
-										"multiselect": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `When true, the dropdown allows multiple values; defaultValue may be a string array.`,
-										},
+								"config": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Input element configuration (open JSON object per key).`,
+									PlanModifiers: []planmodifier.Map{
+										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -438,6 +340,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"search_query_inline": schema.SingleNestedAttribute{
 											Optional: true,
@@ -509,6 +414,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 												"timezone": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.UseStateForUnknown(),
+													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -609,6 +517,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -657,48 +568,15 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 						"dashboard_element_visualization": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
-								"config": schema.SingleNestedAttribute{
-									Computed: true,
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"additional_properties": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Computed:    true,
-											Optional:    true,
-											Description: `Parsed as JSON.`,
-										},
-										"columns": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Column configuration (e.g. auto)`,
-										},
-										"group_by": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Group-by field`,
-										},
-										"max_rows": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Max rows for tables`,
-										},
-										"series": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Series configuration`,
-										},
-										"x_axis": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `X-axis field for charts`,
-										},
-										"y_axis": schema.StringAttribute{
-											Computed:    true,
-											Optional:    true,
-											Description: `Y-axis field for charts`,
-										},
+								"config": schema.MapAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis); JSON string per key.`,
+									PlanModifiers: []planmodifier.Map{
+										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, columns).`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed:    true,
@@ -765,6 +643,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"search_query_inline": schema.SingleNestedAttribute{
 											Optional: true,
@@ -836,6 +717,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 												"timezone": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.UseStateForUnknown(),
+													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -940,6 +824,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -1001,6 +888,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 			"groups": schema.MapNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					mapplanmodifier.UseStateForUnknown(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -1163,6 +1053,8 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+	presence := snapshotSearchDashboardConfigMapPresence(data)
+
 	request, requestDiags := data.ToSharedSearchDashboard(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1195,11 +1087,21 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+	var apiSnapshot SearchDashboardResourceModel
+	resp.Diagnostics.Append(apiSnapshot.RefreshFromOperationsCreateSearchDashboardResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	restoreSearchDashboardAfterPlanMerge(data, &apiSnapshot)
+	normalizeSearchDashboardConfigMaps(data, presence)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -1259,6 +1161,13 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
+	ensureSearchDashboardElementConfigMaps(data)
+
+	// Do not run normalizeSearchDashboardConfigMaps on Read. Prior-state snapshots often have no
+	// config keys (legacy strips / API shape), so presence-aware stripping would remove API
+	// null-only keys such as color and reintroduce perpetual drift vs. HCL (e.g. color = null).
+	// Create/Update still normalize using the plan snapshot so omitted config stays stable.
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -1276,6 +1185,8 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	presence := snapshotSearchDashboardConfigMapPresence(data)
 
 	request, requestDiags := data.ToOperationsUpdateSearchDashboardByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1309,11 +1220,21 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
+	var apiSnapshot SearchDashboardResourceModel
+	resp.Diagnostics.Append(apiSnapshot.RefreshFromOperationsUpdateSearchDashboardByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	restoreSearchDashboardAfterPlanMerge(data, &apiSnapshot)
+	normalizeSearchDashboardConfigMaps(data, presence)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

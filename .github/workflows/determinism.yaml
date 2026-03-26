@@ -1,8 +1,6 @@
-name: Test Determinism on Merge
+name: Test Determinism
 on:
-  push:
-    branches:
-      - 'main'
+  workflow_dispatch:
 
 jobs:
   validate-determinism:

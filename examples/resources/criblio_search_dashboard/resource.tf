@@ -6,7 +6,7 @@ resource "criblio_search_dashboard" "my_searchdashboard" {
     {
       dashboard_element = {
         config = {
-          markdown = "...my_markdown..."
+          key = jsonencode("value")
         }
         hide_panel       = false
         horizontal_chart = false

@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -44,7 +46,13 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			elements.DashboardElementVisualization.Config = tfElementConfigFromShared(elementsItem.DashboardElementVisualization.Config)
+			if len(elementsItem.DashboardElementVisualization.Config) > 0 {
+				elements.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElementVisualization.Config))
+				for key, value := range elementsItem.DashboardElementVisualization.Config {
+					result, _ := json.Marshal(value)
+					elements.DashboardElementVisualization.Config[key] = jsontypes.NewNormalizedValue(string(result))
+				}
+			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
 			elements.DashboardElementVisualization.ID = types.StringValue(elementsItem.DashboardElementVisualization.ID)
@@ -114,48 +122,12 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 		}
 		if elementsItem.DashboardElementInput != nil {
 			elements.DashboardElementInput = &tfTypes.DashboardElementInput{}
-			if elementsItem.DashboardElementInput.Config == nil {
-				elements.DashboardElementInput.Config = nil
-			} else {
-				elements.DashboardElementInput.Config = &tfTypes.InputElementConfig{}
-				if elementsItem.DashboardElementInput.Config.DefaultValue != nil {
-					elements.DashboardElementInput.Config.DefaultValue = &tfTypes.DefaultValueUnion{}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.Str != nil {
-						elements.DashboardElementInput.Config.DefaultValue.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.Str)
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.Number != nil {
-						elements.DashboardElementInput.Config.DefaultValue.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.Number)
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr != nil {
-						elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr = make([]types.String, 0, len(elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr))
-						for _, v := range elementsItem.DashboardElementInput.Config.DefaultValue.ArrayOfStr {
-							elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr = append(elements.DashboardElementInput.Config.DefaultValue.ArrayOfStr, types.StringValue(v))
-						}
-					}
-					if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue != nil {
-						elements.DashboardElementInput.Config.DefaultValue.DefaultValue = &tfTypes.DefaultValue{}
-						if elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest == nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest = &tfTypes.EarliestTypeSearchQuery{}
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str)
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number)
-						}
-						if elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest == nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest = &tfTypes.EarliestTypeSearchQuery{}
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str)
-						}
-						if elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number != nil {
-							elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number)
-						}
-						elements.DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone = types.StringPointerValue(elementsItem.DashboardElementInput.Config.DefaultValue.DefaultValue.Timezone)
-					}
+			if len(elementsItem.DashboardElementInput.Config) > 0 {
+				elements.DashboardElementInput.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElementInput.Config))
+				for key1, value1 := range elementsItem.DashboardElementInput.Config {
+					result1, _ := json.Marshal(value1)
+					elements.DashboardElementInput.Config[key1] = jsontypes.NewNormalizedValue(string(result1))
 				}
-				elements.DashboardElementInput.Config.Multiselect = types.BoolPointerValue(elementsItem.DashboardElementInput.Config.Multiselect)
 			}
 			elements.DashboardElementInput.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementInput.HidePanel)
 			elements.DashboardElementInput.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementInput.HorizontalChart)
@@ -227,11 +199,12 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 		}
 		if elementsItem.DashboardElement != nil {
 			elements.DashboardElement = &tfTypes.DashboardElement{}
-			if elementsItem.DashboardElement.Config == nil {
-				elements.DashboardElement.Config = nil
-			} else {
-				elements.DashboardElement.Config = &tfTypes.MarkdownElementConfig{}
-				elements.DashboardElement.Config.Markdown = types.StringValue(elementsItem.DashboardElement.Config.Markdown)
+			if len(elementsItem.DashboardElement.Config) > 0 {
+				elements.DashboardElement.Config = make(map[string]jsontypes.Normalized, len(elementsItem.DashboardElement.Config))
+				for key2, value2 := range elementsItem.DashboardElement.Config {
+					result2, _ := json.Marshal(value2)
+					elements.DashboardElement.Config[key2] = jsontypes.NewNormalizedValue(string(result2))
+				}
 			}
 			elements.DashboardElement.HidePanel = types.BoolPointerValue(elementsItem.DashboardElement.HidePanel)
 			elements.DashboardElement.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElement.HorizontalChart)
@@ -274,8 +247,8 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 				dashboardGroupsResult.Action.Label = types.StringValue(dashboardGroupsValue.Action.Label)
 				if len(dashboardGroupsValue.Action.Params) > 0 {
 					dashboardGroupsResult.Action.Params = make(map[string]types.String, len(dashboardGroupsValue.Action.Params))
-					for key, value := range dashboardGroupsValue.Action.Params {
-						dashboardGroupsResult.Action.Params[key] = types.StringValue(value)
+					for key3, value3 := range dashboardGroupsValue.Action.Params {
+						dashboardGroupsResult.Action.Params[key3] = types.StringValue(value3)
 					}
 				}
 				dashboardGroupsResult.Action.Target = types.StringValue(dashboardGroupsValue.Action.Target)

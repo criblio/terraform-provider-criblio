@@ -99,6 +99,10 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 			if err != nil {
 				return nil, fmt.Errorf("attribute %q: %w", k, err)
 			}
+			ctyVal, err = StripSearchDashboardElementsConfigNullKeysCty(ctyVal)
+			if err != nil {
+				return nil, fmt.Errorf("attribute %q: %w", k, err)
+			}
 		}
 		body.SetAttributeValue(k, ctyVal)
 	}
