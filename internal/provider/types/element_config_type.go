@@ -8,11 +8,25 @@ import (
 )
 
 type ElementConfigType struct {
-	AdditionalProperties jsontypes.Normalized `tfsdk:"additional_properties"`
-	Columns              types.String         `tfsdk:"columns"`
-	GroupBy              types.String         `tfsdk:"group_by"`
-	MaxRows              types.String         `tfsdk:"max_rows"`
-	Series               types.String         `tfsdk:"series"`
-	XAxis                types.String         `tfsdk:"x_axis"`
-	YAxis                types.String         `tfsdk:"y_axis"`
+	AdditionalProperties         jsontypes.Normalized `tfsdk:"additional_properties"`
+	ApplyThreshold               types.Bool           `tfsdk:"apply_threshold"`
+	Axis                         *Axis                `tfsdk:"axis"`
+	Color                        types.String         `tfsdk:"color"`
+	ColorPalette                 types.Float64        `tfsdk:"color_palette"`
+	ColorPaletteReversed         types.Bool           `tfsdk:"color_palette_reversed"`
+	CustomData                   *CustomData          `tfsdk:"custom_data"`
+	Decimals                     types.Float64        `tfsdk:"decimals"`
+	Label                        types.String         `tfsdk:"label"`
+	Legend                       *Legend              `tfsdk:"legend"`
+	MapDetails                   *MapDetails          `tfsdk:"map_details"`
+	OnClickAction                *OnClickAction       `tfsdk:"on_click_action"`
+	Prefix                       types.String         `tfsdk:"prefix"`
+	Separator                    types.Bool           `tfsdk:"separator"`
+	Series                       []ChartSeries        `tfsdk:"series"`
+	ShouldApplyUserChartSettings types.Bool           `tfsdk:"should_apply_user_chart_settings"`
+	Style                        types.Bool           `tfsdk:"style"`
+	Suffix                       types.String         `tfsdk:"suffix"`
+	Type                         types.String         `tfsdk:"type"`
+	XAxis                        *XAxis               `tfsdk:"x_axis"`
+	YAxis                        *YAxis               `tfsdk:"y_axis"`
 }

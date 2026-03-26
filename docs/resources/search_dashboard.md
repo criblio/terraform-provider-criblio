@@ -311,7 +311,7 @@ Optional:
 
 Optional:
 
-- `config` (Attributes) Chart/visualization-specific config (e.g. xAxis, yAxis, columns). (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
+- `config` (Attributes) Chart/visualization-specific config (xAxis, yAxis, series, onClickAction, etc.). Structured as ChartConfig so Terraform generation matches Input/Markdown element config (object vs map). Unknown keys remain valid JSON via additionalProperties. (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config))
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -327,12 +327,159 @@ Optional:
 Optional:
 
 - `additional_properties` (String) Parsed as JSON.
-- `columns` (String) Column configuration (e.g. auto)
-- `group_by` (String) Group-by field
-- `max_rows` (String) Max rows for tables
-- `series` (String) Series configuration
-- `x_axis` (String) X-axis field for charts
-- `y_axis` (String) Y-axis field for charts
+- `apply_threshold` (Boolean)
+- `axis` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--axis))
+- `color` (String)
+- `color_palette` (Number)
+- `color_palette_reversed` (Boolean)
+- `custom_data` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--custom_data))
+- `decimals` (Number)
+- `label` (String)
+- `legend` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--legend))
+- `map_details` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--map_details))
+- `on_click_action` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--on_click_action))
+- `prefix` (String)
+- `separator` (Boolean)
+- `series` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--series))
+- `should_apply_user_chart_settings` (Boolean)
+- `style` (Boolean)
+- `suffix` (String)
+- `type` (String)
+- `x_axis` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--x_axis))
+- `y_axis` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--y_axis))
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--axis"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.axis`
+
+Optional:
+
+- `x_axis` (String)
+- `y_axis` (List of String)
+- `y_axis_excluded` (List of String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--custom_data"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.custom_data`
+
+Optional:
+
+- `connect_nulls` (String)
+- `data_fields` (List of String)
+- `is_point_color` (Boolean)
+- `limit_to_top_n` (Number)
+- `lines` (Boolean)
+- `name_field` (String)
+- `point_color_palette` (Number)
+- `point_color_palette_reversed` (Boolean)
+- `point_scale` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--custom_data--point_scale))
+- `point_scale_data_field` (String)
+- `series_count` (Number)
+- `split_by` (String)
+- `stack` (Boolean)
+- `summarize_others` (Boolean)
+- `trellis` (Boolean)
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--custom_data--point_scale"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.custom_data.point_scale`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--legend"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.legend`
+
+Optional:
+
+- `position` (String)
+- `truncate` (Boolean)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--map_details"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.map_details`
+
+Optional:
+
+- `latitude_field` (String)
+- `longitude_field` (String)
+- `map_source_id` (String)
+- `map_type` (String)
+- `name_field` (String)
+- `point_scale` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--map_details--point_scale))
+- `value_field` (String)
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--map_details--point_scale"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.map_details.point_scale`
+
+Optional:
+
+- `number` (Number)
+- `str` (String)
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--on_click_action"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.on_click_action`
+
+Optional:
+
+- `search` (String)
+- `selected_dashboard_id` (String)
+- `selected_input_id` (String)
+- `selected_link_id` (String)
+- `selected_timerange_input_id` (String)
+- `type` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--series"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.series`
+
+Optional:
+
+- `color` (String)
+- `data` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--config--series--data))
+- `map` (String)
+- `name` (String) Not Null
+- `type` (String) must be one of ["area", "column", "events", "funnel", "gauge", "horizontalBar", "line", "map", "pie", "scatter", "single", "table"]
+- `y_axis_field` (String)
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--series--data"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.series.data`
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--x_axis"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.x_axis`
+
+Optional:
+
+- `data_field` (String)
+- `inverse` (Boolean)
+- `label_interval` (String)
+- `label_orientation` (Number)
+- `name` (String)
+- `offset` (Number)
+- `position` (String)
+- `type` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--config--y_axis"></a>
+### Nested Schema for `elements.dashboard_element_visualization.config.y_axis`
+
+Optional:
+
+- `data_field` (List of String)
+- `interval` (Number)
+- `max` (Number)
+- `min` (Number)
+- `position` (String)
+- `scale` (String)
+- `split_line` (Boolean)
+- `type` (String)
+
 
 
 <a id="nestedatt--elements--dashboard_element_visualization--layout"></a>

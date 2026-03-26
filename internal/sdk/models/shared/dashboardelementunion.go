@@ -348,7 +348,7 @@ func (e *VariantVisualization) UnmarshalJSON(data []byte) error {
 }
 
 type DashboardElementVisualization struct {
-	// Chart/visualization-specific config (e.g. xAxis, yAxis, columns).
+	// Chart/visualization-specific config (xAxis, yAxis, series, onClickAction, etc.). Structured as ChartConfig so Terraform generation matches Input/Markdown element config (object vs map). Unknown keys remain valid JSON via additionalProperties.
 	Config          *ElementConfigType `json:"config,omitempty"`
 	Description     *string            `json:"description,omitempty"`
 	Empty           *bool              `json:"empty,omitempty"`

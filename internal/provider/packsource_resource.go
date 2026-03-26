@@ -40443,6 +40443,8 @@ func (r *PackSourceResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
+	PromoteFirstInputUnionItemToTopLevel(data)
+
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
@@ -40508,6 +40510,8 @@ func (r *PackSourceResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	PromoteFirstInputUnionItemToTopLevel(data)
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -40558,6 +40562,8 @@ func (r *PackSourceResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	PromoteFirstInputUnionItemToTopLevel(data)
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 

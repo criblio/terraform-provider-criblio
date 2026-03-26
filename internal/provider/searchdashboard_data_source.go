@@ -338,32 +338,274 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 											Computed:    true,
 											Description: `Parsed as JSON.`,
 										},
-										"columns": schema.StringAttribute{
-											Computed:    true,
-											Description: `Column configuration (e.g. auto)`,
+										"apply_threshold": schema.BoolAttribute{
+											Computed: true,
 										},
-										"group_by": schema.StringAttribute{
-											Computed:    true,
-											Description: `Group-by field`,
+										"axis": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"x_axis": schema.StringAttribute{
+													Computed: true,
+												},
+												"y_axis": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+												"y_axis_excluded": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+											},
 										},
-										"max_rows": schema.StringAttribute{
-											Computed:    true,
-											Description: `Max rows for tables`,
+										"color": schema.StringAttribute{
+											Computed: true,
 										},
-										"series": schema.StringAttribute{
-											Computed:    true,
-											Description: `Series configuration`,
+										"color_palette": schema.Float64Attribute{
+											Computed: true,
 										},
-										"x_axis": schema.StringAttribute{
-											Computed:    true,
-											Description: `X-axis field for charts`,
+										"color_palette_reversed": schema.BoolAttribute{
+											Computed: true,
 										},
-										"y_axis": schema.StringAttribute{
-											Computed:    true,
-											Description: `Y-axis field for charts`,
+										"custom_data": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"connect_nulls": schema.StringAttribute{
+													Computed: true,
+												},
+												"data_fields": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+												"is_point_color": schema.BoolAttribute{
+													Computed: true,
+												},
+												"limit_to_top_n": schema.Float64Attribute{
+													Computed: true,
+												},
+												"lines": schema.BoolAttribute{
+													Computed: true,
+												},
+												"name_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"point_color_palette": schema.Float64Attribute{
+													Computed: true,
+												},
+												"point_color_palette_reversed": schema.BoolAttribute{
+													Computed: true,
+												},
+												"point_scale": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"point_scale_data_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"series_count": schema.Float64Attribute{
+													Computed: true,
+												},
+												"split_by": schema.StringAttribute{
+													Computed: true,
+												},
+												"stack": schema.BoolAttribute{
+													Computed: true,
+												},
+												"summarize_others": schema.BoolAttribute{
+													Computed: true,
+												},
+												"trellis": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"decimals": schema.Float64Attribute{
+											Computed: true,
+										},
+										"label": schema.StringAttribute{
+											Computed: true,
+										},
+										"legend": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"position": schema.StringAttribute{
+													Computed: true,
+												},
+												"truncate": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"map_details": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"latitude_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"longitude_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"map_source_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"map_type": schema.StringAttribute{
+													Computed: true,
+												},
+												"name_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"point_scale": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"value_field": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"on_click_action": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"search": schema.StringAttribute{
+													Computed: true,
+												},
+												"selected_dashboard_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"selected_input_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"selected_link_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"selected_timerange_input_id": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"prefix": schema.StringAttribute{
+											Computed: true,
+										},
+										"separator": schema.BoolAttribute{
+											Computed: true,
+										},
+										"series": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"color": schema.StringAttribute{
+														Computed: true,
+													},
+													"data": schema.ListNestedAttribute{
+														Computed: true,
+														NestedObject: schema.NestedAttributeObject{
+															Attributes: map[string]schema.Attribute{},
+														},
+													},
+													"map": schema.StringAttribute{
+														Computed: true,
+													},
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
+													},
+													"y_axis_field": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+										},
+										"should_apply_user_chart_settings": schema.BoolAttribute{
+											Computed: true,
+										},
+										"style": schema.BoolAttribute{
+											Computed: true,
+										},
+										"suffix": schema.StringAttribute{
+											Computed: true,
+										},
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"x_axis": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"data_field": schema.StringAttribute{
+													Computed: true,
+												},
+												"inverse": schema.BoolAttribute{
+													Computed: true,
+												},
+												"label_interval": schema.StringAttribute{
+													Computed: true,
+												},
+												"label_orientation": schema.Float64Attribute{
+													Computed: true,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"offset": schema.Float64Attribute{
+													Computed: true,
+												},
+												"position": schema.StringAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"y_axis": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"data_field": schema.ListAttribute{
+													Computed:    true,
+													ElementType: types.StringType,
+												},
+												"interval": schema.Float64Attribute{
+													Computed: true,
+												},
+												"max": schema.Float64Attribute{
+													Computed: true,
+												},
+												"min": schema.Float64Attribute{
+													Computed: true,
+												},
+												"position": schema.StringAttribute{
+													Computed: true,
+												},
+												"scale": schema.StringAttribute{
+													Computed: true,
+												},
+												"split_line": schema.BoolAttribute{
+													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
 										},
 									},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, columns).`,
+									Description: `Chart/visualization-specific config (xAxis, yAxis, series, onClickAction, etc.). Structured as ChartConfig so Terraform generation matches Input/Markdown element config (object vs map). Unknown keys remain valid JSON via additionalProperties.`,
 								},
 								"hide_panel": schema.BoolAttribute{
 									Computed: true,

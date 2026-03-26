@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -44,7 +46,158 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			elements.DashboardElementVisualization.Config = tfElementConfigFromShared(elementsItem.DashboardElementVisualization.Config)
+			if elementsItem.DashboardElementVisualization.Config == nil {
+				elements.DashboardElementVisualization.Config = nil
+			} else {
+				elements.DashboardElementVisualization.Config = &tfTypes.ElementConfigType{}
+				if elementsItem.DashboardElementVisualization.Config.AdditionalProperties == nil {
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedNull()
+				} else {
+					additionalPropertiesResult, _ := json.Marshal(elementsItem.DashboardElementVisualization.Config.AdditionalProperties)
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
+				}
+				elements.DashboardElementVisualization.Config.ApplyThreshold = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ApplyThreshold)
+				if elementsItem.DashboardElementVisualization.Config.Axis == nil {
+					elements.DashboardElementVisualization.Config.Axis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.Axis = &tfTypes.Axis{}
+					elements.DashboardElementVisualization.Config.Axis.XAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Axis.XAxis)
+					elements.DashboardElementVisualization.Config.Axis.YAxis = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.Axis.YAxis))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.Axis.YAxis {
+						elements.DashboardElementVisualization.Config.Axis.YAxis = append(elements.DashboardElementVisualization.Config.Axis.YAxis, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.Axis.YAxisExcluded = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.Axis.YAxisExcluded))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.Axis.YAxisExcluded {
+						elements.DashboardElementVisualization.Config.Axis.YAxisExcluded = append(elements.DashboardElementVisualization.Config.Axis.YAxisExcluded, types.StringValue(v))
+					}
+				}
+				elements.DashboardElementVisualization.Config.Color = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Color)
+				elements.DashboardElementVisualization.Config.ColorPalette = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.ColorPalette)
+				elements.DashboardElementVisualization.Config.ColorPaletteReversed = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ColorPaletteReversed)
+				if elementsItem.DashboardElementVisualization.Config.CustomData == nil {
+					elements.DashboardElementVisualization.Config.CustomData = nil
+				} else {
+					elements.DashboardElementVisualization.Config.CustomData = &tfTypes.CustomData{}
+					elements.DashboardElementVisualization.Config.CustomData.ConnectNulls = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.ConnectNulls)
+					elements.DashboardElementVisualization.Config.CustomData.DataFields = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.CustomData.DataFields))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.CustomData.DataFields {
+						elements.DashboardElementVisualization.Config.CustomData.DataFields = append(elements.DashboardElementVisualization.Config.CustomData.DataFields, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.CustomData.IsPointColor = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.IsPointColor)
+					elements.DashboardElementVisualization.Config.CustomData.LimitToTopN = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.LimitToTopN)
+					elements.DashboardElementVisualization.Config.CustomData.Lines = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Lines)
+					elements.DashboardElementVisualization.Config.CustomData.NameField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.NameField)
+					elements.DashboardElementVisualization.Config.CustomData.PointColorPalette = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointColorPalette)
+					elements.DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed)
+					if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale != nil {
+						elements.DashboardElementVisualization.Config.CustomData.PointScale = &tfTypes.CustomDataPointScale{}
+						if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Str != nil {
+							elements.DashboardElementVisualization.Config.CustomData.PointScale.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Str)
+						}
+						if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Number != nil {
+							elements.DashboardElementVisualization.Config.CustomData.PointScale.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Number)
+						}
+					}
+					elements.DashboardElementVisualization.Config.CustomData.PointScaleDataField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScaleDataField)
+					elements.DashboardElementVisualization.Config.CustomData.SeriesCount = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SeriesCount)
+					elements.DashboardElementVisualization.Config.CustomData.SplitBy = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SplitBy)
+					elements.DashboardElementVisualization.Config.CustomData.Stack = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Stack)
+					elements.DashboardElementVisualization.Config.CustomData.SummarizeOthers = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SummarizeOthers)
+					elements.DashboardElementVisualization.Config.CustomData.Trellis = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Trellis)
+				}
+				elements.DashboardElementVisualization.Config.Decimals = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.Decimals)
+				elements.DashboardElementVisualization.Config.Label = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Label)
+				if elementsItem.DashboardElementVisualization.Config.Legend == nil {
+					elements.DashboardElementVisualization.Config.Legend = nil
+				} else {
+					elements.DashboardElementVisualization.Config.Legend = &tfTypes.Legend{}
+					elements.DashboardElementVisualization.Config.Legend.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Legend.Position)
+					elements.DashboardElementVisualization.Config.Legend.Truncate = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Legend.Truncate)
+				}
+				if elementsItem.DashboardElementVisualization.Config.MapDetails == nil {
+					elements.DashboardElementVisualization.Config.MapDetails = nil
+				} else {
+					elements.DashboardElementVisualization.Config.MapDetails = &tfTypes.MapDetails{}
+					elements.DashboardElementVisualization.Config.MapDetails.LatitudeField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.LatitudeField)
+					elements.DashboardElementVisualization.Config.MapDetails.LongitudeField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.LongitudeField)
+					elements.DashboardElementVisualization.Config.MapDetails.MapSourceID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.MapSourceID)
+					elements.DashboardElementVisualization.Config.MapDetails.MapType = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.MapType)
+					elements.DashboardElementVisualization.Config.MapDetails.NameField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.NameField)
+					if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale != nil {
+						elements.DashboardElementVisualization.Config.MapDetails.PointScale = &tfTypes.MapDetailsPointScale{}
+						if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Str != nil {
+							elements.DashboardElementVisualization.Config.MapDetails.PointScale.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Str)
+						}
+						if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Number != nil {
+							elements.DashboardElementVisualization.Config.MapDetails.PointScale.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Number)
+						}
+					}
+					elements.DashboardElementVisualization.Config.MapDetails.ValueField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.ValueField)
+				}
+				if elementsItem.DashboardElementVisualization.Config.OnClickAction == nil {
+					elements.DashboardElementVisualization.Config.OnClickAction = nil
+				} else {
+					elements.DashboardElementVisualization.Config.OnClickAction = &tfTypes.OnClickAction{}
+					elements.DashboardElementVisualization.Config.OnClickAction.Search = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.Search)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedInputID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedInputID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedLinkID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedLinkID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID)
+					elements.DashboardElementVisualization.Config.OnClickAction.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.Type)
+				}
+				elements.DashboardElementVisualization.Config.Prefix = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Prefix)
+				elements.DashboardElementVisualization.Config.Separator = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Separator)
+				elements.DashboardElementVisualization.Config.Series = []tfTypes.ChartSeries{}
+
+				for _, seriesItem := range elementsItem.DashboardElementVisualization.Config.Series {
+					var series tfTypes.ChartSeries
+
+					series.Color = types.StringPointerValue(seriesItem.Color)
+					series.Map = types.StringPointerValue(seriesItem.Map)
+					series.Name = types.StringValue(seriesItem.Name)
+					if seriesItem.Type != nil {
+						series.Type = types.StringValue(string(*seriesItem.Type))
+					} else {
+						series.Type = types.StringNull()
+					}
+					series.YAxisField = types.StringPointerValue(seriesItem.YAxisField)
+
+					elements.DashboardElementVisualization.Config.Series = append(elements.DashboardElementVisualization.Config.Series, series)
+				}
+				elements.DashboardElementVisualization.Config.ShouldApplyUserChartSettings = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ShouldApplyUserChartSettings)
+				elements.DashboardElementVisualization.Config.Style = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Style)
+				elements.DashboardElementVisualization.Config.Suffix = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Suffix)
+				elements.DashboardElementVisualization.Config.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Type)
+				if elementsItem.DashboardElementVisualization.Config.XAxis == nil {
+					elements.DashboardElementVisualization.Config.XAxis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.XAxis = &tfTypes.XAxis{}
+					elements.DashboardElementVisualization.Config.XAxis.DataField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.DataField)
+					elements.DashboardElementVisualization.Config.XAxis.Inverse = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Inverse)
+					elements.DashboardElementVisualization.Config.XAxis.LabelInterval = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.LabelInterval)
+					elements.DashboardElementVisualization.Config.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.LabelOrientation)
+					elements.DashboardElementVisualization.Config.XAxis.Name = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Name)
+					elements.DashboardElementVisualization.Config.XAxis.Offset = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Offset)
+					elements.DashboardElementVisualization.Config.XAxis.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Position)
+					elements.DashboardElementVisualization.Config.XAxis.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Type)
+				}
+				if elementsItem.DashboardElementVisualization.Config.YAxis == nil {
+					elements.DashboardElementVisualization.Config.YAxis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.YAxis = &tfTypes.YAxis{}
+					elements.DashboardElementVisualization.Config.YAxis.DataField = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.YAxis.DataField))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.YAxis.DataField {
+						elements.DashboardElementVisualization.Config.YAxis.DataField = append(elements.DashboardElementVisualization.Config.YAxis.DataField, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.YAxis.Interval = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Interval)
+					elements.DashboardElementVisualization.Config.YAxis.Max = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Max)
+					elements.DashboardElementVisualization.Config.YAxis.Min = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Min)
+					elements.DashboardElementVisualization.Config.YAxis.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Position)
+					elements.DashboardElementVisualization.Config.YAxis.Scale = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Scale)
+					elements.DashboardElementVisualization.Config.YAxis.SplitLine = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.SplitLine)
+					elements.DashboardElementVisualization.Config.YAxis.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Type)
+				}
+			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
 			elements.DashboardElementVisualization.ID = types.StringValue(elementsItem.DashboardElementVisualization.ID)

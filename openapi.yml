@@ -6800,8 +6800,9 @@ components:
           items:
             $ref: '#/components/schemas/SearchDashboard'
     ElementConfigType:
-      type: object
-      description: Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+      description: Chart/visualization-specific config (xAxis, yAxis, series, onClickAction, etc.). Structured as ChartConfig so Terraform generation matches Input/Markdown element config (object vs map). Unknown keys remain valid JSON via additionalProperties.
+      allOf:
+        - $ref: '#/components/schemas/ChartConfig'
       additionalProperties: true
     TitleAction:
       type: object
@@ -6839,6 +6840,13 @@ components:
       oneOf:
         - type: string
         - type: number
+    # Named schema so the oneOf branch is not an anonymous array; Speakeasy Terraform then
+    # aligns conflicts-with paths with the array_of_str attribute (inline type: array used array_of).
+    ArrayOfStr:
+      type: array
+      items:
+        type: string
+      description: Default selection for multiselect dropdown inputs (e.g. log levels).
     InputElementConfig:
       type: object
       properties:
@@ -6856,10 +6864,7 @@ components:
           oneOf:
             - type: string
             - type: number
-            - type: array
-              items:
-                type: string
-              description: Default selection for multiselect dropdown inputs (e.g. log levels).
+            - $ref: '#/components/schemas/ArrayOfStr'
             - type: object
               properties:
                 earliest:
@@ -7174,11 +7179,14 @@ components:
         colorPaletteReversed:
           type: boolean
         colorThresholds:
+          x-speakeasy-terraform-ignore: true
           type: object
           properties:
             thresholds:
               type: array
+              description: Entries may be null when the UI reserves slots without a defined threshold.
               items:
+                nullable: true
                 type: object
                 properties:
                   color:
@@ -7328,9 +7336,6 @@ components:
               type: boolean
             type:
               type: string
-      required:
-        - colorPalette
-        - type
     object:
       type: string
     SavedQuery:

@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -84,7 +86,158 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		if elementsItem.DashboardElementVisualization != nil {
 			elements.DashboardElementVisualization = &tfTypes.DashboardElementVisualization{}
-			elements.DashboardElementVisualization.Config = tfElementConfigFromShared(elementsItem.DashboardElementVisualization.Config)
+			if elementsItem.DashboardElementVisualization.Config == nil {
+				elements.DashboardElementVisualization.Config = nil
+			} else {
+				elements.DashboardElementVisualization.Config = &tfTypes.ElementConfigType{}
+				if elementsItem.DashboardElementVisualization.Config.AdditionalProperties == nil {
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedNull()
+				} else {
+					additionalPropertiesResult, _ := json.Marshal(elementsItem.DashboardElementVisualization.Config.AdditionalProperties)
+					elements.DashboardElementVisualization.Config.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
+				}
+				elements.DashboardElementVisualization.Config.ApplyThreshold = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ApplyThreshold)
+				if elementsItem.DashboardElementVisualization.Config.Axis == nil {
+					elements.DashboardElementVisualization.Config.Axis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.Axis = &tfTypes.Axis{}
+					elements.DashboardElementVisualization.Config.Axis.XAxis = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Axis.XAxis)
+					elements.DashboardElementVisualization.Config.Axis.YAxis = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.Axis.YAxis))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.Axis.YAxis {
+						elements.DashboardElementVisualization.Config.Axis.YAxis = append(elements.DashboardElementVisualization.Config.Axis.YAxis, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.Axis.YAxisExcluded = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.Axis.YAxisExcluded))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.Axis.YAxisExcluded {
+						elements.DashboardElementVisualization.Config.Axis.YAxisExcluded = append(elements.DashboardElementVisualization.Config.Axis.YAxisExcluded, types.StringValue(v))
+					}
+				}
+				elements.DashboardElementVisualization.Config.Color = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Color)
+				elements.DashboardElementVisualization.Config.ColorPalette = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.ColorPalette)
+				elements.DashboardElementVisualization.Config.ColorPaletteReversed = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ColorPaletteReversed)
+				if elementsItem.DashboardElementVisualization.Config.CustomData == nil {
+					elements.DashboardElementVisualization.Config.CustomData = nil
+				} else {
+					elements.DashboardElementVisualization.Config.CustomData = &tfTypes.CustomData{}
+					elements.DashboardElementVisualization.Config.CustomData.ConnectNulls = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.ConnectNulls)
+					elements.DashboardElementVisualization.Config.CustomData.DataFields = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.CustomData.DataFields))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.CustomData.DataFields {
+						elements.DashboardElementVisualization.Config.CustomData.DataFields = append(elements.DashboardElementVisualization.Config.CustomData.DataFields, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.CustomData.IsPointColor = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.IsPointColor)
+					elements.DashboardElementVisualization.Config.CustomData.LimitToTopN = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.LimitToTopN)
+					elements.DashboardElementVisualization.Config.CustomData.Lines = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Lines)
+					elements.DashboardElementVisualization.Config.CustomData.NameField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.NameField)
+					elements.DashboardElementVisualization.Config.CustomData.PointColorPalette = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointColorPalette)
+					elements.DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed)
+					if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale != nil {
+						elements.DashboardElementVisualization.Config.CustomData.PointScale = &tfTypes.CustomDataPointScale{}
+						if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Str != nil {
+							elements.DashboardElementVisualization.Config.CustomData.PointScale.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Str)
+						}
+						if elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Number != nil {
+							elements.DashboardElementVisualization.Config.CustomData.PointScale.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScale.Number)
+						}
+					}
+					elements.DashboardElementVisualization.Config.CustomData.PointScaleDataField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.PointScaleDataField)
+					elements.DashboardElementVisualization.Config.CustomData.SeriesCount = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SeriesCount)
+					elements.DashboardElementVisualization.Config.CustomData.SplitBy = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SplitBy)
+					elements.DashboardElementVisualization.Config.CustomData.Stack = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Stack)
+					elements.DashboardElementVisualization.Config.CustomData.SummarizeOthers = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.SummarizeOthers)
+					elements.DashboardElementVisualization.Config.CustomData.Trellis = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.CustomData.Trellis)
+				}
+				elements.DashboardElementVisualization.Config.Decimals = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.Decimals)
+				elements.DashboardElementVisualization.Config.Label = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Label)
+				if elementsItem.DashboardElementVisualization.Config.Legend == nil {
+					elements.DashboardElementVisualization.Config.Legend = nil
+				} else {
+					elements.DashboardElementVisualization.Config.Legend = &tfTypes.Legend{}
+					elements.DashboardElementVisualization.Config.Legend.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Legend.Position)
+					elements.DashboardElementVisualization.Config.Legend.Truncate = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Legend.Truncate)
+				}
+				if elementsItem.DashboardElementVisualization.Config.MapDetails == nil {
+					elements.DashboardElementVisualization.Config.MapDetails = nil
+				} else {
+					elements.DashboardElementVisualization.Config.MapDetails = &tfTypes.MapDetails{}
+					elements.DashboardElementVisualization.Config.MapDetails.LatitudeField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.LatitudeField)
+					elements.DashboardElementVisualization.Config.MapDetails.LongitudeField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.LongitudeField)
+					elements.DashboardElementVisualization.Config.MapDetails.MapSourceID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.MapSourceID)
+					elements.DashboardElementVisualization.Config.MapDetails.MapType = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.MapType)
+					elements.DashboardElementVisualization.Config.MapDetails.NameField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.NameField)
+					if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale != nil {
+						elements.DashboardElementVisualization.Config.MapDetails.PointScale = &tfTypes.MapDetailsPointScale{}
+						if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Str != nil {
+							elements.DashboardElementVisualization.Config.MapDetails.PointScale.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Str)
+						}
+						if elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Number != nil {
+							elements.DashboardElementVisualization.Config.MapDetails.PointScale.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.PointScale.Number)
+						}
+					}
+					elements.DashboardElementVisualization.Config.MapDetails.ValueField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.MapDetails.ValueField)
+				}
+				if elementsItem.DashboardElementVisualization.Config.OnClickAction == nil {
+					elements.DashboardElementVisualization.Config.OnClickAction = nil
+				} else {
+					elements.DashboardElementVisualization.Config.OnClickAction = &tfTypes.OnClickAction{}
+					elements.DashboardElementVisualization.Config.OnClickAction.Search = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.Search)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedInputID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedInputID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedLinkID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedLinkID)
+					elements.DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID)
+					elements.DashboardElementVisualization.Config.OnClickAction.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.OnClickAction.Type)
+				}
+				elements.DashboardElementVisualization.Config.Prefix = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Prefix)
+				elements.DashboardElementVisualization.Config.Separator = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Separator)
+				elements.DashboardElementVisualization.Config.Series = []tfTypes.ChartSeries{}
+
+				for _, seriesItem := range elementsItem.DashboardElementVisualization.Config.Series {
+					var series tfTypes.ChartSeries
+
+					series.Color = types.StringPointerValue(seriesItem.Color)
+					series.Map = types.StringPointerValue(seriesItem.Map)
+					series.Name = types.StringValue(seriesItem.Name)
+					if seriesItem.Type != nil {
+						series.Type = types.StringValue(string(*seriesItem.Type))
+					} else {
+						series.Type = types.StringNull()
+					}
+					series.YAxisField = types.StringPointerValue(seriesItem.YAxisField)
+
+					elements.DashboardElementVisualization.Config.Series = append(elements.DashboardElementVisualization.Config.Series, series)
+				}
+				elements.DashboardElementVisualization.Config.ShouldApplyUserChartSettings = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.ShouldApplyUserChartSettings)
+				elements.DashboardElementVisualization.Config.Style = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.Style)
+				elements.DashboardElementVisualization.Config.Suffix = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Suffix)
+				elements.DashboardElementVisualization.Config.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.Type)
+				if elementsItem.DashboardElementVisualization.Config.XAxis == nil {
+					elements.DashboardElementVisualization.Config.XAxis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.XAxis = &tfTypes.XAxis{}
+					elements.DashboardElementVisualization.Config.XAxis.DataField = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.DataField)
+					elements.DashboardElementVisualization.Config.XAxis.Inverse = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Inverse)
+					elements.DashboardElementVisualization.Config.XAxis.LabelInterval = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.LabelInterval)
+					elements.DashboardElementVisualization.Config.XAxis.LabelOrientation = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.LabelOrientation)
+					elements.DashboardElementVisualization.Config.XAxis.Name = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Name)
+					elements.DashboardElementVisualization.Config.XAxis.Offset = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Offset)
+					elements.DashboardElementVisualization.Config.XAxis.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Position)
+					elements.DashboardElementVisualization.Config.XAxis.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.XAxis.Type)
+				}
+				if elementsItem.DashboardElementVisualization.Config.YAxis == nil {
+					elements.DashboardElementVisualization.Config.YAxis = nil
+				} else {
+					elements.DashboardElementVisualization.Config.YAxis = &tfTypes.YAxis{}
+					elements.DashboardElementVisualization.Config.YAxis.DataField = make([]types.String, 0, len(elementsItem.DashboardElementVisualization.Config.YAxis.DataField))
+					for _, v := range elementsItem.DashboardElementVisualization.Config.YAxis.DataField {
+						elements.DashboardElementVisualization.Config.YAxis.DataField = append(elements.DashboardElementVisualization.Config.YAxis.DataField, types.StringValue(v))
+					}
+					elements.DashboardElementVisualization.Config.YAxis.Interval = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Interval)
+					elements.DashboardElementVisualization.Config.YAxis.Max = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Max)
+					elements.DashboardElementVisualization.Config.YAxis.Min = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Min)
+					elements.DashboardElementVisualization.Config.YAxis.Position = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Position)
+					elements.DashboardElementVisualization.Config.YAxis.Scale = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Scale)
+					elements.DashboardElementVisualization.Config.YAxis.SplitLine = types.BoolPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.SplitLine)
+					elements.DashboardElementVisualization.Config.YAxis.Type = types.StringPointerValue(elementsItem.DashboardElementVisualization.Config.YAxis.Type)
+				}
+			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
 			elements.DashboardElementVisualization.ID = types.StringValue(elementsItem.DashboardElementVisualization.ID)
@@ -418,7 +571,552 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 		if r.Elements[elementsItem].DashboardElementVisualization != nil {
 			var config *shared.ElementConfigType
 			if r.Elements[elementsItem].DashboardElementVisualization.Config != nil {
-				config = sharedElementConfigFromTF(r.Elements[elementsItem].DashboardElementVisualization.Config)
+				applyThreshold := new(bool)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.ApplyThreshold.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.ApplyThreshold.IsNull() {
+					*applyThreshold = r.Elements[elementsItem].DashboardElementVisualization.Config.ApplyThreshold.ValueBool()
+				} else {
+					applyThreshold = nil
+				}
+				var axis *shared.Axis
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.Axis != nil {
+					xAxis := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.XAxis.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.XAxis.IsNull() {
+						*xAxis = r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.XAxis.ValueString()
+					} else {
+						xAxis = nil
+					}
+					yAxis := make([]string, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxis))
+					for yAxisIndex := range r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxis {
+						yAxis = append(yAxis, r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxis[yAxisIndex].ValueString())
+					}
+					yAxisExcluded := make([]string, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxisExcluded))
+					for yAxisExcludedIndex := range r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxisExcluded {
+						yAxisExcluded = append(yAxisExcluded, r.Elements[elementsItem].DashboardElementVisualization.Config.Axis.YAxisExcluded[yAxisExcludedIndex].ValueString())
+					}
+					axis = &shared.Axis{
+						XAxis:         xAxis,
+						YAxis:         yAxis,
+						YAxisExcluded: yAxisExcluded,
+					}
+				}
+				color := new(string)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Color.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Color.IsNull() {
+					*color = r.Elements[elementsItem].DashboardElementVisualization.Config.Color.ValueString()
+				} else {
+					color = nil
+				}
+				colorPalette := new(float64)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPalette.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPalette.IsNull() {
+					*colorPalette = r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPalette.ValueFloat64()
+				} else {
+					colorPalette = nil
+				}
+				colorPaletteReversed := new(bool)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPaletteReversed.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPaletteReversed.IsNull() {
+					*colorPaletteReversed = r.Elements[elementsItem].DashboardElementVisualization.Config.ColorPaletteReversed.ValueBool()
+				} else {
+					colorPaletteReversed = nil
+				}
+				var customData *shared.CustomData
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData != nil {
+					connectNulls := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.ConnectNulls.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.ConnectNulls.IsNull() {
+						*connectNulls = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.ConnectNulls.ValueString()
+					} else {
+						connectNulls = nil
+					}
+					dataFields := make([]string, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.DataFields))
+					for dataFieldsIndex := range r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.DataFields {
+						dataFields = append(dataFields, r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.DataFields[dataFieldsIndex].ValueString())
+					}
+					isPointColor := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.IsPointColor.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.IsPointColor.IsNull() {
+						*isPointColor = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.IsPointColor.ValueBool()
+					} else {
+						isPointColor = nil
+					}
+					limitToTopN := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.LimitToTopN.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.LimitToTopN.IsNull() {
+						*limitToTopN = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.LimitToTopN.ValueFloat64()
+					} else {
+						limitToTopN = nil
+					}
+					lines := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Lines.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Lines.IsNull() {
+						*lines = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Lines.ValueBool()
+					} else {
+						lines = nil
+					}
+					nameField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.NameField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.NameField.IsNull() {
+						*nameField = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.NameField.ValueString()
+					} else {
+						nameField = nil
+					}
+					pointColorPalette := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPalette.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPalette.IsNull() {
+						*pointColorPalette = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPalette.ValueFloat64()
+					} else {
+						pointColorPalette = nil
+					}
+					pointColorPaletteReversed := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed.IsNull() {
+						*pointColorPaletteReversed = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointColorPaletteReversed.ValueBool()
+					} else {
+						pointColorPaletteReversed = nil
+					}
+					var pointScale *shared.CustomDataPointScale
+					if r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale != nil {
+						str := new(string)
+						if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Str.IsNull() {
+							*str = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Str.ValueString()
+						} else {
+							str = nil
+						}
+						if str != nil {
+							pointScale = &shared.CustomDataPointScale{
+								Str: str,
+							}
+						}
+						number := new(float64)
+						if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Number.IsNull() {
+							*number = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScale.Number.ValueFloat64()
+						} else {
+							number = nil
+						}
+						if number != nil {
+							pointScale = &shared.CustomDataPointScale{
+								Number: number,
+							}
+						}
+					}
+					pointScaleDataField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScaleDataField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScaleDataField.IsNull() {
+						*pointScaleDataField = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.PointScaleDataField.ValueString()
+					} else {
+						pointScaleDataField = nil
+					}
+					seriesCount := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SeriesCount.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SeriesCount.IsNull() {
+						*seriesCount = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SeriesCount.ValueFloat64()
+					} else {
+						seriesCount = nil
+					}
+					splitBy := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SplitBy.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SplitBy.IsNull() {
+						*splitBy = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SplitBy.ValueString()
+					} else {
+						splitBy = nil
+					}
+					stack := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Stack.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Stack.IsNull() {
+						*stack = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Stack.ValueBool()
+					} else {
+						stack = nil
+					}
+					summarizeOthers := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SummarizeOthers.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SummarizeOthers.IsNull() {
+						*summarizeOthers = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.SummarizeOthers.ValueBool()
+					} else {
+						summarizeOthers = nil
+					}
+					trellis := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Trellis.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Trellis.IsNull() {
+						*trellis = r.Elements[elementsItem].DashboardElementVisualization.Config.CustomData.Trellis.ValueBool()
+					} else {
+						trellis = nil
+					}
+					customData = &shared.CustomData{
+						ConnectNulls:              connectNulls,
+						DataFields:                dataFields,
+						IsPointColor:              isPointColor,
+						LimitToTopN:               limitToTopN,
+						Lines:                     lines,
+						NameField:                 nameField,
+						PointColorPalette:         pointColorPalette,
+						PointColorPaletteReversed: pointColorPaletteReversed,
+						PointScale:                pointScale,
+						PointScaleDataField:       pointScaleDataField,
+						SeriesCount:               seriesCount,
+						SplitBy:                   splitBy,
+						Stack:                     stack,
+						SummarizeOthers:           summarizeOthers,
+						Trellis:                   trellis,
+					}
+				}
+				decimals := new(float64)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Decimals.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Decimals.IsNull() {
+					*decimals = r.Elements[elementsItem].DashboardElementVisualization.Config.Decimals.ValueFloat64()
+				} else {
+					decimals = nil
+				}
+				label := new(string)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Label.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Label.IsNull() {
+					*label = r.Elements[elementsItem].DashboardElementVisualization.Config.Label.ValueString()
+				} else {
+					label = nil
+				}
+				var legend *shared.Legend
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.Legend != nil {
+					position := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Position.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Position.IsNull() {
+						*position = r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Position.ValueString()
+					} else {
+						position = nil
+					}
+					truncate := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Truncate.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Truncate.IsNull() {
+						*truncate = r.Elements[elementsItem].DashboardElementVisualization.Config.Legend.Truncate.ValueBool()
+					} else {
+						truncate = nil
+					}
+					legend = &shared.Legend{
+						Position: position,
+						Truncate: truncate,
+					}
+				}
+				var mapDetails *shared.MapDetails
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails != nil {
+					latitudeField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LatitudeField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LatitudeField.IsNull() {
+						*latitudeField = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LatitudeField.ValueString()
+					} else {
+						latitudeField = nil
+					}
+					longitudeField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LongitudeField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LongitudeField.IsNull() {
+						*longitudeField = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.LongitudeField.ValueString()
+					} else {
+						longitudeField = nil
+					}
+					mapSourceID := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapSourceID.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapSourceID.IsNull() {
+						*mapSourceID = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapSourceID.ValueString()
+					} else {
+						mapSourceID = nil
+					}
+					mapType := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapType.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapType.IsNull() {
+						*mapType = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.MapType.ValueString()
+					} else {
+						mapType = nil
+					}
+					nameField1 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.NameField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.NameField.IsNull() {
+						*nameField1 = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.NameField.ValueString()
+					} else {
+						nameField1 = nil
+					}
+					var pointScale1 *shared.MapDetailsPointScale
+					if r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale != nil {
+						str1 := new(string)
+						if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Str.IsNull() {
+							*str1 = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Str.ValueString()
+						} else {
+							str1 = nil
+						}
+						if str1 != nil {
+							pointScale1 = &shared.MapDetailsPointScale{
+								Str: str1,
+							}
+						}
+						number1 := new(float64)
+						if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Number.IsNull() {
+							*number1 = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.PointScale.Number.ValueFloat64()
+						} else {
+							number1 = nil
+						}
+						if number1 != nil {
+							pointScale1 = &shared.MapDetailsPointScale{
+								Number: number1,
+							}
+						}
+					}
+					valueField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.ValueField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.ValueField.IsNull() {
+						*valueField = r.Elements[elementsItem].DashboardElementVisualization.Config.MapDetails.ValueField.ValueString()
+					} else {
+						valueField = nil
+					}
+					mapDetails = &shared.MapDetails{
+						LatitudeField:  latitudeField,
+						LongitudeField: longitudeField,
+						MapSourceID:    mapSourceID,
+						MapType:        mapType,
+						NameField:      nameField1,
+						PointScale:     pointScale1,
+						ValueField:     valueField,
+					}
+				}
+				var onClickAction *shared.OnClickAction
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction != nil {
+					search := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Search.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Search.IsNull() {
+						*search = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Search.ValueString()
+					} else {
+						search = nil
+					}
+					selectedDashboardID := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID.IsNull() {
+						*selectedDashboardID = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedDashboardID.ValueString()
+					} else {
+						selectedDashboardID = nil
+					}
+					selectedInputID := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedInputID.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedInputID.IsNull() {
+						*selectedInputID = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedInputID.ValueString()
+					} else {
+						selectedInputID = nil
+					}
+					selectedLinkID := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedLinkID.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedLinkID.IsNull() {
+						*selectedLinkID = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedLinkID.ValueString()
+					} else {
+						selectedLinkID = nil
+					}
+					selectedTimerangeInputID := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID.IsNull() {
+						*selectedTimerangeInputID = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.SelectedTimerangeInputID.ValueString()
+					} else {
+						selectedTimerangeInputID = nil
+					}
+					typeVar := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Type.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Type.IsNull() {
+						*typeVar = r.Elements[elementsItem].DashboardElementVisualization.Config.OnClickAction.Type.ValueString()
+					} else {
+						typeVar = nil
+					}
+					onClickAction = &shared.OnClickAction{
+						Search:                   search,
+						SelectedDashboardID:      selectedDashboardID,
+						SelectedInputID:          selectedInputID,
+						SelectedLinkID:           selectedLinkID,
+						SelectedTimerangeInputID: selectedTimerangeInputID,
+						Type:                     typeVar,
+					}
+				}
+				prefix := new(string)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Prefix.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Prefix.IsNull() {
+					*prefix = r.Elements[elementsItem].DashboardElementVisualization.Config.Prefix.ValueString()
+				} else {
+					prefix = nil
+				}
+				separator := new(bool)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Separator.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Separator.IsNull() {
+					*separator = r.Elements[elementsItem].DashboardElementVisualization.Config.Separator.ValueBool()
+				} else {
+					separator = nil
+				}
+				series := make([]shared.ChartSeries, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Config.Series))
+				for seriesIndex := range r.Elements[elementsItem].DashboardElementVisualization.Config.Series {
+					color1 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Color.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Color.IsNull() {
+						*color1 = r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Color.ValueString()
+					} else {
+						color1 = nil
+					}
+					data := make([]shared.ChartData, len(r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Data))
+					mapVar := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Map.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Map.IsNull() {
+						*mapVar = r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Map.ValueString()
+					} else {
+						mapVar = nil
+					}
+					var name string
+					name = r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Name.ValueString()
+
+					type1 := new(shared.ChartType)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Type.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Type.IsNull() {
+						*type1 = shared.ChartType(r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].Type.ValueString())
+					} else {
+						type1 = nil
+					}
+					yAxisField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].YAxisField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].YAxisField.IsNull() {
+						*yAxisField = r.Elements[elementsItem].DashboardElementVisualization.Config.Series[seriesIndex].YAxisField.ValueString()
+					} else {
+						yAxisField = nil
+					}
+					series = append(series, shared.ChartSeries{
+						Color:      color1,
+						Data:       data,
+						Map:        mapVar,
+						Name:       name,
+						Type:       type1,
+						YAxisField: yAxisField,
+					})
+				}
+				shouldApplyUserChartSettings := new(bool)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.ShouldApplyUserChartSettings.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.ShouldApplyUserChartSettings.IsNull() {
+					*shouldApplyUserChartSettings = r.Elements[elementsItem].DashboardElementVisualization.Config.ShouldApplyUserChartSettings.ValueBool()
+				} else {
+					shouldApplyUserChartSettings = nil
+				}
+				style := new(bool)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Style.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Style.IsNull() {
+					*style = r.Elements[elementsItem].DashboardElementVisualization.Config.Style.ValueBool()
+				} else {
+					style = nil
+				}
+				suffix := new(string)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Suffix.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Suffix.IsNull() {
+					*suffix = r.Elements[elementsItem].DashboardElementVisualization.Config.Suffix.ValueString()
+				} else {
+					suffix = nil
+				}
+				typeVar1 := new(string)
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.Type.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.Type.IsNull() {
+					*typeVar1 = r.Elements[elementsItem].DashboardElementVisualization.Config.Type.ValueString()
+				} else {
+					typeVar1 = nil
+				}
+				var xAxis1 *shared.XAxis
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis != nil {
+					dataField := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.DataField.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.DataField.IsNull() {
+						*dataField = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.DataField.ValueString()
+					} else {
+						dataField = nil
+					}
+					inverse := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Inverse.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Inverse.IsNull() {
+						*inverse = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Inverse.ValueBool()
+					} else {
+						inverse = nil
+					}
+					labelInterval := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelInterval.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelInterval.IsNull() {
+						*labelInterval = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelInterval.ValueString()
+					} else {
+						labelInterval = nil
+					}
+					labelOrientation := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelOrientation.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelOrientation.IsNull() {
+						*labelOrientation = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.LabelOrientation.ValueFloat64()
+					} else {
+						labelOrientation = nil
+					}
+					name1 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Name.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Name.IsNull() {
+						*name1 = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Name.ValueString()
+					} else {
+						name1 = nil
+					}
+					offset := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Offset.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Offset.IsNull() {
+						*offset = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Offset.ValueFloat64()
+					} else {
+						offset = nil
+					}
+					position1 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Position.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Position.IsNull() {
+						*position1 = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Position.ValueString()
+					} else {
+						position1 = nil
+					}
+					typeVar2 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Type.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Type.IsNull() {
+						*typeVar2 = r.Elements[elementsItem].DashboardElementVisualization.Config.XAxis.Type.ValueString()
+					} else {
+						typeVar2 = nil
+					}
+					xAxis1 = &shared.XAxis{
+						DataField:        dataField,
+						Inverse:          inverse,
+						LabelInterval:    labelInterval,
+						LabelOrientation: labelOrientation,
+						Name:             name1,
+						Offset:           offset,
+						Position:         position1,
+						Type:             typeVar2,
+					}
+				}
+				var yAxis1 *shared.YAxis
+				if r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis != nil {
+					dataField1 := make([]string, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.DataField))
+					for dataFieldIndex := range r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.DataField {
+						dataField1 = append(dataField1, r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.DataField[dataFieldIndex].ValueString())
+					}
+					interval := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Interval.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Interval.IsNull() {
+						*interval = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Interval.ValueFloat64()
+					} else {
+						interval = nil
+					}
+					max := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Max.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Max.IsNull() {
+						*max = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Max.ValueFloat64()
+					} else {
+						max = nil
+					}
+					min := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Min.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Min.IsNull() {
+						*min = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Min.ValueFloat64()
+					} else {
+						min = nil
+					}
+					position2 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Position.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Position.IsNull() {
+						*position2 = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Position.ValueString()
+					} else {
+						position2 = nil
+					}
+					scale := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Scale.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Scale.IsNull() {
+						*scale = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Scale.ValueString()
+					} else {
+						scale = nil
+					}
+					splitLine := new(bool)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.SplitLine.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.SplitLine.IsNull() {
+						*splitLine = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.SplitLine.ValueBool()
+					} else {
+						splitLine = nil
+					}
+					typeVar3 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Type.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Type.IsNull() {
+						*typeVar3 = r.Elements[elementsItem].DashboardElementVisualization.Config.YAxis.Type.ValueString()
+					} else {
+						typeVar3 = nil
+					}
+					yAxis1 = &shared.YAxis{
+						DataField: dataField1,
+						Interval:  interval,
+						Max:       max,
+						Min:       min,
+						Position:  position2,
+						Scale:     scale,
+						SplitLine: splitLine,
+						Type:      typeVar3,
+					}
+				}
+				var additionalProperties map[string]any
+				if !r.Elements[elementsItem].DashboardElementVisualization.Config.AdditionalProperties.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Config.AdditionalProperties.IsNull() {
+					_ = json.Unmarshal([]byte(r.Elements[elementsItem].DashboardElementVisualization.Config.AdditionalProperties.ValueString()), &additionalProperties)
+				}
+				config = &shared.ElementConfigType{
+					ApplyThreshold:               applyThreshold,
+					Axis:                         axis,
+					Color:                        color,
+					ColorPalette:                 colorPalette,
+					ColorPaletteReversed:         colorPaletteReversed,
+					CustomData:                   customData,
+					Decimals:                     decimals,
+					Label:                        label,
+					Legend:                       legend,
+					MapDetails:                   mapDetails,
+					OnClickAction:                onClickAction,
+					Prefix:                       prefix,
+					Separator:                    separator,
+					Series:                       series,
+					ShouldApplyUserChartSettings: shouldApplyUserChartSettings,
+					Style:                        style,
+					Suffix:                       suffix,
+					Type:                         typeVar1,
+					XAxis:                        xAxis1,
+					YAxis:                        yAxis1,
+					AdditionalProperties:         additionalProperties,
+				}
 			}
 			hidePanel := new(bool)
 			if !r.Elements[elementsItem].DashboardElementVisualization.HidePanel.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.HidePanel.IsNull() {
@@ -453,7 +1151,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				X: x,
 				Y: y,
 			}
-			var search shared.SearchQuery
+			var search1 shared.SearchQuery
 			var searchQuerySaved *shared.SearchQuerySaved
 			if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQuerySaved != nil {
 				query := new(string)
@@ -471,16 +1169,16 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				} else {
 					runMode = nil
 				}
-				typeVar := shared.TypeSaved(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQuerySaved.Type.ValueString())
+				typeVar4 := shared.TypeSaved(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQuerySaved.Type.ValueString())
 				searchQuerySaved = &shared.SearchQuerySaved{
 					Query:   query,
 					QueryID: queryID,
 					RunMode: runMode,
-					Type:    typeVar,
+					Type:    typeVar4,
 				}
 			}
 			if searchQuerySaved != nil {
-				search = shared.SearchQuery{
+				search1 = shared.SearchQuery{
 					SearchQuerySaved: searchQuerySaved,
 				}
 			}
@@ -488,51 +1186,51 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline != nil {
 				var earliest *shared.SearchQueryEarliest
 				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest != nil {
-					str := new(string)
+					str2 := new(string)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.IsNull() {
-						*str = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.ValueString()
+						*str2 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.ValueString()
 					} else {
-						str = nil
+						str2 = nil
 					}
-					if str != nil {
+					if str2 != nil {
 						earliest = &shared.SearchQueryEarliest{
-							Str: str,
+							Str: str2,
 						}
 					}
-					number := new(float64)
+					number2 := new(float64)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Number.IsNull() {
-						*number = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
+						*number2 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
 					} else {
-						number = nil
+						number2 = nil
 					}
-					if number != nil {
+					if number2 != nil {
 						earliest = &shared.SearchQueryEarliest{
-							Number: number,
+							Number: number2,
 						}
 					}
 				}
 				var latest *shared.SearchQueryLatest
 				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest != nil {
-					str1 := new(string)
+					str3 := new(string)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.IsNull() {
-						*str1 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.ValueString()
+						*str3 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.ValueString()
 					} else {
-						str1 = nil
+						str3 = nil
 					}
-					if str1 != nil {
+					if str3 != nil {
 						latest = &shared.SearchQueryLatest{
-							Str: str1,
+							Str: str3,
 						}
 					}
-					number1 := new(float64)
+					number3 := new(float64)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Number.IsNull() {
-						*number1 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Number.ValueFloat64()
+						*number3 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Number.ValueFloat64()
 					} else {
-						number1 = nil
+						number3 = nil
 					}
-					if number1 != nil {
+					if number3 != nil {
 						latest = &shared.SearchQueryLatest{
-							Number: number1,
+							Number: number3,
 						}
 					}
 				}
@@ -557,7 +1255,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				} else {
 					timezone = nil
 				}
-				typeVar1 := shared.TypeInline(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Type.ValueString())
+				typeVar5 := shared.TypeInline(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Type.ValueString())
 				searchQueryInline = &shared.SearchQueryInline{
 					Earliest:       earliest,
 					Latest:         latest,
@@ -565,28 +1263,28 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					Query:          query1,
 					SampleRate:     sampleRate,
 					Timezone:       timezone,
-					Type:           typeVar1,
+					Type:           typeVar5,
 				}
 			}
 			if searchQueryInline != nil {
-				search = shared.SearchQuery{
+				search1 = shared.SearchQuery{
 					SearchQueryInline: searchQueryInline,
 				}
 			}
 			var searchQueryValues *shared.SearchQueryValues
 			if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues != nil {
-				typeVar2 := shared.TypeValues(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues.Type.ValueString())
+				typeVar6 := shared.TypeValues(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues.Type.ValueString())
 				values := make([]string, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues.Values))
 				for valuesIndex := range r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues.Values {
 					values = append(values, r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryValues.Values[valuesIndex].ValueString())
 				}
 				searchQueryValues = &shared.SearchQueryValues{
-					Type:   typeVar2,
+					Type:   typeVar6,
 					Values: values,
 				}
 			}
 			if searchQueryValues != nil {
-				search = shared.SearchQuery{
+				search1 = shared.SearchQuery{
 					SearchQueryValues: searchQueryValues,
 				}
 			}
@@ -598,8 +1296,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			}
 			var titleAction *shared.TitleAction
 			if r.Elements[elementsItem].DashboardElementVisualization.TitleAction != nil {
-				var label string
-				label = r.Elements[elementsItem].DashboardElementVisualization.TitleAction.Label.ValueString()
+				var label1 string
+				label1 = r.Elements[elementsItem].DashboardElementVisualization.TitleAction.Label.ValueString()
 
 				openInNewTab := new(bool)
 				if !r.Elements[elementsItem].DashboardElementVisualization.TitleAction.OpenInNewTab.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.TitleAction.OpenInNewTab.IsNull() {
@@ -611,22 +1309,22 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				url = r.Elements[elementsItem].DashboardElementVisualization.TitleAction.URL.ValueString()
 
 				titleAction = &shared.TitleAction{
-					Label:        label,
+					Label:        label1,
 					OpenInNewTab: openInNewTab,
 					URL:          url,
 				}
 			}
-			typeVar3 := shared.VisualizationElementType(r.Elements[elementsItem].DashboardElementVisualization.Type.ValueString())
+			typeVar7 := shared.VisualizationElementType(r.Elements[elementsItem].DashboardElementVisualization.Type.ValueString())
 			dashboardElementVisualization := shared.DashboardElementVisualization{
 				Config:          config,
 				HidePanel:       hidePanel,
 				HorizontalChart: horizontalChart,
 				ID:              id,
 				Layout:          layout,
-				Search:          search,
+				Search:          search1,
 				Title:           title,
 				TitleAction:     titleAction,
-				Type:            typeVar3,
+				Type:            typeVar7,
 			}
 			elements = append(elements, shared.DashboardElementUnion{
 				DashboardElementVisualization: &dashboardElementVisualization,
@@ -637,26 +1335,26 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			if r.Elements[elementsItem].DashboardElementInput.Config != nil {
 				var defaultValue *shared.DefaultValueUnion
 				if r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue != nil {
-					str2 := new(string)
+					str4 := new(string)
 					if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.IsNull() {
-						*str2 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.ValueString()
+						*str4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Str.ValueString()
 					} else {
-						str2 = nil
+						str4 = nil
 					}
-					if str2 != nil {
+					if str4 != nil {
 						defaultValue = &shared.DefaultValueUnion{
-							Str: str2,
+							Str: str4,
 						}
 					}
-					number2 := new(float64)
+					number4 := new(float64)
 					if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.IsNull() {
-						*number2 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.ValueFloat64()
+						*number4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.Number.ValueFloat64()
 					} else {
-						number2 = nil
+						number4 = nil
 					}
-					if number2 != nil {
+					if number4 != nil {
 						defaultValue = &shared.DefaultValueUnion{
-							Number: number2,
+							Number: number4,
 						}
 					}
 					var arrayOfStr []string
@@ -674,49 +1372,49 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					var defaultValue1 *shared.DefaultValue
 					if r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue != nil {
 						var earliest1 shared.EarliestTypeSearchQuery
-						str3 := new(string)
+						str5 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.IsNull() {
-							*str3 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.ValueString()
+							*str5 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Str.ValueString()
 						} else {
-							str3 = nil
+							str5 = nil
 						}
-						if str3 != nil {
+						if str5 != nil {
 							earliest1 = shared.EarliestTypeSearchQuery{
-								Str: str3,
+								Str: str5,
 							}
 						}
-						number3 := new(float64)
+						number5 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.IsNull() {
-							*number3 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.ValueFloat64()
+							*number5 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Earliest.Number.ValueFloat64()
 						} else {
-							number3 = nil
+							number5 = nil
 						}
-						if number3 != nil {
+						if number5 != nil {
 							earliest1 = shared.EarliestTypeSearchQuery{
-								Number: number3,
+								Number: number5,
 							}
 						}
 						var latest1 shared.EarliestTypeSearchQuery
-						str4 := new(string)
+						str6 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.IsNull() {
-							*str4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.ValueString()
+							*str6 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Str.ValueString()
 						} else {
-							str4 = nil
+							str6 = nil
 						}
-						if str4 != nil {
+						if str6 != nil {
 							latest1 = shared.EarliestTypeSearchQuery{
-								Str: str4,
+								Str: str6,
 							}
 						}
-						number4 := new(float64)
+						number6 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.IsNull() {
-							*number4 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.ValueFloat64()
+							*number6 = r.Elements[elementsItem].DashboardElementInput.Config.DefaultValue.DefaultValue.Latest.Number.ValueFloat64()
 						} else {
-							number4 = nil
+							number6 = nil
 						}
-						if number4 != nil {
+						if number6 != nil {
 							latest1 = shared.EarliestTypeSearchQuery{
-								Number: number4,
+								Number: number6,
 							}
 						}
 						timezone1 := new(string)
@@ -784,7 +1482,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				X: x1,
 				Y: y1,
 			}
-			var search1 *shared.SearchQuery
+			var search2 *shared.SearchQuery
 			if r.Elements[elementsItem].DashboardElementInput.Search != nil {
 				var searchQuerySaved1 *shared.SearchQuerySaved
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved != nil {
@@ -803,16 +1501,16 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						runMode1 = nil
 					}
-					typeVar4 := shared.TypeSaved(r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Type.ValueString())
+					typeVar8 := shared.TypeSaved(r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Type.ValueString())
 					searchQuerySaved1 = &shared.SearchQuerySaved{
 						Query:   query2,
 						QueryID: queryId1,
 						RunMode: runMode1,
-						Type:    typeVar4,
+						Type:    typeVar8,
 					}
 				}
 				if searchQuerySaved1 != nil {
-					search1 = &shared.SearchQuery{
+					search2 = &shared.SearchQuery{
 						SearchQuerySaved: searchQuerySaved1,
 					}
 				}
@@ -820,51 +1518,51 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline != nil {
 					var earliest2 *shared.SearchQueryEarliest
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest != nil {
-						str5 := new(string)
+						str7 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsNull() {
-							*str5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
+							*str7 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
 						} else {
-							str5 = nil
+							str7 = nil
 						}
-						if str5 != nil {
+						if str7 != nil {
 							earliest2 = &shared.SearchQueryEarliest{
-								Str: str5,
+								Str: str7,
 							}
 						}
-						number5 := new(float64)
+						number7 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsNull() {
-							*number5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
+							*number7 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
 						} else {
-							number5 = nil
+							number7 = nil
 						}
-						if number5 != nil {
+						if number7 != nil {
 							earliest2 = &shared.SearchQueryEarliest{
-								Number: number5,
+								Number: number7,
 							}
 						}
 					}
 					var latest2 *shared.SearchQueryLatest
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest != nil {
-						str6 := new(string)
+						str8 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsNull() {
-							*str6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
+							*str8 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
 						} else {
-							str6 = nil
+							str8 = nil
 						}
-						if str6 != nil {
+						if str8 != nil {
 							latest2 = &shared.SearchQueryLatest{
-								Str: str6,
+								Str: str8,
 							}
 						}
-						number6 := new(float64)
+						number8 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsNull() {
-							*number6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
+							*number8 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
 						} else {
-							number6 = nil
+							number8 = nil
 						}
-						if number6 != nil {
+						if number8 != nil {
 							latest2 = &shared.SearchQueryLatest{
-								Number: number6,
+								Number: number8,
 							}
 						}
 					}
@@ -889,7 +1587,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						timezone2 = nil
 					}
-					typeVar5 := shared.TypeInline(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Type.ValueString())
+					typeVar9 := shared.TypeInline(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Type.ValueString())
 					searchQueryInline1 = &shared.SearchQueryInline{
 						Earliest:       earliest2,
 						Latest:         latest2,
@@ -897,28 +1595,28 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 						Query:          query3,
 						SampleRate:     sampleRate1,
 						Timezone:       timezone2,
-						Type:           typeVar5,
+						Type:           typeVar9,
 					}
 				}
 				if searchQueryInline1 != nil {
-					search1 = &shared.SearchQuery{
+					search2 = &shared.SearchQuery{
 						SearchQueryInline: searchQueryInline1,
 					}
 				}
 				var searchQueryValues1 *shared.SearchQueryValues
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues != nil {
-					typeVar6 := shared.TypeValues(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Type.ValueString())
+					typeVar10 := shared.TypeValues(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Type.ValueString())
 					values1 := make([]string, 0, len(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values))
 					for valuesIndex1 := range r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values {
 						values1 = append(values1, r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values[valuesIndex1].ValueString())
 					}
 					searchQueryValues1 = &shared.SearchQueryValues{
-						Type:   typeVar6,
+						Type:   typeVar10,
 						Values: values1,
 					}
 				}
 				if searchQueryValues1 != nil {
-					search1 = &shared.SearchQuery{
+					search2 = &shared.SearchQuery{
 						SearchQueryValues: searchQueryValues1,
 					}
 				}
@@ -931,8 +1629,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			}
 			var titleAction1 *shared.TitleAction
 			if r.Elements[elementsItem].DashboardElementInput.TitleAction != nil {
-				var label1 string
-				label1 = r.Elements[elementsItem].DashboardElementInput.TitleAction.Label.ValueString()
+				var label2 string
+				label2 = r.Elements[elementsItem].DashboardElementInput.TitleAction.Label.ValueString()
 
 				openInNewTab1 := new(bool)
 				if !r.Elements[elementsItem].DashboardElementInput.TitleAction.OpenInNewTab.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.TitleAction.OpenInNewTab.IsNull() {
@@ -944,12 +1642,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				url1 = r.Elements[elementsItem].DashboardElementInput.TitleAction.URL.ValueString()
 
 				titleAction1 = &shared.TitleAction{
-					Label:        label1,
+					Label:        label2,
 					OpenInNewTab: openInNewTab1,
 					URL:          url1,
 				}
 			}
-			typeVar7 := shared.InputElementType(r.Elements[elementsItem].DashboardElementInput.Type.ValueString())
+			typeVar11 := shared.InputElementType(r.Elements[elementsItem].DashboardElementInput.Type.ValueString())
 			dashboardElementInput := shared.DashboardElementInput{
 				Config:          config1,
 				HidePanel:       hidePanel1,
@@ -957,10 +1655,10 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				ID:              id1,
 				InputID:         inputID,
 				Layout:          layout1,
-				Search:          search1,
+				Search:          search2,
 				Title:           title1,
 				TitleAction:     titleAction1,
-				Type:            typeVar7,
+				Type:            typeVar11,
 			}
 			elements = append(elements, shared.DashboardElementUnion{
 				DashboardElementInput: &dashboardElementInput,
@@ -1009,7 +1707,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				X: x2,
 				Y: y2,
 			}
-			var search2 *shared.PanelQueryDefinition
+			var search3 *shared.PanelQueryDefinition
 			if r.Elements[elementsItem].DashboardElement.Search != nil {
 				alias := new(string)
 				if !r.Elements[elementsItem].DashboardElement.Search.Alias.IsUnknown() && !r.Elements[elementsItem].DashboardElement.Search.Alias.IsNull() {
@@ -1023,7 +1721,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				var query4 string
 				query4 = r.Elements[elementsItem].DashboardElement.Search.Query.ValueString()
 
-				search2 = &shared.PanelQueryDefinition{
+				search3 = &shared.PanelQueryDefinition{
 					Alias:   alias,
 					LocalID: localID,
 					Query:   query4,
@@ -1031,8 +1729,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			}
 			var titleAction2 *shared.TitleAction
 			if r.Elements[elementsItem].DashboardElement.TitleAction != nil {
-				var label2 string
-				label2 = r.Elements[elementsItem].DashboardElement.TitleAction.Label.ValueString()
+				var label3 string
+				label3 = r.Elements[elementsItem].DashboardElement.TitleAction.Label.ValueString()
 
 				openInNewTab2 := new(bool)
 				if !r.Elements[elementsItem].DashboardElement.TitleAction.OpenInNewTab.IsUnknown() && !r.Elements[elementsItem].DashboardElement.TitleAction.OpenInNewTab.IsNull() {
@@ -1044,12 +1742,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				url2 = r.Elements[elementsItem].DashboardElement.TitleAction.URL.ValueString()
 
 				titleAction2 = &shared.TitleAction{
-					Label:        label2,
+					Label:        label3,
 					OpenInNewTab: openInNewTab2,
 					URL:          url2,
 				}
 			}
-			typeVar8 := shared.MarkdownElementType(r.Elements[elementsItem].DashboardElement.Type.ValueString())
+			typeVar12 := shared.MarkdownElementType(r.Elements[elementsItem].DashboardElement.Type.ValueString())
 			variant := shared.VariantMarkdown(r.Elements[elementsItem].DashboardElement.Variant.ValueString())
 			dashboardElement := shared.DashboardElement{
 				Config:          config2,
@@ -1057,9 +1755,9 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				HorizontalChart: horizontalChart2,
 				ID:              id2,
 				Layout:          layout2,
-				Search:          search2,
+				Search:          search3,
 				TitleAction:     titleAction2,
-				Type:            typeVar8,
+				Type:            typeVar12,
 				Variant:         variant,
 			}
 			elements = append(elements, shared.DashboardElementUnion{
@@ -1071,8 +1769,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	for groupsKey := range r.Groups {
 		var action *shared.DashboardGroupsAction
 		if r.Groups[groupsKey].Action != nil {
-			var label3 string
-			label3 = r.Groups[groupsKey].Action.Label.ValueString()
+			var label4 string
+			label4 = r.Groups[groupsKey].Action.Label.ValueString()
 
 			params := make(map[string]string)
 			for paramsKey := range r.Groups[groupsKey].Action.Params {
@@ -1085,7 +1783,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			target = r.Groups[groupsKey].Action.Target.ValueString()
 
 			action = &shared.DashboardGroupsAction{
-				Label:  label3,
+				Label:  label4,
 				Params: params,
 				Target: target,
 			}
@@ -1116,8 +1814,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 	var id3 string
 	id3 = r.ID.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var name2 string
+	name2 = r.Name.ValueString()
 
 	refreshRate := new(float64)
 	if !r.RefreshRate.IsUnknown() && !r.RefreshRate.IsNull() {
@@ -1160,7 +1858,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 		Elements:        elements,
 		Groups:          groups,
 		ID:              id3,
-		Name:            name,
+		Name:            name2,
 		RefreshRate:     refreshRate,
 		Schedule:        schedule,
 	}

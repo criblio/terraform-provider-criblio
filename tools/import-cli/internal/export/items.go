@@ -28,6 +28,9 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if convErr != nil {
 		return nil, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr))
 	}
+	if r.TypeName == "criblio_source" || r.TypeName == "criblio_pack_source" {
+		provider.PromoteFirstInputUnionItemToTopLevel(model)
+	}
 	opts := hclOptionsForType(r.TypeName, e)
 	attrs, attrErr := hcl.ModelToValue(model, opts)
 	if attrErr != nil {
@@ -147,11 +150,11 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		attrs["priv_key"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.CertificatePrivKeyVariableName(name)}
 	}
 	it := generator.ResourceItem{
-		TypeName:  e.TypeName,
-		Name:      name,
-		Attrs:     attrs,
-		ImportID:  importID,
-		GroupID:   groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
+		TypeName: e.TypeName,
+		Name:     name,
+		Attrs:    attrs,
+		ImportID: importID,
+		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 	}
 	if r.TypeName == "criblio_appscope_config" {
 		// Deeply nested Optional+Computed fields (cacertpath, buffer, allowbinary, headers, etc.)
@@ -181,6 +184,9 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 
 // appendResourceItemFromModel builds HCL attrs and appends a ResourceItem to out.Items (used for criblio_group and shared conversion path).
 func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}) error {
+	if typeName == "criblio_source" || typeName == "criblio_pack_source" {
+		provider.PromoteFirstInputUnionItemToTopLevel(model)
+	}
 	opts := hclOptionsForType(typeName, e)
 	attrs, attrErr := hcl.ModelToValue(model, opts)
 	if attrErr != nil {
@@ -247,11 +253,11 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}
 	}
 	it := generator.ResourceItem{
-		TypeName:  e.TypeName,
-		Name:      name,
-		Attrs:     attrs,
-		ImportID:  importID,
-		GroupID:   groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
+		TypeName: e.TypeName,
+		Name:     name,
+		Attrs:    attrs,
+		ImportID: importID,
+		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 	}
 	// criblio_group: API may not return product; state has null. Add ignore_changes to suppress drift.
 	if typeName == "criblio_group" {
