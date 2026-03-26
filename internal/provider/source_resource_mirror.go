@@ -7,8 +7,112 @@ package provider
 import (
 	"reflect"
 
+	"github.com/hashicorp/terraform-plugin-framework/types"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 )
+
+// priorPlainAuthTokens holds copies of []types.String auth_tokens from state before a GET refresh.
+// The API often omits or redacts tokens; sync copies a shorter list onto root and Terraform then
+// plans spurious adds. We restore the prior slice when the API returned fewer elements.
+type priorPlainAuthTokens struct {
+	http          []types.String
+	httpRaw       []types.String
+	firehose      []types.String
+	elastic       []types.String
+	criblLakeHTTP []types.String
+	wizWebhook    []types.String
+}
+
+func snapshotPlainAuthTokensPriorRead(r *SourceResourceModel) priorPlainAuthTokens {
+	var p priorPlainAuthTokens
+	if r.InputHTTP != nil {
+		p.http = cloneTypesStringSlice(r.InputHTTP.AuthTokens)
+	}
+	if r.InputHTTPRaw != nil {
+		p.httpRaw = cloneTypesStringSlice(r.InputHTTPRaw.AuthTokens)
+	}
+	if r.InputFirehose != nil {
+		p.firehose = cloneTypesStringSlice(r.InputFirehose.AuthTokens)
+	}
+	if r.InputElastic != nil {
+		p.elastic = cloneTypesStringSlice(r.InputElastic.AuthTokens)
+	}
+	if r.InputCriblLakeHTTP != nil {
+		p.criblLakeHTTP = cloneTypesStringSlice(r.InputCriblLakeHTTP.AuthTokens)
+	}
+	if r.InputWizWebhook != nil {
+		p.wizWebhook = cloneTypesStringSlice(r.InputWizWebhook.AuthTokens)
+	}
+	return p
+}
+
+func restorePlainAuthTokensIfAPIShrank(r *SourceResourceModel, prior priorPlainAuthTokens) {
+	restore := func(dst **tfTypes.InputHTTP, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+	restoreHTTPRaw := func(dst **tfTypes.InputHTTPRaw, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+	restoreFirehose := func(dst **tfTypes.InputFirehose, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+	restoreElastic := func(dst **tfTypes.InputElastic, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+	restoreCriblLake := func(dst **tfTypes.InputCriblLakeHTTP, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+	restoreWiz := func(dst **tfTypes.InputWizWebhook, prev []types.String) {
+		if *dst == nil || prev == nil {
+			return
+		}
+		if len(prev) > len((*dst).AuthTokens) {
+			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		}
+	}
+
+	restore(&r.InputHTTP, prior.http)
+	restoreHTTPRaw(&r.InputHTTPRaw, prior.httpRaw)
+	restoreFirehose(&r.InputFirehose, prior.firehose)
+	restoreElastic(&r.InputElastic, prior.elastic)
+	restoreCriblLake(&r.InputCriblLakeHTTP, prior.criblLakeHTTP)
+	restoreWiz(&r.InputWizWebhook, prior.wizWebhook)
+}
+
+func cloneTypesStringSlice(s []types.String) []types.String {
+	if s == nil {
+		return nil
+	}
+	out := make([]types.String, len(s))
+	copy(out, s)
+	return out
+}
 
 func (r *SourceResourceModel) syncRootInputFromFirstItem() {
 	if len(r.Items) == 0 {

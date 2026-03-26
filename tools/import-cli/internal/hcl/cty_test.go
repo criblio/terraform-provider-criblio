@@ -89,6 +89,25 @@ func TestPruneSearchDashboardElementsCty_omitsExclusiveNullBranches(t *testing.T
 
 // Regression: list homogenization can yield a non-null but empty dashboard_element_input object
 // alongside a real visualization; fixed priority wrongly preferred input over visualization.
+func TestStripSearchDashboardElementsConfigNullKeysCty_dropsHomogenizedNullConfigKeys(t *testing.T) {
+	// Simulates list homogenization adding "color" = null on one element while another has a real value.
+	viz := cty.ObjectVal(map[string]cty.Value{
+		"id": cty.StringVal("chart-1"),
+		"config": cty.MapVal(map[string]cty.Value{
+			"color": cty.NullVal(cty.String),
+		}),
+	})
+	row := cty.ObjectVal(map[string]cty.Value{
+		"dashboard_element_visualization": viz,
+	})
+	tup := cty.TupleVal([]cty.Value{row})
+	out, err := StripSearchDashboardElementsConfigNullKeysCty(tup)
+	require.NoError(t, err)
+	cfg := out.Index(cty.NumberIntVal(0)).GetAttr("dashboard_element_visualization").GetAttr("config")
+	require.True(t, cfg.IsKnown())
+	require.Equal(t, 0, cfg.LengthInt(), "null-only config keys should be omitted")
+}
+
 func TestPruneSearchDashboardElementsCty_prefersVisualizationOverEmptyInputShell(t *testing.T) {
 	viz := cty.ObjectVal(map[string]cty.Value{
 		"id":   cty.StringVal("chart-1"),

@@ -5,6 +5,9 @@
 package provider
 
 import (
+	"encoding/json"
+	"strings"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -76,6 +79,126 @@ func restoreMarkdownElement(dst, api *tfTypes.DashboardElement) {
 		dst.Search = api.Search
 	}
 	restoreTitleAction(&dst.TitleAction, api.TitleAction)
+}
+
+// elementConfigPresence records whether each element's config map had any keys in the prior
+// Terraform state or plan snapshot. We only strip JSON-null-only keys when the user did not
+// configure that map (no keys); if they set keys such as color = null, stripping would remove
+// them from state and cause perpetual drift against configuration.
+type elementConfigPresence struct {
+	visHadKeys, inputHadKeys, mdHadKeys bool
+}
+
+func snapshotSearchDashboardConfigMapPresence(m *SearchDashboardResourceModel) []elementConfigPresence {
+	if m == nil {
+		return nil
+	}
+	out := make([]elementConfigPresence, len(m.Elements))
+	for i := range m.Elements {
+		el := &m.Elements[i]
+		if el.DashboardElementVisualization != nil {
+			out[i].visHadKeys = len(el.DashboardElementVisualization.Config) > 0
+		}
+		if el.DashboardElementInput != nil {
+			out[i].inputHadKeys = len(el.DashboardElementInput.Config) > 0
+		}
+		if el.DashboardElement != nil {
+			out[i].mdHadKeys = len(el.DashboardElement.Config) > 0
+		}
+	}
+	return out
+}
+
+// normalizeSearchDashboardConfigMaps removes map entries whose JSON value is null when the map
+// was not configured in Terraform (no keys in the given snapshot). The API often returns keys
+// such as "color": null while RefreshFrom encodes them as Normalized("null"); stripping those
+// avoids drift when config omits the map. When the snapshot has keys (e.g. color = null), we
+// keep the API shape so state matches configuration.
+func normalizeSearchDashboardConfigMaps(m *SearchDashboardResourceModel, presence []elementConfigPresence) {
+	if m == nil {
+		return
+	}
+	for i := range m.Elements {
+		var p elementConfigPresence
+		if i < len(presence) {
+			p = presence[i]
+		}
+		el := &m.Elements[i]
+		if el.DashboardElementVisualization != nil {
+			if !p.visHadKeys {
+				stripJSONNullKeysFromConfigMap(&el.DashboardElementVisualization.Config)
+			}
+		}
+		if el.DashboardElementInput != nil {
+			if !p.inputHadKeys {
+				stripJSONNullKeysFromConfigMap(&el.DashboardElementInput.Config)
+			}
+		}
+		if el.DashboardElement != nil {
+			if !p.mdHadKeys {
+				stripJSONNullKeysFromConfigMap(&el.DashboardElement.Config)
+			}
+		}
+	}
+	ensureSearchDashboardElementConfigMaps(m)
+}
+
+// ensureSearchDashboardElementConfigMaps sets each element branch's config map to a non-nil empty
+// map when the API omitted it or normalization stripped all keys. Terraform otherwise stores null
+// and the next plan shows a spurious "+ config = {}" drift against a known empty map.
+func ensureSearchDashboardElementConfigMaps(m *SearchDashboardResourceModel) {
+	if m == nil {
+		return
+	}
+	for i := range m.Elements {
+		el := &m.Elements[i]
+		if el.DashboardElementVisualization != nil && el.DashboardElementVisualization.Config == nil {
+			el.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized)
+		}
+		if el.DashboardElementInput != nil && el.DashboardElementInput.Config == nil {
+			el.DashboardElementInput.Config = make(map[string]jsontypes.Normalized)
+		}
+		if el.DashboardElement != nil && el.DashboardElement.Config == nil {
+			el.DashboardElement.Config = make(map[string]jsontypes.Normalized)
+		}
+	}
+}
+
+func stripJSONNullKeysFromConfigMap(m *map[string]jsontypes.Normalized) {
+	if m == nil {
+		return
+	}
+	if *m == nil {
+		*m = make(map[string]jsontypes.Normalized)
+		return
+	}
+	if len(*m) == 0 {
+		*m = make(map[string]jsontypes.Normalized)
+		return
+	}
+	for k, v := range *m {
+		if isJSONNullNormalized(v) {
+			delete(*m, k)
+		}
+	}
+	if len(*m) == 0 {
+		*m = make(map[string]jsontypes.Normalized)
+	}
+}
+
+func isJSONNullNormalized(v jsontypes.Normalized) bool {
+	if v.IsNull() || v.IsUnknown() {
+		return true
+	}
+	s := strings.TrimSpace(v.ValueString())
+	if s == "null" {
+		return true
+	}
+	var any interface{}
+	if err := json.Unmarshal([]byte(s), &any); err != nil {
+		return false
+	}
+	return any == nil
 }
 
 func mergeConfigMaps(dst *map[string]jsontypes.Normalized, api map[string]jsontypes.Normalized) {

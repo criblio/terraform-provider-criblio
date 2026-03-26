@@ -142,6 +142,104 @@ func PruneSearchDashboardElementsCty(val cty.Value) (cty.Value, error) {
 	return cty.TupleVal(out), nil
 }
 
+// StripSearchDashboardElementsConfigNullKeysCty removes null-valued entries from
+// dashboard_element{,_input,_visualization}.config maps on each element.
+//
+// List homogenization (normalizeListOfMaps / homogenizeListElementObjectsUntilStable)
+// unions keys across elements and inserts explicit null for missing keys so cty list
+// types line up. For open-ended JSON config maps that is undesirable: Terraform
+// then treats those as real nulls and the provider sees perpetual drift. Omitting
+// keys is the correct representation for "not set".
+func StripSearchDashboardElementsConfigNullKeysCty(val cty.Value) (cty.Value, error) {
+	if val.IsNull() || !val.IsKnown() {
+		return val, nil
+	}
+	ty := val.Type()
+	if !ty.IsListType() && !ty.IsTupleType() {
+		return val, nil
+	}
+	l := val.LengthInt()
+	out := make([]cty.Value, l)
+	for i := 0; i < l; i++ {
+		ev := val.Index(cty.NumberIntVal(int64(i)))
+		var err error
+		out[i], err = stripSearchDashboardElementConfigNullKeys(ev)
+		if err != nil {
+			return cty.NilVal, fmt.Errorf("elements[%d]: %w", i, err)
+		}
+	}
+	if ty.IsListType() && cty.CanListVal(out) {
+		return cty.ListVal(out), nil
+	}
+	return cty.TupleVal(out), nil
+}
+
+func stripSearchDashboardElementConfigNullKeys(elem cty.Value) (cty.Value, error) {
+	if elem.IsNull() || !elem.IsKnown() || !elem.Type().IsObjectType() {
+		return elem, nil
+	}
+	out := elem
+	for _, branch := range searchDashboardElementOneOfAttrs {
+		if !out.Type().HasAttribute(branch) {
+			continue
+		}
+		b := out.GetAttr(branch)
+		if b.IsNull() || !b.IsKnown() || !b.Type().IsObjectType() || !b.Type().HasAttribute("config") {
+			continue
+		}
+		cfg := b.GetAttr("config")
+		newCfg := ctyStripNullKeyedEntries(cfg)
+		if newCfg.RawEquals(cfg) {
+			continue
+		}
+		b2 := ctyObjectSetAttr(b, "config", newCfg)
+		out = ctyObjectSetAttr(out, branch, b2)
+	}
+	return out, nil
+}
+
+// ctyStripNullKeyedEntries drops map keys / object attributes whose value is null.
+func ctyStripNullKeyedEntries(v cty.Value) cty.Value {
+	if v.IsNull() || !v.IsKnown() {
+		return v
+	}
+	t := v.Type()
+	switch {
+	case t.IsMapType():
+		if v.LengthInt() == 0 {
+			return v
+		}
+		em := v.AsValueMap()
+		out := make(map[string]cty.Value, len(em))
+		for k, ev := range em {
+			if ev.IsNull() {
+				continue
+			}
+			out[k] = ev
+		}
+		if len(out) == 0 {
+			return cty.MapValEmpty(t.ElementType())
+		}
+		return cty.MapVal(out)
+	case t.IsObjectType():
+		atys := t.AttributeTypes()
+		out := make(map[string]cty.Value, len(atys))
+		for k := range atys {
+			ev := v.GetAttr(k)
+			if ev.IsNull() {
+				continue
+			}
+			out[k] = ev
+		}
+		if len(out) == 0 {
+			return cty.ObjectVal(map[string]cty.Value{})
+		}
+		return cty.ObjectVal(out)
+	default:
+		return v
+	}
+}
+
 func ctyPruneDashboardElementUnionObject(elem cty.Value) (cty.Value, error) {
 	if elem.IsNull() || !elem.IsKnown() {
 		return elem, nil

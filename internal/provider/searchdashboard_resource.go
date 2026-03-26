@@ -102,6 +102,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Description: `Markdown and other dashboard element config (JSON string per key).`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -263,6 +264,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Description: `Input element configuration (open JSON object per key).`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -573,6 +575,7 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis); JSON string per key.`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
+										searchDashboardConfigMapUseStateWhenNullOnly(),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -1050,6 +1053,8 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+	presence := snapshotSearchDashboardConfigMapPresence(data)
+
 	request, requestDiags := data.ToSharedSearchDashboard(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1096,6 +1101,7 @@ func (r *SearchDashboardResource) Create(ctx context.Context, req resource.Creat
 	}
 
 	restoreSearchDashboardAfterPlanMerge(data, &apiSnapshot)
+	normalizeSearchDashboardConfigMaps(data, presence)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -1155,6 +1161,13 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
+	ensureSearchDashboardElementConfigMaps(data)
+
+	// Do not run normalizeSearchDashboardConfigMaps on Read. Prior-state snapshots often have no
+	// config keys (legacy strips / API shape), so presence-aware stripping would remove API
+	// null-only keys such as color and reintroduce perpetual drift vs. HCL (e.g. color = null).
+	// Create/Update still normalize using the plan snapshot so omitted config stays stable.
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -1172,6 +1185,8 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	presence := snapshotSearchDashboardConfigMapPresence(data)
 
 	request, requestDiags := data.ToOperationsUpdateSearchDashboardByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1219,6 +1234,7 @@ func (r *SearchDashboardResource) Update(ctx context.Context, req resource.Updat
 	}
 
 	restoreSearchDashboardAfterPlanMerge(data, &apiSnapshot)
+	normalizeSearchDashboardConfigMaps(data, presence)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

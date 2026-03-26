@@ -39915,6 +39915,9 @@ func (r *SourceResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+
+	priorPlainAuth := snapshotPlainAuthTokensPriorRead(data)
+
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetInputByIDResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
@@ -39922,6 +39925,9 @@ func (r *SourceResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	data.syncRootInputFromFirstItem()
+	// GET may omit/redact auth_tokens; keep prior state when the API returned fewer than we had.
+	restorePlainAuthTokensIfAPIShrank(data, priorPlainAuth)
+	normalizeRootInputEmptySlices(data)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
