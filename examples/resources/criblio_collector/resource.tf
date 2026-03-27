@@ -433,7 +433,7 @@ resource "criblio_collector" "my_collector" {
   input_collector_rest = {
     collector = {
       conf = {
-        auth_header_expr = "Bearer ${token}"
+        auth_header_expr = "Bearer $${token}"
         auth_header_key  = "Authorization"
         auth_request_headers = [
           {

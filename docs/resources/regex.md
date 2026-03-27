@@ -29,8 +29,8 @@ resource "criblio_regex" "my_regex" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `regex` (String)
 
 ### Optional

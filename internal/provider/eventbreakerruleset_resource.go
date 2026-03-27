@@ -26,6 +26,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -73,12 +74,19 @@ func (r *EventBreakerRulesetResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique ID to PATCH. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`).String()),
 				},

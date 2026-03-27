@@ -1,20 +1,20 @@
-speakeasyVersion: 1.759.1
+speakeasyVersion: 1.759.3
 sources:
     Cribl Control Plane and Management API:
         sourceNamespace: cribl-control-plane-and-management-api
-        sourceRevisionDigest: sha256:9557b25f682a36eb9f445a1b7b9952ca81f7913d2aeb7869bab1cfcf256606c9
-        sourceBlobDigest: sha256:34143f15629809b2aab2bf7bd2b7684f869eb4851190772f6f015e1646ec9d09
+        sourceRevisionDigest: sha256:556e414d02dc6290c0d183d14cd117f59d6bcf7e803c343ed43e093dc0b1f967
+        sourceBlobDigest: sha256:33472c0ae1447f2ba7baaa63245c9245edc4ae073ef60d7078d108b6056464b4
         tags:
             - latest
 targets:
     cribl-io:
         source: Cribl Control Plane and Management API
         sourceNamespace: cribl-control-plane-and-management-api
-        sourceRevisionDigest: sha256:9557b25f682a36eb9f445a1b7b9952ca81f7913d2aeb7869bab1cfcf256606c9
-        sourceBlobDigest: sha256:34143f15629809b2aab2bf7bd2b7684f869eb4851190772f6f015e1646ec9d09
+        sourceRevisionDigest: sha256:556e414d02dc6290c0d183d14cd117f59d6bcf7e803c343ed43e093dc0b1f967
+        sourceBlobDigest: sha256:33472c0ae1447f2ba7baaa63245c9245edc4ae073ef60d7078d108b6056464b4
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.759.1
+    speakeasyVersion: 1.759.3
     sources:
         Cribl Control Plane and Management API:
             inputs:

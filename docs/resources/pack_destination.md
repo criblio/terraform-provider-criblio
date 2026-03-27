@@ -466,7 +466,7 @@ resource "criblio_pack_destination" "my_packdestination" {
   }
   output_click_house = {
     async_inserts    = true
-    auth_header_expr = "`Bearer ${token}`"
+    auth_header_expr = "`Bearer $${token}`"
     auth_type        = "none"
     column_mappings = [
       {
@@ -2630,7 +2630,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns = true
   }
   output_influxdb = {
-    auth_header_expr         = "`Bearer ${token}`"
+    auth_header_expr         = "`Bearer $${token}`"
     auth_type                = "token"
     bucket                   = "metrics_prod"
     compress                 = true
@@ -3523,7 +3523,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     use_round_robin_dns = true
   }
   output_open_telemetry = {
-    auth_header_expr   = "`Bearer ${token}`"
+    auth_header_expr   = "`Bearer $${token}`"
     auth_type          = "credentialsSecret"
     compress           = "gzip"
     concurrency        = 5
@@ -3637,7 +3637,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     username             = "otel_user"
   }
   output_prometheus = {
-    auth_header_expr   = "`Bearer ${token}`"
+    auth_header_expr   = "`Bearer $${token}`"
     auth_type          = "none"
     concurrency        = 8
     credentials_secret = "prometheus_basic_auth"
@@ -3956,8 +3956,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     custom_content_type        = "application/x-ndjson"
     custom_drop_when_null      = false
     custom_event_delimiter     = ""
-    custom_payload_expression  = "`{ \"items\": [${events}] }`"
-    custom_source_expression   = "raw=${_raw}"
+    custom_payload_expression  = "`{ \"items\": [$${events}] }`"
+    custom_source_expression   = "raw=$${_raw}"
     dce_endpoint               = "https://mydce-abc123.eastus.ingest.monitor.azure.com"
     dcr_id                     = "12345678-90ab-cdef-1234-567890abcdef"
     description                = "Send events to Microsoft Sentinel (DCR/DCE)"
@@ -4314,7 +4314,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     environment               = "main"
     id                        = "sns_alerts_prod"
     max_retries               = 5
-    message_group_id          = "`alerts-${C.vars.service}`"
+    message_group_id          = "`alerts-$${C.vars.service}`"
     on_backpressure           = "drop"
     pipeline                  = "main"
     pq_compress               = "none"
@@ -5008,7 +5008,7 @@ resource "criblio_pack_destination" "my_packdestination" {
   }
   output_webhook = {
     advanced_content_type     = "application/json"
-    auth_header_expr          = "`Bearer ${token}`"
+    auth_header_expr          = "`Bearer $${token}`"
     auth_type                 = "token"
     compress                  = true
     concurrency               = 10
@@ -5016,8 +5016,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     custom_content_type       = "application/x-ndjson"
     custom_drop_when_null     = false
     custom_event_delimiter    = ""
-    custom_payload_expression = "`{ \"items\": [${events}] }`"
-    custom_source_expression  = "raw=${_raw}"
+    custom_payload_expression = "`{ \"items\": [$${events}] }`"
+    custom_source_expression  = "raw=$${_raw}"
     description               = "Robust webhook delivery with backoff and retries"
     dns_resolve_period_sec    = 600
     environment               = "main"

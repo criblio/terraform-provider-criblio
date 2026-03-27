@@ -7,7 +7,7 @@ resource "criblio_database_connection" "my_databaseconnection" {
   description        = "Primary application database"
   group_id           = "Cribl"
   id                 = "db-prod-01"
-  password           = "$${{secret:db_password}"
+  password           = "$$${{secret:db_password}"
   request_timeout    = 60
   tags               = "prod,db"
   user               = "appuser"

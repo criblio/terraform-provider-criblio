@@ -80,12 +80,19 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `filter. Requires replacement if changed.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `new Id to be used for subscription to be created`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `new Id to be used for subscription to be created. Requires replacement if changed.`,
 			},
 			"pipeline": schema.StringAttribute{
 				Required: true,

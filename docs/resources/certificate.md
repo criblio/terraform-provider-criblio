@@ -35,8 +35,8 @@ resource "criblio_certificate" "my_certificate" {
 ### Required
 
 - `cert` (String) Drag/drop or upload host certificate in PEM/Base64 format, or paste its contents here
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `priv_key` (String, Sensitive)
 
 ### Optional

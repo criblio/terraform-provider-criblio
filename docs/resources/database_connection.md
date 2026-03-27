@@ -22,7 +22,7 @@ resource "criblio_database_connection" "my_databaseconnection" {
   description        = "Primary application database"
   group_id           = "Cribl"
   id                 = "db-prod-01"
-  password           = "$${{secret:db_password}"
+  password           = "$$${{secret:db_password}"
   request_timeout    = 60
   tags               = "prod,db"
   user               = "appuser"
@@ -37,8 +37,8 @@ resource "criblio_database_connection" "my_databaseconnection" {
 - `auth_type` (String)
 - `database_type` (String) must be one of ["mysql", "oracle", "postgres", "sqlserver"]
 - `description` (String)
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 
 ### Optional
 

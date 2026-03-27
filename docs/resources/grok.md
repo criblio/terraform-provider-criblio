@@ -14,7 +14,7 @@ Grok Resource
 
 ```terraform
 resource "criblio_grok" "my_grok" {
-  content  = "%%{IPV4:client} %%{WORD:method} %%{URIPATHPARAM:request}"
+  content  = "%%%{IPV4:client} %%%{WORD:method} %%%{URIPATHPARAM:request}"
   group_id = "Cribl"
   id       = "myGrokFile"
   tags     = "logs,patterns"
@@ -27,8 +27,8 @@ resource "criblio_grok" "my_grok" {
 ### Required
 
 - `content` (String)
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 
 ### Optional
 

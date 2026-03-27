@@ -28,8 +28,8 @@ resource "criblio_subscription" "my_subscription" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) new Id to be used for subscription to be created
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) new Id to be used for subscription to be created. Requires replacement if changed.
 - `pipeline` (String) pipeline to be used. Requires replacement if changed.
 
 ### Optional

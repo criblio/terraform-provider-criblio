@@ -34,10 +34,10 @@ resource "criblio_hmac_function" "my_hmacfunction" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
 - `header_expression` (String)
 - `header_name` (String)
-- `id` (String) Unique ID to PATCH
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `lib` (String) must be one of ["cribl", "cribl-custom", "custom"]
 - `string_builders` (List of String)
 
