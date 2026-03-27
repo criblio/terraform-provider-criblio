@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -96,12 +97,19 @@ func (r *GlobalVarResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Brief description of this variable. Optional.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Global variable name.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Global variable name. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},

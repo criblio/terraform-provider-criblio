@@ -30,8 +30,13 @@ build-import-cli:
 test-speakeasy: 
 	speakeasy test && speakeasy lint openapi --non-interactive -s openapi.yml
 
-build-speakeasy: 
+# Fast/minimal Speakeasy run (CI-friendly).
+build-speakeasy:
 	speakeasy run --skip-versioning --output console --minimal
+
+# Full Speakeasy run
+build-speakeasy-full:
+	speakeasy run
 
 install-sbom-tools:
 	go install github.com/anchore/syft/cmd/syft@latest

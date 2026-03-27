@@ -7,10 +7,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -50,12 +53,19 @@ func (r *ParquetSchemaResource) Schema(ctx context.Context, req resource.SchemaR
 				Optional: true,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique ID to PATCH. Requires replacement if changed.`,
 			},
 			"schema": schema.StringAttribute{
 				Required:    true,

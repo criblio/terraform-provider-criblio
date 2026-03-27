@@ -61,8 +61,8 @@ resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 
 ### Optional
 

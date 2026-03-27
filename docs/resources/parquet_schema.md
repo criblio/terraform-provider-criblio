@@ -26,8 +26,8 @@ resource "criblio_parquet_schema" "my_parquetschema" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `schema` (String) JSON schema matching standards of draft version 2019-09
 
 ### Optional

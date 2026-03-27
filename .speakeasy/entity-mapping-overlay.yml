@@ -259,6 +259,650 @@ actions:
     update:
       x-speakeasy-entity: SearchDashboard
 
+  # Path params id + groupId: Terraform ForceNew when either changes (indices vary by operation).
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/appscope-configs/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/breakers/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/database-connections/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/grok/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/hmac-functions/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/jobs/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parquet-schemas/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/parsers/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/regex/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/schemas/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/lib/vars/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].delete.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].patch.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].delete.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].patch.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].patch.parameters[3].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].delete.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].patch.parameters[3].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].patch.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].delete.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].patch.parameters[3].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].get.parameters[3].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}'].patch.parameters[4].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}/export'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/packs/{id}/export'].get.parameters[3].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/pipelines/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/certificates/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}/hectoken'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}/hectoken'].post.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}/hectoken/{token}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/inputs/{id}/hectoken/{token}'].patch.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/keys/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/lookups/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/pq'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/pq'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/pq'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/pq'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/samples'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/samples'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/test'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/outputs/{id}/test'].post.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/projects/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/secrets/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/system/subscriptions/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/system/jobs/logs/{id}/{groupId}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/system/jobs/logs/{id}/{groupId}'].get.parameters[7].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  # Path param pack (pack-scoped routes): Terraform ForceNew when pack changes.
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/breakers/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/lib/vars/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/pipelines/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/routes/default'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/routes/default'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].delete.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/inputs/{id}'].patch.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/lookups/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs'].post.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].delete.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].get.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/m/{groupId}/p/{pack}/system/outputs/{id}'].patch.parameters[2].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/functions'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/functions/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/lib/schemas'].get.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/lib/schemas'].post.parameters[0].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/lib/schemas/{id}'].delete.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/lib/schemas/{id}'].get.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
+  - target: "$.paths['/p/{pack}/lib/schemas/{id}'].patch.parameters[1].schema"
+    update:
+      x-speakeasy-param-force-new: true
   - target: "$.paths[*][*].security"
     remove: true
   

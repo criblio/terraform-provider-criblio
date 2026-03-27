@@ -22,3 +22,4 @@ sbom-*.json
 tf*
 go.work*
 dist/*
+.speakeasy-manual*

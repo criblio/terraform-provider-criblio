@@ -28,8 +28,8 @@ resource "criblio_secret" "my_secret" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `secret_type` (String) must be one of ["text", "keypair", "credentials"]
 
 ### Optional

@@ -35,8 +35,8 @@ resource "criblio_global_var" "my_globalvar" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Global variable name.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) Global variable name. Requires replacement if changed.
 
 ### Optional
 

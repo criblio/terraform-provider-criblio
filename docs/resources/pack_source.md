@@ -118,7 +118,7 @@ resource "criblio_pack_source" "my_packsource" {
     }
     client_id          = "...my_client_id..."
     client_text_secret = "...my_client_text_secret..."
-    connection_string  = "$${{secret:azure_storage_connection_string}"
+    connection_string  = "$$${{secret:azure_storage_connection_string}"
     connections = [
       {
         output   = "...my_output..."
@@ -982,7 +982,7 @@ resource "criblio_pack_source" "my_packsource" {
     aws_api_key               = "...my_aws_api_key..."
     aws_authentication_method = "secret"
     aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "$${{secret:aws_secret_access_key}"
+    aws_secret_key            = "$$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
@@ -1014,7 +1014,7 @@ resource "criblio_pack_source" "my_packsource" {
       "web-*.example.com",
       "node-exporter.internal.example.com",
     ]
-    password = "$${{secret:edge_prom_password}"
+    password = "$$${{secret:edge_prom_password}"
     persistence = {
       compress      = "gzip"
       enable        = false
@@ -1126,7 +1126,7 @@ resource "criblio_pack_source" "my_packsource" {
         value = "...my_value..."
       }
     ]
-    password = "$${{secret:elastic_proxy_password}"
+    password = "$$${{secret:elastic_proxy_password}"
     pipeline = "default"
     port     = 9200
     pq = {
@@ -1496,7 +1496,7 @@ resource "criblio_pack_source" "my_packsource" {
     request_timeout             = 45000
     secret                      = "gcp-service-account"
     send_to_routes              = true
-    service_account_credentials = "$${{file:/secrets/gcp-service-account.json}"
+    service_account_credentials = "$$${{file:/secrets/gcp-service-account.json}"
     streamtags = [
       "prod",
       "gpubsub",
@@ -1529,7 +1529,7 @@ resource "criblio_pack_source" "my_packsource" {
     keep_alive_timeout  = 30
     loki_api            = "/loki/api/v1/push"
     loki_auth = {
-      auth_header_expr   = "`Bearer ${token}`"
+      auth_header_expr   = "`Bearer $${token}`"
       auth_type          = "textSecret"
       credentials_secret = "loki-credentials"
       login_url          = "https://loki.example.com/oauth/token"
@@ -1545,11 +1545,11 @@ resource "criblio_pack_source" "my_packsource" {
           value = "client_credentials"
         }
       ]
-      password             = "$${{secret:loki_password}"
-      secret               = "$${{secret:loki_oauth_secret}"
+      password             = "$$${{secret:loki_password}"
+      secret               = "$$${{secret:loki_oauth_secret}"
       secret_param_name    = "client_secret"
       text_secret          = "loki-token-secret"
-      token                = "$${{secret:loki_token}"
+      token                = "$$${{secret:loki_token}"
       token_attribute_name = "access_token"
       token_timeout_secs   = 3600
       username             = "loki_user"
@@ -1580,7 +1580,7 @@ resource "criblio_pack_source" "my_packsource" {
     pq_enabled     = false
     prometheus_api = "/api/prom/push"
     prometheus_auth = {
-      auth_header_expr   = "`Bearer ${token}`"
+      auth_header_expr   = "`Bearer $${token}`"
       auth_type          = "none"
       credentials_secret = "prom-credentials"
       login_url          = "https://grafana.example.com/oauth/token"
@@ -1596,11 +1596,11 @@ resource "criblio_pack_source" "my_packsource" {
           value = "client_credentials"
         }
       ]
-      password             = "$${{secret:prom_password}"
-      secret               = "$${{secret:prom_oauth_secret}"
+      password             = "$$${{secret:prom_password}"
+      secret               = "$$${{secret:prom_oauth_secret}"
       secret_param_name    = "client_secret"
       text_secret          = "prom-token-secret"
-      token                = "$${{secret:prom_token}"
+      token                = "$$${{secret:prom_token}"
       token_attribute_name = "access_token"
       token_timeout_secs   = 3600
       username             = "grafana"
@@ -2221,7 +2221,7 @@ resource "criblio_pack_source" "my_packsource" {
   }
   input_loki = {
     activity_log_sample_rate = 10
-    auth_header_expr         = "`Bearer ${token}`"
+    auth_header_expr         = "`Bearer $${token}`"
     auth_type                = "none"
     capture_headers          = true
     connections = [
@@ -2263,7 +2263,7 @@ resource "criblio_pack_source" "my_packsource" {
         value = "client_credentials"
       }
     ]
-    password = "$${{secret:loki_password}"
+    password = "$$${{secret:loki_password}"
     pipeline = "default"
     port     = 3100
     pq = {
@@ -2281,7 +2281,7 @@ resource "criblio_pack_source" "my_packsource" {
     }
     pq_enabled        = false
     request_timeout   = 30
-    secret            = "$${{secret:loki_oauth_secret}"
+    secret            = "$$${{secret:loki_oauth_secret}"
     secret_param_name = "client_secret"
     send_to_routes    = true
     socket_timeout    = 60
@@ -2305,7 +2305,7 @@ resource "criblio_pack_source" "my_packsource" {
       reject_unauthorized = false
       request_cert        = false
     }
-    token                = "$${{secret:loki_token}"
+    token                = "$$${{secret:loki_token}"
     token_attribute_name = "access_token"
     token_timeout_secs   = 3600
     type                 = "loki"
@@ -2521,10 +2521,10 @@ resource "criblio_pack_source" "my_packsource" {
     authentication_timeout    = 15000
     auto_commit_interval      = 5000
     auto_commit_threshold     = 1000
-    aws_api_key               = "$${{secret:aws_access_key_id}"
+    aws_api_key               = "$$${{secret:aws_access_key_id}"
     aws_authentication_method = "auto"
     aws_secret                = "aws-msk-credentials"
-    aws_secret_key            = "$${{secret:aws_secret_access_key}"
+    aws_secret_key            = "$$${{secret:aws_secret_access_key}"
     backoff_rate              = 3
     brokers = [
       "b-1.msk-cluster.a1b2c3d4.e1.kafka.us-east-1.amazonaws.com:9092",
@@ -2686,7 +2686,7 @@ resource "criblio_pack_source" "my_packsource" {
   input_office365_mgmt = {
     app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
     auth_type     = "secret"
-    client_secret = "$${{secret:o365_client_secret}"
+    client_secret = "$$${{secret:o365_client_secret}"
     connections = [
       {
         output   = "...my_output..."
@@ -2770,7 +2770,7 @@ resource "criblio_pack_source" "my_packsource" {
       priv_key_path    = "...my_priv_key_path..."
     }
     client_id     = "99999999-aaaa-bbbb-cccc-111111111111"
-    client_secret = "$${{secret:o365_client_secret}"
+    client_secret = "$$${{secret:o365_client_secret}"
     connections = [
       {
         output   = "...my_output..."
@@ -2797,7 +2797,7 @@ resource "criblio_pack_source" "my_packsource" {
         value = "...my_value..."
       }
     ]
-    password  = "$${{secret:o365_password}"
+    password  = "$$${{secret:o365_password}"
     pipeline  = "default"
     plan_type = "gcc_high"
     pq = {
@@ -2849,7 +2849,7 @@ resource "criblio_pack_source" "my_packsource" {
   input_office365_service = {
     app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
     auth_type     = "manual"
-    client_secret = "$${{secret:o365_client_secret}"
+    client_secret = "$$${{secret:o365_client_secret}"
     connections = [
       {
         output   = "...my_output..."
@@ -2923,7 +2923,7 @@ resource "criblio_pack_source" "my_packsource" {
   }
   input_open_telemetry = {
     activity_log_sample_rate = "{ \"see\": \"documentation\" }"
-    auth_header_expr         = "`Bearer ${token}`"
+    auth_header_expr         = "`Bearer $${token}`"
     auth_type                = "token"
     capture_headers          = "{ \"see\": \"documentation\" }"
     connections = [
@@ -3122,7 +3122,7 @@ resource "criblio_pack_source" "my_packsource" {
     aws_api_key               = "...my_aws_api_key..."
     aws_authentication_method = "secret"
     aws_secret                = "...my_aws_secret..."
-    aws_secret_key            = "$${{secret:aws_secret_access_key}"
+    aws_secret_key            = "$$${{secret:aws_secret_access_key}"
     connections = [
       {
         output   = "...my_output..."
@@ -3159,7 +3159,7 @@ resource "criblio_pack_source" "my_packsource" {
       "web-*.example.com",
       "db-1.internal.example.com",
     ]
-    password = "$${{secret:prom_password}"
+    password = "$$${{secret:prom_password}"
     pipeline = "default"
     pq = {
       commit_frequency      = 4.85
@@ -3217,7 +3217,7 @@ resource "criblio_pack_source" "my_packsource" {
   }
   input_prometheus_rw = {
     activity_log_sample_rate = 10
-    auth_header_expr         = "`Bearer ${token}`"
+    auth_header_expr         = "`Bearer $${token}`"
     auth_type                = "basic"
     capture_headers          = true
     connections = [
@@ -3258,7 +3258,7 @@ resource "criblio_pack_source" "my_packsource" {
         value = "client_credentials"
       }
     ]
-    password = "$${{secret:prom_password}"
+    password = "$$${{secret:prom_password}"
     pipeline = "default"
     port     = 9090
     pq = {
@@ -3277,7 +3277,7 @@ resource "criblio_pack_source" "my_packsource" {
     pq_enabled        = false
     prometheus_api    = "/write"
     request_timeout   = 30
-    secret            = "$${{secret:prom_oauth_secret}"
+    secret            = "$$${{secret:prom_oauth_secret}"
     secret_param_name = "client_secret"
     send_to_routes    = true
     socket_timeout    = 60
@@ -3303,7 +3303,7 @@ resource "criblio_pack_source" "my_packsource" {
       reject_unauthorized = false
       request_cert        = true
     }
-    token                = "$${{secret:prom_token}"
+    token                = "$$${{secret:prom_token}"
     token_attribute_name = "access_token"
     token_timeout_secs   = 3600
     type                 = "prometheus_rw"
@@ -3882,7 +3882,7 @@ resource "criblio_pack_source" "my_packsource" {
     use_fwd_timezone = true
   }
   input_splunk_search = {
-    auth_header_expr = "`Bearer ${token}`"
+    auth_header_expr = "`Bearer $${token}`"
     auth_type        = "basic"
     breaker_rulesets = [
       "Splunk Search Ruleset",
@@ -3904,13 +3904,13 @@ resource "criblio_pack_source" "my_packsource" {
     endpoint_headers = [
       {
         name  = "Authorization"
-        value = "\"Bearer $${{secret:splunk_token}\""
+        value = "\"Bearer $$${{secret:splunk_token}\""
       }
     ]
     endpoint_params = [
       {
         name  = "earliest_time"
-        value = "${earliest}"
+        value = "$${earliest}"
       }
     ]
     environment             = "main"
@@ -3941,7 +3941,7 @@ resource "criblio_pack_source" "my_packsource" {
       }
     ]
     output_mode = "csv"
-    password    = "$${{secret:splunk_password}"
+    password    = "$$${{secret:splunk_password}"
     pipeline    = "default"
     pq = {
       commit_frequency      = 4.05
@@ -3973,7 +3973,7 @@ resource "criblio_pack_source" "my_packsource" {
     }
     search                 = "search index=main sourcetype=access_combined status>=500 | stats count by host"
     search_head            = "https://splunk.example.com:8089"
-    secret                 = "$${{secret:splunk_oauth_secret}"
+    secret                 = "$$${{secret:splunk_oauth_secret}"
     secret_param_name      = "password"
     send_to_routes         = true
     stale_channel_flush_ms = 15000
@@ -3982,7 +3982,7 @@ resource "criblio_pack_source" "my_packsource" {
       "splunk",
     ]
     text_secret          = "splunk-token-secret"
-    token                = "$${{secret:splunk_token}"
+    token                = "$$${{secret:splunk_token}"
     token_attribute_name = "access_token"
     token_timeout_secs   = 3600
     ttl                  = "4h"
@@ -4419,7 +4419,7 @@ resource "criblio_pack_source" "my_packsource" {
     type = "tcp"
   }
   input_tcpjson = {
-    auth_token = "$${{secret:tcpjson_token}"
+    auth_token = "$$${{secret:tcpjson_token}"
     auth_type  = "secret"
     connections = [
       {
