@@ -62,7 +62,7 @@ SBOM files are automatically attached to GitHub releases as:
 
 The SBOM generation process includes:
 
-- **Trivy Scanner** - Filesystem vulnerability scanning
+- **Grype Scanner** - Filesystem vulnerability scanning
 - **SARIF Upload** - Results uploaded to GitHub Security tab
 - **Dependency Analysis** - Go module dependency scanning
 
