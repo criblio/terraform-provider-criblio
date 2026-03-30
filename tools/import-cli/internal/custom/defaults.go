@@ -158,6 +158,7 @@ func parseJSONListOfObjects(s string) []hcl.Value {
 
 // ApplyGroupDefaults populates criblio_group attrs from the model when API returns values
 // (description, is_fleet, on_prem, tags, type, etc.) so generated HCL matches state and avoids plan drift.
+// Does not set "name": it is provider read-only (Computed only); Terraform rejects it in configuration.
 func ApplyGroupDefaults(attrs map[string]hcl.Value, model interface{}) {
 	gm, ok := model.(*provider.GroupResourceModel)
 	if !ok || gm == nil {
@@ -195,9 +196,6 @@ func ApplyGroupDefaults(attrs map[string]hcl.Value, model interface{}) {
 	if !gm.MaxWorkerAge.IsNull() && !gm.MaxWorkerAge.IsUnknown() && gm.MaxWorkerAge.ValueString() != "" {
 		setStr("max_worker_age", gm.MaxWorkerAge.ValueString())
 	}
-	if !gm.Name.IsNull() && !gm.Name.IsUnknown() && gm.Name.ValueString() != "" {
-		setStr("name", gm.Name.ValueString())
-	}
 	if !gm.EstimatedIngestRate.IsNull() && !gm.EstimatedIngestRate.IsUnknown() {
 		setNum("estimated_ingest_rate", gm.EstimatedIngestRate.ValueFloat64())
 	}
@@ -231,4 +229,3 @@ func ApplyProjectDefaults(attrs map[string]hcl.Value) {
 		attrs["destinations"] = emptyList
 	}
 }
-
