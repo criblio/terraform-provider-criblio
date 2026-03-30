@@ -24,7 +24,6 @@ resource "criblio_group" "my_group" {
   inherits              = "base-config"
   is_fleet              = false
   max_worker_age        = "1h"
-  name                  = "Prod Edge"
   on_prem               = true
   product               = "stream"
   provisioned           = true
@@ -54,13 +53,16 @@ resource "criblio_group" "my_group" {
 - `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
-- `name` (String)
 - `on_prem` (Boolean)
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
 - `tags` (String)
 - `type` (String) must be one of ["edge", "stream", "search", "lake_access", "local_search"]
 - `worker_remote_access` (Boolean)
+
+### Read-Only
+
+- `name` (String) Display name for the group; server-managed. Returned from the API after create or read.
 
 <a id="nestedatt--cloud"></a>
 ### Nested Schema for `cloud`

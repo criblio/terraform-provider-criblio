@@ -7,7 +7,6 @@ resource "criblio_group" "my_edge_subfleet" {
   estimated_ingest_rate = 1024
   id                    = "my-edge-subfleet"
   is_fleet              = true
-  name                  = "my-edge-subfleet"
   on_prem               = false
   product               = "edge"
   provisioned           = false

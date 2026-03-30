@@ -45511,6 +45511,9 @@ components:
           type: string
           pattern: ^[a-z0-9-]+$
           example: Prod Edge
+          readOnly: true
+          x-speakeasy-param-readonly: true
+          description: Display name for the group; server-managed. Returned on read; do not send on create or update.
         onPrem:
           type: boolean
           example: true

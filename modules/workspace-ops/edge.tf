@@ -27,7 +27,6 @@ variable "edge_instance_type" {
 
 resource "criblio_group" "edge_worker_group" {
   id                    = var.edge_group
-  name                  = var.edge_group
   product               = "edge"
   description           = "Terraform-managed Edge fleet worker group"
   is_fleet              = true

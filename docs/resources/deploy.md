@@ -43,7 +43,7 @@ Read-Only:
 - `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
-- `name` (String)
+- `name` (String) Display name for the group; server-managed. Returned on read; do not send on create or update.
 - `on_prem` (Boolean) Whether this is an on-premises group. Cannot be true when cloud is set.
 - `provisioned` (Boolean)
 - `streamtags` (List of String)

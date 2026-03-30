@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"strings"
 
-	"regexp"
-
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -116,11 +114,8 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `This is only configurable for hybrid worker groups.`,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9-]+$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9-]+$`).String()),
-				},
+				Computed:    true,
+				Description: `Display name for the group; server-managed. Returned from the API after create or read.`,
 			},
 			"on_prem": schema.BoolAttribute{
 				Computed: true,

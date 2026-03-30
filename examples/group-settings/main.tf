@@ -6,7 +6,6 @@ locals {
 }
 resource "criblio_group" "hybrid_worker_group" {
   id                   = "my-hybrid-group"
-  name                 = "my-hybrid-group"
   is_fleet             = false
   on_prem              = true
   product              = "stream"

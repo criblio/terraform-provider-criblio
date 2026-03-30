@@ -11,7 +11,6 @@ resource "criblio_group" "syslog_worker_group" {
   estimated_ingest_rate = 1024
   id                    = "syslog-workers"
   is_fleet              = false
-  name                  = "syslog-workers"
   on_prem               = false
   product               = "stream"
   provisioned           = true

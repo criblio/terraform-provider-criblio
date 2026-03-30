@@ -32,13 +32,21 @@ data "criblio_group" "my_group" {
 
 ### Read-Only
 
-- `cloud` (Attributes) (see [below for nested schema](#nestedatt--cloud))
+- `items` (Attributes List) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+- `cloud` (Attributes) (see [below for nested schema](#nestedatt--items--cloud))
 - `description` (String)
 - `estimated_ingest_rate` (Number)
+- `id` (String)
 - `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
-- `name` (String)
+- `name` (String) Display name for the group; server-managed. Returned on read; do not send on create or update.
 - `on_prem` (Boolean) Whether this is an on-premises group. Cannot be true when cloud is set.
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
@@ -46,8 +54,8 @@ data "criblio_group" "my_group" {
 - `type` (String)
 - `worker_remote_access` (Boolean)
 
-<a id="nestedatt--cloud"></a>
-### Nested Schema for `cloud`
+<a id="nestedatt--items--cloud"></a>
+### Nested Schema for `items.cloud`
 
 Read-Only:
 
