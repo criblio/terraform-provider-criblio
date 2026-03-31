@@ -44,7 +44,7 @@ func TestModelToValue_sensitive_placeholder(t *testing.T) {
 		ID:      types.StringValue("secret-id"),
 	}
 	opts := &Options{
-		SensitivePaths:      map[string]bool{"id": true},
+		SensitivePaths:       map[string]bool{"id": true},
 		SensitivePlaceholder: "(sensitive)",
 	}
 	out, err := ModelToValue(model, opts)
@@ -212,4 +212,3 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	assert.True(t, len(expr) > 0)
 	assert.Contains(t, expr, "{")
 }
-

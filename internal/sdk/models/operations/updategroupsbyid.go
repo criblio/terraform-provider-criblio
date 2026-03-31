@@ -11,7 +11,7 @@ type UpdateGroupsByIDRequest struct {
 	// Group id
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// ConfigGroup object
-	ConfigGroup shared.ConfigGroupInput `request:"mediaType=application/json"`
+	ConfigGroup shared.ConfigGroup `request:"mediaType=application/json"`
 }
 
 func (u *UpdateGroupsByIDRequest) GetID() string {
@@ -21,9 +21,9 @@ func (u *UpdateGroupsByIDRequest) GetID() string {
 	return u.ID
 }
 
-func (u *UpdateGroupsByIDRequest) GetConfigGroup() shared.ConfigGroupInput {
+func (u *UpdateGroupsByIDRequest) GetConfigGroup() shared.ConfigGroup {
 	if u == nil {
-		return shared.ConfigGroupInput{}
+		return shared.ConfigGroup{}
 	}
 	return u.ConfigGroup
 }

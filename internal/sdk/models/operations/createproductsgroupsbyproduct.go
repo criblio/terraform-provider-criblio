@@ -40,7 +40,7 @@ type CreateProductsGroupsByProductRequest struct {
 	// Cribl Product
 	Product CreateProductsGroupsByProductProduct `pathParam:"style=simple,explode=false,name=product"`
 	// ConfigGroup object
-	ConfigGroup shared.ConfigGroupInput `request:"mediaType=application/json"`
+	ConfigGroup shared.ConfigGroup `request:"mediaType=application/json"`
 }
 
 func (c *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroupsByProductProduct {
@@ -50,9 +50,9 @@ func (c *CreateProductsGroupsByProductRequest) GetProduct() CreateProductsGroups
 	return c.Product
 }
 
-func (c *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGroupInput {
+func (c *CreateProductsGroupsByProductRequest) GetConfigGroup() shared.ConfigGroup {
 	if c == nil {
-		return shared.ConfigGroupInput{}
+		return shared.ConfigGroup{}
 	}
 	return c.ConfigGroup
 }

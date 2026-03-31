@@ -131,11 +131,11 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 				}
 				name := generator.StableResourceNameFromMap(e.TypeName, idMap)
 				out.Items = append(out.Items, generator.ResourceItem{
-					TypeName:  e.TypeName,
-					Name:      name,
-					Attrs:     attrs,
-					ImportID:  importID,
-					GroupID:   "global", // lakehouse_dataset_connection has no group_id
+					TypeName: e.TypeName,
+					Name:     name,
+					Attrs:    attrs,
+					ImportID: importID,
+					GroupID:  "global", // lakehouse_dataset_connection has no group_id
 				})
 			}
 			continue

@@ -4641,15 +4641,15 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 // restores when the API returns nil, so they can be re-applied after refreshPlan
 // overwrites them with empty.
 type collectorPreferStateBackup struct {
-	InputRest, ScheduleRest                       interface{}
-	InputScript, ScheduleScript                   interface{}
-	InputSplunk, ScheduleSplunk                   interface{}
-	InputS3, ScheduleS3                           interface{}
-	InputAzureBlob, ScheduleAzureBlob             interface{}
-	InputCriblLake, ScheduleCriblLake             interface{}
-	InputDatabase, ScheduleDatabase               interface{}
-	InputGCS, ScheduleGCS                         interface{}
-	InputHealthCheck, ScheduleHealthCheck         interface{}
+	InputRest, ScheduleRest               interface{}
+	InputScript, ScheduleScript           interface{}
+	InputSplunk, ScheduleSplunk           interface{}
+	InputS3, ScheduleS3                   interface{}
+	InputAzureBlob, ScheduleAzureBlob     interface{}
+	InputCriblLake, ScheduleCriblLake     interface{}
+	InputDatabase, ScheduleDatabase       interface{}
+	InputGCS, ScheduleGCS                 interface{}
+	InputHealthCheck, ScheduleHealthCheck interface{}
 }
 
 func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {

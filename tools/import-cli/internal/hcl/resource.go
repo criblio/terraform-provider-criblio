@@ -31,10 +31,10 @@ type ResourceBlockOptions struct {
 // skip nulls, skip empty lists, with resource-specific rules for criblio_pack and criblio_project.
 func DefaultResourceBlockOptions() *ResourceBlockOptions {
 	return &ResourceBlockOptions{
-		SkipNullAttributes:       true,
-		SkipEmptyListAttributes:  true,
-		SkipPruneEmptyListsFor:   map[string][]string{"criblio_pack": {"tags"}},
-		AlwaysEmitEmptyListsFor:  map[string][]string{"criblio_project": {"subscriptions", "destinations"}},
+		SkipNullAttributes:      true,
+		SkipEmptyListAttributes: true,
+		SkipPruneEmptyListsFor:  map[string][]string{"criblio_pack": {"tags"}},
+		AlwaysEmitEmptyListsFor: map[string][]string{"criblio_project": {"subscriptions", "destinations"}},
 	}
 }
 
@@ -51,7 +51,9 @@ func attrInList(typeName, attrName string, m map[string][]string) bool {
 }
 
 // ResourceBlock builds an hclwrite Block for a Terraform resource:
-//   resource "typeName" "name" { ... }
+//
+//	resource "typeName" "name" { ... }
+//
 // Attributes are taken from attrs (e.g. from ModelToValue). Nested attributes
 // are rendered as nested blocks/objects. The returned block can be appended to
 // an hclwrite.File body.
@@ -121,10 +123,10 @@ func ResourceBlock(typeName, name string, attrs map[string]Value, opts *Resource
 
 // ResourceInput is the input for building a single resource block.
 type ResourceInput struct {
-	TypeName                string
-	Name                    string
-	Attrs                   map[string]Value
-	LifecycleIgnoreChanges  []string
+	TypeName               string
+	Name                   string
+	Attrs                  map[string]Value
+	LifecycleIgnoreChanges []string
 }
 
 // ResourceBlockBytes returns the HCL source for a single resource block (with newline).

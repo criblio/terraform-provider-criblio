@@ -45,11 +45,11 @@ func TestResourceBlockBytes_generates_valid_hcl(t *testing.T) {
 
 func TestResourceBlock_nested_attributes(t *testing.T) {
 	attrs := map[string]Value{
-		"id":   {Kind: KindString, String: "pipe-1"},
+		"id": {Kind: KindString, String: "pipe-1"},
 		"conf": {
 			Kind: KindMap,
 			Map: map[string]Value{
-				"description": {Kind: KindString, String: "my pipeline"},
+				"description":        {Kind: KindString, String: "my pipeline"},
 				"async_func_timeout": {Kind: KindNumber, Number: 5000},
 			},
 		},
@@ -65,7 +65,7 @@ func TestResourceBlock_nested_attributes(t *testing.T) {
 
 func TestResourceBlock_list_and_null(t *testing.T) {
 	attrs := map[string]Value{
-		"id":   {Kind: KindString, String: "x"},
+		"id": {Kind: KindString, String: "x"},
 		"tags": {Kind: KindList, List: []Value{
 			{Kind: KindString, String: "a"},
 			{Kind: KindNull},

@@ -9,9 +9,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 )
 
 // SecretRefPattern matches Cribl stored secret references (e.g. #42:base64...).
@@ -21,7 +21,7 @@ var SecretRefPattern = regexp.MustCompile(`^#\d+:`)
 type Kind int
 
 const (
-	KindNull        Kind = iota
+	KindNull Kind = iota
 	KindString
 	KindNumber
 	KindBool
@@ -36,12 +36,12 @@ const (
 // Value represents an HCL-compatible value that preserves null vs empty
 // and can represent sensitive placeholders.
 type Value struct {
-	Kind     Kind
-	String   string
-	Number   float64
-	Bool     bool
-	List     []Value
-	Map      map[string]Value
+	Kind   Kind
+	String string
+	Number float64
+	Bool   bool
+	List   []Value
+	Map    map[string]Value
 	// Sensitive: placeholder text when Kind == KindSensitive (e.g. "(sensitive)" or variable name for jsonencode(var.x)).
 	// VarName: variable name when Kind == KindVariableRef (plain var.x, not jsonencode).
 	Sensitive string

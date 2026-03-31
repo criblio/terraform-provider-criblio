@@ -24,6 +24,7 @@ resource "criblio_group" "my_group" {
   inherits              = "base-config"
   is_fleet              = false
   max_worker_age        = "1h"
+  name                  = "Prod Edge"
   on_prem               = true
   product               = "stream"
   provisioned           = true
@@ -43,7 +44,7 @@ resource "criblio_group" "my_group" {
 ### Required
 
 - `id` (String) Group id
-- `product` (String) Cribl Product. must be one of ["stream", "edge"].
+- `product` (String) Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.
 
 ### Optional
 
@@ -53,7 +54,7 @@ resource "criblio_group" "my_group" {
 - `inherits` (String)
 - `is_fleet` (Boolean)
 - `max_worker_age` (String) This is only configurable for hybrid worker groups.
-- `on_prem` (Boolean)
+- `on_prem` (Boolean) Whether this is an on-premises group. Cannot be true when cloud is set.
 - `provisioned` (Boolean)
 - `streamtags` (List of String)
 - `tags` (String)

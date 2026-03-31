@@ -147,11 +147,11 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		attrs["priv_key"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.CertificatePrivKeyVariableName(name)}
 	}
 	it := generator.ResourceItem{
-		TypeName:  e.TypeName,
-		Name:      name,
-		Attrs:     attrs,
-		ImportID:  importID,
-		GroupID:   groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
+		TypeName: e.TypeName,
+		Name:     name,
+		Attrs:    attrs,
+		ImportID: importID,
+		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 	}
 	if r.TypeName == "criblio_appscope_config" {
 		// Deeply nested Optional+Computed fields (cacertpath, buffer, allowbinary, headers, etc.)
@@ -247,11 +247,11 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}
 	}
 	it := generator.ResourceItem{
-		TypeName:  e.TypeName,
-		Name:      name,
-		Attrs:     attrs,
-		ImportID:  importID,
-		GroupID:   groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
+		TypeName: e.TypeName,
+		Name:     name,
+		Attrs:    attrs,
+		ImportID: importID,
+		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 	}
 	// criblio_group: API may not return product; state has null. Add ignore_changes to suppress drift.
 	if typeName == "criblio_group" {

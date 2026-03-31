@@ -9,6 +9,7 @@ resource "criblio_group" "my_group" {
   inherits              = "base-config"
   is_fleet              = false
   max_worker_age        = "1h"
+  name                  = "Prod Edge"
   on_prem               = true
   product               = "stream"
   provisioned           = true

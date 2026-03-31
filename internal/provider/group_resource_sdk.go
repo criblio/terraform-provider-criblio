@@ -113,7 +113,7 @@ func (r *GroupResourceModel) ToOperationsCreateProductsGroupsByProductRequest(ct
 	var diags diag.Diagnostics
 
 	product := operations.CreateProductsGroupsByProductProduct(r.Product.ValueString())
-	configGroup, configGroupDiags := r.ToSharedConfigGroupInput(ctx)
+	configGroup, configGroupDiags := r.ToSharedConfigGroup(ctx)
 	diags.Append(configGroupDiags...)
 
 	if diags.HasError() {
@@ -160,7 +160,7 @@ func (r *GroupResourceModel) ToOperationsUpdateGroupsByIDRequest(ctx context.Con
 	var id string
 	id = r.ID.ValueString()
 
-	configGroup, configGroupDiags := r.ToSharedConfigGroupInput(ctx)
+	configGroup, configGroupDiags := r.ToSharedConfigGroup(ctx)
 	diags.Append(configGroupDiags...)
 
 	if diags.HasError() {
@@ -175,7 +175,7 @@ func (r *GroupResourceModel) ToOperationsUpdateGroupsByIDRequest(ctx context.Con
 	return &out, diags
 }
 
-func (r *GroupResourceModel) ToSharedConfigGroupInput(ctx context.Context) (*shared.ConfigGroupInput, diag.Diagnostics) {
+func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.ConfigGroup, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var cloud *shared.ConfigGroupCloud
@@ -221,6 +221,12 @@ func (r *GroupResourceModel) ToSharedConfigGroupInput(ctx context.Context) (*sha
 	} else {
 		isFleet = nil
 	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
 	onPrem := new(bool)
 	if !r.OnPrem.IsUnknown() && !r.OnPrem.IsNull() {
 		*onPrem = r.OnPrem.ValueBool()
@@ -261,13 +267,14 @@ func (r *GroupResourceModel) ToSharedConfigGroupInput(ctx context.Context) (*sha
 	} else {
 		maxWorkerAge = nil
 	}
-	out := shared.ConfigGroupInput{
+	out := shared.ConfigGroup{
 		Cloud:               cloud,
 		Description:         description,
 		EstimatedIngestRate: estimatedIngestRate,
 		ID:                  id,
 		Inherits:            inherits,
 		IsFleet:             isFleet,
+		Name:                name,
 		OnPrem:              onPrem,
 		Provisioned:         provisioned,
 		Streamtags:          streamtags,

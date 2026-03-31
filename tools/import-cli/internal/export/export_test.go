@@ -102,13 +102,13 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 		"input_collector_s3", "input_collector_script", "input_collector_splunk",
 	}
 	cfg := &registry.OneOfConfig{
-		ReadOnlyAttr:                  "items",
-		DiscriminatorField:            "type",
-		BlockNamePrefix:               "input_collector_",
-		KeysToSkip:                    []string{"status"},
+		ReadOnlyAttr:                   "items",
+		DiscriminatorField:             "type",
+		BlockNamePrefix:                "input_collector_",
+		KeysToSkip:                     []string{"status"},
 		UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"},
-		NestedDiscriminatorField:      "collector.type",
-		SupportedBlockNames:           supportedBlocks,
+		NestedDiscriminatorField:       "collector.type",
+		SupportedBlockNames:            supportedBlocks,
 	}
 
 	t.Run("collection type resolves via nested collector.type=rest", func(t *testing.T) {
@@ -393,7 +393,7 @@ func TestRawJSONToItemMap(t *testing.T) {
 		raw := []byte(`{"id":"x","name":"y"}`)
 		got := rawJSONToItemMap(raw)
 		require.NotNil(t, got)
-		assert.Equal(t, `"x"`, got["id"])   // values are JSON-encoded
+		assert.Equal(t, `"x"`, got["id"]) // values are JSON-encoded
 		assert.Equal(t, `"y"`, got["name"])
 	})
 	t.Run("invalid JSON returns nil", func(t *testing.T) {

@@ -86,8 +86,7 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Description: `This is only configurable for hybrid worker groups.`,
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Display name for the group; server-managed. Returned on read; do not send on create or update.`,
+							Computed: true,
 						},
 						"on_prem": schema.BoolAttribute{
 							Computed:    true,

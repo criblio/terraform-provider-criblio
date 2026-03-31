@@ -51,13 +51,13 @@ var DefaultSearchDatasetProviderIDs = map[string]bool{
 // DefaultSearchDatasetIDs are built-in search dataset IDs that are never imported.
 // We skip these when parsing the datasets list so only user-created datasets are imported.
 var DefaultSearchDatasetIDs = map[string]bool{
-	"cribl_logs":       true,
-	"cribl_metrics":    true,
-	"default_events":   true,
-	"default_logs":     true,
-	"default_metrics":  true,
-	"default_spans":    true,
-	"S3":               true, // default S3 dataset
+	"cribl_logs":      true,
+	"cribl_metrics":   true,
+	"default_events":  true,
+	"default_logs":    true,
+	"default_metrics": true,
+	"default_spans":   true,
+	"S3":              true, // default S3 dataset
 }
 
 // DefaultDestinationIDs are built-in destination IDs (default, devnull) that are never imported.
@@ -70,13 +70,13 @@ var DefaultDestinationIDs = map[string]bool{
 // DefaultCriblLakeDatasetIDs are built-in Cribl Lake dataset IDs that are never imported.
 // We skip these when listing lake datasets so only user-created lake datasets are exported.
 var DefaultCriblLakeDatasetIDs = map[string]bool{
-	"cribl_logs":       true,
-	"cribl_metrics":    true,
-	"default_events":   true,
-	"default_logs":     true,
-	"default_metrics":  true,
-	"default_spans":    true,
-	"S3":               true,
+	"cribl_logs":      true,
+	"cribl_metrics":   true,
+	"default_events":  true,
+	"default_logs":    true,
+	"default_metrics": true,
+	"default_spans":   true,
+	"S3":              true,
 }
 
 // SearchDatasetTypeCriblLake is the API type for Cribl Lake datasets. They appear in the search

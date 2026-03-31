@@ -7,6 +7,7 @@ resource "criblio_group" "my_edge_fleet" {
   id                    = "my-edge-fleet"
   is_fleet              = true
   on_prem               = false
+  name                  = "my-edge-fleet"
   product               = "edge"
   provisioned           = false
   streamtags = [

@@ -13,10 +13,10 @@ import (
 
 // ResourceItem is a single resource to be written into a module (same resource type).
 type ResourceItem struct {
-	TypeName    string
-	Name        string
-	Attrs       map[string]hcl.Value
-	ImportID    string
+	TypeName string
+	Name     string
+	Attrs    map[string]hcl.Value
+	ImportID string
 	// GroupID is the worker group/fleet/default_search id; used to organize output under <output_dir>/<id>/resources/.
 	// Empty or "global" for resources without group scope.
 	GroupID string

@@ -29,9 +29,21 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	Fields types.String          `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
-	ID     types.String          `tfsdk:"id"`
-	Items  []tfTypes.ConfigGroup `tfsdk:"items"`
+	Cloud               *tfTypes.ConfigGroupCloud `tfsdk:"cloud"`
+	Description         types.String              `tfsdk:"description"`
+	EstimatedIngestRate types.Float64             `tfsdk:"estimated_ingest_rate"`
+	Fields              types.String              `queryParam:"style=form,explode=true,name=fields" tfsdk:"fields"`
+	ID                  types.String              `tfsdk:"id"`
+	Inherits            types.String              `tfsdk:"inherits"`
+	IsFleet             types.Bool                `tfsdk:"is_fleet"`
+	MaxWorkerAge        types.String              `tfsdk:"max_worker_age"`
+	Name                types.String              `tfsdk:"name"`
+	OnPrem              types.Bool                `tfsdk:"on_prem"`
+	Provisioned         types.Bool                `tfsdk:"provisioned"`
+	Streamtags          []types.String            `tfsdk:"streamtags"`
+	Tags                types.String              `tfsdk:"tags"`
+	Type                types.String              `tfsdk:"type"`
+	WorkerRemoteAccess  types.Bool                `tfsdk:"worker_remote_access"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +57,23 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Group DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"cloud": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"provider": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
+			"estimated_ingest_rate": schema.Float64Attribute{
+				Computed: true,
+			},
 			"fields": schema.StringAttribute{
 				Optional:    true,
 				Description: `fields to add to results: git.commit, git.localChanges, git.log`,
@@ -53,66 +82,38 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Required:    true,
 				Description: `Group id`,
 			},
-			"items": schema.ListNestedAttribute{
+			"inherits": schema.StringAttribute{
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"cloud": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"provider": schema.StringAttribute{
-									Computed: true,
-								},
-								"region": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"estimated_ingest_rate": schema.Float64Attribute{
-							Computed: true,
-						},
-						"id": schema.StringAttribute{
-							Computed: true,
-						},
-						"inherits": schema.StringAttribute{
-							Computed: true,
-						},
-						"is_fleet": schema.BoolAttribute{
-							Computed: true,
-						},
-						"max_worker_age": schema.StringAttribute{
-							Computed:    true,
-							Description: `This is only configurable for hybrid worker groups.`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Display name for the group; server-managed. Returned on read; do not send on create or update.`,
-						},
-						"on_prem": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
-						},
-						"provisioned": schema.BoolAttribute{
-							Computed: true,
-						},
-						"streamtags": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-						"tags": schema.StringAttribute{
-							Computed: true,
-						},
-						"type": schema.StringAttribute{
-							Computed: true,
-						},
-						"worker_remote_access": schema.BoolAttribute{
-							Computed: true,
-						},
-					},
-				},
+			},
+			"is_fleet": schema.BoolAttribute{
+				Computed: true,
+			},
+			"max_worker_age": schema.StringAttribute{
+				Computed:    true,
+				Description: `This is only configurable for hybrid worker groups.`,
+			},
+			"name": schema.StringAttribute{
+				Computed: true,
+			},
+			"on_prem": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
+			},
+			"provisioned": schema.BoolAttribute{
+				Computed: true,
+			},
+			"streamtags": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+			},
+			"tags": schema.StringAttribute{
+				Computed: true,
+			},
+			"type": schema.StringAttribute{
+				Computed: true,
+			},
+			"worker_remote_access": schema.BoolAttribute{
+				Computed: true,
 			},
 		},
 	}

@@ -61,9 +61,9 @@ func TestValidateRequired_onPremWithToken(t *testing.T) {
 
 func TestValidateRequired_onPremInvalidURL(t *testing.T) {
 	tests := []struct {
-		name    string
+		name      string
 		serverURL string
-		wantErr string
+		wantErr   string
 	}{
 		{"missing scheme", "cribl.local", "scheme must be http or https"},
 		{"empty host", "https://", "missing host"},
