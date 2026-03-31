@@ -332,6 +332,10 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
+	if norm := normalizeGroupIDForAPI(data.ID.ValueString()); norm != "" && norm != data.ID.ValueString() {
+		data.ID = types.StringValue(norm)
+	}
+
 	request, requestDiags := data.ToOperationsGetGroupsByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -372,6 +376,22 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
+// normalizeGroupIDForAPI maps common mistaken import IDs to the Cribl group id used in GET /master/groups/{id}.
+// Users sometimes pass the Terraform resource address (criblio_group.foo_bar); the API expects the group id
+// (often hyphenated, e.g. foo-bar).
+func normalizeGroupIDForAPI(raw string) string {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return ""
+	}
+	const prefix = "criblio_group."
+	if strings.HasPrefix(raw, prefix) {
+		suffix := strings.TrimPrefix(raw, prefix)
+		return strings.ReplaceAll(suffix, "_", "-")
+	}
+	return raw
+}
+
 // refreshGroupModelFromGetGroupsResponse maps GET /master/groups/{id} into Terraform state.
 // The OpenAPI model expects { items: [ConfigGroup] }; some deployments return a single ConfigGroup
 // object instead, which unmarshals to an empty items slice. In that case we decode the raw body.
@@ -381,7 +401,7 @@ func refreshGroupModelFromGetGroupsResponse(ctx context.Context, data *GroupReso
 		return data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)
 	}
 	if res.RawResponse == nil || res.RawResponse.Body == nil {
-		diags.AddError("Unexpected response from API", "Missing response body array data.")
+		diags.AddError("Unexpected response from API", "Missing group data in response (empty body). Use the Cribl group id as the import id, not the Terraform resource address, unless it is criblio_group.<name> (underscores are mapped to hyphens).")
 		return diags
 	}
 	rawBody, err := io.ReadAll(res.RawResponse.Body)
@@ -391,12 +411,22 @@ func refreshGroupModelFromGetGroupsResponse(ctx context.Context, data *GroupReso
 	}
 	res.RawResponse.Body = io.NopCloser(bytes.NewBuffer(rawBody))
 
-	var single shared.ConfigGroup
-	if err := json.Unmarshal(rawBody, &single); err != nil || single.ID == "" {
-		diags.AddError("Unexpected response from API", "Missing response body array data.")
-		return diags
+	var withItems struct {
+		Items []shared.ConfigGroup `json:"items"`
 	}
-	diags.Append(data.RefreshFromSharedConfigGroup(ctx, &single)...)
+	if err := json.Unmarshal(rawBody, &withItems); err == nil && len(withItems.Items) > 0 {
+		return data.RefreshFromSharedConfigGroup(ctx, &withItems.Items[0])
+	}
+
+	var single shared.ConfigGroup
+	if err := json.Unmarshal(rawBody, &single); err == nil && single.ID != "" {
+		return data.RefreshFromSharedConfigGroup(ctx, &single)
+	}
+
+	diags.AddError(
+		"Unexpected response from API",
+		"No ConfigGroup in GET /master/groups/{id} response (empty items or unknown JSON shape). Verify the group id exists and the import id is the Cribl group id.",
+	)
 	return diags
 }
 
@@ -573,5 +603,9 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 }
 
 func (r *GroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
+	id := normalizeGroupIDForAPI(req.ID)
+	if id == "" {
+		id = req.ID
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), id)...)
 }
