@@ -349,6 +349,11 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
