@@ -3,27 +3,20 @@
 package provider
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"strings"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/errors"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -125,17 +118,15 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Display name for the group; server-managed. Returned from the API after create or read.`,
 			},
 			"on_prem": schema.BoolAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
+				Computed: true,
+				Optional: true,
 			},
 			"product": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.NoReplaceProductModifier(),
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.`,
+				Description: `Cribl Product. must be one of ["stream", "edge"].`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"stream",
@@ -332,10 +323,6 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	if norm := normalizeGroupIDForAPI(data.ID.ValueString()); norm != "" && norm != data.ID.ValueString() {
-		data.ID = types.StringValue(norm)
-	}
-
 	request, requestDiags := data.ToOperationsGetGroupsByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -367,67 +354,13 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	resp.Diagnostics.Append(refreshGroupModelFromGetGroupsResponse(ctx, data, res)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
-}
-
-// normalizeGroupIDForAPI maps common mistaken import IDs to the Cribl group id used in GET /master/groups/{id}.
-// Users sometimes pass the Terraform resource address (criblio_group.foo_bar); the API expects the group id
-// (often hyphenated, e.g. foo-bar).
-func normalizeGroupIDForAPI(raw string) string {
-	raw = strings.TrimSpace(raw)
-	if raw == "" {
-		return ""
-	}
-	const prefix = "criblio_group."
-	if strings.HasPrefix(raw, prefix) {
-		suffix := strings.TrimPrefix(raw, prefix)
-		return strings.ReplaceAll(suffix, "_", "-")
-	}
-	return raw
-}
-
-// refreshGroupModelFromGetGroupsResponse maps GET /master/groups/{id} into Terraform state.
-// The OpenAPI model expects { items: [ConfigGroup] }; some deployments return a single ConfigGroup
-// object instead, which unmarshals to an empty items slice. In that case we decode the raw body.
-func refreshGroupModelFromGetGroupsResponse(ctx context.Context, data *GroupResourceModel, res *operations.GetGroupsByIDResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-	if res.Object != nil && len(res.Object.Items) > 0 {
-		return data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)
-	}
-	if res.RawResponse == nil || res.RawResponse.Body == nil {
-		diags.AddError("Unexpected response from API", "Missing group data in response (empty body). Use the Cribl group id as the import id, not the Terraform resource address, unless it is criblio_group.<name> (underscores are mapped to hyphens).")
-		return diags
-	}
-	rawBody, err := io.ReadAll(res.RawResponse.Body)
-	if err != nil {
-		diags.AddError("Unexpected response from API", fmt.Sprintf("failed to read response body: %v", err))
-		return diags
-	}
-	res.RawResponse.Body = io.NopCloser(bytes.NewBuffer(rawBody))
-
-	var withItems struct {
-		Items []shared.ConfigGroup `json:"items"`
-	}
-	if err := json.Unmarshal(rawBody, &withItems); err == nil && len(withItems.Items) > 0 {
-		return data.RefreshFromSharedConfigGroup(ctx, &withItems.Items[0])
-	}
-
-	var single shared.ConfigGroup
-	if err := json.Unmarshal(rawBody, &single); err == nil && single.ID != "" {
-		return data.RefreshFromSharedConfigGroup(ctx, &single)
-	}
-
-	diags.AddError(
-		"Unexpected response from API",
-		"No ConfigGroup in GET /master/groups/{id} response (empty items or unknown JSON shape). Verify the group id exists and the import id is the Cribl group id.",
-	)
-	return diags
 }
 
 func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
@@ -592,10 +525,7 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	switch res.StatusCode {
-	case 200, 404:
-		break
-	default:
+	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -603,9 +533,5 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 }
 
 func (r *GroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	id := normalizeGroupIDForAPI(req.ID)
-	if id == "" {
-		id = req.ID
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), id)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

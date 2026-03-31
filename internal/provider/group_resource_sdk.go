@@ -221,12 +221,8 @@ func (r *GroupResourceModel) ToSharedConfigGroup(ctx context.Context) (*shared.C
 	} else {
 		isFleet = nil
 	}
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
+	// Name is server-managed; never send it on create/update or the API returns read-only errors on PATCH.
+	name := (*string)(nil)
 	onPrem := new(bool)
 	if !r.OnPrem.IsUnknown() && !r.OnPrem.IsNull() {
 		*onPrem = r.OnPrem.ValueBool()
