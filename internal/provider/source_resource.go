@@ -7,11 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
-	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -123,18 +120,18 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		MarkdownDescription: "Source Resource",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.RequiresReplace(),
 				},
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Unique identifier for this source instance. Must match the ` + "`" + `id` + "`" + ` property within the Input object in the request body.`,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.RequiresReplace(),
 				},
-				Description: `Unique identifier for this source instance. Must match the ` + "`" + `id` + "`" + ` property within the Input object in the request body. Requires replacement if changed.`,
 			},
 			"input_appscope": schema.SingleNestedAttribute{
 				Optional: true,
@@ -33699,31 +33696,16 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Attributes: map[string]schema.Attribute{
 								"api_key": schema.StringAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 								"connections": schema.ListNestedAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-									},
 									NestedObject: schema.NestedAttributeObject{
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-										},
 										Attributes: map[string]schema.Attribute{
 											"output": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"pipeline": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 										},
 									},
@@ -33731,80 +33713,41 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"content_config": schema.ListNestedAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-									},
 									NestedObject: schema.NestedAttributeObject{
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-										},
 										Attributes: map[string]schema.Attribute{
 											"collect_path": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `OpenAI Organization API path`,
 											},
 											"content_description": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"content_type": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"cron_schedule": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `A cron schedule on which to run this job`,
 											},
 											"disabled": schema.BoolAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.Bool{
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-												},
 											},
 											"docs_url": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"earliest": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Relative to the current time`,
 											},
 											"endpoint_metadata": schema.ListNestedAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.List{
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-												},
 												NestedObject: schema.NestedAttributeObject{
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
 															Computed: true,
-															PlanModifiers: []planmodifier.String{
-																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-															},
 														},
 														"value": schema.StringAttribute{
-															Computed: true,
-															PlanModifiers: []planmodifier.String{
-																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-															},
+															Computed:    true,
 															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 														},
 													},
@@ -33812,117 +33755,66 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Fields automatically added to events from this Content Type`,
 											},
 											"job_timeout": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 											},
 											"latest": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Relative to the current time`,
 											},
 											"log_level": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Collector runtime log level.`,
 											},
 											"manage_state": schema.SingleNestedAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.Object{
-													speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												},
 											},
 											"max_pages": schema.Float64Attribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.Float64{
-													speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Maximum number of pages to retrieve per collection task. Set to 0 only when unlimited pagination is required.`,
 											},
 											"pagination_attribute": schema.ListAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.List{
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												ElementType: types.StringType,
 											},
 											"pagination_cur_relation_attribute": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Optional relation that represents the current page`,
 											},
 											"pagination_last_page_expr": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"pagination_next_relation_attribute": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Used only for RFC 5988 link-header pagination`,
 											},
 											"pagination_type": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"request_params": schema.ListNestedAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.List{
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-												},
 												NestedObject: schema.NestedAttributeObject{
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
 															Computed: true,
-															PlanModifiers: []planmodifier.String{
-																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-															},
 														},
 														"value": schema.StringAttribute{
 															Computed: true,
-															PlanModifiers: []planmodifier.String{
-																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-															},
 														},
 													},
 												},
 												Description: `Query-string parameters to send with this endpoint`,
 											},
 											"state_merge_expression": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `JavaScript expression that defines which state to keep when merging task state`,
 											},
 											"state_tracking": schema.BoolAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.Bool{
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `Track collection progress between consecutive scheduled executions.`,
 											},
 											"state_update_expression": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `JavaScript expression that defines how to update the state from an event`,
 											},
 										},
@@ -33930,72 +33822,39 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"description": schema.StringAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 								"disabled": schema.BoolAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.Bool{
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
 								},
 								"environment": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 								},
 								"id": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Unique ID for this input`,
 								},
 								"ignore_group_jobs_limit": schema.BoolAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Bool{
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Float64{
-										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Float64{
-										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-									},
 									NestedObject: schema.NestedAttributeObject{
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
 												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
 											},
 											"value": schema.StringAttribute{
-												Computed: true,
-												PlanModifiers: []planmodifier.String{
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-												},
+												Computed:    true,
 												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
@@ -34003,223 +33862,130 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									Description: `Fields to add to events from this input`,
 								},
 								"openai_organization": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Optional ` + "`" + `OpenAI-Organization` + "`" + ` request header value, typically ` + "`" + `org-xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
 								},
 								"openai_project": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Optional ` + "`" + `OpenAI-Project` + "`" + ` request header value, typically ` + "`" + `proj_xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Pipeline to process data from this Source before sending it through the Routes`,
 								},
 								"pq": schema.SingleNestedAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.Object{
-										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-									},
 									Attributes: map[string]schema.Attribute{
 										"commit_frequency": schema.Float64Attribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Float64{
-												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The number of events to send downstream before committing that Stream has read them`,
 										},
 										"compress": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Codec to use to compress the persisted data`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Float64{
-												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
 										},
 										"max_size": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
 										},
 										"mode": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"pq_controls": schema.SingleNestedAttribute{
 											Computed: true,
-											PlanModifiers: []planmodifier.Object{
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-											},
 										},
 									},
 								},
 								"pq_enabled": schema.BoolAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Bool{
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
 								},
 								"request_timeout": schema.Float64Attribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Float64{
-										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.Object{
-										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-									},
 									Attributes: map[string]schema.Attribute{
 										"codes": schema.ListAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.List{
-												speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											ElementType: types.Float64Type,
 											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
 										},
 										"enable_header": schema.BoolAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
 										},
 										"interval": schema.Float64Attribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Float64{
-												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
 										},
 										"limit": schema.Float64Attribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Float64{
-												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The maximum number of times to retry a failed HTTP request`,
 										},
 										"multiplier": schema.Float64Attribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Float64{
-												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
 										},
 										"retry_connect_reset": schema.BoolAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
 										},
 										"retry_connect_timeout": schema.BoolAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
 											Description: `The algorithm to use when performing HTTP retries`,
 										},
 									},
 								},
 								"send_to_routes": schema.BoolAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.Bool{
-										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Select whether to send data to Routes, or directly to Destinations.`,
 								},
 								"streamtags": schema.ListAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.List{
-										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
 								"template_openai_organization": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.`,
 								},
 								"template_openai_project": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.`,
 								},
 								"ttl": schema.StringAttribute{
-									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
 									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
 								},
 							},
 						},

@@ -15,6 +15,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -77,8 +78,11 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Comments`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group Id. Requires replacement if changed.`,
 			},
 			"groups": schema.MapNestedAttribute{
 				Optional: true,
@@ -99,8 +103,11 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"id": schema.StringAttribute{
-				Optional:    true,
-				Description: `Routes ID`,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Routes ID. Requires replacement if changed.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -290,15 +297,23 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"additional_properties": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.PreferState(),
+							},
 							Description: `Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Optional: true,
 						},
 						"disabled": schema.BoolAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.PreferState(),
+							},
 							Description: `Disable this routing rule`,
 						},
 						"enable_output_expression": schema.BoolAttribute{
@@ -323,8 +338,12 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Required: true,
 						},
 						"output": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.PreferState(),
+							},
 							Description: `Parsed as JSON.`,
 						},
 						"output_expression": schema.StringAttribute{
@@ -405,8 +424,55 @@ func (r *PackRoutesResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	if !(res.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByPackResponseBody(ctx, res.Object)...)
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
+	res1, err := r.client.Routes.GetRoutesByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByPackResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -471,6 +537,13 @@ func (r *PackRoutesResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	// Populate routes from Items[0] so state matches API (criblio_routes does this via RefreshFromSharedRoutes).
+	// Pack API returns Items; configurable Routes must be set from Items[0].Routes to avoid plan drift.
+	// Preserve state when API returns null for optional fields (additional_properties, disabled, output, etc.).
+	if len(data.Items) > 0 {
+		data.Routes = packRoutesFromItemsWithPreserveState(data.Items[0].Routes, data.Routes)
+	}
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -512,8 +585,55 @@ func (r *PackRoutesResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	if !(res.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoutesByPackResponseBody(ctx, res.Object)...)
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetRoutesByPackRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
+	res1, err := r.client.Routes.GetRoutesByPack(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoutesByPackResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(packRoutesPreserveRestoreAroundRefreshPlan(ctx, plan, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -568,6 +688,121 @@ func (r *PackRoutesResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
+}
+
+// packRoutesPreserveRestoreAroundRefreshPlan populates Routes from Items, saves them, runs refreshPlan,
+// then restores Routes so refreshPlan's overwrite with plan nulls doesn't cause drift (collector pattern).
+func packRoutesPreserveRestoreAroundRefreshPlan(ctx context.Context, plan types.Object, data *PackRoutesResourceModel) diag.Diagnostics {
+	if len(data.Items) > 0 {
+		data.Routes = packRoutesFromItemsWithPreserveState(data.Items[0].Routes, data.Routes)
+	}
+	saved := data.Routes
+	diags := refreshPlan(ctx, plan, data)
+	if len(saved) > 0 {
+		data.Routes = saved
+	}
+	return diags
+}
+
+// packRoutesFromItemsWithPreserveState converts Items[0].Routes to configurable Routes (RoutesRoute1 without ID).
+// When API returns null for optional fields (additional_properties, disabled, output, etc.), preserves
+// the value from stateRoutes to avoid plan drift (same pattern as collector PreferState).
+func packRoutesFromItemsWithPreserveState(apiRoutes []tfTypes.RoutesRoute, stateRoutes []tfTypes.RoutesRoute1) []tfTypes.RoutesRoute1 {
+	if len(apiRoutes) == 0 {
+		return nil
+	}
+	out := make([]tfTypes.RoutesRoute1, 0, len(apiRoutes))
+	for i, rr := range apiRoutes {
+		r1 := tfTypes.RoutesRoute1{
+			AdditionalProperties:   rr.AdditionalProperties,
+			Description:            rr.Description,
+			Disabled:               rr.Disabled,
+			EnableOutputExpression: rr.EnableOutputExpression,
+			Filter:                 rr.Filter,
+			Final:                  rr.Final,
+			Name:                   rr.Name,
+			Output:                 rr.Output,
+			OutputExpression:       rr.OutputExpression,
+			Pipeline:               rr.Pipeline,
+		}
+		// Preserve state when API returns null for optional fields; use defaults when no state (e.g. import).
+		// When API returns "" for optional strings and state has null, use null to avoid "inconsistent result"
+		// (plan had null, provider returned "").
+		if i < len(stateRoutes) {
+			s := stateRoutes[i]
+			if rr.AdditionalProperties.IsNull() || rr.AdditionalProperties.IsUnknown() {
+				if !s.AdditionalProperties.IsNull() && !s.AdditionalProperties.IsUnknown() {
+					r1.AdditionalProperties = s.AdditionalProperties
+				} else {
+					r1.AdditionalProperties = jsontypes.NewNormalizedValue(`{"clones":[]}`)
+				}
+			}
+			if rr.Disabled.IsNull() || rr.Disabled.IsUnknown() {
+				if !s.Disabled.IsNull() && !s.Disabled.IsUnknown() {
+					r1.Disabled = s.Disabled
+				} else {
+					r1.Disabled = types.BoolValue(false)
+				}
+			}
+			if rr.Output.IsNull() || rr.Output.IsUnknown() {
+				if !s.Output.IsNull() && !s.Output.IsUnknown() {
+					r1.Output = s.Output
+				} else {
+					r1.Output = jsontypes.NewNormalizedValue(`"default"`)
+				}
+			}
+			if rr.OutputExpression.IsNull() || rr.OutputExpression.IsUnknown() {
+				if !s.OutputExpression.IsNull() && !s.OutputExpression.IsUnknown() {
+					r1.OutputExpression = s.OutputExpression
+				}
+			}
+			if rr.Description.IsNull() || rr.Description.IsUnknown() {
+				if !s.Description.IsNull() && !s.Description.IsUnknown() {
+					r1.Description = s.Description
+				}
+			} else if rr.Description.ValueString() == "" && (s.Description.IsNull() || s.Description.IsUnknown()) {
+				// API returned "" but plan/state had null; use null to match plan (avoid inconsistent result)
+				r1.Description = types.StringNull()
+			}
+			if rr.EnableOutputExpression.IsNull() || rr.EnableOutputExpression.IsUnknown() {
+				if !s.EnableOutputExpression.IsNull() && !s.EnableOutputExpression.IsUnknown() {
+					r1.EnableOutputExpression = s.EnableOutputExpression
+				}
+			}
+			if rr.Filter.IsNull() || rr.Filter.IsUnknown() {
+				if !s.Filter.IsNull() && !s.Filter.IsUnknown() {
+					r1.Filter = s.Filter
+				}
+			}
+			if rr.Final.IsNull() || rr.Final.IsUnknown() {
+				if !s.Final.IsNull() && !s.Final.IsUnknown() {
+					r1.Final = s.Final
+				}
+			}
+			if rr.Pipeline.IsNull() || rr.Pipeline.IsUnknown() {
+				if !s.Pipeline.IsNull() && !s.Pipeline.IsUnknown() {
+					r1.Pipeline = s.Pipeline
+				}
+			}
+		} else {
+			// New route from API with no state; use defaults when API returns null
+			if (rr.AdditionalProperties.IsNull() || rr.AdditionalProperties.IsUnknown()) && (r1.AdditionalProperties.IsNull() || r1.AdditionalProperties.IsUnknown()) {
+				r1.AdditionalProperties = jsontypes.NewNormalizedValue(`{"clones":[]}`)
+			}
+			if (rr.Disabled.IsNull() || rr.Disabled.IsUnknown()) && (r1.Disabled.IsNull() || r1.Disabled.IsUnknown()) {
+				r1.Disabled = types.BoolValue(false)
+			}
+			if (rr.Output.IsNull() || rr.Output.IsUnknown()) && (r1.Output.IsNull() || r1.Output.IsUnknown()) {
+				r1.Output = jsontypes.NewNormalizedValue(`"default"`)
+			}
+			// API may return "" for optional strings; use null to match plan (avoid inconsistent result)
+			if rr.Description.ValueString() == "" {
+				r1.Description = types.StringNull()
+			}
+		}
+		out = append(out, r1)
+	}
+	return out
 }
 
 func (r *PackRoutesResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

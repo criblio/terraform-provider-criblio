@@ -7,15 +7,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
-	"os"
-	"path/filepath"
-	"strings"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -31,6 +25,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"io"
+	"net/http"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -60,7 +60,6 @@ type PackResourceModel struct {
 	GroupID              types.String                 `tfsdk:"group_id"`
 	ID                   types.String                 `tfsdk:"id"`
 	Inputs               types.Float64                `tfsdk:"inputs"`
-	IsDisabled           types.Bool                   `tfsdk:"is_disabled"`
 	Items                []tfTypes.PackInstallInfo    `tfsdk:"items"`
 	MinLogStreamVersion  types.String                 `tfsdk:"min_log_stream_version"`
 	Outputs              types.Float64                `tfsdk:"outputs"`
@@ -121,7 +120,7 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Description: `Requires replacement if changed.`,
 			},
 			"filename": schema.StringAttribute{
-				Optional: true,
+				Optional:    true,
 				Description: `Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. When set, description and display_name come from the pack file—omit them from config to avoid drift.`,
 			},
 			"force": schema.BoolAttribute{
@@ -132,24 +131,23 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Description: `Requires replacement if changed.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Pack name`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Pack name. Requires replacement if changed.`,
 			},
 			"inputs": schema.Float64Attribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Float64{
 					float64planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"is_disabled": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
 			},
@@ -857,11 +855,11 @@ func (r *PackResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			if !resp.Diagnostics.HasError() {
 				getReq.ID = effectivePackIDForAPI(data)
 				getRes, getErr := r.client.Packs.GetPacksByID(ctx, *getReq)
-					if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
-						resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
-						preservePackMetadataFromConfig(ctx, data, plan)
-						if !resp.Diagnostics.HasError() {
-							resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+				if getErr == nil && getRes != nil && getRes.StatusCode == 200 && getRes.Object != nil {
+					resp.Diagnostics.Append(data.RefreshFromOperationsGetPacksByIDResponseBody(ctx, getRes.Object)...)
+					preservePackMetadataFromConfig(ctx, data, plan)
+					if !resp.Diagnostics.HasError() {
+						resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 						if !resp.Diagnostics.HasError() {
 							resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 							return
@@ -1110,8 +1108,8 @@ func (r *PackResource) uploadPackFile(ctx context.Context, uploadReq operations.
 
 	if baseURL == "" {
 		getReq := operations.GetPacksByIDRequest{
-			GroupID: uploadReq.GroupID,
-			ID:      "_dummy_for_url_extraction_",
+			GroupID:  uploadReq.GroupID,
+			ID:       "_dummy_for_url_extraction_",
 			Disabled: nil,
 		}
 		getRes, _ := r.client.Packs.GetPacksByID(ctx, getReq)

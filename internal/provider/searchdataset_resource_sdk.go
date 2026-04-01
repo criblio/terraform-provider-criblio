@@ -15,29 +15,26 @@ import (
 
 func (r *SearchDatasetResourceModel) RefreshFromOperationsCreateDatasetResponseBody(ctx context.Context, resp *operations.CreateDatasetResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
-
-	if resp != nil {
+	if resp == nil || len(resp.Items) == 0 {
+		return diags
 	}
-
-	return diags
+	return r.RefreshFromSharedGenericDataset(ctx, &resp.Items[0])
 }
 
 func (r *SearchDatasetResourceModel) RefreshFromOperationsGetDatasetByIDResponseBody(ctx context.Context, resp *operations.GetDatasetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
-
-	if resp != nil {
+	if resp == nil || len(resp.Items) == 0 {
+		return diags
 	}
-
-	return diags
+	return r.RefreshFromSharedGenericDataset(ctx, &resp.Items[0])
 }
 
 func (r *SearchDatasetResourceModel) RefreshFromOperationsUpdateDatasetByIDResponseBody(ctx context.Context, resp *operations.UpdateDatasetByIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
-
-	if resp != nil {
+	if resp == nil || len(resp.Items) == 0 {
+		return diags
 	}
-
-	return diags
+	return r.RefreshFromSharedGenericDataset(ctx, &resp.Items[0])
 }
 
 func (r *SearchDatasetResourceModel) RefreshFromSharedGenericDataset(ctx context.Context, resp *shared.GenericDataset) diag.Diagnostics {

@@ -2557,7 +2557,8 @@ func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 		u.APIElasticSearchDataset = apiElasticSearchDataset
 		u.Type = GenericDatasetTypeAPIElasticSearchDataset
 		return nil
-	case "S3Dataset":
+	case "S3Dataset", "s3":
+		// API returns discriminator "s3" per OpenAPI S3Dataset.type enum; "S3Dataset" is the legacy SDK constant.
 		s3Dataset := new(S3Dataset)
 		if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Dataset) type S3Dataset within GenericDataset: %w", string(data), err)

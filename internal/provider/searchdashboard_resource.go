@@ -7,7 +7,6 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/criblio/terraform-provider-criblio/internal/validators"
 	speakeasy_boolvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/boolvalidators"
 	speakeasy_float64validators "github.com/criblio/terraform-provider-criblio/internal/validators/float64validators"
 	speakeasy_listvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/listvalidators"
@@ -15,16 +14,17 @@ import (
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -75,6 +75,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 			"category": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -96,13 +99,10 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Computed:    true,
 									Optional:    true,
 									ElementType: jsontypes.NormalizedType{},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
+									Description: `Markdown and other dashboard element config (JSON string per key).`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
 										searchDashboardConfigMapUseStateWhenNullOnly(),
-									},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -170,6 +170,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"alias": schema.StringAttribute{
 											Computed: true,
@@ -196,6 +199,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -255,13 +261,10 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Computed:    true,
 									Optional:    true,
 									ElementType: jsontypes.NormalizedType{},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
+									Description: `Input element configuration (open JSON object per key).`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
 										searchDashboardConfigMapUseStateWhenNullOnly(),
-									},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -337,6 +340,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"search_query_inline": schema.SingleNestedAttribute{
 											Optional: true,
@@ -408,6 +414,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 												"timezone": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.UseStateForUnknown(),
+													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -508,6 +517,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -560,13 +572,10 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 									Computed:    true,
 									Optional:    true,
 									ElementType: jsontypes.NormalizedType{},
-									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.`,
+									Description: `Chart/visualization-specific config (e.g. xAxis, yAxis); JSON string per key.`,
 									PlanModifiers: []planmodifier.Map{
 										mapplanmodifier.UseStateForUnknown(),
 										searchDashboardConfigMapUseStateWhenNullOnly(),
-									},
-									Validators: []validator.Map{
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
 								"hide_panel": schema.BoolAttribute{
@@ -634,6 +643,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"search": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"search_query_inline": schema.SingleNestedAttribute{
 											Optional: true,
@@ -705,6 +717,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 												"timezone": schema.StringAttribute{
 													Computed: true,
 													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.UseStateForUnknown(),
+													},
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -809,6 +824,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 								"title_action": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
 									Attributes: map[string]schema.Attribute{
 										"label": schema.StringAttribute{
 											Computed:    true,
@@ -870,6 +888,9 @@ func (r *SearchDashboardResource) Schema(ctx context.Context, req resource.Schem
 			"groups": schema.MapNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					mapplanmodifier.UseStateForUnknown(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -1139,6 +1160,13 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	ensureSearchDashboardElementConfigMaps(data)
+
+	// Do not run normalizeSearchDashboardConfigMaps on Read. Prior-state snapshots often have no
+	// config keys (legacy strips / API shape), so presence-aware stripping would remove API
+	// null-only keys such as color and reintroduce perpetual drift vs. HCL (e.g. color = null).
+	// Create/Update still normalize using the plan snapshot so omitted config stays stable.
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

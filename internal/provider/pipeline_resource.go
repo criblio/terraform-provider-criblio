@@ -16,12 +16,10 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
-	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -29,7 +27,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -51,9 +48,9 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	Conf    *tfTypes.PipelineConf `tfsdk:"conf"`
-	GroupID types.String          `tfsdk:"group_id"`
-	ID      types.String          `tfsdk:"id"`
+	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String         `tfsdk:"group_id"`
+	ID      types.String         `tfsdk:"id"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -99,17 +96,18 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.MapAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.Map{
-										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+								"conf": schema.StringAttribute{
+									Computed:   true,
+									Optional:   true,
+									CustomType: jsontypes.NormalizedType{},
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										speakeasy_stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
 									},
-									ElementType: jsontypes.NormalizedType{},
-									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
-									Validators: []validator.Map{
-										speakeasy_mapvalidators.NotNull(),
-										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
+									Description: `Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+										validators.IsValidJSON(),
 									},
 								},
 								"description": schema.StringAttribute{
@@ -228,19 +226,12 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
+				Required:    true,
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
 			},
 			"id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique ID to PATCH. Requires replacement if changed.`,
+				Required:    true,
+				Description: `Unique ID to PATCH`,
 			},
 		},
 	}
