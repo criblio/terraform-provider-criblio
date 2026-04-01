@@ -16,10 +16,12 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/validators"
+	speakeasy_mapvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -31,8 +33,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"io"
-	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -51,10 +51,10 @@ type PackPipelineResource struct {
 
 // PackPipelineResourceModel describes the resource data model.
 type PackPipelineResourceModel struct {
-	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
-	GroupID types.String         `tfsdk:"group_id"`
-	ID      types.String         `tfsdk:"id"`
-	Pack    types.String         `tfsdk:"pack"`
+	Conf    *tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String          `tfsdk:"group_id"`
+	ID      types.String          `tfsdk:"id"`
+	Pack    types.String          `tfsdk:"pack"`
 }
 
 func (r *PackPipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -100,18 +100,17 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.StringAttribute{
-									Computed:   true,
-									Optional:   true,
-									CustomType: jsontypes.NormalizedType{},
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										speakeasy_stringplanmodifier.PipelineConfSuppressWhitespaceDiff(),
+								"conf": schema.MapAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Map{
+										speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 									},
-									Description: `Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-										validators.IsValidJSON(),
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null`,
+									Validators: []validator.Map{
+										speakeasy_mapvalidators.NotNull(),
+										mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 									},
 								},
 								"description": schema.StringAttribute{
@@ -230,12 +229,19 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group Id. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH for pack`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique ID to PATCH for pack. Requires replacement if changed.`,
 			},
 			"pack": schema.StringAttribute{
 				Required: true,
@@ -306,50 +312,6 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 	if res.StatusCode != 200 {
-		// Check if error is because pipeline already exists - use UPDATE instead
-		if res != nil && res.RawResponse != nil {
-			body, _ := io.ReadAll(res.RawResponse.Body)
-			bodyStr := string(body)
-			if strings.Contains(bodyStr, "pipeline already exists") || strings.Contains(bodyStr, "already exists") {
-				// Pipeline was created between check and create, use UPDATE instead
-				updateRequest, updateDiags := data.ToOperationsUpdatePipelineByPackAndIDRequest(ctx)
-				resp.Diagnostics.Append(updateDiags...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				updateRequest.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
-				updateRes, updateErr := r.client.Pipelines.UpdatePipelineByPackAndID(ctx, *updateRequest)
-				if updateErr != nil {
-					resp.Diagnostics.AddError("failure to invoke API", updateErr.Error())
-					if updateRes != nil && updateRes.RawResponse != nil {
-						resp.Diagnostics.AddError("unexpected http request/response", debugResponse(updateRes.RawResponse))
-					}
-					return
-				}
-				if updateRes == nil {
-					resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", updateRes))
-					return
-				}
-				if updateRes.StatusCode != 200 {
-					resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", updateRes.StatusCode), debugResponse(updateRes.RawResponse))
-					return
-				}
-				if !(updateRes.Object != nil) {
-					resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(updateRes.RawResponse))
-					return
-				}
-				resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx, updateRes.Object)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-				if resp.Diagnostics.HasError() {
-					return
-				}
-				// Continue with GET request below
-				goto skipCreate
-			}
-		}
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -358,45 +320,6 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePipelineByPackResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-skipCreate:
-	request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
-	res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -513,44 +436,6 @@ func (r *PackPipelineResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePipelineByPackAndIDResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetPipelinesByPackWithIDRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1.Pack = resolvePackIDForAPI(ctx, r.client, data.GroupID.ValueString(), data.Pack.ValueString())
-	res1, err := r.client.Routes.GetPipelinesByPackWithID(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPipelinesByPackWithIDResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

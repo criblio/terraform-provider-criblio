@@ -231,4 +231,3 @@ func ApplyProjectDefaults(attrs map[string]hcl.Value) {
 		attrs["destinations"] = emptyList
 	}
 }
-

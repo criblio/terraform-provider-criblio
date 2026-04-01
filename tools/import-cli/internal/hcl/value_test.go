@@ -44,7 +44,7 @@ func TestModelToValue_sensitive_placeholder(t *testing.T) {
 		ID:      types.StringValue("secret-id"),
 	}
 	opts := &Options{
-		SensitivePaths:      map[string]bool{"id": true},
+		SensitivePaths:       map[string]bool{"id": true},
 		SensitivePlaceholder: "(sensitive)",
 	}
 	out, err := ModelToValue(model, opts)
@@ -73,7 +73,7 @@ func TestModelToValue_pipeline_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{
 		GroupID: types.StringValue("default"),
 		ID:      types.StringValue("pipe-1"),
-		Conf:    ptypes.PipelineConf{}, // nested object
+		Conf:    &ptypes.PipelineConf{}, // nested object
 	}
 	out, err := ModelToValue(model, nil)
 	require.NoError(t, err)
@@ -198,7 +198,7 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{
 		GroupID: types.StringValue("default"),
 		ID:      types.StringValue("pipe-1"),
-		Conf:    ptypes.PipelineConf{}, // has map[string]PipelineGroups and other nested fields
+		Conf:    &ptypes.PipelineConf{}, // has map[string]PipelineGroups and other nested fields
 	}
 	out, err := ModelToValue(model, nil)
 	require.NoError(t, err)
@@ -212,4 +212,3 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	assert.True(t, len(expr) > 0)
 	assert.Contains(t, expr, "{")
 }
-

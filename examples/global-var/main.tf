@@ -1,7 +1,21 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 resource "criblio_global_var" "my_globalvar" {
-  description = "test"
+  description = "test variable"
   group_id    = "default"
-  id          = "sample_globalvar"
+  id          = "sample_globalvar_1"
   lib         = "test"
   tags        = "test"
   type        = "number"

@@ -928,8 +928,8 @@ resource "criblio_collector" "my_collector" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) The id of this collector instance
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) The id of this collector instance. Requires replacement if changed.
 
 ### Optional
 

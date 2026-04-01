@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"strings"
 
-	"regexp"
-
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -19,9 +17,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -123,15 +123,17 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"on_prem": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether this is an on-premises group. Cannot be true when cloud is set.`,
 			},
 			"product": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.NoReplaceProductModifier(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Cribl Product. must be one of ["stream", "edge"].`,
+				Description: `Cribl Product. must be one of ["stream", "edge"]; Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"stream",
@@ -294,6 +296,11 @@ func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, 
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -351,6 +358,11 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	}
 	if !(res.Object != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -454,6 +466,11 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetGroupsByIDResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
@@ -491,20 +508,14 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 	res, err := r.client.Groups.DeleteGroupsByID(ctx, *request)
 	if err != nil {
-		// Check if the error is a 403 Forbidden for default groups
-		// These cannot be deleted by the API, but we should remove them from Terraform state
 		if apiErr, ok := err.(*errors.APIError); ok && apiErr.StatusCode == 403 {
-			// Check if the error message indicates default groups cannot be deleted
 			errorBody := apiErr.Body
 			if strings.Contains(errorBody, "Not allowed to delete the default group/fleet") ||
 				strings.Contains(errorBody, "not allowed to delete") ||
 				strings.Contains(errorBody, "default group") {
-				// Default groups cannot be deleted - just remove from state
-				// This allows users to "unmanage" default groups without errors
 				return
 			}
 		}
-		// For other errors, report them normally
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
@@ -515,7 +526,10 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

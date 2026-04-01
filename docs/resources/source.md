@@ -5024,8 +5024,8 @@ resource "criblio_source" "my_source" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
-- `id` (String) Unique identifier for this source instance. Must match the `id` property within the Input object in the request body.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
+- `id` (String) Unique identifier for this source instance. Must match the `id` property within the Input object in the request body. Requires replacement if changed.
 
 ### Optional
 

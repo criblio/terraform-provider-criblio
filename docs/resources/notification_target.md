@@ -111,8 +111,11 @@ resource "criblio_notification_target" "my_notificationtarget" {
 - `slack_target` (Attributes) (see [below for nested schema](#nestedatt--slack_target))
 - `smtp_target` (Attributes) (see [below for nested schema](#nestedatt--smtp_target))
 - `sns_target` (Attributes) (see [below for nested schema](#nestedatt--sns_target))
-- `type` (String)
 - `webhook_target` (Attributes) (see [below for nested schema](#nestedatt--webhook_target))
+
+### Read-Only
+
+- `type` (String)
 
 <a id="nestedatt--pager_duty_target"></a>
 ### Nested Schema for `pager_duty_target`

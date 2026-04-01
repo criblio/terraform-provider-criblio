@@ -54,8 +54,8 @@ resource "criblio_pipeline" "my_pipeline" {
 ### Required
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Unique ID to PATCH
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -74,7 +74,7 @@ Optional:
 
 Optional:
 
-- `conf` (String) Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).
+- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"

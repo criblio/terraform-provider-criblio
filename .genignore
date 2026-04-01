@@ -12,13 +12,11 @@ internal/provider/packbreakers_data_source.go
 internal/provider/packbreakers_data_source_sdk.go
 internal/provider/packroutes_resource.go
 internal/provider/packroutes_resource_sdk.go
-internal/provider/pipeline_resource.go
 internal/provider/packvars_resource_sdk.go
 internal/provider/packvars_data_source_sdk.go
 internal/provider/packlookups_resource_sdk.go
 internal/provider/packlookups_data_source_sdk.go
 internal/provider/packroutes_data_source_sdk.go
-internal/provider/pipeline_resource_sdk.go
 internal/provider/pipeline_data_source.go
 internal/provider/pipeline_data_source_sdk.go
 internal/provider/types/pipeline_function_conf.go

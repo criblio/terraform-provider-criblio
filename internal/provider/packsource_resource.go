@@ -7,8 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -121,12 +124,18 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 		MarkdownDescription: "PackSource Resource",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group Id. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to create pack source`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Unique ID to create pack source. Requires replacement if changed.`,
 			},
 			"input_appscope": schema.SingleNestedAttribute{
 				Optional: true,
@@ -19917,660 +19926,322 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"input_syslog": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
-					"input_syslog_syslog1": schema.SingleNestedAttribute{
+					"allow_non_standard_app_name": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+					},
+					"connections": schema.ListNestedAttribute{
 						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"allow_non_standard_app_name": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Optional: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Optional: true,
 								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Optional: true,
-							},
-							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-							},
-							"enable_load_balancing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Load balance traffic across all Worker Processes`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Required:    true,
-								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"infer_framing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-							},
-							"ip_whitelist_regex": schema.StringAttribute{
-								Optional:    true,
-								Description: `Regex matching IP addresses that are allowed to send data`,
-							},
-							"keep_fields_list": schema.ListAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-								Validators: []validator.List{
-									listvalidator.SizeAtLeast(0),
-								},
-							},
-							"max_active_cxn": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"max_buffer_size": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"metadata": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Required: true,
-										},
-										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-										},
-									},
-								},
-								Description: `Fields to add to events from this input`,
-							},
-							"octet_counting": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"pq": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Optional:    true,
-										Description: `The number of events to send downstream before committing that Stream has read them`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
-										},
-									},
-									"compress": schema.StringAttribute{
-										Optional:    true,
-										Description: `Codec to use to compress the persisted data. must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
-										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Optional:    true,
-										Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_buffer_size_bytes": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Optional:    true,
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Optional:    true,
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-									},
-									"pq_controls": schema.SingleNestedAttribute{
-										Optional: true,
-									},
-								},
-							},
-							"pq_enabled": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-							},
-							"send_to_routes": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Select whether to send data to Routes, or directly to Destinations.`,
-							},
-							"single_msg_udp_packets": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Treat UDP packet data received as full syslog message`,
-							},
-							"socket_ending_max_wait": schema.Float64Attribute{
-								Optional:    true,
-								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_idle_timeout": schema.Float64Attribute{
-								Optional:    true,
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_max_lifespan": schema.Float64Attribute{
-								Optional:    true,
-								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
-							},
-							"strictly_infer_octet_counting": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-							},
-							"tcp_port": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"template_host": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-							},
-							"template_tcp_port": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-							},
-							"template_udp_port": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
-							},
-							"timestamp_timezone": schema.StringAttribute{
-								Optional:    true,
-								Description: `Timezone to assign to timestamps without timezone info`,
-							},
-							"tls": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										Optional:    true,
-										Description: `Regex matching allowable common names in peer certificates' subject attribute`,
-									},
-									"disabled": schema.BoolAttribute{
-										Optional: true,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.BoolAttribute{
-										Optional:    true,
-										Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Optional:    true,
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-									},
-								},
-							},
-							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "syslog"`,
-								Validators: []validator.String{
-									stringvalidator.OneOf("syslog"),
-								},
-							},
-							"udp_port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"udp_socket_rx_buf_size": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
-								Validators: []validator.Float64{
-									float64validator.Between(256, 4294967295),
+								"pipeline": schema.StringAttribute{
+									Optional: true,
 								},
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_syslog_syslog2"),
-							}...),
+						Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+					},
+					"description": schema.StringAttribute{
+						Optional: true,
+					},
+					"disabled": schema.BoolAttribute{
+						Optional: true,
+					},
+					"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+						Optional:    true,
+						Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
+					},
+					"enable_load_balancing": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Load balance traffic across all Worker Processes`,
+					},
+					"enable_proxy_header": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
+					},
+					"environment": schema.StringAttribute{
+						Optional:    true,
+						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+					},
+					"host": schema.StringAttribute{
+						Required:    true,
+						Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+					},
+					"id": schema.StringAttribute{
+						Optional:    true,
+						Description: `Unique ID for this input`,
+					},
+					"infer_framing": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+					},
+					"ip_whitelist_regex": schema.StringAttribute{
+						Optional:    true,
+						Description: `Regex matching IP addresses that are allowed to send data`,
+					},
+					"keep_fields_list": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(0),
 						},
 					},
-					"input_syslog_syslog2": schema.SingleNestedAttribute{
+					"max_active_cxn": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"max_buffer_size": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"metadata": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"name": schema.StringAttribute{
+									Required: true,
+								},
+								"value": schema.StringAttribute{
+									Required:    true,
+									Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+								},
+							},
+						},
+						Description: `Fields to add to events from this input`,
+					},
+					"octet_counting": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional:    true,
+						Description: `Pipeline to process data from this Source before sending it through the Routes`,
+					},
+					"pq": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"allow_non_standard_app_name": schema.BoolAttribute{
+							"commit_frequency": schema.Float64Attribute{
 								Optional:    true,
-								Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
-							},
-							"connections": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"output": schema.StringAttribute{
-											Optional: true,
-										},
-										"pipeline": schema.StringAttribute{
-											Optional: true,
-										},
-									},
-								},
-								Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-							},
-							"description": schema.StringAttribute{
-								Optional: true,
-							},
-							"disabled": schema.BoolAttribute{
-								Optional: true,
-							},
-							"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-							},
-							"enable_load_balancing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Load balance traffic across all Worker Processes`,
-							},
-							"enable_proxy_header": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-							},
-							"environment": schema.StringAttribute{
-								Optional:    true,
-								Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-							},
-							"host": schema.StringAttribute{
-								Required:    true,
-								Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-							},
-							"id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Unique ID for this input`,
-							},
-							"infer_framing": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-							},
-							"ip_whitelist_regex": schema.StringAttribute{
-								Optional:    true,
-								Description: `Regex matching IP addresses that are allowed to send data`,
-							},
-							"keep_fields_list": schema.ListAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-								Validators: []validator.List{
-									listvalidator.SizeAtLeast(0),
-								},
-							},
-							"max_active_cxn": schema.Float64Attribute{
-								Optional:    true,
-								Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								Description: `The number of events to send downstream before committing that Stream has read them`,
 								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+									float64validator.AtLeast(1),
+								},
+							},
+							"compress": schema.StringAttribute{
+								Optional:    true,
+								Description: `Codec to use to compress the persisted data. must be one of ["none", "gzip"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"none",
+										"gzip",
+									),
 								},
 							},
 							"max_buffer_size": schema.Float64Attribute{
 								Optional:    true,
-								Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
 								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
+									float64validator.AtLeast(42),
 								},
 							},
-							"metadata": schema.ListNestedAttribute{
-								Optional: true,
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-										"name": schema.StringAttribute{
-											Required: true,
-										},
-										"value": schema.StringAttribute{
-											Required:    true,
-											Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-										},
-									},
-								},
-								Description: `Fields to add to events from this input`,
-							},
-							"octet_counting": schema.BoolAttribute{
+							"max_buffer_size_bytes": schema.StringAttribute{
 								Optional:    true,
-								Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-							},
-							"pipeline": schema.StringAttribute{
-								Optional:    true,
-								Description: `Pipeline to process data from this Source before sending it through the Routes`,
-							},
-							"pq": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_frequency": schema.Float64Attribute{
-										Optional:    true,
-										Description: `The number of events to send downstream before committing that Stream has read them`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(1),
-										},
-									},
-									"compress": schema.StringAttribute{
-										Optional:    true,
-										Description: `Codec to use to compress the persisted data. must be one of ["none", "gzip"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"none",
-												"gzip",
-											),
-										},
-									},
-									"max_buffer_size": schema.Float64Attribute{
-										Optional:    true,
-										Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
-										Validators: []validator.Float64{
-											float64validator.AtLeast(42),
-										},
-									},
-									"max_buffer_size_bytes": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_file_size": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"max_size": schema.StringAttribute{
-										Optional:    true,
-										Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-										Validators: []validator.String{
-											stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
-										},
-									},
-									"mode": schema.StringAttribute{
-										Optional:    true,
-										Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. must be one of ["smart", "always"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"smart",
-												"always",
-											),
-										},
-									},
-									"path": schema.StringAttribute{
-										Optional:    true,
-										Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-									},
-									"pq_controls": schema.SingleNestedAttribute{
-										Optional: true,
-									},
-								},
-							},
-							"pq_enabled": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-							},
-							"send_to_routes": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Select whether to send data to Routes, or directly to Destinations.`,
-							},
-							"single_msg_udp_packets": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Treat UDP packet data received as full syslog message`,
-							},
-							"socket_ending_max_wait": schema.Float64Attribute{
-								Optional:    true,
-								Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_idle_timeout": schema.Float64Attribute{
-								Optional:    true,
-								Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"socket_max_lifespan": schema.Float64Attribute{
-								Optional:    true,
-								Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-								Validators: []validator.Float64{
-									float64validator.AtLeast(0),
-								},
-							},
-							"streamtags": schema.ListAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-								Description: `Tags for filtering and grouping in @{product}`,
-							},
-							"strictly_infer_octet_counting": schema.BoolAttribute{
-								Optional:    true,
-								Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-							},
-							"tcp_port": schema.Float64Attribute{
-								Required:    true,
-								Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
-								},
-							},
-							"template_host": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-							},
-							"template_tcp_port": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-							},
-							"template_udp_port": schema.StringAttribute{
-								Optional:    true,
-								Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
-							},
-							"timestamp_timezone": schema.StringAttribute{
-								Optional:    true,
-								Description: `Timezone to assign to timestamps without timezone info`,
-							},
-							"tls": schema.SingleNestedAttribute{
-								Optional: true,
-								Attributes: map[string]schema.Attribute{
-									"ca_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"cert_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"certificate_name": schema.StringAttribute{
-										Optional:    true,
-										Description: `The name of the predefined certificate`,
-									},
-									"common_name_regex": schema.StringAttribute{
-										Optional:    true,
-										Description: `Regex matching allowable common names in peer certificates' subject attribute`,
-									},
-									"disabled": schema.BoolAttribute{
-										Optional: true,
-									},
-									"max_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"min_version": schema.StringAttribute{
-										Optional:    true,
-										Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"TLSv1",
-												"TLSv1.1",
-												"TLSv1.2",
-												"TLSv1.3",
-											),
-										},
-									},
-									"passphrase": schema.StringAttribute{
-										Optional:    true,
-										Description: `Passphrase to use to decrypt private key`,
-									},
-									"priv_key_path": schema.StringAttribute{
-										Optional:    true,
-										Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-									},
-									"reject_unauthorized": schema.BoolAttribute{
-										Optional:    true,
-										Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
-									},
-									"request_cert": schema.BoolAttribute{
-										Optional:    true,
-										Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-									},
-								},
-							},
-							"type": schema.StringAttribute{
-								Required:    true,
-								Description: `must be "syslog"`,
+								Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 								Validators: []validator.String{
-									stringvalidator.OneOf("syslog"),
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
 								},
 							},
-							"udp_port": schema.Float64Attribute{
+							"max_file_size": schema.StringAttribute{
 								Optional:    true,
-								Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-								Validators: []validator.Float64{
-									float64validator.AtMost(65535),
+								Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
 								},
 							},
-							"udp_socket_rx_buf_size": schema.Float64Attribute{
+							"max_size": schema.StringAttribute{
 								Optional:    true,
-								Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
-								Validators: []validator.Float64{
-									float64validator.Between(256, 4294967295),
+								Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^\d+\s*(?:\w{2})?$`), "must match pattern "+regexp.MustCompile(`^\d+\s*(?:\w{2})?$`).String()),
 								},
+							},
+							"mode": schema.StringAttribute{
+								Optional:    true,
+								Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine. must be one of ["smart", "always"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"smart",
+										"always",
+									),
+								},
+							},
+							"path": schema.StringAttribute{
+								Optional:    true,
+								Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+							},
+							"pq_controls": schema.SingleNestedAttribute{
+								Optional: true,
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("input_syslog_syslog1"),
-							}...),
+					},
+					"pq_enabled": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+					},
+					"send_to_routes": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Select whether to send data to Routes, or directly to Destinations.`,
+					},
+					"single_msg_udp_packets": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Treat UDP packet data received as full syslog message`,
+					},
+					"socket_ending_max_wait": schema.Float64Attribute{
+						Optional:    true,
+						Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_idle_timeout": schema.Float64Attribute{
+						Optional:    true,
+						Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"socket_max_lifespan": schema.Float64Attribute{
+						Optional:    true,
+						Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
+					},
+					"streamtags": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Tags for filtering and grouping in @{product}`,
+					},
+					"strictly_infer_octet_counting": schema.BoolAttribute{
+						Optional:    true,
+						Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+					},
+					"tcp_port": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"template_host": schema.StringAttribute{
+						Optional:    true,
+						Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+					},
+					"template_tcp_port": schema.StringAttribute{
+						Optional:    true,
+						Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
+					},
+					"template_udp_port": schema.StringAttribute{
+						Optional:    true,
+						Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
+					},
+					"timestamp_timezone": schema.StringAttribute{
+						Optional:    true,
+						Description: `Timezone to assign to timestamps without timezone info`,
+					},
+					"tls": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"ca_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"cert_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"certificate_name": schema.StringAttribute{
+								Optional:    true,
+								Description: `The name of the predefined certificate`,
+							},
+							"common_name_regex": schema.StringAttribute{
+								Optional:    true,
+								Description: `Regex matching allowable common names in peer certificates' subject attribute`,
+							},
+							"disabled": schema.BoolAttribute{
+								Optional: true,
+							},
+							"max_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"min_version": schema.StringAttribute{
+								Optional:    true,
+								Description: `must be one of ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]`,
+								Validators: []validator.String{
+									stringvalidator.OneOf(
+										"TLSv1",
+										"TLSv1.1",
+										"TLSv1.2",
+										"TLSv1.3",
+									),
+								},
+							},
+							"passphrase": schema.StringAttribute{
+								Optional:    true,
+								Description: `Passphrase to use to decrypt private key`,
+							},
+							"priv_key_path": schema.StringAttribute{
+								Optional:    true,
+								Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+							},
+							"reject_unauthorized": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+							},
+							"request_cert": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
+							},
+						},
+					},
+					"type": schema.StringAttribute{
+						Required:    true,
+						Description: `must be "syslog"`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("syslog"),
+						},
+					},
+					"udp_port": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Validators: []validator.Float64{
+							float64validator.AtMost(65535),
+						},
+					},
+					"udp_socket_rx_buf_size": schema.Float64Attribute{
+						Optional:    true,
+						Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+						Validators: []validator.Float64{
+							float64validator.Between(256, 4294967295),
 						},
 					},
 				},
@@ -34029,16 +33700,31 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Attributes: map[string]schema.Attribute{
 								"api_key": schema.StringAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 								"connections": schema.ListNestedAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									NestedObject: schema.NestedAttributeObject{
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"output": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"pipeline": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 										},
 									},
@@ -34046,41 +33732,80 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								"content_config": schema.ListNestedAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									NestedObject: schema.NestedAttributeObject{
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"collect_path": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `OpenAI Organization API path`,
 											},
 											"content_description": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"content_type": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"cron_schedule": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `A cron schedule on which to run this job`,
 											},
 											"disabled": schema.BoolAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 											},
 											"docs_url": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"earliest": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Relative to the current time`,
 											},
 											"endpoint_metadata": schema.ListNestedAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												NestedObject: schema.NestedAttributeObject{
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
 															Computed: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 														},
 														"value": schema.StringAttribute{
-															Computed:    true,
+															Computed: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 															Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 														},
 													},
@@ -34088,66 +33813,117 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Fields automatically added to events from this Content Type`,
 											},
 											"job_timeout": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Maximum time the job is allowed to run (examples: 30, 45s, 15m). Enter 0 for unlimited time.`,
 											},
 											"latest": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Relative to the current time`,
 											},
 											"log_level": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Collector runtime log level.`,
 											},
 											"manage_state": schema.SingleNestedAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.Object{
+													speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+												},
 											},
 											"max_pages": schema.Float64Attribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Float64{
+													speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+												},
 												Description: `Maximum number of pages to retrieve per collection task. Set to 0 only when unlimited pagination is required.`,
 											},
 											"pagination_attribute": schema.ListAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												ElementType: types.StringType,
 											},
 											"pagination_cur_relation_attribute": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Optional relation that represents the current page`,
 											},
 											"pagination_last_page_expr": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"pagination_next_relation_attribute": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Used only for RFC 5988 link-header pagination`,
 											},
 											"pagination_type": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"request_params": schema.ListNestedAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.List{
+													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+												},
 												NestedObject: schema.NestedAttributeObject{
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+													},
 													Attributes: map[string]schema.Attribute{
 														"name": schema.StringAttribute{
 															Computed: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 														},
 														"value": schema.StringAttribute{
 															Computed: true,
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 														},
 													},
 												},
 												Description: `Query-string parameters to send with this endpoint`,
 											},
 											"state_merge_expression": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `JavaScript expression that defines which state to keep when merging task state`,
 											},
 											"state_tracking": schema.BoolAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Track collection progress between consecutive scheduled executions.`,
 											},
 											"state_update_expression": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `JavaScript expression that defines how to update the state from an event`,
 											},
 										},
@@ -34155,39 +33931,72 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								"description": schema.StringAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 								"disabled": schema.BoolAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 								},
 								"environment": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 								},
 								"id": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Unique ID for this input`,
 								},
 								"ignore_group_jobs_limit": schema.BoolAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `When enabled, this job's artifacts are not counted toward the Worker Group's finished job artifacts limit. Artifacts will be removed only after the Collector's configured time to live.`,
 								},
 								"keep_alive_time": schema.Float64Attribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `How often workers should check in with the scheduler to keep job subscription alive`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.`,
 								},
 								"metadata": schema.ListNestedAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									NestedObject: schema.NestedAttributeObject{
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 											},
 											"value": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
 											},
 										},
@@ -34195,130 +34004,223 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 									Description: `Fields to add to events from this input`,
 								},
 								"openai_organization": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Optional ` + "`" + `OpenAI-Organization` + "`" + ` request header value, typically ` + "`" + `org-xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
 								},
 								"openai_project": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Optional ` + "`" + `OpenAI-Project` + "`" + ` request header value, typically ` + "`" + `proj_xxxxxxxxxxxxxxxxxxxxxxxx` + "`" + ``,
 								},
 								"pipeline": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Pipeline to process data from this Source before sending it through the Routes`,
 								},
 								"pq": schema.SingleNestedAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"commit_frequency": schema.Float64Attribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Float64{
+												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+											},
 											Description: `The number of events to send downstream before committing that Stream has read them`,
 										},
 										"compress": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `Codec to use to compress the persisted data`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Float64{
+												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+											},
 											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
 										},
 										"max_buffer_size_bytes": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
 										},
 										"max_file_size": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
 										},
 										"max_size": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
 										},
 										"mode": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
 										},
 										"path": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
 										},
 										"pq_controls": schema.SingleNestedAttribute{
 											Computed: true,
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
 										},
 									},
 								},
 								"pq_enabled": schema.BoolAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
 								},
 								"request_timeout": schema.Float64Attribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `HTTP request inactivity timeout. Use 0 to disable.`,
 								},
 								"retry_rules": schema.SingleNestedAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"codes": schema.ListAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.List{
+												speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+											},
 											ElementType: types.Float64Type,
 											Description: `List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.`,
 										},
 										"enable_header": schema.BoolAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.`,
 										},
 										"interval": schema.Float64Attribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Float64{
+												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+											},
 											Description: `Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).`,
 										},
 										"limit": schema.Float64Attribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Float64{
+												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+											},
 											Description: `The maximum number of times to retry a failed HTTP request`,
 										},
 										"multiplier": schema.Float64Attribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Float64{
+												speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+											},
 											Description: `Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on`,
 										},
 										"retry_connect_reset": schema.BoolAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `Retry request when a connection reset (ECONNRESET) error occurs`,
 										},
 										"retry_connect_timeout": schema.BoolAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `Make a single retry attempt when a connection timeout (ETIMEDOUT) error occurs`,
 										},
 										"type": schema.StringAttribute{
-											Computed:    true,
+											Computed: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The algorithm to use when performing HTTP retries`,
 										},
 									},
 								},
 								"send_to_routes": schema.BoolAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.Bool{
+										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+									},
 									Description: `Select whether to send data to Routes, or directly to Destinations.`,
 								},
 								"streamtags": schema.ListAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
 								"template_openai_organization": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.`,
 								},
 								"template_openai_project": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.`,
 								},
 								"ttl": schema.StringAttribute{
-									Computed:    true,
+									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 							},
 						},
@@ -37253,499 +37155,247 @@ func (r *PackSourceResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"input_syslog": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"input_syslog_syslog1": schema.SingleNestedAttribute{
+								"allow_non_standard_app_name": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+								},
+								"connections": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"output": schema.StringAttribute{
+												Computed: true,
+											},
+											"pipeline": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+									Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+								},
+								"description": schema.StringAttribute{
+									Computed: true,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed: true,
+								},
+								"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
+								},
+								"enable_load_balancing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Load balance traffic across all Worker Processes`,
+								},
+								"enable_proxy_header": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
+								},
+								"environment": schema.StringAttribute{
+									Computed:    true,
+									Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
+								},
+								"host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
+								},
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Unique ID for this input`,
+								},
+								"infer_framing": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer the syslog framing of the incoming messages.`,
+								},
+								"ip_whitelist_regex": schema.StringAttribute{
+									Computed:    true,
+									Description: `Regex matching IP addresses that are allowed to send data`,
+								},
+								"keep_fields_list": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
+								},
+								"max_active_cxn": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+								},
+								"max_buffer_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+								},
+								"metadata": schema.ListNestedAttribute{
+									Computed: true,
+									NestedObject: schema.NestedAttributeObject{
+										Attributes: map[string]schema.Attribute{
+											"name": schema.StringAttribute{
+												Computed: true,
+											},
+											"value": schema.StringAttribute{
+												Computed:    true,
+												Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
+											},
+										},
+									},
+									Description: `Fields to add to events from this input`,
+								},
+								"octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if incoming messages use octet counting per RFC 6587.`,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed:    true,
+									Description: `Pipeline to process data from this Source before sending it through the Routes`,
+								},
+								"pq": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
-										"allow_non_standard_app_name": schema.BoolAttribute{
+										"commit_frequency": schema.Float64Attribute{
 											Computed:    true,
-											Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+											Description: `The number of events to send downstream before committing that Stream has read them`,
 										},
-										"connections": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"output": schema.StringAttribute{
-														Computed: true,
-													},
-													"pipeline": schema.StringAttribute{
-														Computed: true,
-													},
-												},
-											},
-											Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
-										},
-										"description": schema.StringAttribute{
-											Computed: true,
-										},
-										"disabled": schema.BoolAttribute{
-											Computed: true,
-										},
-										"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
+										"compress": schema.StringAttribute{
 											Computed:    true,
-											Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-										},
-										"enable_load_balancing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Load balance traffic across all Worker Processes`,
-										},
-										"enable_proxy_header": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-										},
-										"environment": schema.StringAttribute{
-											Computed:    true,
-											Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-										},
-										"host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Unique ID for this input`,
-										},
-										"infer_framing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-										},
-										"ip_whitelist_regex": schema.StringAttribute{
-											Computed:    true,
-											Description: `Regex matching IP addresses that are allowed to send data`,
-										},
-										"keep_fields_list": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
+											Description: `Codec to use to compress the persisted data`,
 										},
 										"max_buffer_size": schema.Float64Attribute{
 											Computed:    true,
-											Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
+											Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
 										},
-										"metadata": schema.ListNestedAttribute{
+										"max_buffer_size_bytes": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
+										},
+										"max_file_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"max_size": schema.StringAttribute{
+											Computed:    true,
+											Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
+										},
+										"mode": schema.StringAttribute{
+											Computed:    true,
+											Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
+										},
+										"path": schema.StringAttribute{
+											Computed:    true,
+											Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
+										},
+										"pq_controls": schema.SingleNestedAttribute{
 											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed: true,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-													},
-												},
-											},
-											Description: `Fields to add to events from this input`,
-										},
-										"octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-										},
-										"pipeline": schema.StringAttribute{
-											Computed:    true,
-											Description: `Pipeline to process data from this Source before sending it through the Routes`,
-										},
-										"pq": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"commit_frequency": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The number of events to send downstream before committing that Stream has read them`,
-												},
-												"compress": schema.StringAttribute{
-													Computed:    true,
-													Description: `Codec to use to compress the persisted data`,
-												},
-												"max_buffer_size": schema.Float64Attribute{
-													Computed:    true,
-													Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
-												},
-												"max_buffer_size_bytes": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-												},
-												"max_file_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"max_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"mode": schema.StringAttribute{
-													Computed:    true,
-													Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
-												},
-												"path": schema.StringAttribute{
-													Computed:    true,
-													Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-												},
-												"pq_controls": schema.SingleNestedAttribute{
-													Computed: true,
-												},
-											},
-										},
-										"pq_enabled": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-										},
-										"send_to_routes": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Select whether to send data to Routes, or directly to Destinations.`,
-										},
-										"single_msg_udp_packets": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Treat UDP packet data received as full syslog message`,
-										},
-										"socket_ending_max_wait": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_idle_timeout": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_max_lifespan": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-										},
-										"streamtags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags for filtering and grouping in @{product}`,
-										},
-										"strictly_infer_octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-										},
-										"tcp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"template_host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-										},
-										"template_tcp_port": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-										},
-										"template_udp_port": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
-										},
-										"timestamp_timezone": schema.StringAttribute{
-											Computed:    true,
-											Description: `Timezone to assign to timestamps without timezone info`,
-										},
-										"tls": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"ca_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"cert_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"certificate_name": schema.StringAttribute{
-													Computed:    true,
-													Description: `The name of the predefined certificate`,
-												},
-												"common_name_regex": schema.StringAttribute{
-													Computed:    true,
-													Description: `Regex matching allowable common names in peer certificates' subject attribute`,
-												},
-												"disabled": schema.BoolAttribute{
-													Computed: true,
-												},
-												"max_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"min_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"passphrase": schema.StringAttribute{
-													Computed:    true,
-													Description: `Passphrase to use to decrypt private key`,
-												},
-												"priv_key_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"reject_unauthorized": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
-												},
-												"request_cert": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-												},
-											},
-										},
-										"type": schema.StringAttribute{
-											Computed: true,
-										},
-										"udp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
-										},
-										"udp_socket_rx_buf_size": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 										},
 									},
 								},
-								"input_syslog_syslog2": schema.SingleNestedAttribute{
+								"pq_enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
+								},
+								"send_to_routes": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Select whether to send data to Routes, or directly to Destinations.`,
+								},
+								"single_msg_udp_packets": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Treat UDP packet data received as full syslog message`,
+								},
+								"socket_ending_max_wait": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_idle_timeout": schema.Float64Attribute{
+									Computed:    true,
+									Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
+								},
+								"socket_max_lifespan": schema.Float64Attribute{
+									Computed:    true,
+									Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
+								},
+								"streamtags": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Tags for filtering and grouping in @{product}`,
+								},
+								"strictly_infer_octet_counting": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
+								},
+								"tcp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+								},
+								"template_host": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
+								},
+								"template_tcp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
+								},
+								"template_udp_port": schema.StringAttribute{
+									Computed:    true,
+									Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
+								},
+								"timestamp_timezone": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timezone to assign to timestamps without timezone info`,
+								},
+								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
-										"allow_non_standard_app_name": schema.BoolAttribute{
+										"ca_path": schema.StringAttribute{
 											Computed:    true,
-											Description: `Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.`,
+											Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"connections": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"output": schema.StringAttribute{
-														Computed: true,
-													},
-													"pipeline": schema.StringAttribute{
-														Computed: true,
-													},
-												},
-											},
-											Description: `Direct connections to Destinations, and optionally via a Pipeline or a Pack`,
+										"cert_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
 										},
-										"description": schema.StringAttribute{
-											Computed: true,
+										"certificate_name": schema.StringAttribute{
+											Computed:    true,
+											Description: `The name of the predefined certificate`,
+										},
+										"common_name_regex": schema.StringAttribute{
+											Computed:    true,
+											Description: `Regex matching allowable common names in peer certificates' subject attribute`,
 										},
 										"disabled": schema.BoolAttribute{
 											Computed: true,
 										},
-										"enable_enhanced_proxy_header_parsing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.`,
-										},
-										"enable_load_balancing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Load balance traffic across all Worker Processes`,
-										},
-										"enable_proxy_header": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2`,
-										},
-										"environment": schema.StringAttribute{
-											Computed:    true,
-											Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
-										},
-										"host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.`,
-										},
-										"id": schema.StringAttribute{
-											Computed:    true,
-											Description: `Unique ID for this input`,
-										},
-										"infer_framing": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer the syslog framing of the incoming messages.`,
-										},
-										"ip_whitelist_regex": schema.StringAttribute{
-											Computed:    true,
-											Description: `Regex matching IP addresses that are allowed to send data`,
-										},
-										"keep_fields_list": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Wildcard list of fields to keep from source data; * = ALL (default)`,
-										},
-										"max_active_cxn": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.`,
-										},
-										"max_buffer_size": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Maximum number of events to buffer when downstream is blocking. Only applies to UDP.`,
-										},
-										"metadata": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed: true,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-													},
-												},
-											},
-											Description: `Fields to add to events from this input`,
-										},
-										"octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if incoming messages use octet counting per RFC 6587.`,
-										},
-										"pipeline": schema.StringAttribute{
-											Computed:    true,
-											Description: `Pipeline to process data from this Source before sending it through the Routes`,
-										},
-										"pq": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"commit_frequency": schema.Float64Attribute{
-													Computed:    true,
-													Description: `The number of events to send downstream before committing that Stream has read them`,
-												},
-												"compress": schema.StringAttribute{
-													Computed:    true,
-													Description: `Codec to use to compress the persisted data`,
-												},
-												"max_buffer_size": schema.Float64Attribute{
-													Computed:    true,
-													Description: `Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.`,
-												},
-												"max_buffer_size_bytes": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.`,
-												},
-												"max_file_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"max_size": schema.StringAttribute{
-													Computed:    true,
-													Description: `The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.`,
-												},
-												"mode": schema.StringAttribute{
-													Computed:    true,
-													Description: `With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.`,
-												},
-												"path": schema.StringAttribute{
-													Computed:    true,
-													Description: `The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>`,
-												},
-												"pq_controls": schema.SingleNestedAttribute{
-													Computed: true,
-												},
-											},
-										},
-										"pq_enabled": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).`,
-										},
-										"send_to_routes": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Select whether to send data to Routes, or directly to Destinations.`,
-										},
-										"single_msg_udp_packets": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Treat UDP packet data received as full syslog message`,
-										},
-										"socket_ending_max_wait": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_idle_timeout": schema.Float64Attribute{
-											Computed:    true,
-											Description: `How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.`,
-										},
-										"socket_max_lifespan": schema.Float64Attribute{
-											Computed:    true,
-											Description: `The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.`,
-										},
-										"streamtags": schema.ListAttribute{
-											Computed:    true,
-											ElementType: types.StringType,
-											Description: `Tags for filtering and grouping in @{product}`,
-										},
-										"strictly_infer_octet_counting": schema.BoolAttribute{
-											Computed:    true,
-											Description: `Enable if we should infer octet counting only if the messages comply with RFC 5424.`,
-										},
-										"tcp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"template_host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-										},
-										"template_tcp_port": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-										},
-										"template_udp_port": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
-										},
-										"timestamp_timezone": schema.StringAttribute{
-											Computed:    true,
-											Description: `Timezone to assign to timestamps without timezone info`,
-										},
-										"tls": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"ca_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"cert_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"certificate_name": schema.StringAttribute{
-													Computed:    true,
-													Description: `The name of the predefined certificate`,
-												},
-												"common_name_regex": schema.StringAttribute{
-													Computed:    true,
-													Description: `Regex matching allowable common names in peer certificates' subject attribute`,
-												},
-												"disabled": schema.BoolAttribute{
-													Computed: true,
-												},
-												"max_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"min_version": schema.StringAttribute{
-													Computed: true,
-												},
-												"passphrase": schema.StringAttribute{
-													Computed:    true,
-													Description: `Passphrase to use to decrypt private key`,
-												},
-												"priv_key_path": schema.StringAttribute{
-													Computed:    true,
-													Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
-												},
-												"reject_unauthorized": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
-												},
-												"request_cert": schema.BoolAttribute{
-													Computed:    true,
-													Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
-												},
-											},
-										},
-										"type": schema.StringAttribute{
+										"max_version": schema.StringAttribute{
 											Computed: true,
 										},
-										"udp_port": schema.Float64Attribute{
-											Computed:    true,
-											Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+										"min_version": schema.StringAttribute{
+											Computed: true,
 										},
-										"udp_socket_rx_buf_size": schema.Float64Attribute{
+										"passphrase": schema.StringAttribute{
 											Computed:    true,
-											Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
+											Description: `Passphrase to use to decrypt private key`,
+										},
+										"priv_key_path": schema.StringAttribute{
+											Computed:    true,
+											Description: `Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.`,
+										},
+										"reject_unauthorized": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)`,
+										},
+										"request_cert": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Require clients to present their certificates. Used to perform client authentication using SSL certs.`,
 										},
 									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"udp_port": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+								},
+								"udp_socket_rx_buf_size": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.`,
 								},
 							},
 						},

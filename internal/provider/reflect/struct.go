@@ -125,6 +125,7 @@ func Struct(ctx context.Context, typ attr.Type, object tftypes.Value, target ref
 	} else {
 		result = reflect.New(target.Type()).Elem()
 	}
+
 	structType := trueReflectValue(target).Type()
 
 	for field, structFieldPos := range targetFields {

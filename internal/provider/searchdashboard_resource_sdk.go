@@ -276,7 +276,6 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		r.Elements = append(r.Elements, elements)
 	}
-	r.Groups = nil
 	if len(resp.Groups) > 0 {
 		r.Groups = make(map[string]tfTypes.DashboardGroups, len(resp.Groups))
 		for dashboardGroupsKey, dashboardGroupsValue := range resp.Groups {

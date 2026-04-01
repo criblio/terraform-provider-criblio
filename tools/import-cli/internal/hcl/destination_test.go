@@ -10,9 +10,9 @@ import (
 func TestDestinationItemToOutputBlock(t *testing.T) {
 	t.Run("prometheus type", func(t *testing.T) {
 		item := map[string]string{
-			"type":    `"prometheus"`,
-			"id":      `"elastic-prometheus"`,
-			"url":     `"http://prometheus.example:9201"`,
+			"type":       `"prometheus"`,
+			"id":         `"elastic-prometheus"`,
+			"url":        `"http://prometheus.example:9201"`,
 			"timeoutSec": "30",
 		}
 		blockName, value, err := DestinationItemToOutputBlock(item)

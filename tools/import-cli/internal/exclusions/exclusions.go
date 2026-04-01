@@ -14,7 +14,7 @@ var NoExportTypes = []string{
 	"criblio_mapping_ruleset",              // List API is on root CriblIo (GetAdminProductsMappingsByProduct), not a service; no standard discovery.
 	"criblio_notification",                 // Search-scoped API path mismatch in SDK; list returns 0.
 	"criblio_pack_lookups",                 // Same as lookup_file; content often missing from API response.
-	"criblio_search_usage_group",          // API returns null/empty for rules; required attr causes import/plan issues.
+	"criblio_search_usage_group",           // API returns null/empty for rules; required attr causes import/plan issues.
 	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
 }
 
@@ -22,8 +22,8 @@ var NoExportTypes = []string{
 // Use for resources that fail apply (e.g. missing required attrs, API restrictions).
 var SkipExportIDs = map[string]map[string]bool{
 	"criblio_notification_target": {
-		"system_email":          true, // smtp_target requires host/port; system_email is built-in placeholder
-		"system_notifications":  true, // oneOf type unsupported by provider
+		"system_email":         true, // smtp_target requires host/port; system_email is built-in placeholder
+		"system_notifications": true, // oneOf type unsupported by provider
 	},
 	"criblio_pack_destination": {
 		"default": true, // read-only in Pack context

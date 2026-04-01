@@ -30,9 +30,9 @@ type PipelineDataSource struct {
 
 // PipelineDataSourceModel describes the data model.
 type PipelineDataSourceModel struct {
-	Conf    tfTypes.PipelineConf `tfsdk:"conf"`
-	GroupID types.String         `tfsdk:"group_id"`
-	ID      types.String         `tfsdk:"id"`
+	Conf    *tfTypes.PipelineConf `tfsdk:"conf"`
+	GroupID types.String          `tfsdk:"group_id"`
+	ID      types.String          `tfsdk:"id"`
 }
 
 // Metadata returns the data source type name.
@@ -60,10 +60,10 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.StringAttribute{
+								"conf": schema.MapAttribute{
 									Computed:    true,
-									CustomType:  jsontypes.NormalizedType{},
-									Description: `Function configuration as JSON (same shape as jsonencode in the resource).`,
+									ElementType: jsontypes.NormalizedType{},
+									Description: `Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields.`,
 								},
 								"description": schema.StringAttribute{
 									Computed:    true,

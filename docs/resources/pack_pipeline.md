@@ -55,8 +55,8 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
 ### Required
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
-- `group_id` (String) group Id
-- `id` (String) Unique ID to PATCH for pack
+- `group_id` (String) group Id. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH for pack. Requires replacement if changed.
 - `pack` (String) pack ID to POST. Requires replacement if changed.
 
 <a id="nestedatt--conf"></a>
@@ -76,7 +76,7 @@ Optional:
 
 Optional:
 
-- `conf` (String) Function configuration as JSON. In HCL use jsonencode({ ... }) so the shape matches the Cribl API (eval, serde, code, drop, etc.).
+- `conf` (Map of String) Configuration object that varies based on the function type. Each function (eval, serde, code, drop, etc.) requires different configuration fields. Not Null
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"

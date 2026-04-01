@@ -8466,7 +8466,6 @@ components:
           title: Library
           example: custom
         description:
-          x-speakeasy-plan-modifiers: PreferState
           type: string
           title: Description
           description: Brief description of this variable. Optional.
@@ -8494,7 +8493,7 @@ components:
           description: Value of variable
           example: 100
         tags:
-          x-speakeasy-param-suppress-computed-diff: true
+          
           type: string
           title: Tags
           description: One or more tags related to this variable. Optional.
@@ -8503,6 +8502,7 @@ components:
           type: array
           title: Args
           description: Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).
+          x-speakeasy-param-suppress-computed-diff: true
           items:
             type: object
             required:

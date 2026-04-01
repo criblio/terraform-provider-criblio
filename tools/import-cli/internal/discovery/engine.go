@@ -12,8 +12,8 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 )
 
 // eventBreakerRulesetIdentifiersFromCapture returns identifiers from the captured

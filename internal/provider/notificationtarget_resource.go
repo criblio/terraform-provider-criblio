@@ -463,8 +463,6 @@ func (r *NotificationTargetResource) Schema(ctx context.Context, req resource.Sc
 				},
 			},
 			"type": schema.StringAttribute{
-				// Discriminator; set explicitly or hoisted from nested *_target.type. Must be Optional for Terraform (Computed-only is read-only).
-				Optional: true,
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("webhook_target"), FieldPath: path.Root("webhook_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("pager_duty_target"), FieldPath: path.Root("pager_duty_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("slack_target"), FieldPath: path.Root("slack_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("sns_target"), FieldPath: path.Root("sns_target").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("smtp_target"), FieldPath: path.Root("smtp_target").AtName("type")}}),
