@@ -31,7 +31,6 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
@@ -93,7 +92,6 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
@@ -179,7 +177,6 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {

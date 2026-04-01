@@ -177,9 +177,6 @@ func (r *PackResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"inputs": schema.Float64Attribute{
 							Computed: true,
 						},
-						"is_disabled": schema.BoolAttribute{
-							Computed: true,
-						},
 						"min_log_stream_version": schema.StringAttribute{
 							Computed: true,
 						},
