@@ -113,7 +113,8 @@ type OutputGooglePubsub struct {
 	TemplateTopicName *string `json:"__template_topicName,omitempty"`
 	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 	TemplateRegion *string `json:"__template_region,omitempty"`
-	FlushPeriodSec any     `json:"flushPeriodSec,omitempty"`
+	// Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.
+	FlushPeriodSec *float64 `json:"flushPeriodSec,omitempty"`
 }
 
 func (o OutputGooglePubsub) MarshalJSON() ([]byte, error) {
@@ -372,7 +373,7 @@ func (o *OutputGooglePubsub) GetTemplateRegion() *string {
 	return o.TemplateRegion
 }
 
-func (o *OutputGooglePubsub) GetFlushPeriodSec() any {
+func (o *OutputGooglePubsub) GetFlushPeriodSec() *float64 {
 	if o == nil {
 		return nil
 	}

@@ -819,12 +819,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputClickHouse.TemplateTableName = types.StringPointerValue(resp.OutputClickHouse.TemplateTableName)
 		r.OutputClickHouse.TemplateURL = types.StringPointerValue(resp.OutputClickHouse.TemplateURL)
 		r.OutputClickHouse.AsyncInserts = types.BoolPointerValue(resp.OutputClickHouse.AsyncInserts)
-		if resp.OutputClickHouse.AuthHeaderExpr == nil {
-			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult, _ := json.Marshal(resp.OutputClickHouse.AuthHeaderExpr)
-			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
-		}
+		r.OutputClickHouse.AuthHeaderExpr = types.StringPointerValue(resp.OutputClickHouse.AuthHeaderExpr)
 		if resp.OutputClickHouse.AuthType != nil {
 			r.OutputClickHouse.AuthType = types.StringValue(string(*resp.OutputClickHouse.AuthType))
 		} else {
@@ -877,12 +872,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputClickHouse.ID = types.StringPointerValue(resp.OutputClickHouse.ID)
 		r.ID = r.OutputClickHouse.ID
-		if resp.OutputClickHouse.LoginURL == nil {
-			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult, _ := json.Marshal(resp.OutputClickHouse.LoginURL)
-			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
-		}
+		r.OutputClickHouse.LoginURL = types.StringPointerValue(resp.OutputClickHouse.LoginURL)
 		if resp.OutputClickHouse.MappingType != nil {
 			r.OutputClickHouse.MappingType = types.StringValue(string(*resp.OutputClickHouse.MappingType))
 		} else {
@@ -895,18 +885,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem := range resp.OutputClickHouse.OauthHeaders {
 			var oauthHeaders tfTypes.OutputClickHouseOauthHeader
 
-			if oauthHeadersItem.Name == nil {
-				oauthHeaders.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult, _ := json.Marshal(oauthHeadersItem.Name)
-				oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
-			}
-			if oauthHeadersItem.Value == nil {
-				oauthHeaders.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult, _ := json.Marshal(oauthHeadersItem.Value)
-				oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
-			}
+			oauthHeaders.Name = types.StringValue(oauthHeadersItem.Name)
+			oauthHeaders.Value = types.StringValue(oauthHeadersItem.Value)
 
 			r.OutputClickHouse.OauthHeaders = append(r.OutputClickHouse.OauthHeaders, oauthHeaders)
 		}
@@ -915,18 +895,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem := range resp.OutputClickHouse.OauthParams {
 			var oauthParams tfTypes.OutputClickHouseOauthParam
 
-			if oauthParamsItem.Name == nil {
-				oauthParams.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult1, _ := json.Marshal(oauthParamsItem.Name)
-				oauthParams.Name = jsontypes.NewNormalizedValue(string(nameResult1))
-			}
-			if oauthParamsItem.Value == nil {
-				oauthParams.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult1, _ := json.Marshal(oauthParamsItem.Value)
-				oauthParams.Value = jsontypes.NewNormalizedValue(string(valueResult1))
-			}
+			oauthParams.Name = types.StringValue(oauthParamsItem.Name)
+			oauthParams.Value = types.StringValue(oauthParamsItem.Value)
 
 			r.OutputClickHouse.OauthParams = append(r.OutputClickHouse.OauthParams, oauthParams)
 		}
@@ -984,18 +954,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputClickHouse.SafeHeaders {
 			r.OutputClickHouse.SafeHeaders = append(r.OutputClickHouse.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputClickHouse.Secret == nil {
-			r.OutputClickHouse.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult, _ := json.Marshal(resp.OutputClickHouse.Secret)
-			r.OutputClickHouse.Secret = jsontypes.NewNormalizedValue(string(secretResult))
-		}
-		if resp.OutputClickHouse.SecretParamName == nil {
-			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult, _ := json.Marshal(resp.OutputClickHouse.SecretParamName)
-			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
-		}
+		r.OutputClickHouse.Secret = types.StringPointerValue(resp.OutputClickHouse.Secret)
+		r.OutputClickHouse.SecretParamName = types.StringPointerValue(resp.OutputClickHouse.SecretParamName)
 		r.OutputClickHouse.SQLUsername = types.StringPointerValue(resp.OutputClickHouse.SQLUsername)
 		r.OutputClickHouse.Streamtags = make([]types.String, 0, len(resp.OutputClickHouse.Streamtags))
 		for _, v := range resp.OutputClickHouse.Streamtags {
@@ -1006,12 +966,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.SystemFields = append(r.OutputClickHouse.SystemFields, types.StringValue(v))
 		}
 		r.OutputClickHouse.TableName = types.StringValue(resp.OutputClickHouse.TableName)
-		if resp.OutputClickHouse.TextSecret == nil {
-			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedNull()
-		} else {
-			textSecretResult, _ := json.Marshal(resp.OutputClickHouse.TextSecret)
-			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedValue(string(textSecretResult))
-		}
+		r.OutputClickHouse.TextSecret = types.StringPointerValue(resp.OutputClickHouse.TextSecret)
 		if resp.OutputClickHouse.TimeoutRetrySettings == nil {
 			r.OutputClickHouse.TimeoutRetrySettings = nil
 		} else {
@@ -1044,24 +999,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputClickHouse.TLS.PrivKeyPath)
 			r.OutputClickHouse.TLS.Servername = types.StringPointerValue(resp.OutputClickHouse.TLS.Servername)
 		}
-		if resp.OutputClickHouse.Token == nil {
-			r.OutputClickHouse.Token = jsontypes.NewNormalizedNull()
-		} else {
-			tokenResult, _ := json.Marshal(resp.OutputClickHouse.Token)
-			r.OutputClickHouse.Token = jsontypes.NewNormalizedValue(string(tokenResult))
-		}
-		if resp.OutputClickHouse.TokenAttributeName == nil {
-			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult, _ := json.Marshal(resp.OutputClickHouse.TokenAttributeName)
-			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
-		}
-		if resp.OutputClickHouse.TokenTimeoutSecs == nil {
-			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult, _ := json.Marshal(resp.OutputClickHouse.TokenTimeoutSecs)
-			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
-		}
+		r.OutputClickHouse.Token = types.StringPointerValue(resp.OutputClickHouse.Token)
+		r.OutputClickHouse.TokenAttributeName = types.StringPointerValue(resp.OutputClickHouse.TokenAttributeName)
+		r.OutputClickHouse.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputClickHouse.TokenTimeoutSecs)
 		r.OutputClickHouse.Type = types.StringValue(string(resp.OutputClickHouse.Type))
 		r.Type = r.OutputClickHouse.Type
 		r.OutputClickHouse.URL = types.StringValue(resp.OutputClickHouse.URL)
@@ -1075,12 +1015,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.TemplateFormat = types.StringPointerValue(resp.OutputCloudflareR2.TemplateFormat)
 		r.OutputCloudflareR2.AddIDToStagePath = types.BoolPointerValue(resp.OutputCloudflareR2.AddIDToStagePath)
 		r.OutputCloudflareR2.AutomaticSchema = types.BoolPointerValue(resp.OutputCloudflareR2.AutomaticSchema)
-		if resp.OutputCloudflareR2.AwsAPIKey == nil {
-			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedNull()
-		} else {
-			awsAPIKeyResult, _ := json.Marshal(resp.OutputCloudflareR2.AwsAPIKey)
-			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedValue(string(awsAPIKeyResult))
-		}
+		r.OutputCloudflareR2.AwsAPIKey = types.StringPointerValue(resp.OutputCloudflareR2.AwsAPIKey)
 		if resp.OutputCloudflareR2.AwsAuthenticationMethod != nil {
 			r.OutputCloudflareR2.AwsAuthenticationMethod = types.StringValue(string(*resp.OutputCloudflareR2.AwsAuthenticationMethod))
 		} else {
@@ -1138,11 +1073,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.MaxFileSizeMB = types.Float64PointerValue(resp.OutputCloudflareR2.MaxFileSizeMB)
 		r.OutputCloudflareR2.MaxOpenFiles = types.Float64PointerValue(resp.OutputCloudflareR2.MaxOpenFiles)
 		r.OutputCloudflareR2.MaxRetryNum = types.Float64PointerValue(resp.OutputCloudflareR2.MaxRetryNum)
-		if resp.OutputCloudflareR2.ObjectACL == nil {
-			r.OutputCloudflareR2.ObjectACL = jsontypes.NewNormalizedNull()
+		if resp.OutputCloudflareR2.ObjectACL != nil {
+			r.OutputCloudflareR2.ObjectACL = types.StringValue(string(*resp.OutputCloudflareR2.ObjectACL))
 		} else {
-			objectACLResult, _ := json.Marshal(resp.OutputCloudflareR2.ObjectACL)
-			r.OutputCloudflareR2.ObjectACL = jsontypes.NewNormalizedValue(string(objectACLResult))
+			r.OutputCloudflareR2.ObjectACL = types.StringNull()
 		}
 		if resp.OutputCloudflareR2.OnBackpressure != nil {
 			r.OutputCloudflareR2.OnBackpressure = types.StringValue(string(*resp.OutputCloudflareR2.OnBackpressure))
@@ -1170,12 +1104,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.PartitionExpr = types.StringPointerValue(resp.OutputCloudflareR2.PartitionExpr)
 		r.OutputCloudflareR2.Pipeline = types.StringPointerValue(resp.OutputCloudflareR2.Pipeline)
 		r.Pipeline = r.OutputCloudflareR2.Pipeline
-		if resp.OutputCloudflareR2.Region == nil {
-			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedNull()
-		} else {
-			regionResult, _ := json.Marshal(resp.OutputCloudflareR2.Region)
-			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedValue(string(regionResult))
-		}
+		r.OutputCloudflareR2.Region = types.StringPointerValue(resp.OutputCloudflareR2.Region)
 		r.OutputCloudflareR2.RejectUnauthorized = types.BoolPointerValue(resp.OutputCloudflareR2.RejectUnauthorized)
 		r.OutputCloudflareR2.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputCloudflareR2.RemoveEmptyDirs)
 		if resp.OutputCloudflareR2.RetrySettings == nil {
@@ -3924,12 +3853,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGooglePubsub.Environment = types.StringPointerValue(resp.OutputGooglePubsub.Environment)
 		r.Environment = r.OutputGooglePubsub.Environment
 		r.OutputGooglePubsub.FlushPeriod = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriod)
-		if resp.OutputGooglePubsub.FlushPeriodSec == nil {
-			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedNull()
-		} else {
-			flushPeriodSecResult, _ := json.Marshal(resp.OutputGooglePubsub.FlushPeriodSec)
-			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedValue(string(flushPeriodSecResult))
-		}
+		r.OutputGooglePubsub.FlushPeriodSec = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriodSec)
 		if resp.OutputGooglePubsub.GoogleAuthMethod != nil {
 			r.OutputGooglePubsub.GoogleAuthMethod = types.StringValue(string(*resp.OutputGooglePubsub.GoogleAuthMethod))
 		} else {
@@ -4426,12 +4350,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.TemplateBucket = types.StringPointerValue(resp.OutputInfluxdb.TemplateBucket)
 		r.OutputInfluxdb.TemplateDatabase = types.StringPointerValue(resp.OutputInfluxdb.TemplateDatabase)
 		r.OutputInfluxdb.TemplateURL = types.StringPointerValue(resp.OutputInfluxdb.TemplateURL)
-		if resp.OutputInfluxdb.AuthHeaderExpr == nil {
-			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult1, _ := json.Marshal(resp.OutputInfluxdb.AuthHeaderExpr)
-			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
-		}
+		r.OutputInfluxdb.AuthHeaderExpr = types.StringPointerValue(resp.OutputInfluxdb.AuthHeaderExpr)
 		if resp.OutputInfluxdb.AuthType != nil {
 			r.OutputInfluxdb.AuthType = types.StringValue(string(*resp.OutputInfluxdb.AuthType))
 		} else {
@@ -4464,12 +4383,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.FlushPeriodSec = types.Float64PointerValue(resp.OutputInfluxdb.FlushPeriodSec)
 		r.OutputInfluxdb.ID = types.StringPointerValue(resp.OutputInfluxdb.ID)
 		r.ID = r.OutputInfluxdb.ID
-		if resp.OutputInfluxdb.LoginURL == nil {
-			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult1, _ := json.Marshal(resp.OutputInfluxdb.LoginURL)
-			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
-		}
+		r.OutputInfluxdb.LoginURL = types.StringPointerValue(resp.OutputInfluxdb.LoginURL)
 		r.OutputInfluxdb.MaxPayloadEvents = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadEvents)
 		r.OutputInfluxdb.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadSizeKB)
 		r.OutputInfluxdb.OauthHeaders = []tfTypes.OutputInfluxdbOauthHeader{}
@@ -4477,18 +4391,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem1 := range resp.OutputInfluxdb.OauthHeaders {
 			var oauthHeaders1 tfTypes.OutputInfluxdbOauthHeader
 
-			if oauthHeadersItem1.Name == nil {
-				oauthHeaders1.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
-				oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
-			}
-			if oauthHeadersItem1.Value == nil {
-				oauthHeaders1.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
-				oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
-			}
+			oauthHeaders1.Name = types.StringValue(oauthHeadersItem1.Name)
+			oauthHeaders1.Value = types.StringValue(oauthHeadersItem1.Value)
 
 			r.OutputInfluxdb.OauthHeaders = append(r.OutputInfluxdb.OauthHeaders, oauthHeaders1)
 		}
@@ -4497,18 +4401,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem2 := range resp.OutputInfluxdb.OauthParams {
 			var oauthParams2 tfTypes.OutputInfluxdbOauthParam
 
-			if oauthParamsItem2.Name == nil {
-				oauthParams2.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
-				oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
-			}
-			if oauthParamsItem2.Value == nil {
-				oauthParams2.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
-				oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
-			}
+			oauthParams2.Name = types.StringValue(oauthParamsItem2.Name)
+			oauthParams2.Value = types.StringValue(oauthParamsItem2.Value)
 
 			r.OutputInfluxdb.OauthParams = append(r.OutputInfluxdb.OauthParams, oauthParams2)
 		}
@@ -4567,18 +4461,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputInfluxdb.SafeHeaders {
 			r.OutputInfluxdb.SafeHeaders = append(r.OutputInfluxdb.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputInfluxdb.Secret == nil {
-			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult1, _ := json.Marshal(resp.OutputInfluxdb.Secret)
-			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
-		}
-		if resp.OutputInfluxdb.SecretParamName == nil {
-			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult1, _ := json.Marshal(resp.OutputInfluxdb.SecretParamName)
-			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
-		}
+		r.OutputInfluxdb.Secret = types.StringPointerValue(resp.OutputInfluxdb.Secret)
+		r.OutputInfluxdb.SecretParamName = types.StringPointerValue(resp.OutputInfluxdb.SecretParamName)
 		r.OutputInfluxdb.Streamtags = make([]types.String, 0, len(resp.OutputInfluxdb.Streamtags))
 		for _, v := range resp.OutputInfluxdb.Streamtags {
 			r.OutputInfluxdb.Streamtags = append(r.OutputInfluxdb.Streamtags, types.StringValue(v))
@@ -4604,18 +4488,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputInfluxdb.TimestampPrecision = types.StringNull()
 		}
 		r.OutputInfluxdb.Token = types.StringPointerValue(resp.OutputInfluxdb.Token)
-		if resp.OutputInfluxdb.TokenAttributeName == nil {
-			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenAttributeName)
-			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
-		}
-		if resp.OutputInfluxdb.TokenTimeoutSecs == nil {
-			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenTimeoutSecs)
-			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
-		}
+		r.OutputInfluxdb.TokenAttributeName = types.StringPointerValue(resp.OutputInfluxdb.TokenAttributeName)
+		r.OutputInfluxdb.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputInfluxdb.TokenTimeoutSecs)
 		r.OutputInfluxdb.Type = types.StringValue(string(resp.OutputInfluxdb.Type))
 		r.Type = r.OutputInfluxdb.Type
 		r.OutputInfluxdb.URL = types.StringValue(resp.OutputInfluxdb.URL)
@@ -5946,12 +5820,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputOpenTelemetry != nil {
 		r.OutputOpenTelemetry = &tfTypes.OutputOpenTelemetry{}
-		if resp.OutputOpenTelemetry.AuthHeaderExpr == nil {
-			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult2, _ := json.Marshal(resp.OutputOpenTelemetry.AuthHeaderExpr)
-			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
-		}
+		r.OutputOpenTelemetry.AuthHeaderExpr = types.StringPointerValue(resp.OutputOpenTelemetry.AuthHeaderExpr)
 		if resp.OutputOpenTelemetry.AuthType != nil {
 			r.OutputOpenTelemetry.AuthType = types.StringValue(string(*resp.OutputOpenTelemetry.AuthType))
 		} else {
@@ -5997,12 +5866,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.ID = r.OutputOpenTelemetry.ID
 		r.OutputOpenTelemetry.KeepAlive = types.BoolPointerValue(resp.OutputOpenTelemetry.KeepAlive)
 		r.OutputOpenTelemetry.KeepAliveTime = types.Float64PointerValue(resp.OutputOpenTelemetry.KeepAliveTime)
-		if resp.OutputOpenTelemetry.LoginURL == nil {
-			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult2, _ := json.Marshal(resp.OutputOpenTelemetry.LoginURL)
-			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
-		}
+		r.OutputOpenTelemetry.LoginURL = types.StringPointerValue(resp.OutputOpenTelemetry.LoginURL)
 		r.OutputOpenTelemetry.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputOpenTelemetry.MaxPayloadSizeKB)
 		r.OutputOpenTelemetry.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
@@ -6019,18 +5883,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem2 := range resp.OutputOpenTelemetry.OauthHeaders {
 			var oauthHeaders2 tfTypes.OutputOpenTelemetryOauthHeader
 
-			if oauthHeadersItem2.Name == nil {
-				oauthHeaders2.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
-				oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
-			}
-			if oauthHeadersItem2.Value == nil {
-				oauthHeaders2.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
-				oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
-			}
+			oauthHeaders2.Name = types.StringValue(oauthHeadersItem2.Name)
+			oauthHeaders2.Value = types.StringValue(oauthHeadersItem2.Value)
 
 			r.OutputOpenTelemetry.OauthHeaders = append(r.OutputOpenTelemetry.OauthHeaders, oauthHeaders2)
 		}
@@ -6039,18 +5893,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem4 := range resp.OutputOpenTelemetry.OauthParams {
 			var oauthParams4 tfTypes.OutputOpenTelemetryOauthParam
 
-			if oauthParamsItem4.Name == nil {
-				oauthParams4.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult5, _ := json.Marshal(oauthParamsItem4.Name)
-				oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult5))
-			}
-			if oauthParamsItem4.Value == nil {
-				oauthParams4.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult5, _ := json.Marshal(oauthParamsItem4.Value)
-				oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult5))
-			}
+			oauthParams4.Name = types.StringValue(oauthParamsItem4.Name)
+			oauthParams4.Value = types.StringValue(oauthParamsItem4.Value)
 
 			r.OutputOpenTelemetry.OauthParams = append(r.OutputOpenTelemetry.OauthParams, oauthParams4)
 		}
@@ -6118,18 +5962,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputOpenTelemetry.SafeHeaders {
 			r.OutputOpenTelemetry.SafeHeaders = append(r.OutputOpenTelemetry.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputOpenTelemetry.Secret == nil {
-			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult2, _ := json.Marshal(resp.OutputOpenTelemetry.Secret)
-			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
-		}
-		if resp.OutputOpenTelemetry.SecretParamName == nil {
-			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.SecretParamName)
-			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
-		}
+		r.OutputOpenTelemetry.Secret = types.StringPointerValue(resp.OutputOpenTelemetry.Secret)
+		r.OutputOpenTelemetry.SecretParamName = types.StringPointerValue(resp.OutputOpenTelemetry.SecretParamName)
 		r.OutputOpenTelemetry.Streamtags = make([]types.String, 0, len(resp.OutputOpenTelemetry.Streamtags))
 		for _, v := range resp.OutputOpenTelemetry.Streamtags {
 			r.OutputOpenTelemetry.Streamtags = append(r.OutputOpenTelemetry.Streamtags, types.StringValue(v))
@@ -6172,18 +6006,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputOpenTelemetry.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputOpenTelemetry.TLS.RejectUnauthorized)
 		}
 		r.OutputOpenTelemetry.Token = types.StringPointerValue(resp.OutputOpenTelemetry.Token)
-		if resp.OutputOpenTelemetry.TokenAttributeName == nil {
-			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenAttributeName)
-			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
-		}
-		if resp.OutputOpenTelemetry.TokenTimeoutSecs == nil {
-			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenTimeoutSecs)
-			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
-		}
+		r.OutputOpenTelemetry.TokenAttributeName = types.StringPointerValue(resp.OutputOpenTelemetry.TokenAttributeName)
+		r.OutputOpenTelemetry.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputOpenTelemetry.TokenTimeoutSecs)
 		r.OutputOpenTelemetry.Type = types.StringValue(string(resp.OutputOpenTelemetry.Type))
 		r.Type = r.OutputOpenTelemetry.Type
 		r.OutputOpenTelemetry.Username = types.StringPointerValue(resp.OutputOpenTelemetry.Username)
@@ -6192,12 +6016,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	if resp.OutputPrometheus != nil {
 		r.OutputPrometheus = &tfTypes.OutputPrometheus{}
 		r.OutputPrometheus.TemplateURL = types.StringPointerValue(resp.OutputPrometheus.TemplateURL)
-		if resp.OutputPrometheus.AuthHeaderExpr == nil {
-			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult3, _ := json.Marshal(resp.OutputPrometheus.AuthHeaderExpr)
-			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
-		}
+		r.OutputPrometheus.AuthHeaderExpr = types.StringPointerValue(resp.OutputPrometheus.AuthHeaderExpr)
 		if resp.OutputPrometheus.AuthType != nil {
 			r.OutputPrometheus.AuthType = types.StringValue(string(*resp.OutputPrometheus.AuthType))
 		} else {
@@ -6226,12 +6045,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputPrometheus.FlushPeriodSec = types.Float64PointerValue(resp.OutputPrometheus.FlushPeriodSec)
 		r.OutputPrometheus.ID = types.StringPointerValue(resp.OutputPrometheus.ID)
 		r.ID = r.OutputPrometheus.ID
-		if resp.OutputPrometheus.LoginURL == nil {
-			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult3, _ := json.Marshal(resp.OutputPrometheus.LoginURL)
-			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
-		}
+		r.OutputPrometheus.LoginURL = types.StringPointerValue(resp.OutputPrometheus.LoginURL)
 		r.OutputPrometheus.MaxPayloadEvents = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadEvents)
 		r.OutputPrometheus.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadSizeKB)
 		r.OutputPrometheus.MetricRenameExpr = types.StringPointerValue(resp.OutputPrometheus.MetricRenameExpr)
@@ -6241,18 +6055,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem3 := range resp.OutputPrometheus.OauthHeaders {
 			var oauthHeaders3 tfTypes.OutputPrometheusOauthHeader
 
-			if oauthHeadersItem3.Name == nil {
-				oauthHeaders3.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
-				oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
-			}
-			if oauthHeadersItem3.Value == nil {
-				oauthHeaders3.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
-				oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
-			}
+			oauthHeaders3.Name = types.StringValue(oauthHeadersItem3.Name)
+			oauthHeaders3.Value = types.StringValue(oauthHeadersItem3.Value)
 
 			r.OutputPrometheus.OauthHeaders = append(r.OutputPrometheus.OauthHeaders, oauthHeaders3)
 		}
@@ -6261,18 +6065,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem5 := range resp.OutputPrometheus.OauthParams {
 			var oauthParams5 tfTypes.OutputPrometheusOauthParam
 
-			if oauthParamsItem5.Name == nil {
-				oauthParams5.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult7, _ := json.Marshal(oauthParamsItem5.Name)
-				oauthParams5.Name = jsontypes.NewNormalizedValue(string(nameResult7))
-			}
-			if oauthParamsItem5.Value == nil {
-				oauthParams5.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult7, _ := json.Marshal(oauthParamsItem5.Value)
-				oauthParams5.Value = jsontypes.NewNormalizedValue(string(valueResult7))
-			}
+			oauthParams5.Name = types.StringValue(oauthParamsItem5.Name)
+			oauthParams5.Value = types.StringValue(oauthParamsItem5.Value)
 
 			r.OutputPrometheus.OauthParams = append(r.OutputPrometheus.OauthParams, oauthParams5)
 		}
@@ -6330,18 +6124,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputPrometheus.SafeHeaders {
 			r.OutputPrometheus.SafeHeaders = append(r.OutputPrometheus.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputPrometheus.Secret == nil {
-			r.OutputPrometheus.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult3, _ := json.Marshal(resp.OutputPrometheus.Secret)
-			r.OutputPrometheus.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
-		}
-		if resp.OutputPrometheus.SecretParamName == nil {
-			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult3, _ := json.Marshal(resp.OutputPrometheus.SecretParamName)
-			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
-		}
+		r.OutputPrometheus.Secret = types.StringPointerValue(resp.OutputPrometheus.Secret)
+		r.OutputPrometheus.SecretParamName = types.StringPointerValue(resp.OutputPrometheus.SecretParamName)
 		r.OutputPrometheus.SendMetadata = types.BoolPointerValue(resp.OutputPrometheus.SendMetadata)
 		r.OutputPrometheus.Streamtags = make([]types.String, 0, len(resp.OutputPrometheus.Streamtags))
 		for _, v := range resp.OutputPrometheus.Streamtags {
@@ -6363,18 +6147,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputPrometheus.TimeoutSec = types.Float64PointerValue(resp.OutputPrometheus.TimeoutSec)
 		r.OutputPrometheus.Token = types.StringPointerValue(resp.OutputPrometheus.Token)
-		if resp.OutputPrometheus.TokenAttributeName == nil {
-			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult3, _ := json.Marshal(resp.OutputPrometheus.TokenAttributeName)
-			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
-		}
-		if resp.OutputPrometheus.TokenTimeoutSecs == nil {
-			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult3, _ := json.Marshal(resp.OutputPrometheus.TokenTimeoutSecs)
-			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
-		}
+		r.OutputPrometheus.TokenAttributeName = types.StringPointerValue(resp.OutputPrometheus.TokenAttributeName)
+		r.OutputPrometheus.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputPrometheus.TokenTimeoutSecs)
 		r.OutputPrometheus.Type = types.StringValue(string(resp.OutputPrometheus.Type))
 		r.Type = r.OutputPrometheus.Type
 		r.OutputPrometheus.URL = types.StringValue(resp.OutputPrometheus.URL)
@@ -18462,9 +18236,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateRegion4 = nil
 		}
-		var flushPeriodSec13 interface{}
+		flushPeriodSec13 := new(float64)
 		if !r.OutputGooglePubsub.FlushPeriodSec.IsUnknown() && !r.OutputGooglePubsub.FlushPeriodSec.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputGooglePubsub.FlushPeriodSec.ValueString()), &flushPeriodSec13)
+			*flushPeriodSec13 = r.OutputGooglePubsub.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec13 = nil
 		}
 		outputGooglePubsub = &shared.OutputGooglePubsub{
 			ID:                        id23,
@@ -22577,40 +22353,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateBucket2 = nil
 		}
-		var loginUrl2 interface{}
+		loginUrl2 := new(string)
 		if !r.OutputInfluxdb.LoginURL.IsUnknown() && !r.OutputInfluxdb.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.LoginURL.ValueString()), &loginUrl2)
+			*loginUrl2 = r.OutputInfluxdb.LoginURL.ValueString()
+		} else {
+			loginUrl2 = nil
 		}
-		var secretParamName1 interface{}
+		secretParamName1 := new(string)
 		if !r.OutputInfluxdb.SecretParamName.IsUnknown() && !r.OutputInfluxdb.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.SecretParamName.ValueString()), &secretParamName1)
+			*secretParamName1 = r.OutputInfluxdb.SecretParamName.ValueString()
+		} else {
+			secretParamName1 = nil
 		}
-		var secret4 interface{}
+		secret4 := new(string)
 		if !r.OutputInfluxdb.Secret.IsUnknown() && !r.OutputInfluxdb.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.Secret.ValueString()), &secret4)
+			*secret4 = r.OutputInfluxdb.Secret.ValueString()
+		} else {
+			secret4 = nil
 		}
-		var tokenAttributeName1 interface{}
+		tokenAttributeName1 := new(string)
 		if !r.OutputInfluxdb.TokenAttributeName.IsUnknown() && !r.OutputInfluxdb.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.TokenAttributeName.ValueString()), &tokenAttributeName1)
+			*tokenAttributeName1 = r.OutputInfluxdb.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName1 = nil
 		}
-		var authHeaderExpr1 interface{}
+		authHeaderExpr1 := new(string)
 		if !r.OutputInfluxdb.AuthHeaderExpr.IsUnknown() && !r.OutputInfluxdb.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.AuthHeaderExpr.ValueString()), &authHeaderExpr1)
+			*authHeaderExpr1 = r.OutputInfluxdb.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr1 = nil
 		}
-		var tokenTimeoutSecs1 interface{}
+		tokenTimeoutSecs1 := new(float64)
 		if !r.OutputInfluxdb.TokenTimeoutSecs.IsUnknown() && !r.OutputInfluxdb.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs1)
+			*tokenTimeoutSecs1 = r.OutputInfluxdb.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs1 = nil
 		}
 		oauthParams3 := make([]shared.OutputInfluxdbOauthParam, 0, len(r.OutputInfluxdb.OauthParams))
 		for oauthParamsIndex3 := range r.OutputInfluxdb.OauthParams {
-			var name23 interface{}
-			if !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.IsUnknown() && !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.ValueString()), &name23)
-			}
-			var value32 interface{}
-			if !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.IsUnknown() && !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.ValueString()), &value32)
-			}
+			var name23 string
+			name23 = r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.ValueString()
+
+			var value32 string
+			value32 = r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.ValueString()
+
 			oauthParams3 = append(oauthParams3, shared.OutputInfluxdbOauthParam{
 				Name:  name23,
 				Value: value32,
@@ -22618,14 +22404,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders1 := make([]shared.OutputInfluxdbOauthHeader, 0, len(r.OutputInfluxdb.OauthHeaders))
 		for oauthHeadersIndex1 := range r.OutputInfluxdb.OauthHeaders {
-			var name24 interface{}
-			if !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.IsUnknown() && !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.ValueString()), &name24)
-			}
-			var value33 interface{}
-			if !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.IsUnknown() && !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.ValueString()), &value33)
-			}
+			var name24 string
+			name24 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.ValueString()
+
+			var value33 string
+			value33 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.ValueString()
+
 			oauthHeaders1 = append(oauthHeaders1, shared.OutputInfluxdbOauthHeader{
 				Name:  name24,
 				Value: value33,
@@ -26629,40 +26413,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateUrl9 = nil
 		}
-		var loginUrl3 interface{}
+		loginUrl3 := new(string)
 		if !r.OutputPrometheus.LoginURL.IsUnknown() && !r.OutputPrometheus.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.LoginURL.ValueString()), &loginUrl3)
+			*loginUrl3 = r.OutputPrometheus.LoginURL.ValueString()
+		} else {
+			loginUrl3 = nil
 		}
-		var secretParamName2 interface{}
+		secretParamName2 := new(string)
 		if !r.OutputPrometheus.SecretParamName.IsUnknown() && !r.OutputPrometheus.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.SecretParamName.ValueString()), &secretParamName2)
+			*secretParamName2 = r.OutputPrometheus.SecretParamName.ValueString()
+		} else {
+			secretParamName2 = nil
 		}
-		var secret5 interface{}
+		secret5 := new(string)
 		if !r.OutputPrometheus.Secret.IsUnknown() && !r.OutputPrometheus.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.Secret.ValueString()), &secret5)
+			*secret5 = r.OutputPrometheus.Secret.ValueString()
+		} else {
+			secret5 = nil
 		}
-		var tokenAttributeName2 interface{}
+		tokenAttributeName2 := new(string)
 		if !r.OutputPrometheus.TokenAttributeName.IsUnknown() && !r.OutputPrometheus.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.TokenAttributeName.ValueString()), &tokenAttributeName2)
+			*tokenAttributeName2 = r.OutputPrometheus.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName2 = nil
 		}
-		var authHeaderExpr2 interface{}
+		authHeaderExpr2 := new(string)
 		if !r.OutputPrometheus.AuthHeaderExpr.IsUnknown() && !r.OutputPrometheus.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.AuthHeaderExpr.ValueString()), &authHeaderExpr2)
+			*authHeaderExpr2 = r.OutputPrometheus.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr2 = nil
 		}
-		var tokenTimeoutSecs2 interface{}
+		tokenTimeoutSecs2 := new(float64)
 		if !r.OutputPrometheus.TokenTimeoutSecs.IsUnknown() && !r.OutputPrometheus.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs2)
+			*tokenTimeoutSecs2 = r.OutputPrometheus.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs2 = nil
 		}
 		oauthParams4 := make([]shared.OutputPrometheusOauthParam, 0, len(r.OutputPrometheus.OauthParams))
 		for oauthParamsIndex4 := range r.OutputPrometheus.OauthParams {
-			var name32 interface{}
-			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()), &name32)
-			}
-			var value42 interface{}
-			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()), &value42)
-			}
+			var name32 string
+			name32 = r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()
+
+			var value42 string
+			value42 = r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()
+
 			oauthParams4 = append(oauthParams4, shared.OutputPrometheusOauthParam{
 				Name:  name32,
 				Value: value42,
@@ -26670,14 +26464,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders2 := make([]shared.OutputPrometheusOauthHeader, 0, len(r.OutputPrometheus.OauthHeaders))
 		for oauthHeadersIndex2 := range r.OutputPrometheus.OauthHeaders {
-			var name33 interface{}
-			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()), &name33)
-			}
-			var value43 interface{}
-			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()), &value43)
-			}
+			var name33 string
+			name33 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()
+
+			var value43 string
+			value43 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()
+
 			oauthHeaders2 = append(oauthHeaders2, shared.OutputPrometheusOauthHeader{
 				Name:  name33,
 				Value: value43,
@@ -27261,40 +27053,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputOpenTelemetry.PqControls != nil {
 			pqControls37 = &shared.OutputOpenTelemetryPqControls{}
 		}
-		var loginUrl4 interface{}
+		loginUrl4 := new(string)
 		if !r.OutputOpenTelemetry.LoginURL.IsUnknown() && !r.OutputOpenTelemetry.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.LoginURL.ValueString()), &loginUrl4)
+			*loginUrl4 = r.OutputOpenTelemetry.LoginURL.ValueString()
+		} else {
+			loginUrl4 = nil
 		}
-		var secretParamName3 interface{}
+		secretParamName3 := new(string)
 		if !r.OutputOpenTelemetry.SecretParamName.IsUnknown() && !r.OutputOpenTelemetry.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.SecretParamName.ValueString()), &secretParamName3)
+			*secretParamName3 = r.OutputOpenTelemetry.SecretParamName.ValueString()
+		} else {
+			secretParamName3 = nil
 		}
-		var secret6 interface{}
+		secret6 := new(string)
 		if !r.OutputOpenTelemetry.Secret.IsUnknown() && !r.OutputOpenTelemetry.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.Secret.ValueString()), &secret6)
+			*secret6 = r.OutputOpenTelemetry.Secret.ValueString()
+		} else {
+			secret6 = nil
 		}
-		var tokenAttributeName3 interface{}
+		tokenAttributeName3 := new(string)
 		if !r.OutputOpenTelemetry.TokenAttributeName.IsUnknown() && !r.OutputOpenTelemetry.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.TokenAttributeName.ValueString()), &tokenAttributeName3)
+			*tokenAttributeName3 = r.OutputOpenTelemetry.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName3 = nil
 		}
-		var authHeaderExpr3 interface{}
+		authHeaderExpr3 := new(string)
 		if !r.OutputOpenTelemetry.AuthHeaderExpr.IsUnknown() && !r.OutputOpenTelemetry.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.AuthHeaderExpr.ValueString()), &authHeaderExpr3)
+			*authHeaderExpr3 = r.OutputOpenTelemetry.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr3 = nil
 		}
-		var tokenTimeoutSecs3 interface{}
+		tokenTimeoutSecs3 := new(float64)
 		if !r.OutputOpenTelemetry.TokenTimeoutSecs.IsUnknown() && !r.OutputOpenTelemetry.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs3)
+			*tokenTimeoutSecs3 = r.OutputOpenTelemetry.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs3 = nil
 		}
 		oauthParams5 := make([]shared.OutputOpenTelemetryOauthParam, 0, len(r.OutputOpenTelemetry.OauthParams))
 		for oauthParamsIndex5 := range r.OutputOpenTelemetry.OauthParams {
-			var name35 interface{}
-			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()), &name35)
-			}
-			var value46 interface{}
-			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()), &value46)
-			}
+			var name35 string
+			name35 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()
+
+			var value46 string
+			value46 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()
+
 			oauthParams5 = append(oauthParams5, shared.OutputOpenTelemetryOauthParam{
 				Name:  name35,
 				Value: value46,
@@ -27302,14 +27104,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders3 := make([]shared.OutputOpenTelemetryOauthHeader, 0, len(r.OutputOpenTelemetry.OauthHeaders))
 		for oauthHeadersIndex3 := range r.OutputOpenTelemetry.OauthHeaders {
-			var name36 interface{}
-			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()), &name36)
-			}
-			var value47 interface{}
-			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()), &value47)
-			}
+			var name36 string
+			name36 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()
+
+			var value47 string
+			value47 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()
+
 			oauthHeaders3 = append(oauthHeaders3, shared.OutputOpenTelemetryOauthHeader{
 				Name:  name36,
 				Value: value47,
@@ -32153,48 +31953,62 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateTableName = nil
 		}
-		var token13 interface{}
+		token13 := new(string)
 		if !r.OutputClickHouse.Token.IsUnknown() && !r.OutputClickHouse.Token.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.Token.ValueString()), &token13)
+			*token13 = r.OutputClickHouse.Token.ValueString()
+		} else {
+			token13 = nil
 		}
-		var textSecret28 interface{}
+		textSecret28 := new(string)
 		if !r.OutputClickHouse.TextSecret.IsUnknown() && !r.OutputClickHouse.TextSecret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TextSecret.ValueString()), &textSecret28)
+			*textSecret28 = r.OutputClickHouse.TextSecret.ValueString()
+		} else {
+			textSecret28 = nil
 		}
-		var loginUrl5 interface{}
+		loginUrl5 := new(string)
 		if !r.OutputClickHouse.LoginURL.IsUnknown() && !r.OutputClickHouse.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.LoginURL.ValueString()), &loginUrl5)
+			*loginUrl5 = r.OutputClickHouse.LoginURL.ValueString()
+		} else {
+			loginUrl5 = nil
 		}
-		var secretParamName4 interface{}
+		secretParamName4 := new(string)
 		if !r.OutputClickHouse.SecretParamName.IsUnknown() && !r.OutputClickHouse.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.SecretParamName.ValueString()), &secretParamName4)
+			*secretParamName4 = r.OutputClickHouse.SecretParamName.ValueString()
+		} else {
+			secretParamName4 = nil
 		}
-		var secret7 interface{}
+		secret7 := new(string)
 		if !r.OutputClickHouse.Secret.IsUnknown() && !r.OutputClickHouse.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.Secret.ValueString()), &secret7)
+			*secret7 = r.OutputClickHouse.Secret.ValueString()
+		} else {
+			secret7 = nil
 		}
-		var tokenAttributeName4 interface{}
+		tokenAttributeName4 := new(string)
 		if !r.OutputClickHouse.TokenAttributeName.IsUnknown() && !r.OutputClickHouse.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TokenAttributeName.ValueString()), &tokenAttributeName4)
+			*tokenAttributeName4 = r.OutputClickHouse.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName4 = nil
 		}
-		var authHeaderExpr4 interface{}
+		authHeaderExpr4 := new(string)
 		if !r.OutputClickHouse.AuthHeaderExpr.IsUnknown() && !r.OutputClickHouse.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.AuthHeaderExpr.ValueString()), &authHeaderExpr4)
+			*authHeaderExpr4 = r.OutputClickHouse.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr4 = nil
 		}
-		var tokenTimeoutSecs4 interface{}
+		tokenTimeoutSecs4 := new(float64)
 		if !r.OutputClickHouse.TokenTimeoutSecs.IsUnknown() && !r.OutputClickHouse.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs4)
+			*tokenTimeoutSecs4 = r.OutputClickHouse.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs4 = nil
 		}
 		oauthParams6 := make([]shared.OutputClickHouseOauthParam, 0, len(r.OutputClickHouse.OauthParams))
 		for oauthParamsIndex6 := range r.OutputClickHouse.OauthParams {
-			var name44 interface{}
-			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()), &name44)
-			}
-			var value58 interface{}
-			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()), &value58)
-			}
+			var name44 string
+			name44 = r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()
+
+			var value58 string
+			value58 = r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()
+
 			oauthParams6 = append(oauthParams6, shared.OutputClickHouseOauthParam{
 				Name:  name44,
 				Value: value58,
@@ -32202,14 +32016,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders4 := make([]shared.OutputClickHouseOauthHeader, 0, len(r.OutputClickHouse.OauthHeaders))
 		for oauthHeadersIndex4 := range r.OutputClickHouse.OauthHeaders {
-			var name45 interface{}
-			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()), &name45)
-			}
-			var value59 interface{}
-			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()), &value59)
-			}
+			var name45 string
+			name45 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()
+
+			var value59 string
+			value59 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()
+
 			oauthHeaders4 = append(oauthHeaders4, shared.OutputClickHouseOauthHeader{
 				Name:  name45,
 				Value: value59,
@@ -36004,17 +35816,23 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			templateFormat8 = nil
 		}
-		var region18 interface{}
+		region18 := new(string)
 		if !r.OutputCloudflareR2.Region.IsUnknown() && !r.OutputCloudflareR2.Region.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.Region.ValueString()), &region18)
+			*region18 = r.OutputCloudflareR2.Region.ValueString()
+		} else {
+			region18 = nil
 		}
-		var objectAcl7 interface{}
+		objectAcl7 := new(shared.ObjectACLOptions)
 		if !r.OutputCloudflareR2.ObjectACL.IsUnknown() && !r.OutputCloudflareR2.ObjectACL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.ObjectACL.ValueString()), &objectAcl7)
+			*objectAcl7 = shared.ObjectACLOptions(r.OutputCloudflareR2.ObjectACL.ValueString())
+		} else {
+			objectAcl7 = nil
 		}
-		var awsAPIKey11 interface{}
+		awsAPIKey11 := new(string)
 		if !r.OutputCloudflareR2.AwsAPIKey.IsUnknown() && !r.OutputCloudflareR2.AwsAPIKey.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.AwsAPIKey.ValueString()), &awsAPIKey11)
+			*awsAPIKey11 = r.OutputCloudflareR2.AwsAPIKey.ValueString()
+		} else {
+			awsAPIKey11 = nil
 		}
 		outputCloudflareR2 = &shared.OutputCloudflareR2{
 			ID:                      id70,

@@ -9881,23 +9881,57 @@ components:
           description: Select or create a stored text secret
           example: splunk-token-secret
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://splunk.example.com:8089/services/auth/login
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: password
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: $${{secret:splunk_oauth_secret}
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -9905,11 +9939,24 @@ components:
             - name: scope
               value: search:read
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -10202,7 +10249,11 @@ components:
         __template_splunkHecAPI:
           type: string
           description: Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
-        enableHealthCheck: {}
+        enableHealthCheck:
+          type: boolean
+          title: Health check endpoint
+          description: Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+          example: true
     InputAzureBlob:
       type: object
       required:
@@ -11415,23 +11466,57 @@ components:
           type: string
           description: Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://loki.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: $${{secret:loki_oauth_secret}
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -11439,11 +11524,24 @@ components:
             - name: scope
               value: logs:write
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
     InputPrometheusRw:
       type: object
@@ -11638,23 +11736,57 @@ components:
           type: string
           description: Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://prom.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: $${{secret:prom_oauth_secret}
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -11662,11 +11794,24 @@ components:
             - name: scope
               value: metrics:write
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -13145,6 +13290,7 @@ components:
           description: Unique ID for this input
           example: exec-tail-logs
         type:
+          type: string
           enum:
             - exec
           example: exec
@@ -17576,27 +17722,74 @@ components:
         __template_port:
           type: string
           description: Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-        enableProxyHeader: {}
-        captureHeaders: {}
-        activityLogSampleRate: {}
+        enableProxyHeader:
+          type: boolean
+          title: Show originating IP
+          description: Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
+          example: false
+        captureHeaders:
+          type: boolean
+          title: Capture request headers
+          description: Add request headers to events, in the __headers field
+          example: true
+        activityLogSampleRate:
+          type: number
+          title: Activity log sample rate
+          description: How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+          minimum: 1
+          example: 10
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://auth.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: s3cr3t
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -17604,11 +17797,24 @@ components:
             - name: scope
               value: otel.write
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -18134,6 +18340,7 @@ components:
           description: Unique ID for this input
           example: file-watcher
         type:
+          type: string
           enum:
             - file
           example: file
@@ -19346,6 +19553,7 @@ components:
           description: Unique ID for this input
           example: journal-files
         type:
+          type: string
           enum:
             - journal_files
           example: journal_files
@@ -20553,7 +20761,11 @@ components:
         __template_hecAPI:
           type: string
           description: Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
-        enableHealthCheck: {}
+        enableHealthCheck:
+          type: boolean
+          title: Health check endpoint
+          description: Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+          example: true
     InputWizWebhook:
       type: object
       required:
@@ -20963,7 +21175,11 @@ components:
         __template_port:
           type: string
           description: Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-        enableHealthCheck: {}
+        enableHealthCheck:
+          type: boolean
+          title: Health check endpoint
+          description: Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+          example: true
     Input:
       oneOf:
         - $ref: '#/components/schemas/InputCollection'
@@ -21713,6 +21929,7 @@ components:
         onBackpressure:
           $ref: '#/components/schemas/BackpressureBehaviorOptions'
         authType:
+          type: string
           enum:
             - oauth
           x-speakeasy-unknown-values: allow
@@ -21761,6 +21978,7 @@ components:
           title: Description
           example: Send events to Microsoft Sentinel (DCR/DCE)
         format:
+          type: string
           enum:
             - ndjson
             - json_array
@@ -27060,6 +27278,10 @@ components:
           type: string
           description: Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
         flushPeriodSec:
+          type: number
+          title: Flush period (sec)
+          description: Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.
+          minimum: 0
           example: 1
     OutputExabeam:
       type: object
@@ -29290,23 +29512,57 @@ components:
           type: string
           description: Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://influxdb.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: s3cr3tClientSecret
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -29314,11 +29570,24 @@ components:
             - name: scope
               value: write:metrics
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -32442,23 +32711,57 @@ components:
           type: string
           description: Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://auth.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: s3cr3tClientSecret
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -32466,11 +32769,24 @@ components:
             - name: scope
               value: write:metrics
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -32829,23 +33145,57 @@ components:
           title: ''
           example: {}
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://auth.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: s3cr3tClientSecret
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -32853,11 +33203,24 @@ components:
             - name: scope
               value: otlp:write
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -35628,27 +35991,67 @@ components:
           type: string
           description: Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
         token:
+          type: string
+          title: Token
+          description: Bearer token to include in the authorization header
           example: chBearerToken_abc123xyz
         textSecret:
+          type: string
+          title: Token (text secret)
+          description: Select or create a stored text secret
           example: clickhouse_bearer_token
         loginUrl:
+          type: string
+          title: Login URL
+          description: URL for OAuth
+          pattern: ^https?://.*
           example: https://auth.example.com/oauth/token
         secretParamName:
+          type: string
+          title: OAuth Secret parameter name
+          description: Secret parameter name to pass in request body
           example: client_secret
         secret:
+          type: string
+          title: OAuth secret
+          description: Secret parameter value to pass in request body
           example: s3cr3tClientSecret
         tokenAttributeName:
+          type: string
+          title: Token attribute name
+          description: Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
           example: access_token
         authHeaderExpr:
+          type: string
+          title: Authorize expression
+          description: 'JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.'
           example: '`Bearer ${token}`'
         tokenTimeoutSecs:
+          type: number
+          title: Refresh interval (secs.)
+          description: How often the OAuth token should be refreshed.
+          minimum: 1
+          maximum: 300000
           example: 3600
         oauthParams:
+          type: array
+          title: OAuth parameters
+          description: Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth parameter name
                 example: grant_type
               value:
+                type: string
+                title: Value
+                description: OAuth parameter value
                 example: client_credentials
           example:
             - name: grant_type
@@ -35656,11 +36059,24 @@ components:
             - name: scope
               value: write:clickhouse
         oauthHeaders:
+          type: array
+          title: OAuth headers
+          description: Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
           items:
+            type: object
+            required:
+              - name
+              - value
             properties:
               name:
+                type: string
+                title: Name
+                description: OAuth header name
                 example: Accept
               value:
+                type: string
+                title: Value
+                description: OAuth header value
                 example: application/json
           example:
             - name: Accept
@@ -37972,9 +38388,18 @@ components:
         __template_format:
           type: string
           description: Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-        region: {}
-        objectACL: {}
-        awsApiKey: {}
+        region:
+          type: string
+          title: Region
+          description: Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2
+          example: auto
+        objectACL:
+          $ref: '#/components/schemas/ObjectAclOptions'
+        awsApiKey:
+          type: string
+          title: Access key
+          description: R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.
+          example: AKIAIOSFODNN7EXAMPLE
     Output:
       oneOf:
         - $ref: '#/components/schemas/OutputDefault'
@@ -60592,10 +61017,10 @@ paths:
                     type: integer
                     description: number of items present in the items array
                   items:
+                    x-speakeasy-param-suppress-computed-diff: true
                     type: array
                     items:
                       $ref: '#/components/schemas/Output'
-                    x-speakeasy-ignore: true
         '401':
           description: Unauthorized
         '500':

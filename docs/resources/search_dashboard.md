@@ -108,7 +108,7 @@ Optional:
 
 Optional:
 
-- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+- `config` (Map of String) Markdown and other dashboard element config (JSON string per key).
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -155,7 +155,7 @@ Optional:
 
 Optional:
 
-- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+- `config` (Map of String) Input element configuration (open JSON object per key).
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null
@@ -255,7 +255,7 @@ Optional:
 
 Optional:
 
-- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis, onClickAction). The API may return strings or nested objects for axis and styling fields; treat as an open object.
+- `config` (Map of String) Chart/visualization-specific config (e.g. xAxis, yAxis); JSON string per key.
 - `hide_panel` (Boolean) Default: false
 - `horizontal_chart` (Boolean) Default: false
 - `id` (String) Not Null

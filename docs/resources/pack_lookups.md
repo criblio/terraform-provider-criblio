@@ -29,8 +29,8 @@ resource "criblio_pack_lookups" "my_packlookups" {
 
 ### Required
 
-- `group_id` (String) group Id. Requires replacement if changed.
-- `id` (String) Unique ID to PATCH for pack. Requires replacement if changed.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH. Requires replacement if changed.
 - `pack` (String) pack ID to GET. Requires replacement if changed.
 
 ### Optional

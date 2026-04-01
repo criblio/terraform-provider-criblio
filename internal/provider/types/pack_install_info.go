@@ -14,6 +14,7 @@ type PackInstallInfo struct {
 	Exports             []types.String                  `tfsdk:"exports"`
 	ID                  types.String                    `tfsdk:"id"`
 	Inputs              types.Float64                   `tfsdk:"inputs"`
+	IsDisabled          types.Bool                      `tfsdk:"is_disabled"`
 	MinLogStreamVersion types.String                    `tfsdk:"min_log_stream_version"`
 	Outputs             types.Float64                   `tfsdk:"outputs"`
 	Settings            map[string]jsontypes.Normalized `tfsdk:"settings"`

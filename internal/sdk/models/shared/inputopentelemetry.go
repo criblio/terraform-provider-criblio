@@ -90,8 +90,10 @@ func (e *InputOpenTelemetryOTLPVersion) UnmarshalJSON(data []byte) error {
 }
 
 type InputOpenTelemetryOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (i InputOpenTelemetryOauthParam) MarshalJSON() ([]byte, error) {
@@ -105,23 +107,25 @@ func (i *InputOpenTelemetryOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputOpenTelemetryOauthParam) GetName() any {
+func (i *InputOpenTelemetryOauthParam) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputOpenTelemetryOauthParam) GetValue() any {
+func (i *InputOpenTelemetryOauthParam) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
 
 type InputOpenTelemetryOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (i InputOpenTelemetryOauthHeader) MarshalJSON() ([]byte, error) {
@@ -135,16 +139,16 @@ func (i *InputOpenTelemetryOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputOpenTelemetryOauthHeader) GetName() any {
+func (i *InputOpenTelemetryOauthHeader) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputOpenTelemetryOauthHeader) GetValue() any {
+func (i *InputOpenTelemetryOauthHeader) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
@@ -216,18 +220,29 @@ type InputOpenTelemetry struct {
 	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 	TemplateHost *string `json:"__template_host,omitempty"`
 	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort          *string                         `json:"__template_port,omitempty"`
-	EnableProxyHeader     any                             `json:"enableProxyHeader,omitempty"`
-	CaptureHeaders        any                             `json:"captureHeaders,omitempty"`
-	ActivityLogSampleRate any                             `json:"activityLogSampleRate,omitempty"`
-	LoginURL              any                             `json:"loginUrl,omitempty"`
-	SecretParamName       any                             `json:"secretParamName,omitempty"`
-	Secret                any                             `json:"secret,omitempty"`
-	TokenAttributeName    any                             `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr        any                             `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs      any                             `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams           []InputOpenTelemetryOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders          []InputOpenTelemetryOauthHeader `json:"oauthHeaders,omitempty"`
+	TemplatePort *string `json:"__template_port,omitempty"`
+	// Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
+	EnableProxyHeader *bool `json:"enableProxyHeader,omitempty"`
+	// Add request headers to events, in the __headers field
+	CaptureHeaders *bool `json:"captureHeaders,omitempty"`
+	// How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+	ActivityLogSampleRate *float64 `json:"activityLogSampleRate,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []InputOpenTelemetryOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []InputOpenTelemetryOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputOpenTelemetry) MarshalJSON() ([]byte, error) {
@@ -500,63 +515,63 @@ func (i *InputOpenTelemetry) GetTemplatePort() *string {
 	return i.TemplatePort
 }
 
-func (i *InputOpenTelemetry) GetEnableProxyHeader() any {
+func (i *InputOpenTelemetry) GetEnableProxyHeader() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.EnableProxyHeader
 }
 
-func (i *InputOpenTelemetry) GetCaptureHeaders() any {
+func (i *InputOpenTelemetry) GetCaptureHeaders() *bool {
 	if i == nil {
 		return nil
 	}
 	return i.CaptureHeaders
 }
 
-func (i *InputOpenTelemetry) GetActivityLogSampleRate() any {
+func (i *InputOpenTelemetry) GetActivityLogSampleRate() *float64 {
 	if i == nil {
 		return nil
 	}
 	return i.ActivityLogSampleRate
 }
 
-func (i *InputOpenTelemetry) GetLoginURL() any {
+func (i *InputOpenTelemetry) GetLoginURL() *string {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputOpenTelemetry) GetSecretParamName() any {
+func (i *InputOpenTelemetry) GetSecretParamName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputOpenTelemetry) GetSecret() any {
+func (i *InputOpenTelemetry) GetSecret() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputOpenTelemetry) GetTokenAttributeName() any {
+func (i *InputOpenTelemetry) GetTokenAttributeName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputOpenTelemetry) GetAuthHeaderExpr() any {
+func (i *InputOpenTelemetry) GetAuthHeaderExpr() *string {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputOpenTelemetry) GetTokenTimeoutSecs() any {
+func (i *InputOpenTelemetry) GetTokenTimeoutSecs() *float64 {
 	if i == nil {
 		return nil
 	}

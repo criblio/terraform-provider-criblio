@@ -657,10 +657,9 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Computed:    true,
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
@@ -6799,9 +6798,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -6868,9 +6866,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"loki_api": schema.StringAttribute{
 									Computed:    true,
@@ -6904,34 +6901,32 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -6993,14 +6988,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -7078,14 +7071,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9051,24 +9042,21 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						"input_open_telemetry": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"activity_log_sample_rate": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
 									Description: `OpenTelemetry authentication type`,
 								},
-								"capture_headers": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Add request headers to events, in the __headers field`,
 								},
 								"connections": schema.ListNestedAttribute{
 									Computed: true,
@@ -9098,10 +9086,9 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Computed:    true,
 									Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
-								"enable_proxy_header": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
 								},
 								"environment": schema.StringAttribute{
 									Computed:    true,
@@ -9140,9 +9127,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_active_cxn": schema.Float64Attribute{
 									Computed:    true,
@@ -9176,34 +9162,32 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"otlp_version": schema.StringAttribute{
 									Computed:    true,
@@ -9273,14 +9257,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -9358,14 +9340,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9979,9 +9959,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -10048,9 +10027,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_active_req": schema.Float64Attribute{
 									Computed:    true,
@@ -10080,34 +10058,32 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -10173,14 +10149,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -10266,14 +10240,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -11836,10 +11808,9 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Computed:    true,
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
@@ -12048,9 +12019,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -12160,9 +12130,8 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Collector runtime log level (verbosity)`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
 									Computed:    true,
@@ -12188,34 +12157,32 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"output_mode": schema.StringAttribute{
 									Computed:    true,
@@ -12327,14 +12294,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Search head base URL. Can be an expression. Default is https://localhost:8089.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -12358,14 +12323,12 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"ttl": schema.StringAttribute{
 									Computed:    true,
@@ -15261,10 +15224,9 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									Computed:    true,
 									Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,

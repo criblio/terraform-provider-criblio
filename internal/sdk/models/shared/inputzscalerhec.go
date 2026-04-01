@@ -171,8 +171,9 @@ type InputZscalerHec struct {
 	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 	TemplatePort *string `json:"__template_port,omitempty"`
 	// Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
-	TemplateHecAPI    *string `json:"__template_hecAPI,omitempty"`
-	EnableHealthCheck any     `json:"enableHealthCheck,omitempty"`
+	TemplateHecAPI *string `json:"__template_hecAPI,omitempty"`
+	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 }
 
 func (i InputZscalerHec) MarshalJSON() ([]byte, error) {
@@ -431,7 +432,7 @@ func (i *InputZscalerHec) GetTemplateHecAPI() *string {
 	return i.TemplateHecAPI
 }
 
-func (i *InputZscalerHec) GetEnableHealthCheck() any {
+func (i *InputZscalerHec) GetEnableHealthCheck() *bool {
 	if i == nil {
 		return nil
 	}

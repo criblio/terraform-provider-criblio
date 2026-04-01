@@ -305,8 +305,9 @@ type InputCloudflareHec struct {
 	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 	TemplateHost *string `json:"__template_host,omitempty"`
 	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort      *string `json:"__template_port,omitempty"`
-	EnableHealthCheck any     `json:"enableHealthCheck,omitempty"`
+	TemplatePort *string `json:"__template_port,omitempty"`
+	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 }
 
 func (i InputCloudflareHec) MarshalJSON() ([]byte, error) {
@@ -565,7 +566,7 @@ func (i *InputCloudflareHec) GetTemplatePort() *string {
 	return i.TemplatePort
 }
 
-func (i *InputCloudflareHec) GetEnableHealthCheck() any {
+func (i *InputCloudflareHec) GetEnableHealthCheck() *bool {
 	if i == nil {
 		return nil
 	}

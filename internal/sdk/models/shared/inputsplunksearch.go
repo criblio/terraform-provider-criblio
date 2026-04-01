@@ -168,8 +168,10 @@ func (e *InputSplunkSearchAuthenticationType) UnmarshalJSON(data []byte) error {
 }
 
 type InputSplunkSearchOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (i InputSplunkSearchOauthParam) MarshalJSON() ([]byte, error) {
@@ -183,23 +185,25 @@ func (i *InputSplunkSearchOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputSplunkSearchOauthParam) GetName() any {
+func (i *InputSplunkSearchOauthParam) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputSplunkSearchOauthParam) GetValue() any {
+func (i *InputSplunkSearchOauthParam) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
 
 type InputSplunkSearchOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (i InputSplunkSearchOauthHeader) MarshalJSON() ([]byte, error) {
@@ -213,16 +217,16 @@ func (i *InputSplunkSearchOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputSplunkSearchOauthHeader) GetName() any {
+func (i *InputSplunkSearchOauthHeader) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputSplunkSearchOauthHeader) GetValue() any {
+func (i *InputSplunkSearchOauthHeader) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
@@ -300,15 +304,23 @@ type InputSplunkSearch struct {
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
-	TextSecret         *string                        `json:"textSecret,omitempty"`
-	LoginURL           any                            `json:"loginUrl,omitempty"`
-	SecretParamName    any                            `json:"secretParamName,omitempty"`
-	Secret             any                            `json:"secret,omitempty"`
-	TokenAttributeName any                            `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr     any                            `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs   any                            `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams        []InputSplunkSearchOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders       []InputSplunkSearchOauthHeader `json:"oauthHeaders,omitempty"`
+	TextSecret *string `json:"textSecret,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []InputSplunkSearchOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []InputSplunkSearchOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputSplunkSearch) MarshalJSON() ([]byte, error) {
@@ -602,42 +614,42 @@ func (i *InputSplunkSearch) GetTextSecret() *string {
 	return i.TextSecret
 }
 
-func (i *InputSplunkSearch) GetLoginURL() any {
+func (i *InputSplunkSearch) GetLoginURL() *string {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputSplunkSearch) GetSecretParamName() any {
+func (i *InputSplunkSearch) GetSecretParamName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputSplunkSearch) GetSecret() any {
+func (i *InputSplunkSearch) GetSecret() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputSplunkSearch) GetTokenAttributeName() any {
+func (i *InputSplunkSearch) GetTokenAttributeName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputSplunkSearch) GetAuthHeaderExpr() any {
+func (i *InputSplunkSearch) GetAuthHeaderExpr() *string {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputSplunkSearch) GetTokenTimeoutSecs() any {
+func (i *InputSplunkSearch) GetTokenTimeoutSecs() *float64 {
 	if i == nil {
 		return nil
 	}

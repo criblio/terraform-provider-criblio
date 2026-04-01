@@ -46,8 +46,10 @@ func (o *OutputPrometheusPqControls) UnmarshalJSON(data []byte) error {
 }
 
 type OutputPrometheusOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (o OutputPrometheusOauthParam) MarshalJSON() ([]byte, error) {
@@ -61,23 +63,25 @@ func (o *OutputPrometheusOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputPrometheusOauthParam) GetName() any {
+func (o *OutputPrometheusOauthParam) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputPrometheusOauthParam) GetValue() any {
+func (o *OutputPrometheusOauthParam) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
 
 type OutputPrometheusOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (o OutputPrometheusOauthHeader) MarshalJSON() ([]byte, error) {
@@ -91,16 +95,16 @@ func (o *OutputPrometheusOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputPrometheusOauthHeader) GetName() any {
+func (o *OutputPrometheusOauthHeader) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputPrometheusOauthHeader) GetValue() any {
+func (o *OutputPrometheusOauthHeader) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
@@ -189,15 +193,23 @@ type OutputPrometheus struct {
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
 	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL        *string                       `json:"__template_url,omitempty"`
-	LoginURL           any                           `json:"loginUrl,omitempty"`
-	SecretParamName    any                           `json:"secretParamName,omitempty"`
-	Secret             any                           `json:"secret,omitempty"`
-	TokenAttributeName any                           `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr     any                           `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs   any                           `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams        []OutputPrometheusOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders       []OutputPrometheusOauthHeader `json:"oauthHeaders,omitempty"`
+	TemplateURL *string `json:"__template_url,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []OutputPrometheusOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []OutputPrometheusOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (o OutputPrometheus) MarshalJSON() ([]byte, error) {
@@ -519,42 +531,42 @@ func (o *OutputPrometheus) GetTemplateURL() *string {
 	return o.TemplateURL
 }
 
-func (o *OutputPrometheus) GetLoginURL() any {
+func (o *OutputPrometheus) GetLoginURL() *string {
 	if o == nil {
 		return nil
 	}
 	return o.LoginURL
 }
 
-func (o *OutputPrometheus) GetSecretParamName() any {
+func (o *OutputPrometheus) GetSecretParamName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.SecretParamName
 }
 
-func (o *OutputPrometheus) GetSecret() any {
+func (o *OutputPrometheus) GetSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Secret
 }
 
-func (o *OutputPrometheus) GetTokenAttributeName() any {
+func (o *OutputPrometheus) GetTokenAttributeName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TokenAttributeName
 }
 
-func (o *OutputPrometheus) GetAuthHeaderExpr() any {
+func (o *OutputPrometheus) GetAuthHeaderExpr() *string {
 	if o == nil {
 		return nil
 	}
 	return o.AuthHeaderExpr
 }
 
-func (o *OutputPrometheus) GetTokenTimeoutSecs() any {
+func (o *OutputPrometheus) GetTokenTimeoutSecs() *float64 {
 	if o == nil {
 		return nil
 	}

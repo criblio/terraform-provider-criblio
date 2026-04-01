@@ -333,7 +333,7 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
@@ -3120,7 +3120,7 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Loki logs authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_loki--connections))
@@ -3135,21 +3135,21 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_loki--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_loki--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_loki--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -3158,8 +3158,8 @@ Read-Only:
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -3186,8 +3186,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_loki--oauth_params"></a>
@@ -3195,8 +3195,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_loki--pq"></a>
@@ -4075,16 +4075,16 @@ Read-Only:
 
 Read-Only:
 
-- `activity_log_sample_rate` (String) Parsed as JSON.
-- `auth_header_expr` (String) Parsed as JSON.
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) OpenTelemetry authentication type
-- `capture_headers` (String) Parsed as JSON.
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_open_telemetry--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (String) Parsed as JSON.
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_logs` (Boolean) Enable to extract each incoming log record to a separate event
 - `extract_metrics` (Boolean) Enable to extract each incoming Gauge or IntGauge metric to multiple events, one per data point
@@ -4094,13 +4094,13 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist.
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_open_telemetry--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_params))
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when interpreting received data
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -4109,8 +4109,8 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `protocol` (String) Select whether to leverage gRPC or HTTP for OpenTelemetry
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -4119,8 +4119,8 @@ Read-Only:
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -4147,8 +4147,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_open_telemetry--oauth_params"></a>
@@ -4156,8 +4156,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_open_telemetry--pq"></a>
@@ -4451,7 +4451,7 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Remote Write authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_prometheus_rw--connections))
@@ -4466,12 +4466,12 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_prometheus_rw--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
@@ -4479,8 +4479,8 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `prometheus_api` (String) Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -4491,8 +4491,8 @@ Read-Only:
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -4519,8 +4519,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_prometheus_rw--oauth_params"></a>
@@ -4528,8 +4528,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_prometheus_rw--pq"></a>
@@ -5199,7 +5199,7 @@ Read-Only:
 - `disabled` (Boolean)
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`.
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Extract and process Splunk-generated metrics as Cribl metrics
@@ -5314,7 +5314,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Splunk Search authentication type
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_splunk_search--connections))
@@ -5334,11 +5334,11 @@ Read-Only:
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `latest` (String) The latest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-1m@m'
 - `log_level` (String) Collector runtime log level (verbosity)
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_splunk_search--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_params))
 - `output_mode` (String) Format of the returned output
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -5349,15 +5349,15 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search--retry_rules))
 - `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'
 - `search_head` (String) Search head base URL. Can be an expression. Default is https://localhost:8089.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 - `use_round_robin_dns` (Boolean) When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned
@@ -5404,8 +5404,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_splunk_search--oauth_params"></a>
@@ -5413,8 +5413,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_splunk_search--pq"></a>
@@ -6819,7 +6819,7 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `hec_acks` (Boolean) Whether to enable Zscaler HEC acknowledgements

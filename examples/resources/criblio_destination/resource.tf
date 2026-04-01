@@ -575,7 +575,7 @@ resource "criblio_destination" "my_destination" {
   output_cloudflare_r2 = {
     add_id_to_stage_path      = false
     automatic_schema          = true
-    aws_api_key               = "{ \"see\": \"documentation\" }"
+    aws_api_key               = "AKIAIOSFODNN7EXAMPLE"
     aws_authentication_method = "auto"
     aws_secret                = "...my_aws_secret..."
     aws_secret_key            = "...my_aws_secret_key..."
@@ -611,7 +611,7 @@ resource "criblio_destination" "my_destination" {
     max_file_size_mb          = 828.64
     max_open_files            = 937.52
     max_retry_num             = 5.53
-    object_acl                = "{ \"see\": \"documentation\" }"
+    object_acl                = "public-read"
     on_backpressure           = "drop"
     on_disk_full_backpressure = "block"
     parquet_data_page_version = "DATA_PAGE_V2"
@@ -621,7 +621,7 @@ resource "criblio_destination" "my_destination" {
     parquet_version           = "PARQUET_2_6"
     partition_expr            = "...my_partition_expr..."
     pipeline                  = "...my_pipeline..."
-    region                    = "{ \"see\": \"documentation\" }"
+    region                    = "auto"
     reject_unauthorized       = true
     remove_empty_dirs         = true
     retry_settings = {

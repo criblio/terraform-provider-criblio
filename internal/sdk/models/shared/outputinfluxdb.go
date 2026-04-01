@@ -132,8 +132,10 @@ func (o *OutputInfluxdbPqControls) UnmarshalJSON(data []byte) error {
 }
 
 type OutputInfluxdbOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (o OutputInfluxdbOauthParam) MarshalJSON() ([]byte, error) {
@@ -147,23 +149,25 @@ func (o *OutputInfluxdbOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputInfluxdbOauthParam) GetName() any {
+func (o *OutputInfluxdbOauthParam) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputInfluxdbOauthParam) GetValue() any {
+func (o *OutputInfluxdbOauthParam) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
 
 type OutputInfluxdbOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (o OutputInfluxdbOauthHeader) MarshalJSON() ([]byte, error) {
@@ -177,16 +181,16 @@ func (o *OutputInfluxdbOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputInfluxdbOauthHeader) GetName() any {
+func (o *OutputInfluxdbOauthHeader) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputInfluxdbOauthHeader) GetValue() any {
+func (o *OutputInfluxdbOauthHeader) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
@@ -289,15 +293,23 @@ type OutputInfluxdb struct {
 	// Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
 	TemplateDatabase *string `json:"__template_database,omitempty"`
 	// Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
-	TemplateBucket     *string                     `json:"__template_bucket,omitempty"`
-	LoginURL           any                         `json:"loginUrl,omitempty"`
-	SecretParamName    any                         `json:"secretParamName,omitempty"`
-	Secret             any                         `json:"secret,omitempty"`
-	TokenAttributeName any                         `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr     any                         `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs   any                         `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams        []OutputInfluxdbOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders       []OutputInfluxdbOauthHeader `json:"oauthHeaders,omitempty"`
+	TemplateBucket *string `json:"__template_bucket,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []OutputInfluxdbOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []OutputInfluxdbOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (o OutputInfluxdb) MarshalJSON() ([]byte, error) {
@@ -668,42 +680,42 @@ func (o *OutputInfluxdb) GetTemplateBucket() *string {
 	return o.TemplateBucket
 }
 
-func (o *OutputInfluxdb) GetLoginURL() any {
+func (o *OutputInfluxdb) GetLoginURL() *string {
 	if o == nil {
 		return nil
 	}
 	return o.LoginURL
 }
 
-func (o *OutputInfluxdb) GetSecretParamName() any {
+func (o *OutputInfluxdb) GetSecretParamName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.SecretParamName
 }
 
-func (o *OutputInfluxdb) GetSecret() any {
+func (o *OutputInfluxdb) GetSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Secret
 }
 
-func (o *OutputInfluxdb) GetTokenAttributeName() any {
+func (o *OutputInfluxdb) GetTokenAttributeName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TokenAttributeName
 }
 
-func (o *OutputInfluxdb) GetAuthHeaderExpr() any {
+func (o *OutputInfluxdb) GetAuthHeaderExpr() *string {
 	if o == nil {
 		return nil
 	}
 	return o.AuthHeaderExpr
 }
 
-func (o *OutputInfluxdb) GetTokenTimeoutSecs() any {
+func (o *OutputInfluxdb) GetTokenTimeoutSecs() *float64 {
 	if o == nil {
 		return nil
 	}

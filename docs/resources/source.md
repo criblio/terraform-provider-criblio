@@ -213,7 +213,7 @@ resource "criblio_source" "my_source" {
     description             = "...my_description..."
     disabled                = true
     emit_token_metrics      = true
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = true
     environment             = "...my_environment..."
     hec_api                 = "...my_hec_api..."
@@ -2922,10 +2922,10 @@ resource "criblio_source" "my_source" {
     type                   = "office365_service"
   }
   input_open_telemetry = {
-    activity_log_sample_rate = "{ \"see\": \"documentation\" }"
+    activity_log_sample_rate = 10
     auth_header_expr         = "`Bearer $${token}`"
     auth_type                = "basic"
-    capture_headers          = "{ \"see\": \"documentation\" }"
+    capture_headers          = true
     connections = [
       {
         output   = "...my_output..."
@@ -2936,7 +2936,7 @@ resource "criblio_source" "my_source" {
     description             = "Receive OpenTelemetry traces, metrics, and logs"
     disabled                = false
     enable_health_check     = true
-    enable_proxy_header     = "{ \"see\": \"documentation\" }"
+    enable_proxy_header     = false
     environment             = "main"
     extract_logs            = true
     extract_metrics         = false
@@ -3819,7 +3819,7 @@ resource "criblio_source" "my_source" {
     disabled                = false
     drop_control_fields     = true
     emit_token_metrics      = true
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = false
     environment             = "main"
     extract_metrics         = true
@@ -4957,7 +4957,7 @@ resource "criblio_source" "my_source" {
     description             = "Receive Zscaler HEC events over HTTP(S)"
     disabled                = false
     emit_token_metrics      = true
-    enable_health_check     = "{ \"see\": \"documentation\" }"
+    enable_health_check     = true
     enable_proxy_header     = false
     environment             = "main"
     hec_acks                = false
@@ -5024,8 +5024,8 @@ resource "criblio_source" "my_source" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.
-- `id` (String) Unique identifier for this source instance. Must match the `id` property within the Input object in the request body. Requires replacement if changed.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'default'.
+- `id` (String) Unique identifier for this source instance. Must match the `id` property within the Input object in the request body.
 
 ### Optional
 

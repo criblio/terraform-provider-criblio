@@ -1623,9 +1623,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Collect data into batches for later processing. Disable to write to a ClickHouse table immediately.`,
 					},
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed: true,
@@ -1715,9 +1714,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
 					},
 					"mapping_type": schema.StringAttribute{
 						Computed:    true,
@@ -1736,34 +1734,32 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value`,
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -1863,14 +1859,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"sql_username": schema.StringAttribute{
 						Computed:    true,
@@ -1903,9 +1897,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Select or create a stored text secret`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -1970,19 +1963,16 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						},
 					},
 					"token": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
 					},
 					"type": schema.StringAttribute{
 						Computed: true,
@@ -2016,9 +2006,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Computed:    true,
@@ -2150,9 +2139,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `The maximum number of times a file will attempt to move to its final destination before being dead-lettered`,
 					},
 					"object_acl": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Object ACL to assign to uploaded objects`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -2191,9 +2179,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Pipeline to process data before sending out to this output`,
 					},
 					"region": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,
@@ -7622,10 +7609,9 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Computed:    true,
 						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
 					},
-					"flush_period_sec": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.`,
 					},
 					"google_auth_method": schema.StringAttribute{
 						Computed:    true,
@@ -8546,9 +8532,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -8612,9 +8597,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
@@ -8629,34 +8613,32 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value`,
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -8760,14 +8742,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -8828,14 +8808,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
 					},
 					"type": schema.StringAttribute{
 						Computed: true,
@@ -11433,9 +11411,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -11519,9 +11496,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `How often the sender should ping the peer to keep the connection open`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -11546,34 +11522,32 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value`,
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -11681,14 +11655,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -11772,14 +11744,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
 					},
 					"type": schema.StringAttribute{
 						Computed: true,
@@ -11797,9 +11767,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -11847,9 +11816,8 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
@@ -11872,34 +11840,32 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value`,
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name`,
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value`,
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -11999,14 +11965,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"send_metadata": schema.BoolAttribute{
 						Computed:    true,
@@ -12059,14 +12023,12 @@ func (r *DestinationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
 					},
 					"type": schema.StringAttribute{
 						Computed: true,

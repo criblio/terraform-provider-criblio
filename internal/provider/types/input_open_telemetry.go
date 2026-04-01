@@ -3,23 +3,22 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputOpenTelemetry struct {
 	TemplateHost          types.String                    `tfsdk:"template_host"`
 	TemplatePort          types.String                    `tfsdk:"template_port"`
-	ActivityLogSampleRate jsontypes.Normalized            `tfsdk:"activity_log_sample_rate"`
-	AuthHeaderExpr        jsontypes.Normalized            `tfsdk:"auth_header_expr"`
+	ActivityLogSampleRate types.Float64                   `tfsdk:"activity_log_sample_rate"`
+	AuthHeaderExpr        types.String                    `tfsdk:"auth_header_expr"`
 	AuthType              types.String                    `tfsdk:"auth_type"`
-	CaptureHeaders        jsontypes.Normalized            `tfsdk:"capture_headers"`
+	CaptureHeaders        types.Bool                      `tfsdk:"capture_headers"`
 	Connections           []ItemsTypeConnectionsOptional  `tfsdk:"connections"`
 	CredentialsSecret     types.String                    `tfsdk:"credentials_secret"`
 	Description           types.String                    `tfsdk:"description"`
 	Disabled              types.Bool                      `tfsdk:"disabled"`
 	EnableHealthCheck     types.Bool                      `tfsdk:"enable_health_check"`
-	EnableProxyHeader     jsontypes.Normalized            `tfsdk:"enable_proxy_header"`
+	EnableProxyHeader     types.Bool                      `tfsdk:"enable_proxy_header"`
 	Environment           types.String                    `tfsdk:"environment"`
 	ExtractLogs           types.Bool                      `tfsdk:"extract_logs"`
 	ExtractMetrics        types.Bool                      `tfsdk:"extract_metrics"`
@@ -29,7 +28,7 @@ type InputOpenTelemetry struct {
 	IPAllowlistRegex      types.String                    `tfsdk:"ip_allowlist_regex"`
 	IPDenylistRegex       types.String                    `tfsdk:"ip_denylist_regex"`
 	KeepAliveTimeout      types.Float64                   `tfsdk:"keep_alive_timeout"`
-	LoginURL              jsontypes.Normalized            `tfsdk:"login_url"`
+	LoginURL              types.String                    `tfsdk:"login_url"`
 	MaxActiveCxn          types.Float64                   `tfsdk:"max_active_cxn"`
 	MaxActiveReq          types.Float64                   `tfsdk:"max_active_req"`
 	MaxRequestsPerSocket  types.Int64                     `tfsdk:"max_requests_per_socket"`
@@ -44,16 +43,16 @@ type InputOpenTelemetry struct {
 	PqEnabled             types.Bool                      `tfsdk:"pq_enabled"`
 	Protocol              types.String                    `tfsdk:"protocol"`
 	RequestTimeout        types.Float64                   `tfsdk:"request_timeout"`
-	Secret                jsontypes.Normalized            `tfsdk:"secret"`
-	SecretParamName       jsontypes.Normalized            `tfsdk:"secret_param_name"`
+	Secret                types.String                    `tfsdk:"secret"`
+	SecretParamName       types.String                    `tfsdk:"secret_param_name"`
 	SendToRoutes          types.Bool                      `tfsdk:"send_to_routes"`
 	SocketTimeout         types.Float64                   `tfsdk:"socket_timeout"`
 	Streamtags            []types.String                  `tfsdk:"streamtags"`
 	TextSecret            types.String                    `tfsdk:"text_secret"`
 	TLS                   *TLSSettingsServerSideType      `tfsdk:"tls"`
 	Token                 types.String                    `tfsdk:"token"`
-	TokenAttributeName    jsontypes.Normalized            `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs      jsontypes.Normalized            `tfsdk:"token_timeout_secs"`
+	TokenAttributeName    types.String                    `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs      types.Float64                   `tfsdk:"token_timeout_secs"`
 	Type                  types.String                    `tfsdk:"type"`
 	Username              types.String                    `tfsdk:"username"`
 }

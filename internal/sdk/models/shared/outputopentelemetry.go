@@ -75,8 +75,10 @@ func (o *OutputOpenTelemetryPqControls) UnmarshalJSON(data []byte) error {
 }
 
 type OutputOpenTelemetryOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (o OutputOpenTelemetryOauthParam) MarshalJSON() ([]byte, error) {
@@ -90,23 +92,25 @@ func (o *OutputOpenTelemetryOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputOpenTelemetryOauthParam) GetName() any {
+func (o *OutputOpenTelemetryOauthParam) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputOpenTelemetryOauthParam) GetValue() any {
+func (o *OutputOpenTelemetryOauthParam) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
 
 type OutputOpenTelemetryOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (o OutputOpenTelemetryOauthHeader) MarshalJSON() ([]byte, error) {
@@ -120,16 +124,16 @@ func (o *OutputOpenTelemetryOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputOpenTelemetryOauthHeader) GetName() any {
+func (o *OutputOpenTelemetryOauthHeader) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputOpenTelemetryOauthHeader) GetValue() any {
+func (o *OutputOpenTelemetryOauthHeader) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
@@ -230,16 +234,24 @@ type OutputOpenTelemetry struct {
 	// How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 	PqOnBackpressure *QueueFullBehaviorOptions `json:"pqOnBackpressure,omitempty"`
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
-	PqMaxBufferSizeBytes *string                          `json:"pqMaxBufferSizeBytes,omitempty"`
-	PqControls           *OutputOpenTelemetryPqControls   `json:"pqControls,omitempty"`
-	LoginURL             any                              `json:"loginUrl,omitempty"`
-	SecretParamName      any                              `json:"secretParamName,omitempty"`
-	Secret               any                              `json:"secret,omitempty"`
-	TokenAttributeName   any                              `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr       any                              `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs     any                              `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams          []OutputOpenTelemetryOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders         []OutputOpenTelemetryOauthHeader `json:"oauthHeaders,omitempty"`
+	PqMaxBufferSizeBytes *string                        `json:"pqMaxBufferSizeBytes,omitempty"`
+	PqControls           *OutputOpenTelemetryPqControls `json:"pqControls,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []OutputOpenTelemetryOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []OutputOpenTelemetryOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (o OutputOpenTelemetry) MarshalJSON() ([]byte, error) {
@@ -610,42 +622,42 @@ func (o *OutputOpenTelemetry) GetPqControls() *OutputOpenTelemetryPqControls {
 	return o.PqControls
 }
 
-func (o *OutputOpenTelemetry) GetLoginURL() any {
+func (o *OutputOpenTelemetry) GetLoginURL() *string {
 	if o == nil {
 		return nil
 	}
 	return o.LoginURL
 }
 
-func (o *OutputOpenTelemetry) GetSecretParamName() any {
+func (o *OutputOpenTelemetry) GetSecretParamName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.SecretParamName
 }
 
-func (o *OutputOpenTelemetry) GetSecret() any {
+func (o *OutputOpenTelemetry) GetSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Secret
 }
 
-func (o *OutputOpenTelemetry) GetTokenAttributeName() any {
+func (o *OutputOpenTelemetry) GetTokenAttributeName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TokenAttributeName
 }
 
-func (o *OutputOpenTelemetry) GetAuthHeaderExpr() any {
+func (o *OutputOpenTelemetry) GetAuthHeaderExpr() *string {
 	if o == nil {
 		return nil
 	}
 	return o.AuthHeaderExpr
 }
 
-func (o *OutputOpenTelemetry) GetTokenTimeoutSecs() any {
+func (o *OutputOpenTelemetry) GetTokenTimeoutSecs() *float64 {
 	if o == nil {
 		return nil
 	}

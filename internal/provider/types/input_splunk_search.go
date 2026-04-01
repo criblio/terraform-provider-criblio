@@ -3,12 +3,11 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputSplunkSearch struct {
-	AuthHeaderExpr       jsontypes.Normalized           `tfsdk:"auth_header_expr"`
+	AuthHeaderExpr       types.String                   `tfsdk:"auth_header_expr"`
 	AuthType             types.String                   `tfsdk:"auth_type"`
 	BreakerRulesets      []types.String                 `tfsdk:"breaker_rulesets"`
 	Connections          []ItemsTypeConnectionsOptional `tfsdk:"connections"`
@@ -28,7 +27,7 @@ type InputSplunkSearch struct {
 	KeepAliveTime        types.Float64                  `tfsdk:"keep_alive_time"`
 	Latest               types.String                   `tfsdk:"latest"`
 	LogLevel             types.String                   `tfsdk:"log_level"`
-	LoginURL             jsontypes.Normalized           `tfsdk:"login_url"`
+	LoginURL             types.String                   `tfsdk:"login_url"`
 	MaxMissedKeepAlives  types.Float64                  `tfsdk:"max_missed_keep_alives"`
 	Metadata             []ItemsTypeMetadata            `tfsdk:"metadata"`
 	OauthHeaders         []InputSplunkSearchOauthHeader `tfsdk:"oauth_headers"`
@@ -43,15 +42,15 @@ type InputSplunkSearch struct {
 	RetryRules           *RetryRulesType                `tfsdk:"retry_rules"`
 	Search               types.String                   `tfsdk:"search"`
 	SearchHead           types.String                   `tfsdk:"search_head"`
-	Secret               jsontypes.Normalized           `tfsdk:"secret"`
-	SecretParamName      jsontypes.Normalized           `tfsdk:"secret_param_name"`
+	Secret               types.String                   `tfsdk:"secret"`
+	SecretParamName      types.String                   `tfsdk:"secret_param_name"`
 	SendToRoutes         types.Bool                     `tfsdk:"send_to_routes"`
 	StaleChannelFlushMs  types.Float64                  `tfsdk:"stale_channel_flush_ms"`
 	Streamtags           []types.String                 `tfsdk:"streamtags"`
 	TextSecret           types.String                   `tfsdk:"text_secret"`
 	Token                types.String                   `tfsdk:"token"`
-	TokenAttributeName   jsontypes.Normalized           `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs     jsontypes.Normalized           `tfsdk:"token_timeout_secs"`
+	TokenAttributeName   types.String                   `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs     types.Float64                  `tfsdk:"token_timeout_secs"`
 	TTL                  types.String                   `tfsdk:"ttl"`
 	Type                 types.String                   `tfsdk:"type"`
 	UseRoundRobinDNS     types.Bool                     `tfsdk:"use_round_robin_dns"`

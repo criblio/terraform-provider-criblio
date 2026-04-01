@@ -32,8 +32,10 @@ func (e *InputLokiType) UnmarshalJSON(data []byte) error {
 }
 
 type InputLokiOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (i InputLokiOauthParam) MarshalJSON() ([]byte, error) {
@@ -47,23 +49,25 @@ func (i *InputLokiOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputLokiOauthParam) GetName() any {
+func (i *InputLokiOauthParam) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputLokiOauthParam) GetValue() any {
+func (i *InputLokiOauthParam) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
 
 type InputLokiOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (i InputLokiOauthHeader) MarshalJSON() ([]byte, error) {
@@ -77,16 +81,16 @@ func (i *InputLokiOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputLokiOauthHeader) GetName() any {
+func (i *InputLokiOauthHeader) GetName() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Name
 }
 
-func (i *InputLokiOauthHeader) GetValue() any {
+func (i *InputLokiOauthHeader) GetValue() string {
 	if i == nil {
-		return nil
+		return ""
 	}
 	return i.Value
 }
@@ -154,15 +158,23 @@ type InputLoki struct {
 	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 	TemplateHost *string `json:"__template_host,omitempty"`
 	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort       *string                `json:"__template_port,omitempty"`
-	LoginURL           any                    `json:"loginUrl,omitempty"`
-	SecretParamName    any                    `json:"secretParamName,omitempty"`
-	Secret             any                    `json:"secret,omitempty"`
-	TokenAttributeName any                    `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr     any                    `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs   any                    `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams        []InputLokiOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders       []InputLokiOauthHeader `json:"oauthHeaders,omitempty"`
+	TemplatePort *string `json:"__template_port,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []InputLokiOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []InputLokiOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (i InputLoki) MarshalJSON() ([]byte, error) {
@@ -421,42 +433,42 @@ func (i *InputLoki) GetTemplatePort() *string {
 	return i.TemplatePort
 }
 
-func (i *InputLoki) GetLoginURL() any {
+func (i *InputLoki) GetLoginURL() *string {
 	if i == nil {
 		return nil
 	}
 	return i.LoginURL
 }
 
-func (i *InputLoki) GetSecretParamName() any {
+func (i *InputLoki) GetSecretParamName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.SecretParamName
 }
 
-func (i *InputLoki) GetSecret() any {
+func (i *InputLoki) GetSecret() *string {
 	if i == nil {
 		return nil
 	}
 	return i.Secret
 }
 
-func (i *InputLoki) GetTokenAttributeName() any {
+func (i *InputLoki) GetTokenAttributeName() *string {
 	if i == nil {
 		return nil
 	}
 	return i.TokenAttributeName
 }
 
-func (i *InputLoki) GetAuthHeaderExpr() any {
+func (i *InputLoki) GetAuthHeaderExpr() *string {
 	if i == nil {
 		return nil
 	}
 	return i.AuthHeaderExpr
 }
 
-func (i *InputLoki) GetTokenTimeoutSecs() any {
+func (i *InputLoki) GetTokenTimeoutSecs() *float64 {
 	if i == nil {
 		return nil
 	}

@@ -665,7 +665,7 @@ Read-Only:
 Read-Only:
 
 - `async_inserts` (Boolean) Collect data into batches for later processing. Disable to write to a ClickHouse table immediately.
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String)
 - `column_mappings` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--column_mappings))
 - `compress` (Boolean) Compress the payload body before sending
@@ -682,12 +682,12 @@ Read-Only:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) Data format to use when sending data to ClickHouse. Defaults to JSON Compact.
 - `id` (String) Unique ID for this output
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `mapping_type` (String) How event fields are mapped to ClickHouse columns.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
@@ -709,8 +709,8 @@ Read-Only:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `sql_username` (String) Username for certificate authentication
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -718,13 +718,13 @@ Read-Only:
 - `template_database` (String) Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
 - `template_table_name` (String) Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `text_secret` (String) Parsed as JSON.
+- `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--tls))
-- `token` (String) Parsed as JSON.
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token` (String) Bearer token to include in the authorization header
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -755,8 +755,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--output_click_house--oauth_params"></a>
@@ -764,8 +764,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--output_click_house--pq_controls"></a>
@@ -818,7 +818,7 @@ Read-Only:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
-- `aws_api_key` (String) Parsed as JSON.
+- `aws_api_key` (String) R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles.
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression, such as `${C.env.SOME_SECRET}`).
@@ -849,7 +849,7 @@ Read-Only:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Parsed as JSON.
+- `object_acl` (String) Object ACL to assign to uploaded objects
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
@@ -859,7 +859,7 @@ Read-Only:
 - `parquet_version` (String) Determines which data types are supported and how they are represented
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Parsed as JSON.
+- `region` (String) Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2--retry_settings))
@@ -2887,7 +2887,7 @@ Read-Only:
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached)
-- `flush_period_sec` (String) Parsed as JSON.
+- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 - `id` (String) Unique ID for this output
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied.
@@ -3250,7 +3250,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) InfluxDB authentication type
 - `bucket` (String) Bucket to write to.
 - `compress` (Boolean) Compress the payload body before sending
@@ -3264,11 +3264,11 @@ Read-Only:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_influxdb--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_influxdb--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `org` (String) Organization ID for this bucket.
 - `password` (String)
@@ -3291,8 +3291,8 @@ Read-Only:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_influxdb--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
@@ -3303,8 +3303,8 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `timestamp_precision` (String) Sets the precision for the supplied Unix time values. Defaults to milliseconds.
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -3326,8 +3326,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--output_influxdb--oauth_params"></a>
@@ -3335,8 +3335,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--output_influxdb--pq_controls"></a>
@@ -4340,7 +4340,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) OpenTelemetry authentication type
 - `compress` (String) Type of compression to apply to messages sent to the OpenTelemetry endpoint
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
@@ -4359,11 +4359,11 @@ Read-Only:
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_open_telemetry--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send
 - `password` (String)
@@ -4387,8 +4387,8 @@ Read-Only:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_open_telemetry--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -4396,8 +4396,8 @@ Read-Only:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
@@ -4425,8 +4425,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--output_open_telemetry--oauth_params"></a>
@@ -4434,8 +4434,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--output_open_telemetry--pq_controls"></a>
@@ -4487,7 +4487,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Remote Write authentication type
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `credentials_secret` (String) Select or create a secret that references your credentials
@@ -4497,13 +4497,13 @@ Read-Only:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
 - `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_prometheus--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_prometheus--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
@@ -4525,8 +4525,8 @@ Read-Only:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_prometheus--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
@@ -4535,8 +4535,8 @@ Read-Only:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `url` (String) The endpoint to send metrics to
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -4556,8 +4556,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--output_prometheus--oauth_params"></a>
@@ -4565,8 +4565,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--output_prometheus--pq_controls"></a>

@@ -5545,8 +5545,16 @@ Read-Only:
 
 Read-Only:
 
+- `input_syslog_syslog1` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1))
+- `input_syslog_syslog2` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2))
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1`
+
+Read-Only:
+
 - `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
@@ -5560,10 +5568,10 @@ Read-Only:
 - `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--metadata))
 - `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
@@ -5577,13 +5585,13 @@ Read-Only:
 - `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
 - `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--tls))
 - `type` (String)
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--items--input_syslog--connections"></a>
-### Nested Schema for `items.input_syslog.connections`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--connections"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.connections`
 
 Read-Only:
 
@@ -5591,8 +5599,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--items--input_syslog--metadata"></a>
-### Nested Schema for `items.input_syslog.metadata`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--metadata"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.metadata`
 
 Read-Only:
 
@@ -5600,8 +5608,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--items--input_syslog--pq"></a>
-### Nested Schema for `items.input_syslog.pq`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq`
 
 Read-Only:
 
@@ -5613,15 +5621,15 @@ Read-Only:
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--pq--pq_controls))
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls))
 
-<a id="nestedatt--items--input_syslog--pq--pq_controls"></a>
-### Nested Schema for `items.input_syslog.pq.pq_controls`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq.pq_controls`
 
 
 
-<a id="nestedatt--items--input_syslog--tls"></a>
-### Nested Schema for `items.input_syslog.tls`
+<a id="nestedatt--items--input_syslog--input_syslog_syslog1--tls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog1.tls`
 
 Read-Only:
 
@@ -5636,6 +5644,106 @@ Read-Only:
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
+
+
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2`
+
+Read-Only:
+
+- `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--connections))
+- `description` (String)
+- `disabled` (Boolean)
+- `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
+- `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
+- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
+- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
+- `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
+- `id` (String) Unique ID for this input
+- `infer_framing` (Boolean) Enable if we should infer the syslog framing of the incoming messages.
+- `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data
+- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
+- `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
+- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--metadata))
+- `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
+- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq))
+- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
+- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
+- `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
+- `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
+- `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
+- `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
+- `streamtags` (List of String) Tags for filtering and grouping in @{product}
+- `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
+- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
+- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
+- `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--tls))
+- `type` (String)
+- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--connections"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.connections`
+
+Read-Only:
+
+- `output` (String)
+- `pipeline` (String)
+
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--metadata"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.metadata`
+
+Read-Only:
+
+- `name` (String)
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
+
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq`
+
+Read-Only:
+
+- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
+- `compress` (String) Codec to use to compress the persisted data
+- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
+- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
+- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
+- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
+- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
+- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls))
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq.pq_controls`
+
+
+
+<a id="nestedatt--items--input_syslog--input_syslog_syslog2--tls"></a>
+### Nested Schema for `items.input_syslog.input_syslog_syslog2.tls`
+
+Read-Only:
+
+- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
+- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
+- `certificate_name` (String) The name of the predefined certificate
+- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
+- `disabled` (Boolean)
+- `max_version` (String)
+- `min_version` (String)
+- `passphrase` (String) Passphrase to use to decrypt private key
+- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
+- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
+- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
+
 
 
 

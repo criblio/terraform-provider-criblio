@@ -3,13 +3,12 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type OutputPrometheus struct {
 	TemplateURL                   types.String                     `tfsdk:"template_url"`
-	AuthHeaderExpr                jsontypes.Normalized             `tfsdk:"auth_header_expr"`
+	AuthHeaderExpr                types.String                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Concurrency                   types.Float64                    `tfsdk:"concurrency"`
 	CredentialsSecret             types.String                     `tfsdk:"credentials_secret"`
@@ -19,7 +18,7 @@ type OutputPrometheus struct {
 	FailedRequestLoggingMode      types.String                     `tfsdk:"failed_request_logging_mode"`
 	FlushPeriodSec                types.Float64                    `tfsdk:"flush_period_sec"`
 	ID                            types.String                     `tfsdk:"id"`
-	LoginURL                      jsontypes.Normalized             `tfsdk:"login_url"`
+	LoginURL                      types.String                     `tfsdk:"login_url"`
 	MaxPayloadEvents              types.Float64                    `tfsdk:"max_payload_events"`
 	MaxPayloadSizeKB              types.Float64                    `tfsdk:"max_payload_size_kb"`
 	MetricRenameExpr              types.String                     `tfsdk:"metric_rename_expr"`
@@ -45,8 +44,8 @@ type OutputPrometheus struct {
 	ResponseHonorRetryAfterHeader types.Bool                       `tfsdk:"response_honor_retry_after_header"`
 	ResponseRetrySettings         []ItemsTypeResponseRetrySettings `tfsdk:"response_retry_settings"`
 	SafeHeaders                   []types.String                   `tfsdk:"safe_headers"`
-	Secret                        jsontypes.Normalized             `tfsdk:"secret"`
-	SecretParamName               jsontypes.Normalized             `tfsdk:"secret_param_name"`
+	Secret                        types.String                     `tfsdk:"secret"`
+	SecretParamName               types.String                     `tfsdk:"secret_param_name"`
 	SendMetadata                  types.Bool                       `tfsdk:"send_metadata"`
 	Streamtags                    []types.String                   `tfsdk:"streamtags"`
 	SystemFields                  []types.String                   `tfsdk:"system_fields"`
@@ -54,8 +53,8 @@ type OutputPrometheus struct {
 	TimeoutRetrySettings          *TimeoutRetrySettingsType        `tfsdk:"timeout_retry_settings"`
 	TimeoutSec                    types.Float64                    `tfsdk:"timeout_sec"`
 	Token                         types.String                     `tfsdk:"token"`
-	TokenAttributeName            jsontypes.Normalized             `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs              jsontypes.Normalized             `tfsdk:"token_timeout_secs"`
+	TokenAttributeName            types.String                     `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs              types.Float64                    `tfsdk:"token_timeout_secs"`
 	Type                          types.String                     `tfsdk:"type"`
 	URL                           types.String                     `tfsdk:"url"`
 	UseRoundRobinDNS              types.Bool                       `tfsdk:"use_round_robin_dns"`

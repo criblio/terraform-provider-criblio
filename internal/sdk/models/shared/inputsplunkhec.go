@@ -183,7 +183,8 @@ type InputSplunkHec struct {
 	TemplatePort *string `json:"__template_port,omitempty"`
 	// Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 	TemplateSplunkHecAPI *string `json:"__template_splunkHecAPI,omitempty"`
-	EnableHealthCheck    any     `json:"enableHealthCheck,omitempty"`
+	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 }
 
 func (i InputSplunkHec) MarshalJSON() ([]byte, error) {
@@ -477,7 +478,7 @@ func (i *InputSplunkHec) GetTemplateSplunkHecAPI() *string {
 	return i.TemplateSplunkHecAPI
 }
 
-func (i *InputSplunkHec) GetEnableHealthCheck() any {
+func (i *InputSplunkHec) GetEnableHealthCheck() *bool {
 	if i == nil {
 		return nil
 	}

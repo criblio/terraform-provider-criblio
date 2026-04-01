@@ -3,7 +3,6 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -12,7 +11,7 @@ type OutputCloudflareR2 struct {
 	TemplateFormat          types.String                `tfsdk:"template_format"`
 	AddIDToStagePath        types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AutomaticSchema         types.Bool                  `tfsdk:"automatic_schema"`
-	AwsAPIKey               jsontypes.Normalized        `tfsdk:"aws_api_key"`
+	AwsAPIKey               types.String                `tfsdk:"aws_api_key"`
 	AwsAuthenticationMethod types.String                `tfsdk:"aws_authentication_method"`
 	AwsSecret               types.String                `tfsdk:"aws_secret"`
 	AwsSecretKey            types.String                `tfsdk:"aws_secret_key"`
@@ -43,7 +42,7 @@ type OutputCloudflareR2 struct {
 	MaxFileSizeMB           types.Float64               `tfsdk:"max_file_size_mb"`
 	MaxOpenFiles            types.Float64               `tfsdk:"max_open_files"`
 	MaxRetryNum             types.Float64               `tfsdk:"max_retry_num"`
-	ObjectACL               jsontypes.Normalized        `tfsdk:"object_acl"`
+	ObjectACL               types.String                `tfsdk:"object_acl"`
 	OnBackpressure          types.String                `tfsdk:"on_backpressure"`
 	OnDiskFullBackpressure  types.String                `tfsdk:"on_disk_full_backpressure"`
 	ParquetDataPageVersion  types.String                `tfsdk:"parquet_data_page_version"`
@@ -53,7 +52,7 @@ type OutputCloudflareR2 struct {
 	ParquetVersion          types.String                `tfsdk:"parquet_version"`
 	PartitionExpr           types.String                `tfsdk:"partition_expr"`
 	Pipeline                types.String                `tfsdk:"pipeline"`
-	Region                  jsontypes.Normalized        `tfsdk:"region"`
+	Region                  types.String                `tfsdk:"region"`
 	RejectUnauthorized      types.Bool                  `tfsdk:"reject_unauthorized"`
 	RemoveEmptyDirs         types.Bool                  `tfsdk:"remove_empty_dirs"`
 	RetrySettings           *RetrySettingsType          `tfsdk:"retry_settings"`
