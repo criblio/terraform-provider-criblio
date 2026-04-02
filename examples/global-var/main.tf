@@ -1,5 +1,5 @@
 resource "criblio_global_var" "my_globalvar" {
-  description = "test variable"
+  description = "test"
   group_id    = "default"
   id          = "sample_globalvar"
   lib         = "test"
