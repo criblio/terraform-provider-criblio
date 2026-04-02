@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -271,14 +272,6 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -790,16 +783,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -1680,16 +1664,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -1968,16 +1943,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
+								}, "template_splunk_hec_api": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
 								},
@@ -2185,16 +2151,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -2816,16 +2773,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -3568,16 +3516,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -4397,16 +4336,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -4973,16 +4903,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -5237,16 +5158,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
+								}, "template_splunk_hec_api": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
 								},
@@ -5509,16 +5421,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -7015,16 +6918,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"text_secret": schema.StringAttribute{
+								}, "text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
 								},
@@ -7218,12 +7112,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_tcp_port": schema.StringAttribute{
+								}, "template_tcp_port": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
 								},
@@ -7687,16 +7576,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -8268,16 +8148,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 								"template_cache_minutes": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"type": schema.StringAttribute{
+								}, "type": schema.StringAttribute{
 									Computed: true,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
@@ -9295,16 +9166,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"text_secret": schema.StringAttribute{
+								}, "text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
 								},
@@ -10195,16 +10057,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_prometheus_api": schema.StringAttribute{
+								}, "template_prometheus_api": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.`,
 								},
@@ -10410,16 +10263,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"type": schema.StringAttribute{
+								}, "type": schema.StringAttribute{
 									Computed: true,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
@@ -11471,16 +11315,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"type": schema.StringAttribute{
+								}, "type": schema.StringAttribute{
 									Computed: true,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
@@ -11667,16 +11502,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -11977,16 +11803,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
+								}, "template_splunk_hec_api": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
 								},
@@ -12776,12 +12593,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 										"tcp_port": schema.Float64Attribute{
 											Computed:    true,
 											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"template_host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-										},
-										"template_tcp_port": schema.StringAttribute{
+										}, "template_tcp_port": schema.StringAttribute{
 											Computed:    true,
 											Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
 										},
@@ -13023,12 +12835,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 										"tcp_port": schema.Float64Attribute{
 											Computed:    true,
 											Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-										},
-										"template_host": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-										},
-										"template_tcp_port": schema.StringAttribute{
+										}, "template_tcp_port": schema.StringAttribute{
 											Computed:    true,
 											Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
 										},
@@ -13851,16 +13658,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"text_secret": schema.StringAttribute{
+								}, "text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
 								},
@@ -14061,16 +13859,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"text_secret": schema.StringAttribute{
+								}, "text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
 								},
@@ -14385,16 +14174,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 										},
 									},
 									Description: `Subscriptions to events on forwarding endpoints`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -15358,16 +15138,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
@@ -15650,16 +15421,7 @@ func (r *PackSourceDataSource) Schema(ctx context.Context, req datasource.Schema
 								"template_hec_api": schema.StringAttribute{
 									Computed:    true,
 									Description: `Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"tls": schema.SingleNestedAttribute{
+								}, "tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"ca_path": schema.StringAttribute{
