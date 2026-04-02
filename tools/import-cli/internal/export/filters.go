@@ -28,6 +28,10 @@ func sanitizeConvertError(err error) string {
 }
 
 func skipResourceByID(typeName string, idMap map[string]string) bool {
+	// Search worker group: we don't support riptide yet.
+	if typeName == "criblio_source" && idMap["group_id"] == "default_search" {
+		return true
+	}
 	// criblio_pack: pack id is in "id"
 	if typeName == "criblio_pack" && custom.SkipPacks[idMap["id"]] {
 		return true

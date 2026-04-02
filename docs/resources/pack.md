@@ -28,7 +28,6 @@ resource "criblio_pack" "my_pack" {
   group_id               = "Cribl"
   id                     = "pack-apache-logs"
   inputs                 = 2
-  is_disabled            = false
   min_log_stream_version = "4.10.0"
   outputs                = 1
   source                 = "https://github.com/org/packs/apache"
@@ -56,8 +55,8 @@ resource "criblio_pack" "my_pack" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Pack name
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Pack name. Requires replacement if changed.
 
 ### Optional
 
@@ -70,7 +69,6 @@ resource "criblio_pack" "my_pack" {
 - `filename` (String) Local .crbl file path to upload. File is uploaded (PUT) then the pack is installed or updated in place (PATCH); changing filename updates the existing pack rather than replacing it. When set, description and display_name come from the pack file—omit them from config to avoid drift.
 - `force` (Boolean) Requires replacement if changed.
 - `inputs` (Number) Requires replacement if changed.
-- `is_disabled` (Boolean) Requires replacement if changed.
 - `min_log_stream_version` (String) Min LogStream version (from pack metadata). Preserved from state when not configured.
 - `outputs` (Number) Requires replacement if changed.
 - `source` (String) Pack source path (from pack metadata). Preserved from state when not configured.
@@ -104,7 +102,6 @@ Read-Only:
 - `exports` (List of String)
 - `id` (String)
 - `inputs` (Number)
-- `is_disabled` (Boolean)
 - `min_log_stream_version` (String)
 - `outputs` (Number)
 - `settings` (Map of String)

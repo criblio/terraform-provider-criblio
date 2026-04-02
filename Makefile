@@ -36,7 +36,7 @@ build-speakeasy:
 
 # Full Speakeasy run
 build-speakeasy-full:
-	speakeasy run
+	GOTOOLCHAIN=go1.25.0 speakeasy run
 
 install-sbom-tools:
 	go install github.com/anchore/syft/cmd/syft@latest

@@ -7,6 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -28,7 +30,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -132,12 +133,18 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 		MarkdownDescription: "PackDestination Resource",
 		Attributes: map[string]schema.Attribute{
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Unique ID to PATCH. Requires replacement if changed.`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -5454,30 +5461,7 @@ func (r *PackDestinationResource) Schema(ctx context.Context, req resource.Schem
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_dest_path": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'destPath' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'destPath' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
+					// template_* (__template* in OpenAPI) omitted: must match types.OutputCriblLake and criblio_destination.output_cribl_lake.
 					"type": schema.StringAttribute{
 						Required:    true,
 						Description: `must be "cribl_lake"`,

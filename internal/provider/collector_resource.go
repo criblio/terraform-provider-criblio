@@ -30,6 +30,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -87,11 +88,18 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'.`,
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `The id of this collector instance`,
+				Description: `The id of this collector instance. Requires replacement if changed.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 			},
 			"ignore_group_jobs_limit": schema.BoolAttribute{
 				Computed: true,
@@ -4641,15 +4649,15 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 // restores when the API returns nil, so they can be re-applied after refreshPlan
 // overwrites them with empty.
 type collectorPreferStateBackup struct {
-	InputRest, ScheduleRest                       interface{}
-	InputScript, ScheduleScript                   interface{}
-	InputSplunk, ScheduleSplunk                   interface{}
-	InputS3, ScheduleS3                           interface{}
-	InputAzureBlob, ScheduleAzureBlob             interface{}
-	InputCriblLake, ScheduleCriblLake             interface{}
-	InputDatabase, ScheduleDatabase               interface{}
-	InputGCS, ScheduleGCS                         interface{}
-	InputHealthCheck, ScheduleHealthCheck         interface{}
+	InputRest, ScheduleRest               interface{}
+	InputScript, ScheduleScript           interface{}
+	InputSplunk, ScheduleSplunk           interface{}
+	InputS3, ScheduleS3                   interface{}
+	InputAzureBlob, ScheduleAzureBlob     interface{}
+	InputCriblLake, ScheduleCriblLake     interface{}
+	InputDatabase, ScheduleDatabase       interface{}
+	InputGCS, ScheduleGCS                 interface{}
+	InputHealthCheck, ScheduleHealthCheck interface{}
 }
 
 func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {

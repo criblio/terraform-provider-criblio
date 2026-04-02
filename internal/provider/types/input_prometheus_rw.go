@@ -3,17 +3,12 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputPrometheusRw struct {
-	TemplateHost          types.String                   `tfsdk:"template_host"`
-	TemplatePort          types.String                   `tfsdk:"template_port"`
-	TemplatePrometheusAPI types.String                   `tfsdk:"template_prometheus_api"`
-	TemplateUsername      types.String                   `tfsdk:"template_username"`
 	ActivityLogSampleRate types.Float64                  `tfsdk:"activity_log_sample_rate"`
-	AuthHeaderExpr        jsontypes.Normalized           `tfsdk:"auth_header_expr"`
+	AuthHeaderExpr        types.String                   `tfsdk:"auth_header_expr"`
 	AuthType              types.String                   `tfsdk:"auth_type"`
 	CaptureHeaders        types.Bool                     `tfsdk:"capture_headers"`
 	Connections           []ItemsTypeConnectionsOptional `tfsdk:"connections"`
@@ -28,7 +23,7 @@ type InputPrometheusRw struct {
 	IPAllowlistRegex      types.String                   `tfsdk:"ip_allowlist_regex"`
 	IPDenylistRegex       types.String                   `tfsdk:"ip_denylist_regex"`
 	KeepAliveTimeout      types.Float64                  `tfsdk:"keep_alive_timeout"`
-	LoginURL              jsontypes.Normalized           `tfsdk:"login_url"`
+	LoginURL              types.String                   `tfsdk:"login_url"`
 	MaxActiveReq          types.Float64                  `tfsdk:"max_active_req"`
 	MaxRequestsPerSocket  types.Int64                    `tfsdk:"max_requests_per_socket"`
 	Metadata              []ItemsTypeMetadata            `tfsdk:"metadata"`
@@ -41,16 +36,16 @@ type InputPrometheusRw struct {
 	PqEnabled             types.Bool                     `tfsdk:"pq_enabled"`
 	PrometheusAPI         types.String                   `tfsdk:"prometheus_api"`
 	RequestTimeout        types.Float64                  `tfsdk:"request_timeout"`
-	Secret                jsontypes.Normalized           `tfsdk:"secret"`
-	SecretParamName       jsontypes.Normalized           `tfsdk:"secret_param_name"`
+	Secret                types.String                   `tfsdk:"secret"`
+	SecretParamName       types.String                   `tfsdk:"secret_param_name"`
 	SendToRoutes          types.Bool                     `tfsdk:"send_to_routes"`
 	SocketTimeout         types.Float64                  `tfsdk:"socket_timeout"`
 	Streamtags            []types.String                 `tfsdk:"streamtags"`
 	TextSecret            types.String                   `tfsdk:"text_secret"`
 	TLS                   *TLSSettingsServerSideType     `tfsdk:"tls"`
 	Token                 types.String                   `tfsdk:"token"`
-	TokenAttributeName    jsontypes.Normalized           `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs      jsontypes.Normalized           `tfsdk:"token_timeout_secs"`
+	TokenAttributeName    types.String                   `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs      types.Float64                  `tfsdk:"token_timeout_secs"`
 	Type                  types.String                   `tfsdk:"type"`
 	Username              types.String                   `tfsdk:"username"`
 }

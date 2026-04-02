@@ -7,8 +7,6 @@ import (
 )
 
 type OutputTcpjson struct {
-	TemplateHost              types.String                             `tfsdk:"template_host"`
-	TemplatePort              types.String                             `tfsdk:"template_port"`
 	AuthToken                 types.String                             `tfsdk:"auth_token"`
 	AuthType                  types.String                             `tfsdk:"auth_type"`
 	Compression               types.String                             `tfsdk:"compression"`

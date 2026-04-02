@@ -62,8 +62,8 @@ resource "criblio_pack_breakers" "my_packbreakers" {
 
 ### Required
 
-- `group_id` (String) group ID to GET
-- `id` (String) Unique ID to PATCH for pack
+- `group_id` (String) group ID to GET. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH for pack. Requires replacement if changed.
 - `pack` (String) pack ID to POST. Requires replacement if changed.
 
 ### Optional

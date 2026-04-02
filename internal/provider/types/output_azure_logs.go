@@ -7,8 +7,6 @@ import (
 )
 
 type OutputAzureLogs struct {
-	TemplateWorkspaceID           types.String                     `tfsdk:"template_workspace_id"`
-	TemplateWorkspaceKey          types.String                     `tfsdk:"template_workspace_key"`
 	APIURL                        types.String                     `tfsdk:"api_url"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                       `tfsdk:"compress"`

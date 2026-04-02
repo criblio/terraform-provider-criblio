@@ -7,9 +7,6 @@ import (
 )
 
 type OutputNewrelic struct {
-	TemplateLogType               types.String                     `tfsdk:"template_log_type"`
-	TemplateMessageField          types.String                     `tfsdk:"template_message_field"`
-	TemplateRegion                types.String                     `tfsdk:"template_region"`
 	APIKey                        types.String                     `tfsdk:"api_key"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                       `tfsdk:"compress"`

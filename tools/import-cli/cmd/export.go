@@ -12,9 +12,9 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/config"
-	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/exclusions"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/export"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
@@ -64,9 +64,9 @@ func NewExportCommand() *cobra.Command {
 
 	appName := version.AppNameOrDefault()
 	exp := &cobra.Command{
-		Use:   "export",
-		Short: "Generate Terraform HCL and import blocks from Cribl resources",
-		Long:  "Reads resources from Cribl and writes Terraform HCL plus import blocks so you can run terraform import.",
+		Use:     "export",
+		Short:   "Generate Terraform HCL and import blocks from Cribl resources",
+		Long:    "Reads resources from Cribl and writes Terraform HCL plus import blocks so you can run terraform import.",
 		Example: "  " + appName + " export --dry-run\n  " + appName + " export --server-url https://cribl.example.com --output-dir ./tf",
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := ValidateExportFlags(include, exclude); err != nil {
@@ -213,8 +213,8 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 		count          int
 		errs           int
 		firstErr       string
-		details        []string         // e.g. group names for criblio_group
-		perGroupCounts map[string]int   // group-scoped resource counts per group
+		details        []string       // e.g. group names for criblio_group
+		perGroupCounts map[string]int // group-scoped resource counts per group
 	}
 	byType := make(map[string]*agg)
 	for _, r := range results {
@@ -295,7 +295,6 @@ func printDryRunPreview(cmd *cobra.Command, results []discovery.Result, groupFil
 	}
 	fmt.Fprintf(out, ", %d resources\n", totalResources)
 }
-
 
 // printExportSummary prints why some resources were not exported (list skips and convert skips).
 // When onPrem is true, skips due to "not supported for on-prem" are summarized in one line instead of listing each type.

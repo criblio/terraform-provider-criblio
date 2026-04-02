@@ -143,14 +143,6 @@ type InputOffice365Mgmt struct {
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
-	// Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
-	TemplateAppID *string `json:"__template_appId,omitempty"`
-	// Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.
-	TemplatePublisherIdentifier *string `json:"__template_publisherIdentifier,omitempty"`
-	// Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
-	TemplateClientSecret *string `json:"__template_clientSecret,omitempty"`
 }
 
 func (i InputOffice365Mgmt) MarshalJSON() ([]byte, error) {
@@ -358,34 +350,6 @@ func (i *InputOffice365Mgmt) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
-}
-
-func (i *InputOffice365Mgmt) GetTemplateTenantID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTenantID
-}
-
-func (i *InputOffice365Mgmt) GetTemplateAppID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAppID
-}
-
-func (i *InputOffice365Mgmt) GetTemplatePublisherIdentifier() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePublisherIdentifier
-}
-
-func (i *InputOffice365Mgmt) GetTemplateClientSecret() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateClientSecret
 }
 
 // #region class-body-inputoffice365mgmt

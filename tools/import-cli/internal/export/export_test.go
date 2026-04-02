@@ -102,13 +102,13 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 		"input_collector_s3", "input_collector_script", "input_collector_splunk",
 	}
 	cfg := &registry.OneOfConfig{
-		ReadOnlyAttr:                  "items",
-		DiscriminatorField:            "type",
-		BlockNamePrefix:               "input_collector_",
-		KeysToSkip:                    []string{"status"},
+		ReadOnlyAttr:                   "items",
+		DiscriminatorField:             "type",
+		BlockNamePrefix:                "input_collector_",
+		KeysToSkip:                     []string{"status"},
 		UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"},
-		NestedDiscriminatorField:      "collector.type",
-		SupportedBlockNames:           supportedBlocks,
+		NestedDiscriminatorField:       "collector.type",
+		SupportedBlockNames:            supportedBlocks,
 	}
 
 	t.Run("collection type resolves via nested collector.type=rest", func(t *testing.T) {
@@ -246,6 +246,12 @@ func TestSkipResourceByID(t *testing.T) {
 	})
 	t.Run("not skipped for normal resource", func(t *testing.T) {
 		assert.False(t, skipResourceByID("criblio_source", map[string]string{"id": "my_custom_source"}))
+	})
+	t.Run("skip criblio_source in default_search group", func(t *testing.T) {
+		assert.True(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default_search", "id": "in_open_telemetry"}))
+	})
+	t.Run("not skip criblio_source in other groups when same id", func(t *testing.T) {
+		assert.False(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default", "id": "in_open_telemetry"}))
 	})
 }
 
@@ -393,7 +399,7 @@ func TestRawJSONToItemMap(t *testing.T) {
 		raw := []byte(`{"id":"x","name":"y"}`)
 		got := rawJSONToItemMap(raw)
 		require.NotNil(t, got)
-		assert.Equal(t, `"x"`, got["id"])   // values are JSON-encoded
+		assert.Equal(t, `"x"`, got["id"]) // values are JSON-encoded
 		assert.Equal(t, `"y"`, got["name"])
 	})
 	t.Run("invalid JSON returns nil", func(t *testing.T) {

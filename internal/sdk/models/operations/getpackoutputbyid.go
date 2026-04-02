@@ -38,6 +38,14 @@ func (g *GetPackOutputByIDRequest) GetPack() string {
 
 // GetPackOutputByIDResponseBody - a list of Output objects
 type GetPackOutputByIDResponseBody struct {
+	Items []shared.Output `json:"items,omitempty"`
+}
+
+func (g *GetPackOutputByIDResponseBody) GetItems() []shared.Output {
+	if g == nil {
+		return nil
+	}
+	return g.Items
 }
 
 type GetPackOutputByIDResponse struct {

@@ -7,9 +7,6 @@ import (
 )
 
 type InputMetrics struct {
-	TemplateHost       types.String                   `tfsdk:"template_host"`
-	TemplateTCPPort    types.String                   `tfsdk:"template_tcp_port"`
-	TemplateUDPPort    types.String                   `tfsdk:"template_udp_port"`
 	Connections        []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description        types.String                   `tfsdk:"description"`
 	Disabled           types.Bool                     `tfsdk:"disabled"`

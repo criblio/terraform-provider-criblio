@@ -302,11 +302,8 @@ type InputCloudflareHec struct {
 	// Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
 	EmitTokenMetrics *bool   `json:"emitTokenMetrics,omitempty"`
 	Description      *string `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort      *string `json:"__template_port,omitempty"`
-	EnableHealthCheck any     `json:"enableHealthCheck,omitempty"`
+	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
+	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 }
 
 func (i InputCloudflareHec) MarshalJSON() ([]byte, error) {
@@ -551,21 +548,7 @@ func (i *InputCloudflareHec) GetDescription() *string {
 	return i.Description
 }
 
-func (i *InputCloudflareHec) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputCloudflareHec) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
-}
-
-func (i *InputCloudflareHec) GetEnableHealthCheck() any {
+func (i *InputCloudflareHec) GetEnableHealthCheck() *bool {
 	if i == nil {
 		return nil
 	}

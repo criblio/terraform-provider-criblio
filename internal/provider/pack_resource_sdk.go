@@ -31,7 +31,6 @@ func (r *PackResourceModel) RefreshFromOperationsCreatePacksResponseBody(ctx con
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
@@ -93,7 +92,6 @@ func (r *PackResourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx co
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
@@ -179,7 +177,6 @@ func (r *PackResourceModel) RefreshFromOperationsUpdatePacksByIDResponseBody(ctx
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {
@@ -398,12 +395,6 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 	var id string
 	id = r.ID.ValueString()
 
-	isDisabled := new(bool)
-	if !r.IsDisabled.IsUnknown() && !r.IsDisabled.IsNull() {
-		*isDisabled = r.IsDisabled.ValueBool()
-	} else {
-		isDisabled = nil
-	}
 	inputs := new(float64)
 	if !r.Inputs.IsUnknown() && !r.Inputs.IsNull() {
 		*inputs = r.Inputs.ValueFloat64()
@@ -473,7 +464,6 @@ func (r *PackResourceModel) ToSharedPackRequestBody(ctx context.Context) (*share
 		Exports:              exports,
 		Force:                force,
 		ID:                   id,
-		IsDisabled:           isDisabled,
 		Inputs:               inputs,
 		MinLogStreamVersion:  minLogStreamVersion,
 		Outputs:              outputs,

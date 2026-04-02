@@ -36,8 +36,8 @@ resource "criblio_pack_vars" "my_packvars" {
 
 ### Required
 
-- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'.
-- `id` (String) Global variable name.
+- `group_id` (String) The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.
+- `id` (String) Global variable name. Requires replacement if changed.
 - `pack` (String) pack ID to POST. Requires replacement if changed.
 
 ### Optional

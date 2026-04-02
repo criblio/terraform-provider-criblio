@@ -7,7 +7,6 @@ import (
 )
 
 type OutputCriblSearchEngine struct {
-	TemplateURL                   types.String                             `tfsdk:"template_url"`
 	AuthTokens                    []ItemsTypeAuthTokensTokenSecret         `tfsdk:"auth_tokens"`
 	Compression                   types.String                             `tfsdk:"compression"`
 	Concurrency                   types.Float64                            `tfsdk:"concurrency"`

@@ -355,10 +355,6 @@ type OutputSyslog struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                 `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputSyslogPqControls `json:"pqControls,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (o OutputSyslog) MarshalJSON() ([]byte, error) {
@@ -671,18 +667,4 @@ func (o *OutputSyslog) GetPqControls() *OutputSyslogPqControls {
 		return nil
 	}
 	return o.PqControls
-}
-
-func (o *OutputSyslog) GetTemplateHost() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateHost
-}
-
-func (o *OutputSyslog) GetTemplatePort() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplatePort
 }

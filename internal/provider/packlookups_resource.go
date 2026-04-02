@@ -7,6 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
+
 	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
@@ -24,7 +26,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -75,15 +76,19 @@ func (r *PackLookupsResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Unique ID to PATCH for pack`,
+				Description: `Unique ID to PATCH. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`), "must match pattern "+regexp.MustCompile(`^\w[\w -]+(?:\.csv|\.gz|\.csv\.gz|\.mmdb)?$`).String()),
 				},

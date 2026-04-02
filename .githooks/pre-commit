@@ -1,6 +1,21 @@
 #!/bin/bash
+set -euo pipefail
 
-find . -type f -name *.tf -exec terraform fmt {} \;
-find . -type f -name *.tf -exec git add {} \;
-find . -type f -name *.go -exec go fmt {} \;
-find . -type f -name *.go -exec git add {} \;
+# Only format paths that are already staged. Formatting the whole tree and re-adding
+# every .go/.tf re-stages unrelated work and can break IDE commits (e.g. batched git add
+# across directories). CI should `git add -A` before invoking this hook when a full-tree
+# pass is required (see .github/workflows/determinism.yaml).
+while IFS= read -r f; do
+	[ -n "$f" ] || continue
+	[ -f "$f" ] || continue
+	case "$f" in
+	*.go)
+		go fmt "$f"
+		git add "$f"
+		;;
+	*.tf)
+		terraform fmt "$f"
+		git add "$f"
+		;;
+	esac
+done < <(git diff --cached --name-only --diff-filter=ACM)

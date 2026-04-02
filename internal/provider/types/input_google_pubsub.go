@@ -7,9 +7,6 @@ import (
 )
 
 type InputGooglePubsub struct {
-	TemplateRegion            types.String                   `tfsdk:"template_region"`
-	TemplateSubscriptionName  types.String                   `tfsdk:"template_subscription_name"`
-	TemplateTopicName         types.String                   `tfsdk:"template_topic_name"`
 	Concurrency               types.Float64                  `tfsdk:"concurrency"`
 	Connections               []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	CreateSubscription        types.Bool                     `tfsdk:"create_subscription"`

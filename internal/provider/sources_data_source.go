@@ -266,14 +266,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
@@ -517,22 +509,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-								},
-								"template_connection_string": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
-								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `The service principal's tenant ID`,
@@ -652,10 +628,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
@@ -784,14 +759,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -1675,14 +1642,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -1963,18 +1922,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -2179,14 +2126,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -2602,34 +2541,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_account_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -2810,14 +2721,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -3286,26 +3189,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 									},
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable`,
@@ -3529,10 +3412,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 											ElementType: types.StringType,
 											Description: `List of headers to remove from the request to proxy`,
 										},
-										"template_url": schema.StringAttribute{
-											Computed:    true,
-											Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-										},
 										"timeout_sec": schema.Float64Attribute{
 											Computed:    true,
 											Description: `Amount of time, in seconds, to wait for a proxy request to complete before canceling it`,
@@ -3562,14 +3441,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -4392,14 +4263,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -4601,18 +4464,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"subscription_name": schema.StringAttribute{
 									Computed:    true,
 									Description: `ID of the subscription to use when receiving events. When Monitor subscription is enabled, the fully qualified subscription name must be entered. Example: projects/myProject/subscriptions/mySubscription`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
-								"template_subscription_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'subscriptionName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'subscriptionName' at runtime.`,
-								},
-								"template_topic_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.`,
 								},
 								"topic_name": schema.StringAttribute{
 									Computed:    true,
@@ -4968,14 +4819,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -5231,18 +5074,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -5503,14 +5334,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -6303,30 +6126,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
-								"template_stream_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.`,
-								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -6794,9 +6593,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+									CustomType:  types.StringType,
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -6863,9 +6662,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"loki_api": schema.StringAttribute{
 									Computed:    true,
@@ -6899,34 +6697,32 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -6988,14 +6784,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -7009,14 +6803,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -7073,14 +6859,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -7212,18 +6996,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_tcp_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-								},
-								"template_udp_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -7518,22 +7290,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-								},
-								"template_resource": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.`,
-								},
-								"template_tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
-								},
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Directory ID (tenant identifier) in Azure Active Directory.`,
@@ -7681,14 +7437,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -8059,26 +7807,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -8262,14 +7990,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"template_cache_minutes": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -8494,22 +8214,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_app_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.`,
-								},
-								"template_client_secret": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.`,
-								},
-								"template_publisher_identifier": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.`,
-								},
-								"template_tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
 								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
@@ -8766,22 +8470,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-								},
-								"template_resource": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.`,
-								},
-								"template_tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
-								},
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Directory ID (tenant identifier) in Azure Active Directory.`,
@@ -9010,18 +8698,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_app_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.`,
-								},
-								"template_client_secret": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.`,
-								},
-								"template_tenant_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
-								},
 								"tenant_id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Office 365 Azure Tenant ID`,
@@ -9046,24 +8722,22 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"input_open_telemetry": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"activity_log_sample_rate": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"activity_log_sample_rate": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+									CustomType:  types.StringType,
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
 									Description: `OpenTelemetry authentication type`,
 								},
-								"capture_headers": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"capture_headers": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Add request headers to events, in the __headers field`,
 								},
 								"connections": schema.ListNestedAttribute{
 									Computed: true,
@@ -9093,10 +8767,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
-								"enable_proxy_header": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.`,
 								},
 								"environment": schema.StringAttribute{
 									Computed:    true,
@@ -9135,9 +8808,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_active_cxn": schema.Float64Attribute{
 									Computed:    true,
@@ -9171,34 +8843,32 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"otlp_version": schema.StringAttribute{
 									Computed:    true,
@@ -9268,14 +8938,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -9289,14 +8957,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -9353,14 +9013,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -9647,14 +9305,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_openai_organization": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.`,
-								},
-								"template_openai_project": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.`,
-								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.`,
@@ -9909,42 +9559,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.`,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_discovery_type": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'discoveryType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'discoveryType' at runtime.`,
-								},
-								"template_log_level": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'logLevel' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logLevel' at runtime.`,
-								},
-								"template_password": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'password' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'password' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
-								"template_username": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.`,
-								},
 								"timeout": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout`,
@@ -9974,9 +9588,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How often request activity is logged at the ` + "`" + `info` + "`" + ` level. A value of 1 would log every request, 10 every 10th request, etc.`,
 								},
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+									CustomType:  types.StringType,
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -10043,9 +9657,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_active_req": schema.Float64Attribute{
 									Computed:    true,
@@ -10075,34 +9688,32 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"password": schema.StringAttribute{
 									Computed: true,
@@ -10168,14 +9779,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `How long to wait for an incoming request to complete before aborting it. Use 0 to disable.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -10189,22 +9798,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_prometheus_api": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.`,
-								},
-								"template_username": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -10261,14 +9854,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -10404,14 +9995,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -10677,34 +10260,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tag_after_processing": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.`,
-								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_account_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -10974,34 +10529,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_account_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -11270,34 +10797,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tag_after_processing": schema.StringAttribute{
 									Computed: true,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_account_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -11465,14 +10964,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -11662,14 +11153,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -11831,10 +11314,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
@@ -11972,18 +11454,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
-								"template_splunk_hec_api": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -12043,9 +11513,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"auth_header_expr": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+									CustomType:  types.StringType,
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 								},
 								"auth_type": schema.StringAttribute{
 									Computed:    true,
@@ -12155,9 +11625,8 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Collector runtime log level (verbosity)`,
 								},
 								"login_url": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `URL for OAuth`,
 								},
 								"max_missed_keep_alives": schema.Float64Attribute{
 									Computed:    true,
@@ -12183,34 +11652,32 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth header value`,
 											},
 										},
 									},
+									Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"oauth_params": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"name": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter name`,
 											},
 											"value": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `OAuth parameter value`,
 											},
 										},
 									},
+									Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 								},
 								"output_mode": schema.StringAttribute{
 									Computed:    true,
@@ -12322,14 +11789,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Search head base URL. Can be an expression. Default is https://localhost:8089.`,
 								},
 								"secret": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter value to pass in request body`,
 								},
 								"secret_param_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Secret parameter name to pass in request body`,
 								},
 								"send_to_routes": schema.BoolAttribute{
 									Computed:    true,
@@ -12353,14 +11818,12 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Description: `Bearer token to include in the authorization header`,
 								},
 								"token_attribute_name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 								},
-								"token_timeout_secs": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"token_timeout_secs": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `How often the OAuth token should be refreshed.`,
 								},
 								"ttl": schema.StringAttribute{
 									Computed:    true,
@@ -12559,34 +12022,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_assume_role_arn": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-								},
-								"template_assume_role_external_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-								},
-								"template_aws_account_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-								},
-								"template_aws_api_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-								},
-								"template_aws_secret_key": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-								},
-								"template_queue_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-								},
-								"template_region": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-								},
 								"type": schema.StringAttribute{
 									Computed: true,
 								},
@@ -12767,18 +12202,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
 									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_tcp_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.`,
-								},
-								"template_udp_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.`,
 								},
 								"timestamp_timezone": schema.StringAttribute{
 									Computed:    true,
@@ -13594,14 +13017,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
@@ -13803,14 +13218,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
@@ -14127,14 +13534,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 										},
 									},
 									Description: `Subscriptions to events on forwarding endpoints`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -14867,18 +14266,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_auth_url": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.`,
-								},
-								"template_client_id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-								},
-								"template_endpoint": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.`,
-								},
 								"text_secret": schema.StringAttribute{
 									Computed:    true,
 									Description: `Select or create a stored text secret`,
@@ -15101,14 +14488,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
@@ -15256,10 +14635,9 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									Description: `Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics`,
 								},
-								"enable_health_check": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
+								"enable_health_check": schema.BoolAttribute{
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy`,
 								},
 								"enable_proxy_header": schema.BoolAttribute{
 									Computed:    true,
@@ -15388,18 +14766,6 @@ func (r *SourcesDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 									Computed:    true,
 									ElementType: types.StringType,
 									Description: `Tags for filtering and grouping in @{product}`,
-								},
-								"template_hec_api": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,

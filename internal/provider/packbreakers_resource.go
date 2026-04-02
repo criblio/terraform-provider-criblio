@@ -77,12 +77,18 @@ func (r *PackBreakersResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group ID to GET`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group ID to GET. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH for pack`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Unique ID to PATCH for pack. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9\-_ ]+$`).String()),
 				},

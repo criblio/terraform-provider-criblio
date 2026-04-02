@@ -7,14 +7,6 @@ import (
 )
 
 type OutputSentinel struct {
-	TemplateClientID              types.String                     `tfsdk:"template_client_id"`
-	TemplateDceEndpoint           types.String                     `tfsdk:"template_dce_endpoint"`
-	TemplateDcrID                 types.String                     `tfsdk:"template_dcr_id"`
-	TemplateLoginURL              types.String                     `tfsdk:"template_login_url"`
-	TemplateScope                 types.String                     `tfsdk:"template_scope"`
-	TemplateSecret                types.String                     `tfsdk:"template_secret"`
-	TemplateStreamName            types.String                     `tfsdk:"template_stream_name"`
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	AdvancedContentType           types.String                     `tfsdk:"advanced_content_type"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	ClientID                      types.String                     `tfsdk:"client_id"`

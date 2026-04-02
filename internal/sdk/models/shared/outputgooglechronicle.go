@@ -290,12 +290,6 @@ type OutputGoogleChronicle struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                          `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputGoogleChroniclePqControls `json:"pqControls,omitempty"`
-	// Binds 'apiVersion' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'apiVersion' at runtime.
-	TemplateAPIVersion *string `json:"__template_apiVersion,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'customerId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customerId' at runtime.
-	TemplateCustomerID *string `json:"__template_customerId,omitempty"`
 }
 
 func (o OutputGoogleChronicle) MarshalJSON() ([]byte, error) {
@@ -657,25 +651,4 @@ func (o *OutputGoogleChronicle) GetPqControls() *OutputGoogleChroniclePqControls
 		return nil
 	}
 	return o.PqControls
-}
-
-func (o *OutputGoogleChronicle) GetTemplateAPIVersion() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateAPIVersion
-}
-
-func (o *OutputGoogleChronicle) GetTemplateRegion() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateRegion
-}
-
-func (o *OutputGoogleChronicle) GetTemplateCustomerID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateCustomerID
 }

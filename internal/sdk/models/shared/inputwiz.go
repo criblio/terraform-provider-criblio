@@ -265,12 +265,6 @@ type InputWiz struct {
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.
-	TemplateEndpoint *string `json:"__template_endpoint,omitempty"`
-	// Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.
-	TemplateAuthURL *string `json:"__template_authUrl,omitempty"`
-	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-	TemplateClientID *string `json:"__template_clientId,omitempty"`
 }
 
 func (i InputWiz) MarshalJSON() ([]byte, error) {
@@ -464,25 +458,4 @@ func (i *InputWiz) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
-}
-
-func (i *InputWiz) GetTemplateEndpoint() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateEndpoint
-}
-
-func (i *InputWiz) GetTemplateAuthURL() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAuthURL
-}
-
-func (i *InputWiz) GetTemplateClientID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateClientID
 }

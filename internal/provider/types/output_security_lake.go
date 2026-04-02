@@ -7,12 +7,6 @@ import (
 )
 
 type OutputSecurityLake struct {
-	TemplateAssumeRoleArn         types.String                `tfsdk:"template_assume_role_arn"`
-	TemplateAssumeRoleExternalID  types.String                `tfsdk:"template_assume_role_external_id"`
-	TemplateAwsAPIKey             types.String                `tfsdk:"template_aws_api_key"`
-	TemplateAwsSecretKey          types.String                `tfsdk:"template_aws_secret_key"`
-	TemplateBucket                types.String                `tfsdk:"template_bucket"`
-	TemplateRegion                types.String                `tfsdk:"template_region"`
 	AccountID                     types.String                `tfsdk:"account_id"`
 	AddIDToStagePath              types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AssumeRoleArn                 types.String                `tfsdk:"assume_role_arn"`

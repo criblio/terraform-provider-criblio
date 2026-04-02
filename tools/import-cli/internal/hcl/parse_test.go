@@ -19,9 +19,9 @@ func TestParseHCL_valid_passes(t *testing.T) {
 
 func TestParseHCL_invalid_fails_with_clear_error(t *testing.T) {
 	tests := []struct {
-		name     string
-		invalid  string
-		wantErr  string
+		name    string
+		invalid string
+		wantErr string
 	}{
 		{
 			name:    "unclosed block",

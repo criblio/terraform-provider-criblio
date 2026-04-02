@@ -14,8 +14,8 @@ import (
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -78,8 +78,11 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Comments`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group Id. Requires replacement if changed.`,
 			},
 			"groups": schema.MapNestedAttribute{
 				Optional: true,
@@ -100,8 +103,11 @@ func (r *PackRoutesResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"id": schema.StringAttribute{
-				Optional:    true,
-				Description: `Routes ID`,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Routes ID. Requires replacement if changed.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,

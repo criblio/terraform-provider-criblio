@@ -145,8 +145,10 @@ func (o *OutputClickHousePqControls) UnmarshalJSON(data []byte) error {
 }
 
 type OutputClickHouseOauthParam struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth parameter name
+	Name string `json:"name"`
+	// OAuth parameter value
+	Value string `json:"value"`
 }
 
 func (o OutputClickHouseOauthParam) MarshalJSON() ([]byte, error) {
@@ -160,23 +162,25 @@ func (o *OutputClickHouseOauthParam) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputClickHouseOauthParam) GetName() any {
+func (o *OutputClickHouseOauthParam) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputClickHouseOauthParam) GetValue() any {
+func (o *OutputClickHouseOauthParam) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
 
 type OutputClickHouseOauthHeader struct {
-	Name  any `json:"name,omitempty"`
-	Value any `json:"value,omitempty"`
+	// OAuth header name
+	Name string `json:"name"`
+	// OAuth header value
+	Value string `json:"value"`
 }
 
 func (o OutputClickHouseOauthHeader) MarshalJSON() ([]byte, error) {
@@ -190,16 +194,16 @@ func (o *OutputClickHouseOauthHeader) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *OutputClickHouseOauthHeader) GetName() any {
+func (o *OutputClickHouseOauthHeader) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *OutputClickHouseOauthHeader) GetValue() any {
+func (o *OutputClickHouseOauthHeader) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }
@@ -299,22 +303,26 @@ type OutputClickHouse struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                     `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputClickHousePqControls `json:"pqControls,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
-	TemplateDatabase *string `json:"__template_database,omitempty"`
-	// Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
-	TemplateTableName  *string                       `json:"__template_tableName,omitempty"`
-	Token              any                           `json:"token,omitempty"`
-	TextSecret         any                           `json:"textSecret,omitempty"`
-	LoginURL           any                           `json:"loginUrl,omitempty"`
-	SecretParamName    any                           `json:"secretParamName,omitempty"`
-	Secret             any                           `json:"secret,omitempty"`
-	TokenAttributeName any                           `json:"tokenAttributeName,omitempty"`
-	AuthHeaderExpr     any                           `json:"authHeaderExpr,omitempty"`
-	TokenTimeoutSecs   any                           `json:"tokenTimeoutSecs,omitempty"`
-	OauthParams        []OutputClickHouseOauthParam  `json:"oauthParams,omitempty"`
-	OauthHeaders       []OutputClickHouseOauthHeader `json:"oauthHeaders,omitempty"`
+	// Bearer token to include in the authorization header
+	Token *string `json:"token,omitempty"`
+	// Select or create a stored text secret
+	TextSecret *string `json:"textSecret,omitempty"`
+	// URL for OAuth
+	LoginURL *string `json:"loginUrl,omitempty"`
+	// Secret parameter name to pass in request body
+	SecretParamName *string `json:"secretParamName,omitempty"`
+	// Secret parameter value to pass in request body
+	Secret *string `json:"secret,omitempty"`
+	// Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+	TokenAttributeName *string `json:"tokenAttributeName,omitempty"`
+	// JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+	AuthHeaderExpr *string `json:"authHeaderExpr,omitempty"`
+	// How often the OAuth token should be refreshed.
+	TokenTimeoutSecs *float64 `json:"tokenTimeoutSecs,omitempty"`
+	// Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthParams []OutputClickHouseOauthParam `json:"oauthParams,omitempty"`
+	// Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.
+	OauthHeaders []OutputClickHouseOauthHeader `json:"oauthHeaders,omitempty"`
 }
 
 func (o OutputClickHouse) MarshalJSON() ([]byte, error) {
@@ -685,77 +693,56 @@ func (o *OutputClickHouse) GetPqControls() *OutputClickHousePqControls {
 	return o.PqControls
 }
 
-func (o *OutputClickHouse) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
-}
-
-func (o *OutputClickHouse) GetTemplateDatabase() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDatabase
-}
-
-func (o *OutputClickHouse) GetTemplateTableName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateTableName
-}
-
-func (o *OutputClickHouse) GetToken() any {
+func (o *OutputClickHouse) GetToken() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Token
 }
 
-func (o *OutputClickHouse) GetTextSecret() any {
+func (o *OutputClickHouse) GetTextSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TextSecret
 }
 
-func (o *OutputClickHouse) GetLoginURL() any {
+func (o *OutputClickHouse) GetLoginURL() *string {
 	if o == nil {
 		return nil
 	}
 	return o.LoginURL
 }
 
-func (o *OutputClickHouse) GetSecretParamName() any {
+func (o *OutputClickHouse) GetSecretParamName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.SecretParamName
 }
 
-func (o *OutputClickHouse) GetSecret() any {
+func (o *OutputClickHouse) GetSecret() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Secret
 }
 
-func (o *OutputClickHouse) GetTokenAttributeName() any {
+func (o *OutputClickHouse) GetTokenAttributeName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.TokenAttributeName
 }
 
-func (o *OutputClickHouse) GetAuthHeaderExpr() any {
+func (o *OutputClickHouse) GetAuthHeaderExpr() *string {
 	if o == nil {
 		return nil
 	}
 	return o.AuthHeaderExpr
 }
 
-func (o *OutputClickHouse) GetTokenTimeoutSecs() any {
+func (o *OutputClickHouse) GetTokenTimeoutSecs() *float64 {
 	if o == nil {
 		return nil
 	}

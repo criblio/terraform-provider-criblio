@@ -7,8 +7,6 @@ import (
 )
 
 type InputCriblTCP struct {
-	TemplateHost        types.String                   `tfsdk:"template_host"`
-	TemplatePort        types.String                   `tfsdk:"template_port"`
 	AuthTokens          []ItemsTypeAuthTokens          `tfsdk:"auth_tokens"`
 	Connections         []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description         types.String                   `tfsdk:"description"`

@@ -3,12 +3,11 @@
 package shared
 
 type PackClone struct {
-	Dest       *string  `json:"dest,omitempty"`
-	DstGroups  []string `json:"dstGroups"`
-	Force      *bool    `json:"force,omitempty"`
-	IsDisabled *bool    `json:"isDisabled,omitempty"`
-	Packs      []string `json:"packs"`
-	SrcGroup   string   `json:"srcGroup"`
+	Dest      *string  `json:"dest,omitempty"`
+	DstGroups []string `json:"dstGroups"`
+	Force     *bool    `json:"force,omitempty"`
+	Packs     []string `json:"packs"`
+	SrcGroup  string   `json:"srcGroup"`
 }
 
 func (p *PackClone) GetDest() *string {
@@ -30,13 +29,6 @@ func (p *PackClone) GetForce() *bool {
 		return nil
 	}
 	return p.Force
-}
-
-func (p *PackClone) GetIsDisabled() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.IsDisabled
 }
 
 func (p *PackClone) GetPacks() []string {

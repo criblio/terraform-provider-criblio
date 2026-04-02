@@ -168,13 +168,12 @@ type OutputCloudflareR2 struct {
 	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
-	// Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
-	TemplateBucket *string `json:"__template_bucket,omitempty"`
-	// Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-	TemplateFormat *string `json:"__template_format,omitempty"`
-	Region         any     `json:"region,omitempty"`
-	ObjectACL      any     `json:"objectACL,omitempty"`
-	AwsAPIKey      any     `json:"awsApiKey,omitempty"`
+	// Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2
+	Region *string `json:"region,omitempty"`
+	// Object ACL to assign to uploaded objects
+	ObjectACL *ObjectACLOptions `json:"objectACL,omitempty"`
+	// R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.
+	AwsAPIKey *string `json:"awsApiKey,omitempty"`
 }
 
 func (o OutputCloudflareR2) MarshalJSON() ([]byte, error) {
@@ -573,35 +572,21 @@ func (o *OutputCloudflareR2) GetMaxRetryNum() *float64 {
 	return o.MaxRetryNum
 }
 
-func (o *OutputCloudflareR2) GetTemplateBucket() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateBucket
-}
-
-func (o *OutputCloudflareR2) GetTemplateFormat() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateFormat
-}
-
-func (o *OutputCloudflareR2) GetRegion() any {
+func (o *OutputCloudflareR2) GetRegion() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Region
 }
 
-func (o *OutputCloudflareR2) GetObjectACL() any {
+func (o *OutputCloudflareR2) GetObjectACL() *ObjectACLOptions {
 	if o == nil {
 		return nil
 	}
 	return o.ObjectACL
 }
 
-func (o *OutputCloudflareR2) GetAwsAPIKey() any {
+func (o *OutputCloudflareR2) GetAwsAPIKey() *string {
 	if o == nil {
 		return nil
 	}

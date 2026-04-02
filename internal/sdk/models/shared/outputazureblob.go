@@ -180,16 +180,6 @@ type OutputAzureBlob struct {
 	// Select or create a stored text secret
 	ClientTextSecret *string                                     `json:"clientTextSecret,omitempty"`
 	Certificate      *CertificateTypeAzureBlobAuthTypeClientCert `json:"certificate,omitempty"`
-	// Binds 'containerName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'containerName' at runtime.
-	TemplateContainerName *string `json:"__template_containerName,omitempty"`
-	// Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-	TemplateFormat *string `json:"__template_format,omitempty"`
-	// Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.
-	TemplateConnectionString *string `json:"__template_connectionString,omitempty"`
-	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
-	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-	TemplateClientID *string `json:"__template_clientId,omitempty"`
 }
 
 func (o OutputAzureBlob) MarshalJSON() ([]byte, error) {
@@ -600,39 +590,4 @@ func (o *OutputAzureBlob) GetCertificate() *CertificateTypeAzureBlobAuthTypeClie
 		return nil
 	}
 	return o.Certificate
-}
-
-func (o *OutputAzureBlob) GetTemplateContainerName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateContainerName
-}
-
-func (o *OutputAzureBlob) GetTemplateFormat() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateFormat
-}
-
-func (o *OutputAzureBlob) GetTemplateConnectionString() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateConnectionString
-}
-
-func (o *OutputAzureBlob) GetTemplateTenantID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateTenantID
-}
-
-func (o *OutputAzureBlob) GetTemplateClientID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateClientID
 }

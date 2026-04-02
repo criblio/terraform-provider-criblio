@@ -7,10 +7,6 @@ import (
 )
 
 type InputMicrosoftGraph struct {
-	TemplateClientID       types.String                     `tfsdk:"template_client_id"`
-	TemplateResource       types.String                     `tfsdk:"template_resource"`
-	TemplateTenantID       types.String                     `tfsdk:"template_tenant_id"`
-	TemplateURL            types.String                     `tfsdk:"template_url"`
 	AuthType               types.String                     `tfsdk:"auth_type"`
 	CertOptions            *CertOptionsType                 `tfsdk:"cert_options"`
 	ClientID               types.String                     `tfsdk:"client_id"`

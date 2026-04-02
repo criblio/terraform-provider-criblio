@@ -7,7 +7,6 @@ import (
 )
 
 type OutputDataset struct {
-	TemplateCustomURL             types.String                     `tfsdk:"template_custom_url"`
 	APIKey                        types.String                     `tfsdk:"api_key"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                       `tfsdk:"compress"`

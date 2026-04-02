@@ -44,7 +44,6 @@ type PackInstallInfo struct {
 	Exports             []string             `json:"exports,omitempty"`
 	ID                  string               `json:"id"`
 	Inputs              *float64             `json:"inputs,omitempty"`
-	IsDisabled          *bool                `json:"isDisabled,omitempty"`
 	MinLogStreamVersion *string              `json:"minLogStreamVersion,omitempty"`
 	Outputs             *float64             `json:"outputs,omitempty"`
 	Settings            map[string]any       `json:"settings,omitempty"`
@@ -95,13 +94,6 @@ func (p *PackInstallInfo) GetInputs() *float64 {
 		return nil
 	}
 	return p.Inputs
-}
-
-func (p *PackInstallInfo) GetIsDisabled() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.IsDisabled
 }
 
 func (p *PackInstallInfo) GetMinLogStreamVersion() *string {

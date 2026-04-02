@@ -125,14 +125,6 @@ type OutputNewrelicEvents struct {
 	APIKey *string `json:"apiKey,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'accountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'accountId' at runtime.
-	TemplateAccountID *string `json:"__template_accountId,omitempty"`
-	// Binds 'eventType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'eventType' at runtime.
-	TemplateEventType *string `json:"__template_eventType,omitempty"`
-	// Binds 'customUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customUrl' at runtime.
-	TemplateCustomURL *string `json:"__template_customUrl,omitempty"`
 }
 
 func (o OutputNewrelicEvents) MarshalJSON() ([]byte, error) {
@@ -431,32 +423,4 @@ func (o *OutputNewrelicEvents) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
-}
-
-func (o *OutputNewrelicEvents) GetTemplateRegion() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateRegion
-}
-
-func (o *OutputNewrelicEvents) GetTemplateAccountID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateAccountID
-}
-
-func (o *OutputNewrelicEvents) GetTemplateEventType() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateEventType
-}
-
-func (o *OutputNewrelicEvents) GetTemplateCustomURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateCustomURL
 }

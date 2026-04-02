@@ -78,11 +78,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 
 	if resp.OutputAzureBlob != nil {
 		r.OutputAzureBlob = &tfTypes.OutputAzureBlob{}
-		r.OutputAzureBlob.TemplateClientID = types.StringPointerValue(resp.OutputAzureBlob.TemplateClientID)
-		r.OutputAzureBlob.TemplateConnectionString = types.StringPointerValue(resp.OutputAzureBlob.TemplateConnectionString)
-		r.OutputAzureBlob.TemplateContainerName = types.StringPointerValue(resp.OutputAzureBlob.TemplateContainerName)
-		r.OutputAzureBlob.TemplateFormat = types.StringPointerValue(resp.OutputAzureBlob.TemplateFormat)
-		r.OutputAzureBlob.TemplateTenantID = types.StringPointerValue(resp.OutputAzureBlob.TemplateTenantID)
 		r.OutputAzureBlob.AddIDToStagePath = types.BoolPointerValue(resp.OutputAzureBlob.AddIDToStagePath)
 		if resp.OutputAzureBlob.AuthType != nil {
 			r.OutputAzureBlob.AuthType = types.StringValue(string(*resp.OutputAzureBlob.AuthType))
@@ -212,15 +207,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputAzureDataExplorer != nil {
 		r.OutputAzureDataExplorer = &tfTypes.OutputAzureDataExplorer{}
-		r.OutputAzureDataExplorer.TemplateClientID = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClientID)
-		r.OutputAzureDataExplorer.TemplateClientSecret = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClientSecret)
-		r.OutputAzureDataExplorer.TemplateClusterURL = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateClusterURL)
-		r.OutputAzureDataExplorer.TemplateDatabase = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateDatabase)
-		r.OutputAzureDataExplorer.TemplateFormat = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateFormat)
-		r.OutputAzureDataExplorer.TemplateIngestURL = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateIngestURL)
-		r.OutputAzureDataExplorer.TemplateScope = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateScope)
-		r.OutputAzureDataExplorer.TemplateTable = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateTable)
-		r.OutputAzureDataExplorer.TemplateTenantID = types.StringPointerValue(resp.OutputAzureDataExplorer.TemplateTenantID)
 		r.OutputAzureDataExplorer.AddIDToStagePath = types.BoolPointerValue(resp.OutputAzureDataExplorer.AddIDToStagePath)
 		r.OutputAzureDataExplorer.AdditionalProperties = []tfTypes.AdditionalProperty{}
 
@@ -443,7 +429,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputAzureEventhub != nil {
 		r.OutputAzureEventhub = &tfTypes.OutputAzureEventhub{}
-		r.OutputAzureEventhub.TemplateTopic = types.StringPointerValue(resp.OutputAzureEventhub.TemplateTopic)
 		if resp.OutputAzureEventhub.Ack != nil {
 			r.OutputAzureEventhub.Ack = types.Int64Value(int64(*resp.OutputAzureEventhub.Ack))
 		} else {
@@ -568,8 +553,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputAzureLogs != nil {
 		r.OutputAzureLogs = &tfTypes.OutputAzureLogs{}
-		r.OutputAzureLogs.TemplateWorkspaceID = types.StringPointerValue(resp.OutputAzureLogs.TemplateWorkspaceID)
-		r.OutputAzureLogs.TemplateWorkspaceKey = types.StringPointerValue(resp.OutputAzureLogs.TemplateWorkspaceKey)
 		r.OutputAzureLogs.APIURL = types.StringPointerValue(resp.OutputAzureLogs.APIURL)
 		if resp.OutputAzureLogs.AuthType != nil {
 			r.OutputAzureLogs.AuthType = types.StringValue(string(*resp.OutputAzureLogs.AuthType))
@@ -683,8 +666,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputChronicle != nil {
 		r.OutputChronicle = &tfTypes.OutputChronicle{}
-		r.OutputChronicle.TemplateEndpoint = types.StringPointerValue(resp.OutputChronicle.TemplateEndpoint)
-		r.OutputChronicle.TemplateRegion = types.StringPointerValue(resp.OutputChronicle.TemplateRegion)
 		r.OutputChronicle.APIVersion = types.StringPointerValue(resp.OutputChronicle.APIVersion)
 		if resp.OutputChronicle.AuthenticationMethod != nil {
 			r.OutputChronicle.AuthenticationMethod = types.StringValue(string(*resp.OutputChronicle.AuthenticationMethod))
@@ -815,16 +796,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputClickHouse != nil {
 		r.OutputClickHouse = &tfTypes.OutputClickHouse{}
-		r.OutputClickHouse.TemplateDatabase = types.StringPointerValue(resp.OutputClickHouse.TemplateDatabase)
-		r.OutputClickHouse.TemplateTableName = types.StringPointerValue(resp.OutputClickHouse.TemplateTableName)
-		r.OutputClickHouse.TemplateURL = types.StringPointerValue(resp.OutputClickHouse.TemplateURL)
 		r.OutputClickHouse.AsyncInserts = types.BoolPointerValue(resp.OutputClickHouse.AsyncInserts)
-		if resp.OutputClickHouse.AuthHeaderExpr == nil {
-			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult, _ := json.Marshal(resp.OutputClickHouse.AuthHeaderExpr)
-			r.OutputClickHouse.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult))
-		}
+		authHeaderExprValuable, authHeaderExprDiags := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.OutputClickHouse.AuthHeaderExpr))
+		diags.Append(authHeaderExprDiags...)
+		r.OutputClickHouse.AuthHeaderExpr = authHeaderExprValuable.(types.String)
 		if resp.OutputClickHouse.AuthType != nil {
 			r.OutputClickHouse.AuthType = types.StringValue(string(*resp.OutputClickHouse.AuthType))
 		} else {
@@ -877,12 +852,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputClickHouse.ID = types.StringPointerValue(resp.OutputClickHouse.ID)
 		r.ID = r.OutputClickHouse.ID
-		if resp.OutputClickHouse.LoginURL == nil {
-			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult, _ := json.Marshal(resp.OutputClickHouse.LoginURL)
-			r.OutputClickHouse.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult))
-		}
+		r.OutputClickHouse.LoginURL = types.StringPointerValue(resp.OutputClickHouse.LoginURL)
 		if resp.OutputClickHouse.MappingType != nil {
 			r.OutputClickHouse.MappingType = types.StringValue(string(*resp.OutputClickHouse.MappingType))
 		} else {
@@ -895,18 +865,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem := range resp.OutputClickHouse.OauthHeaders {
 			var oauthHeaders tfTypes.OutputClickHouseOauthHeader
 
-			if oauthHeadersItem.Name == nil {
-				oauthHeaders.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult, _ := json.Marshal(oauthHeadersItem.Name)
-				oauthHeaders.Name = jsontypes.NewNormalizedValue(string(nameResult))
-			}
-			if oauthHeadersItem.Value == nil {
-				oauthHeaders.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult, _ := json.Marshal(oauthHeadersItem.Value)
-				oauthHeaders.Value = jsontypes.NewNormalizedValue(string(valueResult))
-			}
+			oauthHeaders.Name = types.StringValue(oauthHeadersItem.Name)
+			oauthHeaders.Value = types.StringValue(oauthHeadersItem.Value)
 
 			r.OutputClickHouse.OauthHeaders = append(r.OutputClickHouse.OauthHeaders, oauthHeaders)
 		}
@@ -915,18 +875,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem := range resp.OutputClickHouse.OauthParams {
 			var oauthParams tfTypes.OutputClickHouseOauthParam
 
-			if oauthParamsItem.Name == nil {
-				oauthParams.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult1, _ := json.Marshal(oauthParamsItem.Name)
-				oauthParams.Name = jsontypes.NewNormalizedValue(string(nameResult1))
-			}
-			if oauthParamsItem.Value == nil {
-				oauthParams.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult1, _ := json.Marshal(oauthParamsItem.Value)
-				oauthParams.Value = jsontypes.NewNormalizedValue(string(valueResult1))
-			}
+			oauthParams.Name = types.StringValue(oauthParamsItem.Name)
+			oauthParams.Value = types.StringValue(oauthParamsItem.Value)
 
 			r.OutputClickHouse.OauthParams = append(r.OutputClickHouse.OauthParams, oauthParams)
 		}
@@ -984,18 +934,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputClickHouse.SafeHeaders {
 			r.OutputClickHouse.SafeHeaders = append(r.OutputClickHouse.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputClickHouse.Secret == nil {
-			r.OutputClickHouse.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult, _ := json.Marshal(resp.OutputClickHouse.Secret)
-			r.OutputClickHouse.Secret = jsontypes.NewNormalizedValue(string(secretResult))
-		}
-		if resp.OutputClickHouse.SecretParamName == nil {
-			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult, _ := json.Marshal(resp.OutputClickHouse.SecretParamName)
-			r.OutputClickHouse.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult))
-		}
+		r.OutputClickHouse.Secret = types.StringPointerValue(resp.OutputClickHouse.Secret)
+		r.OutputClickHouse.SecretParamName = types.StringPointerValue(resp.OutputClickHouse.SecretParamName)
 		r.OutputClickHouse.SQLUsername = types.StringPointerValue(resp.OutputClickHouse.SQLUsername)
 		r.OutputClickHouse.Streamtags = make([]types.String, 0, len(resp.OutputClickHouse.Streamtags))
 		for _, v := range resp.OutputClickHouse.Streamtags {
@@ -1006,12 +946,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.SystemFields = append(r.OutputClickHouse.SystemFields, types.StringValue(v))
 		}
 		r.OutputClickHouse.TableName = types.StringValue(resp.OutputClickHouse.TableName)
-		if resp.OutputClickHouse.TextSecret == nil {
-			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedNull()
-		} else {
-			textSecretResult, _ := json.Marshal(resp.OutputClickHouse.TextSecret)
-			r.OutputClickHouse.TextSecret = jsontypes.NewNormalizedValue(string(textSecretResult))
-		}
+		r.OutputClickHouse.TextSecret = types.StringPointerValue(resp.OutputClickHouse.TextSecret)
 		if resp.OutputClickHouse.TimeoutRetrySettings == nil {
 			r.OutputClickHouse.TimeoutRetrySettings = nil
 		} else {
@@ -1044,24 +979,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputClickHouse.TLS.PrivKeyPath = types.StringPointerValue(resp.OutputClickHouse.TLS.PrivKeyPath)
 			r.OutputClickHouse.TLS.Servername = types.StringPointerValue(resp.OutputClickHouse.TLS.Servername)
 		}
-		if resp.OutputClickHouse.Token == nil {
-			r.OutputClickHouse.Token = jsontypes.NewNormalizedNull()
-		} else {
-			tokenResult, _ := json.Marshal(resp.OutputClickHouse.Token)
-			r.OutputClickHouse.Token = jsontypes.NewNormalizedValue(string(tokenResult))
-		}
-		if resp.OutputClickHouse.TokenAttributeName == nil {
-			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult, _ := json.Marshal(resp.OutputClickHouse.TokenAttributeName)
-			r.OutputClickHouse.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult))
-		}
-		if resp.OutputClickHouse.TokenTimeoutSecs == nil {
-			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult, _ := json.Marshal(resp.OutputClickHouse.TokenTimeoutSecs)
-			r.OutputClickHouse.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult))
-		}
+		r.OutputClickHouse.Token = types.StringPointerValue(resp.OutputClickHouse.Token)
+		r.OutputClickHouse.TokenAttributeName = types.StringPointerValue(resp.OutputClickHouse.TokenAttributeName)
+		r.OutputClickHouse.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputClickHouse.TokenTimeoutSecs)
 		r.OutputClickHouse.Type = types.StringValue(string(resp.OutputClickHouse.Type))
 		r.Type = r.OutputClickHouse.Type
 		r.OutputClickHouse.URL = types.StringValue(resp.OutputClickHouse.URL)
@@ -1071,16 +991,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCloudflareR2 != nil {
 		r.OutputCloudflareR2 = &tfTypes.OutputCloudflareR2{}
-		r.OutputCloudflareR2.TemplateBucket = types.StringPointerValue(resp.OutputCloudflareR2.TemplateBucket)
-		r.OutputCloudflareR2.TemplateFormat = types.StringPointerValue(resp.OutputCloudflareR2.TemplateFormat)
 		r.OutputCloudflareR2.AddIDToStagePath = types.BoolPointerValue(resp.OutputCloudflareR2.AddIDToStagePath)
 		r.OutputCloudflareR2.AutomaticSchema = types.BoolPointerValue(resp.OutputCloudflareR2.AutomaticSchema)
-		if resp.OutputCloudflareR2.AwsAPIKey == nil {
-			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedNull()
-		} else {
-			awsAPIKeyResult, _ := json.Marshal(resp.OutputCloudflareR2.AwsAPIKey)
-			r.OutputCloudflareR2.AwsAPIKey = jsontypes.NewNormalizedValue(string(awsAPIKeyResult))
-		}
+		r.OutputCloudflareR2.AwsAPIKey = types.StringPointerValue(resp.OutputCloudflareR2.AwsAPIKey)
 		if resp.OutputCloudflareR2.AwsAuthenticationMethod != nil {
 			r.OutputCloudflareR2.AwsAuthenticationMethod = types.StringValue(string(*resp.OutputCloudflareR2.AwsAuthenticationMethod))
 		} else {
@@ -1138,11 +1051,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.MaxFileSizeMB = types.Float64PointerValue(resp.OutputCloudflareR2.MaxFileSizeMB)
 		r.OutputCloudflareR2.MaxOpenFiles = types.Float64PointerValue(resp.OutputCloudflareR2.MaxOpenFiles)
 		r.OutputCloudflareR2.MaxRetryNum = types.Float64PointerValue(resp.OutputCloudflareR2.MaxRetryNum)
-		if resp.OutputCloudflareR2.ObjectACL == nil {
-			r.OutputCloudflareR2.ObjectACL = jsontypes.NewNormalizedNull()
+		if resp.OutputCloudflareR2.ObjectACL != nil {
+			r.OutputCloudflareR2.ObjectACL = types.StringValue(string(*resp.OutputCloudflareR2.ObjectACL))
 		} else {
-			objectACLResult, _ := json.Marshal(resp.OutputCloudflareR2.ObjectACL)
-			r.OutputCloudflareR2.ObjectACL = jsontypes.NewNormalizedValue(string(objectACLResult))
+			r.OutputCloudflareR2.ObjectACL = types.StringNull()
 		}
 		if resp.OutputCloudflareR2.OnBackpressure != nil {
 			r.OutputCloudflareR2.OnBackpressure = types.StringValue(string(*resp.OutputCloudflareR2.OnBackpressure))
@@ -1170,12 +1082,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputCloudflareR2.PartitionExpr = types.StringPointerValue(resp.OutputCloudflareR2.PartitionExpr)
 		r.OutputCloudflareR2.Pipeline = types.StringPointerValue(resp.OutputCloudflareR2.Pipeline)
 		r.Pipeline = r.OutputCloudflareR2.Pipeline
-		if resp.OutputCloudflareR2.Region == nil {
-			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedNull()
-		} else {
-			regionResult, _ := json.Marshal(resp.OutputCloudflareR2.Region)
-			r.OutputCloudflareR2.Region = jsontypes.NewNormalizedValue(string(regionResult))
-		}
+		r.OutputCloudflareR2.Region = types.StringPointerValue(resp.OutputCloudflareR2.Region)
 		r.OutputCloudflareR2.RejectUnauthorized = types.BoolPointerValue(resp.OutputCloudflareR2.RejectUnauthorized)
 		r.OutputCloudflareR2.RemoveEmptyDirs = types.BoolPointerValue(resp.OutputCloudflareR2.RemoveEmptyDirs)
 		if resp.OutputCloudflareR2.RetrySettings == nil {
@@ -1221,11 +1128,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCloudwatch != nil {
 		r.OutputCloudwatch = &tfTypes.OutputCloudwatch{}
-		r.OutputCloudwatch.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputCloudwatch.TemplateAssumeRoleArn)
-		r.OutputCloudwatch.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputCloudwatch.TemplateAssumeRoleExternalID)
-		r.OutputCloudwatch.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputCloudwatch.TemplateAwsAPIKey)
-		r.OutputCloudwatch.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputCloudwatch.TemplateAwsSecretKey)
-		r.OutputCloudwatch.TemplateRegion = types.StringPointerValue(resp.OutputCloudwatch.TemplateRegion)
 		r.OutputCloudwatch.AssumeRoleArn = types.StringPointerValue(resp.OutputCloudwatch.AssumeRoleArn)
 		r.OutputCloudwatch.AssumeRoleExternalID = types.StringPointerValue(resp.OutputCloudwatch.AssumeRoleExternalID)
 		r.OutputCloudwatch.AwsAPIKey = types.StringPointerValue(resp.OutputCloudwatch.AwsAPIKey)
@@ -1300,7 +1202,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputConfluentCloud != nil {
 		r.OutputConfluentCloud = &tfTypes.OutputConfluentCloud{}
-		r.OutputConfluentCloud.TemplateTopic = types.StringPointerValue(resp.OutputConfluentCloud.TemplateTopic)
 		if resp.OutputConfluentCloud.Ack != nil {
 			r.OutputConfluentCloud.Ack = types.Int64Value(int64(*resp.OutputConfluentCloud.Ack))
 		} else {
@@ -1499,7 +1400,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCriblHTTP != nil {
 		r.OutputCriblHTTP = &tfTypes.OutputCriblHTTP{}
-		r.OutputCriblHTTP.TemplateURL = types.StringPointerValue(resp.OutputCriblHTTP.TemplateURL)
 		r.OutputCriblHTTP.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
 
 		for _, authTokensItem := range resp.OutputCriblHTTP.AuthTokens {
@@ -1652,7 +1552,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, urlsItem := range resp.OutputCriblHTTP.Urls {
 			var urls tfTypes.ItemsTypeUrls
 
-			urls.TemplateURL = types.StringPointerValue(urlsItem.TemplateURL)
 			urls.URL = types.StringValue(urlsItem.URL)
 			urls.Weight = types.Float64PointerValue(urlsItem.Weight)
 
@@ -1662,12 +1561,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCriblLake != nil {
 		r.OutputCriblLake = &tfTypes.OutputCriblLake{}
-		r.OutputCriblLake.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputCriblLake.TemplateAssumeRoleArn)
-		r.OutputCriblLake.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputCriblLake.TemplateAssumeRoleExternalID)
-		r.OutputCriblLake.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputCriblLake.TemplateAwsSecretKey)
-		r.OutputCriblLake.TemplateBucket = types.StringPointerValue(resp.OutputCriblLake.TemplateBucket)
-		r.OutputCriblLake.TemplateDestPath = types.StringPointerValue(resp.OutputCriblLake.TemplateDestPath)
-		r.OutputCriblLake.TemplateRegion = types.StringPointerValue(resp.OutputCriblLake.TemplateRegion)
 		r.OutputCriblLake.AddIDToStagePath = types.BoolPointerValue(resp.OutputCriblLake.AddIDToStagePath)
 		r.OutputCriblLake.AssumeRoleArn = types.StringPointerValue(resp.OutputCriblLake.AssumeRoleArn)
 		r.OutputCriblLake.AssumeRoleExternalID = types.StringPointerValue(resp.OutputCriblLake.AssumeRoleExternalID)
@@ -1770,7 +1663,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCriblSearchEngine != nil {
 		r.OutputCriblSearchEngine = &tfTypes.OutputCriblSearchEngine{}
-		r.OutputCriblSearchEngine.TemplateURL = types.StringPointerValue(resp.OutputCriblSearchEngine.TemplateURL)
 		r.OutputCriblSearchEngine.AuthTokens = []tfTypes.ItemsTypeAuthTokensTokenSecret{}
 
 		for _, authTokensItem1 := range resp.OutputCriblSearchEngine.AuthTokens {
@@ -1923,7 +1815,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, urlsItem1 := range resp.OutputCriblSearchEngine.Urls {
 			var urls1 tfTypes.ItemsTypeUrls
 
-			urls1.TemplateURL = types.StringPointerValue(urlsItem1.TemplateURL)
 			urls1.URL = types.StringValue(urlsItem1.URL)
 			urls1.Weight = types.Float64PointerValue(urlsItem1.Weight)
 
@@ -1933,8 +1824,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCriblTCP != nil {
 		r.OutputCriblTCP = &tfTypes.OutputCriblTCP{}
-		r.OutputCriblTCP.TemplateHost = types.StringPointerValue(resp.OutputCriblTCP.TemplateHost)
-		r.OutputCriblTCP.TemplatePort = types.StringPointerValue(resp.OutputCriblTCP.TemplatePort)
 		r.OutputCriblTCP.AuthTokens = []tfTypes.ItemsTypeAuthTokens{}
 
 		for _, authTokensItem2 := range resp.OutputCriblTCP.AuthTokens {
@@ -1967,8 +1856,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem := range resp.OutputCriblTCP.Hosts {
 			var hosts tfTypes.ItemsTypeHosts
 
-			hosts.TemplateHost = types.StringPointerValue(hostsItem.TemplateHost)
-			hosts.TemplatePort = types.StringPointerValue(hostsItem.TemplatePort)
 			hosts.Host = types.StringValue(hostsItem.Host)
 			hosts.Port = types.Float64Value(hostsItem.Port)
 			hosts.Servername = types.StringPointerValue(hostsItem.Servername)
@@ -2062,7 +1949,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputCrowdstrikeNextGenSiem != nil {
 		r.OutputCrowdstrikeNextGenSiem = &tfTypes.OutputCrowdstrikeNextGenSiem{}
-		r.OutputCrowdstrikeNextGenSiem.TemplateURL = types.StringPointerValue(resp.OutputCrowdstrikeNextGenSiem.TemplateURL)
 		if resp.OutputCrowdstrikeNextGenSiem.AuthType != nil {
 			r.OutputCrowdstrikeNextGenSiem.AuthType = types.StringValue(string(*resp.OutputCrowdstrikeNextGenSiem.AuthType))
 		} else {
@@ -2174,7 +2060,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputDatabricks != nil {
 		r.OutputDatabricks = &tfTypes.OutputDatabricks{}
-		r.OutputDatabricks.TemplateFormat = types.StringPointerValue(resp.OutputDatabricks.TemplateFormat)
 		r.OutputDatabricks.AddIDToStagePath = types.BoolPointerValue(resp.OutputDatabricks.AddIDToStagePath)
 		r.OutputDatabricks.AutomaticSchema = types.BoolPointerValue(resp.OutputDatabricks.AutomaticSchema)
 		r.OutputDatabricks.BaseFileName = types.StringPointerValue(resp.OutputDatabricks.BaseFileName)
@@ -2422,7 +2307,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputDataset != nil {
 		r.OutputDataset = &tfTypes.OutputDataset{}
-		r.OutputDataset.TemplateCustomURL = types.StringPointerValue(resp.OutputDataset.TemplateCustomURL)
 		r.OutputDataset.APIKey = types.StringPointerValue(resp.OutputDataset.APIKey)
 		if resp.OutputDataset.AuthType != nil {
 			r.OutputDataset.AuthType = types.StringValue(string(*resp.OutputDataset.AuthType))
@@ -2619,13 +2503,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputDlS3 != nil {
 		r.OutputDlS3 = &tfTypes.OutputDlS3{}
-		r.OutputDlS3.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputDlS3.TemplateAssumeRoleArn)
-		r.OutputDlS3.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputDlS3.TemplateAssumeRoleExternalID)
-		r.OutputDlS3.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputDlS3.TemplateAwsAPIKey)
-		r.OutputDlS3.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputDlS3.TemplateAwsSecretKey)
-		r.OutputDlS3.TemplateBucket = types.StringPointerValue(resp.OutputDlS3.TemplateBucket)
-		r.OutputDlS3.TemplateFormat = types.StringPointerValue(resp.OutputDlS3.TemplateFormat)
-		r.OutputDlS3.TemplateRegion = types.StringPointerValue(resp.OutputDlS3.TemplateRegion)
 		r.OutputDlS3.AddIDToStagePath = types.BoolPointerValue(resp.OutputDlS3.AddIDToStagePath)
 		r.OutputDlS3.AssumeRoleArn = types.StringPointerValue(resp.OutputDlS3.AssumeRoleArn)
 		r.OutputDlS3.AssumeRoleExternalID = types.StringPointerValue(resp.OutputDlS3.AssumeRoleExternalID)
@@ -2772,7 +2649,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputDynatraceHTTP != nil {
 		r.OutputDynatraceHTTP = &tfTypes.OutputDynatraceHTTP{}
-		r.OutputDynatraceHTTP.TemplateURL = types.StringPointerValue(resp.OutputDynatraceHTTP.TemplateURL)
 		r.OutputDynatraceHTTP.ActiveGateDomain = types.StringPointerValue(resp.OutputDynatraceHTTP.ActiveGateDomain)
 		if resp.OutputDynatraceHTTP.AuthType != nil {
 			r.OutputDynatraceHTTP.AuthType = types.StringValue(string(*resp.OutputDynatraceHTTP.AuthType))
@@ -3027,7 +2903,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputElastic != nil {
 		r.OutputElastic = &tfTypes.OutputElastic{}
-		r.OutputElastic.TemplateURL = types.StringPointerValue(resp.OutputElastic.TemplateURL)
 		if resp.OutputElastic.Auth == nil {
 			r.OutputElastic.Auth = nil
 		} else {
@@ -3172,7 +3047,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, urlsItem2 := range resp.OutputElastic.Urls {
 			var urls2 tfTypes.OutputElasticURL
 
-			urls2.TemplateURL = types.StringPointerValue(urlsItem2.TemplateURL)
 			urls2.URL = types.StringValue(urlsItem2.URL)
 			urls2.Weight = types.Float64PointerValue(urlsItem2.Weight)
 
@@ -3318,7 +3192,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputExabeam != nil {
 		r.OutputExabeam = &tfTypes.OutputExabeam{}
-		r.OutputExabeam.TemplateRegion = types.StringPointerValue(resp.OutputExabeam.TemplateRegion)
 		r.OutputExabeam.AddIDToStagePath = types.BoolPointerValue(resp.OutputExabeam.AddIDToStagePath)
 		r.OutputExabeam.AwsAPIKey = types.StringPointerValue(resp.OutputExabeam.AwsAPIKey)
 		r.OutputExabeam.AwsSecretKey = types.StringPointerValue(resp.OutputExabeam.AwsSecretKey)
@@ -3398,7 +3271,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputFilesystem != nil {
 		r.OutputFilesystem = &tfTypes.OutputFilesystem{}
-		r.OutputFilesystem.TemplateFormat = types.StringPointerValue(resp.OutputFilesystem.TemplateFormat)
 		r.OutputFilesystem.AddIDToStagePath = types.BoolPointerValue(resp.OutputFilesystem.AddIDToStagePath)
 		r.OutputFilesystem.AutomaticSchema = types.BoolPointerValue(resp.OutputFilesystem.AutomaticSchema)
 		r.OutputFilesystem.BaseFileName = types.StringPointerValue(resp.OutputFilesystem.BaseFileName)
@@ -3501,9 +3373,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputGoogleChronicle != nil {
 		r.OutputGoogleChronicle = &tfTypes.OutputGoogleChronicle{}
-		r.OutputGoogleChronicle.TemplateAPIVersion = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateAPIVersion)
-		r.OutputGoogleChronicle.TemplateCustomerID = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateCustomerID)
-		r.OutputGoogleChronicle.TemplateRegion = types.StringPointerValue(resp.OutputGoogleChronicle.TemplateRegion)
 		r.OutputGoogleChronicle.APIKey = types.StringPointerValue(resp.OutputGoogleChronicle.APIKey)
 		r.OutputGoogleChronicle.APIKeySecret = types.StringPointerValue(resp.OutputGoogleChronicle.APIKeySecret)
 		if resp.OutputGoogleChronicle.APIVersion != nil {
@@ -3781,9 +3650,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputGoogleCloudStorage != nil {
 		r.OutputGoogleCloudStorage = &tfTypes.OutputGoogleCloudStorage{}
-		r.OutputGoogleCloudStorage.TemplateBucket = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateBucket)
-		r.OutputGoogleCloudStorage.TemplateFormat = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateFormat)
-		r.OutputGoogleCloudStorage.TemplateRegion = types.StringPointerValue(resp.OutputGoogleCloudStorage.TemplateRegion)
 		r.OutputGoogleCloudStorage.AddIDToStagePath = types.BoolPointerValue(resp.OutputGoogleCloudStorage.AddIDToStagePath)
 		r.OutputGoogleCloudStorage.AutomaticSchema = types.BoolPointerValue(resp.OutputGoogleCloudStorage.AutomaticSchema)
 		r.OutputGoogleCloudStorage.AwsAPIKey = types.StringPointerValue(resp.OutputGoogleCloudStorage.AwsAPIKey)
@@ -3915,8 +3781,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputGooglePubsub != nil {
 		r.OutputGooglePubsub = &tfTypes.OutputGooglePubsub{}
-		r.OutputGooglePubsub.TemplateRegion = types.StringPointerValue(resp.OutputGooglePubsub.TemplateRegion)
-		r.OutputGooglePubsub.TemplateTopicName = types.StringPointerValue(resp.OutputGooglePubsub.TemplateTopicName)
 		r.OutputGooglePubsub.BatchSize = types.Float64PointerValue(resp.OutputGooglePubsub.BatchSize)
 		r.OutputGooglePubsub.BatchTimeout = types.Float64PointerValue(resp.OutputGooglePubsub.BatchTimeout)
 		r.OutputGooglePubsub.CreateTopic = types.BoolPointerValue(resp.OutputGooglePubsub.CreateTopic)
@@ -3924,12 +3788,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputGooglePubsub.Environment = types.StringPointerValue(resp.OutputGooglePubsub.Environment)
 		r.Environment = r.OutputGooglePubsub.Environment
 		r.OutputGooglePubsub.FlushPeriod = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriod)
-		if resp.OutputGooglePubsub.FlushPeriodSec == nil {
-			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedNull()
-		} else {
-			flushPeriodSecResult, _ := json.Marshal(resp.OutputGooglePubsub.FlushPeriodSec)
-			r.OutputGooglePubsub.FlushPeriodSec = jsontypes.NewNormalizedValue(string(flushPeriodSecResult))
-		}
+		r.OutputGooglePubsub.FlushPeriodSec = types.Float64PointerValue(resp.OutputGooglePubsub.FlushPeriodSec)
 		if resp.OutputGooglePubsub.GoogleAuthMethod != nil {
 			r.OutputGooglePubsub.GoogleAuthMethod = types.StringValue(string(*resp.OutputGooglePubsub.GoogleAuthMethod))
 		} else {
@@ -4311,7 +4170,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputHumioHec != nil {
 		r.OutputHumioHec = &tfTypes.OutputHumioHec{}
-		r.OutputHumioHec.TemplateURL = types.StringPointerValue(resp.OutputHumioHec.TemplateURL)
 		if resp.OutputHumioHec.AuthType != nil {
 			r.OutputHumioHec.AuthType = types.StringValue(string(*resp.OutputHumioHec.AuthType))
 		} else {
@@ -4423,15 +4281,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputInfluxdb != nil {
 		r.OutputInfluxdb = &tfTypes.OutputInfluxdb{}
-		r.OutputInfluxdb.TemplateBucket = types.StringPointerValue(resp.OutputInfluxdb.TemplateBucket)
-		r.OutputInfluxdb.TemplateDatabase = types.StringPointerValue(resp.OutputInfluxdb.TemplateDatabase)
-		r.OutputInfluxdb.TemplateURL = types.StringPointerValue(resp.OutputInfluxdb.TemplateURL)
-		if resp.OutputInfluxdb.AuthHeaderExpr == nil {
-			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult1, _ := json.Marshal(resp.OutputInfluxdb.AuthHeaderExpr)
-			r.OutputInfluxdb.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult1))
-		}
+		authHeaderExprValuable1, authHeaderExprDiags1 := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.OutputInfluxdb.AuthHeaderExpr))
+		diags.Append(authHeaderExprDiags1...)
+		r.OutputInfluxdb.AuthHeaderExpr = authHeaderExprValuable1.(types.String)
 		if resp.OutputInfluxdb.AuthType != nil {
 			r.OutputInfluxdb.AuthType = types.StringValue(string(*resp.OutputInfluxdb.AuthType))
 		} else {
@@ -4464,12 +4316,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputInfluxdb.FlushPeriodSec = types.Float64PointerValue(resp.OutputInfluxdb.FlushPeriodSec)
 		r.OutputInfluxdb.ID = types.StringPointerValue(resp.OutputInfluxdb.ID)
 		r.ID = r.OutputInfluxdb.ID
-		if resp.OutputInfluxdb.LoginURL == nil {
-			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult1, _ := json.Marshal(resp.OutputInfluxdb.LoginURL)
-			r.OutputInfluxdb.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult1))
-		}
+		r.OutputInfluxdb.LoginURL = types.StringPointerValue(resp.OutputInfluxdb.LoginURL)
 		r.OutputInfluxdb.MaxPayloadEvents = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadEvents)
 		r.OutputInfluxdb.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputInfluxdb.MaxPayloadSizeKB)
 		r.OutputInfluxdb.OauthHeaders = []tfTypes.OutputInfluxdbOauthHeader{}
@@ -4477,18 +4324,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem1 := range resp.OutputInfluxdb.OauthHeaders {
 			var oauthHeaders1 tfTypes.OutputInfluxdbOauthHeader
 
-			if oauthHeadersItem1.Name == nil {
-				oauthHeaders1.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult2, _ := json.Marshal(oauthHeadersItem1.Name)
-				oauthHeaders1.Name = jsontypes.NewNormalizedValue(string(nameResult2))
-			}
-			if oauthHeadersItem1.Value == nil {
-				oauthHeaders1.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult2, _ := json.Marshal(oauthHeadersItem1.Value)
-				oauthHeaders1.Value = jsontypes.NewNormalizedValue(string(valueResult2))
-			}
+			oauthHeaders1.Name = types.StringValue(oauthHeadersItem1.Name)
+			oauthHeaders1.Value = types.StringValue(oauthHeadersItem1.Value)
 
 			r.OutputInfluxdb.OauthHeaders = append(r.OutputInfluxdb.OauthHeaders, oauthHeaders1)
 		}
@@ -4497,18 +4334,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem2 := range resp.OutputInfluxdb.OauthParams {
 			var oauthParams2 tfTypes.OutputInfluxdbOauthParam
 
-			if oauthParamsItem2.Name == nil {
-				oauthParams2.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult3, _ := json.Marshal(oauthParamsItem2.Name)
-				oauthParams2.Name = jsontypes.NewNormalizedValue(string(nameResult3))
-			}
-			if oauthParamsItem2.Value == nil {
-				oauthParams2.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult3, _ := json.Marshal(oauthParamsItem2.Value)
-				oauthParams2.Value = jsontypes.NewNormalizedValue(string(valueResult3))
-			}
+			oauthParams2.Name = types.StringValue(oauthParamsItem2.Name)
+			oauthParams2.Value = types.StringValue(oauthParamsItem2.Value)
 
 			r.OutputInfluxdb.OauthParams = append(r.OutputInfluxdb.OauthParams, oauthParams2)
 		}
@@ -4567,18 +4394,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputInfluxdb.SafeHeaders {
 			r.OutputInfluxdb.SafeHeaders = append(r.OutputInfluxdb.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputInfluxdb.Secret == nil {
-			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult1, _ := json.Marshal(resp.OutputInfluxdb.Secret)
-			r.OutputInfluxdb.Secret = jsontypes.NewNormalizedValue(string(secretResult1))
-		}
-		if resp.OutputInfluxdb.SecretParamName == nil {
-			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult1, _ := json.Marshal(resp.OutputInfluxdb.SecretParamName)
-			r.OutputInfluxdb.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult1))
-		}
+		r.OutputInfluxdb.Secret = types.StringPointerValue(resp.OutputInfluxdb.Secret)
+		r.OutputInfluxdb.SecretParamName = types.StringPointerValue(resp.OutputInfluxdb.SecretParamName)
 		r.OutputInfluxdb.Streamtags = make([]types.String, 0, len(resp.OutputInfluxdb.Streamtags))
 		for _, v := range resp.OutputInfluxdb.Streamtags {
 			r.OutputInfluxdb.Streamtags = append(r.OutputInfluxdb.Streamtags, types.StringValue(v))
@@ -4604,18 +4421,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputInfluxdb.TimestampPrecision = types.StringNull()
 		}
 		r.OutputInfluxdb.Token = types.StringPointerValue(resp.OutputInfluxdb.Token)
-		if resp.OutputInfluxdb.TokenAttributeName == nil {
-			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenAttributeName)
-			r.OutputInfluxdb.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult1))
-		}
-		if resp.OutputInfluxdb.TokenTimeoutSecs == nil {
-			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult1, _ := json.Marshal(resp.OutputInfluxdb.TokenTimeoutSecs)
-			r.OutputInfluxdb.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult1))
-		}
+		r.OutputInfluxdb.TokenAttributeName = types.StringPointerValue(resp.OutputInfluxdb.TokenAttributeName)
+		r.OutputInfluxdb.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputInfluxdb.TokenTimeoutSecs)
 		r.OutputInfluxdb.Type = types.StringValue(string(resp.OutputInfluxdb.Type))
 		r.Type = r.OutputInfluxdb.Type
 		r.OutputInfluxdb.URL = types.StringValue(resp.OutputInfluxdb.URL)
@@ -4626,7 +4433,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputKafka != nil {
 		r.OutputKafka = &tfTypes.OutputKafka{}
-		r.OutputKafka.TemplateTopic = types.StringPointerValue(resp.OutputKafka.TemplateTopic)
 		if resp.OutputKafka.Ack != nil {
 			r.OutputKafka.Ack = types.Int64Value(int64(*resp.OutputKafka.Ack))
 		} else {
@@ -4825,12 +4631,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputKinesis != nil {
 		r.OutputKinesis = &tfTypes.OutputKinesis{}
-		r.OutputKinesis.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputKinesis.TemplateAssumeRoleArn)
-		r.OutputKinesis.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputKinesis.TemplateAssumeRoleExternalID)
-		r.OutputKinesis.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputKinesis.TemplateAwsAPIKey)
-		r.OutputKinesis.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputKinesis.TemplateAwsSecretKey)
-		r.OutputKinesis.TemplateRegion = types.StringPointerValue(resp.OutputKinesis.TemplateRegion)
-		r.OutputKinesis.TemplateStreamName = types.StringPointerValue(resp.OutputKinesis.TemplateStreamName)
 		r.OutputKinesis.AsNdjson = types.BoolPointerValue(resp.OutputKinesis.AsNdjson)
 		r.OutputKinesis.AssumeRoleArn = types.StringPointerValue(resp.OutputKinesis.AssumeRoleArn)
 		r.OutputKinesis.AssumeRoleExternalID = types.StringPointerValue(resp.OutputKinesis.AssumeRoleExternalID)
@@ -4917,9 +4717,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputLocalSearchStorage != nil {
 		r.OutputLocalSearchStorage = &tfTypes.OutputLocalSearchStorage{}
-		r.OutputLocalSearchStorage.TemplateDatabase = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateDatabase)
-		r.OutputLocalSearchStorage.TemplateTableName = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateTableName)
-		r.OutputLocalSearchStorage.TemplateURL = types.StringPointerValue(resp.OutputLocalSearchStorage.TemplateURL)
 		r.OutputLocalSearchStorage.AsyncInserts = types.BoolPointerValue(resp.OutputLocalSearchStorage.AsyncInserts)
 		if resp.OutputLocalSearchStorage.AuthType != nil {
 			r.OutputLocalSearchStorage.AuthType = types.StringValue(string(*resp.OutputLocalSearchStorage.AuthType))
@@ -5228,8 +5025,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputMicrosoftFabric != nil {
 		r.OutputMicrosoftFabric = &tfTypes.OutputMicrosoftFabric{}
-		r.OutputMicrosoftFabric.TemplateBootstrapServer = types.StringPointerValue(resp.OutputMicrosoftFabric.TemplateBootstrapServer)
-		r.OutputMicrosoftFabric.TemplateTopic = types.StringPointerValue(resp.OutputMicrosoftFabric.TemplateTopic)
 		if resp.OutputMicrosoftFabric.Ack != nil {
 			r.OutputMicrosoftFabric.Ack = types.Int64Value(int64(*resp.OutputMicrosoftFabric.Ack))
 		} else {
@@ -5344,10 +5139,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputMinio != nil {
 		r.OutputMinio = &tfTypes.OutputMinio{}
-		r.OutputMinio.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputMinio.TemplateAwsAPIKey)
-		r.OutputMinio.TemplateBucket = types.StringPointerValue(resp.OutputMinio.TemplateBucket)
-		r.OutputMinio.TemplateFormat = types.StringPointerValue(resp.OutputMinio.TemplateFormat)
-		r.OutputMinio.TemplateRegion = types.StringPointerValue(resp.OutputMinio.TemplateRegion)
 		r.OutputMinio.AddIDToStagePath = types.BoolPointerValue(resp.OutputMinio.AddIDToStagePath)
 		r.OutputMinio.AutomaticSchema = types.BoolPointerValue(resp.OutputMinio.AutomaticSchema)
 		r.OutputMinio.AwsAPIKey = types.StringPointerValue(resp.OutputMinio.AwsAPIKey)
@@ -5485,12 +5276,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputMsk != nil {
 		r.OutputMsk = &tfTypes.OutputMsk{}
-		r.OutputMsk.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputMsk.TemplateAssumeRoleArn)
-		r.OutputMsk.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputMsk.TemplateAssumeRoleExternalID)
-		r.OutputMsk.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputMsk.TemplateAwsAPIKey)
-		r.OutputMsk.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputMsk.TemplateAwsSecretKey)
-		r.OutputMsk.TemplateRegion = types.StringPointerValue(resp.OutputMsk.TemplateRegion)
-		r.OutputMsk.TemplateTopic = types.StringPointerValue(resp.OutputMsk.TemplateTopic)
 		if resp.OutputMsk.Ack != nil {
 			r.OutputMsk.Ack = types.Int64Value(int64(*resp.OutputMsk.Ack))
 		} else {
@@ -5669,8 +5454,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem1 := range resp.OutputNetflow.Hosts {
 			var hosts1 tfTypes.OutputNetflowHost
 
-			hosts1.TemplateHost = types.StringPointerValue(hostsItem1.TemplateHost)
-			hosts1.TemplatePort = types.StringPointerValue(hostsItem1.TemplatePort)
 			hosts1.Host = types.StringValue(hostsItem1.Host)
 			hosts1.Port = types.Float64Value(hostsItem1.Port)
 
@@ -5694,9 +5477,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputNewrelic != nil {
 		r.OutputNewrelic = &tfTypes.OutputNewrelic{}
-		r.OutputNewrelic.TemplateLogType = types.StringPointerValue(resp.OutputNewrelic.TemplateLogType)
-		r.OutputNewrelic.TemplateMessageField = types.StringPointerValue(resp.OutputNewrelic.TemplateMessageField)
-		r.OutputNewrelic.TemplateRegion = types.StringPointerValue(resp.OutputNewrelic.TemplateRegion)
 		r.OutputNewrelic.APIKey = types.StringPointerValue(resp.OutputNewrelic.APIKey)
 		if resp.OutputNewrelic.AuthType != nil {
 			r.OutputNewrelic.AuthType = types.StringValue(string(*resp.OutputNewrelic.AuthType))
@@ -5825,10 +5605,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputNewrelicEvents != nil {
 		r.OutputNewrelicEvents = &tfTypes.OutputNewrelicEvents{}
-		r.OutputNewrelicEvents.TemplateAccountID = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateAccountID)
-		r.OutputNewrelicEvents.TemplateCustomURL = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateCustomURL)
-		r.OutputNewrelicEvents.TemplateEventType = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateEventType)
-		r.OutputNewrelicEvents.TemplateRegion = types.StringPointerValue(resp.OutputNewrelicEvents.TemplateRegion)
 		r.OutputNewrelicEvents.AccountID = types.StringValue(resp.OutputNewrelicEvents.AccountID)
 		r.OutputNewrelicEvents.APIKey = types.StringPointerValue(resp.OutputNewrelicEvents.APIKey)
 		if resp.OutputNewrelicEvents.AuthType != nil {
@@ -5946,12 +5722,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputOpenTelemetry != nil {
 		r.OutputOpenTelemetry = &tfTypes.OutputOpenTelemetry{}
-		if resp.OutputOpenTelemetry.AuthHeaderExpr == nil {
-			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult2, _ := json.Marshal(resp.OutputOpenTelemetry.AuthHeaderExpr)
-			r.OutputOpenTelemetry.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult2))
-		}
+		authHeaderExprValuable2, authHeaderExprDiags2 := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.OutputOpenTelemetry.AuthHeaderExpr))
+		diags.Append(authHeaderExprDiags2...)
+		r.OutputOpenTelemetry.AuthHeaderExpr = authHeaderExprValuable2.(types.String)
 		if resp.OutputOpenTelemetry.AuthType != nil {
 			r.OutputOpenTelemetry.AuthType = types.StringValue(string(*resp.OutputOpenTelemetry.AuthType))
 		} else {
@@ -5997,12 +5770,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.ID = r.OutputOpenTelemetry.ID
 		r.OutputOpenTelemetry.KeepAlive = types.BoolPointerValue(resp.OutputOpenTelemetry.KeepAlive)
 		r.OutputOpenTelemetry.KeepAliveTime = types.Float64PointerValue(resp.OutputOpenTelemetry.KeepAliveTime)
-		if resp.OutputOpenTelemetry.LoginURL == nil {
-			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult2, _ := json.Marshal(resp.OutputOpenTelemetry.LoginURL)
-			r.OutputOpenTelemetry.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult2))
-		}
+		r.OutputOpenTelemetry.LoginURL = types.StringPointerValue(resp.OutputOpenTelemetry.LoginURL)
 		r.OutputOpenTelemetry.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputOpenTelemetry.MaxPayloadSizeKB)
 		r.OutputOpenTelemetry.Metadata = []tfTypes.ItemsTypeKeyValueMetadata{}
 
@@ -6019,18 +5787,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem2 := range resp.OutputOpenTelemetry.OauthHeaders {
 			var oauthHeaders2 tfTypes.OutputOpenTelemetryOauthHeader
 
-			if oauthHeadersItem2.Name == nil {
-				oauthHeaders2.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult4, _ := json.Marshal(oauthHeadersItem2.Name)
-				oauthHeaders2.Name = jsontypes.NewNormalizedValue(string(nameResult4))
-			}
-			if oauthHeadersItem2.Value == nil {
-				oauthHeaders2.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult4, _ := json.Marshal(oauthHeadersItem2.Value)
-				oauthHeaders2.Value = jsontypes.NewNormalizedValue(string(valueResult4))
-			}
+			oauthHeaders2.Name = types.StringValue(oauthHeadersItem2.Name)
+			oauthHeaders2.Value = types.StringValue(oauthHeadersItem2.Value)
 
 			r.OutputOpenTelemetry.OauthHeaders = append(r.OutputOpenTelemetry.OauthHeaders, oauthHeaders2)
 		}
@@ -6039,18 +5797,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem4 := range resp.OutputOpenTelemetry.OauthParams {
 			var oauthParams4 tfTypes.OutputOpenTelemetryOauthParam
 
-			if oauthParamsItem4.Name == nil {
-				oauthParams4.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult5, _ := json.Marshal(oauthParamsItem4.Name)
-				oauthParams4.Name = jsontypes.NewNormalizedValue(string(nameResult5))
-			}
-			if oauthParamsItem4.Value == nil {
-				oauthParams4.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult5, _ := json.Marshal(oauthParamsItem4.Value)
-				oauthParams4.Value = jsontypes.NewNormalizedValue(string(valueResult5))
-			}
+			oauthParams4.Name = types.StringValue(oauthParamsItem4.Name)
+			oauthParams4.Value = types.StringValue(oauthParamsItem4.Value)
 
 			r.OutputOpenTelemetry.OauthParams = append(r.OutputOpenTelemetry.OauthParams, oauthParams4)
 		}
@@ -6118,18 +5866,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputOpenTelemetry.SafeHeaders {
 			r.OutputOpenTelemetry.SafeHeaders = append(r.OutputOpenTelemetry.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputOpenTelemetry.Secret == nil {
-			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult2, _ := json.Marshal(resp.OutputOpenTelemetry.Secret)
-			r.OutputOpenTelemetry.Secret = jsontypes.NewNormalizedValue(string(secretResult2))
-		}
-		if resp.OutputOpenTelemetry.SecretParamName == nil {
-			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.SecretParamName)
-			r.OutputOpenTelemetry.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult2))
-		}
+		r.OutputOpenTelemetry.Secret = types.StringPointerValue(resp.OutputOpenTelemetry.Secret)
+		r.OutputOpenTelemetry.SecretParamName = types.StringPointerValue(resp.OutputOpenTelemetry.SecretParamName)
 		r.OutputOpenTelemetry.Streamtags = make([]types.String, 0, len(resp.OutputOpenTelemetry.Streamtags))
 		for _, v := range resp.OutputOpenTelemetry.Streamtags {
 			r.OutputOpenTelemetry.Streamtags = append(r.OutputOpenTelemetry.Streamtags, types.StringValue(v))
@@ -6172,18 +5910,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 			r.OutputOpenTelemetry.TLS.RejectUnauthorized = types.BoolPointerValue(resp.OutputOpenTelemetry.TLS.RejectUnauthorized)
 		}
 		r.OutputOpenTelemetry.Token = types.StringPointerValue(resp.OutputOpenTelemetry.Token)
-		if resp.OutputOpenTelemetry.TokenAttributeName == nil {
-			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenAttributeName)
-			r.OutputOpenTelemetry.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult2))
-		}
-		if resp.OutputOpenTelemetry.TokenTimeoutSecs == nil {
-			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult2, _ := json.Marshal(resp.OutputOpenTelemetry.TokenTimeoutSecs)
-			r.OutputOpenTelemetry.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult2))
-		}
+		r.OutputOpenTelemetry.TokenAttributeName = types.StringPointerValue(resp.OutputOpenTelemetry.TokenAttributeName)
+		r.OutputOpenTelemetry.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputOpenTelemetry.TokenTimeoutSecs)
 		r.OutputOpenTelemetry.Type = types.StringValue(string(resp.OutputOpenTelemetry.Type))
 		r.Type = r.OutputOpenTelemetry.Type
 		r.OutputOpenTelemetry.Username = types.StringPointerValue(resp.OutputOpenTelemetry.Username)
@@ -6191,13 +5919,9 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputPrometheus != nil {
 		r.OutputPrometheus = &tfTypes.OutputPrometheus{}
-		r.OutputPrometheus.TemplateURL = types.StringPointerValue(resp.OutputPrometheus.TemplateURL)
-		if resp.OutputPrometheus.AuthHeaderExpr == nil {
-			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedNull()
-		} else {
-			authHeaderExprResult3, _ := json.Marshal(resp.OutputPrometheus.AuthHeaderExpr)
-			r.OutputPrometheus.AuthHeaderExpr = jsontypes.NewNormalizedValue(string(authHeaderExprResult3))
-		}
+		authHeaderExprValuable3, authHeaderExprDiags3 := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.OutputPrometheus.AuthHeaderExpr))
+		diags.Append(authHeaderExprDiags3...)
+		r.OutputPrometheus.AuthHeaderExpr = authHeaderExprValuable3.(types.String)
 		if resp.OutputPrometheus.AuthType != nil {
 			r.OutputPrometheus.AuthType = types.StringValue(string(*resp.OutputPrometheus.AuthType))
 		} else {
@@ -6226,12 +5950,7 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		r.OutputPrometheus.FlushPeriodSec = types.Float64PointerValue(resp.OutputPrometheus.FlushPeriodSec)
 		r.OutputPrometheus.ID = types.StringPointerValue(resp.OutputPrometheus.ID)
 		r.ID = r.OutputPrometheus.ID
-		if resp.OutputPrometheus.LoginURL == nil {
-			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedNull()
-		} else {
-			loginURLResult3, _ := json.Marshal(resp.OutputPrometheus.LoginURL)
-			r.OutputPrometheus.LoginURL = jsontypes.NewNormalizedValue(string(loginURLResult3))
-		}
+		r.OutputPrometheus.LoginURL = types.StringPointerValue(resp.OutputPrometheus.LoginURL)
 		r.OutputPrometheus.MaxPayloadEvents = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadEvents)
 		r.OutputPrometheus.MaxPayloadSizeKB = types.Float64PointerValue(resp.OutputPrometheus.MaxPayloadSizeKB)
 		r.OutputPrometheus.MetricRenameExpr = types.StringPointerValue(resp.OutputPrometheus.MetricRenameExpr)
@@ -6241,18 +5960,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthHeadersItem3 := range resp.OutputPrometheus.OauthHeaders {
 			var oauthHeaders3 tfTypes.OutputPrometheusOauthHeader
 
-			if oauthHeadersItem3.Name == nil {
-				oauthHeaders3.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult6, _ := json.Marshal(oauthHeadersItem3.Name)
-				oauthHeaders3.Name = jsontypes.NewNormalizedValue(string(nameResult6))
-			}
-			if oauthHeadersItem3.Value == nil {
-				oauthHeaders3.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult6, _ := json.Marshal(oauthHeadersItem3.Value)
-				oauthHeaders3.Value = jsontypes.NewNormalizedValue(string(valueResult6))
-			}
+			oauthHeaders3.Name = types.StringValue(oauthHeadersItem3.Name)
+			oauthHeaders3.Value = types.StringValue(oauthHeadersItem3.Value)
 
 			r.OutputPrometheus.OauthHeaders = append(r.OutputPrometheus.OauthHeaders, oauthHeaders3)
 		}
@@ -6261,18 +5970,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, oauthParamsItem5 := range resp.OutputPrometheus.OauthParams {
 			var oauthParams5 tfTypes.OutputPrometheusOauthParam
 
-			if oauthParamsItem5.Name == nil {
-				oauthParams5.Name = jsontypes.NewNormalizedNull()
-			} else {
-				nameResult7, _ := json.Marshal(oauthParamsItem5.Name)
-				oauthParams5.Name = jsontypes.NewNormalizedValue(string(nameResult7))
-			}
-			if oauthParamsItem5.Value == nil {
-				oauthParams5.Value = jsontypes.NewNormalizedNull()
-			} else {
-				valueResult7, _ := json.Marshal(oauthParamsItem5.Value)
-				oauthParams5.Value = jsontypes.NewNormalizedValue(string(valueResult7))
-			}
+			oauthParams5.Name = types.StringValue(oauthParamsItem5.Name)
+			oauthParams5.Value = types.StringValue(oauthParamsItem5.Value)
 
 			r.OutputPrometheus.OauthParams = append(r.OutputPrometheus.OauthParams, oauthParams5)
 		}
@@ -6330,18 +6029,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, v := range resp.OutputPrometheus.SafeHeaders {
 			r.OutputPrometheus.SafeHeaders = append(r.OutputPrometheus.SafeHeaders, types.StringValue(v))
 		}
-		if resp.OutputPrometheus.Secret == nil {
-			r.OutputPrometheus.Secret = jsontypes.NewNormalizedNull()
-		} else {
-			secretResult3, _ := json.Marshal(resp.OutputPrometheus.Secret)
-			r.OutputPrometheus.Secret = jsontypes.NewNormalizedValue(string(secretResult3))
-		}
-		if resp.OutputPrometheus.SecretParamName == nil {
-			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedNull()
-		} else {
-			secretParamNameResult3, _ := json.Marshal(resp.OutputPrometheus.SecretParamName)
-			r.OutputPrometheus.SecretParamName = jsontypes.NewNormalizedValue(string(secretParamNameResult3))
-		}
+		r.OutputPrometheus.Secret = types.StringPointerValue(resp.OutputPrometheus.Secret)
+		r.OutputPrometheus.SecretParamName = types.StringPointerValue(resp.OutputPrometheus.SecretParamName)
 		r.OutputPrometheus.SendMetadata = types.BoolPointerValue(resp.OutputPrometheus.SendMetadata)
 		r.OutputPrometheus.Streamtags = make([]types.String, 0, len(resp.OutputPrometheus.Streamtags))
 		for _, v := range resp.OutputPrometheus.Streamtags {
@@ -6363,18 +6052,8 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		}
 		r.OutputPrometheus.TimeoutSec = types.Float64PointerValue(resp.OutputPrometheus.TimeoutSec)
 		r.OutputPrometheus.Token = types.StringPointerValue(resp.OutputPrometheus.Token)
-		if resp.OutputPrometheus.TokenAttributeName == nil {
-			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedNull()
-		} else {
-			tokenAttributeNameResult3, _ := json.Marshal(resp.OutputPrometheus.TokenAttributeName)
-			r.OutputPrometheus.TokenAttributeName = jsontypes.NewNormalizedValue(string(tokenAttributeNameResult3))
-		}
-		if resp.OutputPrometheus.TokenTimeoutSecs == nil {
-			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedNull()
-		} else {
-			tokenTimeoutSecsResult3, _ := json.Marshal(resp.OutputPrometheus.TokenTimeoutSecs)
-			r.OutputPrometheus.TokenTimeoutSecs = jsontypes.NewNormalizedValue(string(tokenTimeoutSecsResult3))
-		}
+		r.OutputPrometheus.TokenAttributeName = types.StringPointerValue(resp.OutputPrometheus.TokenAttributeName)
+		r.OutputPrometheus.TokenTimeoutSecs = types.Float64PointerValue(resp.OutputPrometheus.TokenTimeoutSecs)
 		r.OutputPrometheus.Type = types.StringValue(string(resp.OutputPrometheus.Type))
 		r.Type = r.OutputPrometheus.Type
 		r.OutputPrometheus.URL = types.StringValue(resp.OutputPrometheus.URL)
@@ -6454,13 +6133,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputS3 != nil {
 		r.OutputS3 = &tfTypes.OutputS3{}
-		r.OutputS3.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputS3.TemplateAssumeRoleArn)
-		r.OutputS3.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputS3.TemplateAssumeRoleExternalID)
-		r.OutputS3.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputS3.TemplateAwsAPIKey)
-		r.OutputS3.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputS3.TemplateAwsSecretKey)
-		r.OutputS3.TemplateBucket = types.StringPointerValue(resp.OutputS3.TemplateBucket)
-		r.OutputS3.TemplateFormat = types.StringPointerValue(resp.OutputS3.TemplateFormat)
-		r.OutputS3.TemplateRegion = types.StringPointerValue(resp.OutputS3.TemplateRegion)
 		r.OutputS3.AddIDToStagePath = types.BoolPointerValue(resp.OutputS3.AddIDToStagePath)
 		r.OutputS3.AssumeRoleArn = types.StringPointerValue(resp.OutputS3.AssumeRoleArn)
 		r.OutputS3.AssumeRoleExternalID = types.StringPointerValue(resp.OutputS3.AssumeRoleExternalID)
@@ -6604,12 +6276,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSecurityLake != nil {
 		r.OutputSecurityLake = &tfTypes.OutputSecurityLake{}
-		r.OutputSecurityLake.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSecurityLake.TemplateAssumeRoleArn)
-		r.OutputSecurityLake.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSecurityLake.TemplateAssumeRoleExternalID)
-		r.OutputSecurityLake.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSecurityLake.TemplateAwsAPIKey)
-		r.OutputSecurityLake.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSecurityLake.TemplateAwsSecretKey)
-		r.OutputSecurityLake.TemplateBucket = types.StringPointerValue(resp.OutputSecurityLake.TemplateBucket)
-		r.OutputSecurityLake.TemplateRegion = types.StringPointerValue(resp.OutputSecurityLake.TemplateRegion)
 		r.OutputSecurityLake.AccountID = types.StringValue(resp.OutputSecurityLake.AccountID)
 		r.OutputSecurityLake.AddIDToStagePath = types.BoolPointerValue(resp.OutputSecurityLake.AddIDToStagePath)
 		r.OutputSecurityLake.AssumeRoleArn = types.StringValue(resp.OutputSecurityLake.AssumeRoleArn)
@@ -6737,14 +6403,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSentinel != nil {
 		r.OutputSentinel = &tfTypes.OutputSentinel{}
-		r.OutputSentinel.TemplateClientID = types.StringPointerValue(resp.OutputSentinel.TemplateClientID)
-		r.OutputSentinel.TemplateDceEndpoint = types.StringPointerValue(resp.OutputSentinel.TemplateDceEndpoint)
-		r.OutputSentinel.TemplateDcrID = types.StringPointerValue(resp.OutputSentinel.TemplateDcrID)
-		r.OutputSentinel.TemplateLoginURL = types.StringPointerValue(resp.OutputSentinel.TemplateLoginURL)
-		r.OutputSentinel.TemplateScope = types.StringPointerValue(resp.OutputSentinel.TemplateScope)
-		r.OutputSentinel.TemplateSecret = types.StringPointerValue(resp.OutputSentinel.TemplateSecret)
-		r.OutputSentinel.TemplateStreamName = types.StringPointerValue(resp.OutputSentinel.TemplateStreamName)
-		r.OutputSentinel.TemplateURL = types.StringPointerValue(resp.OutputSentinel.TemplateURL)
 		r.OutputSentinel.AdvancedContentType = types.StringPointerValue(resp.OutputSentinel.AdvancedContentType)
 		if resp.OutputSentinel.AuthType != nil {
 			r.OutputSentinel.AuthType = types.StringValue(string(*resp.OutputSentinel.AuthType))
@@ -7273,8 +6931,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem2 := range resp.OutputSnmp.Hosts {
 			var hosts2 tfTypes.OutputSnmpHost
 
-			hosts2.TemplateHost = types.StringPointerValue(hostsItem2.TemplateHost)
-			hosts2.TemplatePort = types.StringPointerValue(hostsItem2.TemplatePort)
 			hosts2.Host = types.StringValue(hostsItem2.Host)
 			hosts2.Port = types.Float64Value(hostsItem2.Port)
 
@@ -7297,11 +6953,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSns != nil {
 		r.OutputSns = &tfTypes.OutputSns{}
-		r.OutputSns.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSns.TemplateAssumeRoleArn)
-		r.OutputSns.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSns.TemplateAssumeRoleExternalID)
-		r.OutputSns.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSns.TemplateAwsAPIKey)
-		r.OutputSns.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSns.TemplateAwsSecretKey)
-		r.OutputSns.TemplateRegion = types.StringPointerValue(resp.OutputSns.TemplateRegion)
 		r.OutputSns.AssumeRoleArn = types.StringPointerValue(resp.OutputSns.AssumeRoleArn)
 		r.OutputSns.AssumeRoleExternalID = types.StringPointerValue(resp.OutputSns.AssumeRoleExternalID)
 		r.OutputSns.AwsAPIKey = types.StringPointerValue(resp.OutputSns.AwsAPIKey)
@@ -7379,8 +7030,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSplunk != nil {
 		r.OutputSplunk = &tfTypes.OutputSplunk{}
-		r.OutputSplunk.TemplateHost = types.StringPointerValue(resp.OutputSplunk.TemplateHost)
-		r.OutputSplunk.TemplatePort = types.StringPointerValue(resp.OutputSplunk.TemplatePort)
 		r.OutputSplunk.AuthToken = types.StringPointerValue(resp.OutputSplunk.AuthToken)
 		if resp.OutputSplunk.AuthType != nil {
 			r.OutputSplunk.AuthType = types.StringValue(string(*resp.OutputSplunk.AuthType))
@@ -7488,7 +7137,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSplunkHec != nil {
 		r.OutputSplunkHec = &tfTypes.OutputSplunkHec{}
-		r.OutputSplunkHec.TemplateURL = types.StringPointerValue(resp.OutputSplunkHec.TemplateURL)
 		if resp.OutputSplunkHec.AuthType != nil {
 			r.OutputSplunkHec.AuthType = types.StringValue(string(*resp.OutputSplunkHec.AuthType))
 		} else {
@@ -7629,7 +7277,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, urlsItem3 := range resp.OutputSplunkHec.Urls {
 			var urls3 tfTypes.OutputSplunkHecURL
 
-			urls3.TemplateURL = types.StringPointerValue(urlsItem3.TemplateURL)
 			urls3.URL = types.StringValue(urlsItem3.URL)
 			urls3.Weight = types.Float64PointerValue(urlsItem3.Weight)
 
@@ -7663,8 +7310,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem3 := range resp.OutputSplunkLb.Hosts {
 			var hosts3 tfTypes.ItemsTypeHosts
 
-			hosts3.TemplateHost = types.StringPointerValue(hostsItem3.TemplateHost)
-			hosts3.TemplatePort = types.StringPointerValue(hostsItem3.TemplatePort)
 			hosts3.Host = types.StringValue(hostsItem3.Host)
 			hosts3.Port = types.Float64Value(hostsItem3.Port)
 			hosts3.Servername = types.StringPointerValue(hostsItem3.Servername)
@@ -7800,13 +7445,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSqs != nil {
 		r.OutputSqs = &tfTypes.OutputSqs{}
-		r.OutputSqs.TemplateAssumeRoleArn = types.StringPointerValue(resp.OutputSqs.TemplateAssumeRoleArn)
-		r.OutputSqs.TemplateAssumeRoleExternalID = types.StringPointerValue(resp.OutputSqs.TemplateAssumeRoleExternalID)
-		r.OutputSqs.TemplateAwsAccountID = types.StringPointerValue(resp.OutputSqs.TemplateAwsAccountID)
-		r.OutputSqs.TemplateAwsAPIKey = types.StringPointerValue(resp.OutputSqs.TemplateAwsAPIKey)
-		r.OutputSqs.TemplateAwsSecretKey = types.StringPointerValue(resp.OutputSqs.TemplateAwsSecretKey)
-		r.OutputSqs.TemplateQueueName = types.StringPointerValue(resp.OutputSqs.TemplateQueueName)
-		r.OutputSqs.TemplateRegion = types.StringPointerValue(resp.OutputSqs.TemplateRegion)
 		r.OutputSqs.AssumeRoleArn = types.StringPointerValue(resp.OutputSqs.AssumeRoleArn)
 		r.OutputSqs.AssumeRoleExternalID = types.StringPointerValue(resp.OutputSqs.AssumeRoleExternalID)
 		r.OutputSqs.AwsAccountID = types.StringPointerValue(resp.OutputSqs.AwsAccountID)
@@ -8014,7 +7652,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSumoLogic != nil {
 		r.OutputSumoLogic = &tfTypes.OutputSumoLogic{}
-		r.OutputSumoLogic.TemplateURL = types.StringPointerValue(resp.OutputSumoLogic.TemplateURL)
 		r.OutputSumoLogic.Compress = types.BoolPointerValue(resp.OutputSumoLogic.Compress)
 		r.OutputSumoLogic.Concurrency = types.Float64PointerValue(resp.OutputSumoLogic.Concurrency)
 		r.OutputSumoLogic.CustomCategory = types.StringPointerValue(resp.OutputSumoLogic.CustomCategory)
@@ -8126,8 +7763,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputSyslog != nil {
 		r.OutputSyslog = &tfTypes.OutputSyslog{}
-		r.OutputSyslog.TemplateHost = types.StringPointerValue(resp.OutputSyslog.TemplateHost)
-		r.OutputSyslog.TemplatePort = types.StringPointerValue(resp.OutputSyslog.TemplatePort)
 		r.OutputSyslog.AppName = types.StringPointerValue(resp.OutputSyslog.AppName)
 		r.OutputSyslog.ConnectionTimeout = types.Float64PointerValue(resp.OutputSyslog.ConnectionTimeout)
 		r.OutputSyslog.Description = types.StringPointerValue(resp.OutputSyslog.Description)
@@ -8147,8 +7782,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem4 := range resp.OutputSyslog.Hosts {
 			var hosts4 tfTypes.ItemsTypeHosts
 
-			hosts4.TemplateHost = types.StringPointerValue(hostsItem4.TemplateHost)
-			hosts4.TemplatePort = types.StringPointerValue(hostsItem4.TemplatePort)
 			hosts4.Host = types.StringValue(hostsItem4.Host)
 			hosts4.Port = types.Float64Value(hostsItem4.Port)
 			hosts4.Servername = types.StringPointerValue(hostsItem4.Servername)
@@ -8264,8 +7897,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputTcpjson != nil {
 		r.OutputTcpjson = &tfTypes.OutputTcpjson{}
-		r.OutputTcpjson.TemplateHost = types.StringPointerValue(resp.OutputTcpjson.TemplateHost)
-		r.OutputTcpjson.TemplatePort = types.StringPointerValue(resp.OutputTcpjson.TemplatePort)
 		r.OutputTcpjson.AuthToken = types.StringPointerValue(resp.OutputTcpjson.AuthToken)
 		if resp.OutputTcpjson.AuthType != nil {
 			r.OutputTcpjson.AuthType = types.StringValue(string(*resp.OutputTcpjson.AuthType))
@@ -8289,8 +7920,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, hostsItem5 := range resp.OutputTcpjson.Hosts {
 			var hosts5 tfTypes.ItemsTypeHosts
 
-			hosts5.TemplateHost = types.StringPointerValue(hostsItem5.TemplateHost)
-			hosts5.TemplatePort = types.StringPointerValue(hostsItem5.TemplatePort)
 			hosts5.Host = types.StringValue(hostsItem5.Host)
 			hosts5.Port = types.Float64Value(hostsItem5.Port)
 			hosts5.Servername = types.StringPointerValue(hostsItem5.Servername)
@@ -8496,11 +8125,10 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputWebhook != nil {
 		r.OutputWebhook = &tfTypes.OutputWebhook{}
-		r.OutputWebhook.TemplateLoginURL = types.StringPointerValue(resp.OutputWebhook.TemplateLoginURL)
-		r.OutputWebhook.TemplateSecret = types.StringPointerValue(resp.OutputWebhook.TemplateSecret)
-		r.OutputWebhook.TemplateURL = types.StringPointerValue(resp.OutputWebhook.TemplateURL)
 		r.OutputWebhook.AdvancedContentType = types.StringPointerValue(resp.OutputWebhook.AdvancedContentType)
-		r.OutputWebhook.AuthHeaderExpr = types.StringPointerValue(resp.OutputWebhook.AuthHeaderExpr)
+		authHeaderExprValuable4, authHeaderExprDiags4 := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.OutputWebhook.AuthHeaderExpr))
+		diags.Append(authHeaderExprDiags4...)
+		r.OutputWebhook.AuthHeaderExpr = authHeaderExprValuable4.(types.String)
 		if resp.OutputWebhook.AuthType != nil {
 			r.OutputWebhook.AuthType = types.StringValue(string(*resp.OutputWebhook.AuthType))
 		} else {
@@ -8684,7 +8312,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 		for _, urlsItem4 := range resp.OutputWebhook.Urls {
 			var urls4 tfTypes.OutputWebhookURL
 
-			urls4.TemplateURL = types.StringPointerValue(urlsItem4.TemplateURL)
 			urls4.URL = types.StringValue(urlsItem4.URL)
 			urls4.Weight = types.Float64PointerValue(urlsItem4.Weight)
 
@@ -8695,9 +8322,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputWizHec != nil {
 		r.OutputWizHec = &tfTypes.OutputWizHec{}
-		r.OutputWizHec.TemplateDataCenter = types.StringPointerValue(resp.OutputWizHec.TemplateDataCenter)
-		r.OutputWizHec.TemplateWizEnvironment = types.StringPointerValue(resp.OutputWizHec.TemplateWizEnvironment)
-		r.OutputWizHec.TemplateWizSourcetype = types.StringPointerValue(resp.OutputWizHec.TemplateWizSourcetype)
 		if resp.OutputWizHec.AuthType != nil {
 			r.OutputWizHec.AuthType = types.StringValue(string(*resp.OutputWizHec.AuthType))
 		} else {
@@ -8834,7 +8458,6 @@ func (r *DestinationResourceModel) RefreshFromSharedOutput(ctx context.Context, 
 	}
 	if resp.OutputXsiam != nil {
 		r.OutputXsiam = &tfTypes.OutputXsiam{}
-		r.OutputXsiam.TemplateURL = types.StringPointerValue(resp.OutputXsiam.TemplateURL)
 		if resp.OutputXsiam.AuthType != nil {
 			r.OutputXsiam.AuthType = types.StringValue(string(*resp.OutputXsiam.AuthType))
 		} else {
@@ -9623,16 +9246,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight = nil
 			}
-			templateURL := new(string)
-			if !r.OutputWebhook.Urls[urlsIndex].TemplateURL.IsUnknown() && !r.OutputWebhook.Urls[urlsIndex].TemplateURL.IsNull() {
-				*templateURL = r.OutputWebhook.Urls[urlsIndex].TemplateURL.ValueString()
-			} else {
-				templateURL = nil
-			}
 			urls = append(urls, shared.OutputWebhookURL{
-				URL:         url1,
-				Weight:      weight,
-				TemplateURL: templateURL,
+				URL:    url1,
+				Weight: weight,
 			})
 		}
 		dnsResolvePeriodSec := new(float64)
@@ -9646,24 +9262,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			*loadBalanceStatsPeriodSec = r.OutputWebhook.LoadBalanceStatsPeriodSec.ValueFloat64()
 		} else {
 			loadBalanceStatsPeriodSec = nil
-		}
-		templateLoginURL := new(string)
-		if !r.OutputWebhook.TemplateLoginURL.IsUnknown() && !r.OutputWebhook.TemplateLoginURL.IsNull() {
-			*templateLoginURL = r.OutputWebhook.TemplateLoginURL.ValueString()
-		} else {
-			templateLoginURL = nil
-		}
-		templateSecret := new(string)
-		if !r.OutputWebhook.TemplateSecret.IsUnknown() && !r.OutputWebhook.TemplateSecret.IsNull() {
-			*templateSecret = r.OutputWebhook.TemplateSecret.ValueString()
-		} else {
-			templateSecret = nil
-		}
-		templateUrl1 := new(string)
-		if !r.OutputWebhook.TemplateURL.IsUnknown() && !r.OutputWebhook.TemplateURL.IsNull() {
-			*templateUrl1 = r.OutputWebhook.TemplateURL.ValueString()
-		} else {
-			templateUrl1 = nil
 		}
 		outputWebhook = &shared.OutputWebhook{
 			ID:                            id1,
@@ -9733,9 +9331,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Urls:                          urls,
 			DNSResolvePeriodSec:           dnsResolvePeriodSec,
 			LoadBalanceStatsPeriodSec:     loadBalanceStatsPeriodSec,
-			TemplateLoginURL:              templateLoginURL,
-			TemplateSecret:                templateSecret,
-			TemplateURL:                   templateUrl1,
 		}
 	}
 	if outputWebhook != nil {
@@ -10106,54 +9701,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			streamName = nil
 		}
-		templateLoginUrl1 := new(string)
-		if !r.OutputSentinel.TemplateLoginURL.IsUnknown() && !r.OutputSentinel.TemplateLoginURL.IsNull() {
-			*templateLoginUrl1 = r.OutputSentinel.TemplateLoginURL.ValueString()
-		} else {
-			templateLoginUrl1 = nil
-		}
-		templateSecret1 := new(string)
-		if !r.OutputSentinel.TemplateSecret.IsUnknown() && !r.OutputSentinel.TemplateSecret.IsNull() {
-			*templateSecret1 = r.OutputSentinel.TemplateSecret.ValueString()
-		} else {
-			templateSecret1 = nil
-		}
-		templateClientID := new(string)
-		if !r.OutputSentinel.TemplateClientID.IsUnknown() && !r.OutputSentinel.TemplateClientID.IsNull() {
-			*templateClientID = r.OutputSentinel.TemplateClientID.ValueString()
-		} else {
-			templateClientID = nil
-		}
-		templateScope := new(string)
-		if !r.OutputSentinel.TemplateScope.IsUnknown() && !r.OutputSentinel.TemplateScope.IsNull() {
-			*templateScope = r.OutputSentinel.TemplateScope.ValueString()
-		} else {
-			templateScope = nil
-		}
-		templateUrl2 := new(string)
-		if !r.OutputSentinel.TemplateURL.IsUnknown() && !r.OutputSentinel.TemplateURL.IsNull() {
-			*templateUrl2 = r.OutputSentinel.TemplateURL.ValueString()
-		} else {
-			templateUrl2 = nil
-		}
-		templateDcrID := new(string)
-		if !r.OutputSentinel.TemplateDcrID.IsUnknown() && !r.OutputSentinel.TemplateDcrID.IsNull() {
-			*templateDcrID = r.OutputSentinel.TemplateDcrID.ValueString()
-		} else {
-			templateDcrID = nil
-		}
-		templateDceEndpoint := new(string)
-		if !r.OutputSentinel.TemplateDceEndpoint.IsUnknown() && !r.OutputSentinel.TemplateDceEndpoint.IsNull() {
-			*templateDceEndpoint = r.OutputSentinel.TemplateDceEndpoint.ValueString()
-		} else {
-			templateDceEndpoint = nil
-		}
-		templateStreamName := new(string)
-		if !r.OutputSentinel.TemplateStreamName.IsUnknown() && !r.OutputSentinel.TemplateStreamName.IsNull() {
-			*templateStreamName = r.OutputSentinel.TemplateStreamName.ValueString()
-		} else {
-			templateStreamName = nil
-		}
 		outputSentinel = &shared.OutputSentinel{
 			ID:                            id2,
 			Type:                          typeVar2,
@@ -10210,14 +9757,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DcrID:                         dcrID,
 			DceEndpoint:                   dceEndpoint,
 			StreamName:                    streamName,
-			TemplateLoginURL:              templateLoginUrl1,
-			TemplateSecret:                templateSecret1,
-			TemplateClientID:              templateClientID,
-			TemplateScope:                 templateScope,
-			TemplateURL:                   templateUrl2,
-			TemplateDcrID:                 templateDcrID,
-			TemplateDceEndpoint:           templateDceEndpoint,
-			TemplateStreamName:            templateStreamName,
 		}
 	}
 	if outputSentinel != nil {
@@ -10407,26 +9946,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight1 = nil
 			}
-			templateHost := new(string)
-			if !r.OutputSyslog.Hosts[hostsIndex].TemplateHost.IsUnknown() && !r.OutputSyslog.Hosts[hostsIndex].TemplateHost.IsNull() {
-				*templateHost = r.OutputSyslog.Hosts[hostsIndex].TemplateHost.ValueString()
-			} else {
-				templateHost = nil
-			}
-			templatePort := new(string)
-			if !r.OutputSyslog.Hosts[hostsIndex].TemplatePort.IsUnknown() && !r.OutputSyslog.Hosts[hostsIndex].TemplatePort.IsNull() {
-				*templatePort = r.OutputSyslog.Hosts[hostsIndex].TemplatePort.ValueString()
-			} else {
-				templatePort = nil
-			}
 			hosts = append(hosts, shared.ItemsTypeHosts{
-				Host:         host1,
-				Port:         port1,
-				TLS:          tls1,
-				Servername:   servername1,
-				Weight:       weight1,
-				TemplateHost: templateHost,
-				TemplatePort: templatePort,
+				Host:       host1,
+				Port:       port1,
+				TLS:        tls1,
+				Servername: servername1,
+				Weight:     weight1,
 			})
 		}
 		dnsResolvePeriodSec1 := new(float64)
@@ -10628,18 +10153,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputSyslog.PqControls != nil {
 			pqControls2 = &shared.OutputSyslogPqControls{}
 		}
-		templateHost1 := new(string)
-		if !r.OutputSyslog.TemplateHost.IsUnknown() && !r.OutputSyslog.TemplateHost.IsNull() {
-			*templateHost1 = r.OutputSyslog.TemplateHost.ValueString()
-		} else {
-			templateHost1 = nil
-		}
-		templatePort1 := new(string)
-		if !r.OutputSyslog.TemplatePort.IsUnknown() && !r.OutputSyslog.TemplatePort.IsNull() {
-			*templatePort1 = r.OutputSyslog.TemplatePort.ValueString()
-		} else {
-			templatePort1 = nil
-		}
 		outputSyslog = &shared.OutputSyslog{
 			ID:                        id4,
 			Type:                      typeVar4,
@@ -10684,8 +10197,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure2,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes2,
 			PqControls:                pqControls2,
-			TemplateHost:              templateHost1,
-			TemplatePort:              templatePort1,
 		}
 	}
 	if outputSyslog != nil {
@@ -10963,18 +10474,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret1 = nil
 		}
-		templateHost2 := new(string)
-		if !r.OutputSplunk.TemplateHost.IsUnknown() && !r.OutputSplunk.TemplateHost.IsNull() {
-			*templateHost2 = r.OutputSplunk.TemplateHost.ValueString()
-		} else {
-			templateHost2 = nil
-		}
-		templatePort2 := new(string)
-		if !r.OutputSplunk.TemplatePort.IsUnknown() && !r.OutputSplunk.TemplatePort.IsNull() {
-			*templatePort2 = r.OutputSplunk.TemplatePort.ValueString()
-		} else {
-			templatePort2 = nil
-		}
 		outputSplunk = &shared.OutputSplunk{
 			ID:                    id5,
 			Type:                  typeVar5,
@@ -11012,8 +10511,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:            pqControls3,
 			AuthToken:             authToken,
 			TextSecret:            textSecret1,
-			TemplateHost:          templateHost2,
-			TemplatePort:          templatePort2,
 		}
 	}
 	if outputSplunk != nil {
@@ -11337,26 +10834,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight2 = nil
 			}
-			templateHost3 := new(string)
-			if !r.OutputSplunkLb.Hosts[hostsIndex1].TemplateHost.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex1].TemplateHost.IsNull() {
-				*templateHost3 = r.OutputSplunkLb.Hosts[hostsIndex1].TemplateHost.ValueString()
-			} else {
-				templateHost3 = nil
-			}
-			templatePort3 := new(string)
-			if !r.OutputSplunkLb.Hosts[hostsIndex1].TemplatePort.IsUnknown() && !r.OutputSplunkLb.Hosts[hostsIndex1].TemplatePort.IsNull() {
-				*templatePort3 = r.OutputSplunkLb.Hosts[hostsIndex1].TemplatePort.ValueString()
-			} else {
-				templatePort3 = nil
-			}
 			hosts1 = append(hosts1, shared.ItemsTypeHosts{
-				Host:         host3,
-				Port:         port3,
-				TLS:          tls5,
-				Servername:   servername5,
-				Weight:       weight2,
-				TemplateHost: templateHost3,
-				TemplatePort: templatePort3,
+				Host:       host3,
+				Port:       port3,
+				TLS:        tls5,
+				Servername: servername5,
+				Weight:     weight2,
 			})
 		}
 		pqStrictOrdering4 := new(bool)
@@ -11793,16 +11276,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight3 = nil
 			}
-			templateUrl3 := new(string)
-			if !r.OutputSplunkHec.Urls[urlsIndex1].TemplateURL.IsUnknown() && !r.OutputSplunkHec.Urls[urlsIndex1].TemplateURL.IsNull() {
-				*templateUrl3 = r.OutputSplunkHec.Urls[urlsIndex1].TemplateURL.ValueString()
-			} else {
-				templateUrl3 = nil
-			}
 			urls1 = append(urls1, shared.OutputSplunkHecURL{
-				URL:         url4,
-				Weight:      weight3,
-				TemplateURL: templateUrl3,
+				URL:    url4,
+				Weight: weight3,
 			})
 		}
 		dnsResolvePeriodSec3 := new(float64)
@@ -11899,12 +11375,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputSplunkHec.PqControls != nil {
 			pqControls5 = &shared.OutputSplunkHecPqControls{}
 		}
-		templateUrl4 := new(string)
-		if !r.OutputSplunkHec.TemplateURL.IsUnknown() && !r.OutputSplunkHec.TemplateURL.IsNull() {
-			*templateUrl4 = r.OutputSplunkHec.TemplateURL.ValueString()
-		} else {
-			templateUrl4 = nil
-		}
 		outputSplunkHec = &shared.OutputSplunkHec{
 			ID:                            id7,
 			Type:                          typeVar7,
@@ -11953,7 +11423,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure5,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes5,
 			PqControls:                    pqControls5,
-			TemplateURL:                   templateUrl4,
 		}
 	}
 	if outputSplunkHec != nil {
@@ -12316,24 +11785,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret6 = nil
 		}
-		templateWizEnvironment := new(string)
-		if !r.OutputWizHec.TemplateWizEnvironment.IsUnknown() && !r.OutputWizHec.TemplateWizEnvironment.IsNull() {
-			*templateWizEnvironment = r.OutputWizHec.TemplateWizEnvironment.ValueString()
-		} else {
-			templateWizEnvironment = nil
-		}
-		templateDataCenter := new(string)
-		if !r.OutputWizHec.TemplateDataCenter.IsUnknown() && !r.OutputWizHec.TemplateDataCenter.IsNull() {
-			*templateDataCenter = r.OutputWizHec.TemplateDataCenter.ValueString()
-		} else {
-			templateDataCenter = nil
-		}
-		templateWizSourcetype := new(string)
-		if !r.OutputWizHec.TemplateWizSourcetype.IsUnknown() && !r.OutputWizHec.TemplateWizSourcetype.IsNull() {
-			*templateWizSourcetype = r.OutputWizHec.TemplateWizSourcetype.ValueString()
-		} else {
-			templateWizSourcetype = nil
-		}
 		outputWizHec = &shared.OutputWizHec{
 			ID:                            id8,
 			Type:                          typeVar8,
@@ -12378,9 +11829,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:                    pqControls6,
 			Token:                         token2,
 			TextSecret:                    textSecret6,
-			TemplateWizEnvironment:        templateWizEnvironment,
-			TemplateDataCenter:            templateDataCenter,
-			TemplateWizSourcetype:         templateWizSourcetype,
 		}
 	}
 	if outputWizHec != nil {
@@ -12602,26 +12050,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight4 = nil
 			}
-			templateHost4 := new(string)
-			if !r.OutputTcpjson.Hosts[hostsIndex2].TemplateHost.IsUnknown() && !r.OutputTcpjson.Hosts[hostsIndex2].TemplateHost.IsNull() {
-				*templateHost4 = r.OutputTcpjson.Hosts[hostsIndex2].TemplateHost.ValueString()
-			} else {
-				templateHost4 = nil
-			}
-			templatePort4 := new(string)
-			if !r.OutputTcpjson.Hosts[hostsIndex2].TemplatePort.IsUnknown() && !r.OutputTcpjson.Hosts[hostsIndex2].TemplatePort.IsNull() {
-				*templatePort4 = r.OutputTcpjson.Hosts[hostsIndex2].TemplatePort.ValueString()
-			} else {
-				templatePort4 = nil
-			}
 			hosts2 = append(hosts2, shared.ItemsTypeHosts{
-				Host:         host5,
-				Port:         port5,
-				TLS:          tls9,
-				Servername:   servername9,
-				Weight:       weight4,
-				TemplateHost: templateHost4,
-				TemplatePort: templatePort4,
+				Host:       host5,
+				Port:       port5,
+				TLS:        tls9,
+				Servername: servername9,
+				Weight:     weight4,
 			})
 		}
 		dnsResolvePeriodSec4 := new(float64)
@@ -12724,18 +12158,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret7 = nil
 		}
-		templateHost5 := new(string)
-		if !r.OutputTcpjson.TemplateHost.IsUnknown() && !r.OutputTcpjson.TemplateHost.IsNull() {
-			*templateHost5 = r.OutputTcpjson.TemplateHost.ValueString()
-		} else {
-			templateHost5 = nil
-		}
-		templatePort5 := new(string)
-		if !r.OutputTcpjson.TemplatePort.IsUnknown() && !r.OutputTcpjson.TemplatePort.IsNull() {
-			*templatePort5 = r.OutputTcpjson.TemplatePort.ValueString()
-		} else {
-			templatePort5 = nil
-		}
 		outputTcpjson = &shared.OutputTcpjson{
 			ID:                        id9,
 			Type:                      typeVar9,
@@ -12776,8 +12198,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:                pqControls7,
 			AuthToken:                 authToken4,
 			TextSecret:                textSecret7,
-			TemplateHost:              templateHost5,
-			TemplatePort:              templatePort5,
 		}
 	}
 	if outputTcpjson != nil {
@@ -13710,12 +13130,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum = nil
 		}
-		templateFormat := new(string)
-		if !r.OutputFilesystem.TemplateFormat.IsUnknown() && !r.OutputFilesystem.TemplateFormat.IsNull() {
-			*templateFormat = r.OutputFilesystem.TemplateFormat.ValueString()
-		} else {
-			templateFormat = nil
-		}
 		outputFilesystem = &shared.OutputFilesystem{
 			ID:                     id12,
 			Type:                   typeVar12,
@@ -13760,7 +13174,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:     directoryBatchSize,
 			DeadletterPath:         deadletterPath,
 			MaxRetryNum:            maxRetryNum,
-			TemplateFormat:         templateFormat,
 		}
 	}
 	if outputFilesystem != nil {
@@ -14180,48 +13593,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum1 = nil
 		}
-		templateBucket := new(string)
-		if !r.OutputS3.TemplateBucket.IsUnknown() && !r.OutputS3.TemplateBucket.IsNull() {
-			*templateBucket = r.OutputS3.TemplateBucket.ValueString()
-		} else {
-			templateBucket = nil
-		}
-		templateRegion := new(string)
-		if !r.OutputS3.TemplateRegion.IsUnknown() && !r.OutputS3.TemplateRegion.IsNull() {
-			*templateRegion = r.OutputS3.TemplateRegion.ValueString()
-		} else {
-			templateRegion = nil
-		}
-		templateAwsSecretKey := new(string)
-		if !r.OutputS3.TemplateAwsSecretKey.IsUnknown() && !r.OutputS3.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey = r.OutputS3.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey = nil
-		}
-		templateAssumeRoleArn := new(string)
-		if !r.OutputS3.TemplateAssumeRoleArn.IsUnknown() && !r.OutputS3.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn = r.OutputS3.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn = nil
-		}
-		templateAssumeRoleExternalID := new(string)
-		if !r.OutputS3.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputS3.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalID = r.OutputS3.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalID = nil
-		}
-		templateFormat1 := new(string)
-		if !r.OutputS3.TemplateFormat.IsUnknown() && !r.OutputS3.TemplateFormat.IsNull() {
-			*templateFormat1 = r.OutputS3.TemplateFormat.ValueString()
-		} else {
-			templateFormat1 = nil
-		}
-		templateAwsAPIKey := new(string)
-		if !r.OutputS3.TemplateAwsAPIKey.IsUnknown() && !r.OutputS3.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey = r.OutputS3.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey = nil
-		}
 		outputS3 = &shared.OutputS3{
 			ID:                            id13,
 			Type:                          typeVar13,
@@ -14287,13 +13658,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:            directoryBatchSize1,
 			DeadletterPath:                deadletterPath1,
 			MaxRetryNum:                   maxRetryNum1,
-			TemplateBucket:                templateBucket,
-			TemplateRegion:                templateRegion,
-			TemplateAwsSecretKey:          templateAwsSecretKey,
-			TemplateAssumeRoleArn:         templateAssumeRoleArn,
-			TemplateAssumeRoleExternalID:  templateAssumeRoleExternalID,
-			TemplateFormat:                templateFormat1,
-			TemplateAwsAPIKey:             templateAwsAPIKey,
 		}
 	}
 	if outputS3 != nil {
@@ -14674,99 +14038,64 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 				CertificateName: certificateName7,
 			}
 		}
-		templateContainerName := new(string)
-		if !r.OutputAzureBlob.TemplateContainerName.IsUnknown() && !r.OutputAzureBlob.TemplateContainerName.IsNull() {
-			*templateContainerName = r.OutputAzureBlob.TemplateContainerName.ValueString()
-		} else {
-			templateContainerName = nil
-		}
-		templateFormat2 := new(string)
-		if !r.OutputAzureBlob.TemplateFormat.IsUnknown() && !r.OutputAzureBlob.TemplateFormat.IsNull() {
-			*templateFormat2 = r.OutputAzureBlob.TemplateFormat.ValueString()
-		} else {
-			templateFormat2 = nil
-		}
-		templateConnectionString := new(string)
-		if !r.OutputAzureBlob.TemplateConnectionString.IsUnknown() && !r.OutputAzureBlob.TemplateConnectionString.IsNull() {
-			*templateConnectionString = r.OutputAzureBlob.TemplateConnectionString.ValueString()
-		} else {
-			templateConnectionString = nil
-		}
-		templateTenantID := new(string)
-		if !r.OutputAzureBlob.TemplateTenantID.IsUnknown() && !r.OutputAzureBlob.TemplateTenantID.IsNull() {
-			*templateTenantID = r.OutputAzureBlob.TemplateTenantID.ValueString()
-		} else {
-			templateTenantID = nil
-		}
-		templateClientId1 := new(string)
-		if !r.OutputAzureBlob.TemplateClientID.IsUnknown() && !r.OutputAzureBlob.TemplateClientID.IsNull() {
-			*templateClientId1 = r.OutputAzureBlob.TemplateClientID.ValueString()
-		} else {
-			templateClientId1 = nil
-		}
 		outputAzureBlob = &shared.OutputAzureBlob{
-			ID:                       id14,
-			Type:                     typeVar14,
-			Pipeline:                 pipeline14,
-			SystemFields:             systemFields14,
-			Environment:              environment14,
-			Streamtags:               streamtags14,
-			ContainerName:            containerName,
-			CreateContainer:          createContainer,
-			DestPath:                 destPath2,
-			StagePath:                stagePath2,
-			AddIDToStagePath:         addIDToStagePath2,
-			MaxConcurrentFileParts:   maxConcurrentFileParts1,
-			RemoveEmptyDirs:          removeEmptyDirs2,
-			PartitionExpr:            partitionExpr2,
-			Format:                   format4,
-			BaseFileName:             baseFileName2,
-			FileNameSuffix:           fileNameSuffix2,
-			MaxFileSizeMB:            maxFileSizeMb2,
-			MaxFileOpenTimeSec:       maxFileOpenTimeSec2,
-			MaxFileIdleTimeSec:       maxFileIdleTimeSec2,
-			MaxOpenFiles:             maxOpenFiles2,
-			HeaderLine:               headerLine2,
-			WriteHighWaterMark:       writeHighWaterMark2,
-			OnBackpressure:           onBackpressure12,
-			DeadletterEnabled:        deadletterEnabled2,
-			OnDiskFullBackpressure:   onDiskFullBackpressure2,
-			ForceCloseOnShutdown:     forceCloseOnShutdown2,
-			RetrySettings:            retrySettings2,
-			AuthType:                 authType11,
-			StorageClass:             storageClass1,
-			Description:              description12,
-			Compress:                 compress10,
-			CompressionLevel:         compressionLevel2,
-			AutomaticSchema:          automaticSchema2,
-			ParquetSchema:            parquetSchema2,
-			ParquetVersion:           parquetVersion2,
-			ParquetDataPageVersion:   parquetDataPageVersion2,
-			ParquetRowGroupLength:    parquetRowGroupLength2,
-			ParquetPageSize:          parquetPageSize2,
-			ShouldLogInvalidRows:     shouldLogInvalidRows2,
-			KeyValueMetadata:         keyValueMetadata2,
-			EnableStatistics:         enableStatistics2,
-			EnableWritePageIndex:     enableWritePageIndex2,
-			EnablePageChecksum:       enablePageChecksum2,
-			EmptyDirCleanupSec:       emptyDirCleanupSec2,
-			DirectoryBatchSize:       directoryBatchSize2,
-			DeadletterPath:           deadletterPath2,
-			MaxRetryNum:              maxRetryNum2,
-			ConnectionString:         connectionString,
-			TextSecret:               textSecret10,
-			StorageAccountName:       storageAccountName,
-			TenantID:                 tenantID,
-			ClientID:                 clientId1,
-			AzureCloud:               azureCloud,
-			EndpointSuffix:           endpointSuffix,
-			ClientTextSecret:         clientTextSecret,
-			Certificate:              certificate,
-			TemplateContainerName:    templateContainerName,
-			TemplateFormat:           templateFormat2,
-			TemplateConnectionString: templateConnectionString,
-			TemplateTenantID:         templateTenantID,
-			TemplateClientID:         templateClientId1,
+			ID:                     id14,
+			Type:                   typeVar14,
+			Pipeline:               pipeline14,
+			SystemFields:           systemFields14,
+			Environment:            environment14,
+			Streamtags:             streamtags14,
+			ContainerName:          containerName,
+			CreateContainer:        createContainer,
+			DestPath:               destPath2,
+			StagePath:              stagePath2,
+			AddIDToStagePath:       addIDToStagePath2,
+			MaxConcurrentFileParts: maxConcurrentFileParts1,
+			RemoveEmptyDirs:        removeEmptyDirs2,
+			PartitionExpr:          partitionExpr2,
+			Format:                 format4,
+			BaseFileName:           baseFileName2,
+			FileNameSuffix:         fileNameSuffix2,
+			MaxFileSizeMB:          maxFileSizeMb2,
+			MaxFileOpenTimeSec:     maxFileOpenTimeSec2,
+			MaxFileIdleTimeSec:     maxFileIdleTimeSec2,
+			MaxOpenFiles:           maxOpenFiles2,
+			HeaderLine:             headerLine2,
+			WriteHighWaterMark:     writeHighWaterMark2,
+			OnBackpressure:         onBackpressure12,
+			DeadletterEnabled:      deadletterEnabled2,
+			OnDiskFullBackpressure: onDiskFullBackpressure2,
+			ForceCloseOnShutdown:   forceCloseOnShutdown2,
+			RetrySettings:          retrySettings2,
+			AuthType:               authType11,
+			StorageClass:           storageClass1,
+			Description:            description12,
+			Compress:               compress10,
+			CompressionLevel:       compressionLevel2,
+			AutomaticSchema:        automaticSchema2,
+			ParquetSchema:          parquetSchema2,
+			ParquetVersion:         parquetVersion2,
+			ParquetDataPageVersion: parquetDataPageVersion2,
+			ParquetRowGroupLength:  parquetRowGroupLength2,
+			ParquetPageSize:        parquetPageSize2,
+			ShouldLogInvalidRows:   shouldLogInvalidRows2,
+			KeyValueMetadata:       keyValueMetadata2,
+			EnableStatistics:       enableStatistics2,
+			EnableWritePageIndex:   enableWritePageIndex2,
+			EnablePageChecksum:     enablePageChecksum2,
+			EmptyDirCleanupSec:     emptyDirCleanupSec2,
+			DirectoryBatchSize:     directoryBatchSize2,
+			DeadletterPath:         deadletterPath2,
+			MaxRetryNum:            maxRetryNum2,
+			ConnectionString:       connectionString,
+			TextSecret:             textSecret10,
+			StorageAccountName:     storageAccountName,
+			TenantID:               tenantID,
+			ClientID:               clientId1,
+			AzureCloud:             azureCloud,
+			EndpointSuffix:         endpointSuffix,
+			ClientTextSecret:       clientTextSecret,
+			Certificate:            certificate,
 		}
 	}
 	if outputAzureBlob != nil {
@@ -15357,60 +14686,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputAzureDataExplorer.PqControls != nil {
 			pqControls10 = &shared.OutputAzureDataExplorerPqControls{}
 		}
-		templateClusterURL := new(string)
-		if !r.OutputAzureDataExplorer.TemplateClusterURL.IsUnknown() && !r.OutputAzureDataExplorer.TemplateClusterURL.IsNull() {
-			*templateClusterURL = r.OutputAzureDataExplorer.TemplateClusterURL.ValueString()
-		} else {
-			templateClusterURL = nil
-		}
-		templateDatabase := new(string)
-		if !r.OutputAzureDataExplorer.TemplateDatabase.IsUnknown() && !r.OutputAzureDataExplorer.TemplateDatabase.IsNull() {
-			*templateDatabase = r.OutputAzureDataExplorer.TemplateDatabase.ValueString()
-		} else {
-			templateDatabase = nil
-		}
-		templateTable := new(string)
-		if !r.OutputAzureDataExplorer.TemplateTable.IsUnknown() && !r.OutputAzureDataExplorer.TemplateTable.IsNull() {
-			*templateTable = r.OutputAzureDataExplorer.TemplateTable.ValueString()
-		} else {
-			templateTable = nil
-		}
-		templateTenantId1 := new(string)
-		if !r.OutputAzureDataExplorer.TemplateTenantID.IsUnknown() && !r.OutputAzureDataExplorer.TemplateTenantID.IsNull() {
-			*templateTenantId1 = r.OutputAzureDataExplorer.TemplateTenantID.ValueString()
-		} else {
-			templateTenantId1 = nil
-		}
-		templateClientId2 := new(string)
-		if !r.OutputAzureDataExplorer.TemplateClientID.IsUnknown() && !r.OutputAzureDataExplorer.TemplateClientID.IsNull() {
-			*templateClientId2 = r.OutputAzureDataExplorer.TemplateClientID.ValueString()
-		} else {
-			templateClientId2 = nil
-		}
-		templateScope1 := new(string)
-		if !r.OutputAzureDataExplorer.TemplateScope.IsUnknown() && !r.OutputAzureDataExplorer.TemplateScope.IsNull() {
-			*templateScope1 = r.OutputAzureDataExplorer.TemplateScope.ValueString()
-		} else {
-			templateScope1 = nil
-		}
-		templateClientSecret := new(string)
-		if !r.OutputAzureDataExplorer.TemplateClientSecret.IsUnknown() && !r.OutputAzureDataExplorer.TemplateClientSecret.IsNull() {
-			*templateClientSecret = r.OutputAzureDataExplorer.TemplateClientSecret.ValueString()
-		} else {
-			templateClientSecret = nil
-		}
-		templateFormat3 := new(string)
-		if !r.OutputAzureDataExplorer.TemplateFormat.IsUnknown() && !r.OutputAzureDataExplorer.TemplateFormat.IsNull() {
-			*templateFormat3 = r.OutputAzureDataExplorer.TemplateFormat.ValueString()
-		} else {
-			templateFormat3 = nil
-		}
-		templateIngestURL := new(string)
-		if !r.OutputAzureDataExplorer.TemplateIngestURL.IsUnknown() && !r.OutputAzureDataExplorer.TemplateIngestURL.IsNull() {
-			*templateIngestURL = r.OutputAzureDataExplorer.TemplateIngestURL.ValueString()
-		} else {
-			templateIngestURL = nil
-		}
 		outputAzureDataExplorer = &shared.OutputAzureDataExplorer{
 			ID:                            id15,
 			Type:                          typeVar15,
@@ -15497,15 +14772,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure10,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes10,
 			PqControls:                    pqControls10,
-			TemplateClusterURL:            templateClusterURL,
-			TemplateDatabase:              templateDatabase,
-			TemplateTable:                 templateTable,
-			TemplateTenantID:              templateTenantId1,
-			TemplateClientID:              templateClientId2,
-			TemplateScope:                 templateScope1,
-			TemplateClientSecret:          templateClientSecret,
-			TemplateFormat:                templateFormat3,
-			TemplateIngestURL:             templateIngestURL,
 		}
 	}
 	if outputAzureDataExplorer != nil {
@@ -15803,18 +15069,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			keypairSecret = nil
 		}
-		templateWorkspaceID := new(string)
-		if !r.OutputAzureLogs.TemplateWorkspaceID.IsUnknown() && !r.OutputAzureLogs.TemplateWorkspaceID.IsNull() {
-			*templateWorkspaceID = r.OutputAzureLogs.TemplateWorkspaceID.ValueString()
-		} else {
-			templateWorkspaceID = nil
-		}
-		templateWorkspaceKey := new(string)
-		if !r.OutputAzureLogs.TemplateWorkspaceKey.IsUnknown() && !r.OutputAzureLogs.TemplateWorkspaceKey.IsNull() {
-			*templateWorkspaceKey = r.OutputAzureLogs.TemplateWorkspaceKey.ValueString()
-		} else {
-			templateWorkspaceKey = nil
-		}
 		outputAzureLogs = &shared.OutputAzureLogs{
 			ID:                            id16,
 			Type:                          typeVar16,
@@ -15857,8 +15111,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			WorkspaceID:                   workspaceID,
 			WorkspaceKey:                  workspaceKey,
 			KeypairSecret:                 keypairSecret,
-			TemplateWorkspaceID:           templateWorkspaceID,
-			TemplateWorkspaceKey:          templateWorkspaceKey,
 		}
 	}
 	if outputAzureLogs != nil {
@@ -16097,90 +15349,48 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputKinesis.PqControls != nil {
 			pqControls12 = &shared.OutputKinesisPqControls{}
 		}
-		templateStreamName1 := new(string)
-		if !r.OutputKinesis.TemplateStreamName.IsUnknown() && !r.OutputKinesis.TemplateStreamName.IsNull() {
-			*templateStreamName1 = r.OutputKinesis.TemplateStreamName.ValueString()
-		} else {
-			templateStreamName1 = nil
-		}
-		templateAwsSecretKey1 := new(string)
-		if !r.OutputKinesis.TemplateAwsSecretKey.IsUnknown() && !r.OutputKinesis.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey1 = r.OutputKinesis.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey1 = nil
-		}
-		templateRegion1 := new(string)
-		if !r.OutputKinesis.TemplateRegion.IsUnknown() && !r.OutputKinesis.TemplateRegion.IsNull() {
-			*templateRegion1 = r.OutputKinesis.TemplateRegion.ValueString()
-		} else {
-			templateRegion1 = nil
-		}
-		templateAssumeRoleArn1 := new(string)
-		if !r.OutputKinesis.TemplateAssumeRoleArn.IsUnknown() && !r.OutputKinesis.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn1 = r.OutputKinesis.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn1 = nil
-		}
-		templateAssumeRoleExternalId1 := new(string)
-		if !r.OutputKinesis.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputKinesis.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId1 = r.OutputKinesis.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId1 = nil
-		}
-		templateAwsAPIKey1 := new(string)
-		if !r.OutputKinesis.TemplateAwsAPIKey.IsUnknown() && !r.OutputKinesis.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey1 = r.OutputKinesis.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey1 = nil
-		}
 		outputKinesis = &shared.OutputKinesis{
-			ID:                           id17,
-			Type:                         typeVar17,
-			Pipeline:                     pipeline17,
-			SystemFields:                 systemFields17,
-			Environment:                  environment17,
-			Streamtags:                   streamtags17,
-			StreamName:                   streamName1,
-			AwsAuthenticationMethod:      awsAuthenticationMethod1,
-			AwsSecretKey:                 awsSecretKey1,
-			Region:                       region1,
-			Endpoint:                     endpoint1,
-			SignatureVersion:             signatureVersion1,
-			ReuseConnections:             reuseConnections1,
-			RejectUnauthorized:           rejectUnauthorized14,
-			EnableAssumeRole:             enableAssumeRole1,
-			AssumeRoleArn:                assumeRoleArn1,
-			AssumeRoleExternalID:         assumeRoleExternalId1,
-			DurationSeconds:              durationSeconds1,
-			Concurrency:                  concurrency8,
-			MaxRecordSizeKB:              maxRecordSizeKB,
-			FlushPeriodSec:               flushPeriodSec8,
-			Compression:                  compression1,
-			UseListShards:                useListShards,
-			AsNdjson:                     asNdjson,
-			OnBackpressure:               onBackpressure15,
-			Description:                  description15,
-			AwsAPIKey:                    awsAPIKey1,
-			AwsSecret:                    awsSecret1,
-			MaxEventsPerFlush:            maxEventsPerFlush,
-			PqStrictOrdering:             pqStrictOrdering12,
-			PqRatePerSec:                 pqRatePerSec12,
-			PqMode:                       pqMode12,
-			PqMaxBufferSize:              pqMaxBufferSize12,
-			PqMaxBackpressureSec:         pqMaxBackpressureSec12,
-			PqMaxFileSize:                pqMaxFileSize12,
-			PqMaxSize:                    pqMaxSize12,
-			PqPath:                       pqPath12,
-			PqCompress:                   pqCompress12,
-			PqOnBackpressure:             pqOnBackpressure12,
-			PqMaxBufferSizeBytes:         pqMaxBufferSizeBytes12,
-			PqControls:                   pqControls12,
-			TemplateStreamName:           templateStreamName1,
-			TemplateAwsSecretKey:         templateAwsSecretKey1,
-			TemplateRegion:               templateRegion1,
-			TemplateAssumeRoleArn:        templateAssumeRoleArn1,
-			TemplateAssumeRoleExternalID: templateAssumeRoleExternalId1,
-			TemplateAwsAPIKey:            templateAwsAPIKey1,
+			ID:                      id17,
+			Type:                    typeVar17,
+			Pipeline:                pipeline17,
+			SystemFields:            systemFields17,
+			Environment:             environment17,
+			Streamtags:              streamtags17,
+			StreamName:              streamName1,
+			AwsAuthenticationMethod: awsAuthenticationMethod1,
+			AwsSecretKey:            awsSecretKey1,
+			Region:                  region1,
+			Endpoint:                endpoint1,
+			SignatureVersion:        signatureVersion1,
+			ReuseConnections:        reuseConnections1,
+			RejectUnauthorized:      rejectUnauthorized14,
+			EnableAssumeRole:        enableAssumeRole1,
+			AssumeRoleArn:           assumeRoleArn1,
+			AssumeRoleExternalID:    assumeRoleExternalId1,
+			DurationSeconds:         durationSeconds1,
+			Concurrency:             concurrency8,
+			MaxRecordSizeKB:         maxRecordSizeKB,
+			FlushPeriodSec:          flushPeriodSec8,
+			Compression:             compression1,
+			UseListShards:           useListShards,
+			AsNdjson:                asNdjson,
+			OnBackpressure:          onBackpressure15,
+			Description:             description15,
+			AwsAPIKey:               awsAPIKey1,
+			AwsSecret:               awsSecret1,
+			MaxEventsPerFlush:       maxEventsPerFlush,
+			PqStrictOrdering:        pqStrictOrdering12,
+			PqRatePerSec:            pqRatePerSec12,
+			PqMode:                  pqMode12,
+			PqMaxBufferSize:         pqMaxBufferSize12,
+			PqMaxBackpressureSec:    pqMaxBackpressureSec12,
+			PqMaxFileSize:           pqMaxFileSize12,
+			PqMaxSize:               pqMaxSize12,
+			PqPath:                  pqPath12,
+			PqCompress:              pqCompress12,
+			PqOnBackpressure:        pqOnBackpressure12,
+			PqMaxBufferSizeBytes:    pqMaxBufferSizeBytes12,
+			PqControls:              pqControls12,
 		}
 	}
 	if outputKinesis != nil {
@@ -16839,12 +16049,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputAzureEventhub.PqControls != nil {
 			pqControls14 = &shared.OutputAzureEventhubPqControls{}
 		}
-		templateTopic := new(string)
-		if !r.OutputAzureEventhub.TemplateTopic.IsUnknown() && !r.OutputAzureEventhub.TemplateTopic.IsNull() {
-			*templateTopic = r.OutputAzureEventhub.TemplateTopic.ValueString()
-		} else {
-			templateTopic = nil
-		}
 		outputAzureEventhub = &shared.OutputAzureEventhub{
 			ID:                        id19,
 			Type:                      typeVar19,
@@ -16883,7 +16087,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure14,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes14,
 			PqControls:                pqControls14,
-			TemplateTopic:             templateTopic,
 		}
 	}
 	if outputAzureEventhub != nil {
@@ -17250,24 +16453,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputGoogleChronicle.PqControls != nil {
 			pqControls15 = &shared.OutputGoogleChroniclePqControls{}
 		}
-		templateAPIVersion := new(string)
-		if !r.OutputGoogleChronicle.TemplateAPIVersion.IsUnknown() && !r.OutputGoogleChronicle.TemplateAPIVersion.IsNull() {
-			*templateAPIVersion = r.OutputGoogleChronicle.TemplateAPIVersion.ValueString()
-		} else {
-			templateAPIVersion = nil
-		}
-		templateRegion2 := new(string)
-		if !r.OutputGoogleChronicle.TemplateRegion.IsUnknown() && !r.OutputGoogleChronicle.TemplateRegion.IsNull() {
-			*templateRegion2 = r.OutputGoogleChronicle.TemplateRegion.ValueString()
-		} else {
-			templateRegion2 = nil
-		}
-		templateCustomerID := new(string)
-		if !r.OutputGoogleChronicle.TemplateCustomerID.IsUnknown() && !r.OutputGoogleChronicle.TemplateCustomerID.IsNull() {
-			*templateCustomerID = r.OutputGoogleChronicle.TemplateCustomerID.ValueString()
-		} else {
-			templateCustomerID = nil
-		}
 		outputGoogleChronicle = &shared.OutputGoogleChronicle{
 			ID:                              id20,
 			Type:                            typeVar20,
@@ -17319,9 +16504,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:                pqOnBackpressure15,
 			PqMaxBufferSizeBytes:            pqMaxBufferSizeBytes15,
 			PqControls:                      pqControls15,
-			TemplateAPIVersion:              templateAPIVersion,
-			TemplateRegion:                  templateRegion2,
-			TemplateCustomerID:              templateCustomerID,
 		}
 	}
 	if outputGoogleChronicle != nil {
@@ -17687,24 +16869,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			awsSecret2 = nil
 		}
-		templateBucket1 := new(string)
-		if !r.OutputGoogleCloudStorage.TemplateBucket.IsUnknown() && !r.OutputGoogleCloudStorage.TemplateBucket.IsNull() {
-			*templateBucket1 = r.OutputGoogleCloudStorage.TemplateBucket.ValueString()
-		} else {
-			templateBucket1 = nil
-		}
-		templateRegion3 := new(string)
-		if !r.OutputGoogleCloudStorage.TemplateRegion.IsUnknown() && !r.OutputGoogleCloudStorage.TemplateRegion.IsNull() {
-			*templateRegion3 = r.OutputGoogleCloudStorage.TemplateRegion.ValueString()
-		} else {
-			templateRegion3 = nil
-		}
-		templateFormat4 := new(string)
-		if !r.OutputGoogleCloudStorage.TemplateFormat.IsUnknown() && !r.OutputGoogleCloudStorage.TemplateFormat.IsNull() {
-			*templateFormat4 = r.OutputGoogleCloudStorage.TemplateFormat.ValueString()
-		} else {
-			templateFormat4 = nil
-		}
 		outputGoogleCloudStorage = &shared.OutputGoogleCloudStorage{
 			ID:                      id21,
 			Type:                    typeVar21,
@@ -17762,9 +16926,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			AwsAPIKey:               awsAPIKey2,
 			AwsSecretKey:            awsSecretKey2,
 			AwsSecret:               awsSecret2,
-			TemplateBucket:          templateBucket1,
-			TemplateRegion:          templateRegion3,
-			TemplateFormat:          templateFormat4,
 		}
 	}
 	if outputGoogleCloudStorage != nil {
@@ -18450,21 +17611,11 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputGooglePubsub.PqControls != nil {
 			pqControls17 = &shared.OutputGooglePubsubPqControls{}
 		}
-		templateTopicName := new(string)
-		if !r.OutputGooglePubsub.TemplateTopicName.IsUnknown() && !r.OutputGooglePubsub.TemplateTopicName.IsNull() {
-			*templateTopicName = r.OutputGooglePubsub.TemplateTopicName.ValueString()
-		} else {
-			templateTopicName = nil
-		}
-		templateRegion4 := new(string)
-		if !r.OutputGooglePubsub.TemplateRegion.IsUnknown() && !r.OutputGooglePubsub.TemplateRegion.IsNull() {
-			*templateRegion4 = r.OutputGooglePubsub.TemplateRegion.ValueString()
-		} else {
-			templateRegion4 = nil
-		}
-		var flushPeriodSec13 interface{}
+		flushPeriodSec13 := new(float64)
 		if !r.OutputGooglePubsub.FlushPeriodSec.IsUnknown() && !r.OutputGooglePubsub.FlushPeriodSec.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputGooglePubsub.FlushPeriodSec.ValueString()), &flushPeriodSec13)
+			*flushPeriodSec13 = r.OutputGooglePubsub.FlushPeriodSec.ValueFloat64()
+		} else {
+			flushPeriodSec13 = nil
 		}
 		outputGooglePubsub = &shared.OutputGooglePubsub{
 			ID:                        id23,
@@ -18500,8 +17651,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure17,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes17,
 			PqControls:                pqControls17,
-			TemplateTopicName:         templateTopicName,
-			TemplateRegion:            templateRegion4,
 			FlushPeriodSec:            flushPeriodSec13,
 		}
 	}
@@ -18744,12 +17893,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum5 = nil
 		}
-		templateRegion5 := new(string)
-		if !r.OutputExabeam.TemplateRegion.IsUnknown() && !r.OutputExabeam.TemplateRegion.IsNull() {
-			*templateRegion5 = r.OutputExabeam.TemplateRegion.ValueString()
-		} else {
-			templateRegion5 = nil
-		}
 		outputExabeam = &shared.OutputExabeam{
 			ID:                     id24,
 			Type:                   typeVar24,
@@ -18788,7 +17931,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:     directoryBatchSize5,
 			DeadletterPath:         deadletterPath5,
 			MaxRetryNum:            maxRetryNum5,
-			TemplateRegion:         templateRegion5,
 		}
 	}
 	if outputExabeam != nil {
@@ -19357,12 +18499,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputKafka.PqControls != nil {
 			pqControls18 = &shared.OutputKafkaPqControls{}
 		}
-		templateTopic1 := new(string)
-		if !r.OutputKafka.TemplateTopic.IsUnknown() && !r.OutputKafka.TemplateTopic.IsNull() {
-			*templateTopic1 = r.OutputKafka.TemplateTopic.ValueString()
-		} else {
-			templateTopic1 = nil
-		}
 		outputKafka = &shared.OutputKafka{
 			ID:                        id25,
 			Type:                      typeVar25,
@@ -19405,7 +18541,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure18,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes18,
 			PqControls:                pqControls18,
-			TemplateTopic:             templateTopic1,
 		}
 	}
 	if outputKafka != nil {
@@ -19974,12 +19109,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputConfluentCloud.PqControls != nil {
 			pqControls19 = &shared.OutputConfluentCloudPqControls{}
 		}
-		templateTopic2 := new(string)
-		if !r.OutputConfluentCloud.TemplateTopic.IsUnknown() && !r.OutputConfluentCloud.TemplateTopic.IsNull() {
-			*templateTopic2 = r.OutputConfluentCloud.TemplateTopic.ValueString()
-		} else {
-			templateTopic2 = nil
-		}
 		outputConfluentCloud = &shared.OutputConfluentCloud{
 			ID:                        id26,
 			Type:                      typeVar26,
@@ -20022,7 +19151,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure19,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes19,
 			PqControls:                pqControls19,
-			TemplateTopic:             templateTopic2,
 		}
 	}
 	if outputConfluentCloud != nil {
@@ -20533,102 +19661,60 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputMsk.PqControls != nil {
 			pqControls20 = &shared.OutputMskPqControls{}
 		}
-		templateTopic3 := new(string)
-		if !r.OutputMsk.TemplateTopic.IsUnknown() && !r.OutputMsk.TemplateTopic.IsNull() {
-			*templateTopic3 = r.OutputMsk.TemplateTopic.ValueString()
-		} else {
-			templateTopic3 = nil
-		}
-		templateAwsSecretKey2 := new(string)
-		if !r.OutputMsk.TemplateAwsSecretKey.IsUnknown() && !r.OutputMsk.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey2 = r.OutputMsk.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey2 = nil
-		}
-		templateRegion6 := new(string)
-		if !r.OutputMsk.TemplateRegion.IsUnknown() && !r.OutputMsk.TemplateRegion.IsNull() {
-			*templateRegion6 = r.OutputMsk.TemplateRegion.ValueString()
-		} else {
-			templateRegion6 = nil
-		}
-		templateAssumeRoleArn2 := new(string)
-		if !r.OutputMsk.TemplateAssumeRoleArn.IsUnknown() && !r.OutputMsk.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn2 = r.OutputMsk.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn2 = nil
-		}
-		templateAssumeRoleExternalId2 := new(string)
-		if !r.OutputMsk.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputMsk.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId2 = r.OutputMsk.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId2 = nil
-		}
-		templateAwsAPIKey2 := new(string)
-		if !r.OutputMsk.TemplateAwsAPIKey.IsUnknown() && !r.OutputMsk.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey2 = r.OutputMsk.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey2 = nil
-		}
 		outputMsk = &shared.OutputMsk{
-			ID:                           id27,
-			Type:                         typeVar27,
-			Pipeline:                     pipeline27,
-			SystemFields:                 systemFields27,
-			Environment:                  environment27,
-			Streamtags:                   streamtags27,
-			Brokers:                      brokers3,
-			Topic:                        topic3,
-			Ack:                          ack3,
-			Format:                       format10,
-			Compression:                  compression4,
-			MaxRecordSizeKB:              maxRecordSizeKb5,
-			FlushEventCount:              flushEventCount3,
-			FlushPeriodSec:               flushPeriodSec16,
-			KafkaSchemaRegistry:          kafkaSchemaRegistry2,
-			ConnectionTimeout:            connectionTimeout11,
-			RequestTimeout:               requestTimeout6,
-			MaxRetries:                   maxRetries6,
-			MaxBackOff:                   maxBackOff3,
-			InitialBackoff:               initialBackoff23,
-			BackoffRate:                  backoffRate23,
-			AuthenticationTimeout:        authenticationTimeout3,
-			ReauthenticationThreshold:    reauthenticationThreshold3,
-			AwsAuthenticationMethod:      awsAuthenticationMethod3,
-			AwsSecretKey:                 awsSecretKey4,
-			Region:                       region6,
-			Endpoint:                     endpoint4,
-			SignatureVersion:             signatureVersion4,
-			ReuseConnections:             reuseConnections4,
-			RejectUnauthorized:           rejectUnauthorized25,
-			EnableAssumeRole:             enableAssumeRole2,
-			AssumeRoleArn:                assumeRoleArn2,
-			AssumeRoleExternalID:         assumeRoleExternalId2,
-			DurationSeconds:              durationSeconds2,
-			TLS:                          tls16,
-			OnBackpressure:               onBackpressure25,
-			Description:                  description26,
-			AwsAPIKey:                    awsAPIKey4,
-			AwsSecret:                    awsSecret3,
-			ProtobufLibraryID:            protobufLibraryId2,
-			ProtobufEncodingID:           protobufEncodingId2,
-			PqStrictOrdering:             pqStrictOrdering20,
-			PqRatePerSec:                 pqRatePerSec20,
-			PqMode:                       pqMode20,
-			PqMaxBufferSize:              pqMaxBufferSize20,
-			PqMaxBackpressureSec:         pqMaxBackpressureSec20,
-			PqMaxFileSize:                pqMaxFileSize20,
-			PqMaxSize:                    pqMaxSize20,
-			PqPath:                       pqPath20,
-			PqCompress:                   pqCompress20,
-			PqOnBackpressure:             pqOnBackpressure20,
-			PqMaxBufferSizeBytes:         pqMaxBufferSizeBytes20,
-			PqControls:                   pqControls20,
-			TemplateTopic:                templateTopic3,
-			TemplateAwsSecretKey:         templateAwsSecretKey2,
-			TemplateRegion:               templateRegion6,
-			TemplateAssumeRoleArn:        templateAssumeRoleArn2,
-			TemplateAssumeRoleExternalID: templateAssumeRoleExternalId2,
-			TemplateAwsAPIKey:            templateAwsAPIKey2,
+			ID:                        id27,
+			Type:                      typeVar27,
+			Pipeline:                  pipeline27,
+			SystemFields:              systemFields27,
+			Environment:               environment27,
+			Streamtags:                streamtags27,
+			Brokers:                   brokers3,
+			Topic:                     topic3,
+			Ack:                       ack3,
+			Format:                    format10,
+			Compression:               compression4,
+			MaxRecordSizeKB:           maxRecordSizeKb5,
+			FlushEventCount:           flushEventCount3,
+			FlushPeriodSec:            flushPeriodSec16,
+			KafkaSchemaRegistry:       kafkaSchemaRegistry2,
+			ConnectionTimeout:         connectionTimeout11,
+			RequestTimeout:            requestTimeout6,
+			MaxRetries:                maxRetries6,
+			MaxBackOff:                maxBackOff3,
+			InitialBackoff:            initialBackoff23,
+			BackoffRate:               backoffRate23,
+			AuthenticationTimeout:     authenticationTimeout3,
+			ReauthenticationThreshold: reauthenticationThreshold3,
+			AwsAuthenticationMethod:   awsAuthenticationMethod3,
+			AwsSecretKey:              awsSecretKey4,
+			Region:                    region6,
+			Endpoint:                  endpoint4,
+			SignatureVersion:          signatureVersion4,
+			ReuseConnections:          reuseConnections4,
+			RejectUnauthorized:        rejectUnauthorized25,
+			EnableAssumeRole:          enableAssumeRole2,
+			AssumeRoleArn:             assumeRoleArn2,
+			AssumeRoleExternalID:      assumeRoleExternalId2,
+			DurationSeconds:           durationSeconds2,
+			TLS:                       tls16,
+			OnBackpressure:            onBackpressure25,
+			Description:               description26,
+			AwsAPIKey:                 awsAPIKey4,
+			AwsSecret:                 awsSecret3,
+			ProtobufLibraryID:         protobufLibraryId2,
+			ProtobufEncodingID:        protobufEncodingId2,
+			PqStrictOrdering:          pqStrictOrdering20,
+			PqRatePerSec:              pqRatePerSec20,
+			PqMode:                    pqMode20,
+			PqMaxBufferSize:           pqMaxBufferSize20,
+			PqMaxBackpressureSec:      pqMaxBackpressureSec20,
+			PqMaxFileSize:             pqMaxFileSize20,
+			PqMaxSize:                 pqMaxSize20,
+			PqPath:                    pqPath20,
+			PqCompress:                pqCompress20,
+			PqOnBackpressure:          pqOnBackpressure20,
+			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes20,
+			PqControls:                pqControls20,
 		}
 	}
 	if outputMsk != nil {
@@ -20949,16 +20035,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight5 = nil
 			}
-			templateUrl5 := new(string)
-			if !r.OutputElastic.Urls[urlsIndex2].TemplateURL.IsUnknown() && !r.OutputElastic.Urls[urlsIndex2].TemplateURL.IsNull() {
-				*templateUrl5 = r.OutputElastic.Urls[urlsIndex2].TemplateURL.ValueString()
-			} else {
-				templateUrl5 = nil
-			}
 			urls2 = append(urls2, shared.OutputElasticURL{
-				URL:         url6,
-				Weight:      weight5,
-				TemplateURL: templateUrl5,
+				URL:    url6,
+				Weight: weight5,
 			})
 		}
 		dnsResolvePeriodSec5 := new(float64)
@@ -21043,12 +20122,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputElastic.PqControls != nil {
 			pqControls21 = &shared.OutputElasticPqControls{}
 		}
-		templateUrl6 := new(string)
-		if !r.OutputElastic.TemplateURL.IsUnknown() && !r.OutputElastic.TemplateURL.IsNull() {
-			*templateUrl6 = r.OutputElastic.TemplateURL.ValueString()
-		} else {
-			templateUrl6 = nil
-		}
 		outputElastic = &shared.OutputElastic{
 			ID:                            id28,
 			Type:                          typeVar28,
@@ -21099,7 +20172,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure21,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes21,
 			PqControls:                    pqControls21,
-			TemplateURL:                   templateUrl6,
 		}
 	}
 	if outputElastic != nil {
@@ -21791,24 +20863,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret16 = nil
 		}
-		templateRegion7 := new(string)
-		if !r.OutputNewrelic.TemplateRegion.IsUnknown() && !r.OutputNewrelic.TemplateRegion.IsNull() {
-			*templateRegion7 = r.OutputNewrelic.TemplateRegion.ValueString()
-		} else {
-			templateRegion7 = nil
-		}
-		templateLogType := new(string)
-		if !r.OutputNewrelic.TemplateLogType.IsUnknown() && !r.OutputNewrelic.TemplateLogType.IsNull() {
-			*templateLogType = r.OutputNewrelic.TemplateLogType.ValueString()
-		} else {
-			templateLogType = nil
-		}
-		templateMessageField := new(string)
-		if !r.OutputNewrelic.TemplateMessageField.IsUnknown() && !r.OutputNewrelic.TemplateMessageField.IsNull() {
-			*templateMessageField = r.OutputNewrelic.TemplateMessageField.ValueString()
-		} else {
-			templateMessageField = nil
-		}
 		outputNewrelic = &shared.OutputNewrelic{
 			ID:                            id30,
 			Type:                          typeVar30,
@@ -21853,9 +20907,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:                    pqControls23,
 			APIKey:                        apiKey1,
 			TextSecret:                    textSecret16,
-			TemplateRegion:                templateRegion7,
-			TemplateLogType:               templateLogType,
-			TemplateMessageField:          templateMessageField,
 		}
 	}
 	if outputNewrelic != nil {
@@ -22150,30 +21201,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret17 = nil
 		}
-		templateRegion8 := new(string)
-		if !r.OutputNewrelicEvents.TemplateRegion.IsUnknown() && !r.OutputNewrelicEvents.TemplateRegion.IsNull() {
-			*templateRegion8 = r.OutputNewrelicEvents.TemplateRegion.ValueString()
-		} else {
-			templateRegion8 = nil
-		}
-		templateAccountID := new(string)
-		if !r.OutputNewrelicEvents.TemplateAccountID.IsUnknown() && !r.OutputNewrelicEvents.TemplateAccountID.IsNull() {
-			*templateAccountID = r.OutputNewrelicEvents.TemplateAccountID.ValueString()
-		} else {
-			templateAccountID = nil
-		}
-		templateEventType := new(string)
-		if !r.OutputNewrelicEvents.TemplateEventType.IsUnknown() && !r.OutputNewrelicEvents.TemplateEventType.IsNull() {
-			*templateEventType = r.OutputNewrelicEvents.TemplateEventType.ValueString()
-		} else {
-			templateEventType = nil
-		}
-		templateCustomURL := new(string)
-		if !r.OutputNewrelicEvents.TemplateCustomURL.IsUnknown() && !r.OutputNewrelicEvents.TemplateCustomURL.IsNull() {
-			*templateCustomURL = r.OutputNewrelicEvents.TemplateCustomURL.ValueString()
-		} else {
-			templateCustomURL = nil
-		}
 		outputNewrelicEvents = &shared.OutputNewrelicEvents{
 			ID:                            id31,
 			Type:                          typeVar31,
@@ -22216,10 +21243,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:                    pqControls24,
 			APIKey:                        apiKey2,
 			TextSecret:                    textSecret17,
-			TemplateRegion:                templateRegion8,
-			TemplateAccountID:             templateAccountID,
-			TemplateEventType:             templateEventType,
-			TemplateCustomURL:             templateCustomURL,
 		}
 	}
 	if outputNewrelicEvents != nil {
@@ -22559,58 +21582,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret18 = nil
 		}
-		templateUrl7 := new(string)
-		if !r.OutputInfluxdb.TemplateURL.IsUnknown() && !r.OutputInfluxdb.TemplateURL.IsNull() {
-			*templateUrl7 = r.OutputInfluxdb.TemplateURL.ValueString()
-		} else {
-			templateUrl7 = nil
-		}
-		templateDatabase1 := new(string)
-		if !r.OutputInfluxdb.TemplateDatabase.IsUnknown() && !r.OutputInfluxdb.TemplateDatabase.IsNull() {
-			*templateDatabase1 = r.OutputInfluxdb.TemplateDatabase.ValueString()
-		} else {
-			templateDatabase1 = nil
-		}
-		templateBucket2 := new(string)
-		if !r.OutputInfluxdb.TemplateBucket.IsUnknown() && !r.OutputInfluxdb.TemplateBucket.IsNull() {
-			*templateBucket2 = r.OutputInfluxdb.TemplateBucket.ValueString()
-		} else {
-			templateBucket2 = nil
-		}
-		var loginUrl2 interface{}
+		loginUrl2 := new(string)
 		if !r.OutputInfluxdb.LoginURL.IsUnknown() && !r.OutputInfluxdb.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.LoginURL.ValueString()), &loginUrl2)
+			*loginUrl2 = r.OutputInfluxdb.LoginURL.ValueString()
+		} else {
+			loginUrl2 = nil
 		}
-		var secretParamName1 interface{}
+		secretParamName1 := new(string)
 		if !r.OutputInfluxdb.SecretParamName.IsUnknown() && !r.OutputInfluxdb.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.SecretParamName.ValueString()), &secretParamName1)
+			*secretParamName1 = r.OutputInfluxdb.SecretParamName.ValueString()
+		} else {
+			secretParamName1 = nil
 		}
-		var secret4 interface{}
+		secret4 := new(string)
 		if !r.OutputInfluxdb.Secret.IsUnknown() && !r.OutputInfluxdb.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.Secret.ValueString()), &secret4)
+			*secret4 = r.OutputInfluxdb.Secret.ValueString()
+		} else {
+			secret4 = nil
 		}
-		var tokenAttributeName1 interface{}
+		tokenAttributeName1 := new(string)
 		if !r.OutputInfluxdb.TokenAttributeName.IsUnknown() && !r.OutputInfluxdb.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.TokenAttributeName.ValueString()), &tokenAttributeName1)
+			*tokenAttributeName1 = r.OutputInfluxdb.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName1 = nil
 		}
-		var authHeaderExpr1 interface{}
+		authHeaderExpr1 := new(string)
 		if !r.OutputInfluxdb.AuthHeaderExpr.IsUnknown() && !r.OutputInfluxdb.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.AuthHeaderExpr.ValueString()), &authHeaderExpr1)
+			*authHeaderExpr1 = r.OutputInfluxdb.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr1 = nil
 		}
-		var tokenTimeoutSecs1 interface{}
+		tokenTimeoutSecs1 := new(float64)
 		if !r.OutputInfluxdb.TokenTimeoutSecs.IsUnknown() && !r.OutputInfluxdb.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputInfluxdb.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs1)
+			*tokenTimeoutSecs1 = r.OutputInfluxdb.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs1 = nil
 		}
 		oauthParams3 := make([]shared.OutputInfluxdbOauthParam, 0, len(r.OutputInfluxdb.OauthParams))
 		for oauthParamsIndex3 := range r.OutputInfluxdb.OauthParams {
-			var name23 interface{}
-			if !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.IsUnknown() && !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.ValueString()), &name23)
-			}
-			var value32 interface{}
-			if !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.IsUnknown() && !r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.ValueString()), &value32)
-			}
+			var name23 string
+			name23 = r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Name.ValueString()
+
+			var value32 string
+			value32 = r.OutputInfluxdb.OauthParams[oauthParamsIndex3].Value.ValueString()
+
 			oauthParams3 = append(oauthParams3, shared.OutputInfluxdbOauthParam{
 				Name:  name23,
 				Value: value32,
@@ -22618,14 +21633,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders1 := make([]shared.OutputInfluxdbOauthHeader, 0, len(r.OutputInfluxdb.OauthHeaders))
 		for oauthHeadersIndex1 := range r.OutputInfluxdb.OauthHeaders {
-			var name24 interface{}
-			if !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.IsUnknown() && !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.ValueString()), &name24)
-			}
-			var value33 interface{}
-			if !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.IsUnknown() && !r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.ValueString()), &value33)
-			}
+			var name24 string
+			name24 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Name.ValueString()
+
+			var value33 string
+			value33 = r.OutputInfluxdb.OauthHeaders[oauthHeadersIndex1].Value.ValueString()
+
 			oauthHeaders1 = append(oauthHeaders1, shared.OutputInfluxdbOauthHeader{
 				Name:  name24,
 				Value: value33,
@@ -22680,9 +21693,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Token:                         token5,
 			CredentialsSecret:             credentialsSecret8,
 			TextSecret:                    textSecret18,
-			TemplateURL:                   templateUrl7,
-			TemplateDatabase:              templateDatabase1,
-			TemplateBucket:                templateBucket2,
 			LoginURL:                      loginUrl2,
 			SecretParamName:               secretParamName1,
 			Secret:                        secret4,
@@ -22902,79 +21912,44 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputCloudwatch.PqControls != nil {
 			pqControls26 = &shared.OutputCloudwatchPqControls{}
 		}
-		templateAwsSecretKey3 := new(string)
-		if !r.OutputCloudwatch.TemplateAwsSecretKey.IsUnknown() && !r.OutputCloudwatch.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey3 = r.OutputCloudwatch.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey3 = nil
-		}
-		templateRegion9 := new(string)
-		if !r.OutputCloudwatch.TemplateRegion.IsUnknown() && !r.OutputCloudwatch.TemplateRegion.IsNull() {
-			*templateRegion9 = r.OutputCloudwatch.TemplateRegion.ValueString()
-		} else {
-			templateRegion9 = nil
-		}
-		templateAssumeRoleArn3 := new(string)
-		if !r.OutputCloudwatch.TemplateAssumeRoleArn.IsUnknown() && !r.OutputCloudwatch.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn3 = r.OutputCloudwatch.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn3 = nil
-		}
-		templateAssumeRoleExternalId3 := new(string)
-		if !r.OutputCloudwatch.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputCloudwatch.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId3 = r.OutputCloudwatch.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId3 = nil
-		}
-		templateAwsAPIKey3 := new(string)
-		if !r.OutputCloudwatch.TemplateAwsAPIKey.IsUnknown() && !r.OutputCloudwatch.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey3 = r.OutputCloudwatch.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey3 = nil
-		}
 		outputCloudwatch = &shared.OutputCloudwatch{
-			ID:                           id33,
-			Type:                         typeVar33,
-			Pipeline:                     pipeline33,
-			SystemFields:                 systemFields33,
-			Environment:                  environment33,
-			Streamtags:                   streamtags33,
-			LogGroupName:                 logGroupName,
-			LogStreamName:                logStreamName,
-			AwsAuthenticationMethod:      awsAuthenticationMethod4,
-			AwsSecretKey:                 awsSecretKey5,
-			Region:                       region9,
-			Endpoint:                     endpoint5,
-			ReuseConnections:             reuseConnections5,
-			RejectUnauthorized:           rejectUnauthorized32,
-			EnableAssumeRole:             enableAssumeRole3,
-			AssumeRoleArn:                assumeRoleArn3,
-			AssumeRoleExternalID:         assumeRoleExternalId3,
-			DurationSeconds:              durationSeconds3,
-			MaxQueueSize:                 maxQueueSize1,
-			MaxRecordSizeKB:              maxRecordSizeKb6,
-			FlushPeriodSec:               flushPeriodSec22,
-			OnBackpressure:               onBackpressure31,
-			Description:                  description32,
-			AwsAPIKey:                    awsAPIKey5,
-			AwsSecret:                    awsSecret4,
-			PqStrictOrdering:             pqStrictOrdering26,
-			PqRatePerSec:                 pqRatePerSec26,
-			PqMode:                       pqMode26,
-			PqMaxBufferSize:              pqMaxBufferSize26,
-			PqMaxBackpressureSec:         pqMaxBackpressureSec26,
-			PqMaxFileSize:                pqMaxFileSize26,
-			PqMaxSize:                    pqMaxSize26,
-			PqPath:                       pqPath26,
-			PqCompress:                   pqCompress26,
-			PqOnBackpressure:             pqOnBackpressure26,
-			PqMaxBufferSizeBytes:         pqMaxBufferSizeBytes26,
-			PqControls:                   pqControls26,
-			TemplateAwsSecretKey:         templateAwsSecretKey3,
-			TemplateRegion:               templateRegion9,
-			TemplateAssumeRoleArn:        templateAssumeRoleArn3,
-			TemplateAssumeRoleExternalID: templateAssumeRoleExternalId3,
-			TemplateAwsAPIKey:            templateAwsAPIKey3,
+			ID:                      id33,
+			Type:                    typeVar33,
+			Pipeline:                pipeline33,
+			SystemFields:            systemFields33,
+			Environment:             environment33,
+			Streamtags:              streamtags33,
+			LogGroupName:            logGroupName,
+			LogStreamName:           logStreamName,
+			AwsAuthenticationMethod: awsAuthenticationMethod4,
+			AwsSecretKey:            awsSecretKey5,
+			Region:                  region9,
+			Endpoint:                endpoint5,
+			ReuseConnections:        reuseConnections5,
+			RejectUnauthorized:      rejectUnauthorized32,
+			EnableAssumeRole:        enableAssumeRole3,
+			AssumeRoleArn:           assumeRoleArn3,
+			AssumeRoleExternalID:    assumeRoleExternalId3,
+			DurationSeconds:         durationSeconds3,
+			MaxQueueSize:            maxQueueSize1,
+			MaxRecordSizeKB:         maxRecordSizeKb6,
+			FlushPeriodSec:          flushPeriodSec22,
+			OnBackpressure:          onBackpressure31,
+			Description:             description32,
+			AwsAPIKey:               awsAPIKey5,
+			AwsSecret:               awsSecret4,
+			PqStrictOrdering:        pqStrictOrdering26,
+			PqRatePerSec:            pqRatePerSec26,
+			PqMode:                  pqMode26,
+			PqMaxBufferSize:         pqMaxBufferSize26,
+			PqMaxBackpressureSec:    pqMaxBackpressureSec26,
+			PqMaxFileSize:           pqMaxFileSize26,
+			PqMaxSize:               pqMaxSize26,
+			PqPath:                  pqPath26,
+			PqCompress:              pqCompress26,
+			PqOnBackpressure:        pqOnBackpressure26,
+			PqMaxBufferSizeBytes:    pqMaxBufferSizeBytes26,
+			PqControls:              pqControls26,
 		}
 	}
 	if outputCloudwatch != nil {
@@ -23355,30 +22330,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum6 = nil
 		}
-		templateBucket3 := new(string)
-		if !r.OutputMinio.TemplateBucket.IsUnknown() && !r.OutputMinio.TemplateBucket.IsNull() {
-			*templateBucket3 = r.OutputMinio.TemplateBucket.ValueString()
-		} else {
-			templateBucket3 = nil
-		}
-		templateRegion10 := new(string)
-		if !r.OutputMinio.TemplateRegion.IsUnknown() && !r.OutputMinio.TemplateRegion.IsNull() {
-			*templateRegion10 = r.OutputMinio.TemplateRegion.ValueString()
-		} else {
-			templateRegion10 = nil
-		}
-		templateFormat5 := new(string)
-		if !r.OutputMinio.TemplateFormat.IsUnknown() && !r.OutputMinio.TemplateFormat.IsNull() {
-			*templateFormat5 = r.OutputMinio.TemplateFormat.ValueString()
-		} else {
-			templateFormat5 = nil
-		}
-		templateAwsAPIKey4 := new(string)
-		if !r.OutputMinio.TemplateAwsAPIKey.IsUnknown() && !r.OutputMinio.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey4 = r.OutputMinio.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey4 = nil
-		}
 		outputMinio = &shared.OutputMinio{
 			ID:                      id34,
 			Type:                    typeVar34,
@@ -23438,10 +22389,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:      directoryBatchSize6,
 			DeadletterPath:          deadletterPath6,
 			MaxRetryNum:             maxRetryNum6,
-			TemplateBucket:          templateBucket3,
-			TemplateRegion:          templateRegion10,
-			TemplateFormat:          templateFormat5,
-			TemplateAwsAPIKey:       templateAwsAPIKey4,
 		}
 	}
 	if outputMinio != nil {
@@ -24301,78 +23248,43 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputSns.PqControls != nil {
 			pqControls30 = &shared.OutputSnsPqControls{}
 		}
-		templateAwsSecretKey4 := new(string)
-		if !r.OutputSns.TemplateAwsSecretKey.IsUnknown() && !r.OutputSns.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey4 = r.OutputSns.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey4 = nil
-		}
-		templateRegion11 := new(string)
-		if !r.OutputSns.TemplateRegion.IsUnknown() && !r.OutputSns.TemplateRegion.IsNull() {
-			*templateRegion11 = r.OutputSns.TemplateRegion.ValueString()
-		} else {
-			templateRegion11 = nil
-		}
-		templateAssumeRoleArn4 := new(string)
-		if !r.OutputSns.TemplateAssumeRoleArn.IsUnknown() && !r.OutputSns.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn4 = r.OutputSns.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn4 = nil
-		}
-		templateAssumeRoleExternalId4 := new(string)
-		if !r.OutputSns.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputSns.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId4 = r.OutputSns.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId4 = nil
-		}
-		templateAwsAPIKey5 := new(string)
-		if !r.OutputSns.TemplateAwsAPIKey.IsUnknown() && !r.OutputSns.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey5 = r.OutputSns.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey5 = nil
-		}
 		outputSns = &shared.OutputSns{
-			ID:                           id39,
-			Type:                         typeVar39,
-			Pipeline:                     pipeline39,
-			SystemFields:                 systemFields39,
-			Environment:                  environment39,
-			Streamtags:                   streamtags39,
-			TopicArn:                     topicArn,
-			MessageGroupID:               messageGroupID,
-			MaxRetries:                   maxRetries7,
-			AwsAuthenticationMethod:      awsAuthenticationMethod6,
-			AwsSecretKey:                 awsSecretKey7,
-			Region:                       region11,
-			Endpoint:                     endpoint7,
-			SignatureVersion:             signatureVersion6,
-			ReuseConnections:             reuseConnections7,
-			RejectUnauthorized:           rejectUnauthorized34,
-			EnableAssumeRole:             enableAssumeRole4,
-			AssumeRoleArn:                assumeRoleArn4,
-			AssumeRoleExternalID:         assumeRoleExternalId4,
-			DurationSeconds:              durationSeconds4,
-			OnBackpressure:               onBackpressure36,
-			Description:                  description39,
-			AwsAPIKey:                    awsAPIKey7,
-			AwsSecret:                    awsSecret6,
-			PqStrictOrdering:             pqStrictOrdering30,
-			PqRatePerSec:                 pqRatePerSec30,
-			PqMode:                       pqMode30,
-			PqMaxBufferSize:              pqMaxBufferSize30,
-			PqMaxBackpressureSec:         pqMaxBackpressureSec30,
-			PqMaxFileSize:                pqMaxFileSize30,
-			PqMaxSize:                    pqMaxSize30,
-			PqPath:                       pqPath30,
-			PqCompress:                   pqCompress30,
-			PqOnBackpressure:             pqOnBackpressure30,
-			PqMaxBufferSizeBytes:         pqMaxBufferSizeBytes30,
-			PqControls:                   pqControls30,
-			TemplateAwsSecretKey:         templateAwsSecretKey4,
-			TemplateRegion:               templateRegion11,
-			TemplateAssumeRoleArn:        templateAssumeRoleArn4,
-			TemplateAssumeRoleExternalID: templateAssumeRoleExternalId4,
-			TemplateAwsAPIKey:            templateAwsAPIKey5,
+			ID:                      id39,
+			Type:                    typeVar39,
+			Pipeline:                pipeline39,
+			SystemFields:            systemFields39,
+			Environment:             environment39,
+			Streamtags:              streamtags39,
+			TopicArn:                topicArn,
+			MessageGroupID:          messageGroupID,
+			MaxRetries:              maxRetries7,
+			AwsAuthenticationMethod: awsAuthenticationMethod6,
+			AwsSecretKey:            awsSecretKey7,
+			Region:                  region11,
+			Endpoint:                endpoint7,
+			SignatureVersion:        signatureVersion6,
+			ReuseConnections:        reuseConnections7,
+			RejectUnauthorized:      rejectUnauthorized34,
+			EnableAssumeRole:        enableAssumeRole4,
+			AssumeRoleArn:           assumeRoleArn4,
+			AssumeRoleExternalID:    assumeRoleExternalId4,
+			DurationSeconds:         durationSeconds4,
+			OnBackpressure:          onBackpressure36,
+			Description:             description39,
+			AwsAPIKey:               awsAPIKey7,
+			AwsSecret:               awsSecret6,
+			PqStrictOrdering:        pqStrictOrdering30,
+			PqRatePerSec:            pqRatePerSec30,
+			PqMode:                  pqMode30,
+			PqMaxBufferSize:         pqMaxBufferSize30,
+			PqMaxBackpressureSec:    pqMaxBackpressureSec30,
+			PqMaxFileSize:           pqMaxFileSize30,
+			PqMaxSize:               pqMaxSize30,
+			PqPath:                  pqPath30,
+			PqCompress:              pqCompress30,
+			PqOnBackpressure:        pqOnBackpressure30,
+			PqMaxBufferSizeBytes:    pqMaxBufferSizeBytes30,
+			PqControls:              pqControls30,
 		}
 	}
 	if outputSns != nil {
@@ -24615,98 +23527,49 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputSqs.PqControls != nil {
 			pqControls31 = &shared.OutputSqsPqControls{}
 		}
-		templateQueueName := new(string)
-		if !r.OutputSqs.TemplateQueueName.IsUnknown() && !r.OutputSqs.TemplateQueueName.IsNull() {
-			*templateQueueName = r.OutputSqs.TemplateQueueName.ValueString()
-		} else {
-			templateQueueName = nil
-		}
-		templateAwsAccountID := new(string)
-		if !r.OutputSqs.TemplateAwsAccountID.IsUnknown() && !r.OutputSqs.TemplateAwsAccountID.IsNull() {
-			*templateAwsAccountID = r.OutputSqs.TemplateAwsAccountID.ValueString()
-		} else {
-			templateAwsAccountID = nil
-		}
-		templateAwsSecretKey5 := new(string)
-		if !r.OutputSqs.TemplateAwsSecretKey.IsUnknown() && !r.OutputSqs.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey5 = r.OutputSqs.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey5 = nil
-		}
-		templateRegion12 := new(string)
-		if !r.OutputSqs.TemplateRegion.IsUnknown() && !r.OutputSqs.TemplateRegion.IsNull() {
-			*templateRegion12 = r.OutputSqs.TemplateRegion.ValueString()
-		} else {
-			templateRegion12 = nil
-		}
-		templateAssumeRoleArn5 := new(string)
-		if !r.OutputSqs.TemplateAssumeRoleArn.IsUnknown() && !r.OutputSqs.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn5 = r.OutputSqs.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn5 = nil
-		}
-		templateAssumeRoleExternalId5 := new(string)
-		if !r.OutputSqs.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputSqs.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId5 = r.OutputSqs.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId5 = nil
-		}
-		templateAwsAPIKey6 := new(string)
-		if !r.OutputSqs.TemplateAwsAPIKey.IsUnknown() && !r.OutputSqs.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey6 = r.OutputSqs.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey6 = nil
-		}
 		outputSqs = &shared.OutputSqs{
-			ID:                           id40,
-			Type:                         typeVar40,
-			Pipeline:                     pipeline40,
-			SystemFields:                 systemFields40,
-			Environment:                  environment40,
-			Streamtags:                   streamtags40,
-			QueueName:                    queueName,
-			QueueType:                    queueType,
-			AwsAccountID:                 awsAccountID,
-			MessageGroupID:               messageGroupId1,
-			CreateQueue:                  createQueue,
-			AwsAuthenticationMethod:      awsAuthenticationMethod7,
-			AwsSecretKey:                 awsSecretKey8,
-			Region:                       region12,
-			Endpoint:                     endpoint8,
-			SignatureVersion:             signatureVersion7,
-			ReuseConnections:             reuseConnections8,
-			RejectUnauthorized:           rejectUnauthorized35,
-			EnableAssumeRole:             enableAssumeRole5,
-			AssumeRoleArn:                assumeRoleArn5,
-			AssumeRoleExternalID:         assumeRoleExternalId5,
-			DurationSeconds:              durationSeconds5,
-			MaxQueueSize:                 maxQueueSize2,
-			MaxRecordSizeKB:              maxRecordSizeKb7,
-			FlushPeriodSec:               flushPeriodSec26,
-			MaxInProgress:                maxInProgress1,
-			OnBackpressure:               onBackpressure37,
-			Description:                  description40,
-			AwsAPIKey:                    awsAPIKey8,
-			AwsSecret:                    awsSecret7,
-			PqStrictOrdering:             pqStrictOrdering31,
-			PqRatePerSec:                 pqRatePerSec31,
-			PqMode:                       pqMode31,
-			PqMaxBufferSize:              pqMaxBufferSize31,
-			PqMaxBackpressureSec:         pqMaxBackpressureSec31,
-			PqMaxFileSize:                pqMaxFileSize31,
-			PqMaxSize:                    pqMaxSize31,
-			PqPath:                       pqPath31,
-			PqCompress:                   pqCompress31,
-			PqOnBackpressure:             pqOnBackpressure31,
-			PqMaxBufferSizeBytes:         pqMaxBufferSizeBytes31,
-			PqControls:                   pqControls31,
-			TemplateQueueName:            templateQueueName,
-			TemplateAwsAccountID:         templateAwsAccountID,
-			TemplateAwsSecretKey:         templateAwsSecretKey5,
-			TemplateRegion:               templateRegion12,
-			TemplateAssumeRoleArn:        templateAssumeRoleArn5,
-			TemplateAssumeRoleExternalID: templateAssumeRoleExternalId5,
-			TemplateAwsAPIKey:            templateAwsAPIKey6,
+			ID:                      id40,
+			Type:                    typeVar40,
+			Pipeline:                pipeline40,
+			SystemFields:            systemFields40,
+			Environment:             environment40,
+			Streamtags:              streamtags40,
+			QueueName:               queueName,
+			QueueType:               queueType,
+			AwsAccountID:            awsAccountID,
+			MessageGroupID:          messageGroupId1,
+			CreateQueue:             createQueue,
+			AwsAuthenticationMethod: awsAuthenticationMethod7,
+			AwsSecretKey:            awsSecretKey8,
+			Region:                  region12,
+			Endpoint:                endpoint8,
+			SignatureVersion:        signatureVersion7,
+			ReuseConnections:        reuseConnections8,
+			RejectUnauthorized:      rejectUnauthorized35,
+			EnableAssumeRole:        enableAssumeRole5,
+			AssumeRoleArn:           assumeRoleArn5,
+			AssumeRoleExternalID:    assumeRoleExternalId5,
+			DurationSeconds:         durationSeconds5,
+			MaxQueueSize:            maxQueueSize2,
+			MaxRecordSizeKB:         maxRecordSizeKb7,
+			FlushPeriodSec:          flushPeriodSec26,
+			MaxInProgress:           maxInProgress1,
+			OnBackpressure:          onBackpressure37,
+			Description:             description40,
+			AwsAPIKey:               awsAPIKey8,
+			AwsSecret:               awsSecret7,
+			PqStrictOrdering:        pqStrictOrdering31,
+			PqRatePerSec:            pqRatePerSec31,
+			PqMode:                  pqMode31,
+			PqMaxBufferSize:         pqMaxBufferSize31,
+			PqMaxBackpressureSec:    pqMaxBackpressureSec31,
+			PqMaxFileSize:           pqMaxFileSize31,
+			PqMaxSize:               pqMaxSize31,
+			PqPath:                  pqPath31,
+			PqCompress:              pqCompress31,
+			PqOnBackpressure:        pqOnBackpressure31,
+			PqMaxBufferSizeBytes:    pqMaxBufferSizeBytes31,
+			PqControls:              pqControls31,
 		}
 	}
 	if outputSqs != nil {
@@ -24751,23 +23614,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var port9 float64
 			port9 = r.OutputSnmp.Hosts[hostsIndex3].Port.ValueFloat64()
 
-			templateHost6 := new(string)
-			if !r.OutputSnmp.Hosts[hostsIndex3].TemplateHost.IsUnknown() && !r.OutputSnmp.Hosts[hostsIndex3].TemplateHost.IsNull() {
-				*templateHost6 = r.OutputSnmp.Hosts[hostsIndex3].TemplateHost.ValueString()
-			} else {
-				templateHost6 = nil
-			}
-			templatePort6 := new(string)
-			if !r.OutputSnmp.Hosts[hostsIndex3].TemplatePort.IsUnknown() && !r.OutputSnmp.Hosts[hostsIndex3].TemplatePort.IsNull() {
-				*templatePort6 = r.OutputSnmp.Hosts[hostsIndex3].TemplatePort.ValueString()
-			} else {
-				templatePort6 = nil
-			}
 			hosts3 = append(hosts3, shared.OutputSnmpHost{
-				Host:         host9,
-				Port:         port9,
-				TemplateHost: templateHost6,
-				TemplatePort: templatePort6,
+				Host: host9,
+				Port: port9,
 			})
 		}
 		dnsResolvePeriodSec9 := new(float64)
@@ -25077,12 +23926,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputSumoLogic.PqControls != nil {
 			pqControls32 = &shared.OutputSumoLogicPqControls{}
 		}
-		templateUrl8 := new(string)
-		if !r.OutputSumoLogic.TemplateURL.IsUnknown() && !r.OutputSumoLogic.TemplateURL.IsNull() {
-			*templateUrl8 = r.OutputSumoLogic.TemplateURL.ValueString()
-		} else {
-			templateUrl8 = nil
-		}
 		outputSumoLogic = &shared.OutputSumoLogic{
 			ID:                            id42,
 			Type:                          typeVar42,
@@ -25123,7 +23966,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure32,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes32,
 			PqControls:                    pqControls32,
-			TemplateURL:                   templateUrl8,
 		}
 	}
 	if outputSumoLogic != nil {
@@ -26623,46 +25465,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret23 = nil
 		}
-		templateUrl9 := new(string)
-		if !r.OutputPrometheus.TemplateURL.IsUnknown() && !r.OutputPrometheus.TemplateURL.IsNull() {
-			*templateUrl9 = r.OutputPrometheus.TemplateURL.ValueString()
-		} else {
-			templateUrl9 = nil
-		}
-		var loginUrl3 interface{}
+		loginUrl3 := new(string)
 		if !r.OutputPrometheus.LoginURL.IsUnknown() && !r.OutputPrometheus.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.LoginURL.ValueString()), &loginUrl3)
+			*loginUrl3 = r.OutputPrometheus.LoginURL.ValueString()
+		} else {
+			loginUrl3 = nil
 		}
-		var secretParamName2 interface{}
+		secretParamName2 := new(string)
 		if !r.OutputPrometheus.SecretParamName.IsUnknown() && !r.OutputPrometheus.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.SecretParamName.ValueString()), &secretParamName2)
+			*secretParamName2 = r.OutputPrometheus.SecretParamName.ValueString()
+		} else {
+			secretParamName2 = nil
 		}
-		var secret5 interface{}
+		secret5 := new(string)
 		if !r.OutputPrometheus.Secret.IsUnknown() && !r.OutputPrometheus.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.Secret.ValueString()), &secret5)
+			*secret5 = r.OutputPrometheus.Secret.ValueString()
+		} else {
+			secret5 = nil
 		}
-		var tokenAttributeName2 interface{}
+		tokenAttributeName2 := new(string)
 		if !r.OutputPrometheus.TokenAttributeName.IsUnknown() && !r.OutputPrometheus.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.TokenAttributeName.ValueString()), &tokenAttributeName2)
+			*tokenAttributeName2 = r.OutputPrometheus.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName2 = nil
 		}
-		var authHeaderExpr2 interface{}
+		authHeaderExpr2 := new(string)
 		if !r.OutputPrometheus.AuthHeaderExpr.IsUnknown() && !r.OutputPrometheus.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.AuthHeaderExpr.ValueString()), &authHeaderExpr2)
+			*authHeaderExpr2 = r.OutputPrometheus.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr2 = nil
 		}
-		var tokenTimeoutSecs2 interface{}
+		tokenTimeoutSecs2 := new(float64)
 		if !r.OutputPrometheus.TokenTimeoutSecs.IsUnknown() && !r.OutputPrometheus.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputPrometheus.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs2)
+			*tokenTimeoutSecs2 = r.OutputPrometheus.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs2 = nil
 		}
 		oauthParams4 := make([]shared.OutputPrometheusOauthParam, 0, len(r.OutputPrometheus.OauthParams))
 		for oauthParamsIndex4 := range r.OutputPrometheus.OauthParams {
-			var name32 interface{}
-			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()), &name32)
-			}
-			var value42 interface{}
-			if !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsUnknown() && !r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()), &value42)
-			}
+			var name32 string
+			name32 = r.OutputPrometheus.OauthParams[oauthParamsIndex4].Name.ValueString()
+
+			var value42 string
+			value42 = r.OutputPrometheus.OauthParams[oauthParamsIndex4].Value.ValueString()
+
 			oauthParams4 = append(oauthParams4, shared.OutputPrometheusOauthParam{
 				Name:  name32,
 				Value: value42,
@@ -26670,14 +25516,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders2 := make([]shared.OutputPrometheusOauthHeader, 0, len(r.OutputPrometheus.OauthHeaders))
 		for oauthHeadersIndex2 := range r.OutputPrometheus.OauthHeaders {
-			var name33 interface{}
-			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()), &name33)
-			}
-			var value43 interface{}
-			if !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsUnknown() && !r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()), &value43)
-			}
+			var name33 string
+			name33 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Name.ValueString()
+
+			var value43 string
+			value43 = r.OutputPrometheus.OauthHeaders[oauthHeadersIndex2].Value.ValueString()
+
 			oauthHeaders2 = append(oauthHeaders2, shared.OutputPrometheusOauthHeader{
 				Name:  name33,
 				Value: value43,
@@ -26727,7 +25571,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			Token:                         token9,
 			CredentialsSecret:             credentialsSecret12,
 			TextSecret:                    textSecret23,
-			TemplateURL:                   templateUrl9,
 			LoginURL:                      loginUrl3,
 			SecretParamName:               secretParamName2,
 			Secret:                        secret5,
@@ -27261,40 +26104,50 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputOpenTelemetry.PqControls != nil {
 			pqControls37 = &shared.OutputOpenTelemetryPqControls{}
 		}
-		var loginUrl4 interface{}
+		loginUrl4 := new(string)
 		if !r.OutputOpenTelemetry.LoginURL.IsUnknown() && !r.OutputOpenTelemetry.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.LoginURL.ValueString()), &loginUrl4)
+			*loginUrl4 = r.OutputOpenTelemetry.LoginURL.ValueString()
+		} else {
+			loginUrl4 = nil
 		}
-		var secretParamName3 interface{}
+		secretParamName3 := new(string)
 		if !r.OutputOpenTelemetry.SecretParamName.IsUnknown() && !r.OutputOpenTelemetry.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.SecretParamName.ValueString()), &secretParamName3)
+			*secretParamName3 = r.OutputOpenTelemetry.SecretParamName.ValueString()
+		} else {
+			secretParamName3 = nil
 		}
-		var secret6 interface{}
+		secret6 := new(string)
 		if !r.OutputOpenTelemetry.Secret.IsUnknown() && !r.OutputOpenTelemetry.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.Secret.ValueString()), &secret6)
+			*secret6 = r.OutputOpenTelemetry.Secret.ValueString()
+		} else {
+			secret6 = nil
 		}
-		var tokenAttributeName3 interface{}
+		tokenAttributeName3 := new(string)
 		if !r.OutputOpenTelemetry.TokenAttributeName.IsUnknown() && !r.OutputOpenTelemetry.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.TokenAttributeName.ValueString()), &tokenAttributeName3)
+			*tokenAttributeName3 = r.OutputOpenTelemetry.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName3 = nil
 		}
-		var authHeaderExpr3 interface{}
+		authHeaderExpr3 := new(string)
 		if !r.OutputOpenTelemetry.AuthHeaderExpr.IsUnknown() && !r.OutputOpenTelemetry.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.AuthHeaderExpr.ValueString()), &authHeaderExpr3)
+			*authHeaderExpr3 = r.OutputOpenTelemetry.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr3 = nil
 		}
-		var tokenTimeoutSecs3 interface{}
+		tokenTimeoutSecs3 := new(float64)
 		if !r.OutputOpenTelemetry.TokenTimeoutSecs.IsUnknown() && !r.OutputOpenTelemetry.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs3)
+			*tokenTimeoutSecs3 = r.OutputOpenTelemetry.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs3 = nil
 		}
 		oauthParams5 := make([]shared.OutputOpenTelemetryOauthParam, 0, len(r.OutputOpenTelemetry.OauthParams))
 		for oauthParamsIndex5 := range r.OutputOpenTelemetry.OauthParams {
-			var name35 interface{}
-			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()), &name35)
-			}
-			var value46 interface{}
-			if !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()), &value46)
-			}
+			var name35 string
+			name35 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Name.ValueString()
+
+			var value46 string
+			value46 = r.OutputOpenTelemetry.OauthParams[oauthParamsIndex5].Value.ValueString()
+
 			oauthParams5 = append(oauthParams5, shared.OutputOpenTelemetryOauthParam{
 				Name:  name35,
 				Value: value46,
@@ -27302,14 +26155,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders3 := make([]shared.OutputOpenTelemetryOauthHeader, 0, len(r.OutputOpenTelemetry.OauthHeaders))
 		for oauthHeadersIndex3 := range r.OutputOpenTelemetry.OauthHeaders {
-			var name36 interface{}
-			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()), &name36)
-			}
-			var value47 interface{}
-			if !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsUnknown() && !r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()), &value47)
-			}
+			var name36 string
+			name36 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Name.ValueString()
+
+			var value47 string
+			value47 = r.OutputOpenTelemetry.OauthHeaders[oauthHeadersIndex3].Value.ValueString()
+
 			oauthHeaders3 = append(oauthHeaders3, shared.OutputOpenTelemetryOauthHeader{
 				Name:  name36,
 				Value: value47,
@@ -28134,12 +26985,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			textSecret25 = nil
 		}
-		templateCustomUrl1 := new(string)
-		if !r.OutputDataset.TemplateCustomURL.IsUnknown() && !r.OutputDataset.TemplateCustomURL.IsNull() {
-			*templateCustomUrl1 = r.OutputDataset.TemplateCustomURL.ValueString()
-		} else {
-			templateCustomUrl1 = nil
-		}
 		outputDataset = &shared.OutputDataset{
 			ID:                            id50,
 			Type:                          typeVar50,
@@ -28186,7 +27031,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqControls:                    pqControls39,
 			APIKey:                        apiKey4,
 			TextSecret:                    textSecret25,
-			TemplateCustomURL:             templateCustomUrl1,
 		}
 	}
 	if outputDataset != nil {
@@ -28423,26 +27267,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight6 = nil
 			}
-			templateHost7 := new(string)
-			if !r.OutputCriblTCP.Hosts[hostsIndex4].TemplateHost.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex4].TemplateHost.IsNull() {
-				*templateHost7 = r.OutputCriblTCP.Hosts[hostsIndex4].TemplateHost.ValueString()
-			} else {
-				templateHost7 = nil
-			}
-			templatePort7 := new(string)
-			if !r.OutputCriblTCP.Hosts[hostsIndex4].TemplatePort.IsUnknown() && !r.OutputCriblTCP.Hosts[hostsIndex4].TemplatePort.IsNull() {
-				*templatePort7 = r.OutputCriblTCP.Hosts[hostsIndex4].TemplatePort.ValueString()
-			} else {
-				templatePort7 = nil
-			}
 			hosts4 = append(hosts4, shared.ItemsTypeHosts{
-				Host:         host12,
-				Port:         port11,
-				TLS:          tls20,
-				Servername:   servername17,
-				Weight:       weight6,
-				TemplateHost: templateHost7,
-				TemplatePort: templatePort7,
+				Host:       host12,
+				Port:       port11,
+				TLS:        tls20,
+				Servername: servername17,
+				Weight:     weight6,
 			})
 		}
 		dnsResolvePeriodSec10 := new(float64)
@@ -28533,18 +27363,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputCriblTCP.PqControls != nil {
 			pqControls40 = &shared.OutputCriblTCPPqControls{}
 		}
-		templateHost8 := new(string)
-		if !r.OutputCriblTCP.TemplateHost.IsUnknown() && !r.OutputCriblTCP.TemplateHost.IsNull() {
-			*templateHost8 = r.OutputCriblTCP.TemplateHost.ValueString()
-		} else {
-			templateHost8 = nil
-		}
-		templatePort8 := new(string)
-		if !r.OutputCriblTCP.TemplatePort.IsUnknown() && !r.OutputCriblTCP.TemplatePort.IsNull() {
-			*templatePort8 = r.OutputCriblTCP.TemplatePort.ValueString()
-		} else {
-			templatePort8 = nil
-		}
 		outputCriblTCP = &shared.OutputCriblTCP{
 			ID:                        id51,
 			Type:                      typeVar51,
@@ -28583,8 +27401,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure40,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes39,
 			PqControls:                pqControls40,
-			TemplateHost:              templateHost8,
-			TemplatePort:              templatePort8,
 		}
 	}
 	if outputCriblTCP != nil {
@@ -28916,16 +27732,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight7 = nil
 			}
-			templateUrl10 := new(string)
-			if !r.OutputCriblHTTP.Urls[urlsIndex3].TemplateURL.IsUnknown() && !r.OutputCriblHTTP.Urls[urlsIndex3].TemplateURL.IsNull() {
-				*templateUrl10 = r.OutputCriblHTTP.Urls[urlsIndex3].TemplateURL.ValueString()
-			} else {
-				templateUrl10 = nil
-			}
 			urls3 = append(urls3, shared.ItemsTypeUrls{
-				URL:         url13,
-				Weight:      weight7,
-				TemplateURL: templateUrl10,
+				URL:    url13,
+				Weight: weight7,
 			})
 		}
 		dnsResolvePeriodSec11 := new(float64)
@@ -29010,12 +27819,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputCriblHTTP.PqControls != nil {
 			pqControls41 = &shared.OutputCriblHTTPPqControls{}
 		}
-		templateUrl11 := new(string)
-		if !r.OutputCriblHTTP.TemplateURL.IsUnknown() && !r.OutputCriblHTTP.TemplateURL.IsNull() {
-			*templateUrl11 = r.OutputCriblHTTP.TemplateURL.ValueString()
-		} else {
-			templateUrl11 = nil
-		}
 		outputCriblHTTP = &shared.OutputCriblHTTP{
 			ID:                            id52,
 			Type:                          typeVar52,
@@ -29062,7 +27865,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure41,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes40,
 			PqControls:                    pqControls41,
-			TemplateURL:                   templateUrl11,
 		}
 	}
 	if outputCriblHTTP != nil {
@@ -29394,16 +28196,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			} else {
 				weight8 = nil
 			}
-			templateUrl12 := new(string)
-			if !r.OutputCriblSearchEngine.Urls[urlsIndex4].TemplateURL.IsUnknown() && !r.OutputCriblSearchEngine.Urls[urlsIndex4].TemplateURL.IsNull() {
-				*templateUrl12 = r.OutputCriblSearchEngine.Urls[urlsIndex4].TemplateURL.ValueString()
-			} else {
-				templateUrl12 = nil
-			}
 			urls4 = append(urls4, shared.ItemsTypeUrls{
-				URL:         url15,
-				Weight:      weight8,
-				TemplateURL: templateUrl12,
+				URL:    url15,
+				Weight: weight8,
 			})
 		}
 		dnsResolvePeriodSec12 := new(float64)
@@ -29488,12 +28283,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputCriblSearchEngine.PqControls != nil {
 			pqControls42 = &shared.OutputCriblSearchEnginePqControls{}
 		}
-		templateUrl13 := new(string)
-		if !r.OutputCriblSearchEngine.TemplateURL.IsUnknown() && !r.OutputCriblSearchEngine.TemplateURL.IsNull() {
-			*templateUrl13 = r.OutputCriblSearchEngine.TemplateURL.ValueString()
-		} else {
-			templateUrl13 = nil
-		}
 		outputCriblSearchEngine = &shared.OutputCriblSearchEngine{
 			ID:                            id53,
 			Type:                          typeVar53,
@@ -29540,7 +28329,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure42,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes41,
 			PqControls:                    pqControls42,
-			TemplateURL:                   templateUrl13,
 		}
 	}
 	if outputCriblSearchEngine != nil {
@@ -29821,12 +28609,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputHumioHec.PqControls != nil {
 			pqControls43 = &shared.OutputHumioHecPqControls{}
 		}
-		templateUrl14 := new(string)
-		if !r.OutputHumioHec.TemplateURL.IsUnknown() && !r.OutputHumioHec.TemplateURL.IsNull() {
-			*templateUrl14 = r.OutputHumioHec.TemplateURL.ValueString()
-		} else {
-			templateUrl14 = nil
-		}
 		outputHumioHec = &shared.OutputHumioHec{
 			ID:                            id54,
 			Type:                          typeVar54,
@@ -29867,7 +28649,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure43,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes42,
 			PqControls:                    pqControls43,
-			TemplateURL:                   templateUrl14,
 		}
 	}
 	if outputHumioHec != nil {
@@ -30148,12 +28929,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputCrowdstrikeNextGenSiem.PqControls != nil {
 			pqControls44 = &shared.OutputCrowdstrikeNextGenSiemPqControls{}
 		}
-		templateUrl15 := new(string)
-		if !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsUnknown() && !r.OutputCrowdstrikeNextGenSiem.TemplateURL.IsNull() {
-			*templateUrl15 = r.OutputCrowdstrikeNextGenSiem.TemplateURL.ValueString()
-		} else {
-			templateUrl15 = nil
-		}
 		outputCrowdstrikeNextGenSiem = &shared.OutputCrowdstrikeNextGenSiem{
 			ID:                            id55,
 			Type:                          typeVar55,
@@ -30194,7 +28969,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure44,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes43,
 			PqControls:                    pqControls44,
-			TemplateURL:                   templateUrl15,
 		}
 	}
 	if outputCrowdstrikeNextGenSiem != nil {
@@ -30612,48 +29386,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum7 = nil
 		}
-		templateBucket4 := new(string)
-		if !r.OutputDlS3.TemplateBucket.IsUnknown() && !r.OutputDlS3.TemplateBucket.IsNull() {
-			*templateBucket4 = r.OutputDlS3.TemplateBucket.ValueString()
-		} else {
-			templateBucket4 = nil
-		}
-		templateRegion13 := new(string)
-		if !r.OutputDlS3.TemplateRegion.IsUnknown() && !r.OutputDlS3.TemplateRegion.IsNull() {
-			*templateRegion13 = r.OutputDlS3.TemplateRegion.ValueString()
-		} else {
-			templateRegion13 = nil
-		}
-		templateAwsSecretKey6 := new(string)
-		if !r.OutputDlS3.TemplateAwsSecretKey.IsUnknown() && !r.OutputDlS3.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey6 = r.OutputDlS3.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey6 = nil
-		}
-		templateAssumeRoleArn6 := new(string)
-		if !r.OutputDlS3.TemplateAssumeRoleArn.IsUnknown() && !r.OutputDlS3.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn6 = r.OutputDlS3.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn6 = nil
-		}
-		templateAssumeRoleExternalId6 := new(string)
-		if !r.OutputDlS3.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputDlS3.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId6 = r.OutputDlS3.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId6 = nil
-		}
-		templateFormat6 := new(string)
-		if !r.OutputDlS3.TemplateFormat.IsUnknown() && !r.OutputDlS3.TemplateFormat.IsNull() {
-			*templateFormat6 = r.OutputDlS3.TemplateFormat.ValueString()
-		} else {
-			templateFormat6 = nil
-		}
-		templateAwsAPIKey7 := new(string)
-		if !r.OutputDlS3.TemplateAwsAPIKey.IsUnknown() && !r.OutputDlS3.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey7 = r.OutputDlS3.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey7 = nil
-		}
 		outputDlS3 = &shared.OutputDlS3{
 			ID:                            id56,
 			Type:                          typeVar56,
@@ -30719,13 +29451,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:            directoryBatchSize7,
 			DeadletterPath:                deadletterPath7,
 			MaxRetryNum:                   maxRetryNum7,
-			TemplateBucket:                templateBucket4,
-			TemplateRegion:                templateRegion13,
-			TemplateAwsSecretKey:          templateAwsSecretKey6,
-			TemplateAssumeRoleArn:         templateAssumeRoleArn6,
-			TemplateAssumeRoleExternalID:  templateAssumeRoleExternalId6,
-			TemplateFormat:                templateFormat6,
-			TemplateAwsAPIKey:             templateAwsAPIKey7,
 		}
 	}
 	if outputDlS3 != nil {
@@ -31109,42 +29834,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum8 = nil
 		}
-		templateBucket5 := new(string)
-		if !r.OutputSecurityLake.TemplateBucket.IsUnknown() && !r.OutputSecurityLake.TemplateBucket.IsNull() {
-			*templateBucket5 = r.OutputSecurityLake.TemplateBucket.ValueString()
-		} else {
-			templateBucket5 = nil
-		}
-		templateRegion14 := new(string)
-		if !r.OutputSecurityLake.TemplateRegion.IsUnknown() && !r.OutputSecurityLake.TemplateRegion.IsNull() {
-			*templateRegion14 = r.OutputSecurityLake.TemplateRegion.ValueString()
-		} else {
-			templateRegion14 = nil
-		}
-		templateAwsSecretKey7 := new(string)
-		if !r.OutputSecurityLake.TemplateAwsSecretKey.IsUnknown() && !r.OutputSecurityLake.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey7 = r.OutputSecurityLake.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey7 = nil
-		}
-		templateAssumeRoleArn7 := new(string)
-		if !r.OutputSecurityLake.TemplateAssumeRoleArn.IsUnknown() && !r.OutputSecurityLake.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn7 = r.OutputSecurityLake.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn7 = nil
-		}
-		templateAssumeRoleExternalId7 := new(string)
-		if !r.OutputSecurityLake.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputSecurityLake.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId7 = r.OutputSecurityLake.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId7 = nil
-		}
-		templateAwsAPIKey8 := new(string)
-		if !r.OutputSecurityLake.TemplateAwsAPIKey.IsUnknown() && !r.OutputSecurityLake.TemplateAwsAPIKey.IsNull() {
-			*templateAwsAPIKey8 = r.OutputSecurityLake.TemplateAwsAPIKey.ValueString()
-		} else {
-			templateAwsAPIKey8 = nil
-		}
 		outputSecurityLake = &shared.OutputSecurityLake{
 			ID:                            id57,
 			Type:                          typeVar57,
@@ -31206,12 +29895,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			ParquetSchema:                 parquetSchema7,
 			DeadletterPath:                deadletterPath8,
 			MaxRetryNum:                   maxRetryNum8,
-			TemplateBucket:                templateBucket5,
-			TemplateRegion:                templateRegion14,
-			TemplateAwsSecretKey:          templateAwsSecretKey7,
-			TemplateAssumeRoleArn:         templateAssumeRoleArn7,
-			TemplateAssumeRoleExternalID:  templateAssumeRoleExternalId7,
-			TemplateAwsAPIKey:             templateAwsAPIKey8,
 		}
 	}
 	if outputSecurityLake != nil {
@@ -31534,42 +30217,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum9 = nil
 		}
-		templateBucket6 := new(string)
-		if !r.OutputCriblLake.TemplateBucket.IsUnknown() && !r.OutputCriblLake.TemplateBucket.IsNull() {
-			*templateBucket6 = r.OutputCriblLake.TemplateBucket.ValueString()
-		} else {
-			templateBucket6 = nil
-		}
-		templateRegion15 := new(string)
-		if !r.OutputCriblLake.TemplateRegion.IsUnknown() && !r.OutputCriblLake.TemplateRegion.IsNull() {
-			*templateRegion15 = r.OutputCriblLake.TemplateRegion.ValueString()
-		} else {
-			templateRegion15 = nil
-		}
-		templateAwsSecretKey8 := new(string)
-		if !r.OutputCriblLake.TemplateAwsSecretKey.IsUnknown() && !r.OutputCriblLake.TemplateAwsSecretKey.IsNull() {
-			*templateAwsSecretKey8 = r.OutputCriblLake.TemplateAwsSecretKey.ValueString()
-		} else {
-			templateAwsSecretKey8 = nil
-		}
-		templateAssumeRoleArn8 := new(string)
-		if !r.OutputCriblLake.TemplateAssumeRoleArn.IsUnknown() && !r.OutputCriblLake.TemplateAssumeRoleArn.IsNull() {
-			*templateAssumeRoleArn8 = r.OutputCriblLake.TemplateAssumeRoleArn.ValueString()
-		} else {
-			templateAssumeRoleArn8 = nil
-		}
-		templateAssumeRoleExternalId8 := new(string)
-		if !r.OutputCriblLake.TemplateAssumeRoleExternalID.IsUnknown() && !r.OutputCriblLake.TemplateAssumeRoleExternalID.IsNull() {
-			*templateAssumeRoleExternalId8 = r.OutputCriblLake.TemplateAssumeRoleExternalID.ValueString()
-		} else {
-			templateAssumeRoleExternalId8 = nil
-		}
-		templateDestPath := new(string)
-		if !r.OutputCriblLake.TemplateDestPath.IsUnknown() && !r.OutputCriblLake.TemplateDestPath.IsNull() {
-			*templateDestPath = r.OutputCriblLake.TemplateDestPath.ValueString()
-		} else {
-			templateDestPath = nil
-		}
 		outputCriblLake = &shared.OutputCriblLake{
 			ID:                            id58,
 			Type:                          typeVar58,
@@ -31619,12 +30266,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:            directoryBatchSize9,
 			DeadletterPath:                deadletterPath9,
 			MaxRetryNum:                   maxRetryNum9,
-			TemplateBucket:                templateBucket6,
-			TemplateRegion:                templateRegion15,
-			TemplateAwsSecretKey:          templateAwsSecretKey8,
-			TemplateAssumeRoleArn:         templateAssumeRoleArn8,
-			TemplateAssumeRoleExternalID:  templateAssumeRoleExternalId8,
-			TemplateDestPath:              templateDestPath,
 		}
 	}
 	if outputCriblLake != nil {
@@ -32135,66 +30776,62 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputClickHouse.PqControls != nil {
 			pqControls45 = &shared.OutputClickHousePqControls{}
 		}
-		templateUrl16 := new(string)
-		if !r.OutputClickHouse.TemplateURL.IsUnknown() && !r.OutputClickHouse.TemplateURL.IsNull() {
-			*templateUrl16 = r.OutputClickHouse.TemplateURL.ValueString()
-		} else {
-			templateUrl16 = nil
-		}
-		templateDatabase2 := new(string)
-		if !r.OutputClickHouse.TemplateDatabase.IsUnknown() && !r.OutputClickHouse.TemplateDatabase.IsNull() {
-			*templateDatabase2 = r.OutputClickHouse.TemplateDatabase.ValueString()
-		} else {
-			templateDatabase2 = nil
-		}
-		templateTableName := new(string)
-		if !r.OutputClickHouse.TemplateTableName.IsUnknown() && !r.OutputClickHouse.TemplateTableName.IsNull() {
-			*templateTableName = r.OutputClickHouse.TemplateTableName.ValueString()
-		} else {
-			templateTableName = nil
-		}
-		var token13 interface{}
+		token13 := new(string)
 		if !r.OutputClickHouse.Token.IsUnknown() && !r.OutputClickHouse.Token.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.Token.ValueString()), &token13)
+			*token13 = r.OutputClickHouse.Token.ValueString()
+		} else {
+			token13 = nil
 		}
-		var textSecret28 interface{}
+		textSecret28 := new(string)
 		if !r.OutputClickHouse.TextSecret.IsUnknown() && !r.OutputClickHouse.TextSecret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TextSecret.ValueString()), &textSecret28)
+			*textSecret28 = r.OutputClickHouse.TextSecret.ValueString()
+		} else {
+			textSecret28 = nil
 		}
-		var loginUrl5 interface{}
+		loginUrl5 := new(string)
 		if !r.OutputClickHouse.LoginURL.IsUnknown() && !r.OutputClickHouse.LoginURL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.LoginURL.ValueString()), &loginUrl5)
+			*loginUrl5 = r.OutputClickHouse.LoginURL.ValueString()
+		} else {
+			loginUrl5 = nil
 		}
-		var secretParamName4 interface{}
+		secretParamName4 := new(string)
 		if !r.OutputClickHouse.SecretParamName.IsUnknown() && !r.OutputClickHouse.SecretParamName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.SecretParamName.ValueString()), &secretParamName4)
+			*secretParamName4 = r.OutputClickHouse.SecretParamName.ValueString()
+		} else {
+			secretParamName4 = nil
 		}
-		var secret7 interface{}
+		secret7 := new(string)
 		if !r.OutputClickHouse.Secret.IsUnknown() && !r.OutputClickHouse.Secret.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.Secret.ValueString()), &secret7)
+			*secret7 = r.OutputClickHouse.Secret.ValueString()
+		} else {
+			secret7 = nil
 		}
-		var tokenAttributeName4 interface{}
+		tokenAttributeName4 := new(string)
 		if !r.OutputClickHouse.TokenAttributeName.IsUnknown() && !r.OutputClickHouse.TokenAttributeName.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TokenAttributeName.ValueString()), &tokenAttributeName4)
+			*tokenAttributeName4 = r.OutputClickHouse.TokenAttributeName.ValueString()
+		} else {
+			tokenAttributeName4 = nil
 		}
-		var authHeaderExpr4 interface{}
+		authHeaderExpr4 := new(string)
 		if !r.OutputClickHouse.AuthHeaderExpr.IsUnknown() && !r.OutputClickHouse.AuthHeaderExpr.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.AuthHeaderExpr.ValueString()), &authHeaderExpr4)
+			*authHeaderExpr4 = r.OutputClickHouse.AuthHeaderExpr.ValueString()
+		} else {
+			authHeaderExpr4 = nil
 		}
-		var tokenTimeoutSecs4 interface{}
+		tokenTimeoutSecs4 := new(float64)
 		if !r.OutputClickHouse.TokenTimeoutSecs.IsUnknown() && !r.OutputClickHouse.TokenTimeoutSecs.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputClickHouse.TokenTimeoutSecs.ValueString()), &tokenTimeoutSecs4)
+			*tokenTimeoutSecs4 = r.OutputClickHouse.TokenTimeoutSecs.ValueFloat64()
+		} else {
+			tokenTimeoutSecs4 = nil
 		}
 		oauthParams6 := make([]shared.OutputClickHouseOauthParam, 0, len(r.OutputClickHouse.OauthParams))
 		for oauthParamsIndex6 := range r.OutputClickHouse.OauthParams {
-			var name44 interface{}
-			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()), &name44)
-			}
-			var value58 interface{}
-			if !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsUnknown() && !r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()), &value58)
-			}
+			var name44 string
+			name44 = r.OutputClickHouse.OauthParams[oauthParamsIndex6].Name.ValueString()
+
+			var value58 string
+			value58 = r.OutputClickHouse.OauthParams[oauthParamsIndex6].Value.ValueString()
+
 			oauthParams6 = append(oauthParams6, shared.OutputClickHouseOauthParam{
 				Name:  name44,
 				Value: value58,
@@ -32202,14 +30839,12 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		}
 		oauthHeaders4 := make([]shared.OutputClickHouseOauthHeader, 0, len(r.OutputClickHouse.OauthHeaders))
 		for oauthHeadersIndex4 := range r.OutputClickHouse.OauthHeaders {
-			var name45 interface{}
-			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()), &name45)
-			}
-			var value59 interface{}
-			if !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsUnknown() && !r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.IsNull() {
-				_ = json.Unmarshal([]byte(r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()), &value59)
-			}
+			var name45 string
+			name45 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Name.ValueString()
+
+			var value59 string
+			value59 = r.OutputClickHouse.OauthHeaders[oauthHeadersIndex4].Value.ValueString()
+
 			oauthHeaders4 = append(oauthHeaders4, shared.OutputClickHouseOauthHeader{
 				Name:  name45,
 				Value: value59,
@@ -32267,9 +30902,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure45,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes44,
 			PqControls:                    pqControls45,
-			TemplateURL:                   templateUrl16,
-			TemplateDatabase:              templateDatabase2,
-			TemplateTableName:             templateTableName,
 			Token:                         token13,
 			TextSecret:                    textSecret28,
 			LoginURL:                      loginUrl5,
@@ -32759,24 +31391,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputLocalSearchStorage.PqControls != nil {
 			pqControls46 = &shared.OutputLocalSearchStoragePqControls{}
 		}
-		templateUrl17 := new(string)
-		if !r.OutputLocalSearchStorage.TemplateURL.IsUnknown() && !r.OutputLocalSearchStorage.TemplateURL.IsNull() {
-			*templateUrl17 = r.OutputLocalSearchStorage.TemplateURL.ValueString()
-		} else {
-			templateUrl17 = nil
-		}
-		templateDatabase3 := new(string)
-		if !r.OutputLocalSearchStorage.TemplateDatabase.IsUnknown() && !r.OutputLocalSearchStorage.TemplateDatabase.IsNull() {
-			*templateDatabase3 = r.OutputLocalSearchStorage.TemplateDatabase.ValueString()
-		} else {
-			templateDatabase3 = nil
-		}
-		templateTableName1 := new(string)
-		if !r.OutputLocalSearchStorage.TemplateTableName.IsUnknown() && !r.OutputLocalSearchStorage.TemplateTableName.IsNull() {
-			*templateTableName1 = r.OutputLocalSearchStorage.TemplateTableName.ValueString()
-		} else {
-			templateTableName1 = nil
-		}
 		outputLocalSearchStorage = &shared.OutputLocalSearchStorage{
 			ID:                            id61,
 			Type:                          typeVar61,
@@ -32830,9 +31444,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure46,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes45,
 			PqControls:                    pqControls46,
-			TemplateURL:                   templateUrl17,
-			TemplateDatabase:              templateDatabase3,
-			TemplateTableName:             templateTableName1,
 		}
 	}
 	if outputLocalSearchStorage != nil {
@@ -33162,12 +31773,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputXsiam.PqControls != nil {
 			pqControls47 = &shared.OutputXsiamPqControls{}
 		}
-		templateUrl18 := new(string)
-		if !r.OutputXsiam.TemplateURL.IsUnknown() && !r.OutputXsiam.TemplateURL.IsNull() {
-			*templateUrl18 = r.OutputXsiam.TemplateURL.ValueString()
-		} else {
-			templateUrl18 = nil
-		}
 		outputXsiam = &shared.OutputXsiam{
 			ID:                            id62,
 			Type:                          typeVar62,
@@ -33213,7 +31818,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:              pqOnBackpressure47,
 			PqMaxBufferSizeBytes:          pqMaxBufferSizeBytes46,
 			PqControls:                    pqControls47,
-			TemplateURL:                   templateUrl18,
 		}
 	}
 	if outputXsiam != nil {
@@ -33258,23 +31862,9 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			var port12 float64
 			port12 = r.OutputNetflow.Hosts[hostsIndex5].Port.ValueFloat64()
 
-			templateHost9 := new(string)
-			if !r.OutputNetflow.Hosts[hostsIndex5].TemplateHost.IsUnknown() && !r.OutputNetflow.Hosts[hostsIndex5].TemplateHost.IsNull() {
-				*templateHost9 = r.OutputNetflow.Hosts[hostsIndex5].TemplateHost.ValueString()
-			} else {
-				templateHost9 = nil
-			}
-			templatePort9 := new(string)
-			if !r.OutputNetflow.Hosts[hostsIndex5].TemplatePort.IsUnknown() && !r.OutputNetflow.Hosts[hostsIndex5].TemplatePort.IsNull() {
-				*templatePort9 = r.OutputNetflow.Hosts[hostsIndex5].TemplatePort.ValueString()
-			} else {
-				templatePort9 = nil
-			}
 			hosts5 = append(hosts5, shared.OutputNetflowHost{
-				Host:         host13,
-				Port:         port12,
-				TemplateHost: templateHost9,
-				TemplatePort: templatePort9,
+				Host: host13,
+				Port: port12,
 			})
 		}
 		dnsResolvePeriodSec14 := new(float64)
@@ -33628,12 +32218,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			url23 = nil
 		}
-		templateUrl19 := new(string)
-		if !r.OutputDynatraceHTTP.TemplateURL.IsUnknown() && !r.OutputDynatraceHTTP.TemplateURL.IsNull() {
-			*templateUrl19 = r.OutputDynatraceHTTP.TemplateURL.ValueString()
-		} else {
-			templateUrl19 = nil
-		}
 		outputDynatraceHTTP = &shared.OutputDynatraceHTTP{
 			ID:                            id64,
 			Type:                          typeVar64,
@@ -33681,7 +32265,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			EnvironmentID:                 environmentID,
 			ActiveGateDomain:              activeGateDomain,
 			URL:                           url23,
-			TemplateURL:                   templateUrl19,
 		}
 	}
 	if outputDynatraceHTTP != nil {
@@ -34812,18 +33395,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputChronicle.PqControls != nil {
 			pqControls51 = &shared.OutputChroniclePqControls{}
 		}
-		templateRegion16 := new(string)
-		if !r.OutputChronicle.TemplateRegion.IsUnknown() && !r.OutputChronicle.TemplateRegion.IsNull() {
-			*templateRegion16 = r.OutputChronicle.TemplateRegion.ValueString()
-		} else {
-			templateRegion16 = nil
-		}
-		templateEndpoint := new(string)
-		if !r.OutputChronicle.TemplateEndpoint.IsUnknown() && !r.OutputChronicle.TemplateEndpoint.IsNull() {
-			*templateEndpoint = r.OutputChronicle.TemplateEndpoint.ValueString()
-		} else {
-			templateEndpoint = nil
-		}
 		outputChronicle = &shared.OutputChronicle{
 			ID:                              id67,
 			Type:                            typeVar67,
@@ -34873,8 +33444,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:                pqOnBackpressure51,
 			PqMaxBufferSizeBytes:            pqMaxBufferSizeBytes50,
 			PqControls:                      pqControls51,
-			TemplateRegion:                  templateRegion16,
-			TemplateEndpoint:                templateEndpoint,
 		}
 	}
 	if outputChronicle != nil {
@@ -35201,12 +33770,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum10 = nil
 		}
-		templateFormat7 := new(string)
-		if !r.OutputDatabricks.TemplateFormat.IsUnknown() && !r.OutputDatabricks.TemplateFormat.IsNull() {
-			*templateFormat7 = r.OutputDatabricks.TemplateFormat.ValueString()
-		} else {
-			templateFormat7 = nil
-		}
 		outputDatabricks = &shared.OutputDatabricks{
 			ID:                     id68,
 			Type:                   typeVar68,
@@ -35259,7 +33822,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:     directoryBatchSize10,
 			DeadletterPath:         deadletterPath10,
 			MaxRetryNum:            maxRetryNum10,
-			TemplateFormat:         templateFormat7,
 		}
 	}
 	if outputDatabricks != nil {
@@ -35578,18 +34140,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		if r.OutputMicrosoftFabric.PqControls != nil {
 			pqControls52 = &shared.OutputMicrosoftFabricPqControls{}
 		}
-		templateTopic4 := new(string)
-		if !r.OutputMicrosoftFabric.TemplateTopic.IsUnknown() && !r.OutputMicrosoftFabric.TemplateTopic.IsNull() {
-			*templateTopic4 = r.OutputMicrosoftFabric.TemplateTopic.ValueString()
-		} else {
-			templateTopic4 = nil
-		}
-		templateBootstrapServer := new(string)
-		if !r.OutputMicrosoftFabric.TemplateBootstrapServer.IsUnknown() && !r.OutputMicrosoftFabric.TemplateBootstrapServer.IsNull() {
-			*templateBootstrapServer = r.OutputMicrosoftFabric.TemplateBootstrapServer.ValueString()
-		} else {
-			templateBootstrapServer = nil
-		}
 		outputMicrosoftFabric = &shared.OutputMicrosoftFabric{
 			ID:                        id69,
 			Type:                      typeVar69,
@@ -35628,8 +34178,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			PqOnBackpressure:          pqOnBackpressure52,
 			PqMaxBufferSizeBytes:      pqMaxBufferSizeBytes51,
 			PqControls:                pqControls52,
-			TemplateTopic:             templateTopic4,
-			TemplateBootstrapServer:   templateBootstrapServer,
 		}
 	}
 	if outputMicrosoftFabric != nil {
@@ -35992,29 +34540,23 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 		} else {
 			maxRetryNum11 = nil
 		}
-		templateBucket7 := new(string)
-		if !r.OutputCloudflareR2.TemplateBucket.IsUnknown() && !r.OutputCloudflareR2.TemplateBucket.IsNull() {
-			*templateBucket7 = r.OutputCloudflareR2.TemplateBucket.ValueString()
-		} else {
-			templateBucket7 = nil
-		}
-		templateFormat8 := new(string)
-		if !r.OutputCloudflareR2.TemplateFormat.IsUnknown() && !r.OutputCloudflareR2.TemplateFormat.IsNull() {
-			*templateFormat8 = r.OutputCloudflareR2.TemplateFormat.ValueString()
-		} else {
-			templateFormat8 = nil
-		}
-		var region18 interface{}
+		region18 := new(string)
 		if !r.OutputCloudflareR2.Region.IsUnknown() && !r.OutputCloudflareR2.Region.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.Region.ValueString()), &region18)
+			*region18 = r.OutputCloudflareR2.Region.ValueString()
+		} else {
+			region18 = nil
 		}
-		var objectAcl7 interface{}
+		objectAcl7 := new(shared.ObjectACLOptions)
 		if !r.OutputCloudflareR2.ObjectACL.IsUnknown() && !r.OutputCloudflareR2.ObjectACL.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.ObjectACL.ValueString()), &objectAcl7)
+			*objectAcl7 = shared.ObjectACLOptions(r.OutputCloudflareR2.ObjectACL.ValueString())
+		} else {
+			objectAcl7 = nil
 		}
-		var awsAPIKey11 interface{}
+		awsAPIKey11 := new(string)
 		if !r.OutputCloudflareR2.AwsAPIKey.IsUnknown() && !r.OutputCloudflareR2.AwsAPIKey.IsNull() {
-			_ = json.Unmarshal([]byte(r.OutputCloudflareR2.AwsAPIKey.ValueString()), &awsAPIKey11)
+			*awsAPIKey11 = r.OutputCloudflareR2.AwsAPIKey.ValueString()
+		} else {
+			awsAPIKey11 = nil
 		}
 		outputCloudflareR2 = &shared.OutputCloudflareR2{
 			ID:                      id70,
@@ -36072,8 +34614,6 @@ func (r *DestinationResourceModel) ToSharedOutput(ctx context.Context) (*shared.
 			DirectoryBatchSize:      directoryBatchSize11,
 			DeadletterPath:          deadletterPath11,
 			MaxRetryNum:             maxRetryNum11,
-			TemplateBucket:          templateBucket7,
-			TemplateFormat:          templateFormat8,
 			Region:                  region18,
 			ObjectACL:               objectAcl7,
 			AwsAPIKey:               awsAPIKey11,

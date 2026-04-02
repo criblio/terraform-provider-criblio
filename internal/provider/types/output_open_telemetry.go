@@ -3,12 +3,11 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type OutputOpenTelemetry struct {
-	AuthHeaderExpr                jsontypes.Normalized               `tfsdk:"auth_header_expr"`
+	AuthHeaderExpr                types.String                       `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                       `tfsdk:"auth_type"`
 	Compress                      types.String                       `tfsdk:"compress"`
 	Concurrency                   types.Float64                      `tfsdk:"concurrency"`
@@ -27,7 +26,7 @@ type OutputOpenTelemetry struct {
 	ID                            types.String                       `tfsdk:"id"`
 	KeepAlive                     types.Bool                         `tfsdk:"keep_alive"`
 	KeepAliveTime                 types.Float64                      `tfsdk:"keep_alive_time"`
-	LoginURL                      jsontypes.Normalized               `tfsdk:"login_url"`
+	LoginURL                      types.String                       `tfsdk:"login_url"`
 	MaxPayloadSizeKB              types.Float64                      `tfsdk:"max_payload_size_kb"`
 	Metadata                      []ItemsTypeKeyValueMetadata        `tfsdk:"metadata"`
 	OauthHeaders                  []OutputOpenTelemetryOauthHeader   `tfsdk:"oauth_headers"`
@@ -53,8 +52,8 @@ type OutputOpenTelemetry struct {
 	ResponseHonorRetryAfterHeader types.Bool                         `tfsdk:"response_honor_retry_after_header"`
 	ResponseRetrySettings         []ItemsTypeResponseRetrySettings   `tfsdk:"response_retry_settings"`
 	SafeHeaders                   []types.String                     `tfsdk:"safe_headers"`
-	Secret                        jsontypes.Normalized               `tfsdk:"secret"`
-	SecretParamName               jsontypes.Normalized               `tfsdk:"secret_param_name"`
+	Secret                        types.String                       `tfsdk:"secret"`
+	SecretParamName               types.String                       `tfsdk:"secret_param_name"`
 	Streamtags                    []types.String                     `tfsdk:"streamtags"`
 	SystemFields                  []types.String                     `tfsdk:"system_fields"`
 	TextSecret                    types.String                       `tfsdk:"text_secret"`
@@ -62,8 +61,8 @@ type OutputOpenTelemetry struct {
 	TimeoutSec                    types.Float64                      `tfsdk:"timeout_sec"`
 	TLS                           *TLSSettingsClientSideTypeExtended `tfsdk:"tls"`
 	Token                         types.String                       `tfsdk:"token"`
-	TokenAttributeName            jsontypes.Normalized               `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs              jsontypes.Normalized               `tfsdk:"token_timeout_secs"`
+	TokenAttributeName            types.String                       `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs              types.Float64                      `tfsdk:"token_timeout_secs"`
 	Type                          types.String                       `tfsdk:"type"`
 	UseRoundRobinDNS              types.Bool                         `tfsdk:"use_round_robin_dns"`
 	Username                      types.String                       `tfsdk:"username"`

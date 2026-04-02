@@ -7,9 +7,6 @@ import (
 )
 
 type InputWiz struct {
-	TemplateAuthURL      types.String                   `tfsdk:"template_auth_url"`
-	TemplateClientID     types.String                   `tfsdk:"template_client_id"`
-	TemplateEndpoint     types.String                   `tfsdk:"template_endpoint"`
 	AuthAudienceOverride types.String                   `tfsdk:"auth_audience_override"`
 	AuthType             types.String                   `tfsdk:"auth_type"`
 	AuthURL              types.String                   `tfsdk:"auth_url"`

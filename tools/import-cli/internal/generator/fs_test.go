@@ -14,9 +14,9 @@ import (
 // mockFS implements FileSystem with in-memory storage for unit tests.
 // No real disk I/O; use to mock filesystem interactions.
 type mockFS struct {
-	mu           sync.Mutex
-	MkdirAllCalls []string            // paths passed to MkdirAll
-	Files        map[string][]byte    // full path -> content
+	mu            sync.Mutex
+	MkdirAllCalls []string          // paths passed to MkdirAll
+	Files         map[string][]byte // full path -> content
 }
 
 func (m *mockFS) MkdirAll(path string, perm os.FileMode) error {

@@ -212,12 +212,6 @@ type InputCriblLakeHTTP struct {
 	Metadata      []ItemsTypeMetadata `json:"metadata,omitempty"`
 	AuthTokensExt []AuthTokensExt     `json:"authTokensExt,omitempty"`
 	Description   *string             `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
-	// Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
-	TemplateSplunkHecAPI *string `json:"__template_splunkHecAPI,omitempty"`
 }
 
 func (i InputCriblLakeHTTP) MarshalJSON() ([]byte, error) {
@@ -453,25 +447,4 @@ func (i *InputCriblLakeHTTP) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputCriblLakeHTTP) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputCriblLakeHTTP) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
-}
-
-func (i *InputCriblLakeHTTP) GetTemplateSplunkHecAPI() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateSplunkHecAPI
 }

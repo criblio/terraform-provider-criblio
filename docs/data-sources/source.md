@@ -130,8 +130,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--tls))
 - `type` (String)
@@ -261,10 +259,6 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `storage_account_name` (String) The name of your Azure storage account
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-- `template_connection_string` (String) Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) The service principal's tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `type` (String)
@@ -333,7 +327,7 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `hec_api` (String) Absolute path on which to listen for the Cloudflare HTTP Event Collector API requests. This input supports the /event endpoint.
@@ -354,8 +348,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--tls))
 - `type` (String)
 
@@ -786,8 +778,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http--tls))
 - `type` (String)
 
@@ -893,9 +883,6 @@ Read-Only:
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--tls))
 - `type` (String)
 
@@ -1021,8 +1008,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp--tls))
 - `type` (String)
 
@@ -1199,13 +1184,6 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -1298,8 +1276,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--tls))
 - `type` (String)
 
@@ -1485,11 +1461,6 @@ Read-Only:
 - `signature_version` (String) Signature version to use for signing EC2 requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `targets` (Attributes List) (see [below for nested schema](#nestedatt--items--input_edge_prometheus--targets))
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `timeout` (Number) Timeout, in milliseconds, before aborting HTTP connection attempts; 1-60000 or 0 to disable
 - `type` (String)
 - `use_public_ip` (Boolean) Use public IP address for discovered targets. Disable to use the private IP address.
@@ -1613,8 +1584,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--tls))
 - `type` (String)
 - `username` (String)
@@ -1677,7 +1646,6 @@ Read-Only:
 - `password` (String)
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)
 - `remove_headers` (List of String) List of headers to remove from the request to proxy
-- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a proxy request to complete before canceling it
 - `url` (String) URL of the Elastic server to proxy non-bulk requests to, such as http://elastic:9200
 - `username` (String)
@@ -1993,8 +1961,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose--tls))
 - `type` (String)
 
@@ -2083,9 +2049,6 @@ Read-Only:
 - `service_account_credentials` (String) Contents of service account credentials (JSON keys) file downloaded from Google Cloud. To upload a file, click the upload button at this field's upper right.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `subscription_name` (String) ID of the subscription to use when receiving events. When Monitor subscription is enabled, the fully qualified subscription name must be entered. Example: projects/myProject/subscriptions/mySubscription
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `template_subscription_name` (String) Binds 'subscriptionName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'subscriptionName' at runtime.
-- `template_topic_name` (String) Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.
 - `topic_name` (String) ID of the topic to receive events from. When Monitor subscription is enabled, any value may be entered.
 - `type` (String)
 
@@ -2161,8 +2124,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--tls))
 - `type` (String)
 
@@ -2336,9 +2297,6 @@ Read-Only:
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http--tls))
 - `type` (String)
 
@@ -2453,8 +2411,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw--tls))
 - `type` (String)
 
@@ -2832,12 +2788,6 @@ Read-Only:
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests
 - `stream_name` (String) Kinesis Data Stream to read data from
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `template_stream_name` (String) Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
 - `type` (String)
 - `verify_kpl_check_sums` (Boolean) Verify Kinesis Producer Library (KPL) event checksums
 
@@ -3120,7 +3070,7 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Loki logs authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_loki--connections))
@@ -3135,31 +3085,29 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `loki_api` (String) Absolute path on which to listen for Loki logs requests. Defaults to /loki/api/v1/push, which will (in this example) expand as: 'http://<your‑upstream‑URL>:<your‑port>/loki/api/v1/push'.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_loki--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_loki--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_loki--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_loki--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
 - `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -3186,8 +3134,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_loki--oauth_params"></a>
@@ -3195,8 +3143,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_loki--pq"></a>
@@ -3259,9 +3207,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--tls))
 - `type` (String)
 - `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
@@ -3360,10 +3305,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Microsoft Graph data is delayed; this parameter (with Date range end) compensates for delay and gaps.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-- `template_resource` (String) Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
-- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 - `timeout` (Number) HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.
@@ -3457,8 +3398,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `shutdown_timeout_ms` (Number) Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--tls))
 - `type` (String)
 
@@ -3576,11 +3515,6 @@ Read-Only:
       See [Kafka's documentation](https://kafka.apache.org/documentation/#consumerconfigs_session.timeout.ms) for details.
 - `signature_version` (String) Signature version to use for signing MSK cluster requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_msk--tls))
 - `topics` (List of String) Topic to subscribe to. Warning: To optimize performance, Cribl suggests subscribing each Kafka Source to a single topic only.
 - `type` (String)
@@ -3706,8 +3640,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_cache_minutes` (Number) Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `v5_enabled` (Boolean) Accept messages in Netflow V5 format.
@@ -3780,10 +3712,6 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_mgmt--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_app_id` (String) Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
-- `template_client_secret` (String) Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
-- `template_publisher_identifier` (String) Binds 'publisherIdentifier' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'publisherIdentifier' at runtime.
-- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable
@@ -3892,10 +3820,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `start_date` (String) Backward offset for the search range's head. (E.g.: -3h@h) Message Trace data is delayed; this parameter (with Date range end) compensates for delay and gaps.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-- `template_resource` (String) Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
-- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-- `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory.
 - `text_secret` (String) Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 - `timeout` (Number) HTTP request inactivity timeout. Maximum is 2400 (40 minutes); enter 0 to wait indefinitely.
@@ -3995,9 +3919,6 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_office365_service--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_app_id` (String) Binds 'appId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'appId' at runtime.
-- `template_client_secret` (String) Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
-- `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) Office 365 Azure Tenant ID
 - `text_secret` (String) Select or create a stored text secret
 - `timeout` (Number) HTTP request inactivity timeout, use 0 to disable
@@ -4075,16 +3996,16 @@ Read-Only:
 
 Read-Only:
 
-- `activity_log_sample_rate` (String) Parsed as JSON.
-- `auth_header_expr` (String) Parsed as JSON.
+- `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) OpenTelemetry authentication type
-- `capture_headers` (String) Parsed as JSON.
+- `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_open_telemetry--connections))
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_health_check` (Boolean) Enable to expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
-- `enable_proxy_header` (String) Parsed as JSON.
+- `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_logs` (Boolean) Enable to extract each incoming log record to a separate event
 - `extract_metrics` (Boolean) Enable to extract each incoming Gauge or IntGauge metric to multiple events, one per data point
@@ -4094,13 +4015,13 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist.
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 sec.; maximum 600 sec. (10 min.).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process. Use 0 for unlimited.
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_open_telemetry--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_open_telemetry--oauth_params))
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when interpreting received data
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -4109,18 +4030,16 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `protocol` (String) Select whether to leverage gRPC or HTTP for OpenTelemetry
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -4147,8 +4066,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_open_telemetry--oauth_params"></a>
@@ -4156,8 +4075,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_open_telemetry--pq"></a>
@@ -4224,8 +4143,6 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_openai--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_openai_organization` (String) Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.
-- `template_openai_project` (String) Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.
 - `text_secret` (String) Select or create a stored API key. Visit [OpenAI's organization admin keys page](https://platform.openai.com/settings/organization/admin-keys) to create an organization admin key.
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
@@ -4382,15 +4299,6 @@ Read-Only:
 - `signature_version` (String) Signature version to use for signing EC2 requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `target_list` (List of String) List of Prometheus targets to pull metrics from. Values can be in URL or host[:port] format. For example: http://localhost:9090/metrics, localhost:9090, or localhost. In cases where just host[:port] is specified, the endpoint will resolve to 'http://host[:port]/metrics'.
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_discovery_type` (String) Binds 'discoveryType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'discoveryType' at runtime.
-- `template_log_level` (String) Binds 'logLevel' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logLevel' at runtime.
-- `template_password` (String) Binds 'password' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'password' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `template_username` (String) Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
 - `timeout` (Number) Time, in seconds, before aborting HTTP connection attempts; use 0 for no timeout
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
@@ -4451,7 +4359,7 @@ Read-Only:
 Read-Only:
 
 - `activity_log_sample_rate` (Number) How often request activity is logged at the `info` level. A value of 1 would log every request, 10 every 10th request, etc.
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Remote Write authentication type
 - `capture_headers` (Boolean) Add request headers to events, in the __headers field
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_prometheus_rw--connections))
@@ -4466,12 +4374,12 @@ Read-Only:
 - `ip_allowlist_regex` (String) Messages from matched IP addresses will be processed, unless also matched by the denylist
 - `ip_denylist_regex` (String) Messages from matched IP addresses will be ignored. This takes precedence over the allowlist.
 - `keep_alive_timeout` (Number) After the last response is sent, @{product} will wait this long for additional data before closing the socket connection. Minimum 1 second, maximum 600 seconds (10 minutes).
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_active_req` (Number) Maximum number of active requests allowed per Worker Process. Set to 0 for unlimited. Caution: Increasing the limit above the default value, or setting it to unlimited, may degrade performance and reduce throughput.
 - `max_requests_per_socket` (Number) Maximum number of requests per socket before @{product} instructs the client to close the connection. Default is 0 (unlimited).
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_prometheus_rw--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_prometheus_rw--oauth_params))
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
 - `port` (Number) Port to listen on
@@ -4479,20 +4387,16 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `prometheus_api` (String) Absolute path on which to listen for Prometheus requests. Defaults to /write, which will expand as: http://<your‑upstream‑URL>:<your‑port>/write.
 - `request_timeout` (Number) How long to wait for an incoming request to complete before aborting it. Use 0 to disable.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `template_prometheus_api` (String) Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.
-- `template_username` (String) Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_prometheus_rw--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `type` (String)
 - `username` (String)
 
@@ -4519,8 +4423,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_prometheus_rw--oauth_params"></a>
@@ -4528,8 +4432,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_prometheus_rw--pq"></a>
@@ -4593,8 +4497,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
@@ -4686,13 +4588,6 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (Boolean) Add a tag to processed S3 objects. Requires s3:GetObjectTagging and s3:PutObjectTagging AWS permissions.
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -4804,13 +4699,6 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `validate_inventory_files` (Boolean) If set to Yes, each inventory file in the manifest will be validated against its checksum. Defaults to false
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
@@ -4922,13 +4810,6 @@ Read-Only:
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `tag_after_processing` (String)
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -5012,8 +4893,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--items--input_snmp--snmp_v3_auth))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `varbinds_with_types` (Boolean) If enabled, parses varbinds as an array of objects that include OID, value, and type
@@ -5110,8 +4989,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk--tls))
 - `type` (String)
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event
@@ -5199,7 +5076,7 @@ Read-Only:
 - `disabled` (Boolean)
 - `drop_control_fields` (Boolean) Drop Splunk control fields such as `crcSalt` and `_savedPort`. If disabled, control fields are stored in the internal field `__ctrlFields`.
 - `emit_token_metrics` (Boolean) Emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extract_metrics` (Boolean) Extract and process Splunk-generated metrics as Cribl metrics
@@ -5222,9 +5099,6 @@ Read-Only:
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-- `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec--tls))
 - `type` (String)
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event
@@ -5314,7 +5188,7 @@ Read-Only:
 
 Read-Only:
 
-- `auth_header_expr` (String) Parsed as JSON.
+- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
 - `auth_type` (String) Splunk Search authentication type
 - `breaker_rulesets` (List of String) A list of event-breaking rulesets that will be applied, in order, to the input data stream
 - `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_splunk_search--connections))
@@ -5334,11 +5208,11 @@ Read-Only:
 - `keep_alive_time` (Number) How often workers should check in with the scheduler to keep job subscription alive
 - `latest` (String) The latest time boundary for the search. Can be an exact or relative time. Examples: '2022-01-14T12:00:00Z' or '-1m@m'
 - `log_level` (String) Collector runtime log level (verbosity)
-- `login_url` (String) Parsed as JSON.
+- `login_url` (String) URL for OAuth
 - `max_missed_keep_alives` (Number) The number of Keep Alive Time periods before an inactive worker will have its job subscription revoked.
 - `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_splunk_search--metadata))
-- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_headers))
-- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_params))
+- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_headers))
+- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--items--input_splunk_search--oauth_params))
 - `output_mode` (String) Format of the returned output
 - `password` (String)
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
@@ -5349,15 +5223,15 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_search--retry_rules))
 - `search` (String) Enter Splunk search here. Examples: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'
 - `search_head` (String) Search head base URL. Can be an expression. Default is https://localhost:8089.
-- `secret` (String) Parsed as JSON.
-- `secret_param_name` (String) Parsed as JSON.
+- `secret` (String) Secret parameter value to pass in request body
+- `secret_param_name` (String) Secret parameter name to pass in request body
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `text_secret` (String) Select or create a stored text secret
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Parsed as JSON.
-- `token_timeout_secs` (String) Parsed as JSON.
+- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
+- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
 - `use_round_robin_dns` (Boolean) When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned
@@ -5404,8 +5278,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--items--input_splunk_search--oauth_params"></a>
@@ -5413,8 +5287,8 @@ Read-Only:
 
 Read-Only:
 
-- `name` (String) Parsed as JSON.
-- `value` (String) Parsed as JSON.
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--items--input_splunk_search--pq"></a>
@@ -5489,13 +5363,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `signature_version` (String) Signature version to use for signing SQS requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_account_id` (String) Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-- `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `type` (String)
 - `visibility_timeout` (Number) After messages are retrieved by a ReceiveMessage request, @{product} will hide them from subsequent retrieve requests for at least this duration. You can set this as high as 43200 sec. (12 hours).
 
@@ -5571,9 +5438,6 @@ Read-Only:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
 - `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--tls))
 - `type` (String)
@@ -6039,8 +5903,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--tls))
 - `type` (String)
@@ -6139,8 +6001,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson--tls))
 - `type` (String)
@@ -6236,8 +6096,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--items--input_wef--subscriptions))
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef--tls))
 - `type` (String)
 
@@ -6602,9 +6460,6 @@ Read-Only:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz--retry_rules))
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_auth_url` (String) Binds 'authUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'authUrl' at runtime.
-- `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-- `template_endpoint` (String) Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `ttl` (String) Time to keep the job's artifacts on disk after job completion. This also affects how long a job is listed in the Job Inspector.
 - `type` (String)
@@ -6723,8 +6578,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook--tls))
 - `type` (String)
 
@@ -6819,7 +6672,7 @@ Read-Only:
 - `description` (String)
 - `disabled` (Boolean)
 - `emit_token_metrics` (Boolean) Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
-- `enable_health_check` (String) Parsed as JSON.
+- `enable_health_check` (Boolean) Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 - `enable_proxy_header` (Boolean) Extract the client IP and port from PROXY protocol v1/v2. When enabled, the X-Forwarded-For header is ignored. Disable to use the X-Forwarded-For header for client IP extraction.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `hec_acks` (Boolean) Whether to enable Zscaler HEC acknowledgements
@@ -6840,9 +6693,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_hec_api` (String) Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec--tls))
 - `type` (String)
 

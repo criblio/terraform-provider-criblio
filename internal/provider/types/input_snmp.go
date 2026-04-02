@@ -7,8 +7,6 @@ import (
 )
 
 type InputSnmp struct {
-	TemplateHost       types.String                   `tfsdk:"template_host"`
-	TemplatePort       types.String                   `tfsdk:"template_port"`
 	BestEffortParsing  types.Bool                     `tfsdk:"best_effort_parsing"`
 	Connections        []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description        types.String                   `tfsdk:"description"`

@@ -7,7 +7,6 @@ import (
 )
 
 type OutputDatabricks struct {
-	TemplateFormat         types.String                `tfsdk:"template_format"`
 	AddIDToStagePath       types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AutomaticSchema        types.Bool                  `tfsdk:"automatic_schema"`
 	BaseFileName           types.String                `tfsdk:"base_file_name"`

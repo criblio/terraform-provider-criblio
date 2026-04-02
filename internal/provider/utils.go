@@ -74,6 +74,15 @@ func merge(ctx context.Context, req resource.UpdateRequest, resp *resource.Updat
 }
 
 func refreshPlan(ctx context.Context, plan types.Object, target any) diag.Diagnostics {
+	return refreshPlanWithPreserve(ctx, plan, target, true)
+}
+
+// refreshPlanWithPreserve merges the Terraform plan object onto target (after RefreshFrom).
+// When preservePlanNullTargets is true, null in the plan leaves existing target values in place
+// (used when combining prior state with plan before building a request).
+// When false, null in the plan overwrites target fields so saved state matches omitted optional
+// attributes; otherwise API defaults remain and Terraform reports inconsistent result after apply.
+func refreshPlanWithPreserve(ctx context.Context, plan types.Object, target any, preservePlanNullTargets bool) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	obj := types.ObjectType{AttrTypes: plan.AttributeTypes(ctx)}
@@ -90,6 +99,7 @@ func refreshPlan(ctx context.Context, plan types.Object, target any) diag.Diagno
 		UnhandledNullAsEmpty:    true,
 		UnhandledUnknownAsEmpty: true,
 		SourceType:              tfReflect.SourceTypePlan,
+		PreservePlanNullTargets: preservePlanNullTargets,
 	}, path.Empty())...)
 
 	return diags

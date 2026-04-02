@@ -3,14 +3,10 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type InputZscalerHec struct {
-	TemplateHecAPI            types.String                   `tfsdk:"template_hec_api"`
-	TemplateHost              types.String                   `tfsdk:"template_host"`
-	TemplatePort              types.String                   `tfsdk:"template_port"`
 	AccessControlAllowHeaders []types.String                 `tfsdk:"access_control_allow_headers"`
 	AccessControlAllowOrigin  []types.String                 `tfsdk:"access_control_allow_origin"`
 	ActivityLogSampleRate     types.Float64                  `tfsdk:"activity_log_sample_rate"`
@@ -21,7 +17,7 @@ type InputZscalerHec struct {
 	Description               types.String                   `tfsdk:"description"`
 	Disabled                  types.Bool                     `tfsdk:"disabled"`
 	EmitTokenMetrics          types.Bool                     `tfsdk:"emit_token_metrics"`
-	EnableHealthCheck         jsontypes.Normalized           `tfsdk:"enable_health_check"`
+	EnableHealthCheck         types.Bool                     `tfsdk:"enable_health_check"`
 	EnableProxyHeader         types.Bool                     `tfsdk:"enable_proxy_header"`
 	Environment               types.String                   `tfsdk:"environment"`
 	HecAPI                    types.String                   `tfsdk:"hec_api"`

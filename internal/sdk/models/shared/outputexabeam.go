@@ -103,8 +103,6 @@ type OutputExabeam struct {
 	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
 }
 
 func (o OutputExabeam) MarshalJSON() ([]byte, error) {
@@ -375,11 +373,4 @@ func (o *OutputExabeam) GetMaxRetryNum() *float64 {
 		return nil
 	}
 	return o.MaxRetryNum
-}
-
-func (o *OutputExabeam) GetTemplateRegion() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateRegion
 }

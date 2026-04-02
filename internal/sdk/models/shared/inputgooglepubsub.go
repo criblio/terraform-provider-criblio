@@ -78,12 +78,6 @@ type InputGooglePubsub struct {
 	Description *string             `json:"description,omitempty"`
 	// Receive events in the order they were added to the queue. The process sending events must have ordering enabled.
 	OrderedDelivery *bool `json:"orderedDelivery,omitempty"`
-	// Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.
-	TemplateTopicName *string `json:"__template_topicName,omitempty"`
-	// Binds 'subscriptionName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'subscriptionName' at runtime.
-	TemplateSubscriptionName *string `json:"__template_subscriptionName,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
 }
 
 func (i InputGooglePubsub) MarshalJSON() ([]byte, error) {
@@ -270,25 +264,4 @@ func (i *InputGooglePubsub) GetOrderedDelivery() *bool {
 		return nil
 	}
 	return i.OrderedDelivery
-}
-
-func (i *InputGooglePubsub) GetTemplateTopicName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTopicName
-}
-
-func (i *InputGooglePubsub) GetTemplateSubscriptionName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateSubscriptionName
-}
-
-func (i *InputGooglePubsub) GetTemplateRegion() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateRegion
 }

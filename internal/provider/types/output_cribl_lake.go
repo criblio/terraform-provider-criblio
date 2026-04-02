@@ -7,12 +7,6 @@ import (
 )
 
 type OutputCriblLake struct {
-	TemplateAssumeRoleArn         types.String       `tfsdk:"template_assume_role_arn"`
-	TemplateAssumeRoleExternalID  types.String       `tfsdk:"template_assume_role_external_id"`
-	TemplateAwsSecretKey          types.String       `tfsdk:"template_aws_secret_key"`
-	TemplateBucket                types.String       `tfsdk:"template_bucket"`
-	TemplateDestPath              types.String       `tfsdk:"template_dest_path"`
-	TemplateRegion                types.String       `tfsdk:"template_region"`
 	AddIDToStagePath              types.Bool         `tfsdk:"add_id_to_stage_path"`
 	AssumeRoleArn                 types.String       `tfsdk:"assume_role_arn"`
 	AssumeRoleExternalID          types.String       `tfsdk:"assume_role_external_id"`

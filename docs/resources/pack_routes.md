@@ -52,7 +52,7 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 ### Required
 
-- `group_id` (String) group Id
+- `group_id` (String) group Id. Requires replacement if changed.
 - `pack` (String) pack ID to GET. Requires replacement if changed.
 - `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
 
@@ -60,7 +60,7 @@ resource "criblio_pack_routes" "my_packroutes" {
 
 - `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
-- `id` (String) Routes ID
+- `id` (String) Routes ID. Requires replacement if changed.
 
 ### Read-Only
 

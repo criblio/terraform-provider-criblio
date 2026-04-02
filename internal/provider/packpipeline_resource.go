@@ -230,12 +230,18 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `group Id`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `group Id. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique ID to PATCH for pack`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Unique ID to PATCH for pack. Requires replacement if changed.`,
 			},
 			"pack": schema.StringAttribute{
 				Required: true,

@@ -55,8 +55,8 @@ resource "criblio_pack_pipeline" "my_packpipeline" {
 ### Required
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
-- `group_id` (String) group Id
-- `id` (String) Unique ID to PATCH for pack
+- `group_id` (String) group Id. Requires replacement if changed.
+- `id` (String) Unique ID to PATCH for pack. Requires replacement if changed.
 - `pack` (String) pack ID to POST. Requires replacement if changed.
 
 <a id="nestedatt--conf"></a>

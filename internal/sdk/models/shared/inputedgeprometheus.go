@@ -272,16 +272,6 @@ type InputEdgePrometheus struct {
 	Password *string `json:"password,omitempty"`
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
-	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
-	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
-	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
 }
 
 func (i InputEdgePrometheus) MarshalJSON() ([]byte, error) {
@@ -615,39 +605,4 @@ func (i *InputEdgePrometheus) GetCredentialsSecret() *string {
 		return nil
 	}
 	return i.CredentialsSecret
-}
-
-func (i *InputEdgePrometheus) GetTemplateAwsAPIKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsAPIKey
-}
-
-func (i *InputEdgePrometheus) GetTemplateAwsSecretKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsSecretKey
-}
-
-func (i *InputEdgePrometheus) GetTemplateRegion() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateRegion
-}
-
-func (i *InputEdgePrometheus) GetTemplateAssumeRoleArn() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleArn
-}
-
-func (i *InputEdgePrometheus) GetTemplateAssumeRoleExternalID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleExternalID
 }

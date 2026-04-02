@@ -7,8 +7,6 @@ import (
 )
 
 type InputRawUDP struct {
-	TemplateHost        types.String                   `tfsdk:"template_host"`
-	TemplatePort        types.String                   `tfsdk:"template_port"`
 	Connections         []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description         types.String                   `tfsdk:"description"`
 	Disabled            types.Bool                     `tfsdk:"disabled"`

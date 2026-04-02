@@ -7,7 +7,6 @@ import (
 )
 
 type OutputSplunkHec struct {
-	TemplateURL                   types.String                                     `tfsdk:"template_url"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                                       `tfsdk:"compress"`
 	Concurrency                   types.Float64                                    `tfsdk:"concurrency"`

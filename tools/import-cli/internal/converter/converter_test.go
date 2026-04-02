@@ -15,7 +15,7 @@ import (
 func TestRefreshFromMethodName(t *testing.T) {
 	tests := []struct {
 		getMethod string
-		want     string
+		want      string
 	}{
 		{"GetInputByID", "RefreshFromOperationsGetInputByIDResponseBody"},
 		{"GetPipelineByID", "RefreshFromOperationsGetPipelineByIDResponseBody"},

@@ -213,24 +213,6 @@ type InputPrometheus struct {
 	Password *string `json:"password,omitempty"`
 	// Select or create a secret that references your credentials
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
-	// Binds 'discoveryType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'discoveryType' at runtime.
-	TemplateDiscoveryType *string `json:"__template_discoveryType,omitempty"`
-	// Binds 'logLevel' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logLevel' at runtime.
-	TemplateLogLevel *string `json:"__template_logLevel,omitempty"`
-	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
-	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
-	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
-	// Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
-	TemplateUsername *string `json:"__template_username,omitempty"`
-	// Binds 'password' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'password' at runtime.
-	TemplatePassword *string `json:"__template_password,omitempty"`
 }
 
 func (i InputPrometheus) MarshalJSON() ([]byte, error) {
@@ -571,67 +553,4 @@ func (i *InputPrometheus) GetCredentialsSecret() *string {
 		return nil
 	}
 	return i.CredentialsSecret
-}
-
-func (i *InputPrometheus) GetTemplateDiscoveryType() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateDiscoveryType
-}
-
-func (i *InputPrometheus) GetTemplateLogLevel() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateLogLevel
-}
-
-func (i *InputPrometheus) GetTemplateAwsAPIKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsAPIKey
-}
-
-func (i *InputPrometheus) GetTemplateAwsSecretKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsSecretKey
-}
-
-func (i *InputPrometheus) GetTemplateRegion() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateRegion
-}
-
-func (i *InputPrometheus) GetTemplateAssumeRoleArn() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleArn
-}
-
-func (i *InputPrometheus) GetTemplateAssumeRoleExternalID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleExternalID
-}
-
-func (i *InputPrometheus) GetTemplateUsername() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateUsername
-}
-
-func (i *InputPrometheus) GetTemplatePassword() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePassword
 }

@@ -1224,6 +1224,7 @@ func (r *CollectorsDataSource) Schema(ctx context.Context, req datasource.Schema
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
 												"auth_header_expr": schema.StringAttribute{
+													CustomType:  types.StringType,
 													Computed:    true,
 													Description: `Expression for auth header value`,
 												},

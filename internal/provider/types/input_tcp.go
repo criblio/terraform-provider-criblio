@@ -7,8 +7,6 @@ import (
 )
 
 type InputTCP struct {
-	TemplateHost        types.String                   `tfsdk:"template_host"`
-	TemplatePort        types.String                   `tfsdk:"template_port"`
 	AuthToken           types.String                   `tfsdk:"auth_token"`
 	AuthType            types.String                   `tfsdk:"auth_type"`
 	BreakerRulesets     []types.String                 `tfsdk:"breaker_rulesets"`

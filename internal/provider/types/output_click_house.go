@@ -3,16 +3,12 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type OutputClickHouse struct {
-	TemplateDatabase              types.String                                     `tfsdk:"template_database"`
-	TemplateTableName             types.String                                     `tfsdk:"template_table_name"`
-	TemplateURL                   types.String                                     `tfsdk:"template_url"`
 	AsyncInserts                  types.Bool                                       `tfsdk:"async_inserts"`
-	AuthHeaderExpr                jsontypes.Normalized                             `tfsdk:"auth_header_expr"`
+	AuthHeaderExpr                types.String                                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`
 	ColumnMappings                []OutputClickHouseColumnMapping                  `tfsdk:"column_mappings"`
 	Compress                      types.Bool                                       `tfsdk:"compress"`
@@ -29,7 +25,7 @@ type OutputClickHouse struct {
 	FlushPeriodSec                types.Float64                                    `tfsdk:"flush_period_sec"`
 	Format                        types.String                                     `tfsdk:"format"`
 	ID                            types.String                                     `tfsdk:"id"`
-	LoginURL                      jsontypes.Normalized                             `tfsdk:"login_url"`
+	LoginURL                      types.String                                     `tfsdk:"login_url"`
 	MappingType                   types.String                                     `tfsdk:"mapping_type"`
 	MaxPayloadEvents              types.Float64                                    `tfsdk:"max_payload_events"`
 	MaxPayloadSizeKB              types.Float64                                    `tfsdk:"max_payload_size_kb"`
@@ -54,19 +50,19 @@ type OutputClickHouse struct {
 	ResponseHonorRetryAfterHeader types.Bool                                       `tfsdk:"response_honor_retry_after_header"`
 	ResponseRetrySettings         []ItemsTypeResponseRetrySettings                 `tfsdk:"response_retry_settings"`
 	SafeHeaders                   []types.String                                   `tfsdk:"safe_headers"`
-	Secret                        jsontypes.Normalized                             `tfsdk:"secret"`
-	SecretParamName               jsontypes.Normalized                             `tfsdk:"secret_param_name"`
+	Secret                        types.String                                     `tfsdk:"secret"`
+	SecretParamName               types.String                                     `tfsdk:"secret_param_name"`
 	SQLUsername                   types.String                                     `tfsdk:"sql_username"`
 	Streamtags                    []types.String                                   `tfsdk:"streamtags"`
 	SystemFields                  []types.String                                   `tfsdk:"system_fields"`
 	TableName                     types.String                                     `tfsdk:"table_name"`
-	TextSecret                    jsontypes.Normalized                             `tfsdk:"text_secret"`
+	TextSecret                    types.String                                     `tfsdk:"text_secret"`
 	TimeoutRetrySettings          *TimeoutRetrySettingsType                        `tfsdk:"timeout_retry_settings"`
 	TimeoutSec                    types.Float64                                    `tfsdk:"timeout_sec"`
 	TLS                           *TLSSettingsClientSideTypeCaPathCertPathExtended `tfsdk:"tls"`
-	Token                         jsontypes.Normalized                             `tfsdk:"token"`
-	TokenAttributeName            jsontypes.Normalized                             `tfsdk:"token_attribute_name"`
-	TokenTimeoutSecs              jsontypes.Normalized                             `tfsdk:"token_timeout_secs"`
+	Token                         types.String                                     `tfsdk:"token"`
+	TokenAttributeName            types.String                                     `tfsdk:"token_attribute_name"`
+	TokenTimeoutSecs              types.Float64                                    `tfsdk:"token_timeout_secs"`
 	Type                          types.String                                     `tfsdk:"type"`
 	URL                           types.String                                     `tfsdk:"url"`
 	UseRoundRobinDNS              types.Bool                                       `tfsdk:"use_round_robin_dns"`

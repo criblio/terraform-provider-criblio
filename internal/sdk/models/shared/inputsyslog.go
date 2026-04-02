@@ -93,12 +93,6 @@ type InputSyslog struct {
 	Description         *string `json:"description,omitempty"`
 	// When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
 	EnableEnhancedProxyHeaderParsing *bool `json:"enableEnhancedProxyHeaderParsing,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
-	TemplateUDPPort *string `json:"__template_udpPort,omitempty"`
-	// Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-	TemplateTCPPort *string `json:"__template_tcpPort,omitempty"`
 }
 
 func (i InputSyslog) MarshalJSON() ([]byte, error) {
@@ -341,25 +335,4 @@ func (i *InputSyslog) GetEnableEnhancedProxyHeaderParsing() *bool {
 		return nil
 	}
 	return i.EnableEnhancedProxyHeaderParsing
-}
-
-func (i *InputSyslog) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputSyslog) GetTemplateUDPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateUDPPort
-}
-
-func (i *InputSyslog) GetTemplateTCPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTCPPort
 }

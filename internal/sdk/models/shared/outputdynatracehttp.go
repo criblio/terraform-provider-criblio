@@ -250,8 +250,6 @@ type OutputDynatraceHTTP struct {
 	ActiveGateDomain *string `json:"activeGateDomain,omitempty"`
 	// URL to send events to. Can be overwritten by an event's __url field.
 	URL *string `json:"url,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputDynatraceHTTP) MarshalJSON() ([]byte, error) {
@@ -585,11 +583,4 @@ func (o *OutputDynatraceHTTP) GetURL() *string {
 		return nil
 	}
 	return o.URL
-}
-
-func (o *OutputDynatraceHTTP) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
 }

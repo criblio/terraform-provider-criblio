@@ -111,20 +111,6 @@ type InputCrowdstrike struct {
 	ProcessedTagKey *string `json:"processedTagKey,omitempty"`
 	// The value for the S3 object tag applied after processing. This field accepts an expression for dynamic generation.
 	ProcessedTagValue *string `json:"processedTagValue,omitempty"`
-	// Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-	TemplateQueueName *string `json:"__template_queueName,omitempty"`
-	// Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.
-	TemplateAwsAccountID *string `json:"__template_awsAccountId,omitempty"`
-	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
-	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
-	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (i InputCrowdstrike) MarshalJSON() ([]byte, error) {
@@ -444,53 +430,4 @@ func (i *InputCrowdstrike) GetProcessedTagValue() *string {
 		return nil
 	}
 	return i.ProcessedTagValue
-}
-
-func (i *InputCrowdstrike) GetTemplateQueueName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateQueueName
-}
-
-func (i *InputCrowdstrike) GetTemplateAwsAccountID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsAccountID
-}
-
-func (i *InputCrowdstrike) GetTemplateAwsSecretKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsSecretKey
-}
-
-func (i *InputCrowdstrike) GetTemplateRegion() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateRegion
-}
-
-func (i *InputCrowdstrike) GetTemplateAssumeRoleArn() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleArn
-}
-
-func (i *InputCrowdstrike) GetTemplateAssumeRoleExternalID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleExternalID
-}
-
-func (i *InputCrowdstrike) GetTemplateAwsAPIKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsAPIKey
 }

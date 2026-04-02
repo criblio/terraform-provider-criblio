@@ -277,10 +277,6 @@ type OutputMicrosoftFabric struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                          `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputMicrosoftFabricPqControls `json:"pqControls,omitempty"`
-	// Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
-	TemplateTopic *string `json:"__template_topic,omitempty"`
-	// Binds 'bootstrap_server' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bootstrap_server' at runtime.
-	TemplateBootstrapServer *string `json:"__template_bootstrap_server,omitempty"`
 }
 
 func (o OutputMicrosoftFabric) MarshalJSON() ([]byte, error) {
@@ -551,18 +547,4 @@ func (o *OutputMicrosoftFabric) GetPqControls() *OutputMicrosoftFabricPqControls
 		return nil
 	}
 	return o.PqControls
-}
-
-func (o *OutputMicrosoftFabric) GetTemplateTopic() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateTopic
-}
-
-func (o *OutputMicrosoftFabric) GetTemplateBootstrapServer() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateBootstrapServer
 }

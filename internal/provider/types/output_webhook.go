@@ -7,9 +7,6 @@ import (
 )
 
 type OutputWebhook struct {
-	TemplateLoginURL              types.String                                     `tfsdk:"template_login_url"`
-	TemplateSecret                types.String                                     `tfsdk:"template_secret"`
-	TemplateURL                   types.String                                     `tfsdk:"template_url"`
 	AdvancedContentType           types.String                                     `tfsdk:"advanced_content_type"`
 	AuthHeaderExpr                types.String                                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`

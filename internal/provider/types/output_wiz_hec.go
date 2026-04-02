@@ -7,9 +7,6 @@ import (
 )
 
 type OutputWizHec struct {
-	TemplateDataCenter            types.String                                     `tfsdk:"template_data_center"`
-	TemplateWizEnvironment        types.String                                     `tfsdk:"template_wiz_environment"`
-	TemplateWizSourcetype         types.String                                     `tfsdk:"template_wiz_sourcetype"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                                       `tfsdk:"compress"`
 	Concurrency                   types.Float64                                    `tfsdk:"concurrency"`

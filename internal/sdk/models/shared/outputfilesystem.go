@@ -115,8 +115,6 @@ type OutputFilesystem struct {
 	DeadletterPath *string `json:"deadletterPath,omitempty"`
 	// The maximum number of times a file will attempt to move to its final destination before being dead-lettered
 	MaxRetryNum *float64 `json:"maxRetryNum,omitempty"`
-	// Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-	TemplateFormat *string `json:"__template_format,omitempty"`
 }
 
 func (o OutputFilesystem) MarshalJSON() ([]byte, error) {
@@ -429,11 +427,4 @@ func (o *OutputFilesystem) GetMaxRetryNum() *float64 {
 		return nil
 	}
 	return o.MaxRetryNum
-}
-
-func (o *OutputFilesystem) GetTemplateFormat() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateFormat
 }

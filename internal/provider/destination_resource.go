@@ -7,6 +7,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
+	speakeasy_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_planmodifierutils "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/utils"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -141,26 +144,27 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 		MarkdownDescription: "Destination Resource",
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
-				Optional: true,
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_default"), FieldPath: path.Root("output_default").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_webhook"), FieldPath: path.Root("output_webhook").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel"), FieldPath: path.Root("output_sentinel").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_devnull"), FieldPath: path.Root("output_devnull").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_syslog"), FieldPath: path.Root("output_syslog").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk"), FieldPath: path.Root("output_splunk").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_lb"), FieldPath: path.Root("output_splunk_lb").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_hec"), FieldPath: path.Root("output_splunk_hec").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wiz_hec"), FieldPath: path.Root("output_wiz_hec").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_tcpjson"), FieldPath: path.Root("output_tcpjson").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wavefront"), FieldPath: path.Root("output_wavefront").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_signalfx"), FieldPath: path.Root("output_signalfx").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_filesystem"), FieldPath: path.Root("output_filesystem").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_s3"), FieldPath: path.Root("output_s3").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_blob"), FieldPath: path.Root("output_azure_blob").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_data_explorer"), FieldPath: path.Root("output_azure_data_explorer").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_logs"), FieldPath: path.Root("output_azure_logs").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kinesis"), FieldPath: path.Root("output_kinesis").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_honeycomb"), FieldPath: path.Root("output_honeycomb").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_eventhub"), FieldPath: path.Root("output_azure_eventhub").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_chronicle"), FieldPath: path.Root("output_google_chronicle").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_storage"), FieldPath: path.Root("output_google_cloud_storage").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_logging"), FieldPath: path.Root("output_google_cloud_logging").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_pubsub"), FieldPath: path.Root("output_google_pubsub").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_exabeam"), FieldPath: path.Root("output_exabeam").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kafka"), FieldPath: path.Root("output_kafka").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_confluent_cloud"), FieldPath: path.Root("output_confluent_cloud").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_msk"), FieldPath: path.Root("output_msk").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic"), FieldPath: path.Root("output_elastic").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic_cloud"), FieldPath: path.Root("output_elastic_cloud").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic"), FieldPath: path.Root("output_newrelic").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic_events"), FieldPath: path.Root("output_newrelic_events").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_influxdb"), FieldPath: path.Root("output_influxdb").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudwatch"), FieldPath: path.Root("output_cloudwatch").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_minio"), FieldPath: path.Root("output_minio").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd"), FieldPath: path.Root("output_statsd").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd_ext"), FieldPath: path.Root("output_statsd_ext").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_graphite"), FieldPath: path.Root("output_graphite").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_router"), FieldPath: path.Root("output_router").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sns"), FieldPath: path.Root("output_sns").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sqs"), FieldPath: path.Root("output_sqs").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_snmp"), FieldPath: path.Root("output_snmp").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sumo_logic"), FieldPath: path.Root("output_sumo_logic").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_datadog"), FieldPath: path.Root("output_datadog").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_grafana_cloud"), FieldPath: path.Root("output_grafana_cloud").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_loki"), FieldPath: path.Root("output_loki").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_prometheus"), FieldPath: path.Root("output_prometheus").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_ring"), FieldPath: path.Root("output_ring").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_open_telemetry"), FieldPath: path.Root("output_open_telemetry").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_service_now"), FieldPath: path.Root("output_service_now").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dataset"), FieldPath: path.Root("output_dataset").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_tcp"), FieldPath: path.Root("output_cribl_tcp").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_http"), FieldPath: path.Root("output_cribl_http").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_search_engine"), FieldPath: path.Root("output_cribl_search_engine").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_humio_hec"), FieldPath: path.Root("output_humio_hec").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_crowdstrike_next_gen_siem"), FieldPath: path.Root("output_crowdstrike_next_gen_siem").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dl_s3"), FieldPath: path.Root("output_dl_s3").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_security_lake"), FieldPath: path.Root("output_security_lake").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_lake"), FieldPath: path.Root("output_cribl_lake").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_disk_spool"), FieldPath: path.Root("output_disk_spool").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_click_house"), FieldPath: path.Root("output_click_house").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_local_search_storage"), FieldPath: path.Root("output_local_search_storage").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_xsiam"), FieldPath: path.Root("output_xsiam").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_netflow"), FieldPath: path.Root("output_netflow").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_http"), FieldPath: path.Root("output_dynatrace_http").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_otlp"), FieldPath: path.Root("output_dynatrace_otlp").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel_one_ai_siem"), FieldPath: path.Root("output_sentinel_one_ai_siem").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_chronicle"), FieldPath: path.Root("output_chronicle").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_databricks"), FieldPath: path.Root("output_databricks").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_microsoft_fabric"), FieldPath: path.Root("output_microsoft_fabric").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudflare_r2"), FieldPath: path.Root("output_cloudflare_r2").AtName("environment")}}),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'Cribl'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `Unique identifier for this destination instance. Must match the ` + "`" + `id` + "`" + ` property within the Output object in the request body.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `Unique identifier for this destination instance. Must match the ` + "`" + `id` + "`" + ` property within the Output object in the request body. Requires replacement if changed.`,
 			},
 			"output_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -589,31 +593,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_client_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-					},
-					"template_connection_string": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.`,
-					},
-					"template_container_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'containerName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'containerName' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_tenant_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
 					},
 					"tenant_id": schema.StringAttribute{
 						Computed:    true,
@@ -1466,51 +1445,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[\w\-\.]+$`), "must match pattern "+regexp.MustCompile(`^[\w\-\.]+$`).String()),
 						},
 					},
-					"template_client_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.`,
-					},
-					"template_client_secret": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.`,
-					},
-					"template_cluster_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'clusterUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clusterUrl' at runtime.`,
-					},
-					"template_database": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_ingest_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'ingestUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'ingestUrl' at runtime.`,
-					},
-					"template_scope": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'scope' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'scope' at runtime.`,
-					},
-					"template_table": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'table' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'table' at runtime.`,
-					},
-					"template_tenant_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.`,
-					},
 					"tenant_id": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -2041,11 +1975,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_topic": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -2474,16 +2403,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_workspace_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'workspaceId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'workspaceId' at runtime.`,
-					},
-					"template_workspace_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'workspaceKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'workspaceKey' at runtime.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -3023,16 +2942,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_endpoint": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'endpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'endpoint' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -3188,10 +3097,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Collect data into batches for later processing. Disable to write to a ClickHouse table immediately.`,
 					},
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -3350,10 +3258,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
+						},
 					},
 					"mapping_type": schema.StringAttribute{
 						Computed:    true,
@@ -3391,19 +3301,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
@@ -3414,19 +3329,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -3612,16 +3532,14 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"sql_username": schema.StringAttribute{
 						Computed:    true,
@@ -3649,26 +3567,10 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`).String()),
 						},
 					},
-					"template_database": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.`,
-					},
-					"template_table_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Select or create a stored text secret`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -3783,22 +3685,22 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"token": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -3923,10 +3825,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Automatically calculate the schema based on the events of each Parquet file generated`,
 					},
 					"aws_api_key": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.`,
 					},
 					"aws_authentication_method": schema.StringAttribute{
 						Computed:    true,
@@ -4158,10 +4059,20 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"object_acl": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Object ACL to assign to uploaded objects. must be one of ["private", "public-read", "public-read-write", "authenticated-read", "aws-exec-read", "bucket-owner-read", "bucket-owner-full-control"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"private",
+								"public-read",
+								"public-read-write",
+								"authenticated-read",
+								"aws-exec-read",
+								"bucket-owner-read",
+								"bucket-owner-full-control",
+							),
+						},
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -4243,10 +4154,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Pipeline to process data before sending out to this output`,
 					},
 					"region": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2`,
 					},
 					"reject_unauthorized": schema.BoolAttribute{
 						Computed:    true,
@@ -4345,16 +4255,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -4709,31 +4609,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -5395,11 +5270,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_topic": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -5911,11 +5781,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -6077,11 +5942,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -6530,36 +6390,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_dest_path": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'destPath' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'destPath' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -7004,11 +6834,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -7170,11 +6995,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -7390,16 +7210,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -7589,16 +7399,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-					},
-					"template_port": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -8080,11 +7880,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -8624,11 +8419,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
 					},
 					"timeout_sec": schema.Int64Attribute{
 						Computed:    true,
@@ -9617,11 +9407,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_custom_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'customUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customUrl' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -10662,41 +10447,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -11147,11 +10897,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								"metrics",
 							),
 						},
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -12278,11 +12023,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -12351,11 +12091,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -13256,11 +12991,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"timezone_offset": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -13685,11 +13415,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -14194,21 +13919,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_api_version": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'apiVersion' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'apiVersion' at runtime.`,
-					},
-					"template_customer_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'customerId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customerId' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -15370,21 +15080,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -15523,11 +15218,13 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Description: `Maximum time to wait before sending a batch (when batch size limit is not reached)`,
 					},
-					"flush_period_sec": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"flush_period_sec": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.`,
+						Validators: []validator.Float64{
+							float64validator.AtLeast(0),
+						},
 					},
 					"google_auth_method": schema.StringAttribute{
 						Computed:    true,
@@ -15715,16 +15412,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
-					"template_topic_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.`,
-					},
 					"topic_name": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -15841,27 +15528,45 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"description": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"environment": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.`,
 					},
 					"extra_http_headers": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
+							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
@@ -15901,20 +15606,32 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"labels": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(``),
+									Computed: true,
+									Optional: true,
+									Default:  stringdefault.StaticString(``),
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Default: ""`,
 								},
 								"value": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
@@ -15930,11 +15647,17 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"loki_auth": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`basic`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`basic`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "basic"; must be one of ["none", "token", "textSecret", "basic", "credentialsSecret"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -15947,28 +15670,43 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"credentials_secret": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"password": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Password (API key in Grafana Cloud domain) for authentication`,
 							},
 							"text_secret": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Select or create a stored text secret`,
 							},
 							"token": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
 							},
 							"username": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Username for authentication`,
 							},
 						},
@@ -16000,8 +15738,11 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"message": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Name of the event field that contains the message to send. If not specified, Stream sends a JSON representation of the whole event.`,
 					},
 					"message_format": schema.StringAttribute{
@@ -16036,8 +15777,11 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"pipeline": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `Pipeline to process data before sending out to this output`,
 					},
 					"pq_compress": schema.StringAttribute{
@@ -16055,6 +15799,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"pq_controls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 					},
 					"pq_max_file_size": schema.StringAttribute{
 						Computed:    true,
@@ -16108,11 +15855,17 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"prometheus_auth": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"auth_type": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     stringdefault.StaticString(`basic`),
+								Computed: true,
+								Optional: true,
+								Default:  stringdefault.StaticString(`basic`),
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Default: "basic"; must be one of ["none", "token", "textSecret", "basic", "credentialsSecret"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -16125,28 +15878,43 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"credentials_secret": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Select or create a secret that references your credentials`,
 							},
 							"password": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Password (API key in Grafana Cloud domain) for authentication`,
 							},
 							"text_secret": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Select or create a stored text secret`,
 							},
 							"token": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>`,
 							},
 							"username": schema.StringAttribute{
-								Computed:    true,
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `Username for authentication`,
 							},
 						},
@@ -16177,23 +15945,35 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"response_retry_settings": schema.ListNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"backoff_rate": schema.Float64Attribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     float64default.StaticFloat64(2),
+									Computed: true,
+									Optional: true,
+									Default:  float64default.StaticFloat64(2),
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2`,
 									Validators: []validator.Float64{
 										float64validator.Between(1, 20),
 									},
 								},
 								"http_status": schema.Float64Attribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `The HTTP response status code that will trigger retries. Not Null`,
 									Validators: []validator.Float64{
 										speakeasy_float64validators.NotNull(),
@@ -16201,18 +15981,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									},
 								},
 								"initial_backoff": schema.Float64Attribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     float64default.StaticFloat64(1000),
+									Computed: true,
+									Optional: true,
+									Default:  float64default.StaticFloat64(1000),
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000`,
 									Validators: []validator.Float64{
 										float64validator.Between(0, 600000),
 									},
 								},
 								"max_backoff": schema.Float64Attribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     float64default.StaticFloat64(10000),
+									Computed: true,
+									Optional: true,
+									Default:  float64default.StaticFloat64(10000),
+									PlanModifiers: []planmodifier.Float64{
+										speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+									},
 									Description: `The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000`,
 									Validators: []validator.Float64{
 										float64validator.Between(10000, 180000),
@@ -17431,11 +17217,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -17597,10 +17378,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -17705,10 +17485,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
@@ -17735,19 +17517,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
@@ -17758,19 +17545,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -17961,16 +17753,14 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -17983,21 +17773,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_database": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -18071,16 +17846,17 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -18768,11 +18544,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_topic": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -19215,36 +18986,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
-					"template_stream_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -19769,21 +19510,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`).String()),
 						},
-					},
-					"template_database": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.`,
-					},
-					"template_table_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -20878,16 +20604,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_bootstrap_server": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bootstrap_server' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bootstrap_server' at runtime.`,
-					},
-					"template_topic": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -21447,26 +21163,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -22076,36 +21772,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
-					"template_topic": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.`,
-					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -22320,16 +21986,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										speakeasy_float64validators.NotNull(),
 										float64validator.AtMost(65535),
 									},
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 							},
 						},
@@ -22814,21 +22470,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_log_type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'logType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'logType' at runtime.`,
-					},
-					"template_message_field": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'messageField' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'messageField' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -23307,26 +22948,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_account_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'accountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'accountId' at runtime.`,
-					},
-					"template_custom_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'customUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'customUrl' at runtime.`,
-					},
-					"template_event_type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'eventType' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'eventType' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -23474,10 +23095,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -23626,10 +23246,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
+						},
 					},
 					"max_payload_size_kb": schema.Float64Attribute{
 						Computed:    true,
@@ -23679,19 +23301,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
@@ -23702,19 +23329,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -23922,16 +23554,14 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"streamtags": schema.ListAttribute{
 						Computed:    true,
@@ -24069,16 +23699,17 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -24180,10 +23811,9 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"auth_header_expr": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `JavaScript expression to compute the Authorization header value to pass in requests. The value ` + "`" + `${token}` + "`" + ` is used to reference the token obtained from authentication, e.g.: ` + "`" + `Bearer ${token}` + "`" + `.`,
 					},
 					"auth_type": schema.StringAttribute{
 						Computed:    true,
@@ -24268,10 +23898,12 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Unique ID for this output`,
 					},
 					"login_url": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `URL for OAuth`,
+						Validators: []validator.String{
+							stringvalidator.RegexMatches(regexp.MustCompile(`^https?://.*`), "must match pattern "+regexp.MustCompile(`^https?://.*`).String()),
+						},
 					},
 					"max_payload_events": schema.Float64Attribute{
 						Computed:    true,
@@ -24308,19 +23940,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth header value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"oauth_params": schema.ListNestedAttribute{
 						Computed: true,
@@ -24331,19 +23968,24 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 							Attributes: map[string]schema.Attribute{
 								"name": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter name. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 								"value": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Optional:    true,
-									Description: `Parsed as JSON.`,
+									Description: `OAuth parameter value. Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
 								},
 							},
 						},
+						Description: `Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request.`,
 					},
 					"on_backpressure": schema.StringAttribute{
 						Computed:    true,
@@ -24529,16 +24171,14 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `List of headers that are safe to log in plain text`,
 					},
 					"secret": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter value to pass in request body`,
 					},
 					"secret_param_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Secret parameter name to pass in request body`,
 					},
 					"send_metadata": schema.BoolAttribute{
 						Computed:    true,
@@ -24556,11 +24196,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -24619,16 +24254,17 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Bearer token to include in the authorization header`,
 					},
 					"token_attribute_name": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').`,
 					},
-					"token_timeout_secs": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
+					"token_timeout_secs": schema.Float64Attribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Parsed as JSON.`,
+						Description: `How often the OAuth token should be refreshed.`,
+						Validators: []validator.Float64{
+							float64validator.Between(1, 300000),
+						},
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -25565,41 +25201,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_format": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -26158,36 +25759,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_bucket": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"type": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -26691,46 +26262,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_client_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'client_id' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'client_id' at runtime.`,
-					},
-					"template_dce_endpoint": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'dceEndpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dceEndpoint' at runtime.`,
-					},
-					"template_dcr_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'dcrID' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dcrID' at runtime.`,
-					},
-					"template_login_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'loginUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'loginUrl' at runtime.`,
-					},
-					"template_scope": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'scope' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'scope' at runtime.`,
-					},
-					"template_secret": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'secret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'secret' at runtime.`,
-					},
-					"template_stream_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
 					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
@@ -28509,16 +28040,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 										float64validator.AtMost(65535),
 									},
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 							},
 						},
 						Description: `One or more SNMP destinations to forward traps to. Not Null`,
@@ -28869,31 +28390,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
-					},
 					"topic_arn": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -29220,16 +28716,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-					},
-					"template_port": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -29736,11 +29222,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -29890,11 +29371,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -30096,16 +29572,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Computed:    true,
 									Optional:    true,
 									Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
-								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 								},
 								"tls": schema.StringAttribute{
 									Computed:    true,
@@ -30880,41 +30346,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_assume_role_arn": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.`,
-					},
-					"template_assume_role_external_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.`,
-					},
-					"template_aws_account_id": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsAccountId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsAccountId' at runtime.`,
-					},
-					"template_aws_api_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.`,
-					},
-					"template_aws_secret_key": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.`,
-					},
-					"template_queue_name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.`,
-					},
-					"template_region": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.`,
 					},
 					"type": schema.StringAttribute{
 						Computed:    true,
@@ -31892,11 +31323,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"timeout_retry_settings": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
@@ -32158,16 +31584,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -32409,16 +31825,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-					},
-					"template_port": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 					},
 					"throttle_rate_per_sec": schema.StringAttribute{
 						Computed:    true,
@@ -32701,16 +32107,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 									Optional:    true,
 									Description: `Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.`,
 								},
-								"template_host": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-								},
-								"template_port": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
-								},
 								"tls": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -32905,16 +32301,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
-					},
-					"template_host": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.`,
-					},
-					"template_port": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -34021,21 +33407,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_login_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'loginUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'loginUrl' at runtime.`,
-					},
-					"template_secret": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'secret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'secret' at runtime.`,
-					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -34204,11 +33575,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"template_url": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-								},
 								"url": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
@@ -34623,21 +33989,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Computed:    true,
 						Optional:    true,
 						Description: `In the Splunk app, set the value of _TCP_ROUTING for events that do not have _ctrl._TCP_ROUTING set.`,
-					},
-					"template_data_center": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'data_center' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'data_center' at runtime.`,
-					},
-					"template_wiz_environment": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'wiz_environment' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'wiz_environment' at runtime.`,
-					},
-					"template_wiz_sourcetype": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'wiz_sourcetype' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'wiz_sourcetype' at runtime.`,
 					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
@@ -35180,11 +34531,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 						ElementType: types.StringType,
 						Description: `Fields to automatically add to events, such as cribl_pipe. Supports wildcards.`,
 					},
-					"template_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.`,
-					},
 					"text_secret": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -35384,7 +34730,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"pipeline": schema.StringAttribute{
-				Optional: true,
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_default"), FieldPath: path.Root("output_default").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_webhook"), FieldPath: path.Root("output_webhook").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel"), FieldPath: path.Root("output_sentinel").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_devnull"), FieldPath: path.Root("output_devnull").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_syslog"), FieldPath: path.Root("output_syslog").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk"), FieldPath: path.Root("output_splunk").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_lb"), FieldPath: path.Root("output_splunk_lb").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_hec"), FieldPath: path.Root("output_splunk_hec").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wiz_hec"), FieldPath: path.Root("output_wiz_hec").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_tcpjson"), FieldPath: path.Root("output_tcpjson").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wavefront"), FieldPath: path.Root("output_wavefront").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_signalfx"), FieldPath: path.Root("output_signalfx").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_filesystem"), FieldPath: path.Root("output_filesystem").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_s3"), FieldPath: path.Root("output_s3").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_blob"), FieldPath: path.Root("output_azure_blob").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_data_explorer"), FieldPath: path.Root("output_azure_data_explorer").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_logs"), FieldPath: path.Root("output_azure_logs").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kinesis"), FieldPath: path.Root("output_kinesis").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_honeycomb"), FieldPath: path.Root("output_honeycomb").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_eventhub"), FieldPath: path.Root("output_azure_eventhub").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_chronicle"), FieldPath: path.Root("output_google_chronicle").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_storage"), FieldPath: path.Root("output_google_cloud_storage").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_logging"), FieldPath: path.Root("output_google_cloud_logging").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_pubsub"), FieldPath: path.Root("output_google_pubsub").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_exabeam"), FieldPath: path.Root("output_exabeam").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kafka"), FieldPath: path.Root("output_kafka").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_confluent_cloud"), FieldPath: path.Root("output_confluent_cloud").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_msk"), FieldPath: path.Root("output_msk").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic"), FieldPath: path.Root("output_elastic").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic_cloud"), FieldPath: path.Root("output_elastic_cloud").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic"), FieldPath: path.Root("output_newrelic").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic_events"), FieldPath: path.Root("output_newrelic_events").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_influxdb"), FieldPath: path.Root("output_influxdb").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudwatch"), FieldPath: path.Root("output_cloudwatch").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_minio"), FieldPath: path.Root("output_minio").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd"), FieldPath: path.Root("output_statsd").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd_ext"), FieldPath: path.Root("output_statsd_ext").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_graphite"), FieldPath: path.Root("output_graphite").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_router"), FieldPath: path.Root("output_router").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sns"), FieldPath: path.Root("output_sns").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sqs"), FieldPath: path.Root("output_sqs").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_snmp"), FieldPath: path.Root("output_snmp").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sumo_logic"), FieldPath: path.Root("output_sumo_logic").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_datadog"), FieldPath: path.Root("output_datadog").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_grafana_cloud"), FieldPath: path.Root("output_grafana_cloud").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_loki"), FieldPath: path.Root("output_loki").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_prometheus"), FieldPath: path.Root("output_prometheus").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_ring"), FieldPath: path.Root("output_ring").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_open_telemetry"), FieldPath: path.Root("output_open_telemetry").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_service_now"), FieldPath: path.Root("output_service_now").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dataset"), FieldPath: path.Root("output_dataset").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_tcp"), FieldPath: path.Root("output_cribl_tcp").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_http"), FieldPath: path.Root("output_cribl_http").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_search_engine"), FieldPath: path.Root("output_cribl_search_engine").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_humio_hec"), FieldPath: path.Root("output_humio_hec").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_crowdstrike_next_gen_siem"), FieldPath: path.Root("output_crowdstrike_next_gen_siem").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dl_s3"), FieldPath: path.Root("output_dl_s3").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_security_lake"), FieldPath: path.Root("output_security_lake").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_lake"), FieldPath: path.Root("output_cribl_lake").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_disk_spool"), FieldPath: path.Root("output_disk_spool").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_click_house"), FieldPath: path.Root("output_click_house").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_local_search_storage"), FieldPath: path.Root("output_local_search_storage").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_xsiam"), FieldPath: path.Root("output_xsiam").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_netflow"), FieldPath: path.Root("output_netflow").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_http"), FieldPath: path.Root("output_dynatrace_http").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_otlp"), FieldPath: path.Root("output_dynatrace_otlp").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel_one_ai_siem"), FieldPath: path.Root("output_sentinel_one_ai_siem").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_chronicle"), FieldPath: path.Root("output_chronicle").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_databricks"), FieldPath: path.Root("output_databricks").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_microsoft_fabric"), FieldPath: path.Root("output_microsoft_fabric").AtName("pipeline")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudflare_r2"), FieldPath: path.Root("output_cloudflare_r2").AtName("pipeline")}}),
@@ -35392,7 +34737,6 @@ func (r *DestinationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Pipeline to process data before sending out to this output`,
 			},
 			"type": schema.StringAttribute{
-				Optional: true,
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_default"), FieldPath: path.Root("output_default").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_webhook"), FieldPath: path.Root("output_webhook").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel"), FieldPath: path.Root("output_sentinel").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_devnull"), FieldPath: path.Root("output_devnull").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_syslog"), FieldPath: path.Root("output_syslog").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk"), FieldPath: path.Root("output_splunk").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_lb"), FieldPath: path.Root("output_splunk_lb").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_splunk_hec"), FieldPath: path.Root("output_splunk_hec").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wiz_hec"), FieldPath: path.Root("output_wiz_hec").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_tcpjson"), FieldPath: path.Root("output_tcpjson").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_wavefront"), FieldPath: path.Root("output_wavefront").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_signalfx"), FieldPath: path.Root("output_signalfx").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_filesystem"), FieldPath: path.Root("output_filesystem").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_s3"), FieldPath: path.Root("output_s3").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_blob"), FieldPath: path.Root("output_azure_blob").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_data_explorer"), FieldPath: path.Root("output_azure_data_explorer").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_logs"), FieldPath: path.Root("output_azure_logs").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kinesis"), FieldPath: path.Root("output_kinesis").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_honeycomb"), FieldPath: path.Root("output_honeycomb").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_azure_eventhub"), FieldPath: path.Root("output_azure_eventhub").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_chronicle"), FieldPath: path.Root("output_google_chronicle").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_storage"), FieldPath: path.Root("output_google_cloud_storage").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_cloud_logging"), FieldPath: path.Root("output_google_cloud_logging").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_google_pubsub"), FieldPath: path.Root("output_google_pubsub").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_exabeam"), FieldPath: path.Root("output_exabeam").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_kafka"), FieldPath: path.Root("output_kafka").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_confluent_cloud"), FieldPath: path.Root("output_confluent_cloud").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_msk"), FieldPath: path.Root("output_msk").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic"), FieldPath: path.Root("output_elastic").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_elastic_cloud"), FieldPath: path.Root("output_elastic_cloud").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic"), FieldPath: path.Root("output_newrelic").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_newrelic_events"), FieldPath: path.Root("output_newrelic_events").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_influxdb"), FieldPath: path.Root("output_influxdb").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudwatch"), FieldPath: path.Root("output_cloudwatch").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_minio"), FieldPath: path.Root("output_minio").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd"), FieldPath: path.Root("output_statsd").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_statsd_ext"), FieldPath: path.Root("output_statsd_ext").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_graphite"), FieldPath: path.Root("output_graphite").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_router"), FieldPath: path.Root("output_router").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sns"), FieldPath: path.Root("output_sns").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sqs"), FieldPath: path.Root("output_sqs").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_snmp"), FieldPath: path.Root("output_snmp").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sumo_logic"), FieldPath: path.Root("output_sumo_logic").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_datadog"), FieldPath: path.Root("output_datadog").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_grafana_cloud"), FieldPath: path.Root("output_grafana_cloud").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_loki"), FieldPath: path.Root("output_loki").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_prometheus"), FieldPath: path.Root("output_prometheus").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_ring"), FieldPath: path.Root("output_ring").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_open_telemetry"), FieldPath: path.Root("output_open_telemetry").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_service_now"), FieldPath: path.Root("output_service_now").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dataset"), FieldPath: path.Root("output_dataset").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_tcp"), FieldPath: path.Root("output_cribl_tcp").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_http"), FieldPath: path.Root("output_cribl_http").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_search_engine"), FieldPath: path.Root("output_cribl_search_engine").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_humio_hec"), FieldPath: path.Root("output_humio_hec").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_crowdstrike_next_gen_siem"), FieldPath: path.Root("output_crowdstrike_next_gen_siem").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dl_s3"), FieldPath: path.Root("output_dl_s3").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_security_lake"), FieldPath: path.Root("output_security_lake").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cribl_lake"), FieldPath: path.Root("output_cribl_lake").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_disk_spool"), FieldPath: path.Root("output_disk_spool").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_click_house"), FieldPath: path.Root("output_click_house").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_local_search_storage"), FieldPath: path.Root("output_local_search_storage").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_xsiam"), FieldPath: path.Root("output_xsiam").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_netflow"), FieldPath: path.Root("output_netflow").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_http"), FieldPath: path.Root("output_dynatrace_http").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_dynatrace_otlp"), FieldPath: path.Root("output_dynatrace_otlp").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_sentinel_one_ai_siem"), FieldPath: path.Root("output_sentinel_one_ai_siem").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_chronicle"), FieldPath: path.Root("output_chronicle").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_databricks"), FieldPath: path.Root("output_databricks").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_microsoft_fabric"), FieldPath: path.Root("output_microsoft_fabric").AtName("type")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("output_cloudflare_r2"), FieldPath: path.Root("output_cloudflare_r2").AtName("type")}}),

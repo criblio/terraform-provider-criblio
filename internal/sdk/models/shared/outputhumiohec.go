@@ -122,8 +122,6 @@ type OutputHumioHec struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                   `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputHumioHecPqControls `json:"pqControls,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (o OutputHumioHec) MarshalJSON() ([]byte, error) {
@@ -408,11 +406,4 @@ func (o *OutputHumioHec) GetPqControls() *OutputHumioHecPqControls {
 		return nil
 	}
 	return o.PqControls
-}
-
-func (o *OutputHumioHec) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
 }
