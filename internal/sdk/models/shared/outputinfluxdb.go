@@ -288,12 +288,6 @@ type OutputInfluxdb struct {
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
-	TemplateDatabase *string `json:"__template_database,omitempty"`
-	// Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
-	TemplateBucket *string `json:"__template_bucket,omitempty"`
 	// URL for OAuth
 	LoginURL *string `json:"loginUrl,omitempty"`
 	// Secret parameter name to pass in request body
@@ -657,27 +651,6 @@ func (o *OutputInfluxdb) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
-}
-
-func (o *OutputInfluxdb) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
-}
-
-func (o *OutputInfluxdb) GetTemplateDatabase() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDatabase
-}
-
-func (o *OutputInfluxdb) GetTemplateBucket() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateBucket
 }
 
 func (o *OutputInfluxdb) GetLoginURL() *string {

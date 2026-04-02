@@ -7,10 +7,6 @@ import (
 )
 
 type OutputNewrelicEvents struct {
-	TemplateAccountID             types.String                     `tfsdk:"template_account_id"`
-	TemplateCustomURL             types.String                     `tfsdk:"template_custom_url"`
-	TemplateEventType             types.String                     `tfsdk:"template_event_type"`
-	TemplateRegion                types.String                     `tfsdk:"template_region"`
 	AccountID                     types.String                     `tfsdk:"account_id"`
 	APIKey                        types.String                     `tfsdk:"api_key"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`

@@ -192,8 +192,6 @@ type OutputPrometheus struct {
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
 	// URL for OAuth
 	LoginURL *string `json:"loginUrl,omitempty"`
 	// Secret parameter name to pass in request body
@@ -522,13 +520,6 @@ func (o *OutputPrometheus) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
-}
-
-func (o *OutputPrometheus) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
 }
 
 func (o *OutputPrometheus) GetLoginURL() *string {

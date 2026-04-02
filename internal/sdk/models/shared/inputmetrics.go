@@ -67,12 +67,6 @@ type InputMetrics struct {
 	// Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 	UDPSocketRxBufSize *float64 `json:"udpSocketRxBufSize,omitempty"`
 	Description        *string  `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
-	TemplateUDPPort *string `json:"__template_udpPort,omitempty"`
-	// Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-	TemplateTCPPort *string `json:"__template_tcpPort,omitempty"`
 }
 
 func (i InputMetrics) MarshalJSON() ([]byte, error) {
@@ -224,25 +218,4 @@ func (i *InputMetrics) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputMetrics) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputMetrics) GetTemplateUDPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateUDPPort
-}
-
-func (i *InputMetrics) GetTemplateTCPPort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTCPPort
 }

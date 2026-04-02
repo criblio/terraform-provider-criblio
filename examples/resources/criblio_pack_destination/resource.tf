@@ -73,15 +73,10 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_client_id         = "...my_template_client_id..."
-    template_connection_string = "...my_template_connection_string..."
-    template_container_name    = "...my_template_container_name..."
-    template_format            = "...my_template_format..."
-    template_tenant_id         = "...my_template_tenant_id..."
-    tenant_id                  = "00000000-0000-0000-0000-000000000000"
-    text_secret                = "azure-connstr-secret"
-    type                       = "azure_blob"
-    write_high_water_mark      = 256
+    tenant_id             = "00000000-0000-0000-0000-000000000000"
+    text_secret           = "azure-connstr-secret"
+    type                  = "azure_blob"
+    write_high_water_mark = 256
   }
   output_azure_data_explorer = {
     add_id_to_stage_path = true
@@ -202,18 +197,9 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    table                  = "logs_raw"
-    template_client_id     = "...my_template_client_id..."
-    template_client_secret = "...my_template_client_secret..."
-    template_cluster_url   = "...my_template_cluster_url..."
-    template_database      = "...my_template_database..."
-    template_format        = "...my_template_format..."
-    template_ingest_url    = "...my_template_ingest_url..."
-    template_scope         = "...my_template_scope..."
-    template_table         = "...my_template_table..."
-    template_tenant_id     = "...my_template_tenant_id..."
-    tenant_id              = "00000000-0000-0000-0000-000000000000"
-    text_secret            = "adx-client-secret"
+    table       = "logs_raw"
+    tenant_id   = "00000000-0000-0000-0000-000000000000"
+    text_secret = "adx-client-secret"
     timeout_retry_settings = {
       backoff_rate    = 15.6
       initial_backoff = 71830.59
@@ -287,7 +273,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       disabled            = false
       reject_unauthorized = false
@@ -352,8 +337,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_workspace_id  = "...my_template_workspace_id..."
-    template_workspace_key = "...my_template_workspace_key..."
     timeout_retry_settings = {
       backoff_rate    = 1.28
       initial_backoff = 379283.94
@@ -436,8 +419,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_endpoint = "...my_template_endpoint..."
-    template_region   = "...my_template_region..."
     timeout_retry_settings = {
       backoff_rate    = 19.58
       initial_backoff = 476612.3
@@ -540,11 +521,8 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    table_name          = "app_events"
-    template_database   = "...my_template_database..."
-    template_table_name = "...my_template_table_name..."
-    template_url        = "...my_template_url..."
-    text_secret         = "clickhouse_bearer_token"
+    table_name  = "app_events"
+    text_secret = "clickhouse_bearer_token"
     timeout_retry_settings = {
       backoff_rate    = 11.96
       initial_backoff = 42734.45
@@ -643,8 +621,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
     type                  = "cloudflare_r2"
     verify_permissions    = false
     write_high_water_mark = 1607.6
@@ -694,12 +670,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    type                             = "cloudwatch"
+    type = "cloudwatch"
   }
   output_confluent_cloud = {
     ack                    = 8
@@ -800,7 +771,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -885,7 +855,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url          = "...my_template_url..."
     throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
     timeout_retry_settings = {
       backoff_rate    = 9.19
@@ -911,9 +880,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url               = "https://edge.example.com:10200"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "...my_url..."
-        weight       = 0.17
+        url    = "...my_url..."
+        weight = 0.17
       }
     ]
     use_round_robin_dns = true
@@ -976,15 +944,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_dest_path               = "...my_template_dest_path..."
-    template_region                  = "...my_template_region..."
-    type                             = "cribl_lake"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "cribl_lake"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_cribl_search_engine = {
     auth_tokens = [
@@ -1051,7 +1013,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_url          = "...my_template_url..."
     throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
     timeout_retry_settings = {
       backoff_rate    = 10.68
@@ -1077,9 +1038,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url               = "...my_url..."
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "...my_url..."
-        weight       = 5.35
+        url    = "...my_url..."
+        weight = 5.35
       }
     ]
     use_round_robin_dns = false
@@ -1105,13 +1065,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host         = "edge01.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 61317.22
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "inherit"
-        weight        = 1.12
+        host       = "...my_host..."
+        port       = 61317.22
+        servername = "...my_servername..."
+        tls        = "inherit"
+        weight     = 1.12
       }
     ]
     id                            = "cribl_tcp_prod"
@@ -1144,8 +1102,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     throttle_rate_per_sec = "10 MB"
     tls = {
       ca_path             = "...my_ca_path..."
@@ -1219,8 +1175,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "crowdstrike_nextgen_token"
+    text_secret = "crowdstrike_nextgen_token"
     timeout_retry_settings = {
       backoff_rate    = 9.38
       initial_backoff = 492268.73
@@ -1296,7 +1251,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_format       = "...my_template_format..."
     timeout_sec           = 36
     type                  = "databricks"
     workspace_id          = "...my_workspace_id..."
@@ -1450,8 +1404,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_custom_url = "...my_template_custom_url..."
-    text_secret         = "dataset_api_key"
+    text_secret = "dataset_api_key"
     timeout_retry_settings = {
       backoff_rate    = 12.05
       initial_backoff = 227296.99
@@ -1591,16 +1544,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_format                  = "...my_template_format..."
-    template_region                  = "...my_template_region..."
-    type                             = "dl_s3"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "dl_s3"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_dynatrace_http = {
     active_gate_domain = "https://activegate.example.com:9999/e/abc12345/api/v2/logs/ingest"
@@ -1664,7 +1610,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_breaker",
     ]
     telemetry_type = "logs"
-    template_url   = "...my_template_url..."
     text_secret    = "dynatrace_api_token"
     timeout_retry_settings = {
       backoff_rate    = 12.37
@@ -1838,7 +1783,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_url = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 9.56
       initial_backoff = 522024.45
@@ -1850,9 +1794,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url         = "https://es.example.com:9200/_bulk"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "https://es-node-1.example.com:9200/_bulk"
-        weight       = 2
+        url    = "https://es-node-1.example.com:9200/_bulk"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -1985,7 +1928,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_region = "...my_template_region..."
     timezone_offset = "-07:00"
     type            = "exabeam"
   }
@@ -2047,7 +1989,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_format       = "...my_template_format..."
     type                  = "filesystem"
     write_high_water_mark = 256
   }
@@ -2127,9 +2068,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_api_version = "...my_template_api_version..."
-    template_customer_id = "...my_template_customer_id..."
-    template_region      = "...my_template_region..."
     timeout_retry_settings = {
       backoff_rate    = 4.63
       initial_backoff = 22588.87
@@ -2301,9 +2239,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
-    template_region       = "...my_template_region..."
     type                  = "google_cloud_storage"
     verify_permissions    = true
     write_high_water_mark = 256
@@ -2348,10 +2283,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_region     = "...my_template_region..."
-    template_topic_name = "...my_template_topic_name..."
-    topic_name          = "app-events"
-    type                = "google_pubsub"
+    topic_name = "app-events"
+    type       = "google_pubsub"
   }
   output_grafana_cloud = {
     compress    = true
@@ -2600,8 +2533,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "humio_hec_token"
+    text_secret = "humio_hec_token"
     timeout_retry_settings = {
       backoff_rate    = 19.48
       initial_backoff = 366619.61
@@ -2691,10 +2623,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_bucket   = "...my_template_bucket..."
-    template_database = "...my_template_database..."
-    template_url      = "...my_template_url..."
-    text_secret       = "influxdb_token"
+    text_secret = "influxdb_token"
     timeout_retry_settings = {
       backoff_rate    = 1.3
       initial_backoff = 389060.46
@@ -2813,7 +2742,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2876,14 +2804,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    template_stream_name             = "...my_template_stream_name..."
-    type                             = "kinesis"
-    use_list_shards                  = true
+    type            = "kinesis"
+    use_list_shards = true
   }
   output_local_search_storage = {
     async_inserts = false
@@ -2964,10 +2886,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    table_name          = "...my_table_name..."
-    template_database   = "...my_template_database..."
-    template_table_name = "...my_template_table_name..."
-    template_url        = "...my_template_url..."
+    table_name = "...my_table_name..."
     timeout_retry_settings = {
       backoff_rate    = 8.7
       initial_backoff = 188575.59
@@ -3129,8 +3048,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_bootstrap_server = "...my_template_bootstrap_server..."
-    template_topic            = "...my_template_topic..."
     tls = {
       disabled            = false
       reject_unauthorized = false
@@ -3211,10 +3128,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_aws_api_key  = "...my_template_aws_api_key..."
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
-    template_region       = "...my_template_region..."
     type                  = "minio"
     verify_permissions    = true
     write_high_water_mark = 256
@@ -3304,12 +3217,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    template_topic                   = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -3332,10 +3239,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     environment            = "main"
     hosts = [
       {
-        host          = "netflow-collector.example.com"
-        port          = 2055
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
+        host = "netflow-collector.example.com"
+        port = 2055
       }
     ]
     id              = "netflow_export_prod"
@@ -3417,10 +3322,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_log_type      = "...my_template_log_type..."
-    template_message_field = "...my_template_message_field..."
-    template_region        = "...my_template_region..."
-    text_secret            = "newrelic_api_key"
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
       backoff_rate    = 1.72
       initial_backoff = 577081.54
@@ -3492,11 +3394,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_account_id = "...my_template_account_id..."
-    template_custom_url = "...my_template_custom_url..."
-    template_event_type = "...my_template_event_type..."
-    template_region     = "...my_template_region..."
-    text_secret         = "newrelic_api_key"
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
       backoff_rate    = 19.98
       initial_backoff = 99705.33
@@ -3696,8 +3594,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_host",
       "cribl_wp",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "prometheus_bearer_token"
+    text_secret = "prometheus_bearer_token"
     timeout_retry_settings = {
       backoff_rate    = 9.91
       initial_backoff = 299842.71
@@ -3836,16 +3733,9 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_format                  = "...my_template_format..."
-    template_region                  = "...my_template_region..."
-    type                             = "s3"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "s3"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_security_lake = {
     account_id                = "123456789012"
@@ -3922,15 +3812,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_region                  = "...my_template_region..."
-    type                             = "security_lake"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "security_lake"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_sentinel = {
     advanced_content_type      = "application/json"
@@ -4003,14 +3887,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_client_id    = "...my_template_client_id..."
-    template_dce_endpoint = "...my_template_dce_endpoint..."
-    template_dcr_id       = "...my_template_dcr_id..."
-    template_login_url    = "...my_template_login_url..."
-    template_scope        = "...my_template_scope..."
-    template_secret       = "...my_template_secret..."
-    template_stream_name  = "...my_template_stream_name..."
-    template_url          = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 6.35
       initial_backoff = 55942.62
@@ -4267,10 +4143,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     environment            = "main"
     hosts = [
       {
-        host          = "snmp01.example.com"
-        port          = 162
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
+        host = "snmp01.example.com"
+        port = 162
       }
     ]
     id       = "snmp_trap_forwarder"
@@ -4328,13 +4202,8 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    topic_arn                        = "arn:aws:sns:us-east-1:123456789012:alerts-topic"
-    type                             = "sns"
+    topic_arn = "arn:aws:sns:us-east-1:123456789012:alerts-topic"
+    type      = "sns"
   }
   output_splunk = {
     auth_token               = "***REDACTED***"
@@ -4375,8 +4244,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     text_secret           = "splunk-indexer-token"
     throttle_rate_per_sec = "50 MB"
     tls = {
@@ -4453,9 +4320,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    tcp_routing  = "default_route"
-    template_url = "...my_template_url..."
-    text_secret  = "splunk-hec-token"
+    tcp_routing = "default_route"
+    text_secret = "splunk-hec-token"
     timeout_retry_settings = {
       backoff_rate    = 12.64
       initial_backoff = 425987.93
@@ -4479,9 +4345,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url   = "http://splunk-hec.example.com:8088/services/collector/event"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "http://splunk-hec-2.example.com:8088/services/collector/event"
-        weight       = 2
+        url    = "http://splunk-hec-2.example.com:8088/services/collector/event"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -4499,13 +4364,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     exclude_self           = false
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 45464.92
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "off"
-        weight        = 4.85
+        host       = "...my_host..."
+        port       = 45464.92
+        servername = "...my_servername..."
+        tls        = "off"
+        weight     = 4.85
       }
     ]
     id                = "splunk-lb-main"
@@ -4623,14 +4486,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "sqs"
+    type = "sqs"
   }
   output_statsd = {
     connection_timeout     = 10000
@@ -4767,7 +4623,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 15.65
       initial_backoff = 147734.27
@@ -4792,13 +4647,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host                   = "syslog.receiver.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 14583.92
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "inherit"
-        weight        = 0.09
+        host       = "...my_host..."
+        port       = 14583.92
+        servername = "...my_servername..."
+        tls        = "inherit"
+        weight     = 0.09
       }
     ]
     id                            = "syslog-out"
@@ -4834,8 +4687,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     throttle_rate_per_sec = "0"
     timestamp_format      = "syslog"
     tls = {
@@ -4866,13 +4717,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host                   = "tcp.receiver.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 8100.96
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "off"
-        weight        = 7.27
+        host       = "...my_host..."
+        port       = 8100.96
+        servername = "...my_servername..."
+        tls        = "off"
+        weight     = 7.27
       }
     ]
     id                            = "tcpjson-out"
@@ -4905,8 +4754,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     text_secret           = "tcpjson-auth-token"
     throttle_rate_per_sec = "50 MB"
     tls = {
@@ -5076,10 +4923,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_login_url = "...my_template_login_url..."
-    template_secret    = "...my_template_secret..."
-    template_url       = "...my_template_url..."
-    text_secret        = "webhook-token-secret"
+    text_secret = "webhook-token-secret"
     timeout_retry_settings = {
       backoff_rate    = 18.85
       initial_backoff = 131843.06
@@ -5106,9 +4950,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url                   = "https://hooks.example.com/ingest"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "https://hooks1.example.com/ingest"
-        weight       = 2
+        url    = "https://hooks1.example.com/ingest"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -5168,11 +5011,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    tcp_routing              = "...my_tcp_routing..."
-    template_data_center     = "...my_template_data_center..."
-    template_wiz_environment = "...my_template_wiz_environment..."
-    template_wiz_sourcetype  = "...my_template_wiz_sourcetype..."
-    text_secret              = "...my_text_secret..."
+    tcp_routing = "...my_tcp_routing..."
+    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
       backoff_rate    = 19.63
       initial_backoff = 227483.41
@@ -5255,7 +5095,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url              = "...my_template_url..."
     text_secret               = "xsiam_token"
     throttle_rate_req_per_sec = 500
     timeout_retry_settings = {

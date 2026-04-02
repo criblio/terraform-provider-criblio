@@ -7,10 +7,6 @@ import (
 )
 
 type OutputMinio struct {
-	TemplateAwsAPIKey       types.String                `tfsdk:"template_aws_api_key"`
-	TemplateBucket          types.String                `tfsdk:"template_bucket"`
-	TemplateFormat          types.String                `tfsdk:"template_format"`
-	TemplateRegion          types.String                `tfsdk:"template_region"`
 	AddIDToStagePath        types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AutomaticSchema         types.Bool                  `tfsdk:"automatic_schema"`
 	AwsAPIKey               types.String                `tfsdk:"aws_api_key"`

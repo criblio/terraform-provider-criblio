@@ -114,10 +114,6 @@ type OutputSplunk struct {
 	AuthToken *string `json:"authToken,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (o OutputSplunk) MarshalJSON() ([]byte, error) {
@@ -381,18 +377,4 @@ func (o *OutputSplunk) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
-}
-
-func (o *OutputSplunk) GetTemplateHost() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateHost
-}
-
-func (o *OutputSplunk) GetTemplatePort() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplatePort
 }

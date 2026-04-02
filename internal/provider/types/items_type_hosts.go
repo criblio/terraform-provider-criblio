@@ -7,11 +7,9 @@ import (
 )
 
 type ItemsTypeHosts struct {
-	TemplateHost types.String  `tfsdk:"template_host"`
-	TemplatePort types.String  `tfsdk:"template_port"`
-	Host         types.String  `tfsdk:"host"`
-	Port         types.Float64 `tfsdk:"port"`
-	Servername   types.String  `tfsdk:"servername"`
-	TLS          types.String  `tfsdk:"tls"`
-	Weight       types.Float64 `tfsdk:"weight"`
+	Host       types.String  `tfsdk:"host"`
+	Port       types.Float64 `tfsdk:"port"`
+	Servername types.String  `tfsdk:"servername"`
+	TLS        types.String  `tfsdk:"tls"`
+	Weight     types.Float64 `tfsdk:"weight"`
 }

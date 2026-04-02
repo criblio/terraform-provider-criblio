@@ -7,7 +7,6 @@ import (
 )
 
 type OutputXsiam struct {
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Concurrency                   types.Float64                    `tfsdk:"concurrency"`
 	Description                   types.String                     `tfsdk:"description"`

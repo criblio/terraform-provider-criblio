@@ -493,10 +493,6 @@ type InputWef struct {
 	Description *string             `json:"description,omitempty"`
 	// Log a warning if the client certificate authority (CA) fingerprint does not match the expected value. A mismatch prevents Cribl from receiving events from the Windows Event Forwarder.
 	LogFingerprintMismatch *bool `json:"logFingerprintMismatch,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (i InputWef) MarshalJSON() ([]byte, error) {
@@ -725,18 +721,4 @@ func (i *InputWef) GetLogFingerprintMismatch() *bool {
 		return nil
 	}
 	return i.LogFingerprintMismatch
-}
-
-func (i *InputWef) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputWef) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
 }

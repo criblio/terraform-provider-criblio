@@ -28,7 +28,6 @@ resource "criblio_pack" "my_pack" {
   group_id               = "Cribl"
   id                     = "pack-apache-logs"
   inputs                 = 2
-  is_disabled            = false
   min_log_stream_version = "4.10.0"
   outputs                = 1
   source                 = "https://github.com/org/packs/apache"

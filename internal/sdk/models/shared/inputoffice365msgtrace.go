@@ -102,14 +102,6 @@ type InputOffice365MsgTrace struct {
 	// Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 	TextSecret  *string          `json:"textSecret,omitempty"`
 	CertOptions *CertOptionsType `json:"certOptions,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
-	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-	TemplateClientID *string `json:"__template_clientId,omitempty"`
-	// Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
-	TemplateResource *string `json:"__template_resource,omitempty"`
 }
 
 func (i InputOffice365MsgTrace) MarshalJSON() ([]byte, error) {
@@ -387,34 +379,6 @@ func (i *InputOffice365MsgTrace) GetCertOptions() *CertOptionsType {
 		return nil
 	}
 	return i.CertOptions
-}
-
-func (i *InputOffice365MsgTrace) GetTemplateURL() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateURL
-}
-
-func (i *InputOffice365MsgTrace) GetTemplateTenantID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTenantID
-}
-
-func (i *InputOffice365MsgTrace) GetTemplateClientID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateClientID
-}
-
-func (i *InputOffice365MsgTrace) GetTemplateResource() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateResource
 }
 
 // #region class-body-inputoffice365msgtrace

@@ -7,8 +7,6 @@ import (
 )
 
 type InputWef struct {
-	TemplateHost           types.String                   `tfsdk:"template_host"`
-	TemplatePort           types.String                   `tfsdk:"template_port"`
 	AllowMachineIDMismatch types.Bool                     `tfsdk:"allow_machine_id_mismatch"`
 	AuthMethod             types.String                   `tfsdk:"auth_method"`
 	CaFingerprint          types.String                   `tfsdk:"ca_fingerprint"`

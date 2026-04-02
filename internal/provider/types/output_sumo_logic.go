@@ -7,7 +7,6 @@ import (
 )
 
 type OutputSumoLogic struct {
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	Compress                      types.Bool                       `tfsdk:"compress"`
 	Concurrency                   types.Float64                    `tfsdk:"concurrency"`
 	CustomCategory                types.String                     `tfsdk:"custom_category"`

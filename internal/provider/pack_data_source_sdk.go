@@ -30,7 +30,6 @@ func (r *PackDataSourceModel) RefreshFromOperationsGetPacksByIDResponseBody(ctx 
 			}
 			items.ID = types.StringValue(itemsItem.ID)
 			items.Inputs = types.Float64PointerValue(itemsItem.Inputs)
-			items.IsDisabled = types.BoolPointerValue(itemsItem.IsDisabled)
 			items.MinLogStreamVersion = types.StringPointerValue(itemsItem.MinLogStreamVersion)
 			items.Outputs = types.Float64PointerValue(itemsItem.Outputs)
 			if len(itemsItem.Settings) > 0 {

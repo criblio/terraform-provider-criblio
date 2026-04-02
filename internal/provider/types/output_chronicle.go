@@ -7,8 +7,6 @@ import (
 )
 
 type OutputChronicle struct {
-	TemplateEndpoint                types.String                     `tfsdk:"template_endpoint"`
-	TemplateRegion                  types.String                     `tfsdk:"template_region"`
 	APIVersion                      types.String                     `tfsdk:"api_version"`
 	AuthenticationMethod            types.String                     `tfsdk:"authentication_method"`
 	Compress                        types.Bool                       `tfsdk:"compress"`

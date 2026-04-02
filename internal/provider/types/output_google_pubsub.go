@@ -7,8 +7,6 @@ import (
 )
 
 type OutputGooglePubsub struct {
-	TemplateRegion            types.String                  `tfsdk:"template_region"`
-	TemplateTopicName         types.String                  `tfsdk:"template_topic_name"`
 	BatchSize                 types.Float64                 `tfsdk:"batch_size"`
 	BatchTimeout              types.Float64                 `tfsdk:"batch_timeout"`
 	CreateTopic               types.Bool                    `tfsdk:"create_topic"`

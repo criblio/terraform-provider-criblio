@@ -24,4 +24,10 @@ type Options struct {
 	// such that it can make decisions based on the tfPlanOnly annotation
 	// The default is SourceTypeState
 	SourceType int
+
+	// PreservePlanNullTargets, when true with SourceTypePlan, keeps existing
+	// target values when the plan value is null instead of overwriting with
+	// zero/null. Used by refreshPlan after RefreshFrom so omitted nested
+	// optional+computed attributes do not wipe API defaults in state.
+	PreservePlanNullTargets bool
 }

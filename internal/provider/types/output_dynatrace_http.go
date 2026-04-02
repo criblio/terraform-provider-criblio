@@ -7,7 +7,6 @@ import (
 )
 
 type OutputDynatraceHTTP struct {
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	ActiveGateDomain              types.String                     `tfsdk:"active_gate_domain"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Compress                      types.Bool                       `tfsdk:"compress"`

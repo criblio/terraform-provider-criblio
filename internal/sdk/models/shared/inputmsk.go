@@ -126,16 +126,6 @@ type InputMsk struct {
 	AwsAPIKey       *string  `json:"awsApiKey,omitempty"`
 	// Select or create a stored secret that references your access key and secret key
 	AwsSecret *string `json:"awsSecret,omitempty"`
-	// Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-	TemplateAwsSecretKey *string `json:"__template_awsSecretKey,omitempty"`
-	// Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-	TemplateRegion *string `json:"__template_region,omitempty"`
-	// Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-	TemplateAssumeRoleArn *string `json:"__template_assumeRoleArn,omitempty"`
-	// Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-	TemplateAssumeRoleExternalID *string `json:"__template_assumeRoleExternalId,omitempty"`
-	// Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
-	TemplateAwsAPIKey *string `json:"__template_awsApiKey,omitempty"`
 }
 
 func (i InputMsk) MarshalJSON() ([]byte, error) {
@@ -476,39 +466,4 @@ func (i *InputMsk) GetAwsSecret() *string {
 		return nil
 	}
 	return i.AwsSecret
-}
-
-func (i *InputMsk) GetTemplateAwsSecretKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsSecretKey
-}
-
-func (i *InputMsk) GetTemplateRegion() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateRegion
-}
-
-func (i *InputMsk) GetTemplateAssumeRoleArn() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleArn
-}
-
-func (i *InputMsk) GetTemplateAssumeRoleExternalID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAssumeRoleExternalID
-}
-
-func (i *InputMsk) GetTemplateAwsAPIKey() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateAwsAPIKey
 }

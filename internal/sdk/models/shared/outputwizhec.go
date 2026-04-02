@@ -128,12 +128,6 @@ type OutputWizHec struct {
 	Token *string `json:"token,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'wiz_environment' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'wiz_environment' at runtime.
-	TemplateWizEnvironment *string `json:"__template_wiz_environment,omitempty"`
-	// Binds 'data_center' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'data_center' at runtime.
-	TemplateDataCenter *string `json:"__template_data_center,omitempty"`
-	// Binds 'wiz_sourcetype' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'wiz_sourcetype' at runtime.
-	TemplateWizSourcetype *string `json:"__template_wiz_sourcetype,omitempty"`
 }
 
 func (o OutputWizHec) MarshalJSON() ([]byte, error) {
@@ -446,25 +440,4 @@ func (o *OutputWizHec) GetTextSecret() *string {
 		return nil
 	}
 	return o.TextSecret
-}
-
-func (o *OutputWizHec) GetTemplateWizEnvironment() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateWizEnvironment
-}
-
-func (o *OutputWizHec) GetTemplateDataCenter() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDataCenter
-}
-
-func (o *OutputWizHec) GetTemplateWizSourcetype() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateWizSourcetype
 }

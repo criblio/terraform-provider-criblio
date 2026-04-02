@@ -88,15 +88,10 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_client_id         = "...my_template_client_id..."
-    template_connection_string = "...my_template_connection_string..."
-    template_container_name    = "...my_template_container_name..."
-    template_format            = "...my_template_format..."
-    template_tenant_id         = "...my_template_tenant_id..."
-    tenant_id                  = "00000000-0000-0000-0000-000000000000"
-    text_secret                = "azure-connstr-secret"
-    type                       = "azure_blob"
-    write_high_water_mark      = 256
+    tenant_id             = "00000000-0000-0000-0000-000000000000"
+    text_secret           = "azure-connstr-secret"
+    type                  = "azure_blob"
+    write_high_water_mark = 256
   }
   output_azure_data_explorer = {
     add_id_to_stage_path = true
@@ -217,18 +212,9 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    table                  = "logs_raw"
-    template_client_id     = "...my_template_client_id..."
-    template_client_secret = "...my_template_client_secret..."
-    template_cluster_url   = "...my_template_cluster_url..."
-    template_database      = "...my_template_database..."
-    template_format        = "...my_template_format..."
-    template_ingest_url    = "...my_template_ingest_url..."
-    template_scope         = "...my_template_scope..."
-    template_table         = "...my_template_table..."
-    template_tenant_id     = "...my_template_tenant_id..."
-    tenant_id              = "00000000-0000-0000-0000-000000000000"
-    text_secret            = "adx-client-secret"
+    table       = "logs_raw"
+    tenant_id   = "00000000-0000-0000-0000-000000000000"
+    text_secret = "adx-client-secret"
     timeout_retry_settings = {
       backoff_rate    = 15.6
       initial_backoff = 71830.59
@@ -302,7 +288,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       disabled            = false
       reject_unauthorized = false
@@ -367,8 +352,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_workspace_id  = "...my_template_workspace_id..."
-    template_workspace_key = "...my_template_workspace_key..."
     timeout_retry_settings = {
       backoff_rate    = 1.28
       initial_backoff = 379283.94
@@ -451,8 +434,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_endpoint = "...my_template_endpoint..."
-    template_region   = "...my_template_region..."
     timeout_retry_settings = {
       backoff_rate    = 19.58
       initial_backoff = 476612.3
@@ -555,11 +536,8 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    table_name          = "app_events"
-    template_database   = "...my_template_database..."
-    template_table_name = "...my_template_table_name..."
-    template_url        = "...my_template_url..."
-    text_secret         = "clickhouse_bearer_token"
+    table_name  = "app_events"
+    text_secret = "clickhouse_bearer_token"
     timeout_retry_settings = {
       backoff_rate    = 11.96
       initial_backoff = 42734.45
@@ -658,8 +636,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
     type                  = "cloudflare_r2"
     verify_permissions    = false
     write_high_water_mark = 1607.6
@@ -709,12 +685,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    type                             = "cloudwatch"
+    type = "cloudwatch"
   }
   output_confluent_cloud = {
     ack                    = 8
@@ -815,7 +786,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -900,7 +870,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url          = "...my_template_url..."
     throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
     timeout_retry_settings = {
       backoff_rate    = 9.19
@@ -926,9 +895,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url               = "https://edge.example.com:10200"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "...my_url..."
-        weight       = 0.17
+        url    = "...my_url..."
+        weight = 0.17
       }
     ]
     use_round_robin_dns = true
@@ -991,15 +959,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_dest_path               = "...my_template_dest_path..."
-    template_region                  = "...my_template_region..."
-    type                             = "cribl_lake"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "cribl_lake"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_cribl_search_engine = {
     auth_tokens = [
@@ -1066,7 +1028,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_url          = "...my_template_url..."
     throttle_rate_per_sec = "...my_throttle_rate_per_sec..."
     timeout_retry_settings = {
       backoff_rate    = 10.68
@@ -1092,9 +1053,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url               = "...my_url..."
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "...my_url..."
-        weight       = 5.35
+        url    = "...my_url..."
+        weight = 5.35
       }
     ]
     use_round_robin_dns = false
@@ -1120,13 +1080,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host         = "edge01.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 61317.22
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "inherit"
-        weight        = 1.12
+        host       = "...my_host..."
+        port       = 61317.22
+        servername = "...my_servername..."
+        tls        = "inherit"
+        weight     = 1.12
       }
     ]
     id                            = "cribl_tcp_prod"
@@ -1159,8 +1117,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     throttle_rate_per_sec = "10 MB"
     tls = {
       ca_path             = "...my_ca_path..."
@@ -1234,8 +1190,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "crowdstrike_nextgen_token"
+    text_secret = "crowdstrike_nextgen_token"
     timeout_retry_settings = {
       backoff_rate    = 9.38
       initial_backoff = 492268.73
@@ -1311,7 +1266,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_format       = "...my_template_format..."
     timeout_sec           = 36
     type                  = "databricks"
     workspace_id          = "...my_workspace_id..."
@@ -1465,8 +1419,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_custom_url = "...my_template_custom_url..."
-    text_secret         = "dataset_api_key"
+    text_secret = "dataset_api_key"
     timeout_retry_settings = {
       backoff_rate    = 12.05
       initial_backoff = 227296.99
@@ -1606,16 +1559,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_format                  = "...my_template_format..."
-    template_region                  = "...my_template_region..."
-    type                             = "dl_s3"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "dl_s3"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_dynatrace_http = {
     active_gate_domain = "https://activegate.example.com:9999/e/abc12345/api/v2/logs/ingest"
@@ -1679,7 +1625,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_breaker",
     ]
     telemetry_type = "logs"
-    template_url   = "...my_template_url..."
     text_secret    = "dynatrace_api_token"
     timeout_retry_settings = {
       backoff_rate    = 12.37
@@ -1853,7 +1798,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_url = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 9.56
       initial_backoff = 522024.45
@@ -1865,9 +1809,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url         = "https://es.example.com:9200/_bulk"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "https://es-node-1.example.com:9200/_bulk"
-        weight       = 2
+        url    = "https://es-node-1.example.com:9200/_bulk"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -2000,7 +1943,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_region = "...my_template_region..."
     timezone_offset = "-07:00"
     type            = "exabeam"
   }
@@ -2062,7 +2004,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_format       = "...my_template_format..."
     type                  = "filesystem"
     write_high_water_mark = 256
   }
@@ -2142,9 +2083,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_api_version = "...my_template_api_version..."
-    template_customer_id = "...my_template_customer_id..."
-    template_region      = "...my_template_region..."
     timeout_retry_settings = {
       backoff_rate    = 4.63
       initial_backoff = 22588.87
@@ -2316,9 +2254,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
-    template_region       = "...my_template_region..."
     type                  = "google_cloud_storage"
     verify_permissions    = true
     write_high_water_mark = 256
@@ -2363,10 +2298,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_region     = "...my_template_region..."
-    template_topic_name = "...my_template_topic_name..."
-    topic_name          = "app-events"
-    type                = "google_pubsub"
+    topic_name = "app-events"
+    type       = "google_pubsub"
   }
   output_grafana_cloud = {
     compress    = true
@@ -2615,8 +2548,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "humio_hec_token"
+    text_secret = "humio_hec_token"
     timeout_retry_settings = {
       backoff_rate    = 19.48
       initial_backoff = 366619.61
@@ -2706,10 +2638,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_bucket   = "...my_template_bucket..."
-    template_database = "...my_template_database..."
-    template_url      = "...my_template_url..."
-    text_secret       = "influxdb_token"
+    text_secret = "influxdb_token"
     timeout_retry_settings = {
       backoff_rate    = 1.3
       initial_backoff = 389060.46
@@ -2828,7 +2757,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_topic = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2891,14 +2819,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    template_stream_name             = "...my_template_stream_name..."
-    type                             = "kinesis"
-    use_list_shards                  = true
+    type            = "kinesis"
+    use_list_shards = true
   }
   output_local_search_storage = {
     async_inserts = false
@@ -2979,10 +2901,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    table_name          = "...my_table_name..."
-    template_database   = "...my_template_database..."
-    template_table_name = "...my_template_table_name..."
-    template_url        = "...my_template_url..."
+    table_name = "...my_table_name..."
     timeout_retry_settings = {
       backoff_rate    = 8.7
       initial_backoff = 188575.59
@@ -3144,8 +3063,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    template_bootstrap_server = "...my_template_bootstrap_server..."
-    template_topic            = "...my_template_topic..."
     tls = {
       disabled            = false
       reject_unauthorized = false
@@ -3226,10 +3143,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_aws_api_key  = "...my_template_aws_api_key..."
-    template_bucket       = "...my_template_bucket..."
-    template_format       = "...my_template_format..."
-    template_region       = "...my_template_region..."
     type                  = "minio"
     verify_permissions    = true
     write_high_water_mark = 256
@@ -3319,12 +3232,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    template_topic                   = "...my_template_topic..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -3347,10 +3254,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     environment            = "main"
     hosts = [
       {
-        host          = "netflow-collector.example.com"
-        port          = 2055
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
+        host = "netflow-collector.example.com"
+        port = 2055
       }
     ]
     id              = "netflow_export_prod"
@@ -3432,10 +3337,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_log_type      = "...my_template_log_type..."
-    template_message_field = "...my_template_message_field..."
-    template_region        = "...my_template_region..."
-    text_secret            = "newrelic_api_key"
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
       backoff_rate    = 1.72
       initial_backoff = 577081.54
@@ -3507,11 +3409,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_account_id = "...my_template_account_id..."
-    template_custom_url = "...my_template_custom_url..."
-    template_event_type = "...my_template_event_type..."
-    template_region     = "...my_template_region..."
-    text_secret         = "newrelic_api_key"
+    text_secret = "newrelic_api_key"
     timeout_retry_settings = {
       backoff_rate    = 19.98
       initial_backoff = 99705.33
@@ -3711,8 +3609,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_host",
       "cribl_wp",
     ]
-    template_url = "...my_template_url..."
-    text_secret  = "prometheus_bearer_token"
+    text_secret = "prometheus_bearer_token"
     timeout_retry_settings = {
       backoff_rate    = 9.91
       initial_backoff = 299842.71
@@ -3851,16 +3748,9 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_format                  = "...my_template_format..."
-    template_region                  = "...my_template_region..."
-    type                             = "s3"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "s3"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_security_lake = {
     account_id                = "123456789012"
@@ -3937,15 +3827,9 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_bucket                  = "...my_template_bucket..."
-    template_region                  = "...my_template_region..."
-    type                             = "security_lake"
-    verify_permissions               = true
-    write_high_water_mark            = 256
+    type                  = "security_lake"
+    verify_permissions    = true
+    write_high_water_mark = 256
   }
   output_sentinel = {
     advanced_content_type      = "application/json"
@@ -4018,14 +3902,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_client_id    = "...my_template_client_id..."
-    template_dce_endpoint = "...my_template_dce_endpoint..."
-    template_dcr_id       = "...my_template_dcr_id..."
-    template_login_url    = "...my_template_login_url..."
-    template_scope        = "...my_template_scope..."
-    template_secret       = "...my_template_secret..."
-    template_stream_name  = "...my_template_stream_name..."
-    template_url          = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 6.35
       initial_backoff = 55942.62
@@ -4282,10 +4158,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     environment            = "main"
     hosts = [
       {
-        host          = "snmp01.example.com"
-        port          = 162
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
+        host = "snmp01.example.com"
+        port = 162
       }
     ]
     id       = "snmp_trap_forwarder"
@@ -4343,13 +4217,8 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    topic_arn                        = "arn:aws:sns:us-east-1:123456789012:alerts-topic"
-    type                             = "sns"
+    topic_arn = "arn:aws:sns:us-east-1:123456789012:alerts-topic"
+    type      = "sns"
   }
   output_splunk = {
     auth_token               = "***REDACTED***"
@@ -4390,8 +4259,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     text_secret           = "splunk-indexer-token"
     throttle_rate_per_sec = "50 MB"
     tls = {
@@ -4468,9 +4335,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    tcp_routing  = "default_route"
-    template_url = "...my_template_url..."
-    text_secret  = "splunk-hec-token"
+    tcp_routing = "default_route"
+    text_secret = "splunk-hec-token"
     timeout_retry_settings = {
       backoff_rate    = 12.64
       initial_backoff = 425987.93
@@ -4494,9 +4360,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url   = "http://splunk-hec.example.com:8088/services/collector/event"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "http://splunk-hec-2.example.com:8088/services/collector/event"
-        weight       = 2
+        url    = "http://splunk-hec-2.example.com:8088/services/collector/event"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -4514,13 +4379,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     exclude_self           = false
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 45464.92
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "off"
-        weight        = 4.85
+        host       = "...my_host..."
+        port       = 45464.92
+        servername = "...my_servername..."
+        tls        = "off"
+        weight     = 4.85
       }
     ]
     id                = "splunk-lb-main"
@@ -4638,14 +4501,7 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "sqs"
+    type = "sqs"
   }
   output_statsd = {
     connection_timeout     = 10000
@@ -4782,7 +4638,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url = "...my_template_url..."
     timeout_retry_settings = {
       backoff_rate    = 15.65
       initial_backoff = 147734.27
@@ -4807,13 +4662,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host                   = "syslog.receiver.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 14583.92
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "inherit"
-        weight        = 0.09
+        host       = "...my_host..."
+        port       = 14583.92
+        servername = "...my_servername..."
+        tls        = "inherit"
+        weight     = 0.09
       }
     ]
     id                            = "syslog-out"
@@ -4849,8 +4702,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     throttle_rate_per_sec = "0"
     timestamp_format      = "syslog"
     tls = {
@@ -4881,13 +4732,11 @@ resource "criblio_pack_destination" "my_packdestination" {
     host                   = "tcp.receiver.example.com"
     hosts = [
       {
-        host          = "...my_host..."
-        port          = 8100.96
-        servername    = "...my_servername..."
-        template_host = "...my_template_host..."
-        template_port = "...my_template_port..."
-        tls           = "off"
-        weight        = 7.27
+        host       = "...my_host..."
+        port       = 8100.96
+        servername = "...my_servername..."
+        tls        = "off"
+        weight     = 7.27
       }
     ]
     id                            = "tcpjson-out"
@@ -4920,8 +4769,6 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_host         = "...my_template_host..."
-    template_port         = "...my_template_port..."
     text_secret           = "tcpjson-auth-token"
     throttle_rate_per_sec = "50 MB"
     tls = {
@@ -5091,10 +4938,7 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "cribl_pipe",
     ]
-    template_login_url = "...my_template_login_url..."
-    template_secret    = "...my_template_secret..."
-    template_url       = "...my_template_url..."
-    text_secret        = "webhook-token-secret"
+    text_secret = "webhook-token-secret"
     timeout_retry_settings = {
       backoff_rate    = 18.85
       initial_backoff = 131843.06
@@ -5121,9 +4965,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     url                   = "https://hooks.example.com/ingest"
     urls = [
       {
-        template_url = "...my_template_url..."
-        url          = "https://hooks1.example.com/ingest"
-        weight       = 2
+        url    = "https://hooks1.example.com/ingest"
+        weight = 2
       }
     ]
     use_round_robin_dns = true
@@ -5183,11 +5026,8 @@ resource "criblio_pack_destination" "my_packdestination" {
     system_fields = [
       "..."
     ]
-    tcp_routing              = "...my_tcp_routing..."
-    template_data_center     = "...my_template_data_center..."
-    template_wiz_environment = "...my_template_wiz_environment..."
-    template_wiz_sourcetype  = "...my_template_wiz_sourcetype..."
-    text_secret              = "...my_text_secret..."
+    tcp_routing = "...my_tcp_routing..."
+    text_secret = "...my_text_secret..."
     timeout_retry_settings = {
       backoff_rate    = 19.63
       initial_backoff = 227483.41
@@ -5270,7 +5110,6 @@ resource "criblio_pack_destination" "my_packdestination" {
       "cribl_pipe",
       "cribl_breaker",
     ]
-    template_url              = "...my_template_url..."
     text_secret               = "xsiam_token"
     throttle_rate_req_per_sec = 500
     timeout_retry_settings = {
@@ -5379,14 +5218,14 @@ resource "criblio_pack_destination" "my_packdestination" {
 - `output_wiz_hec` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec))
 - `output_xsiam` (Attributes) (see [below for nested schema](#nestedatt--output_xsiam))
 
-### Read-Only
-
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `pipeline` (String) Pipeline to process data before sending out to this output
-- `type` (String)
-
 <a id="nestedatt--output_azure_blob"></a>
 ### Nested Schema for `output_azure_blob`
+
+Required:
+
+- `container_name` (String) The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`.
+- `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "azure_blob"
 
 Optional:
 
@@ -5401,7 +5240,6 @@ Optional:
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `connection_string` (String) Enter your Azure Storage account connection string. If left blank, Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.
-- `container_name` (String) The Azure Blob Storage container name. Name can include only lowercase letters, numbers, and hyphens. For dynamic container names, enter a JavaScript expression within quotes or backticks, to be evaluated at initialization. The expression can evaluate to a constant value and can reference Global Variables, such as `myContainer-${C.env["CRIBL_WORKER_ID"]}`. Not Null
 - `create_container` (Boolean) Create the configured container in Azure Blob Storage if it does not already exist
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
@@ -5438,7 +5276,6 @@ Optional:
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_blob--retry_settings))
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
-- `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_account_name` (String) The name of your Azure storage account
 - `storage_class` (String) must be one of ["Inferred", "Hot", "Cool", "Cold", "Archive"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -5450,24 +5287,23 @@ Optional:
 - `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
 - `tenant_id` (String) The service principal's tenant ID
 - `text_secret` (String) Select or create a stored text secret
-- `type` (String) Not Null; must be "azure_blob"
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_azure_blob--certificate"></a>
 ### Nested Schema for `output_azure_blob.certificate`
 
-Optional:
+Required:
 
-- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal. Not Null
+- `certificate_name` (String) The certificate you registered as credentials for your app in the Azure portal
 
 
 <a id="nestedatt--output_azure_blob--key_value_metadata"></a>
 ### Nested Schema for `output_azure_blob.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_azure_blob--retry_settings"></a>
@@ -5486,19 +5322,28 @@ Optional:
 <a id="nestedatt--output_azure_data_explorer"></a>
 ### Nested Schema for `output_azure_data_explorer`
 
+Required:
+
+- `client_id` (String) client_id to pass in the OAuth request parameter
+- `cluster_url` (String) The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`.
+- `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
+- `database` (String) Name of the database containing the table where data will be ingested
+- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure. must be one of ["https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn"]
+- `oauth_type` (String) The type of OAuth 2.0 client credentials grant flow to use. must be one of ["clientSecret", "clientTextSecret", "certificate"]
+- `scope` (String) Scope to pass in the OAuth request parameter
+- `table` (String) Name of the table to ingest data into
+- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory
+- `type` (String) must be "azure_data_explorer"
+
 Optional:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `additional_properties` (Attributes List) Optionally, enter additional configuration properties to send to the ingestion service (see [below for nested schema](#nestedatt--output_azure_data_explorer--additional_properties))
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `certificate` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--certificate))
-- `client_id` (String) client_id to pass in the OAuth request parameter. Not Null
 - `client_secret` (String) The client secret that you generated for your app in the Azure portal
-- `cluster_url` (String) The base URI for your cluster. Typically, `https://<cluster>.<region>.kusto.windows.net`. Not Null
-- `compress` (String) Data compression format to apply to HTTP content before it is delivered. Not Null; must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `database` (String) Name of the database containing the table where data will be ingested. Not Null
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
@@ -5530,8 +5375,6 @@ Optional:
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure. Not Null; must be one of ["https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn"]
-- `oauth_type` (String) The type of OAuth 2.0 client credentials grant flow to use. Not Null; must be one of ["clientSecret", "clientTextSecret", "certificate"]
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. must be one of ["block", "drop"]
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it. must be one of ["DATA_PAGE_V1", "DATA_PAGE_V2"]
@@ -5562,12 +5405,10 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_azure_data_explorer--response_retry_settings))
 - `retain_blob_on_success` (Boolean) Prevent blob deletion after ingestion is complete
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--retry_settings))
-- `scope` (String) Scope to pass in the OAuth request parameter. Not Null
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant and stable storage.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `table` (String) Name of the table to ingest data into. Not Null
 - `template_client_id` (String) Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
 - `template_client_secret` (String) Binds 'clientSecret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientSecret' at runtime.
 - `template_cluster_url` (String) Binds 'clusterUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clusterUrl' at runtime.
@@ -5577,21 +5418,19 @@ Optional:
 - `template_scope` (String) Binds 'scope' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'scope' at runtime.
 - `template_table` (String) Binds 'table' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'table' at runtime.
 - `template_tenant_id` (String) Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-- `tenant_id` (String) Directory ID (tenant identifier) in Azure Active Directory. Not Null
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_data_explorer--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "azure_data_explorer"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `validate_database_settings` (Boolean) When saving or starting the Destination, validate the database name and credentials; also validate table name, except when creating a new table. Disable if your Azure app does not have both the Database Viewer and the Table Viewer role.
 
 <a id="nestedatt--output_azure_data_explorer--additional_properties"></a>
 ### Nested Schema for `output_azure_data_explorer.additional_properties`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_azure_data_explorer--certificate"></a>
@@ -5605,27 +5444,30 @@ Optional:
 <a id="nestedatt--output_azure_data_explorer--extent_tags"></a>
 ### Nested Schema for `output_azure_data_explorer.extent_tags`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `prefix` (String) must be one of ["dropBy", "ingestBy"]
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_azure_data_explorer--ingest_if_not_exists"></a>
 ### Nested Schema for `output_azure_data_explorer.ingest_if_not_exists`
 
-Optional:
+Required:
 
-- `value` (String) Not Null
+- `value` (String)
 
 
 <a id="nestedatt--output_azure_data_explorer--key_value_metadata"></a>
 ### Nested Schema for `output_azure_data_explorer.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_azure_data_explorer--pq_controls"></a>
@@ -5635,10 +5477,13 @@ Optional:
 <a id="nestedatt--output_azure_data_explorer--response_retry_settings"></a>
 ### Nested Schema for `output_azure_data_explorer.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -5658,24 +5503,32 @@ Optional:
 <a id="nestedatt--output_azure_data_explorer--timeout_retry_settings"></a>
 ### Nested Schema for `output_azure_data_explorer.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_azure_eventhub"></a>
 ### Nested Schema for `output_azure_eventhub`
 
+Required:
+
+- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies.
+- `topic` (String) The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut.
+- `type` (String) must be "azure_eventhub"
+
 Optional:
 
 - `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `brokers` (List of String) List of Event Hubs Kafka brokers to connect to, eg. yourdomain.servicebus.windows.net:9093. The hostname can be found in the host portion of the primary or secondary connection string in Shared Access Policies. Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -5708,8 +5561,6 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_topic` (String) Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_azure_eventhub--tls))
-- `topic` (String) The name of the Event Hub (Kafka Topic) to publish events. Can be overwritten using field __topicOut. Not Null
-- `type` (String) Not Null; must be "azure_eventhub"
 
 <a id="nestedatt--output_azure_eventhub--pq_controls"></a>
 ### Nested Schema for `output_azure_eventhub.pq_controls`
@@ -5717,6 +5568,10 @@ Optional:
 
 <a id="nestedatt--output_azure_eventhub--sasl"></a>
 ### Nested Schema for `output_azure_eventhub.sasl`
+
+Required:
+
+- `disabled` (Boolean)
 
 Optional:
 
@@ -5727,7 +5582,6 @@ Optional:
 - `client_secret` (String) client_secret to pass in the OAuth request parameter
 - `client_secret_auth_type` (String) must be one of ["manual", "secret", "certificate"]
 - `client_text_secret` (String) Select or create a stored text secret
-- `disabled` (Boolean) Not Null
 - `mechanism` (String) must be one of ["plain", "oauthbearer"]
 - `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure. must be one of ["https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn"]
 - `passphrase` (String)
@@ -5742,15 +5596,23 @@ Optional:
 <a id="nestedatt--output_azure_eventhub--tls"></a>
 ### Nested Schema for `output_azure_eventhub.tls`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
-- `disabled` (Boolean) Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 
 
 <a id="nestedatt--output_azure_logs"></a>
 ### Nested Schema for `output_azure_logs`
+
+Required:
+
+- `log_type` (String) The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType.
+- `type` (String) must be "azure_logs"
 
 Optional:
 
@@ -5765,7 +5627,6 @@ Optional:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `keypair_secret` (String) Select or create a stored secret that references your access key and secret key
-- `log_type` (String) The Log Type of events sent to this LogAnalytics workspace. Defaults to `Cribl`. Use only letters, numbers, and `_` characters, and can't exceed 100 characters. Can be overwritten by event field __logType. Not Null
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
@@ -5795,7 +5656,6 @@ Optional:
 - `template_workspace_key` (String) Binds 'workspaceKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'workspaceKey' at runtime.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_azure_logs--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "azure_logs"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `workspace_id` (String) Azure Log Analytics Workspace ID. See Azure Dashboard Workspace > Advanced settings.
 - `workspace_key` (String) Azure Log Analytics Workspace Primary or Secondary Shared Key. See Azure Dashboard Workspace > Advanced settings.
@@ -5803,10 +5663,13 @@ Optional:
 <a id="nestedatt--output_azure_logs--extra_http_headers"></a>
 ### Nested Schema for `output_azure_logs.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_azure_logs--pq_controls"></a>
@@ -5816,10 +5679,13 @@ Optional:
 <a id="nestedatt--output_azure_logs--response_retry_settings"></a>
 ### Nested Schema for `output_azure_logs.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -5827,17 +5693,28 @@ Optional:
 <a id="nestedatt--output_azure_logs--timeout_retry_settings"></a>
 ### Nested Schema for `output_azure_logs.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_chronicle"></a>
 ### Nested Schema for `output_chronicle`
+
+Required:
+
+- `gcp_instance` (String) The Google Cloud Platform (GCP) instance to send events to. This is the Chronicle customer uuid.
+- `gcp_project_id` (String) The Google Cloud Platform (GCP) project ID to send events to
+- `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType.
+- `region` (String) Regional endpoint to send events to
+- `type` (String) must be "chronicle"
 
 Optional:
 
@@ -5852,12 +5729,9 @@ Optional:
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_chronicle--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-- `gcp_instance` (String) The Google Cloud Platform (GCP) instance to send events to. This is the Chronicle customer uuid. Not Null
-- `gcp_project_id` (String) The Google Cloud Platform (GCP) project ID to send events to. Not Null
 - `id` (String) Unique ID for this output
 - `ingestion_method` (String)
 - `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
-- `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType. Not Null
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `namespace` (String) User-configured environment namespace to identify the data domain the logs originated from. This namespace is used as a tag to identify the appropriate data domain for indexing and enrichment functionality. Can be overwritten by event field __namespace.
@@ -5875,7 +5749,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `region` (String) Regional endpoint to send events to. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -5891,26 +5764,31 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_chronicle--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "chronicle"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
 
 <a id="nestedatt--output_chronicle--custom_labels"></a>
 ### Nested Schema for `output_chronicle.custom_labels`
 
+Required:
+
+- `key` (String)
+- `value` (String)
+
 Optional:
 
-- `key` (String) Not Null
 - `rbac_enabled` (Boolean) Designate this label for role-based access control and filtering
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_chronicle--extra_http_headers"></a>
 ### Nested Schema for `output_chronicle.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_chronicle--pq_controls"></a>
@@ -5920,10 +5798,13 @@ Optional:
 <a id="nestedatt--output_chronicle--response_retry_settings"></a>
 ### Nested Schema for `output_chronicle.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -5931,28 +5812,37 @@ Optional:
 <a id="nestedatt--output_chronicle--timeout_retry_settings"></a>
 ### Nested Schema for `output_chronicle.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_click_house"></a>
 ### Nested Schema for `output_click_house`
 
+Required:
+
+- `database` (String)
+- `table_name` (String) Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
+- `type` (String) must be "click_house"
+- `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/
+
 Optional:
 
 - `async_inserts` (Boolean) Collect data into batches for later processing. Disable to write to a ClickHouse table immediately.
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) must be one of ["none", "basic", "credentialsSecret", "sslUserCertificate"]
 - `column_mappings` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--column_mappings))
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `database` (String) Not Null
 - `describe_table` (String) Retrieves the table schema from ClickHouse and populates the Column Mapping table
 - `description` (String)
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
@@ -5963,12 +5853,12 @@ Optional:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `format` (String) Data format to use when sending data to ClickHouse. Defaults to JSON Compact. must be one of ["json-compact-each-row-with-names", "json-each-row"]
 - `id` (String) Unique ID for this output
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `mapping_type` (String) How event fields are mapped to ClickHouse columns. must be one of ["automatic", "custom"]
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_click_house--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_click_house--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
@@ -5990,24 +5880,21 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_click_house--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `sql_username` (String) Username for certificate authentication
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `table_name` (String) Name of the ClickHouse table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_". Not Null
 - `template_database` (String) Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
 - `template_table_name` (String) Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `text_secret` (String) Select or create a stored text secret
+- `text_secret` (String) Parsed as JSON.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_click_house--tls))
-- `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
-- `type` (String) Not Null; must be "click_house"
-- `url` (String) URL of the ClickHouse instance. Example: http://localhost:8123/. Not Null
+- `token` (String) Parsed as JSON.
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 - `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the ClickHouse database before proceeding. Disabling this option can increase throughput, but Cribl won’t be able to verify data has been completely inserted.
@@ -6015,20 +5902,26 @@ Optional:
 <a id="nestedatt--output_click_house--column_mappings"></a>
 ### Nested Schema for `output_click_house.column_mappings`
 
+Required:
+
+- `column_name` (String) Name of the column in ClickHouse that will store field value
+- `column_value_expression` (String) JavaScript expression to compute value to be inserted into ClickHouse table
+
 Optional:
 
-- `column_name` (String) Name of the column in ClickHouse that will store field value. Not Null
 - `column_type` (String) Type of the column in the ClickHouse database
-- `column_value_expression` (String) JavaScript expression to compute value to be inserted into ClickHouse table. Not Null
 
 
 <a id="nestedatt--output_click_house--extra_http_headers"></a>
 ### Nested Schema for `output_click_house.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_click_house--oauth_headers"></a>
@@ -6036,8 +5929,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth header name. Not Null
-- `value` (String) OAuth header value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_click_house--oauth_params"></a>
@@ -6045,8 +5938,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth parameter name. Not Null
-- `value` (String) OAuth parameter value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_click_house--pq_controls"></a>
@@ -6056,10 +5949,13 @@ Optional:
 <a id="nestedatt--output_click_house--response_retry_settings"></a>
 ### Nested Schema for `output_click_house.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -6067,12 +5963,15 @@ Optional:
 <a id="nestedatt--output_click_house--timeout_retry_settings"></a>
 ### Nested Schema for `output_click_house.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_click_house--tls"></a>
@@ -6095,16 +5994,22 @@ Optional:
 <a id="nestedatt--output_cloudflare_r2"></a>
 ### Nested Schema for `output_cloudflare_r2`
 
+Required:
+
+- `bucket` (String) Name of the destination R2 bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `endpoint` (String) Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com)
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
+- `type` (String) must be "cloudflare_r2"
+
 Optional:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
-- `aws_api_key` (String) R2 access key ID (S3-compatible). This value can be a constant or a JavaScript expression.
+- `aws_api_key` (String) Parsed as JSON.
 - `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. must be one of ["auto", "secret"]
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression, such as `${C.env.SOME_SECRET}`).
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination R2 bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -6116,7 +6021,6 @@ Optional:
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-- `endpoint` (String) Cloudflare R2 service URL (example: https://<ACCOUNT_ID>.r2.cloudflarestorage.com). Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
@@ -6130,7 +6034,7 @@ Optional:
 - `max_file_size_mb` (Number) Maximum uncompressed output file size. Files of this size will be closed and moved to final output location.
 - `max_open_files` (Number) Maximum number of files to keep open concurrently. When exceeded, @{product} will close the oldest open files and move them to the final output location.
 - `max_retry_num` (Number) The maximum number of times a file will attempt to move to its final destination before being dead-lettered
-- `object_acl` (String) Object ACL to assign to uploaded objects. must be one of ["private", "public-read", "public-read-write", "authenticated-read", "aws-exec-read", "bucket-owner-read", "bucket-owner-full-control"]
+- `object_acl` (String) Parsed as JSON.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop"]
 - `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. must be one of ["block", "drop"]
 - `parquet_data_page_version` (String) Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it. must be one of ["DATA_PAGE_V1", "DATA_PAGE_V2"]
@@ -6140,7 +6044,7 @@ Optional:
 - `parquet_version` (String) Determines which data types are supported and how they are represented. must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region identifier for R2 (S3-compatible API); often auto for Cloudflare R2
+- `region` (String) Parsed as JSON.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates)
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_cloudflare_r2--retry_settings))
@@ -6148,23 +6052,21 @@ Optional:
 - `server_side_encryption` (String) Server-side encryption for uploaded objects. must be "AES256"
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing MinIO requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-- `type` (String) Not Null; must be "cloudflare_r2"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_cloudflare_r2--key_value_metadata"></a>
 ### Nested Schema for `output_cloudflare_r2.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_cloudflare_r2--retry_settings"></a>
@@ -6183,6 +6085,13 @@ Optional:
 <a id="nestedatt--output_cloudwatch"></a>
 ### Nested Schema for `output_cloudwatch`
 
+Required:
+
+- `log_group_name` (String) CloudWatch log group to associate events with
+- `log_stream_name` (String) Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId
+- `region` (String) Region where the CloudWatchLogs is located
+- `type` (String) must be "cloudwatch"
+
 Optional:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -6198,8 +6107,6 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Max record size.
 - `id` (String) Unique ID for this output
-- `log_group_name` (String) CloudWatch log group to associate events with. Not Null
-- `log_stream_name` (String) Prefix for CloudWatch log stream name. This prefix will be used to generate a unique log stream name per cribl instance, for example: myStream_myHost_myOutputId. Not Null
 - `max_queue_size` (Number) Maximum number of queued batches before blocking
 - `max_record_size_kb` (Number) Maximum size (KB) of each individual record before compression. For non compressible data 1MB is the max recommended size
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
@@ -6216,7 +6123,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `region` (String) Region where the CloudWatchLogs is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
@@ -6226,7 +6132,6 @@ Optional:
 - `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
 - `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "cloudwatch"
 
 <a id="nestedatt--output_cloudwatch--pq_controls"></a>
 ### Nested Schema for `output_cloudwatch.pq_controls`
@@ -6236,12 +6141,17 @@ Optional:
 <a id="nestedatt--output_confluent_cloud"></a>
 ### Nested Schema for `output_confluent_cloud`
 
+Required:
+
+- `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092.
+- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
+- `type` (String) must be "confluent_cloud"
+
 Optional:
 
 - `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `brokers` (List of String) List of Confluent Cloud bootstrap servers to use, such as yourAccount.confluent.cloud:9092. Not Null
 - `compression` (String) Codec to use to compress the data before sending to Kafka. must be one of ["none", "gzip", "snappy", "lz4", "zstd"]
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
@@ -6278,11 +6188,13 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_topic` (String) Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_confluent_cloud--tls))
-- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field. Not Null
-- `type` (String) Not Null; must be "confluent_cloud"
 
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry"></a>
 ### Nested Schema for `output_confluent_cloud.kafka_schema_registry`
+
+Required:
+
+- `disabled` (Boolean)
 
 Optional:
 
@@ -6290,7 +6202,6 @@ Optional:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Not Null
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -6299,10 +6210,13 @@ Optional:
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry--auth"></a>
 ### Nested Schema for `output_confluent_cloud.kafka_schema_registry.auth`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 
 
 <a id="nestedatt--output_confluent_cloud--kafka_schema_registry--tls"></a>
@@ -6331,6 +6245,10 @@ Optional:
 <a id="nestedatt--output_confluent_cloud--sasl"></a>
 ### Nested Schema for `output_confluent_cloud.sasl`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret. must be one of ["manual", "secret"]
@@ -6338,7 +6256,6 @@ Optional:
 - `client_id` (String) Client ID to use for OAuth authentication
 - `client_text_secret` (String) Select or create a stored text secret
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 - `keytab_location` (String) Location of keytab file for authentication principal
 - `mechanism` (String) must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]
 - `oauth_enabled` (Boolean) Enable OAuth authentication
@@ -6353,19 +6270,19 @@ Optional:
 <a id="nestedatt--output_confluent_cloud--sasl--oauth_params"></a>
 ### Nested Schema for `output_confluent_cloud.sasl.oauth_params`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_confluent_cloud--sasl--sasl_extensions"></a>
 ### Nested Schema for `output_confluent_cloud.sasl.sasl_extensions`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 
@@ -6390,6 +6307,10 @@ Optional:
 
 <a id="nestedatt--output_cribl_http"></a>
 ### Nested Schema for `output_cribl_http`
+
+Required:
+
+- `type` (String) must be "cribl_http"
 
 Optional:
 
@@ -6437,7 +6358,6 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_http--tls))
 - `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
-- `type` (String) Not Null; must be "cribl_http"
 - `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_http--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -6445,20 +6365,26 @@ Optional:
 <a id="nestedatt--output_cribl_http--auth_tokens"></a>
 ### Nested Schema for `output_cribl_http.auth_tokens`
 
+Required:
+
+- `token_secret` (String) Select or create a stored text secret
+
 Optional:
 
 - `description` (String)
 - `enabled` (Boolean)
-- `token_secret` (String) Select or create a stored text secret. Not Null
 
 
 <a id="nestedatt--output_cribl_http--extra_http_headers"></a>
 ### Nested Schema for `output_cribl_http.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_cribl_http--pq_controls"></a>
@@ -6468,10 +6394,13 @@ Optional:
 <a id="nestedatt--output_cribl_http--response_retry_settings"></a>
 ### Nested Schema for `output_cribl_http.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -6479,12 +6408,15 @@ Optional:
 <a id="nestedatt--output_cribl_http--timeout_retry_settings"></a>
 ### Nested Schema for `output_cribl_http.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_cribl_http--tls"></a>
@@ -6508,16 +6440,23 @@ Optional:
 <a id="nestedatt--output_cribl_http--urls"></a>
 ### Nested Schema for `output_cribl_http.urls`
 
+Required:
+
+- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
+
 Optional:
 
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200. Not Null
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 
 <a id="nestedatt--output_cribl_lake"></a>
 ### Nested Schema for `output_cribl_lake`
+
+Required:
+
+- `type` (String) must be "cribl_lake"
 
 Optional:
 
@@ -6566,13 +6505,6 @@ Optional:
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
-- `template_assume_role_external_id` (String) Binds 'assumeRoleExternalId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleExternalId' at runtime.
-- `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
-- `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
-- `template_dest_path` (String) Binds 'destPath' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'destPath' at runtime.
-- `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "cribl_lake"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
@@ -6591,6 +6523,10 @@ Optional:
 
 <a id="nestedatt--output_cribl_search_engine"></a>
 ### Nested Schema for `output_cribl_search_engine`
+
+Required:
+
+- `type` (String) must be "cribl_search_engine"
 
 Optional:
 
@@ -6638,7 +6574,6 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_search_engine--tls))
 - `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires. Valid values are between 1 and 60.
-- `type` (String) Not Null; must be "cribl_search_engine"
 - `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_cribl_search_engine--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -6646,20 +6581,26 @@ Optional:
 <a id="nestedatt--output_cribl_search_engine--auth_tokens"></a>
 ### Nested Schema for `output_cribl_search_engine.auth_tokens`
 
+Required:
+
+- `token_secret` (String) Select or create a stored text secret
+
 Optional:
 
 - `description` (String)
 - `enabled` (Boolean)
-- `token_secret` (String) Select or create a stored text secret. Not Null
 
 
 <a id="nestedatt--output_cribl_search_engine--extra_http_headers"></a>
 ### Nested Schema for `output_cribl_search_engine.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_cribl_search_engine--pq_controls"></a>
@@ -6669,10 +6610,13 @@ Optional:
 <a id="nestedatt--output_cribl_search_engine--response_retry_settings"></a>
 ### Nested Schema for `output_cribl_search_engine.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -6680,12 +6624,15 @@ Optional:
 <a id="nestedatt--output_cribl_search_engine--timeout_retry_settings"></a>
 ### Nested Schema for `output_cribl_search_engine.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_cribl_search_engine--tls"></a>
@@ -6709,16 +6656,23 @@ Optional:
 <a id="nestedatt--output_cribl_search_engine--urls"></a>
 ### Nested Schema for `output_cribl_search_engine.urls`
 
+Required:
+
+- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200
+
 Optional:
 
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `url` (String) URL of a Cribl Worker to send events to, such as http://localhost:10200. Not Null
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 
 <a id="nestedatt--output_cribl_tcp"></a>
 ### Nested Schema for `output_cribl_tcp`
+
+Required:
+
+- `type` (String) must be "cribl_tcp"
 
 Optional:
 
@@ -6759,26 +6713,31 @@ Optional:
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_cribl_tcp--tls))
 - `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires, valid values between 1 and 60
-- `type` (String) Not Null; must be "cribl_tcp"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_cribl_tcp--auth_tokens"></a>
 ### Nested Schema for `output_cribl_tcp.auth_tokens`
 
+Required:
+
+- `token_secret` (String) Select or create a stored text secret
+
 Optional:
 
 - `description` (String) Optional token description
 - `enabled` (Boolean)
-- `token_secret` (String) Select or create a stored text secret. Not Null
 
 
 <a id="nestedatt--output_cribl_tcp--hosts"></a>
 ### Nested Schema for `output_cribl_tcp.hosts`
 
+Required:
+
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+
 Optional:
 
-- `host` (String) The hostname of the receiver. Not Null
-- `port` (Number) The port to connect to on the provided host. Not Null
 - `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
@@ -6812,6 +6771,13 @@ Optional:
 <a id="nestedatt--output_crowdstrike_next_gen_siem"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem`
 
+Required:
+
+- `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent. must be one of ["JSON", "raw"]
+- `type` (String) must be "crowdstrike_next_gen_siem"
+- `url` (String) URL provided from a CrowdStrike data connector. 
+Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
+
 Optional:
 
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. must be one of ["manual", "secret"]
@@ -6822,7 +6788,6 @@ Optional:
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-- `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent. Not Null; must be one of ["JSON", "raw"]
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -6853,19 +6818,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String)
-- `type` (String) Not Null; must be "crowdstrike_next_gen_siem"
-- `url` (String) URL provided from a CrowdStrike data connector. 
-Example: https://ingest.<region>.crowdstrike.com/api/ingest/hec/<connection-id>/v1/services/collector
-Not Null
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem--extra_http_headers"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_crowdstrike_next_gen_siem--pq_controls"></a>
@@ -6875,10 +6839,13 @@ Optional:
 <a id="nestedatt--output_crowdstrike_next_gen_siem--response_retry_settings"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -6886,26 +6853,37 @@ Optional:
 <a id="nestedatt--output_crowdstrike_next_gen_siem--timeout_retry_settings"></a>
 ### Nested Schema for `output_crowdstrike_next_gen_siem.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_databricks"></a>
 ### Nested Schema for `output_databricks`
 
+Required:
+
+- `catalog` (String) Name of the Unity Catalog catalog to use for the Destination.
+- `client_id` (String) OAuth client ID for Unity Catalog authentication
+- `client_text_secret` (String) OAuth client secret for Unity Catalog authentication
+- `events_volume_name` (String) Name of the Unity Catalog volume where event data is written.
+- `schema` (String) Name of the Unity Catalog schema to use for the Destination.
+- `scope` (String) OAuth scope for Unity Catalog authentication
+- `type` (String) must be "databricks"
+- `workspace_id` (String) Unique identifier for the Databricks workspace. Used to construct the OAuth login URL and API base URL.
+
 Optional:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `catalog` (String) Name of the Unity Catalog catalog to use for the Destination. Not Null
-- `client_id` (String) OAuth client ID for Unity Catalog authentication. Not Null
-- `client_text_secret` (String) OAuth client secret for Unity Catalog authentication. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -6918,7 +6896,6 @@ Optional:
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `events_volume_name` (String) Name of the Unity Catalog volume where event data is written. Not Null
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
 - `format` (String) Format of the output data. must be one of ["json", "raw", "parquet"]
@@ -6941,25 +6918,21 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_databricks--retry_settings))
-- `schema` (String) Name of the Unity Catalog schema to use for the Destination. Not Null
-- `scope` (String) OAuth scope for Unity Catalog authentication. Not Null
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `stage_path` (String) Filesystem location in which to buffer files before compressing and moving to final destination. Use performant, stable storage.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it.
-- `type` (String) Not Null; must be "databricks"
-- `workspace_id` (String) Unique identifier for the Databricks workspace. Used to construct the OAuth login URL and API base URL. Not Null
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_databricks--key_value_metadata"></a>
 ### Nested Schema for `output_databricks.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_databricks--retry_settings"></a>
@@ -6977,6 +6950,10 @@ Optional:
 
 <a id="nestedatt--output_datadog"></a>
 ### Nested Schema for `output_datadog`
+
+Required:
+
+- `type` (String) must be "datadog"
 
 Optional:
 
@@ -7030,16 +7007,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_datadog--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "datadog"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_datadog--extra_http_headers"></a>
 ### Nested Schema for `output_datadog.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_datadog--pq_controls"></a>
@@ -7049,10 +7028,13 @@ Optional:
 <a id="nestedatt--output_datadog--response_retry_settings"></a>
 ### Nested Schema for `output_datadog.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7060,17 +7042,24 @@ Optional:
 <a id="nestedatt--output_datadog--timeout_retry_settings"></a>
 ### Nested Schema for `output_datadog.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_dataset"></a>
 ### Nested Schema for `output_dataset`
+
+Required:
+
+- `type` (String) must be "dataset"
 
 Optional:
 
@@ -7120,16 +7109,18 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `timestamp_field` (String) Name of the event field that contains the timestamp. If not specified, defaults to `ts`, `_time`, or `Date.now()`, in that order.
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "dataset"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dataset--extra_http_headers"></a>
 ### Nested Schema for `output_dataset.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_dataset--pq_controls"></a>
@@ -7139,10 +7130,13 @@ Optional:
 <a id="nestedatt--output_dataset--response_retry_settings"></a>
 ### Nested Schema for `output_dataset.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7150,17 +7144,24 @@ Optional:
 <a id="nestedatt--output_dataset--timeout_retry_settings"></a>
 ### Nested Schema for `output_dataset.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_default"></a>
 ### Nested Schema for `output_default`
+
+Required:
+
+- `type` (String) must be "default"
 
 Optional:
 
@@ -7170,11 +7171,14 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "default"
 
 
 <a id="nestedatt--output_devnull"></a>
 ### Nested Schema for `output_devnull`
+
+Required:
+
+- `type` (String) must be "devnull"
 
 Optional:
 
@@ -7183,11 +7187,14 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "devnull"
 
 
 <a id="nestedatt--output_disk_spool"></a>
 ### Nested Schema for `output_disk_spool`
+
+Required:
+
+- `type` (String) must be "disk_spool"
 
 Optional:
 
@@ -7202,11 +7209,16 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `time_window` (String) Time period for grouping spooled events. Default is 10m.
-- `type` (String) Not Null; must be "disk_spool"
 
 
 <a id="nestedatt--output_dl_s3"></a>
 ### Nested Schema for `output_dl_s3`
+
+Required:
+
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "dl_s3"
 
 Optional:
 
@@ -7219,7 +7231,6 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -7267,7 +7278,6 @@ Optional:
 - `server_side_encryption` (String) must be one of ["AES256", "aws:kms"]
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing S3 requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -7278,17 +7288,16 @@ Optional:
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "dl_s3"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_dl_s3--key_value_metadata"></a>
 ### Nested Schema for `output_dl_s3.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_dl_s3--retry_settings"></a>
@@ -7307,6 +7316,13 @@ Optional:
 <a id="nestedatt--output_dynatrace_http"></a>
 ### Nested Schema for `output_dynatrace_http`
 
+Required:
+
+- `endpoint` (String) must be one of ["cloud", "activeGate", "manual"]
+- `format` (String) How to format events before sending. Defaults to JSON. Plaintext is not currently supported. must be one of ["json_array", "plaintext"]
+- `telemetry_type` (String) must be one of ["logs", "metrics"]
+- `type` (String) must be "dynatrace_http"
+
 Optional:
 
 - `active_gate_domain` (String) ActiveGate domain with Log analytics collector module enabled. For example https://{activeGate-domain}:9999/e/{environment-id}/api/v2/logs/ingest.
@@ -7314,13 +7330,11 @@ Optional:
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `endpoint` (String) Not Null; must be one of ["cloud", "activeGate", "manual"]
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `environment_id` (String) ID of the environment to send to
 - `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_dynatrace_http--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-- `format` (String) How to format events before sending. Defaults to JSON. Plaintext is not currently supported. Not Null; must be one of ["json_array", "plaintext"]
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
@@ -7348,24 +7362,25 @@ Optional:
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `telemetry_type` (String) Not Null; must be one of ["logs", "metrics"]
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_http--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) Bearer token to include in the authorization header
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "dynatrace_http"
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dynatrace_http--extra_http_headers"></a>
 ### Nested Schema for `output_dynatrace_http.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_dynatrace_http--pq_controls"></a>
@@ -7375,10 +7390,13 @@ Optional:
 <a id="nestedatt--output_dynatrace_http--response_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_http.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7386,17 +7404,29 @@ Optional:
 <a id="nestedatt--output_dynatrace_http--timeout_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_http.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_dynatrace_otlp"></a>
 ### Nested Schema for `output_dynatrace_otlp`
+
+Required:
+
+- `endpoint` (String) The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
+- `endpoint_type` (String) Select the type of Dynatrace endpoint configured. must be one of ["saas", "ag"]
+- `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send. must be "1.3.1"
+- `protocol` (String) Select a transport option for Dynatrace. must be "http"
+- `token_secret` (String) Select or create a stored text secret
+- `type` (String) must be "dynatrace_otlp"
 
 Optional:
 
@@ -7405,8 +7435,6 @@ Optional:
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `description` (String)
-- `endpoint` (String) The endpoint where Dynatrace events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Not Null
-- `endpoint_type` (String) Select the type of Dynatrace endpoint configured. Not Null; must be one of ["saas", "ag"]
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_dynatrace_otlp--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
@@ -7421,7 +7449,6 @@ Optional:
 - `max_payload_size_kb` (Number) Maximum size (in KB) of the request body. The maximum payload size is 4 MB. If this limit is exceeded, the entire OTLP message is dropped
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_dynatrace_otlp--metadata))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
-- `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send. Not Null; must be "1.3.1"
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--pq_controls))
@@ -7435,7 +7462,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `protocol` (String) Select a transport option for Dynatrace. Not Null; must be "http"
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -7446,26 +7472,27 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_dynatrace_otlp--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `token_secret` (String) Select or create a stored text secret. Not Null
-- `type` (String) Not Null; must be "dynatrace_otlp"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_dynatrace_otlp--extra_http_headers"></a>
 ### Nested Schema for `output_dynatrace_otlp.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_dynatrace_otlp--metadata"></a>
 ### Nested Schema for `output_dynatrace_otlp.metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_dynatrace_otlp--pq_controls"></a>
@@ -7475,10 +7502,13 @@ Optional:
 <a id="nestedatt--output_dynatrace_otlp--response_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_otlp.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7486,17 +7516,25 @@ Optional:
 <a id="nestedatt--output_dynatrace_otlp--timeout_retry_settings"></a>
 ### Nested Schema for `output_dynatrace_otlp.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_elastic"></a>
 ### Nested Schema for `output_elastic`
+
+Required:
+
+- `index` (String) Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
+- `type` (String) must be "elastic"
 
 Optional:
 
@@ -7516,7 +7554,6 @@ Optional:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `include_doc_id` (Boolean) Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
-- `index` (String) Index or data stream to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field. Not Null
 - `load_balance_stats_period_sec` (Number) How far back in time to keep traffic stats for load balancing purposes
 - `load_balanced` (Boolean) Enable for optimal performance. Even if you have one hostname, it can expand to multiple IPs. If disabled, consider enabling round-robin DNS.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
@@ -7547,7 +7584,6 @@ Optional:
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "elastic"
 - `url` (String) The Cloud ID or URL to an Elastic cluster to send events to. Example: http://elastic:9200/_bulk
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_elastic--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -7556,11 +7592,14 @@ Optional:
 <a id="nestedatt--output_elastic--auth"></a>
 ### Nested Schema for `output_elastic.auth`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret. must be one of ["manual", "secret", "manualAPIKey", "textSecret"]
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 - `manual_api_key` (String) Enter API key directly
 - `password` (String)
 - `text_secret` (String) Select or create a stored text secret
@@ -7570,19 +7609,22 @@ Optional:
 <a id="nestedatt--output_elastic--extra_http_headers"></a>
 ### Nested Schema for `output_elastic.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_elastic--extra_params"></a>
 ### Nested Schema for `output_elastic.extra_params`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic--pq_controls"></a>
@@ -7592,10 +7634,13 @@ Optional:
 <a id="nestedatt--output_elastic--response_retry_settings"></a>
 ### Nested Schema for `output_elastic.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7603,27 +7648,39 @@ Optional:
 <a id="nestedatt--output_elastic--timeout_retry_settings"></a>
 ### Nested Schema for `output_elastic.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_elastic--urls"></a>
 ### Nested Schema for `output_elastic.urls`
 
+Required:
+
+- `url` (String) The URL to an Elastic node to send events to. Example: http://elastic:9200/_bulk
+
 Optional:
 
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `url` (String) The URL to an Elastic node to send events to. Example: http://elastic:9200/_bulk. Not Null
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 
 <a id="nestedatt--output_elastic_cloud"></a>
 ### Nested Schema for `output_elastic_cloud`
+
+Required:
+
+- `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field.
+- `type` (String) must be "elastic_cloud"
+- `url` (String) Enter Cloud ID of the Elastic Cloud environment to send events to
 
 Optional:
 
@@ -7639,7 +7696,6 @@ Optional:
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
 - `include_doc_id` (Boolean) Include the `document_id` field when sending events to an Elastic TSDS (time series data stream)
-- `index` (String) Data stream or index to send events to. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be overwritten by an event's __index field. Not Null
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
@@ -7666,17 +7722,18 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_elastic_cloud--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "elastic_cloud"
-- `url` (String) Enter Cloud ID of the Elastic Cloud environment to send events to. Not Null
 
 <a id="nestedatt--output_elastic_cloud--auth"></a>
 ### Nested Schema for `output_elastic_cloud.auth`
+
+Required:
+
+- `disabled` (Boolean)
 
 Optional:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret. must be one of ["manual", "secret", "manualAPIKey", "textSecret"]
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 - `manual_api_key` (String) Enter API key directly
 - `password` (String)
 - `text_secret` (String) Select or create a stored text secret
@@ -7686,19 +7743,22 @@ Optional:
 <a id="nestedatt--output_elastic_cloud--extra_http_headers"></a>
 ### Nested Schema for `output_elastic_cloud.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_elastic_cloud--extra_params"></a>
 ### Nested Schema for `output_elastic_cloud.extra_params`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_elastic_cloud--pq_controls"></a>
@@ -7708,10 +7768,13 @@ Optional:
 <a id="nestedatt--output_elastic_cloud--response_retry_settings"></a>
 ### Nested Schema for `output_elastic_cloud.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7719,32 +7782,41 @@ Optional:
 <a id="nestedatt--output_elastic_cloud--timeout_retry_settings"></a>
 ### Nested Schema for `output_elastic_cloud.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_exabeam"></a>
 ### Nested Schema for `output_exabeam`
 
+Required:
+
+- `bucket` (String) Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: `myBucket-${C.vars.myVar}`.
+- `collector_instance_id` (String) ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888
+- `endpoint` (String) Google Cloud Storage service endpoint
+- `region` (String) Region where the bucket is located
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "exabeam"
+
 Optional:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
 - `aws_api_key` (String) HMAC access key. Can be a constant or a JavaScript expression, such as `${C.env.GCS_ACCESS_KEY}`.
 - `aws_secret_key` (String) HMAC secret. Can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
-- `bucket` (String) Name of the destination bucket. A constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a JavaScript Global Variable: `myBucket-${C.vars.myVar}`. Not Null
-- `collector_instance_id` (String) ID of the Exabeam Collector where data should be sent. Example: 11112222-3333-4444-5555-666677778888. Not Null
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
 - `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
 - `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `encoded_configuration` (String) Enter an encoded string containing Exabeam configurations
-- `endpoint` (String) Google Cloud Storage service endpoint. Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `max_file_idle_time_sec` (Number) Maximum amount of time to keep inactive files open. Files open for longer than this will be closed and moved to final output location.
@@ -7756,7 +7828,6 @@ Optional:
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop"]
 - `on_disk_full_backpressure` (String) How to handle events when disk space is below the global 'Min free disk space' limit. must be one of ["block", "drop"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the bucket is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_exabeam--retry_settings))
@@ -7764,13 +7835,11 @@ Optional:
 - `signature_version` (String) Signature version to use for signing Google Cloud Storage requests. must be one of ["v2", "v4"]
 - `site_id` (String) Exabeam site ID. If left blank, @{product} will use the value of the Exabeam site name.
 - `site_name` (String) Constant or JavaScript expression to create an Exabeam site name. Values that aren't successfully evaluated will be treated as string constants.
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `timezone_offset` (String)
-- `type` (String) Not Null; must be "exabeam"
 
 <a id="nestedatt--output_exabeam--retry_settings"></a>
 ### Nested Schema for `output_exabeam.retry_settings`
@@ -7788,6 +7857,11 @@ Optional:
 <a id="nestedatt--output_filesystem"></a>
 ### Nested Schema for `output_filesystem`
 
+Required:
+
+- `dest_path` (String) Final destination for the output files
+- `type` (String) must be "filesystem"
+
 Optional:
 
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
@@ -7798,7 +7872,6 @@ Optional:
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
-- `dest_path` (String) Final destination for the output files. Not Null
 - `directory_batch_size` (Number) Number of directories to process in each batch during cleanup of empty directories. Minimum is 10, maximum is 10000. Higher values may require more memory.
 - `empty_dir_cleanup_sec` (Number) How frequently, in seconds, to clean up empty directories
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
@@ -7832,16 +7905,15 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
-- `type` (String) Not Null; must be "filesystem"
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_filesystem--key_value_metadata"></a>
 ### Nested Schema for `output_filesystem.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_filesystem--retry_settings"></a>
@@ -7860,6 +7932,11 @@ Optional:
 <a id="nestedatt--output_google_chronicle"></a>
 ### Nested Schema for `output_google_chronicle`
 
+Required:
+
+- `log_format_type` (String) must be one of ["unstructured", "udm"]
+- `type` (String) must be "google_chronicle"
+
 Optional:
 
 - `api_key` (String) Organization's API key in Google SecOps
@@ -7877,7 +7954,6 @@ Optional:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `log_format_type` (String) Not Null; must be one of ["unstructured", "udm"]
 - `log_text_field` (String) Name of the event field that contains the log text to send. If not specified, Stream sends a JSON representation of the whole event.
 - `log_type` (String) Default log type value to send to SecOps. Can be overwritten by event field __logType.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
@@ -7914,35 +7990,40 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_chronicle--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "google_chronicle"
 - `udm_type` (String) Defines the specific format for UDM events sent to Google SecOps. This must match the type of UDM data being sent. must be one of ["entities", "logs"]
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned.
 
 <a id="nestedatt--output_google_chronicle--custom_labels"></a>
 ### Nested Schema for `output_google_chronicle.custom_labels`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_google_chronicle--extra_http_headers"></a>
 ### Nested Schema for `output_google_chronicle.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_google_chronicle--extra_log_types"></a>
 ### Nested Schema for `output_google_chronicle.extra_log_types`
 
+Required:
+
+- `log_type` (String)
+
 Optional:
 
 - `description` (String)
-- `log_type` (String) Not Null
 
 
 <a id="nestedatt--output_google_chronicle--pq_controls"></a>
@@ -7952,10 +8033,13 @@ Optional:
 <a id="nestedatt--output_google_chronicle--response_retry_settings"></a>
 ### Nested Schema for `output_google_chronicle.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -7963,17 +8047,27 @@ Optional:
 <a id="nestedatt--output_google_chronicle--timeout_retry_settings"></a>
 ### Nested Schema for `output_google_chronicle.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_google_cloud_logging"></a>
 ### Nested Schema for `output_google_cloud_logging`
+
+Required:
+
+- `log_location_expression` (String) JavaScript expression to compute the value of the folder ID with which log entries should be associated. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
+- `log_location_type` (String) must be one of ["project", "organization", "billingAccount", "folder"]
+- `log_name_expression` (String) JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore.
+- `type` (String) must be "google_cloud_logging"
 
 Optional:
 
@@ -7998,9 +8092,6 @@ Optional:
 - `latency_expression` (String) A JavaScript expression that evaluates to the HTTP request latency, formatted as <seconds>.<nanoseconds>s (for example, 1.23s). See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
 - `line_expression` (String) A JavaScript expression that evaluates to the log entry source location line as a string, in int64 format. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logentrysourcelocation) for details.
 - `log_labels` (Attributes List) Labels to apply to the log entry (see [below for nested schema](#nestedatt--output_google_cloud_logging--log_labels))
-- `log_location_expression` (String) JavaScript expression to compute the value of the folder ID with which log entries should be associated. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore. Not Null
-- `log_location_type` (String) Not Null; must be one of ["project", "organization", "billingAccount", "folder"]
-- `log_name_expression` (String) JavaScript expression to compute the value of the log name. If Validate and correct log name is enabled, invalid characters (characters other than alphanumerics, forward-slashes, underscores, hyphens, and periods) will be replaced with an underscore. Not Null
 - `max_payload_events` (Number) Max number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
@@ -8044,17 +8135,16 @@ Optional:
 - `total_splits_expression` (String) A JavaScript expression that evaluates to the log entry log split total splits as a number. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.
 - `trace_expression` (String) A JavaScript expression that evaluates to the REST resource name of the trace being written as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
 - `trace_sampled_expression` (String) A JavaScript expression that evaluates to the the sampling decision of the span associated with the log entry. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry) for details.
-- `type` (String) Not Null; must be "google_cloud_logging"
 - `uid_expression` (String) A JavaScript expression that evaluates to the log entry log split UID as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logsplit) for details.
 - `user_agent_expression` (String) A JavaScript expression that evaluates to the HTTP request user agent as a string. See the [documentation](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#httprequest) for details.
 
 <a id="nestedatt--output_google_cloud_logging--log_labels"></a>
 ### Nested Schema for `output_google_cloud_logging.log_labels`
 
-Optional:
+Required:
 
-- `label` (String) Label name. Not Null
-- `value_expression` (String) JavaScript expression to compute the label's value. Not Null
+- `label` (String) Label name
+- `value_expression` (String) JavaScript expression to compute the label's value.
 
 
 <a id="nestedatt--output_google_cloud_logging--pq_controls"></a>
@@ -8064,15 +8154,23 @@ Optional:
 <a id="nestedatt--output_google_cloud_logging--resource_type_labels"></a>
 ### Nested Schema for `output_google_cloud_logging.resource_type_labels`
 
-Optional:
+Required:
 
-- `label` (String) Label name. Not Null
-- `value_expression` (String) JavaScript expression to compute the label's value. Not Null
+- `label` (String) Label name
+- `value_expression` (String) JavaScript expression to compute the label's value.
 
 
 
 <a id="nestedatt--output_google_cloud_storage"></a>
 ### Nested Schema for `output_google_cloud_storage`
+
+Required:
+
+- `bucket` (String) Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: `myBucket-${C.vars.myVar}`.
+- `endpoint` (String) Google Cloud Storage service endpoint
+- `region` (String) Region where the bucket is located
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "google_cloud_storage"
 
 Optional:
 
@@ -8083,7 +8181,6 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) HMAC secret. This value can be a constant or a JavaScript expression, such as `${C.env.GCS_SECRET}`.
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example of referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -8095,7 +8192,6 @@ Optional:
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-- `endpoint` (String) Google Cloud Storage service endpoint. Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
@@ -8118,31 +8214,28 @@ Optional:
 - `parquet_version` (String) Determines which data types are supported and how they are represented. must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
 - `partition_expr` (String) JavaScript expression defining how files are partitioned and organized. Default is date-based. If blank, Stream will fall back to the event's __partition field value – if present – otherwise to each location's root directory.
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the bucket is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_google_cloud_storage--retry_settings))
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing Google Cloud Storage requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "google_cloud_storage"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_google_cloud_storage--key_value_metadata"></a>
 ### Nested Schema for `output_google_cloud_storage.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_google_cloud_storage--retry_settings"></a>
@@ -8161,6 +8254,11 @@ Optional:
 <a id="nestedatt--output_google_pubsub"></a>
 ### Nested Schema for `output_google_pubsub`
 
+Required:
+
+- `topic_name` (String) ID of the topic to send events to.
+- `type` (String) must be "google_pubsub"
+
 Optional:
 
 - `batch_size` (Number) The maximum number of items the Google API should batch before it sends them to the topic.
@@ -8169,7 +8267,7 @@ Optional:
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period` (Number) Maximum time to wait before sending a batch (when batch size limit is not reached)
-- `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured batch limits.
+- `flush_period_sec` (String) Parsed as JSON.
 - `google_auth_method` (String) Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials. must be one of ["auto", "manual", "secret"]
 - `id` (String) Unique ID for this output
 - `max_in_progress` (Number) The maximum number of in-progress API requests before backpressure is applied.
@@ -8197,8 +8295,6 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `template_topic_name` (String) Binds 'topicName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topicName' at runtime.
-- `topic_name` (String) ID of the topic to send events to. Not Null
-- `type` (String) Not Null; must be "google_pubsub"
 
 <a id="nestedatt--output_google_pubsub--pq_controls"></a>
 ### Nested Schema for `output_google_pubsub.pq_controls`
@@ -8207,6 +8303,11 @@ Optional:
 
 <a id="nestedatt--output_grafana_cloud"></a>
 ### Nested Schema for `output_grafana_cloud`
+
+Required:
+
+- `id` (String) Unique ID for this output
+- `type` (String) must be "grafana_cloud"
 
 Optional:
 
@@ -8217,7 +8318,6 @@ Optional:
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_grafana_cloud--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. Default: "none"; must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Maximum time between requests. Small values can reduce the payload size below the configured 'Max record size' and 'Max events per request'. Warning: Setting this too low can increase the number of ongoing requests (depending on the value of 'Request concurrency'); this can cause Loki and Prometheus to complain about entries being delivered out of order. Default: 15
-- `id` (String) Unique ID for this output. Not Null
 - `labels` (Attributes List) List of labels to send with logs. Labels define Loki streams, so use static labels to avoid proliferating label value combinations and streams. Can be merged and/or overridden by the events __labels field. Example: "__labels: {host: "cribl.io", level: "error"}" (see [below for nested schema](#nestedatt--output_grafana_cloud--labels))
 - `loki_auth` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--loki_auth))
 - `loki_url` (String) The endpoint to send logs to, such as https://logs-prod-us-central1.grafana.net. LokiUrl, PrometheusUrl, or both are required.
@@ -8248,25 +8348,30 @@ Default: true
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively. Default: ["cribl_host","cribl_wp"]
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_grafana_cloud--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it. Default: 30
-- `type` (String) Not Null; must be "grafana_cloud"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations. Default: false
 
 <a id="nestedatt--output_grafana_cloud--extra_http_headers"></a>
 ### Nested Schema for `output_grafana_cloud.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_grafana_cloud--labels"></a>
 ### Nested Schema for `output_grafana_cloud.labels`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String) Default: ""
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_grafana_cloud--loki_auth"></a>
@@ -8302,10 +8407,13 @@ Optional:
 <a id="nestedatt--output_grafana_cloud--response_retry_settings"></a>
 ### Nested Schema for `output_grafana_cloud.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc. Default: 2
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes). Default: 1000
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds). Default: 10000
 
@@ -8325,6 +8433,13 @@ Optional:
 <a id="nestedatt--output_graphite"></a>
 ### Nested Schema for `output_graphite`
 
+Required:
+
+- `host` (String) The hostname of the destination.
+- `port` (Number) Destination port.
+- `protocol` (String) Protocol to use when communicating with the destination. must be one of ["udp", "tcp"]
+- `type` (String) must be "graphite"
+
 Optional:
 
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
@@ -8332,12 +8447,10 @@ Optional:
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
-- `host` (String) The hostname of the destination. Not Null
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `port` (Number) Destination port. Not Null
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_graphite--pq_controls))
 - `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
@@ -8350,11 +8463,9 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `protocol` (String) Protocol to use when communicating with the destination. Not Null; must be one of ["udp", "tcp"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-- `type` (String) Not Null; must be "graphite"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_graphite--pq_controls"></a>
@@ -8365,12 +8476,16 @@ Optional:
 <a id="nestedatt--output_honeycomb"></a>
 ### Nested Schema for `output_honeycomb`
 
+Required:
+
+- `dataset` (String) Name of the dataset to send events to – e.g., observability
+- `type` (String) must be "honeycomb"
+
 Optional:
 
 - `auth_type` (String) Enter API key directly, or select a stored secret. must be one of ["manual", "secret"]
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `dataset` (String) Name of the dataset to send events to – e.g., observability. Not Null
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_honeycomb--extra_http_headers))
@@ -8405,16 +8520,18 @@ Optional:
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_honeycomb--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "honeycomb"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_honeycomb--extra_http_headers"></a>
 ### Nested Schema for `output_honeycomb.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_honeycomb--pq_controls"></a>
@@ -8424,10 +8541,13 @@ Optional:
 <a id="nestedatt--output_honeycomb--response_retry_settings"></a>
 ### Nested Schema for `output_honeycomb.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -8435,17 +8555,26 @@ Optional:
 <a id="nestedatt--output_honeycomb--timeout_retry_settings"></a>
 ### Nested Schema for `output_honeycomb.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_humio_hec"></a>
 ### Nested Schema for `output_humio_hec`
+
+Required:
+
+- `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent. must be one of ["JSON", "raw"]
+- `type` (String) must be "humio_hec"
+- `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw
 
 Optional:
 
@@ -8457,7 +8586,6 @@ Optional:
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_humio_hec--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
-- `format` (String) When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent. Not Null; must be one of ["JSON", "raw"]
 - `id` (String) Unique ID for this output
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
@@ -8488,17 +8616,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_humio_hec--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) CrowdStrike Falcon LogScale authentication token
-- `type` (String) Not Null; must be "humio_hec"
-- `url` (String) URL to a CrowdStrike Falcon LogScale endpoint to send events to. Examples: https://cloud.us.humio.com/api/v1/ingest/hec for JSON and https://cloud.us.humio.com/api/v1/ingest/hec/raw for raw. Not Null
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_humio_hec--extra_http_headers"></a>
 ### Nested Schema for `output_humio_hec.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_humio_hec--pq_controls"></a>
@@ -8508,10 +8637,13 @@ Optional:
 <a id="nestedatt--output_humio_hec--response_retry_settings"></a>
 ### Nested Schema for `output_humio_hec.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -8519,21 +8651,29 @@ Optional:
 <a id="nestedatt--output_humio_hec--timeout_retry_settings"></a>
 ### Nested Schema for `output_humio_hec.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_influxdb"></a>
 ### Nested Schema for `output_influxdb`
 
+Required:
+
+- `type` (String) must be "influxdb"
+- `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write
+
 Optional:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) InfluxDB authentication type. must be one of ["none", "basic", "credentialsSecret", "token", "textSecret"]
 - `bucket` (String) Bucket to write to.
 - `compress` (Boolean) Compress the payload body before sending
@@ -8547,11 +8687,11 @@ Optional:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_influxdb--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_influxdb--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_influxdb--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `org` (String) Organization ID for this bucket.
 - `password` (String)
@@ -8574,8 +8714,8 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_influxdb--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
@@ -8586,10 +8726,8 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `timestamp_precision` (String) Sets the precision for the supplied Unix time values. Defaults to milliseconds. must be one of ["ns", "u", "ms", "s", "m", "h"]
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
-- `type` (String) Not Null; must be "influxdb"
-- `url` (String) URL of an InfluxDB cluster to send events to, e.g., http://localhost:8086/write. Not Null
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `use_v2_api` (Boolean) The v2 API can be enabled with InfluxDB versions 1.8 and later.
 - `username` (String)
@@ -8598,10 +8736,13 @@ Optional:
 <a id="nestedatt--output_influxdb--extra_http_headers"></a>
 ### Nested Schema for `output_influxdb.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_influxdb--oauth_headers"></a>
@@ -8609,8 +8750,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth header name. Not Null
-- `value` (String) OAuth header value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_influxdb--oauth_params"></a>
@@ -8618,8 +8759,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth parameter name. Not Null
-- `value` (String) OAuth parameter value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_influxdb--pq_controls"></a>
@@ -8629,10 +8770,13 @@ Optional:
 <a id="nestedatt--output_influxdb--response_retry_settings"></a>
 ### Nested Schema for `output_influxdb.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -8640,24 +8784,32 @@ Optional:
 <a id="nestedatt--output_influxdb--timeout_retry_settings"></a>
 ### Nested Schema for `output_influxdb.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_kafka"></a>
 ### Nested Schema for `output_kafka`
 
+Required:
+
+- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.
+- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
+- `type` (String) must be "kafka"
+
 Optional:
 
 - `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092. Not Null
 - `compression` (String) Codec to use to compress the data before sending to Kafka. must be one of ["none", "gzip", "snappy", "lz4", "zstd"]
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
@@ -8694,11 +8846,13 @@ Optional:
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_topic` (String) Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_kafka--tls))
-- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field. Not Null
-- `type` (String) Not Null; must be "kafka"
 
 <a id="nestedatt--output_kafka--kafka_schema_registry"></a>
 ### Nested Schema for `output_kafka.kafka_schema_registry`
+
+Required:
+
+- `disabled` (Boolean)
 
 Optional:
 
@@ -8706,7 +8860,6 @@ Optional:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Not Null
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -8715,10 +8868,13 @@ Optional:
 <a id="nestedatt--output_kafka--kafka_schema_registry--auth"></a>
 ### Nested Schema for `output_kafka.kafka_schema_registry.auth`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 
 
 <a id="nestedatt--output_kafka--kafka_schema_registry--tls"></a>
@@ -8747,6 +8903,10 @@ Optional:
 <a id="nestedatt--output_kafka--sasl"></a>
 ### Nested Schema for `output_kafka.sasl`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `auth_type` (String) Enter credentials directly, or select a stored secret. must be one of ["manual", "secret"]
@@ -8754,7 +8914,6 @@ Optional:
 - `client_id` (String) Client ID to use for OAuth authentication
 - `client_text_secret` (String) Select or create a stored text secret
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 - `keytab_location` (String) Location of keytab file for authentication principal
 - `mechanism` (String) must be one of ["plain", "scram-sha-256", "scram-sha-512", "kerberos"]
 - `oauth_enabled` (Boolean) Enable OAuth authentication
@@ -8769,19 +8928,19 @@ Optional:
 <a id="nestedatt--output_kafka--sasl--oauth_params"></a>
 ### Nested Schema for `output_kafka.sasl.oauth_params`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_kafka--sasl--sasl_extensions"></a>
 ### Nested Schema for `output_kafka.sasl.sasl_extensions`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 
@@ -8806,6 +8965,12 @@ Optional:
 
 <a id="nestedatt--output_kinesis"></a>
 ### Nested Schema for `output_kinesis`
+
+Required:
+
+- `region` (String) Region where the Kinesis stream is located
+- `stream_name` (String) Kinesis stream name to send events to.
+- `type` (String) must be "kinesis"
 
 Optional:
 
@@ -8841,11 +9006,9 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `region` (String) Region where the Kinesis stream is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
 - `signature_version` (String) Signature version to use for signing Kinesis stream requests. must be one of ["v2", "v4"]
-- `stream_name` (String) Kinesis stream name to send events to. Not Null
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `template_assume_role_arn` (String) Binds 'assumeRoleArn' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'assumeRoleArn' at runtime.
@@ -8854,7 +9017,6 @@ Optional:
 - `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `template_stream_name` (String) Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
-- `type` (String) Not Null; must be "kinesis"
 - `use_list_shards` (Boolean) Provides higher stream rate limits, improving delivery speed and reliability by minimizing throttling. See the [ListShards API](https://docs.aws.amazon.com/kinesis/latest/APIReference/API_ListShards.html) documentation for details.
 
 <a id="nestedatt--output_kinesis--pq_controls"></a>
@@ -8865,6 +9027,13 @@ Optional:
 <a id="nestedatt--output_local_search_storage"></a>
 ### Nested Schema for `output_local_search_storage`
 
+Required:
+
+- `database` (String)
+- `table_name` (String) Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_".
+- `type` (String) must be "local_search_storage"
+- `url` (String) URL of the database instance. Example: http://localhost:8123/
+
 Optional:
 
 - `async_inserts` (Boolean) Collect data into batches for later processing. Disable to write to a table immediately.
@@ -8873,7 +9042,6 @@ Optional:
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `database` (String) Not Null
 - `describe_table` (String) Retrieves the table schema and populates the Column Mapping table
 - `description` (String)
 - `dump_format_errors_to_disk` (Boolean) Log the most recent event that fails to match the table schema
@@ -8912,15 +9080,12 @@ Optional:
 - `stats_destination` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--stats_destination))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `table_name` (String) Name of the table where data will be inserted. Name can contain letters (A-Z, a-z), numbers (0-9), and the character "_", and must start with either a letter or the character "_". Not Null
 - `template_database` (String) Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
 - `template_table_name` (String) Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_local_search_storage--tls))
-- `type` (String) Not Null; must be "local_search_storage"
-- `url` (String) URL of the database instance. Example: http://localhost:8123/. Not Null
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 - `wait_for_async_inserts` (Boolean) Cribl will wait for confirmation that data has been fully inserted into the database before proceeding. Disabling this option can increase throughput, but Cribl won't be able to verify data has been completely inserted.
@@ -8928,20 +9093,26 @@ Optional:
 <a id="nestedatt--output_local_search_storage--column_mappings"></a>
 ### Nested Schema for `output_local_search_storage.column_mappings`
 
+Required:
+
+- `column_name` (String) Name of the column that will store field value
+- `column_value_expression` (String) JavaScript expression to compute value to be inserted into the table
+
 Optional:
 
-- `column_name` (String) Name of the column that will store field value. Not Null
 - `column_type` (String) Type of the column in the database
-- `column_value_expression` (String) JavaScript expression to compute value to be inserted into the table. Not Null
 
 
 <a id="nestedatt--output_local_search_storage--extra_http_headers"></a>
 ### Nested Schema for `output_local_search_storage.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_local_search_storage--pq_controls"></a>
@@ -8951,10 +9122,13 @@ Optional:
 <a id="nestedatt--output_local_search_storage--response_retry_settings"></a>
 ### Nested Schema for `output_local_search_storage.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -8976,12 +9150,15 @@ Optional:
 <a id="nestedatt--output_local_search_storage--timeout_retry_settings"></a>
 ### Nested Schema for `output_local_search_storage.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_local_search_storage--tls"></a>
@@ -9003,6 +9180,11 @@ Optional:
 
 <a id="nestedatt--output_loki"></a>
 ### Nested Schema for `output_loki`
+
+Required:
+
+- `type` (String) must be "loki"
+- `url` (String) The endpoint to send logs to
 
 Optional:
 
@@ -9050,27 +9232,28 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) Bearer token to include in the authorization header. In Grafana Cloud, this is generally built by concatenating the username and the API key, separated by a colon. Example: <your-username>:<your-api-key>
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "loki"
-- `url` (String) The endpoint to send logs to. Not Null
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String) Username for authentication
 
 <a id="nestedatt--output_loki--extra_http_headers"></a>
 ### Nested Schema for `output_loki.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_loki--labels"></a>
 ### Nested Schema for `output_loki.labels`
 
-Optional:
+Required:
 
-- `name` (String) Not Null
-- `value` (String) Not Null
+- `name` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_loki--pq_controls"></a>
@@ -9080,10 +9263,13 @@ Optional:
 <a id="nestedatt--output_loki--response_retry_settings"></a>
 ### Nested Schema for `output_loki.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -9091,24 +9277,32 @@ Optional:
 <a id="nestedatt--output_loki--timeout_retry_settings"></a>
 ### Nested Schema for `output_loki.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_microsoft_fabric"></a>
 ### Nested Schema for `output_microsoft_fabric`
 
+Required:
+
+- `bootstrap_server` (String) Bootstrap server from Fabric Eventstream's endpoint
+- `topic` (String) Topic name from Fabric Eventstream's endpoint
+- `type` (String) must be "microsoft_fabric"
+
 Optional:
 
 - `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `bootstrap_server` (String) Bootstrap server from Fabric Eventstream's endpoint. Not Null
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
@@ -9142,8 +9336,6 @@ Optional:
 - `template_bootstrap_server` (String) Binds 'bootstrap_server' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bootstrap_server' at runtime.
 - `template_topic` (String) Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_microsoft_fabric--tls))
-- `topic` (String) Topic name from Fabric Eventstream's endpoint. Not Null
-- `type` (String) Not Null; must be "microsoft_fabric"
 
 <a id="nestedatt--output_microsoft_fabric--pq_controls"></a>
 ### Nested Schema for `output_microsoft_fabric.pq_controls`
@@ -9152,6 +9344,10 @@ Optional:
 <a id="nestedatt--output_microsoft_fabric--sasl"></a>
 ### Nested Schema for `output_microsoft_fabric.sasl`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `cert_path` (String)
@@ -9159,7 +9355,6 @@ Optional:
 - `client_id` (String) client_id to pass in the OAuth request parameter
 - `client_secret_auth_type` (String) must be one of ["secret", "certificate"]
 - `client_text_secret` (String) Select or create a stored text secret
-- `disabled` (Boolean) Not Null
 - `mechanism` (String) must be one of ["plain", "oauthbearer"]
 - `oauth_endpoint` (String) Endpoint used to acquire authentication tokens from Azure. must be one of ["https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn"]
 - `passphrase` (String)
@@ -9173,15 +9368,25 @@ Optional:
 <a id="nestedatt--output_microsoft_fabric--tls"></a>
 ### Nested Schema for `output_microsoft_fabric.tls`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
-- `disabled` (Boolean) Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that are not authorized by a CA in the CA certificate path, or by another trusted CA (such as the system's)
 
 
 
 <a id="nestedatt--output_minio"></a>
 ### Nested Schema for `output_minio`
+
+Required:
+
+- `bucket` (String) Name of the destination MinIO bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `endpoint` (String) MinIO service url (e.g. http://minioHost:9000)
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage.
+- `type` (String) must be "minio"
 
 Optional:
 
@@ -9192,7 +9397,6 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression, such as `${C.env.SOME_SECRET}`).
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination MinIO bucket. This value can be a constant or a JavaScript expression that can only be evaluated at init time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -9204,7 +9408,6 @@ Optional:
 - `enable_page_checksum` (Boolean) Parquet tools can use the checksum of a Parquet page to verify data integrity
 - `enable_statistics` (Boolean) Statistics profile an entire file in terms of minimum/maximum values within data, numbers of nulls, etc. You can use Parquet tools to view statistics.
 - `enable_write_page_index` (Boolean) One page index contains statistics for one data page. Parquet readers use statistics to enable page skipping.
-- `endpoint` (String) MinIO service url (e.g. http://minioHost:9000). Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `file_name_suffix` (String) JavaScript expression to define the output filename suffix (can be constant).  The `__format` variable refers to the value of the `Data format` field (`json` or `raw`).  The `__compression` field refers to the kind of compression being used (`none` or `gzip`).
 - `force_close_on_shutdown` (Boolean) Force all staged files to close during an orderly Node shutdown. This triggers immediate upload of in-progress data — regardless of idle time, file age, or size thresholds — to minimize data loss.
@@ -9236,7 +9439,6 @@ Optional:
 - `server_side_encryption` (String) Server-side encryption for uploaded objects. must be "AES256"
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing MinIO requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -9244,17 +9446,16 @@ Optional:
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "minio"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_minio--key_value_metadata"></a>
 ### Nested Schema for `output_minio.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_minio--retry_settings"></a>
@@ -9273,6 +9474,14 @@ Optional:
 <a id="nestedatt--output_msk"></a>
 ### Nested Schema for `output_msk`
 
+Required:
+
+- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. must be one of ["auto", "manual", "secret"]
+- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092.
+- `region` (String) Region where the MSK cluster is located
+- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field.
+- `type` (String) must be "msk"
+
 Optional:
 
 - `ack` (Number) Control the number of required acknowledgments. must be one of [1, 0, -1]
@@ -9280,11 +9489,9 @@ Optional:
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `authentication_timeout` (Number) Maximum time to wait for Kafka to respond to an authentication request
 - `aws_api_key` (String)
-- `aws_authentication_method` (String) AWS authentication method. Choose Auto to use IAM roles. Not Null; must be one of ["auto", "manual", "secret"]
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `backoff_rate` (Number) Set the backoff multiplier (2-20) to control the retry frequency for failed messages. For faster retries, use a lower multiplier. For slower retries with more delay between attempts, use a higher multiplier. The multiplier is used in an exponential backoff formula; see the Kafka [documentation](https://kafka.js.org/docs/retry-detailed) for details.
-- `brokers` (List of String) Enter each Kafka bootstrap server you want to use. Specify hostname and port, e.g., mykafkabroker:9092, or just hostname, in which case @{product} will assign port 9092. Not Null
 - `compression` (String) Codec to use to compress the data before sending to Kafka. must be one of ["none", "gzip", "snappy", "lz4", "zstd"]
 - `connection_timeout` (Number) Maximum time to wait for a connection to complete successfully
 - `description` (String)
@@ -9318,7 +9525,6 @@ Optional:
 - `protobuf_encoding_id` (String) Select the type of object you want the Protobuf definitions to use for event encoding
 - `protobuf_library_id` (String) Select a set of Protobuf definitions for the events you want to send
 - `reauthentication_threshold` (Number) Specifies a time window during which @{product} can reauthenticate if needed. Creates the window measuring backward from the moment when credentials are set to expire.
-- `region` (String) Region where the MSK cluster is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `request_timeout` (Number) Maximum time to wait for Kafka to respond to a request
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -9332,11 +9538,13 @@ Optional:
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
 - `template_topic` (String) Binds 'topic' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'topic' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_msk--tls))
-- `topic` (String) The topic to publish events to. Can be overridden using the __topicOut field. Not Null
-- `type` (String) Not Null; must be "msk"
 
 <a id="nestedatt--output_msk--kafka_schema_registry"></a>
 ### Nested Schema for `output_msk.kafka_schema_registry`
+
+Required:
+
+- `disabled` (Boolean)
 
 Optional:
 
@@ -9344,7 +9552,6 @@ Optional:
 - `connection_timeout` (Number) Maximum time to wait for a Schema Registry connection to complete successfully
 - `default_key_schema_id` (Number) Used when __keySchemaIdOut is not present, to transform key values, leave blank if key transformation is not required by default.
 - `default_value_schema_id` (Number) Used when __valueSchemaIdOut is not present, to transform _raw, leave blank if value transformation is not required by default.
-- `disabled` (Boolean) Not Null
 - `max_retries` (Number) Maximum number of times to try fetching schemas from the Schema Registry
 - `request_timeout` (Number) Maximum time to wait for the Schema Registry to respond to a request
 - `schema_registry_url` (String) URL for accessing the Confluent Schema Registry. Example: http://localhost:8081. To connect over TLS, use https instead of http.
@@ -9353,10 +9560,13 @@ Optional:
 <a id="nestedatt--output_msk--kafka_schema_registry--auth"></a>
 ### Nested Schema for `output_msk.kafka_schema_registry.auth`
 
+Required:
+
+- `disabled` (Boolean)
+
 Optional:
 
 - `credentials_secret` (String) Select or create a secret that references your credentials
-- `disabled` (Boolean) Not Null
 
 
 <a id="nestedatt--output_msk--kafka_schema_registry--tls"></a>
@@ -9404,27 +9614,33 @@ Optional:
 <a id="nestedatt--output_netflow"></a>
 ### Nested Schema for `output_netflow`
 
+Required:
+
+- `hosts` (Attributes List) One or more NetFlow Destinations to forward events to (see [below for nested schema](#nestedatt--output_netflow--hosts))
+- `type` (String) must be "netflow"
+
 Optional:
 
 - `description` (String)
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every datagram sent will incur a DNS lookup.
 - `enable_ip_spoofing` (Boolean) Send NetFlow traffic using the original event's Source IP and port. To enable this, you must install the external `udp-sender` helper binary at `/usr/bin/udp-sender` on all Worker Nodes and grant it the `CAP_NET_RAW` capability.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `hosts` (Attributes List) One or more NetFlow Destinations to forward events to. Not Null (see [below for nested schema](#nestedatt--output_netflow--hosts))
 - `id` (String) Unique ID for this output
 - `max_record_size` (Number) MTU in bytes. The actual maximum NetFlow payload size will be MTU minus IP and UDP headers (28 bytes for IPv4, 48 bytes for IPv6). For example, with the default MTU of 1500, the max payload is 1472 bytes for IPv4. Payloads exceeding this limit will be dropped.
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "netflow"
 
 <a id="nestedatt--output_netflow--hosts"></a>
 ### Nested Schema for `output_netflow.hosts`
 
+Required:
+
+- `host` (String) Destination host
+- `port` (Number) Destination port, default is 2055
+
 Optional:
 
-- `host` (String) Destination host. Not Null
-- `port` (Number) Destination port, default is 2055. Not Null
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 
@@ -9432,6 +9648,10 @@ Optional:
 
 <a id="nestedatt--output_newrelic"></a>
 ### Nested Schema for `output_newrelic`
+
+Required:
+
+- `type` (String) must be "newrelic"
 
 Optional:
 
@@ -9481,25 +9701,27 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "newrelic"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_newrelic--extra_http_headers"></a>
 ### Nested Schema for `output_newrelic.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_newrelic--metadata"></a>
 ### Nested Schema for `output_newrelic.metadata`
 
-Optional:
+Required:
 
-- `name` (String) Not Null; must be one of ["service", "hostname", "timestamp", "auditId"]
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
+- `name` (String) must be one of ["service", "hostname", "timestamp", "auditId"]
+- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
 <a id="nestedatt--output_newrelic--pq_controls"></a>
@@ -9509,10 +9731,13 @@ Optional:
 <a id="nestedatt--output_newrelic--response_retry_settings"></a>
 ### Nested Schema for `output_newrelic.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -9520,21 +9745,29 @@ Optional:
 <a id="nestedatt--output_newrelic--timeout_retry_settings"></a>
 ### Nested Schema for `output_newrelic.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_newrelic_events"></a>
 ### Nested Schema for `output_newrelic_events`
 
+Required:
+
+- `account_id` (String) New Relic account ID
+- `event_type` (String) Default eventType to use when not present in an event. For more information, see [here](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words).
+- `type` (String) must be "newrelic_events"
+
 Optional:
 
-- `account_id` (String) New Relic account ID. Not Null
 - `api_key` (String) New Relic API key. Can be overridden using __newRelic_apiKey field.
 - `auth_type` (String) Enter API key directly, or select a stored secret. must be one of ["manual", "secret"]
 - `compress` (Boolean) Compress the payload body before sending
@@ -9542,7 +9775,6 @@ Optional:
 - `custom_url` (String)
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `event_type` (String) Default eventType to use when not present in an event. For more information, see [here](https://docs.newrelic.com/docs/telemetry-data-platform/custom-data/custom-events/data-requirements-limits-custom-event-data/#reserved-words). Not Null
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_newrelic_events--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
@@ -9579,16 +9811,18 @@ Optional:
 - `text_secret` (String) Select or create a stored text secret
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_newrelic_events--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
-- `type` (String) Not Null; must be "newrelic_events"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_newrelic_events--extra_http_headers"></a>
 ### Nested Schema for `output_newrelic_events.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_newrelic_events--pq_controls"></a>
@@ -9598,10 +9832,13 @@ Optional:
 <a id="nestedatt--output_newrelic_events--response_retry_settings"></a>
 ### Nested Schema for `output_newrelic_events.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -9609,28 +9846,35 @@ Optional:
 <a id="nestedatt--output_newrelic_events--timeout_retry_settings"></a>
 ### Nested Schema for `output_newrelic_events.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_open_telemetry"></a>
 ### Nested Schema for `output_open_telemetry`
 
+Required:
+
+- `endpoint` (String) The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used.
+- `type` (String) must be "open_telemetry"
+
 Optional:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) OpenTelemetry authentication type. must be one of ["none", "basic", "credentialsSecret", "token", "textSecret"]
 - `compress` (String) Type of compression to apply to messages sent to the OpenTelemetry endpoint. must be one of ["none", "deflate", "gzip"]
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `credentials_secret` (String) Select or create a secret that references your credentials
 - `description` (String)
-- `endpoint` (String) The endpoint where OTel events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Unspecified ports will default to 4317, unless the endpoint is an HTTPS-based URL or TLS is enabled, in which case 443 will be used. Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_open_telemetry--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
@@ -9642,11 +9886,11 @@ Optional:
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
 - `keep_alive_time` (Number) How often the sender should ping the peer to keep the connection open
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_open_telemetry--metadata))
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_open_telemetry--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send. must be one of ["0.10.0", "1.3.1"]
 - `password` (String)
@@ -9670,8 +9914,8 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_open_telemetry--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `text_secret` (String) Select or create a stored text secret
@@ -9679,28 +9923,30 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
-- `type` (String) Not Null; must be "open_telemetry"
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 
 <a id="nestedatt--output_open_telemetry--extra_http_headers"></a>
 ### Nested Schema for `output_open_telemetry.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_open_telemetry--metadata"></a>
 ### Nested Schema for `output_open_telemetry.metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_open_telemetry--oauth_headers"></a>
@@ -9708,8 +9954,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth header name. Not Null
-- `value` (String) OAuth header value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_open_telemetry--oauth_params"></a>
@@ -9717,8 +9963,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth parameter name. Not Null
-- `value` (String) OAuth parameter value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_open_telemetry--pq_controls"></a>
@@ -9728,10 +9974,13 @@ Optional:
 <a id="nestedatt--output_open_telemetry--response_retry_settings"></a>
 ### Nested Schema for `output_open_telemetry.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -9739,12 +9988,15 @@ Optional:
 <a id="nestedatt--output_open_telemetry--timeout_retry_settings"></a>
 ### Nested Schema for `output_open_telemetry.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_open_telemetry--tls"></a>
@@ -9768,9 +10020,14 @@ Optional:
 <a id="nestedatt--output_prometheus"></a>
 ### Nested Schema for `output_prometheus`
 
+Required:
+
+- `type` (String) must be "prometheus"
+- `url` (String) The endpoint to send metrics to
+
 Optional:
 
-- `auth_header_expr` (String) JavaScript expression to compute the Authorization header value to pass in requests. The value `${token}` is used to reference the token obtained from authentication, e.g.: `Bearer ${token}`.
+- `auth_header_expr` (String) Parsed as JSON.
 - `auth_type` (String) Remote Write authentication type. must be one of ["none", "basic", "credentialsSecret", "token", "textSecret"]
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `credentials_secret` (String) Select or create a secret that references your credentials
@@ -9780,13 +10037,13 @@ Optional:
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
 - `flush_period_sec` (Number) Maximum time between requests. Small values could cause the payload size to be smaller than the configured Body size limit.
 - `id` (String) Unique ID for this output
-- `login_url` (String) URL for OAuth
+- `login_url` (String) Parsed as JSON.
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metric_rename_expr` (String) JavaScript expression that can be used to rename metrics. For example, name.replace(/\./g, '_') will replace all '.' characters in a metric's name with the supported '_' character. Use the 'name' global variable to access the metric's name. You can access event fields' values via __e.<fieldName>.
 - `metrics_flush_period_sec` (Number) How frequently metrics metadata is sent out. Value cannot be smaller than the base Flush period set above.
-- `oauth_headers` (Attributes List) Additional headers to send in the OAuth login request. @{product} will automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_headers))
-- `oauth_params` (Attributes List) Additional parameters to send in the OAuth login request. @{product} will combine the secret with these parameters, and will send the URL-encoded result in a POST request to the endpoint specified in the 'Login URL'. We'll automatically add the content-type header 'application/x-www-form-urlencoded' when sending this request. (see [below for nested schema](#nestedatt--output_prometheus--oauth_params))
+- `oauth_headers` (Attributes List) (see [below for nested schema](#nestedatt--output_prometheus--oauth_headers))
+- `oauth_params` (Attributes List) (see [below for nested schema](#nestedatt--output_prometheus--oauth_params))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `password` (String)
 - `pipeline` (String) Pipeline to process data before sending out to this output
@@ -9808,8 +10065,8 @@ Optional:
 - `response_honor_retry_after_header` (Boolean) Honor any Retry-After header that specifies a delay (in seconds) no longer than 180 seconds after the retry request. @{product} limits the delay to 180 seconds, even if the Retry-After header specifies a longer delay. When enabled, takes precedence over user-configured retry options. When disabled, all Retry-After headers are ignored.
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_prometheus--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
-- `secret` (String) Secret parameter value to pass in request body
-- `secret_param_name` (String) Secret parameter name to pass in request body
+- `secret` (String) Parsed as JSON.
+- `secret_param_name` (String) Parsed as JSON.
 - `send_metadata` (Boolean) Generate and send metadata (`type` and `metricFamilyName`) requests
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions to generated metrics.
@@ -9818,20 +10075,21 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_prometheus--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) Bearer token to include in the authorization header
-- `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
-- `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
-- `type` (String) Not Null; must be "prometheus"
-- `url` (String) The endpoint to send metrics to. Not Null
+- `token_attribute_name` (String) Parsed as JSON.
+- `token_timeout_secs` (String) Parsed as JSON.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 - `username` (String)
 
 <a id="nestedatt--output_prometheus--extra_http_headers"></a>
 ### Nested Schema for `output_prometheus.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_prometheus--oauth_headers"></a>
@@ -9839,8 +10097,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth header name. Not Null
-- `value` (String) OAuth header value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_prometheus--oauth_params"></a>
@@ -9848,8 +10106,8 @@ Optional:
 
 Optional:
 
-- `name` (String) OAuth parameter name. Not Null
-- `value` (String) OAuth parameter value. Not Null
+- `name` (String) Parsed as JSON.
+- `value` (String) Parsed as JSON.
 
 
 <a id="nestedatt--output_prometheus--pq_controls"></a>
@@ -9859,10 +10117,13 @@ Optional:
 <a id="nestedatt--output_prometheus--response_retry_settings"></a>
 ### Nested Schema for `output_prometheus.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -9870,17 +10131,24 @@ Optional:
 <a id="nestedatt--output_prometheus--timeout_retry_settings"></a>
 ### Nested Schema for `output_prometheus.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_ring"></a>
 ### Nested Schema for `output_ring`
+
+Required:
+
+- `type` (String) must be "ring"
 
 Optional:
 
@@ -9897,11 +10165,15 @@ Optional:
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "ring"
 
 
 <a id="nestedatt--output_router"></a>
 ### Nested Schema for `output_router`
+
+Required:
+
+- `rules` (Attributes List) Event routing rules (see [below for nested schema](#nestedatt--output_router--rules))
+- `type` (String) must be "router"
 
 Optional:
 
@@ -9909,25 +10181,32 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `rules` (Attributes List) Event routing rules. Not Null (see [below for nested schema](#nestedatt--output_router--rules))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "router"
 
 <a id="nestedatt--output_router--rules"></a>
 ### Nested Schema for `output_router.rules`
 
+Required:
+
+- `filter` (String) JavaScript expression to select events to send to output
+- `output` (String) Output to send matching events to
+
 Optional:
 
 - `description` (String) Description of this rule's purpose
-- `filter` (String) JavaScript expression to select events to send to output. Not Null
 - `final` (Boolean) Flag to control whether to stop the event from being checked against other rules
-- `output` (String) Output to send matching events to. Not Null
 
 
 
 <a id="nestedatt--output_s3"></a>
 ### Nested Schema for `output_s3`
+
+Required:
+
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "s3"
 
 Optional:
 
@@ -9940,7 +10219,6 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String) Secret key. This value can be a constant or a JavaScript expression. Example: `${C.env.SOME_SECRET}`)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
 - `compress` (String) Data compression format to apply to HTTP content before it is delivered. must be one of ["none", "gzip"]
 - `compression_level` (String) Compression level to apply before moving files to final destination. must be one of ["best_speed", "normal", "best_compression"]
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
@@ -9988,7 +10266,6 @@ Optional:
 - `server_side_encryption` (String) must be one of ["AES256", "aws:kms"]
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing S3 requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -9999,17 +10276,16 @@ Optional:
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_format` (String) Binds 'format' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'format' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "s3"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_s3--key_value_metadata"></a>
 ### Nested Schema for `output_s3.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_s3--retry_settings"></a>
@@ -10028,11 +10304,19 @@ Optional:
 <a id="nestedatt--output_security_lake"></a>
 ### Nested Schema for `output_security_lake`
 
+Required:
+
+- `account_id` (String) ID of the AWS account whose data the Destination will write to Security Lake. This should have been configured when creating the Amazon Security Lake custom source.
+- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
+- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`
+- `custom_source` (String) Name of the custom source configured in Amazon Security Lake
+- `region` (String) Region where the Amazon Security Lake is located.
+- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage.
+- `type` (String) must be "security_lake"
+
 Optional:
 
-- `account_id` (String) ID of the AWS account whose data the Destination will write to Security Lake. This should have been configured when creating the Amazon Security Lake custom source. Not Null
 - `add_id_to_stage_path` (Boolean) Add the Output ID value to staging location
-- `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume. Not Null
 - `assume_role_external_id` (String) External ID to use when assuming role
 - `automatic_schema` (Boolean) Automatically calculate the schema based on the events of each Parquet file generated
 - `aws_api_key` (String) This value can be a constant or a JavaScript expression (`${C.env.SOME_ACCESS_KEY}`)
@@ -10040,8 +10324,6 @@ Optional:
 - `aws_secret` (String) Select or create a stored secret that references your access key and secret key
 - `aws_secret_key` (String)
 - `base_file_name` (String) JavaScript expression to define the output filename prefix (can be constant)
-- `bucket` (String) Name of the destination S3 bucket. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `myBucket-${C.vars.myVar}`. Not Null
-- `custom_source` (String) Name of the custom source configured in Amazon Security Lake. Not Null
 - `deadletter_enabled` (Boolean) If a file fails to move to its final destination after the maximum number of retries, move it to a designated directory to prevent further errors
 - `deadletter_path` (String) Storage location for files that fail to reach their final destination after maximum retries are exceeded
 - `description` (String)
@@ -10075,7 +10357,6 @@ Optional:
 - `parquet_schema` (String) To add a new schema, navigate to Processing > Knowledge > Parquet Schemas
 - `parquet_version` (String) Determines which data types are supported and how they are represented. must be one of ["PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `region` (String) Region where the Amazon Security Lake is located. Not Null
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `remove_empty_dirs` (Boolean) Remove empty staging directories after moving files
 - `retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_security_lake--retry_settings))
@@ -10083,7 +10364,6 @@ Optional:
 - `server_side_encryption` (String) must be one of ["AES256", "aws:kms"]
 - `should_log_invalid_rows` (Boolean) Log up to 3 rows that @{product} skips due to data mismatch
 - `signature_version` (String) Signature version to use for signing Amazon Security Lake requests. must be one of ["v2", "v4"]
-- `stage_path` (String) Filesystem location in which to buffer files, before compressing and moving to final destination. Use performant and stable storage. Not Null
 - `storage_class` (String) Storage class to select for uploaded objects. must be one of ["STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards. These fields are added as dimensions and labels to generated metrics and logs, respectively.
@@ -10093,17 +10373,16 @@ Optional:
 - `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
 - `template_bucket` (String) Binds 'bucket' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'bucket' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "security_lake"
 - `verify_permissions` (Boolean) Disable if you can access files within the bucket but not the bucket itself
 - `write_high_water_mark` (Number) Buffer size used to write to a file
 
 <a id="nestedatt--output_security_lake--key_value_metadata"></a>
 ### Nested Schema for `output_security_lake.key_value_metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_security_lake--retry_settings"></a>
@@ -10122,11 +10401,18 @@ Optional:
 <a id="nestedatt--output_sentinel"></a>
 ### Nested Schema for `output_sentinel`
 
+Required:
+
+- `client_id` (String) JavaScript expression to compute the Client ID for the Azure application. Can be a constant.
+- `endpoint_url_configuration` (String) Enter the data collection endpoint URL or the individual ID. must be one of ["url", "ID"]
+- `login_url` (String) URL for OAuth
+- `secret` (String) Secret parameter value to pass in request body
+- `type` (String) must be "sentinel"
+
 Optional:
 
 - `advanced_content_type` (String) HTTP content-type header value
 - `auth_type` (String) must be "oauth"
-- `client_id` (String) JavaScript expression to compute the Client ID for the Azure application. Can be a constant. Not Null
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `custom_content_type` (String) Content type to use for request. Defaults to application/x-ndjson. Any content types set in Advanced Settings > Extra HTTP headers will override this entry.
@@ -10137,7 +10423,6 @@ Optional:
 - `dce_endpoint` (String) Data collection endpoint (DCE) URL. In the format: `https://<Endpoint-Name>-<Identifier>.<Region>.ingest.monitor.azure.com`
 - `dcr_id` (String) Immutable ID for the Data Collection Rule (DCR)
 - `description` (String)
-- `endpoint_url_configuration` (String) Enter the data collection endpoint URL or the individual ID. Not Null; must be one of ["url", "ID"]
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events. You can also add headers dynamically on a per-event basis in the __headers field, as explained in [Cribl Docs](https://docs.cribl.io/stream/destinations-webhook/#internal-fields). (see [below for nested schema](#nestedatt--output_sentinel--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
@@ -10147,7 +10432,6 @@ Optional:
 - `format_payload_code` (String) Optional JavaScript code to format the payload sent to the Destination. The payload, containing a batch of formatted events, is accessible through the __e['payload'] variable. The formatted payload is returned in the __e['__payloadOut'] variable. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.
 - `id` (String) Unique ID for this output
 - `keep_alive` (Boolean) Disable to close the connection immediately after sending the outgoing request
-- `login_url` (String) URL for OAuth. Not Null
 - `max_payload_events` (Number) Maximum number of events to include in the request body. Default is 0 (unlimited).
 - `max_payload_size_kb` (Number) Maximum size (KB) of the request body (defaults to the API's maximum limit of 1000 KB)
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
@@ -10171,7 +10455,6 @@ Optional:
 - `response_retry_settings` (Attributes List) Automatically retry after unsuccessful response status codes, such as 429 (Too Many Requests) or 503 (Service Unavailable) (see [below for nested schema](#nestedatt--output_sentinel--response_retry_settings))
 - `safe_headers` (List of String) List of headers that are safe to log in plain text
 - `scope` (String) Scope to pass in the OAuth request
-- `secret` (String) Secret parameter value to pass in request body. Not Null
 - `stream_name` (String) The name of the stream (Sentinel table) in which to store the events
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
@@ -10186,17 +10469,19 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "sentinel"
 - `url` (String) URL to send events to. Can be overwritten by an event's __url field.
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_sentinel--extra_http_headers"></a>
 ### Nested Schema for `output_sentinel.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_sentinel--pq_controls"></a>
@@ -10206,10 +10491,13 @@ Optional:
 <a id="nestedatt--output_sentinel--response_retry_settings"></a>
 ### Nested Schema for `output_sentinel.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -10217,17 +10505,26 @@ Optional:
 <a id="nestedatt--output_sentinel--timeout_retry_settings"></a>
 ### Nested Schema for `output_sentinel.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_sentinel_one_ai_siem"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem`
+
+Required:
+
+- `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text). must be one of ["/services/collector/event", "/services/collector/raw"]
+- `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in. must be one of ["US", "CA", "EMEA", "AP", "APS", "AU", "Custom"]
+- `type` (String) must be "sentinel_one_ai_siem"
 
 Optional:
 
@@ -10242,7 +10539,6 @@ Optional:
 - `data_source_vendor` (String) Specify the dataSource.vendorvalue to pass as a parameter to AI SIEM. This value should reflect the vendor of the data being inserted. Don't quote this value. The default is cribl.
 - `data_source_vendor_expression` (String) Define the dataSource.vendor for events using a JavaScript expression. This value should reflect the vendor of the data being inserted into AI SIEM. You must enclose text constants in quotes (such as, 'Cisco' or 'Microsoft').
 - `description` (String)
-- `endpoint` (String) Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text). Not Null; must be one of ["/services/collector/event", "/services/collector/raw"]
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `event_type` (String) Specify the event.type value to pass as an optional parameter to AI SIEM. This value acts as a label, grouping events into meaningful categories like Process Creation, File Modification, or Network Connection. Don't quote this value. By default, this field is empty.
 - `event_type_expression` (String) Optionally, define the event.type for events using a JavaScript expression. This value acts as a label, grouping events into meaningful categories. You must enclose text constants in quotes (such as, 'Process Creation' or 'Network Connection').
@@ -10268,7 +10564,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `region` (String) The SentinelOne region to send events to. In most cases you can find the region by either looking at your SentinelOne URL or knowing what geographic region your SentinelOne instance is contained in. Not Null; must be one of ["US", "CA", "EMEA", "AP", "APS", "AU", "Custom"]
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -10285,15 +10580,17 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) In the SentinelOne Console select Policy & Settings then select the Singularity AI SIEM section, API Keys will be at the bottom. Under Log Access Keys select a Write token and copy it here
-- `type` (String) Not Null; must be "sentinel_one_ai_siem"
 
 <a id="nestedatt--output_sentinel_one_ai_siem--extra_http_headers"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_sentinel_one_ai_siem--pq_controls"></a>
@@ -10303,10 +10600,13 @@ Optional:
 <a id="nestedatt--output_sentinel_one_ai_siem--response_retry_settings"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -10314,17 +10614,28 @@ Optional:
 <a id="nestedatt--output_sentinel_one_ai_siem--timeout_retry_settings"></a>
 ### Nested Schema for `output_sentinel_one_ai_siem.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_service_now"></a>
 ### Nested Schema for `output_service_now`
+
+Required:
+
+- `endpoint` (String) The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets)
+- `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send. must be "1.3.1"
+- `protocol` (String) Select a transport option for OpenTelemetry. must be one of ["grpc", "http"]
+- `token_secret` (String) Select or create a stored text secret
+- `type` (String) must be "service_now"
 
 Optional:
 
@@ -10333,7 +10644,6 @@ Optional:
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
 - `description` (String)
-- `endpoint` (String) The endpoint where ServiceNow events will be sent. Enter any valid URL or an IP address (IPv4 or IPv6; enclose IPv6 addresses in square brackets). Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_service_now--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
@@ -10348,7 +10658,6 @@ Optional:
 - `max_payload_size_kb` (Number) Maximum size, in KB, of the request body
 - `metadata` (Attributes List) List of key-value pairs to send with each gRPC request. Value supports JavaScript expressions that are evaluated just once, when the destination gets started. To pass credentials as metadata, use 'C.Secret'. (see [below for nested schema](#nestedatt--output_service_now--metadata))
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
-- `otlp_version` (String) The version of OTLP Protobuf definitions to use when structuring data to send. Not Null; must be "1.3.1"
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--pq_controls))
@@ -10362,7 +10671,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `protocol` (String) Select a transport option for OpenTelemetry. Not Null; must be one of ["grpc", "http"]
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -10374,26 +10682,27 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_service_now--tls))
-- `token_secret` (String) Select or create a stored text secret. Not Null
-- `type` (String) Not Null; must be "service_now"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_service_now--extra_http_headers"></a>
 ### Nested Schema for `output_service_now.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_service_now--metadata"></a>
 ### Nested Schema for `output_service_now.metadata`
 
-Optional:
+Required:
 
-- `key` (String) Not Null
-- `value` (String) Not Null
+- `key` (String)
+- `value` (String)
 
 
 <a id="nestedatt--output_service_now--pq_controls"></a>
@@ -10403,10 +10712,13 @@ Optional:
 <a id="nestedatt--output_service_now--response_retry_settings"></a>
 ### Nested Schema for `output_service_now.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -10414,12 +10726,15 @@ Optional:
 <a id="nestedatt--output_service_now--timeout_retry_settings"></a>
 ### Nested Schema for `output_service_now.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_service_now--tls"></a>
@@ -10442,6 +10757,11 @@ Optional:
 
 <a id="nestedatt--output_signalfx"></a>
 ### Nested Schema for `output_signalfx`
+
+Required:
+
+- `realm` (String) SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions).
+- `type` (String) must be "signalfx"
 
 Optional:
 
@@ -10470,7 +10790,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `realm` (String) SignalFx realm name, e.g. "us0". For a complete list of available SignalFx realm names, please check [here](https://docs.splunk.com/observability/en/get-started/service-description.html#sd-regions). Not Null
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's). 
         Enabled by default. When this setting is also present in TLS Settings (Client Side), 
         that value will take precedence.
@@ -10483,16 +10802,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_signalfx--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) SignalFx API access token (see [here](https://docs.signalfx.com/en/latest/admin-guide/tokens.html#working-with-access-tokens))
-- `type` (String) Not Null; must be "signalfx"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_signalfx--extra_http_headers"></a>
 ### Nested Schema for `output_signalfx.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_signalfx--pq_controls"></a>
@@ -10502,10 +10823,13 @@ Optional:
 <a id="nestedatt--output_signalfx--response_retry_settings"></a>
 ### Nested Schema for `output_signalfx.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -10513,37 +10837,46 @@ Optional:
 <a id="nestedatt--output_signalfx--timeout_retry_settings"></a>
 ### Nested Schema for `output_signalfx.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_snmp"></a>
 ### Nested Schema for `output_snmp`
 
+Required:
+
+- `hosts` (Attributes List) One or more SNMP destinations to forward traps to (see [below for nested schema](#nestedatt--output_snmp--hosts))
+- `type` (String) must be "snmp"
+
 Optional:
 
 - `description` (String)
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if all destinations are IP addresses. A value of 0 means every trap sent will incur a DNS lookup.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `hosts` (Attributes List) One or more SNMP destinations to forward traps to. Not Null (see [below for nested schema](#nestedatt--output_snmp--hosts))
 - `id` (String) Unique ID for this output
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
-- `type` (String) Not Null; must be "snmp"
 
 <a id="nestedatt--output_snmp--hosts"></a>
 ### Nested Schema for `output_snmp.hosts`
 
+Required:
+
+- `host` (String) Destination host
+- `port` (Number) Destination port, default is 162
+
 Optional:
 
-- `host` (String) Destination host. Not Null
-- `port` (Number) Destination port, default is 162. Not Null
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 
@@ -10551,6 +10884,12 @@ Optional:
 
 <a id="nestedatt--output_sns"></a>
 ### Nested Schema for `output_sns`
+
+Required:
+
+- `message_group_id` (String) Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
+- `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`
+- `type` (String) must be "sns"
 
 Optional:
 
@@ -10567,7 +10906,6 @@ Optional:
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `id` (String) Unique ID for this output
 - `max_retries` (Number) Maximum number of retries before the output returns an error. Note that not all errors are retryable. The retries use an exponential backoff policy.
-- `message_group_id` (String) Messages in the same group are processed in a FIFO manner. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
@@ -10593,8 +10931,6 @@ Optional:
 - `template_aws_api_key` (String) Binds 'awsApiKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsApiKey' at runtime.
 - `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `topic_arn` (String) The ARN of the SNS topic to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. E.g., 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at initialization time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
-- `type` (String) Not Null; must be "sns"
 
 <a id="nestedatt--output_sns--pq_controls"></a>
 ### Nested Schema for `output_sns.pq_controls`
@@ -10603,6 +10939,12 @@ Optional:
 
 <a id="nestedatt--output_splunk"></a>
 ### Nested Schema for `output_splunk`
+
+Required:
+
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+- `type` (String) must be "splunk"
 
 Optional:
 
@@ -10614,7 +10956,6 @@ Optional:
 - `enable_ack` (Boolean) Check if indexer is shutting down and stop sending data. This helps minimize data loss during shutdown.
 - `enable_multi_metrics` (Boolean) Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `host` (String) The hostname of the receiver. Not Null
 - `id` (String) Unique ID for this output
 - `log_failed_requests` (Boolean) Use to troubleshoot issues with sending data
 - `max_failed_health_checks` (Number) Maximum number of times healthcheck can fail before we close connection. If set to 0 (disabled), and the connection to Splunk is forcibly closed, some data loss might occur.
@@ -10622,7 +10963,6 @@ Optional:
 - `nested_fields` (String) How to serialize nested fields into index-time fields. must be one of ["json", "none"]
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `port` (Number) The port to connect to on the provided host. Not Null
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--pq_controls))
 - `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
@@ -10642,7 +10982,6 @@ Optional:
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk--tls))
-- `type` (String) Not Null; must be "splunk"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_splunk--pq_controls"></a>
@@ -10670,6 +11009,10 @@ Optional:
 
 <a id="nestedatt--output_splunk_hec"></a>
 ### Nested Schema for `output_splunk_hec`
+
+Required:
+
+- `type` (String) must be "splunk_hec"
 
 Optional:
 
@@ -10719,7 +11062,6 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_hec--tls))
 - `token` (String) Splunk HEC authentication token
-- `type` (String) Not Null; must be "splunk_hec"
 - `url` (String) URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_splunk_hec--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -10727,10 +11069,13 @@ Optional:
 <a id="nestedatt--output_splunk_hec--extra_http_headers"></a>
 ### Nested Schema for `output_splunk_hec.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_splunk_hec--pq_controls"></a>
@@ -10740,10 +11085,13 @@ Optional:
 <a id="nestedatt--output_splunk_hec--response_retry_settings"></a>
 ### Nested Schema for `output_splunk_hec.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -10751,12 +11099,15 @@ Optional:
 <a id="nestedatt--output_splunk_hec--timeout_retry_settings"></a>
 ### Nested Schema for `output_splunk_hec.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_splunk_hec--tls"></a>
@@ -10778,16 +11129,24 @@ Optional:
 <a id="nestedatt--output_splunk_hec--urls"></a>
 ### Nested Schema for `output_splunk_hec.urls`
 
+Required:
+
+- `url` (String) URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event
+
 Optional:
 
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `url` (String) URL to a Splunk HEC endpoint to send events to, e.g., http://localhost:8088/services/collector/event. Not Null
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
 
 <a id="nestedatt--output_splunk_lb"></a>
 ### Nested Schema for `output_splunk_lb`
+
+Required:
+
+- `hosts` (Attributes List) Set of Splunk indexers to load-balance data to. (see [below for nested schema](#nestedatt--output_splunk_lb--hosts))
+- `type` (String) must be "splunk_lb"
 
 Optional:
 
@@ -10801,7 +11160,6 @@ Optional:
 - `enable_multi_metrics` (Boolean) Output metrics in multiple-metric format in a single event. Supported in Splunk 8.0 and above.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `exclude_self` (Boolean) Exclude all IPs of the current host from the list of any resolved hostnames
-- `hosts` (Attributes List) Set of Splunk indexers to load-balance data to. Not Null (see [below for nested schema](#nestedatt--output_splunk_lb--hosts))
 - `id` (String) Unique ID for this output
 - `indexer_discovery` (Boolean) Automatically discover indexers in indexer clustering environment.
 - `indexer_discovery_configs` (Attributes) List of configurations to set up indexer discovery in Splunk Indexer clustering environment. (see [below for nested schema](#nestedatt--output_splunk_lb--indexer_discovery_configs))
@@ -10831,16 +11189,18 @@ Optional:
 - `text_secret` (String) Select or create a stored text secret
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_splunk_lb--tls))
-- `type` (String) Not Null; must be "splunk_lb"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_splunk_lb--hosts"></a>
 ### Nested Schema for `output_splunk_lb.hosts`
 
+Required:
+
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+
 Optional:
 
-- `host` (String) The hostname of the receiver. Not Null
-- `port` (Number) The port to connect to on the provided host. Not Null
 - `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
@@ -10851,15 +11211,18 @@ Optional:
 <a id="nestedatt--output_splunk_lb--indexer_discovery_configs"></a>
 ### Nested Schema for `output_splunk_lb.indexer_discovery_configs`
 
+Required:
+
+- `master_uri` (String) Full URI of Splunk cluster manager (scheme://host:port). Example: https://managerAddress:8089
+- `refresh_interval_sec` (Number) Time interval, in seconds, between two consecutive indexer list fetches from cluster manager
+- `site` (String) Clustering site of the indexers from where indexers need to be discovered. In case of single site cluster, it defaults to 'default' site.
+
 Optional:
 
 - `auth_token` (String) Shared secret to be provided by any client (in authToken header field). If empty, unauthorized access is permitted.
 - `auth_tokens` (Attributes List) Tokens required to authenticate to cluster manager for indexer discovery (see [below for nested schema](#nestedatt--output_splunk_lb--indexer_discovery_configs--auth_tokens))
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. must be one of ["manual", "secret"]
-- `master_uri` (String) Full URI of Splunk cluster manager (scheme://host:port). Example: https://managerAddress:8089. Not Null
-- `refresh_interval_sec` (Number) Time interval, in seconds, between two consecutive indexer list fetches from cluster manager. Not Null
 - `reject_unauthorized` (Boolean) During indexer discovery, reject cluster manager certificates that are not authorized by the system's CA. Disable to allow untrusted (for example, self-signed) certificates.
-- `site` (String) Clustering site of the indexers from where indexers need to be discovered. In case of single site cluster, it defaults to 'default' site. Not Null
 - `text_secret` (String) Select or create a stored text secret
 
 <a id="nestedatt--output_splunk_lb--indexer_discovery_configs--auth_tokens"></a>
@@ -10899,6 +11262,12 @@ Optional:
 <a id="nestedatt--output_sqs"></a>
 ### Nested Schema for `output_sqs`
 
+Required:
+
+- `queue_name` (String) The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`.
+- `queue_type` (String) The queue type used (or created). Defaults to Standard. must be one of ["standard", "fifo"]
+- `type` (String) must be "sqs"
+
 Optional:
 
 - `assume_role_arn` (String) Amazon Resource Name (ARN) of the role to assume
@@ -10934,8 +11303,6 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `queue_name` (String) The name, URL, or ARN of the SQS queue to send events to. When a non-AWS URL is specified, format must be: '{url}/myQueueName'. Example: 'https://host:port/myQueueName'. Must be a JavaScript expression (which can evaluate to a constant value), enclosed in quotes or backticks. Can be evaluated only at init time. Example referencing a Global Variable: `https://host:port/myQueue-${C.vars.myVar}`. Not Null
-- `queue_type` (String) The queue type used (or created). Defaults to Standard. Not Null; must be one of ["standard", "fifo"]
 - `region` (String) AWS Region where the SQS queue is located. Required, unless the Queue entry is a URL or ARN that includes a Region.
 - `reject_unauthorized` (Boolean) Reject certificates that cannot be verified against a valid CA, such as self-signed certificates
 - `reuse_connections` (Boolean) Reuse connections between requests, which can improve performance
@@ -10949,7 +11316,6 @@ Optional:
 - `template_aws_secret_key` (String) Binds 'awsSecretKey' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'awsSecretKey' at runtime.
 - `template_queue_name` (String) Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
 - `template_region` (String) Binds 'region' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'region' at runtime.
-- `type` (String) Not Null; must be "sqs"
 
 <a id="nestedatt--output_sqs--pq_controls"></a>
 ### Nested Schema for `output_sqs.pq_controls`
@@ -10959,6 +11325,13 @@ Optional:
 <a id="nestedatt--output_statsd"></a>
 ### Nested Schema for `output_statsd`
 
+Required:
+
+- `host` (String) The hostname of the destination.
+- `port` (Number) Destination port.
+- `protocol` (String) Protocol to use when communicating with the destination. must be one of ["udp", "tcp"]
+- `type` (String) must be "statsd"
+
 Optional:
 
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
@@ -10966,12 +11339,10 @@ Optional:
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
-- `host` (String) The hostname of the destination. Not Null
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `port` (Number) Destination port. Not Null
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_statsd--pq_controls))
 - `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
@@ -10984,11 +11355,9 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `protocol` (String) Protocol to use when communicating with the destination. Not Null; must be one of ["udp", "tcp"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-- `type` (String) Not Null; must be "statsd"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_statsd--pq_controls"></a>
@@ -10999,6 +11368,13 @@ Optional:
 <a id="nestedatt--output_statsd_ext"></a>
 ### Nested Schema for `output_statsd_ext`
 
+Required:
+
+- `host` (String) The hostname of the destination.
+- `port` (Number) Destination port.
+- `protocol` (String) Protocol to use when communicating with the destination. must be one of ["udp", "tcp"]
+- `type` (String) must be "statsd_ext"
+
 Optional:
 
 - `connection_timeout` (Number) Amount of time (milliseconds) to wait for the connection to establish before retrying
@@ -11006,12 +11382,10 @@ Optional:
 - `dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every batch sent will incur a DNS lookup.
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `flush_period_sec` (Number) When protocol is TCP, specifies how often buffers should be flushed, resulting in records sent to the destination.
-- `host` (String) The hostname of the destination. Not Null
 - `id` (String) Unique ID for this output
 - `mtu` (Number) When protocol is UDP, specifies the maximum size of packets sent to the destination. Also known as the MTU for the network path to the destination system.
 - `on_backpressure` (String) How to handle events when all receivers are exerting backpressure. must be one of ["block", "drop", "queue"]
 - `pipeline` (String) Pipeline to process data before sending out to this output
-- `port` (Number) Destination port. Not Null
 - `pq_compress` (String) Codec to use to compress the persisted data. must be one of ["none", "gzip"]
 - `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--output_statsd_ext--pq_controls))
 - `pq_max_backpressure_sec` (Number) How long (in seconds) to wait for backpressure to resolve before engaging the queue
@@ -11024,11 +11398,9 @@ Optional:
 - `pq_path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/<output-id>.
 - `pq_rate_per_sec` (Number) Throttling rate (in events per second) to impose while writing to Destinations from PQ. Defaults to 0, which disables throttling.
 - `pq_strict_ordering` (Boolean) Use FIFO (first in, first out) processing. Disable to forward new events to receivers before queue is flushed.
-- `protocol` (String) Protocol to use when communicating with the destination. Not Null; must be one of ["udp", "tcp"]
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `system_fields` (List of String) Fields to automatically add to events, such as cribl_pipe. Supports wildcards.
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
-- `type` (String) Not Null; must be "statsd_ext"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_statsd_ext--pq_controls"></a>
@@ -11038,6 +11410,11 @@ Optional:
 
 <a id="nestedatt--output_sumo_logic"></a>
 ### Nested Schema for `output_sumo_logic`
+
+Required:
+
+- `type` (String) must be "sumo_logic"
+- `url` (String) Sumo Logic HTTP collector URL to which events should be sent
 
 Optional:
 
@@ -11080,17 +11457,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_sumo_logic--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "sumo_logic"
-- `url` (String) Sumo Logic HTTP collector URL to which events should be sent. Not Null
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_sumo_logic--extra_http_headers"></a>
 ### Nested Schema for `output_sumo_logic.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_sumo_logic--pq_controls"></a>
@@ -11100,10 +11478,13 @@ Optional:
 <a id="nestedatt--output_sumo_logic--response_retry_settings"></a>
 ### Nested Schema for `output_sumo_logic.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -11111,17 +11492,24 @@ Optional:
 <a id="nestedatt--output_sumo_logic--timeout_retry_settings"></a>
 ### Nested Schema for `output_sumo_logic.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_syslog"></a>
 ### Nested Schema for `output_syslog`
+
+Required:
+
+- `type` (String) must be "syslog"
 
 Optional:
 
@@ -11167,17 +11555,19 @@ Optional:
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `timestamp_format` (String) Timestamp format to use when serializing event's time field. must be one of ["syslog", "iso8601"]
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_syslog--tls))
-- `type` (String) Not Null; must be "syslog"
 - `udp_dns_resolve_period_sec` (Number) How often to resolve the destination hostname to an IP address. Ignored if the destination is an IP address. A value of 0 means every message sent will incur a DNS lookup.
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_syslog--hosts"></a>
 ### Nested Schema for `output_syslog.hosts`
 
+Required:
+
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+
 Optional:
 
-- `host` (String) The hostname of the receiver. Not Null
-- `port` (Number) The port to connect to on the provided host. Not Null
 - `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
@@ -11210,6 +11600,10 @@ Optional:
 
 <a id="nestedatt--output_tcpjson"></a>
 ### Nested Schema for `output_tcpjson`
+
+Required:
+
+- `type` (String) must be "tcpjson"
 
 Optional:
 
@@ -11252,16 +11646,18 @@ Optional:
 - `throttle_rate_per_sec` (String) Rate (in bytes per second) to throttle while writing to an output. Accepts values with multiple-byte units, such as KB, MB, and GB. (Example: 42 MB) Default value of 0 specifies no throttling.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_tcpjson--tls))
 - `token_ttl_minutes` (Number) The number of minutes before the internally generated authentication token expires, valid values between 1 and 60
-- `type` (String) Not Null; must be "tcpjson"
 - `write_timeout` (Number) Amount of time (milliseconds) to wait for a write to complete before assuming connection is dead
 
 <a id="nestedatt--output_tcpjson--hosts"></a>
 ### Nested Schema for `output_tcpjson.hosts`
 
+Required:
+
+- `host` (String) The hostname of the receiver
+- `port` (Number) The port to connect to on the provided host
+
 Optional:
 
-- `host` (String) The hostname of the receiver. Not Null
-- `port` (Number) The port to connect to on the provided host. Not Null
 - `servername` (String) Servername to use if establishing a TLS connection. If not specified, defaults to connection host (if not an IP); otherwise, uses the global TLS settings.
 - `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
 - `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
@@ -11295,13 +11691,17 @@ Optional:
 <a id="nestedatt--output_wavefront"></a>
 ### Nested Schema for `output_wavefront`
 
+Required:
+
+- `domain` (String) WaveFront domain name, e.g. "longboard"
+- `type` (String) must be "wavefront"
+
 Optional:
 
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. must be one of ["manual", "secret"]
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
 - `description` (String)
-- `domain` (String) WaveFront domain name, e.g. "longboard". Not Null
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_wavefront--extra_http_headers))
 - `failed_request_logging_mode` (String) Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below. must be one of ["payload", "payloadAndHeaders", "none"]
@@ -11335,16 +11735,18 @@ Optional:
 - `timeout_retry_settings` (Attributes) (see [below for nested schema](#nestedatt--output_wavefront--timeout_retry_settings))
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) WaveFront API authentication token (see [here](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token))
-- `type` (String) Not Null; must be "wavefront"
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
 
 <a id="nestedatt--output_wavefront--extra_http_headers"></a>
 ### Nested Schema for `output_wavefront.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_wavefront--pq_controls"></a>
@@ -11354,10 +11756,13 @@ Optional:
 <a id="nestedatt--output_wavefront--response_retry_settings"></a>
 ### Nested Schema for `output_wavefront.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -11365,17 +11770,24 @@ Optional:
 <a id="nestedatt--output_wavefront--timeout_retry_settings"></a>
 ### Nested Schema for `output_wavefront.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 
 <a id="nestedatt--output_webhook"></a>
 ### Nested Schema for `output_webhook`
+
+Required:
+
+- `type` (String) must be "webhook"
 
 Optional:
 
@@ -11446,7 +11858,6 @@ Optional:
 - `token_attribute_name` (String) Name of the auth token attribute in the OAuth response. Can be top-level (e.g., 'token'); or nested, using a period (e.g., 'data.token').
 - `token_timeout_secs` (Number) How often the OAuth token should be refreshed.
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "webhook"
 - `url` (String) URL of a webhook endpoint to send events to, such as http://localhost:10200
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_webhook--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -11455,28 +11866,31 @@ Optional:
 <a id="nestedatt--output_webhook--extra_http_headers"></a>
 ### Nested Schema for `output_webhook.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_webhook--oauth_headers"></a>
 ### Nested Schema for `output_webhook.oauth_headers`
 
-Optional:
+Required:
 
-- `name` (String) OAuth header name. Not Null
-- `value` (String) OAuth header value. Not Null
+- `name` (String) OAuth header name
+- `value` (String) OAuth header value
 
 
 <a id="nestedatt--output_webhook--oauth_params"></a>
 ### Nested Schema for `output_webhook.oauth_params`
 
-Optional:
+Required:
 
-- `name` (String) OAuth parameter name. Not Null
-- `value` (String) OAuth parameter value. Not Null
+- `name` (String) OAuth parameter name
+- `value` (String) OAuth parameter value
 
 
 <a id="nestedatt--output_webhook--pq_controls"></a>
@@ -11486,10 +11900,13 @@ Optional:
 <a id="nestedatt--output_webhook--response_retry_settings"></a>
 ### Nested Schema for `output_webhook.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -11497,12 +11914,15 @@ Optional:
 <a id="nestedatt--output_webhook--timeout_retry_settings"></a>
 ### Nested Schema for `output_webhook.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_webhook--tls"></a>
@@ -11524,10 +11944,13 @@ Optional:
 <a id="nestedatt--output_webhook--urls"></a>
 ### Nested Schema for `output_webhook.urls`
 
+Required:
+
+- `url` (String) URL of a webhook endpoint to send events to, such as http://localhost:10200
+
 Optional:
 
 - `template_url` (String) Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-- `url` (String) URL of a webhook endpoint to send events to, such as http://localhost:10200. Not Null
 - `weight` (Number) Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 
 
@@ -11535,12 +11958,19 @@ Optional:
 <a id="nestedatt--output_wiz_hec"></a>
 ### Nested Schema for `output_wiz_hec`
 
+Required:
+
+- `data_center` (String) Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console.
+- `type` (String) must be "wiz_hec"
+- `wiz_connector_id` (String) The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration.
+- `wiz_environment` (String) Your Wiz deployment environment.
+- `wiz_sourcetype` (String)
+
 Optional:
 
 - `auth_type` (String) Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate. must be one of ["manual", "secret"]
 - `compress` (Boolean) Compress the payload body before sending
 - `concurrency` (Number) Maximum number of ongoing requests before blocking
-- `data_center` (String) Your Wiz deployment data center (e.g., us1, us8, eu1). From Tenant Info → Data Center and Regions → Tenant Data Center in your Wiz console. Not Null
 - `description` (String)
 - `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
 - `extra_http_headers` (Attributes List) Headers to add to all events (see [below for nested schema](#nestedatt--output_wiz_hec--extra_http_headers))
@@ -11581,18 +12011,17 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--output_wiz_hec--tls))
 - `token` (String) Wiz Defend Auth token
-- `type` (String) Not Null; must be "wiz_hec"
-- `wiz_connector_id` (String) The unique identifier for the specific Cribl connector defined in your Wiz Settings. This is used to cross-validate the bearer token and ensure traffic is originating from the authorized integration. Not Null
-- `wiz_environment` (String) Your Wiz deployment environment. Not Null
-- `wiz_sourcetype` (String) Not Null
 
 <a id="nestedatt--output_wiz_hec--extra_http_headers"></a>
 ### Nested Schema for `output_wiz_hec.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_wiz_hec--pq_controls"></a>
@@ -11602,10 +12031,13 @@ Optional:
 <a id="nestedatt--output_wiz_hec--response_retry_settings"></a>
 ### Nested Schema for `output_wiz_hec.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -11613,12 +12045,15 @@ Optional:
 <a id="nestedatt--output_wiz_hec--timeout_retry_settings"></a>
 ### Nested Schema for `output_wiz_hec.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_wiz_hec--tls"></a>
@@ -11640,6 +12075,10 @@ Optional:
 
 <a id="nestedatt--output_xsiam"></a>
 ### Nested Schema for `output_xsiam`
+
+Required:
+
+- `type` (String) must be "xsiam"
 
 Optional:
 
@@ -11686,7 +12125,6 @@ Optional:
 - `timeout_sec` (Number) Amount of time, in seconds, to wait for a request to complete before canceling it
 - `token` (String) XSIAM authentication token
 - `total_memory_limit_kb` (Number) Maximum total size of the batches waiting to be sent. If left blank, defaults to 5 times the max body size (if set). If 0, no limit is enforced.
-- `type` (String) Not Null; must be "xsiam"
 - `url` (String) XSIAM endpoint URL to send events to, such as https://api-{tenant external URL}/logs/v1/event
 - `urls` (Attributes List) (see [below for nested schema](#nestedatt--output_xsiam--urls))
 - `use_round_robin_dns` (Boolean) Enable round-robin DNS lookup. When a DNS server returns multiple addresses, @{product} will cycle through them in the order returned. For optimal performance, consider enabling this setting for non-load balanced destinations.
@@ -11694,10 +12132,13 @@ Optional:
 <a id="nestedatt--output_xsiam--extra_http_headers"></a>
 ### Nested Schema for `output_xsiam.extra_http_headers`
 
+Required:
+
+- `value` (String)
+
 Optional:
 
 - `name` (String)
-- `value` (String) Not Null
 
 
 <a id="nestedatt--output_xsiam--pq_controls"></a>
@@ -11707,10 +12148,13 @@ Optional:
 <a id="nestedatt--output_xsiam--response_retry_settings"></a>
 ### Nested Schema for `output_xsiam.response_retry_settings`
 
+Required:
+
+- `http_status` (Number) The HTTP response status code that will trigger retries
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
-- `http_status` (Number) The HTTP response status code that will trigger retries. Not Null
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
 
@@ -11718,12 +12162,15 @@ Optional:
 <a id="nestedatt--output_xsiam--timeout_retry_settings"></a>
 ### Nested Schema for `output_xsiam.timeout_retry_settings`
 
+Required:
+
+- `timeout_retry` (Boolean)
+
 Optional:
 
 - `backoff_rate` (Number) Base for exponential backoff. A value of 2 (default) means Cribl Stream will retry after 2 seconds, then 4 seconds, then 8 seconds, etc.
 - `initial_backoff` (Number) How long, in milliseconds, Cribl Stream should wait before initiating backoff. Maximum interval is 600,000 ms (10 minutes).
 - `max_backoff` (Number) The maximum backoff interval, in milliseconds, Cribl Stream should apply. Default (and minimum) is 10,000 ms (10 seconds); maximum is 180,000 ms (180 seconds).
-- `timeout_retry` (Boolean) Not Null
 
 
 <a id="nestedatt--output_xsiam--urls"></a>

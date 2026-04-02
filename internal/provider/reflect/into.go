@@ -80,6 +80,11 @@ func BuildValue(ctx context.Context, typ attr.Type, val tftypes.Value, target re
 
 	// if this is an attr.Value, build the type from that
 	if target.Type().Implements(reflect.TypeOf((*attr.Value)(nil)).Elem()) {
+		if opts.PreservePlanNullTargets && opts.SourceType == SourceTypePlan && val.IsNull() {
+			if av, ok := target.Interface().(attr.Value); ok && !av.IsNull() && !av.IsUnknown() {
+				return target, diags
+			}
+		}
 		return NewAttributeValue(ctx, typ, val, target, opts, path)
 	}
 	// if this tells tftypes how to build an instance of it out of a
@@ -152,6 +157,14 @@ func BuildValue(ctx context.Context, typ attr.Type, val tftypes.Value, target re
 		// we checked that target isn't an attr.Value
 		// all that's left to us now is to set it as an empty value or
 		// throw an error, depending on what's in opts
+		if opts.PreservePlanNullTargets && opts.SourceType == SourceTypePlan {
+			if target.Kind() == reflect.Ptr && !target.IsNil() {
+				return target, diags
+			}
+			if (target.Kind() == reflect.Slice || target.Kind() == reflect.Map) && target.Len() > 0 {
+				return target, diags
+			}
+		}
 		// Preserve empty slices/maps when plan has null during refreshPlan.
 		if opts.SourceType == SourceTypePlan && (target.Kind() == reflect.Slice || target.Kind() == reflect.Map) && target.Len() == 0 {
 			return target, diags

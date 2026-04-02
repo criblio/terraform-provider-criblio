@@ -7,8 +7,6 @@ import (
 )
 
 type InputHTTPRaw struct {
-	TemplateHost          types.String                   `tfsdk:"template_host"`
-	TemplatePort          types.String                   `tfsdk:"template_port"`
 	ActivityLogSampleRate types.Float64                  `tfsdk:"activity_log_sample_rate"`
 	AllowedMethods        []types.String                 `tfsdk:"allowed_methods"`
 	AllowedPaths          []types.String                 `tfsdk:"allowed_paths"`

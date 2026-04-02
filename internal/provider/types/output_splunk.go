@@ -7,8 +7,6 @@ import (
 )
 
 type OutputSplunk struct {
-	TemplateHost          types.String                             `tfsdk:"template_host"`
-	TemplatePort          types.String                             `tfsdk:"template_port"`
 	AuthToken             types.String                             `tfsdk:"auth_token"`
 	AuthType              types.String                             `tfsdk:"auth_type"`
 	Compress              types.String                             `tfsdk:"compress"`

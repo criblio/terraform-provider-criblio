@@ -236,22 +236,6 @@ type OutputSentinel struct {
 	DceEndpoint *string `json:"dceEndpoint,omitempty"`
 	// The name of the stream (Sentinel table) in which to store the events
 	StreamName *string `json:"streamName,omitempty"`
-	// Binds 'loginUrl' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'loginUrl' at runtime.
-	TemplateLoginURL *string `json:"__template_loginUrl,omitempty"`
-	// Binds 'secret' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'secret' at runtime.
-	TemplateSecret *string `json:"__template_secret,omitempty"`
-	// Binds 'client_id' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'client_id' at runtime.
-	TemplateClientID *string `json:"__template_client_id,omitempty"`
-	// Binds 'scope' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'scope' at runtime.
-	TemplateScope *string `json:"__template_scope,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'dcrID' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dcrID' at runtime.
-	TemplateDcrID *string `json:"__template_dcrID,omitempty"`
-	// Binds 'dceEndpoint' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'dceEndpoint' at runtime.
-	TemplateDceEndpoint *string `json:"__template_dceEndpoint,omitempty"`
-	// Binds 'streamName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamName' at runtime.
-	TemplateStreamName *string `json:"__template_streamName,omitempty"`
 }
 
 func (o OutputSentinel) MarshalJSON() ([]byte, error) {
@@ -648,60 +632,4 @@ func (o *OutputSentinel) GetStreamName() *string {
 		return nil
 	}
 	return o.StreamName
-}
-
-func (o *OutputSentinel) GetTemplateLoginURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateLoginURL
-}
-
-func (o *OutputSentinel) GetTemplateSecret() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateSecret
-}
-
-func (o *OutputSentinel) GetTemplateClientID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateClientID
-}
-
-func (o *OutputSentinel) GetTemplateScope() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateScope
-}
-
-func (o *OutputSentinel) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
-}
-
-func (o *OutputSentinel) GetTemplateDcrID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDcrID
-}
-
-func (o *OutputSentinel) GetTemplateDceEndpoint() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDceEndpoint
-}
-
-func (o *OutputSentinel) GetTemplateStreamName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateStreamName
 }

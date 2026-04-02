@@ -7,9 +7,6 @@ import (
 )
 
 type InputSplunkHec struct {
-	TemplateHost              types.String                   `tfsdk:"template_host"`
-	TemplatePort              types.String                   `tfsdk:"template_port"`
-	TemplateSplunkHecAPI      types.String                   `tfsdk:"template_splunk_hec_api"`
 	AccessControlAllowHeaders []types.String                 `tfsdk:"access_control_allow_headers"`
 	AccessControlAllowOrigin  []types.String                 `tfsdk:"access_control_allow_origin"`
 	ActivityLogSampleRate     types.Float64                  `tfsdk:"activity_log_sample_rate"`

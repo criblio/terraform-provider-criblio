@@ -260,6 +260,7 @@ resource "criblio_destination" "grafana_cloud" {
   output_grafana_cloud = {
     id                          = "CriblCloud"
     type                        = "grafana_cloud"
+    pipeline                    = "default"
     concurrency                 = 1
     failed_request_logging_mode = "none"
     flush_period_sec            = 15

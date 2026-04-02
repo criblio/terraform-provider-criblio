@@ -90,12 +90,6 @@ type InputHTTP struct {
 	// Shared secrets to be provided by any client (Authorization: <token>). If empty, unauthorized access is permitted.
 	AuthTokensExt []ItemsTypeAuthTokensExt `json:"authTokensExt,omitempty"`
 	Description   *string                  `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
-	// Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
-	TemplateSplunkHecAPI *string `json:"__template_splunkHecAPI,omitempty"`
 }
 
 func (i InputHTTP) MarshalJSON() ([]byte, error) {
@@ -331,25 +325,4 @@ func (i *InputHTTP) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputHTTP) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputHTTP) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
-}
-
-func (i *InputHTTP) GetTemplateSplunkHecAPI() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateSplunkHecAPI
 }

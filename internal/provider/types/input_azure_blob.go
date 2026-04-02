@@ -7,10 +7,6 @@ import (
 )
 
 type InputAzureBlob struct {
-	TemplateClientID            types.String                                `tfsdk:"template_client_id"`
-	TemplateConnectionString    types.String                                `tfsdk:"template_connection_string"`
-	TemplateQueueName           types.String                                `tfsdk:"template_queue_name"`
-	TemplateTenantID            types.String                                `tfsdk:"template_tenant_id"`
 	AuthType                    types.String                                `tfsdk:"auth_type"`
 	AzureCloud                  types.String                                `tfsdk:"azure_cloud"`
 	BreakerRulesets             []types.String                              `tfsdk:"breaker_rulesets"`

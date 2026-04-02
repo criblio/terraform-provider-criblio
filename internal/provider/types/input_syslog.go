@@ -7,9 +7,6 @@ import (
 )
 
 type InputSyslog struct {
-	TemplateHost                     types.String                   `tfsdk:"template_host"`
-	TemplateTCPPort                  types.String                   `tfsdk:"template_tcp_port"`
-	TemplateUDPPort                  types.String                   `tfsdk:"template_udp_port"`
 	AllowNonStandardAppName          types.Bool                     `tfsdk:"allow_non_standard_app_name"`
 	Connections                      []ItemsTypeConnectionsOptional `tfsdk:"connections"`
 	Description                      types.String                   `tfsdk:"description"`

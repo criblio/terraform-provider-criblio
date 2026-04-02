@@ -61,10 +61,6 @@ type InputModelDrivenTelemetry struct {
 	// Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.
 	ShutdownTimeoutMs *float64 `json:"shutdownTimeoutMs,omitempty"`
 	Description       *string  `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (i InputModelDrivenTelemetry) MarshalJSON() ([]byte, error) {
@@ -195,18 +191,4 @@ func (i *InputModelDrivenTelemetry) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputModelDrivenTelemetry) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputModelDrivenTelemetry) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
 }

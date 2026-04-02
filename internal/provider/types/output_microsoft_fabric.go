@@ -7,8 +7,6 @@ import (
 )
 
 type OutputMicrosoftFabric struct {
-	TemplateBootstrapServer   types.String                         `tfsdk:"template_bootstrap_server"`
-	TemplateTopic             types.String                         `tfsdk:"template_topic"`
 	Ack                       types.Int64                          `tfsdk:"ack"`
 	AuthenticationTimeout     types.Float64                        `tfsdk:"authentication_timeout"`
 	BackoffRate               types.Float64                        `tfsdk:"backoff_rate"`

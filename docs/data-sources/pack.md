@@ -49,7 +49,6 @@ Read-Only:
 - `exports` (List of String)
 - `id` (String)
 - `inputs` (Number)
-- `is_disabled` (Boolean)
 - `min_log_stream_version` (String)
 - `outputs` (Number)
 - `settings` (Map of String)

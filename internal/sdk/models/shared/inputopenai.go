@@ -361,10 +361,6 @@ type InputOpenai struct {
 	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
 	RetryRules  *RetryRulesType     `json:"retryRules,omitempty"`
 	Description *string             `json:"description,omitempty"`
-	// Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.
-	TemplateOpenaiOrganization *string `json:"__template_openaiOrganization,omitempty"`
-	// Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.
-	TemplateOpenaiProject *string `json:"__template_openaiProject,omitempty"`
 }
 
 func (i InputOpenai) MarshalJSON() ([]byte, error) {
@@ -537,20 +533,6 @@ func (i *InputOpenai) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputOpenai) GetTemplateOpenaiOrganization() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateOpenaiOrganization
-}
-
-func (i *InputOpenai) GetTemplateOpenaiProject() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateOpenaiProject
 }
 
 type ContentConfigInput struct {
@@ -764,10 +746,6 @@ type InputOpenaiInput struct {
 	Metadata    []ItemsTypeMetadata `json:"metadata,omitempty"`
 	RetryRules  *RetryRulesType     `json:"retryRules,omitempty"`
 	Description *string             `json:"description,omitempty"`
-	// Binds 'openaiOrganization' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiOrganization' at runtime.
-	TemplateOpenaiOrganization *string `json:"__template_openaiOrganization,omitempty"`
-	// Binds 'openaiProject' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'openaiProject' at runtime.
-	TemplateOpenaiProject *string `json:"__template_openaiProject,omitempty"`
 }
 
 func (i InputOpenaiInput) MarshalJSON() ([]byte, error) {
@@ -940,18 +918,4 @@ func (i *InputOpenaiInput) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputOpenaiInput) GetTemplateOpenaiOrganization() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateOpenaiOrganization
-}
-
-func (i *InputOpenaiInput) GetTemplateOpenaiProject() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateOpenaiProject
 }

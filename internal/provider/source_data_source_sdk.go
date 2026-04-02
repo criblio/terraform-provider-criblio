@@ -23,8 +23,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 
 			if itemsItem.InputAppscope != nil {
 				items.InputAppscope = &tfTypes.InputAppscope{}
-				items.InputAppscope.TemplateHost = types.StringPointerValue(itemsItem.InputAppscope.TemplateHost)
-				items.InputAppscope.TemplatePort = types.StringPointerValue(itemsItem.InputAppscope.TemplatePort)
 				items.InputAppscope.AuthToken = types.StringPointerValue(itemsItem.InputAppscope.AuthToken)
 				if itemsItem.InputAppscope.AuthType != nil {
 					items.InputAppscope.AuthType = types.StringValue(string(*itemsItem.InputAppscope.AuthType))
@@ -165,10 +163,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputAzureBlob != nil {
 				items.InputAzureBlob = &tfTypes.InputAzureBlob{}
-				items.InputAzureBlob.TemplateClientID = types.StringPointerValue(itemsItem.InputAzureBlob.TemplateClientID)
-				items.InputAzureBlob.TemplateConnectionString = types.StringPointerValue(itemsItem.InputAzureBlob.TemplateConnectionString)
-				items.InputAzureBlob.TemplateQueueName = types.StringPointerValue(itemsItem.InputAzureBlob.TemplateQueueName)
-				items.InputAzureBlob.TemplateTenantID = types.StringPointerValue(itemsItem.InputAzureBlob.TemplateTenantID)
 				if itemsItem.InputAzureBlob.AuthType != nil {
 					items.InputAzureBlob.AuthType = types.StringValue(string(*itemsItem.InputAzureBlob.AuthType))
 				} else {
@@ -263,8 +257,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputCloudflareHec != nil {
 				items.InputCloudflareHec = &tfTypes.InputCloudflareHec{}
-				items.InputCloudflareHec.TemplateHost = types.StringPointerValue(itemsItem.InputCloudflareHec.TemplateHost)
-				items.InputCloudflareHec.TemplatePort = types.StringPointerValue(itemsItem.InputCloudflareHec.TemplatePort)
 				items.InputCloudflareHec.AccessControlAllowHeaders = make([]types.String, 0, len(itemsItem.InputCloudflareHec.AccessControlAllowHeaders))
 				for _, v := range itemsItem.InputCloudflareHec.AccessControlAllowHeaders {
 					items.InputCloudflareHec.AccessControlAllowHeaders = append(items.InputCloudflareHec.AccessControlAllowHeaders, types.StringValue(v))
@@ -755,8 +747,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputCriblHTTP != nil {
 				items.InputCriblHTTP = &tfTypes.InputCriblHTTP{}
-				items.InputCriblHTTP.TemplateHost = types.StringPointerValue(itemsItem.InputCriblHTTP.TemplateHost)
-				items.InputCriblHTTP.TemplatePort = types.StringPointerValue(itemsItem.InputCriblHTTP.TemplatePort)
 				items.InputCriblHTTP.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputCriblHTTP.ActivityLogSampleRate)
 				items.InputCriblHTTP.AuthTokens = []tfTypes.ItemsTypeAuthTokens{}
 
@@ -866,9 +856,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputCriblLakeHTTP != nil {
 				items.InputCriblLakeHTTP = &tfTypes.InputCriblLakeHTTP{}
-				items.InputCriblLakeHTTP.TemplateHost = types.StringPointerValue(itemsItem.InputCriblLakeHTTP.TemplateHost)
-				items.InputCriblLakeHTTP.TemplatePort = types.StringPointerValue(itemsItem.InputCriblLakeHTTP.TemplatePort)
-				items.InputCriblLakeHTTP.TemplateSplunkHecAPI = types.StringPointerValue(itemsItem.InputCriblLakeHTTP.TemplateSplunkHecAPI)
 				items.InputCriblLakeHTTP.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputCriblLakeHTTP.ActivityLogSampleRate)
 				items.InputCriblLakeHTTP.AuthTokens = make([]types.String, 0, len(itemsItem.InputCriblLakeHTTP.AuthTokens))
 				for _, v := range itemsItem.InputCriblLakeHTTP.AuthTokens {
@@ -1013,8 +1000,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputCriblTCP != nil {
 				items.InputCriblTCP = &tfTypes.InputCriblTCP{}
-				items.InputCriblTCP.TemplateHost = types.StringPointerValue(itemsItem.InputCriblTCP.TemplateHost)
-				items.InputCriblTCP.TemplatePort = types.StringPointerValue(itemsItem.InputCriblTCP.TemplatePort)
 				items.InputCriblTCP.AuthTokens = []tfTypes.ItemsTypeAuthTokens{}
 
 				for _, authTokensItem2 := range itemsItem.InputCriblTCP.AuthTokens {
@@ -1182,13 +1167,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputCrowdstrike != nil {
 				items.InputCrowdstrike = &tfTypes.InputCrowdstrike{}
-				items.InputCrowdstrike.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateAssumeRoleArn)
-				items.InputCrowdstrike.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateAssumeRoleExternalID)
-				items.InputCrowdstrike.TemplateAwsAccountID = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateAwsAccountID)
-				items.InputCrowdstrike.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateAwsAPIKey)
-				items.InputCrowdstrike.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateAwsSecretKey)
-				items.InputCrowdstrike.TemplateQueueName = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateQueueName)
-				items.InputCrowdstrike.TemplateRegion = types.StringPointerValue(itemsItem.InputCrowdstrike.TemplateRegion)
 				items.InputCrowdstrike.AssumeRoleArn = types.StringPointerValue(itemsItem.InputCrowdstrike.AssumeRoleArn)
 				items.InputCrowdstrike.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputCrowdstrike.AssumeRoleExternalID)
 				items.InputCrowdstrike.AwsAccountID = types.StringPointerValue(itemsItem.InputCrowdstrike.AwsAccountID)
@@ -1313,8 +1291,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputDatadogAgent != nil {
 				items.InputDatadogAgent = &tfTypes.InputDatadogAgent{}
-				items.InputDatadogAgent.TemplateHost = types.StringPointerValue(itemsItem.InputDatadogAgent.TemplateHost)
-				items.InputDatadogAgent.TemplatePort = types.StringPointerValue(itemsItem.InputDatadogAgent.TemplatePort)
 				items.InputDatadogAgent.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputDatadogAgent.ActivityLogSampleRate)
 				items.InputDatadogAgent.CaptureHeaders = types.BoolPointerValue(itemsItem.InputDatadogAgent.CaptureHeaders)
 				items.InputDatadogAgent.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
@@ -1492,11 +1468,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputEdgePrometheus != nil {
 				items.InputEdgePrometheus = &tfTypes.InputEdgePrometheus{}
-				items.InputEdgePrometheus.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputEdgePrometheus.TemplateAssumeRoleArn)
-				items.InputEdgePrometheus.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputEdgePrometheus.TemplateAssumeRoleExternalID)
-				items.InputEdgePrometheus.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputEdgePrometheus.TemplateAwsAPIKey)
-				items.InputEdgePrometheus.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputEdgePrometheus.TemplateAwsSecretKey)
-				items.InputEdgePrometheus.TemplateRegion = types.StringPointerValue(itemsItem.InputEdgePrometheus.TemplateRegion)
 				items.InputEdgePrometheus.AssumeRoleArn = types.StringPointerValue(itemsItem.InputEdgePrometheus.AssumeRoleArn)
 				items.InputEdgePrometheus.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputEdgePrometheus.AssumeRoleExternalID)
 				if itemsItem.InputEdgePrometheus.AuthType != nil {
@@ -1667,8 +1638,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputElastic != nil {
 				items.InputElastic = &tfTypes.InputElastic{}
-				items.InputElastic.TemplateHost = types.StringPointerValue(itemsItem.InputElastic.TemplateHost)
-				items.InputElastic.TemplatePort = types.StringPointerValue(itemsItem.InputElastic.TemplatePort)
 				items.InputElastic.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputElastic.ActivityLogSampleRate)
 				if itemsItem.InputElastic.APIVersion != nil {
 					items.InputElastic.APIVersion = types.StringValue(string(*itemsItem.InputElastic.APIVersion))
@@ -1764,7 +1733,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 					items.InputElastic.ProxyMode = nil
 				} else {
 					items.InputElastic.ProxyMode = &tfTypes.InputElasticProxyMode{}
-					items.InputElastic.ProxyMode.TemplateURL = types.StringPointerValue(itemsItem.InputElastic.ProxyMode.TemplateURL)
 					if itemsItem.InputElastic.ProxyMode.AuthType != nil {
 						items.InputElastic.ProxyMode.AuthType = types.StringValue(string(*itemsItem.InputElastic.ProxyMode.AuthType))
 					} else {
@@ -2117,8 +2085,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputFirehose != nil {
 				items.InputFirehose = &tfTypes.InputFirehose{}
-				items.InputFirehose.TemplateHost = types.StringPointerValue(itemsItem.InputFirehose.TemplateHost)
-				items.InputFirehose.TemplatePort = types.StringPointerValue(itemsItem.InputFirehose.TemplatePort)
 				items.InputFirehose.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputFirehose.ActivityLogSampleRate)
 				items.InputFirehose.AuthTokens = make([]types.String, 0, len(itemsItem.InputFirehose.AuthTokens))
 				for _, v := range itemsItem.InputFirehose.AuthTokens {
@@ -2221,9 +2187,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputGooglePubsub != nil {
 				items.InputGooglePubsub = &tfTypes.InputGooglePubsub{}
-				items.InputGooglePubsub.TemplateRegion = types.StringPointerValue(itemsItem.InputGooglePubsub.TemplateRegion)
-				items.InputGooglePubsub.TemplateSubscriptionName = types.StringPointerValue(itemsItem.InputGooglePubsub.TemplateSubscriptionName)
-				items.InputGooglePubsub.TemplateTopicName = types.StringPointerValue(itemsItem.InputGooglePubsub.TemplateTopicName)
 				items.InputGooglePubsub.Concurrency = types.Float64PointerValue(itemsItem.InputGooglePubsub.Concurrency)
 				items.InputGooglePubsub.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
@@ -2302,8 +2265,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputGrafana != nil {
 				items.InputGrafana = &tfTypes.InputGrafana{}
-				items.InputGrafana.TemplateHost = types.StringPointerValue(itemsItem.InputGrafana.TemplateHost)
-				items.InputGrafana.TemplatePort = types.StringPointerValue(itemsItem.InputGrafana.TemplatePort)
 				items.InputGrafana.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputGrafana.ActivityLogSampleRate)
 				items.InputGrafana.CaptureHeaders = types.BoolPointerValue(itemsItem.InputGrafana.CaptureHeaders)
 				items.InputGrafana.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
@@ -2586,9 +2547,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputHTTP != nil {
 				items.InputHTTP = &tfTypes.InputHTTP{}
-				items.InputHTTP.TemplateHost = types.StringPointerValue(itemsItem.InputHTTP.TemplateHost)
-				items.InputHTTP.TemplatePort = types.StringPointerValue(itemsItem.InputHTTP.TemplatePort)
-				items.InputHTTP.TemplateSplunkHecAPI = types.StringPointerValue(itemsItem.InputHTTP.TemplateSplunkHecAPI)
 				items.InputHTTP.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputHTTP.ActivityLogSampleRate)
 				items.InputHTTP.AuthTokens = make([]types.String, 0, len(itemsItem.InputHTTP.AuthTokens))
 				for _, v := range itemsItem.InputHTTP.AuthTokens {
@@ -2715,8 +2673,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputHTTPRaw != nil {
 				items.InputHTTPRaw = &tfTypes.InputHTTPRaw{}
-				items.InputHTTPRaw.TemplateHost = types.StringPointerValue(itemsItem.InputHTTPRaw.TemplateHost)
-				items.InputHTTPRaw.TemplatePort = types.StringPointerValue(itemsItem.InputHTTPRaw.TemplatePort)
 				items.InputHTTPRaw.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputHTTPRaw.ActivityLogSampleRate)
 				items.InputHTTPRaw.AllowedMethods = make([]types.String, 0, len(itemsItem.InputHTTPRaw.AllowedMethods))
 				for _, v := range itemsItem.InputHTTPRaw.AllowedMethods {
@@ -3128,12 +3084,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputKinesis != nil {
 				items.InputKinesis = &tfTypes.InputKinesis{}
-				items.InputKinesis.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputKinesis.TemplateAssumeRoleArn)
-				items.InputKinesis.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputKinesis.TemplateAssumeRoleExternalID)
-				items.InputKinesis.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputKinesis.TemplateAwsAPIKey)
-				items.InputKinesis.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputKinesis.TemplateAwsSecretKey)
-				items.InputKinesis.TemplateRegion = types.StringPointerValue(itemsItem.InputKinesis.TemplateRegion)
-				items.InputKinesis.TemplateStreamName = types.StringPointerValue(itemsItem.InputKinesis.TemplateStreamName)
 				items.InputKinesis.AssumeRoleArn = types.StringPointerValue(itemsItem.InputKinesis.AssumeRoleArn)
 				items.InputKinesis.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputKinesis.AssumeRoleExternalID)
 				items.InputKinesis.AvoidDuplicates = types.BoolPointerValue(itemsItem.InputKinesis.AvoidDuplicates)
@@ -3489,10 +3439,10 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputLoki != nil {
 				items.InputLoki = &tfTypes.InputLoki{}
-				items.InputLoki.TemplateHost = types.StringPointerValue(itemsItem.InputLoki.TemplateHost)
-				items.InputLoki.TemplatePort = types.StringPointerValue(itemsItem.InputLoki.TemplatePort)
 				items.InputLoki.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputLoki.ActivityLogSampleRate)
-				items.InputLoki.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputLoki.AuthHeaderExpr)
+				authHeaderExprValuable, authHeaderExprDiags := types.StringType.ValueFromString(ctx, types.StringPointerValue(itemsItem.InputLoki.AuthHeaderExpr))
+				diags.Append(authHeaderExprDiags...)
+				items.InputLoki.AuthHeaderExpr = authHeaderExprValuable.(types.String)
 				if itemsItem.InputLoki.AuthType != nil {
 					items.InputLoki.AuthType = types.StringValue(string(*itemsItem.InputLoki.AuthType))
 				} else {
@@ -3626,9 +3576,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputMetrics != nil {
 				items.InputMetrics = &tfTypes.InputMetrics{}
-				items.InputMetrics.TemplateHost = types.StringPointerValue(itemsItem.InputMetrics.TemplateHost)
-				items.InputMetrics.TemplateTCPPort = types.StringPointerValue(itemsItem.InputMetrics.TemplateTCPPort)
-				items.InputMetrics.TemplateUDPPort = types.StringPointerValue(itemsItem.InputMetrics.TemplateUDPPort)
 				items.InputMetrics.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
 				for _, connectionsItem30 := range itemsItem.InputMetrics.Connections {
@@ -3721,10 +3668,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputMicrosoftGraph != nil {
 				items.InputMicrosoftGraph = &tfTypes.InputMicrosoftGraph{}
-				items.InputMicrosoftGraph.TemplateClientID = types.StringPointerValue(itemsItem.InputMicrosoftGraph.TemplateClientID)
-				items.InputMicrosoftGraph.TemplateResource = types.StringPointerValue(itemsItem.InputMicrosoftGraph.TemplateResource)
-				items.InputMicrosoftGraph.TemplateTenantID = types.StringPointerValue(itemsItem.InputMicrosoftGraph.TemplateTenantID)
-				items.InputMicrosoftGraph.TemplateURL = types.StringPointerValue(itemsItem.InputMicrosoftGraph.TemplateURL)
 				if itemsItem.InputMicrosoftGraph.AuthType != nil {
 					items.InputMicrosoftGraph.AuthType = types.StringValue(string(*itemsItem.InputMicrosoftGraph.AuthType))
 				} else {
@@ -3847,8 +3790,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputModelDrivenTelemetry != nil {
 				items.InputModelDrivenTelemetry = &tfTypes.InputModelDrivenTelemetry{}
-				items.InputModelDrivenTelemetry.TemplateHost = types.StringPointerValue(itemsItem.InputModelDrivenTelemetry.TemplateHost)
-				items.InputModelDrivenTelemetry.TemplatePort = types.StringPointerValue(itemsItem.InputModelDrivenTelemetry.TemplatePort)
 				items.InputModelDrivenTelemetry.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
 				for _, connectionsItem32 := range itemsItem.InputModelDrivenTelemetry.Connections {
@@ -3938,11 +3879,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputMsk != nil {
 				items.InputMsk = &tfTypes.InputMsk{}
-				items.InputMsk.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputMsk.TemplateAssumeRoleArn)
-				items.InputMsk.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputMsk.TemplateAssumeRoleExternalID)
-				items.InputMsk.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputMsk.TemplateAwsAPIKey)
-				items.InputMsk.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputMsk.TemplateAwsSecretKey)
-				items.InputMsk.TemplateRegion = types.StringPointerValue(itemsItem.InputMsk.TemplateRegion)
 				items.InputMsk.AssumeRoleArn = types.StringPointerValue(itemsItem.InputMsk.AssumeRoleArn)
 				items.InputMsk.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputMsk.AssumeRoleExternalID)
 				items.InputMsk.AuthenticationTimeout = types.Float64PointerValue(itemsItem.InputMsk.AuthenticationTimeout)
@@ -4110,8 +4046,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputNetflow != nil {
 				items.InputNetflow = &tfTypes.InputNetflow{}
-				items.InputNetflow.TemplateHost = types.StringPointerValue(itemsItem.InputNetflow.TemplateHost)
-				items.InputNetflow.TemplatePort = types.StringPointerValue(itemsItem.InputNetflow.TemplatePort)
 				items.InputNetflow.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
 				for _, connectionsItem34 := range itemsItem.InputNetflow.Connections {
@@ -4183,10 +4117,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputOffice365Mgmt != nil {
 				items.InputOffice365Mgmt = &tfTypes.InputOffice365Mgmt{}
-				items.InputOffice365Mgmt.TemplateAppID = types.StringPointerValue(itemsItem.InputOffice365Mgmt.TemplateAppID)
-				items.InputOffice365Mgmt.TemplateClientSecret = types.StringPointerValue(itemsItem.InputOffice365Mgmt.TemplateClientSecret)
-				items.InputOffice365Mgmt.TemplatePublisherIdentifier = types.StringPointerValue(itemsItem.InputOffice365Mgmt.TemplatePublisherIdentifier)
-				items.InputOffice365Mgmt.TemplateTenantID = types.StringPointerValue(itemsItem.InputOffice365Mgmt.TemplateTenantID)
 				items.InputOffice365Mgmt.AppID = types.StringValue(itemsItem.InputOffice365Mgmt.AppID)
 				if itemsItem.InputOffice365Mgmt.AuthType != nil {
 					items.InputOffice365Mgmt.AuthType = types.StringValue(string(*itemsItem.InputOffice365Mgmt.AuthType))
@@ -4299,10 +4229,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputOffice365MsgTrace != nil {
 				items.InputOffice365MsgTrace = &tfTypes.InputOffice365MsgTrace{}
-				items.InputOffice365MsgTrace.TemplateClientID = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.TemplateClientID)
-				items.InputOffice365MsgTrace.TemplateResource = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.TemplateResource)
-				items.InputOffice365MsgTrace.TemplateTenantID = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.TemplateTenantID)
-				items.InputOffice365MsgTrace.TemplateURL = types.StringPointerValue(itemsItem.InputOffice365MsgTrace.TemplateURL)
 				if itemsItem.InputOffice365MsgTrace.AuthType != nil {
 					items.InputOffice365MsgTrace.AuthType = types.StringValue(string(*itemsItem.InputOffice365MsgTrace.AuthType))
 				} else {
@@ -4425,9 +4351,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputOffice365Service != nil {
 				items.InputOffice365Service = &tfTypes.InputOffice365Service{}
-				items.InputOffice365Service.TemplateAppID = types.StringPointerValue(itemsItem.InputOffice365Service.TemplateAppID)
-				items.InputOffice365Service.TemplateClientSecret = types.StringPointerValue(itemsItem.InputOffice365Service.TemplateClientSecret)
-				items.InputOffice365Service.TemplateTenantID = types.StringPointerValue(itemsItem.InputOffice365Service.TemplateTenantID)
 				items.InputOffice365Service.AppID = types.StringValue(itemsItem.InputOffice365Service.AppID)
 				if itemsItem.InputOffice365Service.AuthType != nil {
 					items.InputOffice365Service.AuthType = types.StringValue(string(*itemsItem.InputOffice365Service.AuthType))
@@ -4542,10 +4465,10 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputOpenTelemetry != nil {
 				items.InputOpenTelemetry = &tfTypes.InputOpenTelemetry{}
-				items.InputOpenTelemetry.TemplateHost = types.StringPointerValue(itemsItem.InputOpenTelemetry.TemplateHost)
-				items.InputOpenTelemetry.TemplatePort = types.StringPointerValue(itemsItem.InputOpenTelemetry.TemplatePort)
 				items.InputOpenTelemetry.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputOpenTelemetry.ActivityLogSampleRate)
-				items.InputOpenTelemetry.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputOpenTelemetry.AuthHeaderExpr)
+				authHeaderExprValuable1, authHeaderExprDiags1 := types.StringType.ValueFromString(ctx, types.StringPointerValue(itemsItem.InputOpenTelemetry.AuthHeaderExpr))
+				diags.Append(authHeaderExprDiags1...)
+				items.InputOpenTelemetry.AuthHeaderExpr = authHeaderExprValuable1.(types.String)
 				if itemsItem.InputOpenTelemetry.AuthType != nil {
 					items.InputOpenTelemetry.AuthType = types.StringValue(string(*itemsItem.InputOpenTelemetry.AuthType))
 				} else {
@@ -4692,8 +4615,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputOpenai != nil {
 				items.InputOpenai = &tfTypes.InputOpenai1{}
-				items.InputOpenai.TemplateOpenaiOrganization = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiOrganization)
-				items.InputOpenai.TemplateOpenaiProject = types.StringPointerValue(itemsItem.InputOpenai.TemplateOpenaiProject)
 				items.InputOpenai.APIKey = types.StringPointerValue(itemsItem.InputOpenai.APIKey)
 				items.InputOpenai.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
@@ -4839,15 +4760,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputPrometheus != nil {
 				items.InputPrometheus = &tfTypes.InputPrometheus{}
-				items.InputPrometheus.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputPrometheus.TemplateAssumeRoleArn)
-				items.InputPrometheus.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputPrometheus.TemplateAssumeRoleExternalID)
-				items.InputPrometheus.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputPrometheus.TemplateAwsAPIKey)
-				items.InputPrometheus.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputPrometheus.TemplateAwsSecretKey)
-				items.InputPrometheus.TemplateDiscoveryType = types.StringPointerValue(itemsItem.InputPrometheus.TemplateDiscoveryType)
-				items.InputPrometheus.TemplateLogLevel = types.StringPointerValue(itemsItem.InputPrometheus.TemplateLogLevel)
-				items.InputPrometheus.TemplatePassword = types.StringPointerValue(itemsItem.InputPrometheus.TemplatePassword)
-				items.InputPrometheus.TemplateRegion = types.StringPointerValue(itemsItem.InputPrometheus.TemplateRegion)
-				items.InputPrometheus.TemplateUsername = types.StringPointerValue(itemsItem.InputPrometheus.TemplateUsername)
 				items.InputPrometheus.AssumeRoleArn = types.StringPointerValue(itemsItem.InputPrometheus.AssumeRoleArn)
 				items.InputPrometheus.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputPrometheus.AssumeRoleExternalID)
 				if itemsItem.InputPrometheus.AuthType != nil {
@@ -4989,12 +4901,10 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputPrometheusRw != nil {
 				items.InputPrometheusRw = &tfTypes.InputPrometheusRw{}
-				items.InputPrometheusRw.TemplateHost = types.StringPointerValue(itemsItem.InputPrometheusRw.TemplateHost)
-				items.InputPrometheusRw.TemplatePort = types.StringPointerValue(itemsItem.InputPrometheusRw.TemplatePort)
-				items.InputPrometheusRw.TemplatePrometheusAPI = types.StringPointerValue(itemsItem.InputPrometheusRw.TemplatePrometheusAPI)
-				items.InputPrometheusRw.TemplateUsername = types.StringPointerValue(itemsItem.InputPrometheusRw.TemplateUsername)
 				items.InputPrometheusRw.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputPrometheusRw.ActivityLogSampleRate)
-				items.InputPrometheusRw.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputPrometheusRw.AuthHeaderExpr)
+				authHeaderExprValuable2, authHeaderExprDiags2 := types.StringType.ValueFromString(ctx, types.StringPointerValue(itemsItem.InputPrometheusRw.AuthHeaderExpr))
+				diags.Append(authHeaderExprDiags2...)
+				items.InputPrometheusRw.AuthHeaderExpr = authHeaderExprValuable2.(types.String)
 				if itemsItem.InputPrometheusRw.AuthType != nil {
 					items.InputPrometheusRw.AuthType = types.StringValue(string(*itemsItem.InputPrometheusRw.AuthType))
 				} else {
@@ -5128,8 +5038,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputRawUDP != nil {
 				items.InputRawUDP = &tfTypes.InputRawUDP{}
-				items.InputRawUDP.TemplateHost = types.StringPointerValue(itemsItem.InputRawUDP.TemplateHost)
-				items.InputRawUDP.TemplatePort = types.StringPointerValue(itemsItem.InputRawUDP.TemplatePort)
 				items.InputRawUDP.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
 				for _, connectionsItem42 := range itemsItem.InputRawUDP.Connections {
@@ -5198,13 +5106,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputS3 != nil {
 				items.InputS3 = &tfTypes.InputS3{}
-				items.InputS3.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputS3.TemplateAssumeRoleArn)
-				items.InputS3.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputS3.TemplateAssumeRoleExternalID)
-				items.InputS3.TemplateAwsAccountID = types.StringPointerValue(itemsItem.InputS3.TemplateAwsAccountID)
-				items.InputS3.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputS3.TemplateAwsAPIKey)
-				items.InputS3.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputS3.TemplateAwsSecretKey)
-				items.InputS3.TemplateQueueName = types.StringPointerValue(itemsItem.InputS3.TemplateQueueName)
-				items.InputS3.TemplateRegion = types.StringPointerValue(itemsItem.InputS3.TemplateRegion)
 				items.InputS3.AssumeRoleArn = types.StringPointerValue(itemsItem.InputS3.AssumeRoleArn)
 				items.InputS3.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputS3.AssumeRoleExternalID)
 				items.InputS3.AwsAccountID = types.StringPointerValue(itemsItem.InputS3.AwsAccountID)
@@ -5327,13 +5228,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputS3Inventory != nil {
 				items.InputS3Inventory = &tfTypes.InputS3Inventory{}
-				items.InputS3Inventory.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateAssumeRoleArn)
-				items.InputS3Inventory.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateAssumeRoleExternalID)
-				items.InputS3Inventory.TemplateAwsAccountID = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateAwsAccountID)
-				items.InputS3Inventory.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateAwsAPIKey)
-				items.InputS3Inventory.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateAwsSecretKey)
-				items.InputS3Inventory.TemplateQueueName = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateQueueName)
-				items.InputS3Inventory.TemplateRegion = types.StringPointerValue(itemsItem.InputS3Inventory.TemplateRegion)
 				items.InputS3Inventory.AssumeRoleArn = types.StringPointerValue(itemsItem.InputS3Inventory.AssumeRoleArn)
 				items.InputS3Inventory.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputS3Inventory.AssumeRoleExternalID)
 				items.InputS3Inventory.AwsAccountID = types.StringPointerValue(itemsItem.InputS3Inventory.AwsAccountID)
@@ -5462,13 +5356,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSecurityLake != nil {
 				items.InputSecurityLake = &tfTypes.InputSecurityLake{}
-				items.InputSecurityLake.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateAssumeRoleArn)
-				items.InputSecurityLake.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateAssumeRoleExternalID)
-				items.InputSecurityLake.TemplateAwsAccountID = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateAwsAccountID)
-				items.InputSecurityLake.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateAwsAPIKey)
-				items.InputSecurityLake.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateAwsSecretKey)
-				items.InputSecurityLake.TemplateQueueName = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateQueueName)
-				items.InputSecurityLake.TemplateRegion = types.StringPointerValue(itemsItem.InputSecurityLake.TemplateRegion)
 				items.InputSecurityLake.AssumeRoleArn = types.StringPointerValue(itemsItem.InputSecurityLake.AssumeRoleArn)
 				items.InputSecurityLake.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputSecurityLake.AssumeRoleExternalID)
 				items.InputSecurityLake.AwsAccountID = types.StringPointerValue(itemsItem.InputSecurityLake.AwsAccountID)
@@ -5595,8 +5482,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSnmp != nil {
 				items.InputSnmp = &tfTypes.InputSnmp{}
-				items.InputSnmp.TemplateHost = types.StringPointerValue(itemsItem.InputSnmp.TemplateHost)
-				items.InputSnmp.TemplatePort = types.StringPointerValue(itemsItem.InputSnmp.TemplatePort)
 				items.InputSnmp.BestEffortParsing = types.BoolPointerValue(itemsItem.InputSnmp.BestEffortParsing)
 				items.InputSnmp.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
@@ -5693,8 +5578,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSplunk != nil {
 				items.InputSplunk = &tfTypes.InputSplunk{}
-				items.InputSplunk.TemplateHost = types.StringPointerValue(itemsItem.InputSplunk.TemplateHost)
-				items.InputSplunk.TemplatePort = types.StringPointerValue(itemsItem.InputSplunk.TemplatePort)
 				items.InputSplunk.AuthTokens = []tfTypes.InputSplunkAuthToken{}
 
 				for _, authTokensItem3 := range itemsItem.InputSplunk.AuthTokens {
@@ -5816,9 +5699,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSplunkHec != nil {
 				items.InputSplunkHec = &tfTypes.InputSplunkHec{}
-				items.InputSplunkHec.TemplateHost = types.StringPointerValue(itemsItem.InputSplunkHec.TemplateHost)
-				items.InputSplunkHec.TemplatePort = types.StringPointerValue(itemsItem.InputSplunkHec.TemplatePort)
-				items.InputSplunkHec.TemplateSplunkHecAPI = types.StringPointerValue(itemsItem.InputSplunkHec.TemplateSplunkHecAPI)
 				items.InputSplunkHec.AccessControlAllowHeaders = make([]types.String, 0, len(itemsItem.InputSplunkHec.AccessControlAllowHeaders))
 				for _, v := range itemsItem.InputSplunkHec.AccessControlAllowHeaders {
 					items.InputSplunkHec.AccessControlAllowHeaders = append(items.InputSplunkHec.AccessControlAllowHeaders, types.StringValue(v))
@@ -5971,7 +5851,9 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSplunkSearch != nil {
 				items.InputSplunkSearch = &tfTypes.InputSplunkSearch{}
-				items.InputSplunkSearch.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputSplunkSearch.AuthHeaderExpr)
+				authHeaderExprValuable3, authHeaderExprDiags3 := types.StringType.ValueFromString(ctx, types.StringPointerValue(itemsItem.InputSplunkSearch.AuthHeaderExpr))
+				diags.Append(authHeaderExprDiags3...)
+				items.InputSplunkSearch.AuthHeaderExpr = authHeaderExprValuable3.(types.String)
 				if itemsItem.InputSplunkSearch.AuthType != nil {
 					items.InputSplunkSearch.AuthType = types.StringValue(string(*itemsItem.InputSplunkSearch.AuthType))
 				} else {
@@ -6130,13 +6012,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSqs != nil {
 				items.InputSqs = &tfTypes.InputSqs{}
-				items.InputSqs.TemplateAssumeRoleArn = types.StringPointerValue(itemsItem.InputSqs.TemplateAssumeRoleArn)
-				items.InputSqs.TemplateAssumeRoleExternalID = types.StringPointerValue(itemsItem.InputSqs.TemplateAssumeRoleExternalID)
-				items.InputSqs.TemplateAwsAccountID = types.StringPointerValue(itemsItem.InputSqs.TemplateAwsAccountID)
-				items.InputSqs.TemplateAwsAPIKey = types.StringPointerValue(itemsItem.InputSqs.TemplateAwsAPIKey)
-				items.InputSqs.TemplateAwsSecretKey = types.StringPointerValue(itemsItem.InputSqs.TemplateAwsSecretKey)
-				items.InputSqs.TemplateQueueName = types.StringPointerValue(itemsItem.InputSqs.TemplateQueueName)
-				items.InputSqs.TemplateRegion = types.StringPointerValue(itemsItem.InputSqs.TemplateRegion)
 				items.InputSqs.AssumeRoleArn = types.StringPointerValue(itemsItem.InputSqs.AssumeRoleArn)
 				items.InputSqs.AssumeRoleExternalID = types.StringPointerValue(itemsItem.InputSqs.AssumeRoleExternalID)
 				items.InputSqs.AwsAccountID = types.StringPointerValue(itemsItem.InputSqs.AwsAccountID)
@@ -6227,9 +6102,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputSyslog != nil {
 				items.InputSyslog = &tfTypes.InputSyslog{}
-				items.InputSyslog.TemplateHost = types.StringPointerValue(itemsItem.InputSyslog.TemplateHost)
-				items.InputSyslog.TemplateTCPPort = types.StringPointerValue(itemsItem.InputSyslog.TemplateTCPPort)
-				items.InputSyslog.TemplateUDPPort = types.StringPointerValue(itemsItem.InputSyslog.TemplateUDPPort)
 				items.InputSyslog.AllowNonStandardAppName = types.BoolPointerValue(itemsItem.InputSyslog.AllowNonStandardAppName)
 				items.InputSyslog.Connections = []tfTypes.ItemsTypeConnectionsOptional{}
 
@@ -6700,8 +6572,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputTCP != nil {
 				items.InputTCP = &tfTypes.InputTCP{}
-				items.InputTCP.TemplateHost = types.StringPointerValue(itemsItem.InputTCP.TemplateHost)
-				items.InputTCP.TemplatePort = types.StringPointerValue(itemsItem.InputTCP.TemplatePort)
 				items.InputTCP.AuthToken = types.StringPointerValue(itemsItem.InputTCP.AuthToken)
 				if itemsItem.InputTCP.AuthType != nil {
 					items.InputTCP.AuthType = types.StringValue(string(*itemsItem.InputTCP.AuthType))
@@ -6819,8 +6689,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputTcpjson != nil {
 				items.InputTcpjson = &tfTypes.InputTcpjson{}
-				items.InputTcpjson.TemplateHost = types.StringPointerValue(itemsItem.InputTcpjson.TemplateHost)
-				items.InputTcpjson.TemplatePort = types.StringPointerValue(itemsItem.InputTcpjson.TemplatePort)
 				items.InputTcpjson.AuthToken = types.StringPointerValue(itemsItem.InputTcpjson.AuthToken)
 				if itemsItem.InputTcpjson.AuthType != nil {
 					items.InputTcpjson.AuthType = types.StringValue(string(*itemsItem.InputTcpjson.AuthType))
@@ -6922,8 +6790,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputWef != nil {
 				items.InputWef = &tfTypes.InputWef{}
-				items.InputWef.TemplateHost = types.StringPointerValue(itemsItem.InputWef.TemplateHost)
-				items.InputWef.TemplatePort = types.StringPointerValue(itemsItem.InputWef.TemplatePort)
 				items.InputWef.AllowMachineIDMismatch = types.BoolPointerValue(itemsItem.InputWef.AllowMachineIDMismatch)
 				if itemsItem.InputWef.AuthMethod != nil {
 					items.InputWef.AuthMethod = types.StringValue(string(*itemsItem.InputWef.AuthMethod))
@@ -7355,9 +7221,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputWiz != nil {
 				items.InputWiz = &tfTypes.InputWiz{}
-				items.InputWiz.TemplateAuthURL = types.StringPointerValue(itemsItem.InputWiz.TemplateAuthURL)
-				items.InputWiz.TemplateClientID = types.StringPointerValue(itemsItem.InputWiz.TemplateClientID)
-				items.InputWiz.TemplateEndpoint = types.StringPointerValue(itemsItem.InputWiz.TemplateEndpoint)
 				items.InputWiz.AuthAudienceOverride = types.StringPointerValue(itemsItem.InputWiz.AuthAudienceOverride)
 				if itemsItem.InputWiz.AuthType != nil {
 					items.InputWiz.AuthType = types.StringValue(string(*itemsItem.InputWiz.AuthType))
@@ -7481,8 +7344,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputWizWebhook != nil {
 				items.InputWizWebhook = &tfTypes.InputWizWebhook{}
-				items.InputWizWebhook.TemplateHost = types.StringPointerValue(itemsItem.InputWizWebhook.TemplateHost)
-				items.InputWizWebhook.TemplatePort = types.StringPointerValue(itemsItem.InputWizWebhook.TemplatePort)
 				items.InputWizWebhook.ActivityLogSampleRate = types.Float64PointerValue(itemsItem.InputWizWebhook.ActivityLogSampleRate)
 				items.InputWizWebhook.AllowedMethods = make([]types.String, 0, len(itemsItem.InputWizWebhook.AllowedMethods))
 				for _, v := range itemsItem.InputWizWebhook.AllowedMethods {
@@ -7618,9 +7479,6 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 			}
 			if itemsItem.InputZscalerHec != nil {
 				items.InputZscalerHec = &tfTypes.InputZscalerHec{}
-				items.InputZscalerHec.TemplateHecAPI = types.StringPointerValue(itemsItem.InputZscalerHec.TemplateHecAPI)
-				items.InputZscalerHec.TemplateHost = types.StringPointerValue(itemsItem.InputZscalerHec.TemplateHost)
-				items.InputZscalerHec.TemplatePort = types.StringPointerValue(itemsItem.InputZscalerHec.TemplatePort)
 				items.InputZscalerHec.AccessControlAllowHeaders = make([]types.String, 0, len(itemsItem.InputZscalerHec.AccessControlAllowHeaders))
 				for _, v := range itemsItem.InputZscalerHec.AccessControlAllowHeaders {
 					items.InputZscalerHec.AccessControlAllowHeaders = append(items.InputZscalerHec.AccessControlAllowHeaders, types.StringValue(v))

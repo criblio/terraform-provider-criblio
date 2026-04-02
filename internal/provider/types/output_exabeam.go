@@ -7,7 +7,6 @@ import (
 )
 
 type OutputExabeam struct {
-	TemplateRegion         types.String       `tfsdk:"template_region"`
 	AddIDToStagePath       types.Bool         `tfsdk:"add_id_to_stage_path"`
 	AwsAPIKey              types.String       `tfsdk:"aws_api_key"`
 	AwsSecretKey           types.String       `tfsdk:"aws_secret_key"`

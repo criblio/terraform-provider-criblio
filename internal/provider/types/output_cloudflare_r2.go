@@ -7,8 +7,6 @@ import (
 )
 
 type OutputCloudflareR2 struct {
-	TemplateBucket          types.String                `tfsdk:"template_bucket"`
-	TemplateFormat          types.String                `tfsdk:"template_format"`
 	AddIDToStagePath        types.Bool                  `tfsdk:"add_id_to_stage_path"`
 	AutomaticSchema         types.Bool                  `tfsdk:"automatic_schema"`
 	AwsAPIKey               types.String                `tfsdk:"aws_api_key"`

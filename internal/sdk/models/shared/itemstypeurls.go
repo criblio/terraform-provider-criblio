@@ -11,8 +11,6 @@ type ItemsTypeUrls struct {
 	URL string `json:"url"`
 	// Assign a weight (>0) to each endpoint to indicate its traffic-handling capability
 	Weight *float64 `json:"weight,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
 }
 
 func (i ItemsTypeUrls) MarshalJSON() ([]byte, error) {
@@ -38,11 +36,4 @@ func (i *ItemsTypeUrls) GetWeight() *float64 {
 		return nil
 	}
 	return i.Weight
-}
-
-func (i *ItemsTypeUrls) GetTemplateURL() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateURL
 }

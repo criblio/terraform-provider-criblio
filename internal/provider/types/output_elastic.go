@@ -7,7 +7,6 @@ import (
 )
 
 type OutputElastic struct {
-	TemplateURL                   types.String                       `tfsdk:"template_url"`
 	Auth                          *AuthTypeAuthTypeCredentialsSecret `tfsdk:"auth"`
 	Compress                      types.Bool                         `tfsdk:"compress"`
 	Concurrency                   types.Float64                      `tfsdk:"concurrency"`

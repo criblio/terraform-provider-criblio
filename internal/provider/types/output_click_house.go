@@ -7,9 +7,6 @@ import (
 )
 
 type OutputClickHouse struct {
-	TemplateDatabase              types.String                                     `tfsdk:"template_database"`
-	TemplateTableName             types.String                                     `tfsdk:"template_table_name"`
-	TemplateURL                   types.String                                     `tfsdk:"template_url"`
 	AsyncInserts                  types.Bool                                       `tfsdk:"async_inserts"`
 	AuthHeaderExpr                types.String                                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`

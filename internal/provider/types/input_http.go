@@ -7,9 +7,6 @@ import (
 )
 
 type InputHTTP struct {
-	TemplateHost          types.String                   `tfsdk:"template_host"`
-	TemplatePort          types.String                   `tfsdk:"template_port"`
-	TemplateSplunkHecAPI  types.String                   `tfsdk:"template_splunk_hec_api"`
 	ActivityLogSampleRate types.Float64                  `tfsdk:"activity_log_sample_rate"`
 	AuthTokens            []types.String                 `tfsdk:"auth_tokens"`
 	AuthTokensExt         []ItemsTypeAuthTokensExt       `tfsdk:"auth_tokens_ext"`

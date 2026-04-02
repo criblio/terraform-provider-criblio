@@ -7,8 +7,6 @@ import (
 )
 
 type OutputSyslog struct {
-	TemplateHost              types.String                             `tfsdk:"template_host"`
-	TemplatePort              types.String                             `tfsdk:"template_port"`
 	AppName                   types.String                             `tfsdk:"app_name"`
 	ConnectionTimeout         types.Float64                            `tfsdk:"connection_timeout"`
 	Description               types.String                             `tfsdk:"description"`

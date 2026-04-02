@@ -7,9 +7,6 @@ import (
 )
 
 type OutputLocalSearchStorage struct {
-	TemplateDatabase              types.String                                     `tfsdk:"template_database"`
-	TemplateTableName             types.String                                     `tfsdk:"template_table_name"`
-	TemplateURL                   types.String                                     `tfsdk:"template_url"`
 	AsyncInserts                  types.Bool                                       `tfsdk:"async_inserts"`
 	AuthType                      types.String                                     `tfsdk:"auth_type"`
 	ColumnMappings                []OutputLocalSearchStorageColumnMapping          `tfsdk:"column_mappings"`

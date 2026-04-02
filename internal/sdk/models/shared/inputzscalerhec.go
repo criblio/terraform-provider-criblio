@@ -166,12 +166,6 @@ type InputZscalerHec struct {
 	// Enable to emit per-token (<prefix>.http.perToken) and summary (<prefix>.http.summary) request metrics
 	EmitTokenMetrics *bool   `json:"emitTokenMetrics,omitempty"`
 	Description      *string `json:"description,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
-	// Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
-	TemplateHecAPI *string `json:"__template_hecAPI,omitempty"`
 	// Expose the /cribl_health endpoint, which returns 200 OK when this Source is healthy
 	EnableHealthCheck *bool `json:"enableHealthCheck,omitempty"`
 }
@@ -409,27 +403,6 @@ func (i *InputZscalerHec) GetDescription() *string {
 		return nil
 	}
 	return i.Description
-}
-
-func (i *InputZscalerHec) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputZscalerHec) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
-}
-
-func (i *InputZscalerHec) GetTemplateHecAPI() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHecAPI
 }
 
 func (i *InputZscalerHec) GetEnableHealthCheck() *bool {

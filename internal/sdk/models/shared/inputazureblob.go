@@ -92,14 +92,6 @@ type InputAzureBlob struct {
 	// Select or create a stored text secret
 	ClientTextSecret *string                                     `json:"clientTextSecret,omitempty"`
 	Certificate      *CertificateTypeAzureBlobAuthTypeClientCert `json:"certificate,omitempty"`
-	// Binds 'queueName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'queueName' at runtime.
-	TemplateQueueName *string `json:"__template_queueName,omitempty"`
-	// Binds 'connectionString' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'connectionString' at runtime.
-	TemplateConnectionString *string `json:"__template_connectionString,omitempty"`
-	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
-	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-	TemplateClientID *string `json:"__template_clientId,omitempty"`
 }
 
 func (i InputAzureBlob) MarshalJSON() ([]byte, error) {
@@ -342,32 +334,4 @@ func (i *InputAzureBlob) GetCertificate() *CertificateTypeAzureBlobAuthTypeClien
 		return nil
 	}
 	return i.Certificate
-}
-
-func (i *InputAzureBlob) GetTemplateQueueName() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateQueueName
-}
-
-func (i *InputAzureBlob) GetTemplateConnectionString() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateConnectionString
-}
-
-func (i *InputAzureBlob) GetTemplateTenantID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTenantID
-}
-
-func (i *InputAzureBlob) GetTemplateClientID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateClientID
 }

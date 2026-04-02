@@ -155,14 +155,6 @@ type InputPrometheusRw struct {
 	CredentialsSecret *string `json:"credentialsSecret,omitempty"`
 	// Select or create a stored text secret
 	TextSecret *string `json:"textSecret,omitempty"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
-	// Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.
-	TemplatePrometheusAPI *string `json:"__template_prometheusAPI,omitempty"`
-	// Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
-	TemplateUsername *string `json:"__template_username,omitempty"`
 	// URL for OAuth
 	LoginURL *string `json:"loginUrl,omitempty"`
 	// Secret parameter name to pass in request body
@@ -421,34 +413,6 @@ func (i *InputPrometheusRw) GetTextSecret() *string {
 		return nil
 	}
 	return i.TextSecret
-}
-
-func (i *InputPrometheusRw) GetTemplateHost() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateHost
-}
-
-func (i *InputPrometheusRw) GetTemplatePort() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePort
-}
-
-func (i *InputPrometheusRw) GetTemplatePrometheusAPI() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplatePrometheusAPI
-}
-
-func (i *InputPrometheusRw) GetTemplateUsername() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateUsername
 }
 
 func (i *InputPrometheusRw) GetLoginURL() *string {

@@ -7,10 +7,6 @@ import (
 )
 
 type InputPrometheusRw struct {
-	TemplateHost          types.String                   `tfsdk:"template_host"`
-	TemplatePort          types.String                   `tfsdk:"template_port"`
-	TemplatePrometheusAPI types.String                   `tfsdk:"template_prometheus_api"`
-	TemplateUsername      types.String                   `tfsdk:"template_username"`
 	ActivityLogSampleRate types.Float64                  `tfsdk:"activity_log_sample_rate"`
 	AuthHeaderExpr        types.String                   `tfsdk:"auth_header_expr"`
 	AuthType              types.String                   `tfsdk:"auth_type"`

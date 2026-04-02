@@ -7,15 +7,6 @@ import (
 )
 
 type OutputAzureDataExplorer struct {
-	TemplateClientID              types.String                        `tfsdk:"template_client_id"`
-	TemplateClientSecret          types.String                        `tfsdk:"template_client_secret"`
-	TemplateClusterURL            types.String                        `tfsdk:"template_cluster_url"`
-	TemplateDatabase              types.String                        `tfsdk:"template_database"`
-	TemplateFormat                types.String                        `tfsdk:"template_format"`
-	TemplateIngestURL             types.String                        `tfsdk:"template_ingest_url"`
-	TemplateScope                 types.String                        `tfsdk:"template_scope"`
-	TemplateTable                 types.String                        `tfsdk:"template_table"`
-	TemplateTenantID              types.String                        `tfsdk:"template_tenant_id"`
 	AddIDToStagePath              types.Bool                          `tfsdk:"add_id_to_stage_path"`
 	AdditionalProperties          []AdditionalProperty                `tfsdk:"additional_properties"`
 	AutomaticSchema               types.Bool                          `tfsdk:"automatic_schema"`

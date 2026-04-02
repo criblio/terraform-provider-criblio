@@ -247,6 +247,12 @@ func TestSkipResourceByID(t *testing.T) {
 	t.Run("not skipped for normal resource", func(t *testing.T) {
 		assert.False(t, skipResourceByID("criblio_source", map[string]string{"id": "my_custom_source"}))
 	})
+	t.Run("skip criblio_source in default_search group", func(t *testing.T) {
+		assert.True(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default_search", "id": "in_open_telemetry"}))
+	})
+	t.Run("not skip criblio_source in other groups when same id", func(t *testing.T) {
+		assert.False(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default", "id": "in_open_telemetry"}))
+	})
 }
 
 func TestSkipResourceWhenLibCribl(t *testing.T) {

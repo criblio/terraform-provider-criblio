@@ -704,7 +704,9 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 					} else {
 						items.InputCollectorRest.Collector.Conf.Authentication = types.StringNull()
 					}
-					items.InputCollectorRest.Collector.Conf.AuthHeaderExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.AuthHeaderExpr)
+					authHeaderExprValuable, authHeaderExprDiags := types.StringType.ValueFromString(ctx, types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.AuthHeaderExpr))
+					diags.Append(authHeaderExprDiags...)
+					items.InputCollectorRest.Collector.Conf.AuthHeaderExpr = authHeaderExprValuable.(types.String)
 					items.InputCollectorRest.Collector.Conf.AuthHeaderKey = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.AuthHeaderKey)
 					items.InputCollectorRest.Collector.Conf.AuthRequestHeaders = []tfTypes.AuthRequestHeader{}
 

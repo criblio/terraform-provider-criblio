@@ -102,14 +102,6 @@ type InputMicrosoftGraph struct {
 	// Select or create a secret that references your client_secret to pass in the OAuth request parameter.
 	TextSecret  *string          `json:"textSecret,omitempty"`
 	CertOptions *CertOptionsType `json:"certOptions,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'tenantId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tenantId' at runtime.
-	TemplateTenantID *string `json:"__template_tenantId,omitempty"`
-	// Binds 'clientId' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'clientId' at runtime.
-	TemplateClientID *string `json:"__template_clientId,omitempty"`
-	// Binds 'resource' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'resource' at runtime.
-	TemplateResource *string `json:"__template_resource,omitempty"`
 }
 
 func (i InputMicrosoftGraph) MarshalJSON() ([]byte, error) {
@@ -387,32 +379,4 @@ func (i *InputMicrosoftGraph) GetCertOptions() *CertOptionsType {
 		return nil
 	}
 	return i.CertOptions
-}
-
-func (i *InputMicrosoftGraph) GetTemplateURL() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateURL
-}
-
-func (i *InputMicrosoftGraph) GetTemplateTenantID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateTenantID
-}
-
-func (i *InputMicrosoftGraph) GetTemplateClientID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateClientID
-}
-
-func (i *InputMicrosoftGraph) GetTemplateResource() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TemplateResource
 }

@@ -310,12 +310,6 @@ type OutputLocalSearchStorage struct {
 	// The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
 	PqMaxBufferSizeBytes *string                             `json:"pqMaxBufferSizeBytes,omitempty"`
 	PqControls           *OutputLocalSearchStoragePqControls `json:"pqControls,omitempty"`
-	// Binds 'url' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'url' at runtime.
-	TemplateURL *string `json:"__template_url,omitempty"`
-	// Binds 'database' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'database' at runtime.
-	TemplateDatabase *string `json:"__template_database,omitempty"`
-	// Binds 'tableName' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tableName' at runtime.
-	TemplateTableName *string `json:"__template_tableName,omitempty"`
 }
 
 func (o OutputLocalSearchStorage) MarshalJSON() ([]byte, error) {
@@ -691,25 +685,4 @@ func (o *OutputLocalSearchStorage) GetPqControls() *OutputLocalSearchStoragePqCo
 		return nil
 	}
 	return o.PqControls
-}
-
-func (o *OutputLocalSearchStorage) GetTemplateURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateURL
-}
-
-func (o *OutputLocalSearchStorage) GetTemplateDatabase() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateDatabase
-}
-
-func (o *OutputLocalSearchStorage) GetTemplateTableName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateTableName
 }

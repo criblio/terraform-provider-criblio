@@ -7,8 +7,6 @@ import (
 )
 
 type InputSplunk struct {
-	TemplateHost        types.String                   `tfsdk:"template_host"`
-	TemplatePort        types.String                   `tfsdk:"template_port"`
 	AuthTokens          []InputSplunkAuthToken         `tfsdk:"auth_tokens"`
 	BreakerRulesets     []types.String                 `tfsdk:"breaker_rulesets"`
 	Compress            types.String                   `tfsdk:"compress"`

@@ -7,7 +7,6 @@ import (
 )
 
 type OutputPrometheus struct {
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	AuthHeaderExpr                types.String                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Concurrency                   types.Float64                    `tfsdk:"concurrency"`

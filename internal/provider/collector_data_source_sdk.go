@@ -749,7 +749,9 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 			} else {
 				r.InputCollectorRest.Collector.Conf.Authentication = types.StringNull()
 			}
-			r.InputCollectorRest.Collector.Conf.AuthHeaderExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderExpr)
+			authHeaderExprValuable, authHeaderExprDiags := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderExpr))
+			diags.Append(authHeaderExprDiags...)
+			r.InputCollectorRest.Collector.Conf.AuthHeaderExpr = authHeaderExprValuable.(types.String)
 			r.InputCollectorRest.Collector.Conf.AuthHeaderKey = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderKey)
 			r.InputCollectorRest.Collector.Conf.AuthRequestHeaders = []tfTypes.AuthRequestHeader{}
 

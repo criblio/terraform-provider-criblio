@@ -86,9 +86,7 @@ resource "criblio_pack_source" "my_packsource" {
       "appscope",
       "observability",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
-    text_secret   = "appscope-auth-secret"
+    text_secret = "appscope-auth-secret"
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -166,14 +164,10 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "azure",
     ]
-    template_client_id         = "...my_template_client_id..."
-    template_connection_string = "...my_template_connection_string..."
-    template_queue_name        = "...my_template_queue_name..."
-    template_tenant_id         = "...my_template_tenant_id..."
-    tenant_id                  = "...my_tenant_id..."
-    text_secret                = "...my_text_secret..."
-    type                       = "azure_blob"
-    visibility_timeout         = 300
+    tenant_id          = "...my_tenant_id..."
+    text_secret        = "...my_text_secret..."
+    type               = "azure_blob"
+    visibility_timeout = 300
   }
   input_cloudflare_hec = {
     access_control_allow_headers = [
@@ -253,8 +247,6 @@ resource "criblio_pack_source" "my_packsource" {
     streamtags = [
       "..."
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -544,8 +536,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "cribl_http",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -641,9 +631,6 @@ resource "criblio_pack_source" "my_packsource" {
       "lake",
       "ingest",
     ]
-    template_host           = "...my_template_host..."
-    template_port           = "...my_template_port..."
-    template_splunk_hec_api = "...my_template_splunk_hec_api..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -711,8 +698,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "cribl_tcp",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -847,16 +832,9 @@ resource "criblio_pack_source" "my_packsource" {
       "crowdstrike",
       "edr",
     ]
-    tag_after_processing             = "true"
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "crowdstrike"
-    visibility_timeout               = 300
+    tag_after_processing = "true"
+    type                 = "crowdstrike"
+    visibility_timeout   = 300
   }
   input_datadog_agent = {
     activity_log_sample_rate = 100
@@ -913,8 +891,6 @@ resource "criblio_pack_source" "my_packsource" {
       "datadog",
       "metrics",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -1074,15 +1050,10 @@ resource "criblio_pack_source" "my_packsource" {
         protocol = "http"
       }
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    timeout                          = 5000
-    type                             = "edge_prometheus"
-    use_public_ip                    = true
-    username                         = "edge_user"
+    timeout       = 5000
+    type          = "edge_prometheus"
+    use_public_ip = true
+    username      = "edge_user"
   }
   input_elastic = {
     activity_log_sample_rate = 10
@@ -1153,10 +1124,9 @@ resource "criblio_pack_source" "my_packsource" {
         "Authorization",
         "Content-Length",
       ]
-      template_url = "...my_template_url..."
-      timeout_sec  = 60
-      url          = "https://elastic.example.com:9200"
-      username     = "...my_username..."
+      timeout_sec = 60
+      url         = "https://elastic.example.com:9200"
+      username    = "...my_username..."
     }
     request_timeout = 30
     send_to_routes  = true
@@ -1165,8 +1135,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "elastic",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -1436,8 +1404,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "firehose",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -1501,12 +1467,9 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "gpubsub",
     ]
-    subscription_name          = "projects/my-project/subscriptions/nginx-logs-sub"
-    template_region            = "...my_template_region..."
-    template_subscription_name = "...my_template_subscription_name..."
-    template_topic_name        = "...my_template_topic_name..."
-    topic_name                 = "projects/my-project/topics/nginx-logs"
-    type                       = "google_pubsub"
+    subscription_name = "projects/my-project/subscriptions/nginx-logs-sub"
+    topic_name        = "projects/my-project/topics/nginx-logs"
+    type              = "google_pubsub"
   }
   input_grafana = {
     activity_log_sample_rate = 10
@@ -1612,8 +1575,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "grafana",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -1699,9 +1660,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "http",
     ]
-    template_host           = "...my_template_host..."
-    template_port           = "...my_template_port..."
-    template_splunk_hec_api = "...my_template_splunk_hec_api..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -1795,8 +1753,6 @@ resource "criblio_pack_source" "my_packsource" {
       "http",
       "raw",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2051,14 +2007,8 @@ resource "criblio_pack_source" "my_packsource" {
       "aws",
       "kinesis",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
-    template_stream_name             = "...my_template_stream_name..."
-    type                             = "kinesis"
-    verify_kpl_check_sums            = true
+    type                  = "kinesis"
+    verify_kpl_check_sums = true
   }
   input_kube_events = {
     connections = [
@@ -2289,9 +2239,7 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "loki",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
-    text_secret   = "loki-token-secret"
+    text_secret = "loki-token-secret"
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2352,10 +2300,7 @@ resource "criblio_pack_source" "my_packsource" {
       "metrics",
       "udp",
     ]
-    tcp_port          = 8126
-    template_host     = "...my_template_host..."
-    template_tcp_port = "...my_template_tcp_port..."
-    template_udp_port = "...my_template_udp_port..."
+    tcp_port = 8126
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2445,17 +2390,13 @@ resource "criblio_pack_source" "my_packsource" {
     streamtags = [
       "..."
     ]
-    template_client_id = "...my_template_client_id..."
-    template_resource  = "...my_template_resource..."
-    template_tenant_id = "...my_template_tenant_id..."
-    template_url       = "...my_template_url..."
-    tenant_id          = "...my_tenant_id..."
-    text_secret        = "...my_text_secret..."
-    timeout            = 1347.03
-    ttl                = "...my_ttl..."
-    type               = "microsoft_graph"
-    url                = "...my_url..."
-    username           = "...my_username..."
+    tenant_id   = "...my_tenant_id..."
+    text_secret = "...my_text_secret..."
+    timeout     = 1347.03
+    ttl         = "...my_ttl..."
+    type        = "microsoft_graph"
+    url         = "...my_url..."
+    username    = "...my_username..."
   }
   input_model_driven_telemetry = {
     connections = [
@@ -2498,8 +2439,6 @@ resource "criblio_pack_source" "my_packsource" {
       "mdt",
       "grpc",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2610,11 +2549,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "msk",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_region                  = "...my_template_region..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -2676,8 +2610,6 @@ resource "criblio_pack_source" "my_packsource" {
       "network",
     ]
     template_cache_minutes = 60
-    template_host          = "...my_template_host..."
-    template_port          = "...my_template_port..."
     type                   = "netflow"
     udp_socket_rx_buf_size = 4194304
     v5_enabled             = true
@@ -2751,15 +2683,11 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "o365",
     ]
-    template_app_id               = "...my_template_app_id..."
-    template_client_secret        = "...my_template_client_secret..."
-    template_publisher_identifier = "...my_template_publisher_identifier..."
-    template_tenant_id            = "...my_template_tenant_id..."
-    tenant_id                     = "11111111-2222-3333-4444-555555555555"
-    text_secret                   = "o365-client-secret"
-    timeout                       = 300
-    ttl                           = "4h"
-    type                          = "office365_mgmt"
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_mgmt"
   }
   input_office365_msg_trace = {
     auth_type = "manual"
@@ -2834,17 +2762,13 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "o365",
     ]
-    template_client_id = "...my_template_client_id..."
-    template_resource  = "...my_template_resource..."
-    template_tenant_id = "...my_template_tenant_id..."
-    template_url       = "...my_template_url..."
-    tenant_id          = "11111111-2222-3333-4444-555555555555"
-    text_secret        = "o365-client-secret"
-    timeout            = 300
-    ttl                = "4h"
-    type               = "office365_msg_trace"
-    url                = "https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace"
-    username           = "o365_user"
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_msg_trace"
+    url         = "https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace"
+    username    = "o365_user"
   }
   input_office365_service = {
     app_id        = "99999999-aaaa-bbbb-cccc-111111111111"
@@ -2912,14 +2836,11 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "o365",
     ]
-    template_app_id        = "...my_template_app_id..."
-    template_client_secret = "...my_template_client_secret..."
-    template_tenant_id     = "...my_template_tenant_id..."
-    tenant_id              = "11111111-2222-3333-4444-555555555555"
-    text_secret            = "o365-client-secret"
-    timeout                = 300
-    ttl                    = "4h"
-    type                   = "office365_service"
+    tenant_id   = "11111111-2222-3333-4444-555555555555"
+    text_secret = "o365-client-secret"
+    timeout     = 300
+    ttl         = "4h"
+    type        = "office365_service"
   }
   input_open_telemetry = {
     activity_log_sample_rate = 10
@@ -2996,9 +2917,7 @@ resource "criblio_pack_source" "my_packsource" {
       "otel",
       "grpc",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
-    text_secret   = "otel-token-secret"
+    text_secret = "otel-token-secret"
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -3109,11 +3028,9 @@ resource "criblio_pack_source" "my_packsource" {
     streamtags = [
       "..."
     ]
-    template_openai_organization = "...my_template_openai_organization..."
-    template_openai_project      = "...my_template_openai_project..."
-    text_secret                  = "...my_text_secret..."
-    ttl                          = "...my_ttl..."
-    type                         = "openai"
+    text_secret = "...my_text_secret..."
+    ttl         = "...my_ttl..."
+    type        = "openai"
   }
   input_prometheus = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/prometheus-discovery"
@@ -3200,20 +3117,11 @@ resource "criblio_pack_source" "my_packsource" {
       "node-exporter:9100",
       "db:9200/metrics",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_discovery_type          = "...my_template_discovery_type..."
-    template_log_level               = "...my_template_log_level..."
-    template_password                = "...my_template_password..."
-    template_region                  = "...my_template_region..."
-    template_username                = "...my_template_username..."
-    timeout                          = 6.2
-    ttl                              = "4h"
-    type                             = "prometheus"
-    use_public_ip                    = true
-    username                         = "prom_user"
+    timeout       = 6.2
+    ttl           = "4h"
+    type          = "prometheus"
+    use_public_ip = true
+    username      = "prom_user"
   }
   input_prometheus_rw = {
     activity_log_sample_rate = 10
@@ -3285,11 +3193,7 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "prometheus",
     ]
-    template_host           = "...my_template_host..."
-    template_port           = "...my_template_port..."
-    template_prometheus_api = "...my_template_prometheus_api..."
-    template_username       = "...my_template_username..."
-    text_secret             = "prom-token-secret"
+    text_secret = "prom-token-secret"
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -3352,8 +3256,6 @@ resource "criblio_pack_source" "my_packsource" {
       "udp",
       "raw",
     ]
-    template_host          = "...my_template_host..."
-    template_port          = "...my_template_port..."
     type                   = "raw_udp"
     udp_socket_rx_buf_size = 4194304
   }
@@ -3437,16 +3339,9 @@ resource "criblio_pack_source" "my_packsource" {
       "aws",
       "s3",
     ]
-    tag_after_processing             = true
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "s3"
-    visibility_timeout               = 300
+    tag_after_processing = true
+    type                 = "s3"
+    visibility_timeout   = 300
   }
   input_s3_inventory = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-s3-access"
@@ -3529,17 +3424,10 @@ resource "criblio_pack_source" "my_packsource" {
       "aws",
       "s3-inventory",
     ]
-    tag_after_processing             = "false"
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "s3_inventory"
-    validate_inventory_files         = true
-    visibility_timeout               = 300
+    tag_after_processing     = "false"
+    type                     = "s3_inventory"
+    validate_inventory_files = true
+    visibility_timeout       = 300
   }
   input_security_lake = {
     assume_role_arn           = "arn:aws:iam::123456789012:role/cribl-security-lake-access"
@@ -3621,16 +3509,9 @@ resource "criblio_pack_source" "my_packsource" {
       "aws",
       "security-lake",
     ]
-    tag_after_processing             = "false"
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "security_lake"
-    visibility_timeout               = 300
+    tag_after_processing = "false"
+    type                 = "security_lake"
+    visibility_timeout   = 300
   }
   input_snmp = {
     best_effort_parsing = true
@@ -3687,8 +3568,6 @@ resource "criblio_pack_source" "my_packsource" {
       "network",
       "snmp",
     ]
-    template_host          = "...my_template_host..."
-    template_port          = "...my_template_port..."
     type                   = "snmp"
     udp_socket_rx_buf_size = 4194304
     varbinds_with_types    = true
@@ -3753,8 +3632,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "splunk",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -3862,9 +3739,6 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "splunk",
     ]
-    template_host           = "...my_template_host..."
-    template_port           = "...my_template_port..."
-    template_splunk_hec_api = "...my_template_splunk_hec_api..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -4047,15 +3921,8 @@ resource "criblio_pack_source" "my_packsource" {
       "aws",
       "sqs",
     ]
-    template_assume_role_arn         = "...my_template_assume_role_arn..."
-    template_assume_role_external_id = "...my_template_assume_role_external_id..."
-    template_aws_account_id          = "...my_template_aws_account_id..."
-    template_aws_api_key             = "...my_template_aws_api_key..."
-    template_aws_secret_key          = "...my_template_aws_secret_key..."
-    template_queue_name              = "...my_template_queue_name..."
-    template_region                  = "...my_template_region..."
-    type                             = "sqs"
-    visibility_timeout               = 300
+    type               = "sqs"
+    visibility_timeout = 300
   }
   input_syslog = {
     allow_non_standard_app_name = true
@@ -4114,9 +3981,6 @@ resource "criblio_pack_source" "my_packsource" {
     ]
     strictly_infer_octet_counting = true
     tcp_port                      = 514
-    template_host                 = "...my_template_host..."
-    template_tcp_port             = "...my_template_tcp_port..."
-    template_udp_port             = "...my_template_udp_port..."
     timestamp_timezone            = "UTC"
     tls = {
       ca_path             = "...my_ca_path..."
@@ -4400,9 +4264,7 @@ resource "criblio_pack_source" "my_packsource" {
       "tcp",
       "ingest",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
-    text_secret   = "...my_text_secret..."
+    text_secret = "...my_text_secret..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -4466,9 +4328,7 @@ resource "criblio_pack_source" "my_packsource" {
       "prod",
       "tcpjson",
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
-    text_secret   = "tcpjson-token-secret"
+    text_secret = "tcpjson-token-secret"
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -4570,8 +4430,6 @@ resource "criblio_pack_source" "my_packsource" {
         xml_query = "...my_xml_query..."
       }
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path               = "/etc/ssl/certs/ca-bundle.crt"
       cert_path             = "/etc/ssl/certs/server.crt"
@@ -4819,12 +4677,9 @@ resource "criblio_pack_source" "my_packsource" {
       "wiz",
       "security",
     ]
-    template_auth_url  = "...my_template_auth_url..."
-    template_client_id = "...my_template_client_id..."
-    template_endpoint  = "...my_template_endpoint..."
-    text_secret        = "wiz-client-secret"
-    ttl                = "4h"
-    type               = "wiz"
+    text_secret = "wiz-client-secret"
+    ttl         = "4h"
+    type        = "wiz"
   }
   input_wiz_webhook = {
     activity_log_sample_rate = 3.29
@@ -4900,8 +4755,6 @@ resource "criblio_pack_source" "my_packsource" {
     streamtags = [
       "..."
     ]
-    template_host = "...my_template_host..."
-    template_port = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."
@@ -4998,9 +4851,6 @@ resource "criblio_pack_source" "my_packsource" {
       "zscaler",
       "hec",
     ]
-    template_hec_api = "...my_template_hec_api..."
-    template_host    = "...my_template_host..."
-    template_port    = "...my_template_port..."
     tls = {
       ca_path             = "...my_ca_path..."
       cert_path           = "...my_cert_path..."

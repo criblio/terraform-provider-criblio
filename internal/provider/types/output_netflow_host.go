@@ -7,8 +7,6 @@ import (
 )
 
 type OutputNetflowHost struct {
-	TemplateHost types.String  `tfsdk:"template_host"`
-	TemplatePort types.String  `tfsdk:"template_port"`
-	Host         types.String  `tfsdk:"host"`
-	Port         types.Float64 `tfsdk:"port"`
+	Host types.String  `tfsdk:"host"`
+	Port types.Float64 `tfsdk:"port"`
 }

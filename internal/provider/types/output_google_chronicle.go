@@ -7,9 +7,6 @@ import (
 )
 
 type OutputGoogleChronicle struct {
-	TemplateAPIVersion              types.String                     `tfsdk:"template_api_version"`
-	TemplateCustomerID              types.String                     `tfsdk:"template_customer_id"`
-	TemplateRegion                  types.String                     `tfsdk:"template_region"`
 	APIKey                          types.String                     `tfsdk:"api_key"`
 	APIKeySecret                    types.String                     `tfsdk:"api_key_secret"`
 	APIVersion                      types.String                     `tfsdk:"api_version"`

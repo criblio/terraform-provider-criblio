@@ -7,9 +7,6 @@ import (
 )
 
 type InputOffice365Service struct {
-	TemplateAppID        types.String                         `tfsdk:"template_app_id"`
-	TemplateClientSecret types.String                         `tfsdk:"template_client_secret"`
-	TemplateTenantID     types.String                         `tfsdk:"template_tenant_id"`
 	AppID                types.String                         `tfsdk:"app_id"`
 	AuthType             types.String                         `tfsdk:"auth_type"`
 	ClientSecret         types.String                         `tfsdk:"client_secret"`

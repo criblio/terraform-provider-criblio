@@ -7,7 +7,6 @@ import (
 )
 
 type OutputConfluentCloud struct {
-	TemplateTopic             types.String                                                `tfsdk:"template_topic"`
 	Ack                       types.Int64                                                 `tfsdk:"ack"`
 	AuthenticationTimeout     types.Float64                                               `tfsdk:"authentication_timeout"`
 	BackoffRate               types.Float64                                               `tfsdk:"backoff_rate"`

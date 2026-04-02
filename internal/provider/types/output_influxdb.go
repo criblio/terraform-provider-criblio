@@ -7,9 +7,6 @@ import (
 )
 
 type OutputInfluxdb struct {
-	TemplateBucket                types.String                     `tfsdk:"template_bucket"`
-	TemplateDatabase              types.String                     `tfsdk:"template_database"`
-	TemplateURL                   types.String                     `tfsdk:"template_url"`
 	AuthHeaderExpr                types.String                     `tfsdk:"auth_header_expr"`
 	AuthType                      types.String                     `tfsdk:"auth_type"`
 	Bucket                        types.String                     `tfsdk:"bucket"`

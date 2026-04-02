@@ -36,10 +36,6 @@ type OutputNetflowHost struct {
 	Host string `json:"host"`
 	// Destination port, default is 2055
 	Port float64 `json:"port"`
-	// Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-	TemplateHost *string `json:"__template_host,omitempty"`
-	// Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
-	TemplatePort *string `json:"__template_port,omitempty"`
 }
 
 func (o OutputNetflowHost) MarshalJSON() ([]byte, error) {
@@ -65,20 +61,6 @@ func (o *OutputNetflowHost) GetPort() float64 {
 		return 0.0
 	}
 	return o.Port
-}
-
-func (o *OutputNetflowHost) GetTemplateHost() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplateHost
-}
-
-func (o *OutputNetflowHost) GetTemplatePort() *string {
-	if o == nil {
-		return nil
-	}
-	return o.TemplatePort
 }
 
 type OutputNetflow struct {
