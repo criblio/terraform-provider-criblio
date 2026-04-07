@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptions - Controls whether the sender should send compressed data to the server. Select 'Disabled' to reject compressed connections or 'Always' to ignore server's configuration and send compressed data.
 type CompressionOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e CompressionOptions) ToPointer() *CompressionOptions {
 	return &e
 }
-func (e *CompressionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "disabled", "auto", "always":
+			return true
+		}
 	}
-	switch v {
-	case "disabled":
-		fallthrough
-	case "auto":
-		fallthrough
-	case "always":
-		*e = CompressionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptions: %v", v)
-	}
+	return false
 }

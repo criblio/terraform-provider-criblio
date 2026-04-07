@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // GoogleAuthenticationMethodOptions - Choose Auto to use Google Application Default Credentials (ADC), Manual to enter Google service account credentials directly, or Secret to select or create a stored secret that references Google service account credentials.
 type GoogleAuthenticationMethodOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e GoogleAuthenticationMethodOptions) ToPointer() *GoogleAuthenticationMethodOptions {
 	return &e
 }
-func (e *GoogleAuthenticationMethodOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GoogleAuthenticationMethodOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "auto", "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = GoogleAuthenticationMethodOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GoogleAuthenticationMethodOptions: %v", v)
-	}
+	return false
 }

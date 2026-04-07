@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // DiskSpaceProtectionOptions - How to handle events when disk space is below the global 'Min free disk space' limit
 type DiskSpaceProtectionOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e DiskSpaceProtectionOptions) ToPointer() *DiskSpaceProtectionOptions {
 	return &e
 }
-func (e *DiskSpaceProtectionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *DiskSpaceProtectionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "block", "drop":
+			return true
+		}
 	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = DiskSpaceProtectionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DiskSpaceProtectionOptions: %v", v)
-	}
+	return false
 }

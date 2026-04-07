@@ -44,20 +44,16 @@ const (
 func (e OutputSyslogProtocol) ToPointer() *OutputSyslogProtocol {
 	return &e
 }
-func (e *OutputSyslogProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSyslogProtocol) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "tcp", "udp":
+			return true
+		}
 	}
-	switch v {
-	case "tcp":
-		fallthrough
-	case "udp":
-		*e = OutputSyslogProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSyslogProtocol: %v", v)
-	}
+	return false
 }
 
 // Facility - Default value for message facility. Will be overwritten by value of __facility if set. Defaults to user.
@@ -91,60 +87,16 @@ const (
 func (e Facility) ToPointer() *Facility {
 	return &e
 }
-func (e *Facility) UnmarshalJSON(data []byte) error {
-	var v int64
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Facility) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21:
+			return true
+		}
 	}
-	switch v {
-	case 0:
-		fallthrough
-	case 1:
-		fallthrough
-	case 2:
-		fallthrough
-	case 3:
-		fallthrough
-	case 4:
-		fallthrough
-	case 5:
-		fallthrough
-	case 6:
-		fallthrough
-	case 7:
-		fallthrough
-	case 8:
-		fallthrough
-	case 9:
-		fallthrough
-	case 10:
-		fallthrough
-	case 11:
-		fallthrough
-	case 12:
-		fallthrough
-	case 13:
-		fallthrough
-	case 14:
-		fallthrough
-	case 15:
-		fallthrough
-	case 16:
-		fallthrough
-	case 17:
-		fallthrough
-	case 18:
-		fallthrough
-	case 19:
-		fallthrough
-	case 20:
-		fallthrough
-	case 21:
-		*e = Facility(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for Facility: %v", v)
-	}
+	return false
 }
 
 // OutputSyslogSeverity - Default value for message severity. Will be overwritten by value of __severity if set. Defaults to notice.
@@ -172,32 +124,16 @@ const (
 func (e OutputSyslogSeverity) ToPointer() *OutputSyslogSeverity {
 	return &e
 }
-func (e *OutputSyslogSeverity) UnmarshalJSON(data []byte) error {
-	var v int64
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSyslogSeverity) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case 0, 1, 2, 3, 4, 5, 6, 7:
+			return true
+		}
 	}
-	switch v {
-	case 0:
-		fallthrough
-	case 1:
-		fallthrough
-	case 2:
-		fallthrough
-	case 3:
-		fallthrough
-	case 4:
-		fallthrough
-	case 5:
-		fallthrough
-	case 6:
-		fallthrough
-	case 7:
-		*e = OutputSyslogSeverity(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSyslogSeverity: %v", v)
-	}
+	return false
 }
 
 // OutputSyslogMessageFormat - The syslog message format depending on the receiver's support
@@ -213,20 +149,16 @@ const (
 func (e OutputSyslogMessageFormat) ToPointer() *OutputSyslogMessageFormat {
 	return &e
 }
-func (e *OutputSyslogMessageFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSyslogMessageFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "rfc3164", "rfc5424":
+			return true
+		}
 	}
-	switch v {
-	case "rfc3164":
-		fallthrough
-	case "rfc5424":
-		*e = OutputSyslogMessageFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSyslogMessageFormat: %v", v)
-	}
+	return false
 }
 
 // TimestampFormatEnum - Timestamp format to use when serializing event's time field
@@ -242,20 +174,16 @@ const (
 func (e TimestampFormatEnum) ToPointer() *TimestampFormatEnum {
 	return &e
 }
-func (e *TimestampFormatEnum) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *TimestampFormatEnum) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "syslog", "iso8601":
+			return true
+		}
 	}
-	switch v {
-	case "syslog":
-		fallthrough
-	case "iso8601":
-		*e = TimestampFormatEnum(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for TimestampFormatEnum: %v", v)
-	}
+	return false
 }
 
 type OutputSyslogPqControls struct {

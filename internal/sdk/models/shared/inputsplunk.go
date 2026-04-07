@@ -75,20 +75,16 @@ const (
 func (e MaxS2SVersion) ToPointer() *MaxS2SVersion {
 	return &e
 }
-func (e *MaxS2SVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MaxS2SVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v3", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v3":
-		fallthrough
-	case "v4":
-		*e = MaxS2SVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MaxS2SVersion: %v", v)
-	}
+	return false
 }
 
 // InputSplunkCompression - Controls whether to support reading compressed data from a forwarder. Select 'Automatic' to match the forwarder's configuration, or 'Disabled' to reject compressed connections.
@@ -106,22 +102,16 @@ const (
 func (e InputSplunkCompression) ToPointer() *InputSplunkCompression {
 	return &e
 }
-func (e *InputSplunkCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSplunkCompression) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "disabled", "auto", "always":
+			return true
+		}
 	}
-	switch v {
-	case "disabled":
-		fallthrough
-	case "auto":
-		fallthrough
-	case "always":
-		*e = InputSplunkCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSplunkCompression: %v", v)
-	}
+	return false
 }
 
 type InputSplunk struct {

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ProtocolOptionsTargetsItems - Protocol to use when collecting metrics
 type ProtocolOptionsTargetsItems string
 
@@ -18,18 +13,14 @@ const (
 func (e ProtocolOptionsTargetsItems) ToPointer() *ProtocolOptionsTargetsItems {
 	return &e
 }
-func (e *ProtocolOptionsTargetsItems) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ProtocolOptionsTargetsItems) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "http", "https":
+			return true
+		}
 	}
-	switch v {
-	case "http":
-		fallthrough
-	case "https":
-		*e = ProtocolOptionsTargetsItems(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ProtocolOptionsTargetsItems: %v", v)
-	}
+	return false
 }

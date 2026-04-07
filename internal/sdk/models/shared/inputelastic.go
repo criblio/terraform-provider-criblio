@@ -47,24 +47,16 @@ const (
 func (e InputElasticAuthenticationType) ToPointer() *InputElasticAuthenticationType {
 	return &e
 }
-func (e *InputElasticAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputElasticAuthenticationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "authTokens":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "authTokens":
-		*e = InputElasticAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputElasticAuthenticationType: %v", v)
-	}
+	return false
 }
 
 // InputElasticAPIVersion - The API version to use for communicating with the server
@@ -82,22 +74,16 @@ const (
 func (e InputElasticAPIVersion) ToPointer() *InputElasticAPIVersion {
 	return &e
 }
-func (e *InputElasticAPIVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputElasticAPIVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "6.8.4", "8.3.2", "custom":
+			return true
+		}
 	}
-	switch v {
-	case "6.8.4":
-		fallthrough
-	case "8.3.2":
-		fallthrough
-	case "custom":
-		*e = InputElasticAPIVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputElasticAPIVersion: %v", v)
-	}
+	return false
 }
 
 // InputElasticAuthenticationMethod - Enter credentials directly, or select a stored secret
@@ -112,22 +98,16 @@ const (
 func (e InputElasticAuthenticationMethod) ToPointer() *InputElasticAuthenticationMethod {
 	return &e
 }
-func (e *InputElasticAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputElasticAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = InputElasticAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputElasticAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type InputElasticProxyMode struct {

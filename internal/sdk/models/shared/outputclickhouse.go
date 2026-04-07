@@ -44,20 +44,16 @@ const (
 func (e OutputClickHouseFormat) ToPointer() *OutputClickHouseFormat {
 	return &e
 }
-func (e *OutputClickHouseFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputClickHouseFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json-compact-each-row-with-names", "json-each-row":
+			return true
+		}
 	}
-	switch v {
-	case "json-compact-each-row-with-names":
-		fallthrough
-	case "json-each-row":
-		*e = OutputClickHouseFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputClickHouseFormat: %v", v)
-	}
+	return false
 }
 
 // OutputClickHouseMappingType - How event fields are mapped to ClickHouse columns.
@@ -73,20 +69,16 @@ const (
 func (e OutputClickHouseMappingType) ToPointer() *OutputClickHouseMappingType {
 	return &e
 }
-func (e *OutputClickHouseMappingType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputClickHouseMappingType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "automatic", "custom":
+			return true
+		}
 	}
-	switch v {
-	case "automatic":
-		fallthrough
-	case "custom":
-		*e = OutputClickHouseMappingType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputClickHouseMappingType: %v", v)
-	}
+	return false
 }
 
 type OutputClickHouseColumnMapping struct {

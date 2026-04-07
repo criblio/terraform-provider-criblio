@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // RetryTypeOptionsHealthCheckCollectorConfRetryRules - The algorithm to use when performing HTTP retries
 type RetryTypeOptionsHealthCheckCollectorConfRetryRules string
 
@@ -22,20 +17,14 @@ const (
 func (e RetryTypeOptionsHealthCheckCollectorConfRetryRules) ToPointer() *RetryTypeOptionsHealthCheckCollectorConfRetryRules {
 	return &e
 }
-func (e *RetryTypeOptionsHealthCheckCollectorConfRetryRules) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RetryTypeOptionsHealthCheckCollectorConfRetryRules) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "backoff", "static":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "backoff":
-		fallthrough
-	case "static":
-		*e = RetryTypeOptionsHealthCheckCollectorConfRetryRules(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RetryTypeOptionsHealthCheckCollectorConfRetryRules: %v", v)
-	}
+	return false
 }

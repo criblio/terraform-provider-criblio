@@ -59,26 +59,16 @@ const (
 func (e InputWizLogLevel) ToPointer() *InputWizLogLevel {
 	return &e
 }
-func (e *InputWizLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWizLogLevel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "warn", "info", "debug", "silly":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		fallthrough
-	case "silly":
-		*e = InputWizLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWizLogLevel: %v", v)
-	}
+	return false
 }
 
 type InputWizContentConfig struct {

@@ -106,24 +106,16 @@ const (
 func (e InputSplunkSearchLogLevel) ToPointer() *InputSplunkSearchLogLevel {
 	return &e
 }
-func (e *InputSplunkSearchLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSplunkSearchLogLevel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "warn", "info", "debug":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		*e = InputSplunkSearchLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSplunkSearchLogLevel: %v", v)
-	}
+	return false
 }
 
 // InputSplunkSearchAuthenticationType - Splunk Search authentication type
@@ -145,26 +137,16 @@ const (
 func (e InputSplunkSearchAuthenticationType) ToPointer() *InputSplunkSearchAuthenticationType {
 	return &e
 }
-func (e *InputSplunkSearchAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSplunkSearchAuthenticationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "token", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		*e = InputSplunkSearchAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSplunkSearchAuthenticationType: %v", v)
-	}
+	return false
 }
 
 type InputSplunkSearchOauthParam struct {

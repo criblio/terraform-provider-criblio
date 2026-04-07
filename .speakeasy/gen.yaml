@@ -30,7 +30,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.21.9
+  version: 1.22.0
   additionalActions: []
   additionalDataSources: []
   additionalDependencies:
@@ -65,6 +65,7 @@ terraform:
     - env: CRIBL_CLOUD_DOMAIN
       providerAttribute: cloud_domain
   excludeEmptyObjectSchemas: false
+  forwardCompatibleEnumsByDefault: false
   includeEmptyObjects: false
   inferUnionDiscriminators: false
   packageName: criblio

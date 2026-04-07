@@ -44,20 +44,16 @@ const (
 func (e SendLogsAs) ToPointer() *SendLogsAs {
 	return &e
 }
-func (e *SendLogsAs) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SendLogsAs) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "text", "json":
+			return true
+		}
 	}
-	switch v {
-	case "text":
-		fallthrough
-	case "json":
-		*e = SendLogsAs(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SendLogsAs: %v", v)
-	}
+	return false
 }
 
 // OutputDatadogSeverity - Default value for message severity. When you send logs as JSON objects, the event's '__severity' field (if set) will override this value.
@@ -85,32 +81,16 @@ const (
 func (e OutputDatadogSeverity) ToPointer() *OutputDatadogSeverity {
 	return &e
 }
-func (e *OutputDatadogSeverity) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputDatadogSeverity) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "emergency", "alert", "critical", "error", "warning", "notice", "info", "debug":
+			return true
+		}
 	}
-	switch v {
-	case "emergency":
-		fallthrough
-	case "alert":
-		fallthrough
-	case "critical":
-		fallthrough
-	case "error":
-		fallthrough
-	case "warning":
-		fallthrough
-	case "notice":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		*e = OutputDatadogSeverity(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatadogSeverity: %v", v)
-	}
+	return false
 }
 
 // DatadogSite - Datadog site to which events should be sent
@@ -136,30 +116,16 @@ const (
 func (e DatadogSite) ToPointer() *DatadogSite {
 	return &e
 }
-func (e *DatadogSite) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *DatadogSite) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "us", "us3", "us5", "eu", "fed1", "ap1", "custom":
+			return true
+		}
 	}
-	switch v {
-	case "us":
-		fallthrough
-	case "us3":
-		fallthrough
-	case "us5":
-		fallthrough
-	case "eu":
-		fallthrough
-	case "fed1":
-		fallthrough
-	case "ap1":
-		fallthrough
-	case "custom":
-		*e = DatadogSite(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DatadogSite: %v", v)
-	}
+	return false
 }
 
 type OutputDatadogPqControls struct {

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SignatureVersionOptionsKinesis - Signature version to use for signing Kinesis stream requests
 type SignatureVersionOptionsKinesis string
 
@@ -18,18 +13,14 @@ const (
 func (e SignatureVersionOptionsKinesis) ToPointer() *SignatureVersionOptionsKinesis {
 	return &e
 }
-func (e *SignatureVersionOptionsKinesis) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SignatureVersionOptionsKinesis) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = SignatureVersionOptionsKinesis(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SignatureVersionOptionsKinesis: %v", v)
-	}
+	return false
 }

@@ -41,18 +41,16 @@ const (
 func (e InputCloudflareHecAuthenticationMethod) ToPointer() *InputCloudflareHecAuthenticationMethod {
 	return &e
 }
-func (e *InputCloudflareHecAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputCloudflareHecAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "secret":
+			return true
+		}
 	}
-	switch v {
-	case "secret":
-		*e = InputCloudflareHecAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputCloudflareHecAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type InputCloudflareHecAuthToken struct {

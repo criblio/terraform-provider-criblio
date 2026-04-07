@@ -47,24 +47,16 @@ const (
 func (e LogLocationType) ToPointer() *LogLocationType {
 	return &e
 }
-func (e *LogLocationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *LogLocationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "project", "organization", "billingAccount", "folder":
+			return true
+		}
 	}
-	switch v {
-	case "project":
-		fallthrough
-	case "organization":
-		fallthrough
-	case "billingAccount":
-		fallthrough
-	case "folder":
-		*e = LogLocationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for LogLocationType: %v", v)
-	}
+	return false
 }
 
 // PayloadFormat - Format to use when sending payload. Defaults to Text.
@@ -80,20 +72,16 @@ const (
 func (e PayloadFormat) ToPointer() *PayloadFormat {
 	return &e
 }
-func (e *PayloadFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *PayloadFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "text", "json":
+			return true
+		}
 	}
-	switch v {
-	case "text":
-		fallthrough
-	case "json":
-		*e = PayloadFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for PayloadFormat: %v", v)
-	}
+	return false
 }
 
 type OutputGoogleCloudLoggingPqControls struct {

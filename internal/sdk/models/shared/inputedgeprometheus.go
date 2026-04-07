@@ -50,26 +50,16 @@ const (
 func (e InputEdgePrometheusDiscoveryType) ToPointer() *InputEdgePrometheusDiscoveryType {
 	return &e
 }
-func (e *InputEdgePrometheusDiscoveryType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputEdgePrometheusDiscoveryType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "static", "dns", "ec2", "k8s-node", "k8s-pods":
+			return true
+		}
 	}
-	switch v {
-	case "static":
-		fallthrough
-	case "dns":
-		fallthrough
-	case "ec2":
-		fallthrough
-	case "k8s-node":
-		fallthrough
-	case "k8s-pods":
-		*e = InputEdgePrometheusDiscoveryType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputEdgePrometheusDiscoveryType: %v", v)
-	}
+	return false
 }
 
 // InputEdgePrometheusAuthenticationMethod - Enter credentials directly, or select a stored secret
@@ -84,22 +74,16 @@ const (
 func (e InputEdgePrometheusAuthenticationMethod) ToPointer() *InputEdgePrometheusAuthenticationMethod {
 	return &e
 }
-func (e *InputEdgePrometheusAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputEdgePrometheusAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "kubernetes":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "kubernetes":
-		*e = InputEdgePrometheusAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputEdgePrometheusAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type Target struct {

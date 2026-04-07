@@ -132,8 +132,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_appscope--tls))
 - `type` (String)
@@ -356,8 +354,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cloudflare_hec--tls))
 - `type` (String)
 
@@ -788,8 +784,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_http--tls))
 - `type` (String)
 
@@ -895,8 +889,6 @@ Read-Only:
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_lake_http--tls))
 - `type` (String)
@@ -1023,8 +1015,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_cribl_tcp--tls))
 - `type` (String)
 
@@ -1300,8 +1290,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_datadog_agent--tls))
 - `type` (String)
 
@@ -1615,8 +1603,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_elastic--tls))
 - `type` (String)
 - `username` (String)
@@ -1995,8 +1981,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_firehose--tls))
 - `type` (String)
 
@@ -2163,8 +2147,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_grafana--tls))
 - `type` (String)
 
@@ -2338,8 +2320,6 @@ Read-Only:
 - `splunk_hec_acks` (Boolean)
 - `splunk_hec_api` (String) Absolute path on which listen for the Splunk HTTP Event Collector API requests. Use empty string to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http--tls))
 - `type` (String)
@@ -2455,8 +2435,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_http_raw--tls))
 - `type` (String)
 
@@ -3155,8 +3133,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_loki--tls))
 - `token` (String) Bearer token to include in the authorization header
@@ -3260,13 +3236,12 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
+- `tcp_port` (Number) TCP port this syslog Source listens on for TCP (TLS when enabled), when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
 - `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--tls))
 - `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this syslog Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--items--input_metrics--connections"></a>
@@ -3459,8 +3434,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `shutdown_timeout_ms` (Number) Time in milliseconds to allow the server to shutdown gracefully before forcing shutdown. Defaults to 5000.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_model_driven_telemetry--tls))
 - `type` (String)
 
@@ -3708,8 +3681,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_cache_minutes` (Number) Specifies how many minutes NetFlow v9 templates are cached before being discarded if not refreshed. Adjust based on your network's template update frequency to optimize performance and memory usage.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `v5_enabled` (Boolean) Accept messages in Netflow V5 format.
@@ -4116,8 +4087,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_open_telemetry--tls))
 - `token` (String) Bearer token to include in the authorization header
@@ -4486,8 +4455,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `template_prometheus_api` (String) Binds 'prometheusAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'prometheusAPI' at runtime.
 - `template_username` (String) Binds 'username' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'username' at runtime.
 - `text_secret` (String) Select or create a stored text secret
@@ -4595,8 +4562,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) If true, each UDP packet is assumed to contain a single message. If false, each UDP packet is assumed to contain multiple messages, separated by newlines.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
@@ -5014,8 +4979,6 @@ Read-Only:
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `snmp_v3_auth` (Attributes) Authentication parameters for SNMPv3 trap. Set the log level to debug if you are experiencing authentication or decryption issues. (see [below for nested schema](#nestedatt--items--input_snmp--snmp_v3_auth))
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `type` (String)
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 - `varbinds_with_types` (Boolean) If enabled, parses varbinds as an array of objects that include OID, value, and type
@@ -5112,8 +5075,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk--tls))
 - `type` (String)
 - `use_fwd_timezone` (Boolean) Event Breakers will determine events' time zone from UF-provided metadata, when TZ can't be inferred from the raw event
@@ -5224,8 +5185,6 @@ Read-Only:
 - `splunk_hec_api` (String) Absolute path on which to listen for the Splunk HTTP Event Collector API requests. This input supports the /event, /raw and /s2s endpoints.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `template_splunk_hec_api` (String) Binds 'splunkHecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'splunkHecAPI' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_splunk_hec--tls))
 - `type` (String)
@@ -5545,16 +5504,8 @@ Read-Only:
 
 Read-Only:
 
-- `input_syslog_syslog1` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1))
-- `input_syslog_syslog2` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2))
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1`
-
-Read-Only:
-
 - `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--connections))
+- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--connections))
 - `description` (String)
 - `disabled` (Boolean)
 - `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
@@ -5568,10 +5519,10 @@ Read-Only:
 - `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
 - `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
 - `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--metadata))
+- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--metadata))
 - `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
 - `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq))
+- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--pq))
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
@@ -5580,18 +5531,15 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
+- `tcp_port` (Number) TCP port this syslog Source listens on for TCP (TLS when enabled), when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--tls))
+- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--tls))
 - `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this syslog Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1--connections"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1.connections`
+<a id="nestedatt--items--input_syslog--connections"></a>
+### Nested Schema for `items.input_syslog.connections`
 
 Read-Only:
 
@@ -5599,8 +5547,8 @@ Read-Only:
 - `pipeline` (String)
 
 
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1--metadata"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1.metadata`
+<a id="nestedatt--items--input_syslog--metadata"></a>
+### Nested Schema for `items.input_syslog.metadata`
 
 Read-Only:
 
@@ -5608,8 +5556,8 @@ Read-Only:
 - `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
 
 
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq`
+<a id="nestedatt--items--input_syslog--pq"></a>
+### Nested Schema for `items.input_syslog.pq`
 
 Read-Only:
 
@@ -5621,15 +5569,15 @@ Read-Only:
 - `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
 - `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 - `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls))
+- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--pq--pq_controls))
 
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1--pq--pq_controls"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1.pq.pq_controls`
+<a id="nestedatt--items--input_syslog--pq--pq_controls"></a>
+### Nested Schema for `items.input_syslog.pq.pq_controls`
 
 
 
-<a id="nestedatt--items--input_syslog--input_syslog_syslog1--tls"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog1.tls`
+<a id="nestedatt--items--input_syslog--tls"></a>
+### Nested Schema for `items.input_syslog.tls`
 
 Read-Only:
 
@@ -5644,106 +5592,6 @@ Read-Only:
 - `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
 - `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
 - `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
-
-
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2`
-
-Read-Only:
-
-- `allow_non_standard_app_name` (Boolean) Enable if RFC 3164-formatted messages have hyphens in the app name portion of the TAG section. If disabled, only alphanumeric characters and underscores are allowed. Ignored for RFC 5424-formatted messages.
-- `connections` (Attributes List) Direct connections to Destinations, and optionally via a Pipeline or a Pack (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--connections))
-- `description` (String)
-- `disabled` (Boolean)
-- `enable_enhanced_proxy_header_parsing` (Boolean) When enabled, parses PROXY protocol headers during the TLS handshake. Disable if compatibility issues arise.
-- `enable_load_balancing` (Boolean) Load balance traffic across all Worker Processes
-- `enable_proxy_header` (Boolean) Enable if the connection is proxied by a device that supports Proxy Protocol V1 or V2
-- `environment` (String) Optionally, enable this config only on a specified Git branch. If empty, will be enabled everywhere.
-- `host` (String) Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
-- `id` (String) Unique ID for this input
-- `infer_framing` (Boolean) Enable if we should infer the syslog framing of the incoming messages.
-- `ip_whitelist_regex` (String) Regex matching IP addresses that are allowed to send data
-- `keep_fields_list` (List of String) Wildcard list of fields to keep from source data; * = ALL (default)
-- `max_active_cxn` (Number) Maximum number of active connections allowed per Worker Process for TCP connections. Use 0 for unlimited.
-- `max_buffer_size` (Number) Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
-- `metadata` (Attributes List) Fields to add to events from this input (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--metadata))
-- `octet_counting` (Boolean) Enable if incoming messages use octet counting per RFC 6587.
-- `pipeline` (String) Pipeline to process data from this Source before sending it through the Routes
-- `pq` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq))
-- `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
-- `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
-- `single_msg_udp_packets` (Boolean) Treat UDP packet data received as full syslog message
-- `socket_ending_max_wait` (Number) How long the server will wait after initiating a closure for a client to close its end of the connection. If the client doesn't close the connection within this time, the server will forcefully terminate the socket to prevent resource leaks and ensure efficient connection cleanup and system stability. Leave at 0 for no inactive socket monitoring.
-- `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
-- `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
-- `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_tcp_port` (String) Binds 'tcpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'tcpPort' at runtime.
-- `template_udp_port` (String) Binds 'udpPort' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'udpPort' at runtime.
-- `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
-- `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--tls))
-- `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
-- `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2--connections"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2.connections`
-
-Read-Only:
-
-- `output` (String)
-- `pipeline` (String)
-
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2--metadata"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq`
-
-Read-Only:
-
-- `commit_frequency` (Number) The number of events to send downstream before committing that Stream has read them
-- `compress` (String) Codec to use to compress the persisted data
-- `max_buffer_size` (Number) Maximum number of events to hold in memory before writing the events to disk. Deprecated and only supported in workers < v4.17.0. Use maxBufferSizeBytes instead.
-- `max_buffer_size_bytes` (String) The maximum size to hold in memory before writing events to disk. Enter a numeral with units of KB, MB, etc. The minimum value is 64KB and the maximum value is 1MB.
-- `max_file_size` (String) The maximum size to store in each queue file before closing and optionally compressing. Enter a numeral with units of KB, MB, etc.
-- `max_size` (String) The maximum disk space that the queue can consume (as an average per Worker Process) before queueing stops. Enter a numeral with units of KB, MB, etc.
-- `mode` (String) With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
-- `path` (String) The location for the persistent queue files. To this field's value, the system will append: /<worker-id>/inputs/<input-id>
-- `pq_controls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls))
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2--pq--pq_controls"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2.pq.pq_controls`
-
-
-
-<a id="nestedatt--items--input_syslog--input_syslog_syslog2--tls"></a>
-### Nested Schema for `items.input_syslog.input_syslog_syslog2.tls`
-
-Read-Only:
-
-- `ca_path` (String) Path on server containing CA certificates to use. PEM format. Can reference $ENV_VARS.
-- `cert_path` (String) Path on server containing certificates to use. PEM format. Can reference $ENV_VARS.
-- `certificate_name` (String) The name of the predefined certificate
-- `common_name_regex` (String) Regex matching allowable common names in peer certificates' subject attribute
-- `disabled` (Boolean)
-- `max_version` (String)
-- `min_version` (String)
-- `passphrase` (String) Passphrase to use to decrypt private key
-- `priv_key_path` (String) Path on server containing the private key to use. PEM format. Can reference $ENV_VARS.
-- `reject_unauthorized` (Boolean) Reject certificates not authorized by a CA in the CA certificate path or by another trusted CA (such as the system's)
-- `request_cert` (Boolean) Require clients to present their certificates. Used to perform client authentication using SSL certs.
-
 
 
 
@@ -6149,8 +5997,6 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcp--tls))
 - `type` (String)
@@ -6249,8 +6095,6 @@ Read-Only:
 - `socket_idle_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. After this time, the connection will be closed. Leave at 0 for no inactive socket monitoring.
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `text_secret` (String) Select or create a stored text secret
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_tcpjson--tls))
 - `type` (String)
@@ -6346,8 +6190,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `subscriptions` (Attributes List) Subscriptions to events on forwarding endpoints (see [below for nested schema](#nestedatt--items--input_wef--subscriptions))
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wef--tls))
 - `type` (String)
 
@@ -6833,8 +6675,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `stale_channel_flush_ms` (Number) How long (in milliseconds) the Event Breaker will wait for new data to be sent to a specific channel before flushing the data stream out, as is, to the Pipelines
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_wiz_webhook--tls))
 - `type` (String)
 
@@ -6951,8 +6791,6 @@ Read-Only:
 - `socket_timeout` (Number) How long @{product} should wait before assuming that an inactive socket has timed out. To wait forever, set to 0.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `template_hec_api` (String) Binds 'hecAPI' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'hecAPI' at runtime.
-- `template_host` (String) Binds 'host' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'host' at runtime.
-- `template_port` (String) Binds 'port' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'port' at runtime.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_zscaler_hec--tls))
 - `type` (String)
 

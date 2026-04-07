@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type AuthenticationTypeOptionsBasicCredentialsSecret string
 
 const (
@@ -23,22 +18,14 @@ const (
 func (e AuthenticationTypeOptionsBasicCredentialsSecret) ToPointer() *AuthenticationTypeOptionsBasicCredentialsSecret {
 	return &e
 }
-func (e *AuthenticationTypeOptionsBasicCredentialsSecret) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationTypeOptionsBasicCredentialsSecret) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "sslUserCertificate":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "sslUserCertificate":
-		*e = AuthenticationTypeOptionsBasicCredentialsSecret(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationTypeOptionsBasicCredentialsSecret: %v", v)
-	}
+	return false
 }

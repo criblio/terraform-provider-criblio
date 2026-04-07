@@ -44,20 +44,16 @@ const (
 func (e InputWefAuthenticationMethod) ToPointer() *InputWefAuthenticationMethod {
 	return &e
 }
-func (e *InputWefAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWefAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "clientCert", "kerberos":
+			return true
+		}
 	}
-	switch v {
-	case "clientCert":
-		fallthrough
-	case "kerberos":
-		*e = InputWefAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWefAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type MTLSSettings struct {
@@ -216,20 +212,16 @@ const (
 func (e InputWefFormat) ToPointer() *InputWefFormat {
 	return &e
 }
-func (e *InputWefFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWefFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "Raw", "RenderedText":
+			return true
+		}
 	}
-	switch v {
-	case "Raw":
-		fallthrough
-	case "RenderedText":
-		*e = InputWefFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWefFormat: %v", v)
-	}
+	return false
 }
 
 type QueryBuilderMode string
@@ -242,20 +234,16 @@ const (
 func (e QueryBuilderMode) ToPointer() *QueryBuilderMode {
 	return &e
 }
-func (e *QueryBuilderMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *QueryBuilderMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "simple", "xml":
+			return true
+		}
 	}
-	switch v {
-	case "simple":
-		fallthrough
-	case "xml":
-		*e = QueryBuilderMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for QueryBuilderMode: %v", v)
-	}
+	return false
 }
 
 type Query struct {

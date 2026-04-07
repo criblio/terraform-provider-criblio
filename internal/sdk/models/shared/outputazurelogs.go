@@ -42,20 +42,16 @@ const (
 func (e OutputAzureLogsAuthenticationMethod) ToPointer() *OutputAzureLogsAuthenticationMethod {
 	return &e
 }
-func (e *OutputAzureLogsAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputAzureLogsAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = OutputAzureLogsAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureLogsAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type OutputAzureLogsPqControls struct {

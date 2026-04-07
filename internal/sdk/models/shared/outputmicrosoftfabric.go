@@ -41,20 +41,16 @@ const (
 func (e OutputMicrosoftFabricAuthenticationMethod) ToPointer() *OutputMicrosoftFabricAuthenticationMethod {
 	return &e
 }
-func (e *OutputMicrosoftFabricAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputMicrosoftFabricAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "secret", "certificate":
+			return true
+		}
 	}
-	switch v {
-	case "secret":
-		fallthrough
-	case "certificate":
-		*e = OutputMicrosoftFabricAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputMicrosoftFabricAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 // OutputMicrosoftFabricAuthentication - Authentication parameters to use when connecting to bootstrap server. Using TLS is highly recommended.

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionLevelOptions - Compression level to apply before moving files to final destination
 type CompressionLevelOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e CompressionLevelOptions) ToPointer() *CompressionLevelOptions {
 	return &e
 }
-func (e *CompressionLevelOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionLevelOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "best_speed", "normal", "best_compression":
+			return true
+		}
 	}
-	switch v {
-	case "best_speed":
-		fallthrough
-	case "normal":
-		fallthrough
-	case "best_compression":
-		*e = CompressionLevelOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionLevelOptions: %v", v)
-	}
+	return false
 }

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SubscriptionPlanOptions - Office 365 subscription plan for your organization, typically Office 365 Enterprise
 type SubscriptionPlanOptions string
 
@@ -24,22 +19,14 @@ const (
 func (e SubscriptionPlanOptions) ToPointer() *SubscriptionPlanOptions {
 	return &e
 }
-func (e *SubscriptionPlanOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SubscriptionPlanOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "enterprise_gcc", "gcc", "gcc_high", "dod":
+			return true
+		}
 	}
-	switch v {
-	case "enterprise_gcc":
-		fallthrough
-	case "gcc":
-		fallthrough
-	case "gcc_high":
-		fallthrough
-	case "dod":
-		*e = SubscriptionPlanOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SubscriptionPlanOptions: %v", v)
-	}
+	return false
 }

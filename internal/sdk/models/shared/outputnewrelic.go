@@ -43,24 +43,16 @@ const (
 func (e FieldName) ToPointer() *FieldName {
 	return &e
 }
-func (e *FieldName) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *FieldName) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "service", "hostname", "timestamp", "auditId":
+			return true
+		}
 	}
-	switch v {
-	case "service":
-		fallthrough
-	case "hostname":
-		fallthrough
-	case "timestamp":
-		fallthrough
-	case "auditId":
-		*e = FieldName(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for FieldName: %v", v)
-	}
+	return false
 }
 
 type OutputNewrelicMetadatum struct {

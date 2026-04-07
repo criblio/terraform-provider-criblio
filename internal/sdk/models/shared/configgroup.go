@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type ConfigGroupGit struct {
 	Commit       *string  `json:"commit,omitempty"`
 	LocalChanges *float64 `json:"localChanges,omitempty"`
@@ -47,26 +42,16 @@ const (
 func (e ConfigGroupType) ToPointer() *ConfigGroupType {
 	return &e
 }
-func (e *ConfigGroupType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ConfigGroupType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "edge", "stream", "search", "lake_access", "local_search":
+			return true
+		}
 	}
-	switch v {
-	case "edge":
-		fallthrough
-	case "stream":
-		fallthrough
-	case "search":
-		fallthrough
-	case "lake_access":
-		fallthrough
-	case "local_search":
-		*e = ConfigGroupType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ConfigGroupType: %v", v)
-	}
+	return false
 }
 
 type ConfigGroup struct {

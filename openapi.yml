@@ -17853,13 +17853,13 @@ components:
                     type: number
                     title: UDP port
                     maximum: 65535
-                    description: Enter UDP port number to listen on. Not required if listening on TCP.
+                    description: UDP port this Source listens on for syslog over UDP. Omit for TCP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
                     example: 514
                 tcpPort:
                     type: number
                     title: TCP port
                     maximum: 65535
-                    description: Enter TCP port number to listen on. Not required if listening on UDP.
+                    description: TCP port this Source listens on for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
                     example: 514
                 maxBufferSize:
                     type: number

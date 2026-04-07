@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ModeOptionsHost - Select level of detail for host metrics
 type ModeOptionsHost string
 
@@ -24,22 +19,14 @@ const (
 func (e ModeOptionsHost) ToPointer() *ModeOptionsHost {
 	return &e
 }
-func (e *ModeOptionsHost) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ModeOptionsHost) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = ModeOptionsHost(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ModeOptionsHost: %v", v)
-	}
+	return false
 }

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ModeOptionsPq - With Smart mode, PQ will write events to the filesystem only when it detects backpressure from the processing engine. With Always On mode, PQ will always write events directly to the queue before forwarding them to the processing engine.
 type ModeOptionsPq string
 
@@ -20,18 +15,14 @@ const (
 func (e ModeOptionsPq) ToPointer() *ModeOptionsPq {
 	return &e
 }
-func (e *ModeOptionsPq) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ModeOptionsPq) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "smart", "always":
+			return true
+		}
 	}
-	switch v {
-	case "smart":
-		fallthrough
-	case "always":
-		*e = ModeOptionsPq(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ModeOptionsPq: %v", v)
-	}
+	return false
 }

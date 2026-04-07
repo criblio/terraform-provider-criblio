@@ -43,20 +43,16 @@ const (
 func (e OutputDynatraceHTTPAuthenticationType) ToPointer() *OutputDynatraceHTTPAuthenticationType {
 	return &e
 }
-func (e *OutputDynatraceHTTPAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputDynatraceHTTPAuthenticationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "token", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "token":
-		fallthrough
-	case "textSecret":
-		*e = OutputDynatraceHTTPAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPAuthenticationType: %v", v)
-	}
+	return false
 }
 
 // OutputDynatraceHTTPFormat - How to format events before sending. Defaults to JSON. Plaintext is not currently supported.
@@ -72,20 +68,16 @@ const (
 func (e OutputDynatraceHTTPFormat) ToPointer() *OutputDynatraceHTTPFormat {
 	return &e
 }
-func (e *OutputDynatraceHTTPFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputDynatraceHTTPFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json_array", "plaintext":
+			return true
+		}
 	}
-	switch v {
-	case "json_array":
-		fallthrough
-	case "plaintext":
-		*e = OutputDynatraceHTTPFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceHTTPFormat: %v", v)
-	}
+	return false
 }
 
 type Endpoint string
@@ -102,22 +94,16 @@ const (
 func (e Endpoint) ToPointer() *Endpoint {
 	return &e
 }
-func (e *Endpoint) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Endpoint) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "cloud", "activeGate", "manual":
+			return true
+		}
 	}
-	switch v {
-	case "cloud":
-		fallthrough
-	case "activeGate":
-		fallthrough
-	case "manual":
-		*e = Endpoint(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for Endpoint: %v", v)
-	}
+	return false
 }
 
 type TelemetryType string
@@ -132,20 +118,16 @@ const (
 func (e TelemetryType) ToPointer() *TelemetryType {
 	return &e
 }
-func (e *TelemetryType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *TelemetryType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "logs", "metrics":
+			return true
+		}
 	}
-	switch v {
-	case "logs":
-		fallthrough
-	case "metrics":
-		*e = TelemetryType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for TelemetryType: %v", v)
-	}
+	return false
 }
 
 type OutputDynatraceHTTPPqControls struct {

@@ -44,20 +44,16 @@ const (
 func (e OutputCloudflareR2AuthenticationMethod) ToPointer() *OutputCloudflareR2AuthenticationMethod {
 	return &e
 }
-func (e *OutputCloudflareR2AuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputCloudflareR2AuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "auto", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "secret":
-		*e = OutputCloudflareR2AuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputCloudflareR2AuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type OutputCloudflareR2 struct {

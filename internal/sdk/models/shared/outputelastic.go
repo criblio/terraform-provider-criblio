@@ -46,22 +46,16 @@ const (
 func (e ElasticVersion) ToPointer() *ElasticVersion {
 	return &e
 }
-func (e *ElasticVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ElasticVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "auto", "6", "7":
+			return true
+		}
 	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "6":
-		fallthrough
-	case "7":
-		*e = ElasticVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ElasticVersion: %v", v)
-	}
+	return false
 }
 
 // WriteAction - Action to use when writing events. Must be set to `Create` when writing to a data stream.
@@ -77,20 +71,16 @@ const (
 func (e WriteAction) ToPointer() *WriteAction {
 	return &e
 }
-func (e *WriteAction) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WriteAction) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "index", "create":
+			return true
+		}
 	}
-	switch v {
-	case "index":
-		fallthrough
-	case "create":
-		*e = WriteAction(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for WriteAction: %v", v)
-	}
+	return false
 }
 
 type OutputElasticURL struct {

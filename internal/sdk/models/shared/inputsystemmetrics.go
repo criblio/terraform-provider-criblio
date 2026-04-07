@@ -48,24 +48,16 @@ const (
 func (e InputSystemMetricsSystemMode) ToPointer() *InputSystemMetricsSystemMode {
 	return &e
 }
-func (e *InputSystemMetricsSystemMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSystemMetricsSystemMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputSystemMetricsSystemMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSystemMetricsSystemMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsSystem struct {
@@ -117,24 +109,16 @@ const (
 func (e InputSystemMetricsCPUMode) ToPointer() *InputSystemMetricsCPUMode {
 	return &e
 }
-func (e *InputSystemMetricsCPUMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSystemMetricsCPUMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputSystemMetricsCPUMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSystemMetricsCPUMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsCPU struct {
@@ -204,24 +188,16 @@ const (
 func (e InputSystemMetricsMemoryMode) ToPointer() *InputSystemMetricsMemoryMode {
 	return &e
 }
-func (e *InputSystemMetricsMemoryMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSystemMetricsMemoryMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputSystemMetricsMemoryMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSystemMetricsMemoryMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsMemory struct {
@@ -273,24 +249,16 @@ const (
 func (e InputSystemMetricsNetworkMode) ToPointer() *InputSystemMetricsNetworkMode {
 	return &e
 }
-func (e *InputSystemMetricsNetworkMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSystemMetricsNetworkMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputSystemMetricsNetworkMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSystemMetricsNetworkMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsNetwork struct {
@@ -369,24 +337,16 @@ const (
 func (e InputSystemMetricsDiskMode) ToPointer() *InputSystemMetricsDiskMode {
 	return &e
 }
-func (e *InputSystemMetricsDiskMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSystemMetricsDiskMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputSystemMetricsDiskMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSystemMetricsDiskMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsDisk struct {
@@ -568,24 +528,16 @@ const (
 func (e ContainerMode) ToPointer() *ContainerMode {
 	return &e
 }
-func (e *ContainerMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ContainerMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = ContainerMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ContainerMode: %v", v)
-	}
+	return false
 }
 
 type InputSystemMetricsFilter struct {

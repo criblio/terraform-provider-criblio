@@ -43,20 +43,16 @@ const (
 func (e IngestionMode) ToPointer() *IngestionMode {
 	return &e
 }
-func (e *IngestionMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *IngestionMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "batching", "streaming":
+			return true
+		}
 	}
-	switch v {
-	case "batching":
-		fallthrough
-	case "streaming":
-		*e = IngestionMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for IngestionMode: %v", v)
-	}
+	return false
 }
 
 // OutputAzureDataExplorerAuthenticationMethod - The type of OAuth 2.0 client credentials grant flow to use
@@ -74,22 +70,16 @@ const (
 func (e OutputAzureDataExplorerAuthenticationMethod) ToPointer() *OutputAzureDataExplorerAuthenticationMethod {
 	return &e
 }
-func (e *OutputAzureDataExplorerAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputAzureDataExplorerAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "clientSecret", "clientTextSecret", "certificate":
+			return true
+		}
 	}
-	switch v {
-	case "clientSecret":
-		fallthrough
-	case "clientTextSecret":
-		fallthrough
-	case "certificate":
-		*e = OutputAzureDataExplorerAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputAzureDataExplorerAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type OutputAzureDataExplorerCertificate struct {
@@ -127,20 +117,16 @@ const (
 func (e PrefixOptional) ToPointer() *PrefixOptional {
 	return &e
 }
-func (e *PrefixOptional) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *PrefixOptional) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "dropBy", "ingestBy":
+			return true
+		}
 	}
-	switch v {
-	case "dropBy":
-		fallthrough
-	case "ingestBy":
-		*e = PrefixOptional(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for PrefixOptional: %v", v)
-	}
+	return false
 }
 
 type ExtentTag struct {
@@ -210,22 +196,16 @@ const (
 func (e ReportLevel) ToPointer() *ReportLevel {
 	return &e
 }
-func (e *ReportLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ReportLevel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "failuresOnly", "doNotReport", "failuresAndSuccesses":
+			return true
+		}
 	}
-	switch v {
-	case "failuresOnly":
-		fallthrough
-	case "doNotReport":
-		fallthrough
-	case "failuresAndSuccesses":
-		*e = ReportLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ReportLevel: %v", v)
-	}
+	return false
 }
 
 // ReportMethod - Target of the ingestion status reporting. Defaults to Queue.
@@ -243,22 +223,16 @@ const (
 func (e ReportMethod) ToPointer() *ReportMethod {
 	return &e
 }
-func (e *ReportMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ReportMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "queue", "table", "queueAndTable":
+			return true
+		}
 	}
-	switch v {
-	case "queue":
-		fallthrough
-	case "table":
-		fallthrough
-	case "queueAndTable":
-		*e = ReportMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ReportMethod: %v", v)
-	}
+	return false
 }
 
 type AdditionalProperty struct {

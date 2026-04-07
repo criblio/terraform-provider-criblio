@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ObjectACLOptions - Object ACL to assign to uploaded objects
 type ObjectACLOptions string
 
@@ -30,28 +25,14 @@ const (
 func (e ObjectACLOptions) ToPointer() *ObjectACLOptions {
 	return &e
 }
-func (e *ObjectACLOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ObjectACLOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "private", "public-read", "public-read-write", "authenticated-read", "aws-exec-read", "bucket-owner-read", "bucket-owner-full-control":
+			return true
+		}
 	}
-	switch v {
-	case "private":
-		fallthrough
-	case "public-read":
-		fallthrough
-	case "public-read-write":
-		fallthrough
-	case "authenticated-read":
-		fallthrough
-	case "aws-exec-read":
-		fallthrough
-	case "bucket-owner-read":
-		fallthrough
-	case "bucket-owner-full-control":
-		*e = ObjectACLOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ObjectACLOptions: %v", v)
-	}
+	return false
 }

@@ -44,20 +44,16 @@ const (
 func (e ShardIteratorStart) ToPointer() *ShardIteratorStart {
 	return &e
 }
-func (e *ShardIteratorStart) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ShardIteratorStart) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "TRIM_HORIZON", "LATEST":
+			return true
+		}
 	}
-	switch v {
-	case "TRIM_HORIZON":
-		fallthrough
-	case "LATEST":
-		*e = ShardIteratorStart(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ShardIteratorStart: %v", v)
-	}
+	return false
 }
 
 // RecordDataFormat - Format of data inside the Kinesis Stream records. Gzip compression is automatically detected.
@@ -77,24 +73,16 @@ const (
 func (e RecordDataFormat) ToPointer() *RecordDataFormat {
 	return &e
 }
-func (e *RecordDataFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RecordDataFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "cribl", "ndjson", "cloudwatch", "line":
+			return true
+		}
 	}
-	switch v {
-	case "cribl":
-		fallthrough
-	case "ndjson":
-		fallthrough
-	case "cloudwatch":
-		fallthrough
-	case "line":
-		*e = RecordDataFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RecordDataFormat: %v", v)
-	}
+	return false
 }
 
 // ShardLoadBalancing - The load-balancing algorithm to use for spreading out shards across Workers and Worker Processes
@@ -110,20 +98,16 @@ const (
 func (e ShardLoadBalancing) ToPointer() *ShardLoadBalancing {
 	return &e
 }
-func (e *ShardLoadBalancing) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ShardLoadBalancing) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "ConsistentHashing", "RoundRobin":
+			return true
+		}
 	}
-	switch v {
-	case "ConsistentHashing":
-		fallthrough
-	case "RoundRobin":
-		*e = ShardLoadBalancing(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ShardLoadBalancing: %v", v)
-	}
+	return false
 }
 
 type InputKinesis struct {

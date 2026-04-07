@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ProtocolOptions - Select a transport option for OpenTelemetry
 type ProtocolOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e ProtocolOptions) ToPointer() *ProtocolOptions {
 	return &e
 }
-func (e *ProtocolOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ProtocolOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "grpc", "http":
+			return true
+		}
 	}
-	switch v {
-	case "grpc":
-		fallthrough
-	case "http":
-		*e = ProtocolOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ProtocolOptions: %v", v)
-	}
+	return false
 }

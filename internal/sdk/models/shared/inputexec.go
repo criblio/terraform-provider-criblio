@@ -42,20 +42,16 @@ const (
 func (e ScheduleType) ToPointer() *ScheduleType {
 	return &e
 }
-func (e *ScheduleType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ScheduleType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "interval", "cronSchedule":
+			return true
+		}
 	}
-	switch v {
-	case "interval":
-		fallthrough
-	case "cronSchedule":
-		*e = ScheduleType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ScheduleType: %v", v)
-	}
+	return false
 }
 
 type InputExec struct {

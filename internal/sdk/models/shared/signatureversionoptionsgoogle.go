@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SignatureVersionOptionsGoogle - Signature version to use for signing Google Cloud Storage requests
 type SignatureVersionOptionsGoogle string
 
@@ -18,18 +13,14 @@ const (
 func (e SignatureVersionOptionsGoogle) ToPointer() *SignatureVersionOptionsGoogle {
 	return &e
 }
-func (e *SignatureVersionOptionsGoogle) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SignatureVersionOptionsGoogle) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = SignatureVersionOptionsGoogle(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SignatureVersionOptionsGoogle: %v", v)
-	}
+	return false
 }

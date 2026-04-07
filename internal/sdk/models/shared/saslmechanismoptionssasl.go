@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type SaslMechanismOptionsSasl string
 
 const (
@@ -23,22 +18,14 @@ const (
 func (e SaslMechanismOptionsSasl) ToPointer() *SaslMechanismOptionsSasl {
 	return &e
 }
-func (e *SaslMechanismOptionsSasl) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SaslMechanismOptionsSasl) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "plain", "scram-sha-256", "scram-sha-512", "kerberos":
+			return true
+		}
 	}
-	switch v {
-	case "plain":
-		fallthrough
-	case "scram-sha-256":
-		fallthrough
-	case "scram-sha-512":
-		fallthrough
-	case "kerberos":
-		*e = SaslMechanismOptionsSasl(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SaslMechanismOptionsSasl: %v", v)
-	}
+	return false
 }

@@ -46,22 +46,16 @@ const (
 func (e InputPrometheusDiscoveryType) ToPointer() *InputPrometheusDiscoveryType {
 	return &e
 }
-func (e *InputPrometheusDiscoveryType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputPrometheusDiscoveryType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "static", "dns", "ec2":
+			return true
+		}
 	}
-	switch v {
-	case "static":
-		fallthrough
-	case "dns":
-		fallthrough
-	case "ec2":
-		*e = InputPrometheusDiscoveryType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusDiscoveryType: %v", v)
-	}
+	return false
 }
 
 // InputPrometheusLogLevel - Collector runtime log level
@@ -77,24 +71,16 @@ const (
 func (e InputPrometheusLogLevel) ToPointer() *InputPrometheusLogLevel {
 	return &e
 }
-func (e *InputPrometheusLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputPrometheusLogLevel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "warn", "info", "debug":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		*e = InputPrometheusLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputPrometheusLogLevel: %v", v)
-	}
+	return false
 }
 
 // MetricsProtocol - Protocol to use when collecting metrics
@@ -108,20 +94,16 @@ const (
 func (e MetricsProtocol) ToPointer() *MetricsProtocol {
 	return &e
 }
-func (e *MetricsProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MetricsProtocol) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "http", "https":
+			return true
+		}
 	}
-	switch v {
-	case "http":
-		fallthrough
-	case "https":
-		*e = MetricsProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MetricsProtocol: %v", v)
-	}
+	return false
 }
 
 type InputPrometheus struct {

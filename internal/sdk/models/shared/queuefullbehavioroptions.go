@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // QueueFullBehaviorOptions - How to handle events when the queue is exerting backpressure (full capacity or low disk). 'Block' is the same behavior as non-PQ blocking. 'Drop new data' throws away incoming data, while leaving the contents of the PQ unchanged.
 type QueueFullBehaviorOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e QueueFullBehaviorOptions) ToPointer() *QueueFullBehaviorOptions {
 	return &e
 }
-func (e *QueueFullBehaviorOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *QueueFullBehaviorOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "block", "drop":
+			return true
+		}
 	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		*e = QueueFullBehaviorOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for QueueFullBehaviorOptions: %v", v)
-	}
+	return false
 }

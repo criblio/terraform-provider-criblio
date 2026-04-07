@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AcknowledgmentsOptionsAllLeader - Control the number of required acknowledgments.
 type AcknowledgmentsOptionsAllLeader int64
 
@@ -22,20 +17,14 @@ const (
 func (e AcknowledgmentsOptionsAllLeader) ToPointer() *AcknowledgmentsOptionsAllLeader {
 	return &e
 }
-func (e *AcknowledgmentsOptionsAllLeader) UnmarshalJSON(data []byte) error {
-	var v int64
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AcknowledgmentsOptionsAllLeader) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case 1, 0, -1:
+			return true
+		}
 	}
-	switch v {
-	case 1:
-		fallthrough
-	case 0:
-		fallthrough
-	case -1:
-		*e = AcknowledgmentsOptionsAllLeader(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AcknowledgmentsOptionsAllLeader: %v", v)
-	}
+	return false
 }

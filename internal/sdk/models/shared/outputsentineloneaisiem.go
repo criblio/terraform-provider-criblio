@@ -47,30 +47,16 @@ const (
 func (e OutputSentinelOneAiSiemRegion) ToPointer() *OutputSentinelOneAiSiemRegion {
 	return &e
 }
-func (e *OutputSentinelOneAiSiemRegion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSentinelOneAiSiemRegion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "US", "CA", "EMEA", "AP", "APS", "AU", "Custom":
+			return true
+		}
 	}
-	switch v {
-	case "US":
-		fallthrough
-	case "CA":
-		fallthrough
-	case "EMEA":
-		fallthrough
-	case "AP":
-		fallthrough
-	case "APS":
-		fallthrough
-	case "AU":
-		fallthrough
-	case "Custom":
-		*e = OutputSentinelOneAiSiemRegion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelOneAiSiemRegion: %v", v)
-	}
+	return false
 }
 
 // AISIEMEndpointPath - Endpoint to send events to. Use /services/collector/event for structured JSON payloads with standard HEC top-level fields. Use /services/collector/raw for unstructured log lines (plain text).
@@ -84,20 +70,16 @@ const (
 func (e AISIEMEndpointPath) ToPointer() *AISIEMEndpointPath {
 	return &e
 }
-func (e *AISIEMEndpointPath) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AISIEMEndpointPath) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "/services/collector/event", "/services/collector/raw":
+			return true
+		}
 	}
-	switch v {
-	case "/services/collector/event":
-		fallthrough
-	case "/services/collector/raw":
-		*e = AISIEMEndpointPath(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AISIEMEndpointPath: %v", v)
-	}
+	return false
 }
 
 type OutputSentinelOneAiSiemPqControls struct {

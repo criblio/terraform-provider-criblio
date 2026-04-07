@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // MessageFormatOptions - Format to use when sending logs to Loki (Protobuf or JSON)
 type MessageFormatOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e MessageFormatOptions) ToPointer() *MessageFormatOptions {
 	return &e
 }
-func (e *MessageFormatOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MessageFormatOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "protobuf", "json":
+			return true
+		}
 	}
-	switch v {
-	case "protobuf":
-		fallthrough
-	case "json":
-		*e = MessageFormatOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MessageFormatOptions: %v", v)
-	}
+	return false
 }

@@ -43,20 +43,16 @@ const (
 func (e OutputGoogleChronicleAPIVersion) ToPointer() *OutputGoogleChronicleAPIVersion {
 	return &e
 }
-func (e *OutputGoogleChronicleAPIVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputGoogleChronicleAPIVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v1", "v2":
+			return true
+		}
 	}
-	switch v {
-	case "v1":
-		fallthrough
-	case "v2":
-		*e = OutputGoogleChronicleAPIVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleChronicleAPIVersion: %v", v)
-	}
+	return false
 }
 
 type OutputGoogleChronicleAuthenticationMethod string
@@ -75,24 +71,16 @@ const (
 func (e OutputGoogleChronicleAuthenticationMethod) ToPointer() *OutputGoogleChronicleAuthenticationMethod {
 	return &e
 }
-func (e *OutputGoogleChronicleAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputGoogleChronicleAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "serviceAccount", "serviceAccountSecret":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "serviceAccount":
-		fallthrough
-	case "serviceAccountSecret":
-		*e = OutputGoogleChronicleAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputGoogleChronicleAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type SendEventsAs string
@@ -107,20 +95,16 @@ const (
 func (e SendEventsAs) ToPointer() *SendEventsAs {
 	return &e
 }
-func (e *SendEventsAs) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SendEventsAs) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "unstructured", "udm":
+			return true
+		}
 	}
-	switch v {
-	case "unstructured":
-		fallthrough
-	case "udm":
-		*e = SendEventsAs(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SendEventsAs: %v", v)
-	}
+	return false
 }
 
 type ExtraLogType struct {
@@ -164,20 +148,16 @@ const (
 func (e UDMType) ToPointer() *UDMType {
 	return &e
 }
-func (e *UDMType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UDMType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "entities", "logs":
+			return true
+		}
 	}
-	switch v {
-	case "entities":
-		fallthrough
-	case "logs":
-		*e = UDMType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UDMType: %v", v)
-	}
+	return false
 }
 
 type OutputGoogleChroniclePqControls struct {

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type FormatOptions string
 
 const (
@@ -18,20 +13,14 @@ const (
 func (e FormatOptions) ToPointer() *FormatOptions {
 	return &e
 }
-func (e *FormatOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *FormatOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json", "parquet", "ddss":
+			return true
+		}
 	}
-	switch v {
-	case "json":
-		fallthrough
-	case "parquet":
-		fallthrough
-	case "ddss":
-		*e = FormatOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for FormatOptions: %v", v)
-	}
+	return false
 }

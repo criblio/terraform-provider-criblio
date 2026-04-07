@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationTypeOptions - OpenTelemetry authentication type
 type AuthenticationTypeOptions string
 
@@ -26,24 +21,14 @@ const (
 func (e AuthenticationTypeOptions) ToPointer() *AuthenticationTypeOptions {
 	return &e
 }
-func (e *AuthenticationTypeOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationTypeOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "token", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		*e = AuthenticationTypeOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationTypeOptions: %v", v)
-	}
+	return false
 }

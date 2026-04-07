@@ -12206,7 +12206,7 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 								},
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+									Description: `TCP port this Source listens on for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"timestamp_timezone": schema.StringAttribute{
 									Computed:    true,
@@ -12263,7 +12263,7 @@ func (r *SourceDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 								},
 								"udp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+									Description: `UDP port this Source listens on for syslog over UDP. Omit for TCP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
 									Computed:    true,

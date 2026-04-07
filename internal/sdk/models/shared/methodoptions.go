@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // MethodOptions - The method to use when sending events
 type MethodOptions string
 
@@ -19,20 +14,14 @@ const (
 func (e MethodOptions) ToPointer() *MethodOptions {
 	return &e
 }
-func (e *MethodOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MethodOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "POST", "PUT", "PATCH":
+			return true
+		}
 	}
-	switch v {
-	case "POST":
-		fallthrough
-	case "PUT":
-		fallthrough
-	case "PATCH":
-		*e = MethodOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MethodOptions: %v", v)
-	}
+	return false
 }

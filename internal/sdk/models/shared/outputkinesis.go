@@ -44,20 +44,16 @@ const (
 func (e OutputKinesisCompression) ToPointer() *OutputKinesisCompression {
 	return &e
 }
-func (e *OutputKinesisCompression) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputKinesisCompression) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = OutputKinesisCompression(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputKinesisCompression: %v", v)
-	}
+	return false
 }
 
 type OutputKinesisPqControls struct {

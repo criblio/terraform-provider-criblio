@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // DataPageVersionOptions - Serialization format of data pages. Note that some reader implementations use Data page V2's attributes to work more efficiently, while others ignore it.
 type DataPageVersionOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e DataPageVersionOptions) ToPointer() *DataPageVersionOptions {
 	return &e
 }
-func (e *DataPageVersionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *DataPageVersionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "DATA_PAGE_V1", "DATA_PAGE_V2":
+			return true
+		}
 	}
-	switch v {
-	case "DATA_PAGE_V1":
-		fallthrough
-	case "DATA_PAGE_V2":
-		*e = DataPageVersionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DataPageVersionOptions: %v", v)
-	}
+	return false
 }

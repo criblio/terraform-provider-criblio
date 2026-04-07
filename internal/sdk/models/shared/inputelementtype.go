@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type InputElementType string
 
 const (
@@ -19,22 +14,14 @@ const (
 func (e InputElementType) ToPointer() *InputElementType {
 	return &e
 }
-func (e *InputElementType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputElementType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "input.timerange", "input.dropdown", "input.text", "input.number":
+			return true
+		}
 	}
-	switch v {
-	case "input.timerange":
-		fallthrough
-	case "input.dropdown":
-		fallthrough
-	case "input.text":
-		fallthrough
-	case "input.number":
-		*e = InputElementType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputElementType: %v", v)
-	}
+	return false
 }

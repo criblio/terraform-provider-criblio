@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // TLSOptionsHostsItems - Whether to inherit TLS configs from group setting or disable TLS
 type TLSOptionsHostsItems string
 
@@ -18,18 +13,14 @@ const (
 func (e TLSOptionsHostsItems) ToPointer() *TLSOptionsHostsItems {
 	return &e
 }
-func (e *TLSOptionsHostsItems) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *TLSOptionsHostsItems) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "inherit", "off":
+			return true
+		}
 	}
-	switch v {
-	case "inherit":
-		fallthrough
-	case "off":
-		*e = TLSOptionsHostsItems(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for TLSOptionsHostsItems: %v", v)
-	}
+	return false
 }

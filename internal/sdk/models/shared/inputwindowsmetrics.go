@@ -48,24 +48,16 @@ const (
 func (e InputWindowsMetricsSystemMode) ToPointer() *InputWindowsMetricsSystemMode {
 	return &e
 }
-func (e *InputWindowsMetricsSystemMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWindowsMetricsSystemMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputWindowsMetricsSystemMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWindowsMetricsSystemMode: %v", v)
-	}
+	return false
 }
 
 type InputWindowsMetricsSystem struct {
@@ -117,24 +109,16 @@ const (
 func (e InputWindowsMetricsCPUMode) ToPointer() *InputWindowsMetricsCPUMode {
 	return &e
 }
-func (e *InputWindowsMetricsCPUMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWindowsMetricsCPUMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputWindowsMetricsCPUMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWindowsMetricsCPUMode: %v", v)
-	}
+	return false
 }
 
 type InputWindowsMetricsCPU struct {
@@ -204,24 +188,16 @@ const (
 func (e InputWindowsMetricsMemoryMode) ToPointer() *InputWindowsMetricsMemoryMode {
 	return &e
 }
-func (e *InputWindowsMetricsMemoryMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWindowsMetricsMemoryMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputWindowsMetricsMemoryMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWindowsMetricsMemoryMode: %v", v)
-	}
+	return false
 }
 
 type InputWindowsMetricsMemory struct {
@@ -273,24 +249,16 @@ const (
 func (e InputWindowsMetricsNetworkMode) ToPointer() *InputWindowsMetricsNetworkMode {
 	return &e
 }
-func (e *InputWindowsMetricsNetworkMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWindowsMetricsNetworkMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputWindowsMetricsNetworkMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWindowsMetricsNetworkMode: %v", v)
-	}
+	return false
 }
 
 type InputWindowsMetricsNetwork struct {
@@ -369,24 +337,16 @@ const (
 func (e InputWindowsMetricsDiskMode) ToPointer() *InputWindowsMetricsDiskMode {
 	return &e
 }
-func (e *InputWindowsMetricsDiskMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputWindowsMetricsDiskMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "basic", "all", "custom", "disabled":
+			return true
+		}
 	}
-	switch v {
-	case "basic":
-		fallthrough
-	case "all":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "disabled":
-		*e = InputWindowsMetricsDiskMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputWindowsMetricsDiskMode: %v", v)
-	}
+	return false
 }
 
 type InputWindowsMetricsDisk struct {

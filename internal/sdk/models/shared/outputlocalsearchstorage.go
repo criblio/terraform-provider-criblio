@@ -44,20 +44,16 @@ const (
 func (e OutputLocalSearchStorageFormat) ToPointer() *OutputLocalSearchStorageFormat {
 	return &e
 }
-func (e *OutputLocalSearchStorageFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputLocalSearchStorageFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json-compact-each-row-with-names", "json-each-row":
+			return true
+		}
 	}
-	switch v {
-	case "json-compact-each-row-with-names":
-		fallthrough
-	case "json-each-row":
-		*e = OutputLocalSearchStorageFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputLocalSearchStorageFormat: %v", v)
-	}
+	return false
 }
 
 // OutputLocalSearchStorageMappingType - How event fields are mapped to columns.
@@ -73,20 +69,16 @@ const (
 func (e OutputLocalSearchStorageMappingType) ToPointer() *OutputLocalSearchStorageMappingType {
 	return &e
 }
-func (e *OutputLocalSearchStorageMappingType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputLocalSearchStorageMappingType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "automatic", "custom":
+			return true
+		}
 	}
-	switch v {
-	case "automatic":
-		fallthrough
-	case "custom":
-		*e = OutputLocalSearchStorageMappingType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputLocalSearchStorageMappingType: %v", v)
-	}
+	return false
 }
 
 type StatsDestination struct {

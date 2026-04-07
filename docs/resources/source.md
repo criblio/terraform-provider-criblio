@@ -8225,9 +8225,9 @@ Optional:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `tcp_port` (Number) TCP port this metrics Source listens on for line-delimited metrics over TCP (TLS when enabled). Omit for UDP-only; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_metrics--tls))
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this metrics Source listens on for datagram (UDP) metrics. Omit for TCP-only; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--input_metrics--connections"></a>
@@ -10578,10 +10578,10 @@ Optional:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `tcp_port` (Number) TCP port for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--input_syslog--tls))
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port for syslog over UDP. Omit for TCP-only ingestion; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--input_syslog--connections"></a>
@@ -15148,10 +15148,10 @@ Read-Only:
 - `pq_enabled` (Boolean) Use a disk queue to minimize data loss when connected services block. See [Cribl Docs](https://docs.cribl.io/stream/persistent-queues) for PQ defaults (Cribl-managed Cloud Workers) and configuration options (on-prem and hybrid Workers).
 - `send_to_routes` (Boolean) Select whether to send data to Routes, or directly to Destinations.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `tcp_port` (Number) TCP port this metrics Source listens on for TCP, when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_metrics--tls))
 - `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this metrics Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--items--input_metrics--connections"></a>
@@ -17379,11 +17379,11 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `tcp_port` (Number) TCP port this syslog Source listens on for TCP (TLS when enabled), when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--tls))
 - `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this syslog Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--items--input_syslog--connections"></a>
@@ -18727,7 +18727,7 @@ import {
   to = criblio_source.my_criblio_source
   id = jsonencode({
     group_id = "default"
-    id = "input-hec-1"
+    id       = "input-hec-1"
   })
 }
 ```
