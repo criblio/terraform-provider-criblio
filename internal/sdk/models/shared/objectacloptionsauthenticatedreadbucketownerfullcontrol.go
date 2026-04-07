@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol - Object ACL to assign to uploaded objects
 type ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol string
 
@@ -28,26 +23,14 @@ const (
 func (e ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol) ToPointer() *ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol {
 	return &e
 }
-func (e *ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "private", "bucket-owner-read", "bucket-owner-full-control", "project-private", "authenticated-read", "public-read":
+			return true
+		}
 	}
-	switch v {
-	case "private":
-		fallthrough
-	case "bucket-owner-read":
-		fallthrough
-	case "bucket-owner-full-control":
-		fallthrough
-	case "project-private":
-		fallthrough
-	case "authenticated-read":
-		fallthrough
-	case "public-read":
-		*e = ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ObjectACLOptionsAuthenticatedreadBucketownerfullcontrol: %v", v)
-	}
+	return false
 }

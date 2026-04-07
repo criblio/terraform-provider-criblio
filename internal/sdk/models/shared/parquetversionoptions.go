@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ParquetVersionOptions - Determines which data types are supported and how they are represented
 type ParquetVersionOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e ParquetVersionOptions) ToPointer() *ParquetVersionOptions {
 	return &e
 }
-func (e *ParquetVersionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ParquetVersionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "PARQUET_1_0", "PARQUET_2_4", "PARQUET_2_6":
+			return true
+		}
 	}
-	switch v {
-	case "PARQUET_1_0":
-		fallthrough
-	case "PARQUET_2_4":
-		fallthrough
-	case "PARQUET_2_6":
-		*e = ParquetVersionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ParquetVersionOptions: %v", v)
-	}
+	return false
 }

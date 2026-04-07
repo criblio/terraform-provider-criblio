@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsGzipLz4 - Codec to use to compress the data before sending to Kafka
 type CompressionOptionsGzipLz4 string
 
@@ -26,24 +21,14 @@ const (
 func (e CompressionOptionsGzipLz4) ToPointer() *CompressionOptionsGzipLz4 {
 	return &e
 }
-func (e *CompressionOptionsGzipLz4) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsGzipLz4) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip", "snappy", "lz4", "zstd":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		fallthrough
-	case "snappy":
-		fallthrough
-	case "lz4":
-		fallthrough
-	case "zstd":
-		*e = CompressionOptionsGzipLz4(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsGzipLz4: %v", v)
-	}
+	return false
 }

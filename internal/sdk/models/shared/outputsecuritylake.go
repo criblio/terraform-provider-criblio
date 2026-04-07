@@ -42,20 +42,16 @@ const (
 func (e OutputSecurityLakeSignatureVersion) ToPointer() *OutputSecurityLakeSignatureVersion {
 	return &e
 }
-func (e *OutputSecurityLakeSignatureVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSecurityLakeSignatureVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = OutputSecurityLakeSignatureVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSecurityLakeSignatureVersion: %v", v)
-	}
+	return false
 }
 
 type OutputSecurityLake struct {

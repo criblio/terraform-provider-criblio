@@ -44,20 +44,16 @@ const (
 func (e InputSqsQueueType) ToPointer() *InputSqsQueueType {
 	return &e
 }
-func (e *InputSqsQueueType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputSqsQueueType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "standard", "fifo":
+			return true
+		}
 	}
-	switch v {
-	case "standard":
-		fallthrough
-	case "fifo":
-		*e = InputSqsQueueType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputSqsQueueType: %v", v)
-	}
+	return false
 }
 
 type InputSqs struct {

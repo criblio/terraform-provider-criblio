@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // BackpressureBehaviorOptions - How to handle events when all receivers are exerting backpressure
 type BackpressureBehaviorOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e BackpressureBehaviorOptions) ToPointer() *BackpressureBehaviorOptions {
 	return &e
 }
-func (e *BackpressureBehaviorOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *BackpressureBehaviorOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "block", "drop", "queue":
+			return true
+		}
 	}
-	switch v {
-	case "block":
-		fallthrough
-	case "drop":
-		fallthrough
-	case "queue":
-		*e = BackpressureBehaviorOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for BackpressureBehaviorOptions: %v", v)
-	}
+	return false
 }

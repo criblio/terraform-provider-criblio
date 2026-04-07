@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type VisualizationElementType string
 
 const (
@@ -29,42 +24,14 @@ const (
 func (e VisualizationElementType) ToPointer() *VisualizationElementType {
 	return &e
 }
-func (e *VisualizationElementType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *VisualizationElementType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "chart.area", "chart.column", "chart.funnel", "chart.gauge", "chart.horizontalBar", "chart.line", "chart.map", "chart.pie", "chart.scatter", "counter.single", "list.events", "list.table", "custom.throughputMetrics", "custom.flowMatrix":
+			return true
+		}
 	}
-	switch v {
-	case "chart.area":
-		fallthrough
-	case "chart.column":
-		fallthrough
-	case "chart.funnel":
-		fallthrough
-	case "chart.gauge":
-		fallthrough
-	case "chart.horizontalBar":
-		fallthrough
-	case "chart.line":
-		fallthrough
-	case "chart.map":
-		fallthrough
-	case "chart.pie":
-		fallthrough
-	case "chart.scatter":
-		fallthrough
-	case "counter.single":
-		fallthrough
-	case "list.events":
-		fallthrough
-	case "list.table":
-		fallthrough
-	case "custom.throughputMetrics":
-		fallthrough
-	case "custom.flowMatrix":
-		*e = VisualizationElementType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for VisualizationElementType: %v", v)
-	}
+	return false
 }

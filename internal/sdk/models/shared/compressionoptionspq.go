@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsPq - Codec to use to compress the persisted data
 type CompressionOptionsPq string
 
@@ -20,18 +15,14 @@ const (
 func (e CompressionOptionsPq) ToPointer() *CompressionOptionsPq {
 	return &e
 }
-func (e *CompressionOptionsPq) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsPq) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = CompressionOptionsPq(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsPq: %v", v)
-	}
+	return false
 }

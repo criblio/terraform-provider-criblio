@@ -40,18 +40,16 @@ const (
 func (e OutputSentinelAuthType) ToPointer() *OutputSentinelAuthType {
 	return &e
 }
-func (e *OutputSentinelAuthType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSentinelAuthType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "oauth":
+			return true
+		}
 	}
-	switch v {
-	case "oauth":
-		*e = OutputSentinelAuthType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelAuthType: %v", v)
-	}
+	return false
 }
 
 // EndpointConfiguration - Enter the data collection endpoint URL or the individual ID
@@ -67,20 +65,16 @@ const (
 func (e EndpointConfiguration) ToPointer() *EndpointConfiguration {
 	return &e
 }
-func (e *EndpointConfiguration) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *EndpointConfiguration) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "url", "ID":
+			return true
+		}
 	}
-	switch v {
-	case "url":
-		fallthrough
-	case "ID":
-		*e = EndpointConfiguration(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for EndpointConfiguration: %v", v)
-	}
+	return false
 }
 
 type OutputSentinelFormat string
@@ -95,24 +89,16 @@ const (
 func (e OutputSentinelFormat) ToPointer() *OutputSentinelFormat {
 	return &e
 }
-func (e *OutputSentinelFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputSentinelFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "ndjson", "json_array", "custom", "advanced":
+			return true
+		}
 	}
-	switch v {
-	case "ndjson":
-		fallthrough
-	case "json_array":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "advanced":
-		*e = OutputSentinelFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputSentinelFormat: %v", v)
-	}
+	return false
 }
 
 type OutputSentinelPqControls struct {

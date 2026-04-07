@@ -44,20 +44,16 @@ const (
 func (e ReadMode) ToPointer() *ReadMode {
 	return &e
 }
-func (e *ReadMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ReadMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "oldest", "newest":
+			return true
+		}
 	}
-	switch v {
-	case "oldest":
-		fallthrough
-	case "newest":
-		*e = ReadMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ReadMode: %v", v)
-	}
+	return false
 }
 
 // EventFormat - Format of individual events
@@ -73,20 +69,16 @@ const (
 func (e EventFormat) ToPointer() *EventFormat {
 	return &e
 }
-func (e *EventFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *EventFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json", "xml":
+			return true
+		}
 	}
-	switch v {
-	case "json":
-		fallthrough
-	case "xml":
-		*e = EventFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for EventFormat: %v", v)
-	}
+	return false
 }
 
 type InputWinEventLogs struct {

@@ -61,24 +61,16 @@ const (
 func (e InputOpenaiPaginationType) ToPointer() *InputOpenaiPaginationType {
 	return &e
 }
-func (e *InputOpenaiPaginationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputOpenaiPaginationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "response_body", "response_header", "response_header_link":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "response_body":
-		fallthrough
-	case "response_header":
-		fallthrough
-	case "response_header_link":
-		*e = InputOpenaiPaginationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOpenaiPaginationType: %v", v)
-	}
+	return false
 }
 
 // InputOpenaiLogLevel - Collector runtime log level.
@@ -95,26 +87,16 @@ const (
 func (e InputOpenaiLogLevel) ToPointer() *InputOpenaiLogLevel {
 	return &e
 }
-func (e *InputOpenaiLogLevel) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputOpenaiLogLevel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "warn", "info", "debug", "silly":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		fallthrough
-	case "silly":
-		*e = InputOpenaiLogLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOpenaiLogLevel: %v", v)
-	}
+	return false
 }
 
 type InputOpenaiContentConfig struct {

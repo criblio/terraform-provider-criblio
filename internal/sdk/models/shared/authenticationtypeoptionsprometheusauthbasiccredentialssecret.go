@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret string
 
 const (
@@ -25,24 +20,14 @@ const (
 func (e AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret) ToPointer() *AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret {
 	return &e
 }
-func (e *AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "token", "textSecret", "basic", "credentialsSecret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		*e = AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationTypeOptionsPrometheusAuthBasicCredentialsSecret: %v", v)
-	}
+	return false
 }

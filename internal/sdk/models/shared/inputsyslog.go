@@ -51,9 +51,9 @@ type InputSyslog struct {
 	Pq          *PqType                        `json:"pq,omitempty"`
 	// Address to bind on. For IPv4 (all addresses), use the default '0.0.0.0'. For IPv6, enter '::' (all addresses) or specify an IP address.
 	Host string `json:"host"`
-	// Enter UDP port number to listen on. Not required if listening on TCP.
+	// UDP port this Source listens on for syslog over UDP. Omit for TCP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 	UDPPort *float64 `json:"udpPort,omitempty"`
-	// Enter TCP port number to listen on. Not required if listening on UDP.
+	// TCP port this Source listens on for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 	TCPPort *float64 `json:"tcpPort,omitempty"`
 	// Maximum number of events to buffer when downstream is blocking. Only applies to UDP.
 	MaxBufferSize *float64 `json:"maxBufferSize,omitempty"`

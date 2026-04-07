@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SignatureVersionOptionsV2V4 - Signature version to use for signing EC2 requests
 type SignatureVersionOptionsV2V4 string
 
@@ -18,18 +13,14 @@ const (
 func (e SignatureVersionOptionsV2V4) ToPointer() *SignatureVersionOptionsV2V4 {
 	return &e
 }
-func (e *SignatureVersionOptionsV2V4) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SignatureVersionOptionsV2V4) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = SignatureVersionOptionsV2V4(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SignatureVersionOptionsV2V4: %v", v)
-	}
+	return false
 }

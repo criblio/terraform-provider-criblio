@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SignatureVersionOptionsS3CollectorConf - Signature version to use for signing S3 requests
 type SignatureVersionOptionsS3CollectorConf string
 
@@ -18,18 +13,14 @@ const (
 func (e SignatureVersionOptionsS3CollectorConf) ToPointer() *SignatureVersionOptionsS3CollectorConf {
 	return &e
 }
-func (e *SignatureVersionOptionsS3CollectorConf) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SignatureVersionOptionsS3CollectorConf) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = SignatureVersionOptionsS3CollectorConf(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SignatureVersionOptionsS3CollectorConf: %v", v)
-	}
+	return false
 }

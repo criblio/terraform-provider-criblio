@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone string
 
 const (
@@ -25,24 +20,14 @@ const (
 func (e PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone) ToPointer() *PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone {
 	return &e
 }
-func (e *PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "des", "aes", "aes256b", "aes256r":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "des":
-		fallthrough
-	case "aes":
-		fallthrough
-	case "aes256b":
-		fallthrough
-	case "aes256r":
-		*e = PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for PrivacyProtocolOptionsSnmpTrapSerializeV3UserAuthProtocolNotNone: %v", v)
-	}
+	return false
 }

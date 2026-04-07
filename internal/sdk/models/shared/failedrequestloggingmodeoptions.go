@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // FailedRequestLoggingModeOptions - Data to log when a request fails. All headers are redacted by default, unless listed as safe headers below.
 type FailedRequestLoggingModeOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e FailedRequestLoggingModeOptions) ToPointer() *FailedRequestLoggingModeOptions {
 	return &e
 }
-func (e *FailedRequestLoggingModeOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *FailedRequestLoggingModeOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "payload", "payloadAndHeaders", "none":
+			return true
+		}
 	}
-	switch v {
-	case "payload":
-		fallthrough
-	case "payloadAndHeaders":
-		fallthrough
-	case "none":
-		*e = FailedRequestLoggingModeOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for FailedRequestLoggingModeOptions: %v", v)
-	}
+	return false
 }

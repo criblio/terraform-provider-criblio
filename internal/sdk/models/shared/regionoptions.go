@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // RegionOptions - Which New Relic region endpoint to use.
 type RegionOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e RegionOptions) ToPointer() *RegionOptions {
 	return &e
 }
-func (e *RegionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RegionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "US", "EU", "Custom":
+			return true
+		}
 	}
-	switch v {
-	case "US":
-		fallthrough
-	case "EU":
-		fallthrough
-	case "Custom":
-		*e = RegionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RegionOptions: %v", v)
-	}
+	return false
 }

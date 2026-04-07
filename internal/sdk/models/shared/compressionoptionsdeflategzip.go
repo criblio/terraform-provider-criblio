@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsDeflateGzip - Type of compression to apply to messages sent to the OpenTelemetry endpoint
 type CompressionOptionsDeflateGzip string
 
@@ -22,20 +17,14 @@ const (
 func (e CompressionOptionsDeflateGzip) ToPointer() *CompressionOptionsDeflateGzip {
 	return &e
 }
-func (e *CompressionOptionsDeflateGzip) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsDeflateGzip) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "deflate", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "deflate":
-		fallthrough
-	case "gzip":
-		*e = CompressionOptionsDeflateGzip(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsDeflateGzip: %v", v)
-	}
+	return false
 }

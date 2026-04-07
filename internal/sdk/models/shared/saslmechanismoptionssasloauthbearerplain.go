@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type SaslMechanismOptionsSaslOauthbearerPlain string
 
 const (
@@ -19,18 +14,14 @@ const (
 func (e SaslMechanismOptionsSaslOauthbearerPlain) ToPointer() *SaslMechanismOptionsSaslOauthbearerPlain {
 	return &e
 }
-func (e *SaslMechanismOptionsSaslOauthbearerPlain) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SaslMechanismOptionsSaslOauthbearerPlain) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "plain", "oauthbearer":
+			return true
+		}
 	}
-	switch v {
-	case "plain":
-		fallthrough
-	case "oauthbearer":
-		*e = SaslMechanismOptionsSaslOauthbearerPlain(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SaslMechanismOptionsSaslOauthbearerPlain: %v", v)
-	}
+	return false
 }

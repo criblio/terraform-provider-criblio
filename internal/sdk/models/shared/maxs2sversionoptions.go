@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // MaxS2SVersionOptions - The highest S2S protocol version to advertise during handshake
 type MaxS2SVersionOptions string
 
@@ -18,18 +13,14 @@ const (
 func (e MaxS2SVersionOptions) ToPointer() *MaxS2SVersionOptions {
 	return &e
 }
-func (e *MaxS2SVersionOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MaxS2SVersionOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v3", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v3":
-		fallthrough
-	case "v4":
-		*e = MaxS2SVersionOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MaxS2SVersionOptions: %v", v)
-	}
+	return false
 }

@@ -44,20 +44,16 @@ const (
 func (e InputFileMode) ToPointer() *InputFileMode {
 	return &e
 }
-func (e *InputFileMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputFileMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "auto":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "auto":
-		*e = InputFileMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputFileMode: %v", v)
-	}
+	return false
 }
 
 type InputFile struct {

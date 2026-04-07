@@ -44,20 +44,16 @@ const (
 func (e InputOpenTelemetryProtocol) ToPointer() *InputOpenTelemetryProtocol {
 	return &e
 }
-func (e *InputOpenTelemetryProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputOpenTelemetryProtocol) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "grpc", "http":
+			return true
+		}
 	}
-	switch v {
-	case "grpc":
-		fallthrough
-	case "http":
-		*e = InputOpenTelemetryProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOpenTelemetryProtocol: %v", v)
-	}
+	return false
 }
 
 // InputOpenTelemetryOTLPVersion - The version of OTLP Protobuf definitions to use when interpreting received data
@@ -73,20 +69,16 @@ const (
 func (e InputOpenTelemetryOTLPVersion) ToPointer() *InputOpenTelemetryOTLPVersion {
 	return &e
 }
-func (e *InputOpenTelemetryOTLPVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *InputOpenTelemetryOTLPVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "0.10.0", "1.3.1":
+			return true
+		}
 	}
-	switch v {
-	case "0.10.0":
-		fallthrough
-	case "1.3.1":
-		*e = InputOpenTelemetryOTLPVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for InputOpenTelemetryOTLPVersion: %v", v)
-	}
+	return false
 }
 
 type InputOpenTelemetryOauthParam struct {

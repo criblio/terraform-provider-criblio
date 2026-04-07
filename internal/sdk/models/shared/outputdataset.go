@@ -54,30 +54,16 @@ const (
 func (e OutputDatasetSeverity) ToPointer() *OutputDatasetSeverity {
 	return &e
 }
-func (e *OutputDatasetSeverity) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputDatasetSeverity) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "finest", "finer", "fine", "info", "warning", "error", "fatal":
+			return true
+		}
 	}
-	switch v {
-	case "finest":
-		fallthrough
-	case "finer":
-		fallthrough
-	case "fine":
-		fallthrough
-	case "info":
-		fallthrough
-	case "warning":
-		fallthrough
-	case "error":
-		fallthrough
-	case "fatal":
-		*e = OutputDatasetSeverity(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDatasetSeverity: %v", v)
-	}
+	return false
 }
 
 // DataSetSite - DataSet site to which events should be sent
@@ -95,22 +81,16 @@ const (
 func (e DataSetSite) ToPointer() *DataSetSite {
 	return &e
 }
-func (e *DataSetSite) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *DataSetSite) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "us", "eu", "custom":
+			return true
+		}
 	}
-	switch v {
-	case "us":
-		fallthrough
-	case "eu":
-		fallthrough
-	case "custom":
-		*e = DataSetSite(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DataSetSite: %v", v)
-	}
+	return false
 }
 
 type OutputDatasetPqControls struct {

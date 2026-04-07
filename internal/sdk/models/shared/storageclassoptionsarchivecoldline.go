@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // StorageClassOptionsArchiveColdline - Storage class to select for uploaded objects
 type StorageClassOptionsArchiveColdline string
 
@@ -24,22 +19,14 @@ const (
 func (e StorageClassOptionsArchiveColdline) ToPointer() *StorageClassOptionsArchiveColdline {
 	return &e
 }
-func (e *StorageClassOptionsArchiveColdline) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *StorageClassOptionsArchiveColdline) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE":
+			return true
+		}
 	}
-	switch v {
-	case "STANDARD":
-		fallthrough
-	case "NEARLINE":
-		fallthrough
-	case "COLDLINE":
-		fallthrough
-	case "ARCHIVE":
-		*e = StorageClassOptionsArchiveColdline(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for StorageClassOptionsArchiveColdline: %v", v)
-	}
+	return false
 }

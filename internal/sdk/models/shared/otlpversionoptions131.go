@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // OtlpVersionOptions131 - The version of OTLP Protobuf definitions to use when structuring data to send
 type OtlpVersionOptions131 string
 
@@ -18,16 +13,14 @@ const (
 func (e OtlpVersionOptions131) ToPointer() *OtlpVersionOptions131 {
 	return &e
 }
-func (e *OtlpVersionOptions131) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OtlpVersionOptions131) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "1.3.1":
+			return true
+		}
 	}
-	switch v {
-	case "1.3.1":
-		*e = OtlpVersionOptions131(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OtlpVersionOptions131: %v", v)
-	}
+	return false
 }

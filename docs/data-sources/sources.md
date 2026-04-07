@@ -5435,11 +5435,11 @@ Read-Only:
 - `socket_max_lifespan` (Number) The maximum duration a socket can remain open, even if active. This helps manage resources and mitigate issues caused by TCP pinning. Set to 0 to disable.
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `strictly_infer_octet_counting` (Boolean) Enable if we should infer octet counting only if the messages comply with RFC 5424.
-- `tcp_port` (Number) Enter TCP port number to listen on. Not required if listening on UDP.
+- `tcp_port` (Number) TCP port this Source listens on for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `timestamp_timezone` (String) Timezone to assign to timestamps without timezone info
 - `tls` (Attributes) (see [below for nested schema](#nestedatt--items--input_syslog--tls))
 - `type` (String)
-- `udp_port` (Number) Enter UDP port number to listen on. Not required if listening on TCP.
+- `udp_port` (Number) UDP port this Source listens on for syslog over UDP. Omit for TCP-only ingestion; TCP and UDP may both be set. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.
 - `udp_socket_rx_buf_size` (Number) Optionally, set the SO_RCVBUF socket option for the UDP socket. This value tells the operating system how many bytes can be buffered in the kernel before events are dropped. Leave blank to use the OS default. Caution: Increasing this value will affect OS memory utilization.
 
 <a id="nestedatt--items--input_syslog--connections"></a>

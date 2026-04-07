@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type MinimumTLSVersionOptionsTLS string
 
 const (
@@ -19,22 +14,14 @@ const (
 func (e MinimumTLSVersionOptionsTLS) ToPointer() *MinimumTLSVersionOptionsTLS {
 	return &e
 }
-func (e *MinimumTLSVersionOptionsTLS) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MinimumTLSVersionOptionsTLS) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3":
+			return true
+		}
 	}
-	switch v {
-	case "TLSv1":
-		fallthrough
-	case "TLSv1.1":
-		fallthrough
-	case "TLSv1.2":
-		fallthrough
-	case "TLSv1.3":
-		*e = MinimumTLSVersionOptionsTLS(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MinimumTLSVersionOptionsTLS: %v", v)
-	}
+	return false
 }

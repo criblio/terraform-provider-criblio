@@ -52,28 +52,16 @@ const (
 func (e TimestampPrecision) ToPointer() *TimestampPrecision {
 	return &e
 }
-func (e *TimestampPrecision) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *TimestampPrecision) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "ns", "u", "ms", "s", "m", "h":
+			return true
+		}
 	}
-	switch v {
-	case "ns":
-		fallthrough
-	case "u":
-		fallthrough
-	case "ms":
-		fallthrough
-	case "s":
-		fallthrough
-	case "m":
-		fallthrough
-	case "h":
-		*e = TimestampPrecision(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for TimestampPrecision: %v", v)
-	}
+	return false
 }
 
 // OutputInfluxdbAuthenticationType - InfluxDB authentication type
@@ -95,26 +83,16 @@ const (
 func (e OutputInfluxdbAuthenticationType) ToPointer() *OutputInfluxdbAuthenticationType {
 	return &e
 }
-func (e *OutputInfluxdbAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputInfluxdbAuthenticationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "token", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		*e = OutputInfluxdbAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputInfluxdbAuthenticationType: %v", v)
-	}
+	return false
 }
 
 type OutputInfluxdbPqControls struct {

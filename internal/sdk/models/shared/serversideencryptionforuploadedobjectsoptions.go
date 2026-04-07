@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type ServerSideEncryptionForUploadedObjectsOptions string
 
 const (
@@ -19,18 +14,14 @@ const (
 func (e ServerSideEncryptionForUploadedObjectsOptions) ToPointer() *ServerSideEncryptionForUploadedObjectsOptions {
 	return &e
 }
-func (e *ServerSideEncryptionForUploadedObjectsOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ServerSideEncryptionForUploadedObjectsOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "AES256", "aws:kms":
+			return true
+		}
 	}
-	switch v {
-	case "AES256":
-		fallthrough
-	case "aws:kms":
-		*e = ServerSideEncryptionForUploadedObjectsOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ServerSideEncryptionForUploadedObjectsOptions: %v", v)
-	}
+	return false
 }

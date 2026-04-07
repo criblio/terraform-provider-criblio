@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // ModeOptions - In Error mode, PQ writes events to the filesystem if the Destination is unavailable. In Backpressure mode, PQ writes events to the filesystem when it detects backpressure from the Destination. In Always On mode, PQ always writes events to the filesystem.
 type ModeOptions string
 
@@ -22,20 +17,14 @@ const (
 func (e ModeOptions) ToPointer() *ModeOptions {
 	return &e
 }
-func (e *ModeOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ModeOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "always", "backpressure":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "always":
-		fallthrough
-	case "backpressure":
-		*e = ModeOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ModeOptions: %v", v)
-	}
+	return false
 }

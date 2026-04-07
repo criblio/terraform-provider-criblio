@@ -98,7 +98,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = criblio_mapping_ruleset.my_criblio_mapping_ruleset
   id = jsonencode({
-    id = "..."
+    id      = "..."
     product = "stream"
   })
 }

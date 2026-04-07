@@ -49,26 +49,16 @@ const (
 func (e BlobAccessTier) ToPointer() *BlobAccessTier {
 	return &e
 }
-func (e *BlobAccessTier) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *BlobAccessTier) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "Inferred", "Hot", "Cool", "Cold", "Archive":
+			return true
+		}
 	}
-	switch v {
-	case "Inferred":
-		fallthrough
-	case "Hot":
-		fallthrough
-	case "Cool":
-		fallthrough
-	case "Cold":
-		fallthrough
-	case "Archive":
-		*e = BlobAccessTier(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for BlobAccessTier: %v", v)
-	}
+	return false
 }
 
 type OutputAzureBlob struct {

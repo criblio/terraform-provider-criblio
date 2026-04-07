@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationMethodOptionsAuth - Enter credentials directly, or select a stored secret
 type AuthenticationMethodOptionsAuth string
 
@@ -20,22 +15,14 @@ const (
 func (e AuthenticationMethodOptionsAuth) ToPointer() *AuthenticationMethodOptionsAuth {
 	return &e
 }
-func (e *AuthenticationMethodOptionsAuth) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsAuth) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "manualAPIKey", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "manualAPIKey":
-		fallthrough
-	case "textSecret":
-		*e = AuthenticationMethodOptionsAuth(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsAuth: %v", v)
-	}
+	return false
 }

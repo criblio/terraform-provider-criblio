@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsMessages - Type of compression to apply to messages sent to the OpenTelemetry endpoint
 type CompressionOptionsMessages string
 
@@ -20,18 +15,14 @@ const (
 func (e CompressionOptionsMessages) ToPointer() *CompressionOptionsMessages {
 	return &e
 }
-func (e *CompressionOptionsMessages) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsMessages) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = CompressionOptionsMessages(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsMessages: %v", v)
-	}
+	return false
 }

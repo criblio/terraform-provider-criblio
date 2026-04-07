@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationMethodOptionsSaslManualSecret - Enter password directly, or select a stored secret
 type AuthenticationMethodOptionsSaslManualSecret string
 
@@ -18,18 +13,14 @@ const (
 func (e AuthenticationMethodOptionsSaslManualSecret) ToPointer() *AuthenticationMethodOptionsSaslManualSecret {
 	return &e
 }
-func (e *AuthenticationMethodOptionsSaslManualSecret) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsSaslManualSecret) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = AuthenticationMethodOptionsSaslManualSecret(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsSaslManualSecret: %v", v)
-	}
+	return false
 }

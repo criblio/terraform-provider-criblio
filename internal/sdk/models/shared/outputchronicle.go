@@ -41,20 +41,16 @@ const (
 func (e OutputChronicleAuthenticationMethod) ToPointer() *OutputChronicleAuthenticationMethod {
 	return &e
 }
-func (e *OutputChronicleAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputChronicleAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "serviceAccount", "serviceAccountSecret":
+			return true
+		}
 	}
-	switch v {
-	case "serviceAccount":
-		fallthrough
-	case "serviceAccountSecret":
-		*e = OutputChronicleAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputChronicleAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type CustomLabel struct {

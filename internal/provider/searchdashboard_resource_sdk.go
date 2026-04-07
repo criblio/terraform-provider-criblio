@@ -914,7 +914,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				}
 			}
 			typeVar8 := shared.MarkdownElementType(r.Elements[elementsItem].DashboardElement.Type.ValueString())
-			variant := shared.VariantMarkdown(r.Elements[elementsItem].DashboardElement.Variant.ValueString())
+			variant := shared.Variant(r.Elements[elementsItem].DashboardElement.Variant.ValueString())
 			dashboardElement := shared.DashboardElement{
 				Config:          config2,
 				HidePanel:       hidePanel2,

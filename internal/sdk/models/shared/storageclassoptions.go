@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // StorageClassOptions - Storage class to select for uploaded objects
 type StorageClassOptions string
 
@@ -32,30 +27,14 @@ const (
 func (e StorageClassOptions) ToPointer() *StorageClassOptions {
 	return &e
 }
-func (e *StorageClassOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *StorageClassOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "STANDARD", "REDUCED_REDUNDANCY", "STANDARD_IA", "ONEZONE_IA", "INTELLIGENT_TIERING", "GLACIER", "GLACIER_IR", "DEEP_ARCHIVE":
+			return true
+		}
 	}
-	switch v {
-	case "STANDARD":
-		fallthrough
-	case "REDUCED_REDUNDANCY":
-		fallthrough
-	case "STANDARD_IA":
-		fallthrough
-	case "ONEZONE_IA":
-		fallthrough
-	case "INTELLIGENT_TIERING":
-		fallthrough
-	case "GLACIER":
-		fallthrough
-	case "GLACIER_IR":
-		fallthrough
-	case "DEEP_ARCHIVE":
-		*e = StorageClassOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for StorageClassOptions: %v", v)
-	}
+	return false
 }

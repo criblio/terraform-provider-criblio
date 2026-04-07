@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // RecordTypeOptions - DNS record type to resolve
 type RecordTypeOptions string
 
@@ -19,20 +14,14 @@ const (
 func (e RecordTypeOptions) ToPointer() *RecordTypeOptions {
 	return &e
 }
-func (e *RecordTypeOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RecordTypeOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "SRV", "A", "AAAA":
+			return true
+		}
 	}
-	switch v {
-	case "SRV":
-		fallthrough
-	case "A":
-		fallthrough
-	case "AAAA":
-		*e = RecordTypeOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RecordTypeOptions: %v", v)
-	}
+	return false
 }

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // DestinationProtocolOptions - Protocol to use when communicating with the destination.
 type DestinationProtocolOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e DestinationProtocolOptions) ToPointer() *DestinationProtocolOptions {
 	return &e
 }
-func (e *DestinationProtocolOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *DestinationProtocolOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "udp", "tcp":
+			return true
+		}
 	}
-	switch v {
-	case "udp":
-		fallthrough
-	case "tcp":
-		*e = DestinationProtocolOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DestinationProtocolOptions: %v", v)
-	}
+	return false
 }

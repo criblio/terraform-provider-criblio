@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type TagAfterProcessingOptions string
 
 const (
@@ -17,18 +12,14 @@ const (
 func (e TagAfterProcessingOptions) ToPointer() *TagAfterProcessingOptions {
 	return &e
 }
-func (e *TagAfterProcessingOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *TagAfterProcessingOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "false", "true":
+			return true
+		}
 	}
-	switch v {
-	case "false":
-		fallthrough
-	case "true":
-		*e = TagAfterProcessingOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for TagAfterProcessingOptions: %v", v)
-	}
+	return false
 }

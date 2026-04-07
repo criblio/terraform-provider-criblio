@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // RecordDataFormatOptionsJSONProtobuf - Format to use to serialize events before writing to Kafka.
 type RecordDataFormatOptionsJSONProtobuf string
 
@@ -22,20 +17,14 @@ const (
 func (e RecordDataFormatOptionsJSONProtobuf) ToPointer() *RecordDataFormatOptionsJSONProtobuf {
 	return &e
 }
-func (e *RecordDataFormatOptionsJSONProtobuf) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RecordDataFormatOptionsJSONProtobuf) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json", "raw", "protobuf":
+			return true
+		}
 	}
-	switch v {
-	case "json":
-		fallthrough
-	case "raw":
-		fallthrough
-	case "protobuf":
-		*e = RecordDataFormatOptionsJSONProtobuf(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RecordDataFormatOptionsJSONProtobuf: %v", v)
-	}
+	return false
 }

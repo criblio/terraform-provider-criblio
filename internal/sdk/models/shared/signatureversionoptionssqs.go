@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // SignatureVersionOptionsSqs - Signature version to use for signing SQS requests
 type SignatureVersionOptionsSqs string
 
@@ -18,18 +13,14 @@ const (
 func (e SignatureVersionOptionsSqs) ToPointer() *SignatureVersionOptionsSqs {
 	return &e
 }
-func (e *SignatureVersionOptionsSqs) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SignatureVersionOptionsSqs) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "v2", "v4":
+			return true
+		}
 	}
-	switch v {
-	case "v2":
-		fallthrough
-	case "v4":
-		*e = SignatureVersionOptionsSqs(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SignatureVersionOptionsSqs: %v", v)
-	}
+	return false
 }

@@ -9,27 +9,25 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-type VariantMarkdown string
+type Variant string
 
 const (
-	VariantMarkdownMarkdown VariantMarkdown = "markdown"
+	VariantMarkdown Variant = "markdown"
 )
 
-func (e VariantMarkdown) ToPointer() *VariantMarkdown {
+func (e Variant) ToPointer() *Variant {
 	return &e
 }
-func (e *VariantMarkdown) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Variant) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "markdown":
+			return true
+		}
 	}
-	switch v {
-	case "markdown":
-		*e = VariantMarkdown(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for VariantMarkdown: %v", v)
-	}
+	return false
 }
 
 type DashboardElement struct {
@@ -47,7 +45,7 @@ type DashboardElement struct {
 	Title           *string               `json:"title,omitempty"`
 	TitleAction     *TitleAction          `json:"titleAction,omitempty"`
 	Type            MarkdownElementType   `json:"type"`
-	Variant         VariantMarkdown       `json:"variant"`
+	Variant         Variant               `json:"variant"`
 }
 
 func (d DashboardElement) MarshalJSON() ([]byte, error) {
@@ -152,9 +150,9 @@ func (d *DashboardElement) GetType() MarkdownElementType {
 	return d.Type
 }
 
-func (d *DashboardElement) GetVariant() VariantMarkdown {
+func (d *DashboardElement) GetVariant() Variant {
 	if d == nil {
-		return VariantMarkdown("")
+		return Variant("")
 	}
 	return d.Variant
 }

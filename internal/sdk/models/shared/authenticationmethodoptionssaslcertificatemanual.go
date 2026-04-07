@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type AuthenticationMethodOptionsSaslCertificateManual string
 
 const (
@@ -18,20 +13,14 @@ const (
 func (e AuthenticationMethodOptionsSaslCertificateManual) ToPointer() *AuthenticationMethodOptionsSaslCertificateManual {
 	return &e
 }
-func (e *AuthenticationMethodOptionsSaslCertificateManual) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsSaslCertificateManual) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "certificate":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "certificate":
-		*e = AuthenticationMethodOptionsSaslCertificateManual(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsSaslCertificateManual: %v", v)
-	}
+	return false
 }

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // MicrosoftEntraIDAuthenticationEndpointOptionsSasl - Endpoint used to acquire authentication tokens from Azure
 type MicrosoftEntraIDAuthenticationEndpointOptionsSasl string
 
@@ -19,20 +14,14 @@ const (
 func (e MicrosoftEntraIDAuthenticationEndpointOptionsSasl) ToPointer() *MicrosoftEntraIDAuthenticationEndpointOptionsSasl {
 	return &e
 }
-func (e *MicrosoftEntraIDAuthenticationEndpointOptionsSasl) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MicrosoftEntraIDAuthenticationEndpointOptionsSasl) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "https://login.microsoftonline.com", "https://login.microsoftonline.us", "https://login.partner.microsoftonline.cn":
+			return true
+		}
 	}
-	switch v {
-	case "https://login.microsoftonline.com":
-		fallthrough
-	case "https://login.microsoftonline.us":
-		fallthrough
-	case "https://login.partner.microsoftonline.cn":
-		*e = MicrosoftEntraIDAuthenticationEndpointOptionsSasl(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for MicrosoftEntraIDAuthenticationEndpointOptionsSasl: %v", v)
-	}
+	return false
 }

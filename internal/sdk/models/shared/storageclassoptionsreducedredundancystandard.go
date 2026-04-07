@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // StorageClassOptionsReducedredundancyStandard - Storage class to select for uploaded objects
 type StorageClassOptionsReducedredundancyStandard string
 
@@ -20,18 +15,14 @@ const (
 func (e StorageClassOptionsReducedredundancyStandard) ToPointer() *StorageClassOptionsReducedredundancyStandard {
 	return &e
 }
-func (e *StorageClassOptionsReducedredundancyStandard) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *StorageClassOptionsReducedredundancyStandard) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "STANDARD", "REDUCED_REDUNDANCY":
+			return true
+		}
 	}
-	switch v {
-	case "STANDARD":
-		fallthrough
-	case "REDUCED_REDUNDANCY":
-		*e = StorageClassOptionsReducedredundancyStandard(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for StorageClassOptionsReducedredundancyStandard: %v", v)
-	}
+	return false
 }

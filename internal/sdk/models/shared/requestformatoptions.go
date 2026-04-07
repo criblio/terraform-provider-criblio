@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // RequestFormatOptions - When set to JSON, the event is automatically formatted with required fields before sending. When set to Raw, only the event's `_raw` value is sent.
 type RequestFormatOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e RequestFormatOptions) ToPointer() *RequestFormatOptions {
 	return &e
 }
-func (e *RequestFormatOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *RequestFormatOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "JSON", "raw":
+			return true
+		}
 	}
-	switch v {
-	case "JSON":
-		fallthrough
-	case "raw":
-		*e = RequestFormatOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for RequestFormatOptions: %v", v)
-	}
+	return false
 }

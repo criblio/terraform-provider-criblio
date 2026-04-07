@@ -44,20 +44,16 @@ const (
 func (e OutputOpenTelemetryOTLPVersion) ToPointer() *OutputOpenTelemetryOTLPVersion {
 	return &e
 }
-func (e *OutputOpenTelemetryOTLPVersion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputOpenTelemetryOTLPVersion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "0.10.0", "1.3.1":
+			return true
+		}
 	}
-	switch v {
-	case "0.10.0":
-		fallthrough
-	case "1.3.1":
-		*e = OutputOpenTelemetryOTLPVersion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputOpenTelemetryOTLPVersion: %v", v)
-	}
+	return false
 }
 
 type OutputOpenTelemetryPqControls struct {

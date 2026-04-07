@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsGzipNone - Codec to use to compress the data before sending
 type CompressionOptionsGzipNone string
 
@@ -20,18 +15,14 @@ const (
 func (e CompressionOptionsGzipNone) ToPointer() *CompressionOptionsGzipNone {
 	return &e
 }
-func (e *CompressionOptionsGzipNone) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsGzipNone) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = CompressionOptionsGzipNone(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsGzipNone: %v", v)
-	}
+	return false
 }

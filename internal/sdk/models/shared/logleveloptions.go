@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // LogLevelOptions - Log Level (verbosity) for collection runtime behavior.
 type LogLevelOptions string
 
@@ -21,24 +16,14 @@ const (
 func (e LogLevelOptions) ToPointer() *LogLevelOptions {
 	return &e
 }
-func (e *LogLevelOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *LogLevelOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "error", "warn", "info", "debug", "silly":
+			return true
+		}
 	}
-	switch v {
-	case "error":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "info":
-		fallthrough
-	case "debug":
-		fallthrough
-	case "silly":
-		*e = LogLevelOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for LogLevelOptions: %v", v)
-	}
+	return false
 }

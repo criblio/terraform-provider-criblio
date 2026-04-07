@@ -48,24 +48,16 @@ const (
 func (e OutputWebhookFormat) ToPointer() *OutputWebhookFormat {
 	return &e
 }
-func (e *OutputWebhookFormat) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputWebhookFormat) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "ndjson", "json_array", "custom", "advanced":
+			return true
+		}
 	}
-	switch v {
-	case "ndjson":
-		fallthrough
-	case "json_array":
-		fallthrough
-	case "custom":
-		fallthrough
-	case "advanced":
-		*e = OutputWebhookFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputWebhookFormat: %v", v)
-	}
+	return false
 }
 
 // OutputWebhookAuthenticationType - Authentication method to use for the HTTP request
@@ -89,28 +81,16 @@ const (
 func (e OutputWebhookAuthenticationType) ToPointer() *OutputWebhookAuthenticationType {
 	return &e
 }
-func (e *OutputWebhookAuthenticationType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputWebhookAuthenticationType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "token", "textSecret", "oauth":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		fallthrough
-	case "oauth":
-		*e = OutputWebhookAuthenticationType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputWebhookAuthenticationType: %v", v)
-	}
+	return false
 }
 
 type OutputWebhookPqControls struct {

@@ -42,20 +42,16 @@ const (
 func (e OutputXsiamAuthenticationMethod) ToPointer() *OutputXsiamAuthenticationMethod {
 	return &e
 }
-func (e *OutputXsiamAuthenticationMethod) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputXsiamAuthenticationMethod) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "token", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "token":
-		fallthrough
-	case "secret":
-		*e = OutputXsiamAuthenticationMethod(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputXsiamAuthenticationMethod: %v", v)
-	}
+	return false
 }
 
 type OutputXsiamURL struct {

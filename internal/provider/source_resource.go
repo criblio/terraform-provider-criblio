@@ -11243,7 +11243,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"tcp_port": schema.Float64Attribute{
 						Optional:    true,
-						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Description: `TCP port this metrics Source listens on for line-delimited metrics over TCP (TLS when enabled). Omit for UDP-only; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(65535),
 						},
@@ -11321,7 +11321,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"udp_port": schema.Float64Attribute{
 						Optional:    true,
-						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Description: `UDP port this metrics Source listens on for datagram (UDP) metrics. Omit for TCP-only; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(65535),
 						},
@@ -19599,7 +19599,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"tcp_port": schema.Float64Attribute{
 						Optional:    true,
-						Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+						Description: `TCP port for syslog over TCP (TLS when enabled). Omit for UDP-only ingestion; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(65535),
 						},
@@ -19681,7 +19681,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"udp_port": schema.Float64Attribute{
 						Optional:    true,
-						Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+						Description: `UDP port for syslog over UDP. Omit for TCP-only ingestion; you may set both TCP and UDP. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 						Validators: []validator.Float64{
 							float64validator.AtMost(65535),
 						},
@@ -30712,7 +30712,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+									Description: `TCP port this metrics Source listens on for TCP, when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"tls": schema.SingleNestedAttribute{
 									Computed: true,
@@ -30765,7 +30765,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"udp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+									Description: `UDP port this metrics Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
 									Computed:    true,
@@ -36143,7 +36143,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"tcp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter TCP port number to listen on. Not required if listening on UDP.`,
+									Description: `TCP port this syslog Source listens on for TCP (TLS when enabled), when set. Unset when only UDP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"timestamp_timezone": schema.StringAttribute{
 									Computed:    true,
@@ -36200,7 +36200,7 @@ func (r *SourceResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								},
 								"udp_port": schema.Float64Attribute{
 									Computed:    true,
-									Description: `Enter UDP port number to listen on. Not required if listening on TCP.`,
+									Description: `UDP port this syslog Source listens on, when set. Unset when only TCP is used. Must not conflict with another input on the same Worker (same host, port, and protocol), including built-in Sources.`,
 								},
 								"udp_socket_rx_buf_size": schema.Float64Attribute{
 									Computed:    true,

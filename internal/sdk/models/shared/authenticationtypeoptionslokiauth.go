@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationTypeOptionsLokiAuth - Loki logs authentication type
 type AuthenticationTypeOptionsLokiAuth string
 
@@ -26,24 +21,14 @@ const (
 func (e AuthenticationTypeOptionsLokiAuth) ToPointer() *AuthenticationTypeOptionsLokiAuth {
 	return &e
 }
-func (e *AuthenticationTypeOptionsLokiAuth) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationTypeOptionsLokiAuth) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "basic", "credentialsSecret", "token", "textSecret":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "basic":
-		fallthrough
-	case "credentialsSecret":
-		fallthrough
-	case "token":
-		fallthrough
-	case "textSecret":
-		*e = AuthenticationTypeOptionsLokiAuth(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationTypeOptionsLokiAuth: %v", v)
-	}
+	return false
 }

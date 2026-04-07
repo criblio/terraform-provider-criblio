@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type AuthenticationMethodOptions string
 
 const (
@@ -19,22 +14,14 @@ const (
 func (e AuthenticationMethodOptions) ToPointer() *AuthenticationMethodOptions {
 	return &e
 }
-func (e *AuthenticationMethodOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "clientSecret", "clientCert":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "clientSecret":
-		fallthrough
-	case "clientCert":
-		*e = AuthenticationMethodOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptions: %v", v)
-	}
+	return false
 }

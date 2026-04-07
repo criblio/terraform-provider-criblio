@@ -42,18 +42,16 @@ const (
 func (e OutputDynatraceOtlpProtocol) ToPointer() *OutputDynatraceOtlpProtocol {
 	return &e
 }
-func (e *OutputDynatraceOtlpProtocol) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputDynatraceOtlpProtocol) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "http":
+			return true
+		}
 	}
-	switch v {
-	case "http":
-		*e = OutputDynatraceOtlpProtocol(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputDynatraceOtlpProtocol: %v", v)
-	}
+	return false
 }
 
 // EndpointType - Select the type of Dynatrace endpoint configured
@@ -69,20 +67,16 @@ const (
 func (e EndpointType) ToPointer() *EndpointType {
 	return &e
 }
-func (e *EndpointType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *EndpointType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "saas", "ag":
+			return true
+		}
 	}
-	switch v {
-	case "saas":
-		fallthrough
-	case "ag":
-		*e = EndpointType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for EndpointType: %v", v)
-	}
+	return false
 }
 
 type OutputDynatraceOtlpPqControls struct {

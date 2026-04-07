@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationMethodOptionsS3CollectorConf - AWS authentication method. Choose Auto to use IAM roles.
 type AuthenticationMethodOptionsS3CollectorConf string
 
@@ -22,20 +17,14 @@ const (
 func (e AuthenticationMethodOptionsS3CollectorConf) ToPointer() *AuthenticationMethodOptionsS3CollectorConf {
 	return &e
 }
-func (e *AuthenticationMethodOptionsS3CollectorConf) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsS3CollectorConf) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "auto", "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "auto":
-		fallthrough
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = AuthenticationMethodOptionsS3CollectorConf(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsS3CollectorConf: %v", v)
-	}
+	return false
 }

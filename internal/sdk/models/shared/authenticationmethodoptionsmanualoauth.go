@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationMethodOptionsManualOauth - Select authentication method.
 type AuthenticationMethodOptionsManualOauth string
 
@@ -21,24 +16,14 @@ const (
 func (e AuthenticationMethodOptionsManualOauth) ToPointer() *AuthenticationMethodOptionsManualOauth {
 	return &e
 }
-func (e *AuthenticationMethodOptionsManualOauth) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsManualOauth) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret", "oauth", "oauthSecret", "oauthCert":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		fallthrough
-	case "oauth":
-		fallthrough
-	case "oauthSecret":
-		fallthrough
-	case "oauthCert":
-		*e = AuthenticationMethodOptionsManualOauth(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsManualOauth: %v", v)
-	}
+	return false
 }

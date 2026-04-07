@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // OutputModeOptionsSplunkCollectorConf - Format of the returned output
 type OutputModeOptionsSplunkCollectorConf string
 
@@ -18,18 +13,14 @@ const (
 func (e OutputModeOptionsSplunkCollectorConf) ToPointer() *OutputModeOptionsSplunkCollectorConf {
 	return &e
 }
-func (e *OutputModeOptionsSplunkCollectorConf) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *OutputModeOptionsSplunkCollectorConf) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "csv", "json":
+			return true
+		}
 	}
-	switch v {
-	case "csv":
-		fallthrough
-	case "json":
-		*e = OutputModeOptionsSplunkCollectorConf(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for OutputModeOptionsSplunkCollectorConf: %v", v)
-	}
+	return false
 }

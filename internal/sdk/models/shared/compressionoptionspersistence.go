@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // CompressionOptionsPersistence - Data compression format. Default is gzip.
 type CompressionOptionsPersistence string
 
@@ -18,18 +13,14 @@ const (
 func (e CompressionOptionsPersistence) ToPointer() *CompressionOptionsPersistence {
 	return &e
 }
-func (e *CompressionOptionsPersistence) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CompressionOptionsPersistence) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "gzip":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "gzip":
-		*e = CompressionOptionsPersistence(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CompressionOptionsPersistence: %v", v)
-	}
+	return false
 }

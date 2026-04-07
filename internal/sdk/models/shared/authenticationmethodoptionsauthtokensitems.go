@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // AuthenticationMethodOptionsAuthTokensItems - Select Manual to enter an auth token directly, or select Secret to use a text secret to authenticate
 type AuthenticationMethodOptionsAuthTokensItems string
 
@@ -18,18 +13,14 @@ const (
 func (e AuthenticationMethodOptionsAuthTokensItems) ToPointer() *AuthenticationMethodOptionsAuthTokensItems {
 	return &e
 }
-func (e *AuthenticationMethodOptionsAuthTokensItems) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationMethodOptionsAuthTokensItems) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "manual", "secret":
+			return true
+		}
 	}
-	switch v {
-	case "manual":
-		fallthrough
-	case "secret":
-		*e = AuthenticationMethodOptionsAuthTokensItems(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationMethodOptionsAuthTokensItems: %v", v)
-	}
+	return false
 }

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // NestedFieldSerializationOptions - How to serialize nested fields into index-time fields
 type NestedFieldSerializationOptions string
 
@@ -20,18 +15,14 @@ const (
 func (e NestedFieldSerializationOptions) ToPointer() *NestedFieldSerializationOptions {
 	return &e
 }
-func (e *NestedFieldSerializationOptions) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *NestedFieldSerializationOptions) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "json", "none":
+			return true
+		}
 	}
-	switch v {
-	case "json":
-		fallthrough
-	case "none":
-		*e = NestedFieldSerializationOptions(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for NestedFieldSerializationOptions: %v", v)
-	}
+	return false
 }

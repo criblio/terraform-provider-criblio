@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // WorkspaceSchemaRegion - AWS region where the workspace is deployed
 type WorkspaceSchemaRegion string
 
@@ -25,34 +20,16 @@ const (
 func (e WorkspaceSchemaRegion) ToPointer() *WorkspaceSchemaRegion {
 	return &e
 }
-func (e *WorkspaceSchemaRegion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WorkspaceSchemaRegion) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "us-west-2", "us-east-1", "us-east-2", "eu-central-1", "eu-central-2", "eu-west-2", "ap-southeast-1", "ap-southeast-2", "ca-central-1":
+			return true
+		}
 	}
-	switch v {
-	case "us-west-2":
-		fallthrough
-	case "us-east-1":
-		fallthrough
-	case "us-east-2":
-		fallthrough
-	case "eu-central-1":
-		fallthrough
-	case "eu-central-2":
-		fallthrough
-	case "eu-west-2":
-		fallthrough
-	case "ap-southeast-1":
-		fallthrough
-	case "ap-southeast-2":
-		fallthrough
-	case "ca-central-1":
-		*e = WorkspaceSchemaRegion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for WorkspaceSchemaRegion: %v", v)
-	}
+	return false
 }
 
 // State - Current state of the workspace
@@ -69,26 +46,16 @@ const (
 func (e State) ToPointer() *State {
 	return &e
 }
-func (e *State) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *State) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "Provisioning", "Active", "Inactive", "Failed", "Deprovisioning":
+			return true
+		}
 	}
-	switch v {
-	case "Provisioning":
-		fallthrough
-	case "Active":
-		fallthrough
-	case "Inactive":
-		fallthrough
-	case "Failed":
-		fallthrough
-	case "Deprovisioning":
-		*e = State(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for State: %v", v)
-	}
+	return false
 }
 
 type WorkspaceSchema struct {

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type AuthenticationProtocolOptionsV3User string
 
 const (
@@ -29,28 +24,14 @@ const (
 func (e AuthenticationProtocolOptionsV3User) ToPointer() *AuthenticationProtocolOptionsV3User {
 	return &e
 }
-func (e *AuthenticationProtocolOptionsV3User) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AuthenticationProtocolOptionsV3User) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "none", "md5", "sha", "sha224", "sha256", "sha384", "sha512":
+			return true
+		}
 	}
-	switch v {
-	case "none":
-		fallthrough
-	case "md5":
-		fallthrough
-	case "sha":
-		fallthrough
-	case "sha224":
-		fallthrough
-	case "sha256":
-		fallthrough
-	case "sha384":
-		fallthrough
-	case "sha512":
-		*e = AuthenticationProtocolOptionsV3User(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AuthenticationProtocolOptionsV3User: %v", v)
-	}
+	return false
 }
