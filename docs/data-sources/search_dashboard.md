@@ -125,6 +125,7 @@ Read-Only:
 Read-Only:
 
 - `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_inline))
+- `search_query_metric` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric))
 - `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_saved))
 - `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_values))
 
@@ -157,6 +158,45 @@ Read-Only:
 
 - `number` (Number)
 - `str` (String)
+
+
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric`
+
+Read-Only:
+
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--latest))
+- `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_input--search--search_query_metric--queries))
+- `type` (String)
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--earliest"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.earliest`
+
+Read-Only:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--latest"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.latest`
+
+Read-Only:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_input--search--search_query_metric--queries"></a>
+### Nested Schema for `elements.dashboard_element_input.search.search_query_metric.queries`
+
+Read-Only:
+
+- `alias` (String)
+- `local_id` (String)
+- `query` (String)
 
 
 
@@ -224,6 +264,7 @@ Read-Only:
 Read-Only:
 
 - `search_query_inline` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_inline))
+- `search_query_metric` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric))
 - `search_query_saved` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_saved))
 - `search_query_values` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_values))
 
@@ -256,6 +297,45 @@ Read-Only:
 
 - `number` (Number)
 - `str` (String)
+
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric`
+
+Read-Only:
+
+- `earliest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest))
+- `latest` (Attributes) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest))
+- `queries` (Attributes List) (see [below for nested schema](#nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries))
+- `type` (String)
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--earliest"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.earliest`
+
+Read-Only:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--latest"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.latest`
+
+Read-Only:
+
+- `number` (Number)
+- `str` (String)
+
+
+<a id="nestedatt--elements--dashboard_element_visualization--search--search_query_metric--queries"></a>
+### Nested Schema for `elements.dashboard_element_visualization.search.search_query_metric.queries`
+
+Read-Only:
+
+- `alias` (String)
+- `local_id` (String)
+- `query` (String)
 
 
 

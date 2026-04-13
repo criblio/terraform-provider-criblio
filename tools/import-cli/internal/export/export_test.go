@@ -25,7 +25,7 @@ func TestToResourceItems_empty_results(t *testing.T) {
 		{TypeName: "criblio_source", Count: 0},
 		{TypeName: "criblio_pipeline", Count: 0},
 	}
-	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, 1, nil)
+	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Empty(t, result.Items)
@@ -37,7 +37,7 @@ func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	results := []discovery.Result{
 		{TypeName: "criblio_source", Count: 1},
 	}
-	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, 1, nil)
+	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Empty(t, result.Items)
@@ -281,6 +281,24 @@ func TestGroupIDFromIDMap(t *testing.T) {
 	})
 	t.Run("returns global for nil map", func(t *testing.T) {
 		assert.Equal(t, "global", groupIDFromIDMap(nil))
+	})
+}
+
+func TestSkipExportForGroupFilter(t *testing.T) {
+	t.Run("no filter never skips", func(t *testing.T) {
+		assert.False(t, skipExportForGroupFilter("criblio_search_dataset", map[string]string{"id": "x"}, nil, []string{"stream-leaders"}))
+	})
+	t.Run("skip search when only stream group", func(t *testing.T) {
+		assert.True(t, skipExportForGroupFilter("criblio_search_dataset", map[string]string{"id": "x"}, []string{"stream-leaders"}, []string{"stream-leaders"}))
+	})
+	t.Run("include search when default_search selected", func(t *testing.T) {
+		assert.False(t, skipExportForGroupFilter("criblio_search_dataset", map[string]string{"id": "x"}, []string{"default_search"}, []string{"default_search"}))
+	})
+	t.Run("skip global lake when group filter", func(t *testing.T) {
+		assert.True(t, skipExportForGroupFilter("criblio_cribl_lake_dataset", map[string]string{"id": "x"}, []string{"stream-leaders"}, []string{"stream-leaders"}))
+	})
+	t.Run("include worker resource in filtered group", func(t *testing.T) {
+		assert.False(t, skipExportForGroupFilter("criblio_source", map[string]string{"group_id": "stream-leaders", "id": "s1"}, []string{"stream-leaders"}, []string{"stream-leaders"}))
 	})
 }
 

@@ -17,7 +17,7 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w
+      - '-s -w -X github.com/criblio/terraform-provider-criblio/tools/import-cli/version.Version={{.Version}} -X github.com/criblio/terraform-provider-criblio/tools/import-cli/version.Commit={{.Commit}} -X github.com/criblio/terraform-provider-criblio/tools/import-cli/version.Date={{.CommitDate}}'
     goos:
       - linux
       - darwin

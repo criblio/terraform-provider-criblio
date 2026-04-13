@@ -92,6 +92,9 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 					result, _ := json.Marshal(value)
 					elements.DashboardElementVisualization.Config[key] = jsontypes.NewNormalizedValue(string(result))
 				}
+			} else {
+				// Match HCL `config = {}`: empty map in state, not null (avoids refresh drift vs omitted API keys).
+				elements.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized)
 			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
@@ -118,7 +121,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 			if elementsItem.DashboardElementVisualization.Search.SearchQueryInline != nil {
 				elements.DashboardElementVisualization.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
 				if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest != nil {
-					elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+					elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest1{}
 					if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str != nil {
 						elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str)
 					}
@@ -127,7 +130,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 					}
 				}
 				if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest != nil {
-					elements.DashboardElementVisualization.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+					elements.DashboardElementVisualization.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest1{}
 					if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str != nil {
 						elements.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str)
 					}
@@ -148,6 +151,39 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 				for _, v := range elementsItem.DashboardElementVisualization.Search.SearchQueryValues.Values {
 					elements.DashboardElementVisualization.Search.SearchQueryValues.Values = append(elements.DashboardElementVisualization.Search.SearchQueryValues.Values, types.StringValue(v))
 				}
+			}
+			if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric != nil {
+				elements.DashboardElementVisualization.Search.SearchQueryMetric = &tfTypes.SearchQueryMetric{}
+				if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest != nil {
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest = &tfTypes.SearchQueryEarliest2{}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str)
+					}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number)
+					}
+				}
+				if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest != nil {
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest = &tfTypes.SearchQueryLatest2{}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str)
+					}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number)
+					}
+				}
+				elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries = []tfTypes.PanelQueryDefinition{}
+
+				for _, queriesItem := range elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Queries {
+					var queries tfTypes.PanelQueryDefinition
+
+					queries.Alias = types.StringPointerValue(queriesItem.Alias)
+					queries.LocalID = types.StringValue(queriesItem.LocalID)
+					queries.Query = types.StringValue(queriesItem.Query)
+
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries = append(elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries, queries)
+				}
+				elements.DashboardElementVisualization.Search.SearchQueryMetric.Type = types.StringValue(string(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Type))
 			}
 			elements.DashboardElementVisualization.Title = types.StringPointerValue(elementsItem.DashboardElementVisualization.Title)
 			if elementsItem.DashboardElementVisualization.TitleAction == nil {
@@ -194,7 +230,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 				if elementsItem.DashboardElementInput.Search.SearchQueryInline != nil {
 					elements.DashboardElementInput.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
 					if elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest != nil {
-						elements.DashboardElementInput.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+						elements.DashboardElementInput.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest1{}
 						if elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest.Str != nil {
 							elements.DashboardElementInput.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest.Str)
 						}
@@ -203,7 +239,7 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 						}
 					}
 					if elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest != nil {
-						elements.DashboardElementInput.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+						elements.DashboardElementInput.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest1{}
 						if elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest.Str != nil {
 							elements.DashboardElementInput.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest.Str)
 						}
@@ -224,6 +260,39 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 					for _, v := range elementsItem.DashboardElementInput.Search.SearchQueryValues.Values {
 						elements.DashboardElementInput.Search.SearchQueryValues.Values = append(elements.DashboardElementInput.Search.SearchQueryValues.Values, types.StringValue(v))
 					}
+				}
+				if elementsItem.DashboardElementInput.Search.SearchQueryMetric != nil {
+					elements.DashboardElementInput.Search.SearchQueryMetric = &tfTypes.SearchQueryMetric{}
+					if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest != nil {
+						elements.DashboardElementInput.Search.SearchQueryMetric.Earliest = &tfTypes.SearchQueryEarliest2{}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str)
+						}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number)
+						}
+					}
+					if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest != nil {
+						elements.DashboardElementInput.Search.SearchQueryMetric.Latest = &tfTypes.SearchQueryLatest2{}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Str != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Str)
+						}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Number != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Number)
+						}
+					}
+					elements.DashboardElementInput.Search.SearchQueryMetric.Queries = []tfTypes.PanelQueryDefinition{}
+
+					for _, queriesItem1 := range elementsItem.DashboardElementInput.Search.SearchQueryMetric.Queries {
+						var queries1 tfTypes.PanelQueryDefinition
+
+						queries1.Alias = types.StringPointerValue(queriesItem1.Alias)
+						queries1.LocalID = types.StringValue(queriesItem1.LocalID)
+						queries1.Query = types.StringValue(queriesItem1.Query)
+
+						elements.DashboardElementInput.Search.SearchQueryMetric.Queries = append(elements.DashboardElementInput.Search.SearchQueryMetric.Queries, queries1)
+					}
+					elements.DashboardElementInput.Search.SearchQueryMetric.Type = types.StringValue(string(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Type))
 				}
 			}
 			elements.DashboardElementInput.Title = types.StringPointerValue(elementsItem.DashboardElementInput.Title)
@@ -276,8 +345,13 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		r.Elements = append(r.Elements, elements)
 	}
-	r.Groups = nil
-	if len(resp.Groups) > 0 {
+	switch {
+	case resp.Groups == nil:
+		r.Groups = nil
+	case len(resp.Groups) == 0:
+		// API may return `"groups": {}`; represent as empty map in state for Optional+Computed consistency.
+		r.Groups = make(map[string]tfTypes.DashboardGroups)
+	default:
 		r.Groups = make(map[string]tfTypes.DashboardGroups, len(resp.Groups))
 		for dashboardGroupsKey, dashboardGroupsValue := range resp.Groups {
 			var dashboardGroupsResult tfTypes.DashboardGroups
@@ -462,7 +536,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			}
 			var searchQueryInline *shared.SearchQueryInline
 			if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline != nil {
-				var earliest *shared.SearchQueryEarliest
+				var earliest *shared.SearchQueryEarliest1
 				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest != nil {
 					str := new(string)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str.IsNull() {
@@ -471,7 +545,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 						str = nil
 					}
 					if str != nil {
-						earliest = &shared.SearchQueryEarliest{
+						earliest = &shared.SearchQueryEarliest1{
 							Str: str,
 						}
 					}
@@ -482,12 +556,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 						number = nil
 					}
 					if number != nil {
-						earliest = &shared.SearchQueryEarliest{
+						earliest = &shared.SearchQueryEarliest1{
 							Number: number,
 						}
 					}
 				}
-				var latest *shared.SearchQueryLatest
+				var latest *shared.SearchQueryLatest1
 				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest != nil {
 					str1 := new(string)
 					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryInline.Latest.Str.IsNull() {
@@ -496,7 +570,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 						str1 = nil
 					}
 					if str1 != nil {
-						latest = &shared.SearchQueryLatest{
+						latest = &shared.SearchQueryLatest1{
 							Str: str1,
 						}
 					}
@@ -507,7 +581,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 						number1 = nil
 					}
 					if number1 != nil {
-						latest = &shared.SearchQueryLatest{
+						latest = &shared.SearchQueryLatest1{
 							Number: number1,
 						}
 					}
@@ -566,6 +640,91 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					SearchQueryValues: searchQueryValues,
 				}
 			}
+			var searchQueryMetric *shared.SearchQueryMetric
+			if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric != nil {
+				typeVar3 := shared.TypeMetric(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Type.ValueString())
+				var earliest1 *shared.SearchQueryEarliest2
+				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest != nil {
+					str2 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str.IsNull() {
+						*str2 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str.ValueString()
+					} else {
+						str2 = nil
+					}
+					if str2 != nil {
+						earliest1 = &shared.SearchQueryEarliest2{
+							Str: str2,
+						}
+					}
+					number2 := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number.IsNull() {
+						*number2 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number.ValueFloat64()
+					} else {
+						number2 = nil
+					}
+					if number2 != nil {
+						earliest1 = &shared.SearchQueryEarliest2{
+							Number: number2,
+						}
+					}
+				}
+				var latest1 *shared.SearchQueryLatest2
+				if r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest != nil {
+					str3 := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str.IsNull() {
+						*str3 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str.ValueString()
+					} else {
+						str3 = nil
+					}
+					if str3 != nil {
+						latest1 = &shared.SearchQueryLatest2{
+							Str: str3,
+						}
+					}
+					number3 := new(float64)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number.IsNull() {
+						*number3 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number.ValueFloat64()
+					} else {
+						number3 = nil
+					}
+					if number3 != nil {
+						latest1 = &shared.SearchQueryLatest2{
+							Number: number3,
+						}
+					}
+				}
+				queries := make([]shared.PanelQueryDefinition, 0, len(r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries))
+				for queriesIndex := range r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries {
+					alias := new(string)
+					if !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries[queriesIndex].Alias.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries[queriesIndex].Alias.IsNull() {
+						*alias = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries[queriesIndex].Alias.ValueString()
+					} else {
+						alias = nil
+					}
+					var localID string
+					localID = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries[queriesIndex].LocalID.ValueString()
+
+					var query2 string
+					query2 = r.Elements[elementsItem].DashboardElementVisualization.Search.SearchQueryMetric.Queries[queriesIndex].Query.ValueString()
+
+					queries = append(queries, shared.PanelQueryDefinition{
+						Alias:   alias,
+						LocalID: localID,
+						Query:   query2,
+					})
+				}
+				searchQueryMetric = &shared.SearchQueryMetric{
+					Type:     typeVar3,
+					Earliest: earliest1,
+					Latest:   latest1,
+					Queries:  queries,
+				}
+			}
+			if searchQueryMetric != nil {
+				search = shared.SearchQuery{
+					SearchQueryMetric: searchQueryMetric,
+				}
+			}
 			title := new(string)
 			if !r.Elements[elementsItem].DashboardElementVisualization.Title.IsUnknown() && !r.Elements[elementsItem].DashboardElementVisualization.Title.IsNull() {
 				*title = r.Elements[elementsItem].DashboardElementVisualization.Title.ValueString()
@@ -592,7 +751,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					URL:          url,
 				}
 			}
-			typeVar3 := shared.VisualizationElementType(r.Elements[elementsItem].DashboardElementVisualization.Type.ValueString())
+			typeVar4 := shared.VisualizationElementType(r.Elements[elementsItem].DashboardElementVisualization.Type.ValueString())
 			dashboardElementVisualization := shared.DashboardElementVisualization{
 				Config:          config,
 				HidePanel:       hidePanel,
@@ -602,7 +761,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				Search:          search,
 				Title:           title,
 				TitleAction:     titleAction,
-				Type:            typeVar3,
+				Type:            typeVar4,
 			}
 			elements = append(elements, shared.DashboardElementUnion{
 				DashboardElementVisualization: &dashboardElementVisualization,
@@ -655,11 +814,11 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			if r.Elements[elementsItem].DashboardElementInput.Search != nil {
 				var searchQuerySaved1 *shared.SearchQuerySaved
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved != nil {
-					query2 := new(string)
+					query3 := new(string)
 					if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Query.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Query.IsNull() {
-						*query2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Query.ValueString()
+						*query3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Query.ValueString()
 					} else {
-						query2 = nil
+						query3 = nil
 					}
 					var queryId1 string
 					queryId1 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.QueryID.ValueString()
@@ -670,12 +829,12 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						runMode1 = nil
 					}
-					typeVar4 := shared.TypeSaved(r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Type.ValueString())
+					typeVar5 := shared.TypeSaved(r.Elements[elementsItem].DashboardElementInput.Search.SearchQuerySaved.Type.ValueString())
 					searchQuerySaved1 = &shared.SearchQuerySaved{
-						Query:   query2,
+						Query:   query3,
 						QueryID: queryId1,
 						RunMode: runMode1,
-						Type:    typeVar4,
+						Type:    typeVar5,
 					}
 				}
 				if searchQuerySaved1 != nil {
@@ -685,53 +844,53 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				}
 				var searchQueryInline1 *shared.SearchQueryInline
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline != nil {
-					var earliest1 *shared.SearchQueryEarliest
+					var earliest2 *shared.SearchQueryEarliest1
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest != nil {
-						str2 := new(string)
+						str4 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.IsNull() {
-							*str2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
+							*str4 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Str.ValueString()
 						} else {
-							str2 = nil
+							str4 = nil
 						}
-						if str2 != nil {
-							earliest1 = &shared.SearchQueryEarliest{
-								Str: str2,
+						if str4 != nil {
+							earliest2 = &shared.SearchQueryEarliest1{
+								Str: str4,
 							}
 						}
-						number2 := new(float64)
+						number4 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.IsNull() {
-							*number2 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
+							*number4 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Earliest.Number.ValueFloat64()
 						} else {
-							number2 = nil
+							number4 = nil
 						}
-						if number2 != nil {
-							earliest1 = &shared.SearchQueryEarliest{
-								Number: number2,
+						if number4 != nil {
+							earliest2 = &shared.SearchQueryEarliest1{
+								Number: number4,
 							}
 						}
 					}
-					var latest1 *shared.SearchQueryLatest
+					var latest2 *shared.SearchQueryLatest1
 					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest != nil {
-						str3 := new(string)
+						str5 := new(string)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.IsNull() {
-							*str3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
+							*str5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Str.ValueString()
 						} else {
-							str3 = nil
+							str5 = nil
 						}
-						if str3 != nil {
-							latest1 = &shared.SearchQueryLatest{
-								Str: str3,
+						if str5 != nil {
+							latest2 = &shared.SearchQueryLatest1{
+								Str: str5,
 							}
 						}
-						number3 := new(float64)
+						number5 := new(float64)
 						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.IsNull() {
-							*number3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
+							*number5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Latest.Number.ValueFloat64()
 						} else {
-							number3 = nil
+							number5 = nil
 						}
-						if number3 != nil {
-							latest1 = &shared.SearchQueryLatest{
-								Number: number3,
+						if number5 != nil {
+							latest2 = &shared.SearchQueryLatest1{
+								Number: number5,
 							}
 						}
 					}
@@ -741,8 +900,8 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						parentSearchId1 = nil
 					}
-					var query3 string
-					query3 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Query.ValueString()
+					var query4 string
+					query4 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Query.ValueString()
 
 					sampleRate1 := new(float64)
 					if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.SampleRate.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.SampleRate.IsNull() {
@@ -756,15 +915,15 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					} else {
 						timezone1 = nil
 					}
-					typeVar5 := shared.TypeInline(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Type.ValueString())
+					typeVar6 := shared.TypeInline(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryInline.Type.ValueString())
 					searchQueryInline1 = &shared.SearchQueryInline{
-						Earliest:       earliest1,
-						Latest:         latest1,
+						Earliest:       earliest2,
+						Latest:         latest2,
 						ParentSearchID: parentSearchId1,
-						Query:          query3,
+						Query:          query4,
 						SampleRate:     sampleRate1,
 						Timezone:       timezone1,
-						Type:           typeVar5,
+						Type:           typeVar6,
 					}
 				}
 				if searchQueryInline1 != nil {
@@ -774,19 +933,104 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				}
 				var searchQueryValues1 *shared.SearchQueryValues
 				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues != nil {
-					typeVar6 := shared.TypeValues(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Type.ValueString())
+					typeVar7 := shared.TypeValues(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Type.ValueString())
 					values1 := make([]string, 0, len(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values))
 					for valuesIndex1 := range r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values {
 						values1 = append(values1, r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryValues.Values[valuesIndex1].ValueString())
 					}
 					searchQueryValues1 = &shared.SearchQueryValues{
-						Type:   typeVar6,
+						Type:   typeVar7,
 						Values: values1,
 					}
 				}
 				if searchQueryValues1 != nil {
 					search1 = &shared.SearchQuery{
 						SearchQueryValues: searchQueryValues1,
+					}
+				}
+				var searchQueryMetric1 *shared.SearchQueryMetric
+				if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric != nil {
+					typeVar8 := shared.TypeMetric(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Type.ValueString())
+					var earliest3 *shared.SearchQueryEarliest2
+					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest != nil {
+						str6 := new(string)
+						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Str.IsNull() {
+							*str6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Str.ValueString()
+						} else {
+							str6 = nil
+						}
+						if str6 != nil {
+							earliest3 = &shared.SearchQueryEarliest2{
+								Str: str6,
+							}
+						}
+						number6 := new(float64)
+						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Number.IsNull() {
+							*number6 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Earliest.Number.ValueFloat64()
+						} else {
+							number6 = nil
+						}
+						if number6 != nil {
+							earliest3 = &shared.SearchQueryEarliest2{
+								Number: number6,
+							}
+						}
+					}
+					var latest3 *shared.SearchQueryLatest2
+					if r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest != nil {
+						str7 := new(string)
+						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Str.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Str.IsNull() {
+							*str7 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Str.ValueString()
+						} else {
+							str7 = nil
+						}
+						if str7 != nil {
+							latest3 = &shared.SearchQueryLatest2{
+								Str: str7,
+							}
+						}
+						number7 := new(float64)
+						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Number.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Number.IsNull() {
+							*number7 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Latest.Number.ValueFloat64()
+						} else {
+							number7 = nil
+						}
+						if number7 != nil {
+							latest3 = &shared.SearchQueryLatest2{
+								Number: number7,
+							}
+						}
+					}
+					queries1 := make([]shared.PanelQueryDefinition, 0, len(r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries))
+					for queriesIndex1 := range r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries {
+						alias1 := new(string)
+						if !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries[queriesIndex1].Alias.IsUnknown() && !r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries[queriesIndex1].Alias.IsNull() {
+							*alias1 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries[queriesIndex1].Alias.ValueString()
+						} else {
+							alias1 = nil
+						}
+						var localId1 string
+						localId1 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries[queriesIndex1].LocalID.ValueString()
+
+						var query5 string
+						query5 = r.Elements[elementsItem].DashboardElementInput.Search.SearchQueryMetric.Queries[queriesIndex1].Query.ValueString()
+
+						queries1 = append(queries1, shared.PanelQueryDefinition{
+							Alias:   alias1,
+							LocalID: localId1,
+							Query:   query5,
+						})
+					}
+					searchQueryMetric1 = &shared.SearchQueryMetric{
+						Type:     typeVar8,
+						Earliest: earliest3,
+						Latest:   latest3,
+						Queries:  queries1,
+					}
+				}
+				if searchQueryMetric1 != nil {
+					search1 = &shared.SearchQuery{
+						SearchQueryMetric: searchQueryMetric1,
 					}
 				}
 			}
@@ -816,7 +1060,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					URL:          url1,
 				}
 			}
-			typeVar7 := shared.InputElementType(r.Elements[elementsItem].DashboardElementInput.Type.ValueString())
+			typeVar9 := shared.InputElementType(r.Elements[elementsItem].DashboardElementInput.Type.ValueString())
 			dashboardElementInput := shared.DashboardElementInput{
 				Config:          config1,
 				HidePanel:       hidePanel1,
@@ -827,7 +1071,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				Search:          search1,
 				Title:           title1,
 				TitleAction:     titleAction1,
-				Type:            typeVar7,
+				Type:            typeVar9,
 			}
 			elements = append(elements, shared.DashboardElementUnion{
 				DashboardElementInput: &dashboardElementInput,
@@ -875,22 +1119,22 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 			}
 			var search2 *shared.PanelQueryDefinition
 			if r.Elements[elementsItem].DashboardElement.Search != nil {
-				alias := new(string)
+				alias2 := new(string)
 				if !r.Elements[elementsItem].DashboardElement.Search.Alias.IsUnknown() && !r.Elements[elementsItem].DashboardElement.Search.Alias.IsNull() {
-					*alias = r.Elements[elementsItem].DashboardElement.Search.Alias.ValueString()
+					*alias2 = r.Elements[elementsItem].DashboardElement.Search.Alias.ValueString()
 				} else {
-					alias = nil
+					alias2 = nil
 				}
-				var localID string
-				localID = r.Elements[elementsItem].DashboardElement.Search.LocalID.ValueString()
+				var localId2 string
+				localId2 = r.Elements[elementsItem].DashboardElement.Search.LocalID.ValueString()
 
-				var query4 string
-				query4 = r.Elements[elementsItem].DashboardElement.Search.Query.ValueString()
+				var query6 string
+				query6 = r.Elements[elementsItem].DashboardElement.Search.Query.ValueString()
 
 				search2 = &shared.PanelQueryDefinition{
-					Alias:   alias,
-					LocalID: localID,
-					Query:   query4,
+					Alias:   alias2,
+					LocalID: localId2,
+					Query:   query6,
 				}
 			}
 			var titleAction2 *shared.TitleAction
@@ -913,7 +1157,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 					URL:          url2,
 				}
 			}
-			typeVar8 := shared.MarkdownElementType(r.Elements[elementsItem].DashboardElement.Type.ValueString())
+			typeVar10 := shared.MarkdownElementType(r.Elements[elementsItem].DashboardElement.Type.ValueString())
 			variant := shared.Variant(r.Elements[elementsItem].DashboardElement.Variant.ValueString())
 			dashboardElement := shared.DashboardElement{
 				Config:          config2,
@@ -923,7 +1167,7 @@ func (r *SearchDashboardResourceModel) ToSharedSearchDashboard(ctx context.Conte
 				Layout:          layout2,
 				Search:          search2,
 				TitleAction:     titleAction2,
-				Type:            typeVar8,
+				Type:            typeVar10,
 				Variant:         variant,
 			}
 			elements = append(elements, shared.DashboardElementUnion{

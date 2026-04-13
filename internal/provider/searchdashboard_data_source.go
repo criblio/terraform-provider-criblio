@@ -221,6 +221,52 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 												},
 											},
 										},
+										"search_query_metric": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"earliest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"latest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"queries": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"alias": schema.StringAttribute{
+																Computed: true,
+															},
+															"local_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"query": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
 										"search_query_saved": schema.SingleNestedAttribute{
 											Computed: true,
 											Attributes: map[string]schema.Attribute{
@@ -350,6 +396,52 @@ func (r *SearchDashboardDataSource) Schema(ctx context.Context, req datasource.S
 												},
 												"timezone": schema.StringAttribute{
 													Computed: true,
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"search_query_metric": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"earliest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"latest": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"number": schema.Float64Attribute{
+															Computed: true,
+														},
+														"str": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"queries": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"alias": schema.StringAttribute{
+																Computed: true,
+															},
+															"local_id": schema.StringAttribute{
+																Computed: true,
+															},
+															"query": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
 												},
 												"type": schema.StringAttribute{
 													Computed: true,

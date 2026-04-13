@@ -17,7 +17,10 @@ import (
 func NewFromConfig(cfg *config.Config) (*sdk.CriblIo, error) {
 	applyConfigToEnv(cfg)
 	transport := &custom.SearchListTransport{Base: http.DefaultTransport}
-	return sdk.New(sdk.WithClient(&http.Client{Transport: transport})), nil
+	return sdk.New(
+		sdk.WithClient(&http.Client{Transport: transport}),
+		sdk.WithUserAgent(BulkExporterUserAgent()),
+	), nil
 }
 
 // applyConfigToEnv sets CRIBL_* environment variables from the config.

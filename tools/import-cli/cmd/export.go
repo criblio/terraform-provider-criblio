@@ -88,6 +88,8 @@ func NewExportCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("initialize SDK client: %w", err)
 			}
+			// Always print once (not only with --verbose); the SDK does not log User-Agent per request.
+			fmt.Fprintf(c.ErrOrStderr(), "user_agent: %s\n", client.BulkExporterUserAgent())
 			if verbose {
 				printResolvedConfig(c, cfg)
 			}
@@ -113,6 +115,10 @@ func NewExportCommand() *cobra.Command {
 						if onPrem && isOnPremUnsupportedError(r.Err) {
 							continue // skip: expected for on-prem (search, lake, etc. not supported)
 						}
+						if discovery.IsRecoverableListDecodeError(r.Err) {
+							fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (continuing; list response could not be fully decoded)\n", r.Err)
+							continue
+						}
 						firstErr = r.Err
 					}
 				}
@@ -128,6 +134,10 @@ func NewExportCommand() *cobra.Command {
 				if r.Err != nil {
 					if onPrem && isOnPremUnsupportedError(r.Err) {
 						continue // skip: expected for on-prem
+					}
+					if discovery.IsRecoverableListDecodeError(r.Err) {
+						fmt.Fprintf(c.ErrOrStderr(), "Warning: %v (continuing; list response could not be fully decoded)\n", r.Err)
+						continue
 					}
 					fmt.Fprintln(c.ErrOrStderr(), r.Err.Error())
 					if firstErr == nil {
@@ -152,7 +162,7 @@ func NewExportCommand() *cobra.Command {
 			progress := func(format string, args ...interface{}) {
 				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
 			}
-			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, parallel, progress)
+			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
 			if exportErr != nil {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())

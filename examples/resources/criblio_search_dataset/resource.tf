@@ -1,19 +1,8 @@
 resource "criblio_search_dataset" "my_searchdataset" {
-  s3_dataset = {
-    auto_detect_region = false
-    bucket             = "...my_bucket..."
-    description        = "This is a generic dataset"
-    extra_paths = [
-      {
-        auto_detect_region = true
-        bucket             = "...my_bucket..."
-        filter             = "true"
-        path               = "...my_path..."
-        region             = "...my_region..."
-      }
-    ]
-    filter = "true"
-    id     = "myGenericDatasetId"
+  cribl_search_dataset = {
+    additional_properties = "{ \"see\": \"documentation\" }"
+    description           = "This is a generic dataset"
+    id                    = "myGenericDatasetId"
     metadata = {
       created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
@@ -23,13 +12,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
         "pii",
       ]
     }
-    path                   = "...my_path..."
-    provider_id            = "myProviderId"
-    region                 = "...my_region..."
-    skip_event_time_filter = true
-    storage_classes = [
-      "..."
-    ]
-    type = "cribl_lake"
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
 }

@@ -14,21 +14,10 @@ SearchDataset Resource
 
 ```terraform
 resource "criblio_search_dataset" "my_searchdataset" {
-  s3_dataset = {
-    auto_detect_region = false
-    bucket             = "...my_bucket..."
-    description        = "This is a generic dataset"
-    extra_paths = [
-      {
-        auto_detect_region = true
-        bucket             = "...my_bucket..."
-        filter             = "true"
-        path               = "...my_path..."
-        region             = "...my_region..."
-      }
-    ]
-    filter = "true"
-    id     = "myGenericDatasetId"
+  cribl_search_dataset = {
+    additional_properties = "{ \"see\": \"documentation\" }"
+    description           = "This is a generic dataset"
+    id                    = "myGenericDatasetId"
     metadata = {
       created             = "2025-10-06T12:00:00Z"
       enable_acceleration = true
@@ -38,14 +27,8 @@ resource "criblio_search_dataset" "my_searchdataset" {
         "pii",
       ]
     }
-    path                   = "...my_path..."
-    provider_id            = "myProviderId"
-    region                 = "...my_region..."
-    skip_event_time_filter = true
-    storage_classes = [
-      "..."
-    ]
-    type = "cribl_lake"
+    provider_id = "myProviderId"
+    type        = "cribl_lake"
   }
 }
 ```
@@ -71,6 +54,7 @@ resource "criblio_search_dataset" "my_searchdataset" {
 - `azure_blob_dataset` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_dataset))
 - `click_house_dataset` (Attributes) (see [below for nested schema](#nestedatt--click_house_dataset))
 - `cribl_leader_dataset` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset))
+- `cribl_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_dataset))
 - `edge_dataset` (Attributes) (see [below for nested schema](#nestedatt--edge_dataset))
 - `gcs_dataset` (Attributes) (see [below for nested schema](#nestedatt--gcs_dataset))
 - `meta_dataset` (Attributes) (see [below for nested schema](#nestedatt--meta_dataset))
@@ -516,6 +500,30 @@ Optional:
 
 <a id="nestedatt--cribl_leader_dataset--metadata"></a>
 ### Nested Schema for `cribl_leader_dataset.metadata`
+
+Optional:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset. Default: false
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--cribl_search_dataset"></a>
+### Nested Schema for `cribl_search_dataset`
+
+Optional:
+
+- `additional_properties` (String) Parsed as JSON.
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset. Not Null
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_dataset--metadata))
+- `provider_id` (String) Dataset provider ID. Not Null
+- `type` (String) Dataset provider type, set automatically from the dataset provider. Not Null
+
+<a id="nestedatt--cribl_search_dataset--metadata"></a>
+### Nested Schema for `cribl_search_dataset.metadata`
 
 Optional:
 

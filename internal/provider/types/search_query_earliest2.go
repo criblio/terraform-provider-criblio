@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type SearchQueryLatest struct {
+type SearchQueryEarliest2 struct {
 	Str    types.String  `queryParam:"inline" tfsdk:"str"`
 	Number types.Float64 `queryParam:"inline" tfsdk:"number"`
 }

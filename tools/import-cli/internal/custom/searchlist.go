@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -22,6 +23,8 @@ var eventBreakerRulesetListPathRe = regexp.MustCompile(`m/([^/]+)/lib/breakers$`
 const (
 	PathSearchDatasets         = "/m/default_search/search/datasets"
 	PathSearchDatasetProviders = "/m/default_search/search/dataset-providers"
+	PathSearchSaved            = "/m/default_search/search/saved"
+	PathSearchDashboards       = "/m/default_search/search/dashboards"
 )
 
 // CriblDefaultTag is the tag used for built-in Cribl datasets; we skip these so only
@@ -254,6 +257,10 @@ func (t *SearchListTransport) RoundTrip(req *http.Request) (*http.Response, erro
 		key = PathSearchDatasets
 	case strings.HasSuffix(path, PathSearchDatasetProviders) && path != "":
 		key = PathSearchDatasetProviders
+	case strings.HasSuffix(path, PathSearchSaved) && path != "":
+		key = PathSearchSaved
+	case strings.HasSuffix(path, PathSearchDashboards) && path != "":
+		key = PathSearchDashboards
 	default:
 		if k := packOutputGetKey(path); k != "" {
 			key = k
@@ -583,6 +590,72 @@ func itemIsCriblLakeDataset(raw json.RawMessage) bool {
 
 var itemCache map[string]map[string]json.RawMessage // path key -> id -> item JSON
 
+// idStringFromItemRaw returns the item's id as a string; supports JSON string or number.
+func idStringFromItemRaw(raw json.RawMessage) (string, bool) {
+	var m map[string]interface{}
+	if err := json.Unmarshal(raw, &m); err != nil {
+		return "", false
+	}
+	v, ok := m["id"]
+	if !ok || v == nil {
+		return "", false
+	}
+	switch x := v.(type) {
+	case string:
+		return x, x != ""
+	case float64:
+		return strconv.FormatInt(int64(x), 10), true
+	case json.Number:
+		s := x.String()
+		return s, s != ""
+	default:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return "", false
+		}
+		s := strings.Trim(string(b), `"`)
+		return s, s != ""
+	}
+}
+
+// IdentifiersFromItemsIDsOnly parses {"items":[...]} and returns one map per item with key "id" only.
+// Caches raw items under pathKey for GetCachedSearchListItem. Used when strict SDK types fail (saved query, dashboards).
+func IdentifiersFromItemsIDsOnly(body []byte, pathKey string) ([]map[string]string, int, error) {
+	if len(body) == 0 {
+		return nil, 0, nil
+	}
+	var resp struct {
+		Items []json.RawMessage `json:"items,omitempty"`
+	}
+	if err := json.Unmarshal(body, &resp); err != nil {
+		return nil, 0, err
+	}
+	mu.Lock()
+	if itemCache == nil {
+		itemCache = make(map[string]map[string]json.RawMessage)
+	}
+	c := itemCache[pathKey]
+	if c == nil {
+		c = make(map[string]json.RawMessage)
+		itemCache[pathKey] = c
+	}
+	mu.Unlock()
+
+	out := make([]map[string]string, 0, len(resp.Items))
+	for _, raw := range resp.Items {
+		id, ok := idStringFromItemRaw(raw)
+		if !ok {
+			continue
+		}
+		out = append(out, map[string]string{"id": id})
+		c[id] = raw
+	}
+	mu.Lock()
+	itemCache[pathKey] = c
+	mu.Unlock()
+	return out, len(out), nil
+}
+
 // IdentifiersFromSearchListBody parses body as { "items": [ { "id": "..." }, ... ] }
 // and returns one map per item with key "id". pathKey is PathSearchDatasets or
 // PathSearchDatasetProviders; each full item is cached by id so Convert can build
@@ -612,25 +685,23 @@ func IdentifiersFromSearchListBody(body []byte, pathKey string) ([]map[string]st
 
 	out := make([]map[string]string, 0, len(resp.Items))
 	for _, raw := range resp.Items {
-		var it struct {
-			ID string `json:"id"`
-		}
-		if err := json.Unmarshal(raw, &it); err != nil || it.ID == "" {
+		id, ok := idStringFromItemRaw(raw)
+		if !ok {
 			continue
 		}
 		// Skip search datasets/providers tagged cribl:default (built-in); only user-created are imported.
 		if itemHasCriblDefaultTag(raw) {
 			continue
 		}
-		if pathKey == PathSearchDatasetProviders && DefaultSearchDatasetProviderIDs[it.ID] {
+		if pathKey == PathSearchDatasetProviders && DefaultSearchDatasetProviderIDs[id] {
 			continue
 		}
 		// Skip cribl_lake datasets: they are managed via Lake API and exported as criblio_cribl_lake_dataset only.
 		if pathKey == PathSearchDatasets && itemIsCriblLakeDataset(raw) {
 			continue
 		}
-		out = append(out, map[string]string{"id": it.ID})
-		c[it.ID] = raw
+		out = append(out, map[string]string{"id": id})
+		c[id] = raw
 	}
 	mu.Lock()
 	itemCache[pathKey] = c

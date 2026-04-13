@@ -43,6 +43,7 @@ data "criblio_search_dataset" "my_searchdataset" {
 - `azure_blob_dataset` (Attributes) (see [below for nested schema](#nestedatt--azure_blob_dataset))
 - `click_house_dataset` (Attributes) (see [below for nested schema](#nestedatt--click_house_dataset))
 - `cribl_leader_dataset` (Attributes) (see [below for nested schema](#nestedatt--cribl_leader_dataset))
+- `cribl_search_dataset` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_dataset))
 - `description` (String) Description of the dataset
 - `edge_dataset` (Attributes) (see [below for nested schema](#nestedatt--edge_dataset))
 - `gcs_dataset` (Attributes) (see [below for nested schema](#nestedatt--gcs_dataset))
@@ -484,6 +485,30 @@ Read-Only:
 
 <a id="nestedatt--cribl_leader_dataset--metadata"></a>
 ### Nested Schema for `cribl_leader_dataset.metadata`
+
+Read-Only:
+
+- `created` (String) Creation timestamp
+- `enable_acceleration` (Boolean) Whether acceleration is enabled for this dataset
+- `modified` (String) Last modification timestamp
+- `tags` (List of String) Tags associated with the dataset
+
+
+
+<a id="nestedatt--cribl_search_dataset"></a>
+### Nested Schema for `cribl_search_dataset`
+
+Read-Only:
+
+- `additional_properties` (String) Parsed as JSON.
+- `description` (String) Description of the dataset
+- `id` (String) Unique identifier for the dataset
+- `metadata` (Attributes) (see [below for nested schema](#nestedatt--cribl_search_dataset--metadata))
+- `provider_id` (String) Dataset provider ID
+- `type` (String) Dataset provider type, set automatically from the dataset provider
+
+<a id="nestedatt--cribl_search_dataset--metadata"></a>
+### Nested Schema for `cribl_search_dataset.metadata`
 
 Read-Only:
 
