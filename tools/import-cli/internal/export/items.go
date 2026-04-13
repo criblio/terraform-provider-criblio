@@ -19,7 +19,10 @@ import (
 )
 
 // convertOneResource fetches a single resource via the converter, builds HCL attrs, and returns a ResourceItem or skip message.
-func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Result, e registry.Entry, idMap map[string]string) (item *generator.ResourceItem, skipMsg string) {
+func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Result, e registry.Entry, idMap map[string]string, groupFilter []string, groupIDs []string) (item *generator.ResourceItem, skipMsg string) {
+	if skipExportForGroupFilter(r.TypeName, idMap, groupFilter, groupIDs) {
+		return nil, ""
+	}
 	if skipResourceByID(r.TypeName, idMap) {
 		return nil, fmt.Sprintf("%s %v: skipped by config", r.TypeName, idMap)
 	}
@@ -180,7 +183,10 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 }
 
 // appendResourceItemFromModel builds HCL attrs and appends a ResourceItem to out.Items (used for criblio_group and shared conversion path).
-func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}) error {
+func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}, groupFilter []string, groupIDs []string) error {
+	if skipExportForGroupFilter(typeName, idMap, groupFilter, groupIDs) {
+		return nil
+	}
 	opts := hclOptionsForType(typeName, e)
 	attrs, attrErr := hcl.ModelToValue(model, opts)
 	if attrErr != nil {

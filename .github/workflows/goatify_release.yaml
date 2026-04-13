@@ -36,6 +36,8 @@ jobs:
             echo "GOATIFY_VERSION=${TAG#goatify-v}" >> $GITHUB_ENV
           fi
 
+      # GoReleaser sets tools/import-cli/version.Version from the tag (see ldflags in
+      # .goreleaser-goatify.yml) so User-Agent and --version match the release.
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:

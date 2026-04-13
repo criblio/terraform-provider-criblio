@@ -2,6 +2,7 @@ package discovery
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -211,11 +212,22 @@ func TestIsSDKUnionUnmarshalError(t *testing.T) {
 		{"could not unmarshal json into InputCollector", true},
 		{"could not unmarshal json into NotificationTarget", true},
 		{"could not unmarshal: GenericDataset", true},
+		{`could not unmarshal '{"type":"list.events"}' into any supported union types for DashboardElementUnion`, true},
 	}
 	for _, tt := range tests {
 		got := isSDKUnionUnmarshalError(errFromString(tt.err))
 		assert.Equal(t, tt.want, got, "isSDKUnionUnmarshalError(%q) = %v, want %v", tt.err, got, tt.want)
 	}
+}
+
+func TestIsRecoverableListDecodeError(t *testing.T) {
+	union := errFromString(`could not unmarshal '{}' into any supported union types for Foo`)
+	jsonErr := errFromString("error unmarshaling json response body: json: cannot unmarshal number into Go value of type string")
+	wrapped := fmt.Errorf("criblio_search_saved_query: %w", jsonErr)
+	assert.True(t, IsRecoverableListDecodeError(union))
+	assert.True(t, IsRecoverableListDecodeError(jsonErr))
+	assert.True(t, IsRecoverableListDecodeError(wrapped))
+	assert.False(t, IsRecoverableListDecodeError(errFromString("connection refused")))
 }
 
 // TestIsSDKLibraryUnmarshalError documents and tests the expected SDK error for lib="cribl" enum mismatch.

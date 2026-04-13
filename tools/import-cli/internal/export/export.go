@@ -50,7 +50,9 @@ type ProgressFunc func(format string, args ...interface{})
 // Continues on list-level and per-item errors so as many resources as possible are exported;
 // failed types or items are recorded in result.ListSkipped and result.ConvertSkipped.
 // Caller should set result.DiscoveredTotal to the sum of discovery counts for reporting.
-func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, parallel int, progress ProgressFunc) (result *ExportResult, err error) {
+// groupFilter is the CLI --group slice; when non-empty, export only resources whose output folder
+// matches a resolved worker/search group (see skipExportForGroupFilter).
+func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, progress ProgressFunc) (result *ExportResult, err error) {
 	if parallel < 1 {
 		parallel = 1
 	}
@@ -95,7 +97,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr)))
 					continue
 				}
-				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model); appendErr != nil {
+				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model, groupFilter, groupIDs); appendErr != nil {
 					if errors.Is(appendErr, ErrSkipResourceLibCribl) {
 						out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap))
 					} else {
@@ -120,6 +122,9 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 				continue
 			}
 			for _, idMap := range idMaps {
+				if skipExportForGroupFilter(r.TypeName, idMap, groupFilter, groupIDs) {
+					continue
+				}
 				importID, idErr := generator.BuildImportID(e.ImportIDFormat, idMap)
 				if idErr != nil {
 					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr)))
@@ -154,7 +159,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 		}
 		if parallel <= 1 {
 			for _, idMap := range idMaps {
-				item, skipMsg := convertOneResource(ctx, client, r, e, idMap)
+				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs)
 				if skipMsg != "" {
 					out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
 				} else if item != nil {
@@ -172,7 +177,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					defer wg.Done()
 					sem <- struct{}{}
 					defer func() { <-sem }()
-					item, skipMsg := convertOneResource(ctx, client, r, e, idMap)
+					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs)
 					mu.Lock()
 					if skipMsg != "" {
 						out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)

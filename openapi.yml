@@ -3572,6 +3572,7 @@ components:
                 - $ref: '#/components/schemas/AzureBlobDataset'
                 - $ref: '#/components/schemas/GcsDataset'
                 - $ref: '#/components/schemas/AwsSecurityLakeDataset'
+                - $ref: '#/components/schemas/CriblSearchDataset'
         GenericProvider:
             type: object
             required:
@@ -4989,6 +4990,19 @@ components:
                                     title: Region
                                     description: AWS region where the bucket is located
                                     example: us-east-1
+        CriblSearchDataset:
+            allOf:
+                - $ref: '#/components/schemas/Dataset'
+                - type: object
+                  properties:
+                    type:
+                        type: string
+                        enum:
+                            - cribl_search
+                        example: cribl_search
+                  required:
+                    - type
+                  additionalProperties: true
         TailscaleAccountConfig:
             type: object
             required:
@@ -6621,6 +6635,34 @@ components:
                   required:
                     - type
                     - values
+                - type: object
+                  properties:
+                    type:
+                        type: string
+                        enum:
+                            - metric
+                        example: metric
+                    earliest:
+                        oneOf:
+                            - type: string
+                              default: '-1h'
+                              example: '-1h'
+                            - type: number
+                              example: 1696166400
+                    latest:
+                        oneOf:
+                            - type: string
+                              default: now
+                              example: now
+                            - type: number
+                              example: 1696170000
+                    queries:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/PanelQueryDefinition'
+                  required:
+                    - type
+                    - queries
         ExpectedOutputType:
             type: string
             enum:

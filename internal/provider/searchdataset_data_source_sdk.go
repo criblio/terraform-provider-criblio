@@ -4,10 +4,12 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/criblio/terraform-provider-criblio/internal/provider/typeconvert"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -508,6 +510,35 @@ func (r *SearchDatasetDataSourceModel) RefreshFromSharedGenericDataset(ctx conte
 		r.ProviderID = r.CriblLeaderDataset.ProviderID
 		r.CriblLeaderDataset.Type = types.StringValue(resp.CriblLeaderDataset.Type)
 		r.Type = r.CriblLeaderDataset.Type
+	}
+	if resp.CriblSearchDataset != nil {
+		r.CriblSearchDataset = &tfTypes.CriblSearchDataset{}
+		if resp.CriblSearchDataset.AdditionalProperties == nil {
+			r.CriblSearchDataset.AdditionalProperties = jsontypes.NewNormalizedNull()
+		} else {
+			additionalPropertiesResult, _ := json.Marshal(resp.CriblSearchDataset.AdditionalProperties)
+			r.CriblSearchDataset.AdditionalProperties = jsontypes.NewNormalizedValue(string(additionalPropertiesResult))
+		}
+		r.CriblSearchDataset.Description = types.StringPointerValue(resp.CriblSearchDataset.Description)
+		r.Description = r.CriblSearchDataset.Description
+		r.CriblSearchDataset.ID = types.StringValue(resp.CriblSearchDataset.ID)
+		r.ID = r.CriblSearchDataset.ID
+		if resp.CriblSearchDataset.Metadata == nil {
+			r.CriblSearchDataset.Metadata = nil
+		} else {
+			r.CriblSearchDataset.Metadata = &tfTypes.DatasetMetadata{}
+			r.CriblSearchDataset.Metadata.Created = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblSearchDataset.Metadata.Created))
+			r.CriblSearchDataset.Metadata.EnableAcceleration = types.BoolPointerValue(resp.CriblSearchDataset.Metadata.EnableAcceleration)
+			r.CriblSearchDataset.Metadata.Modified = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CriblSearchDataset.Metadata.Modified))
+			r.CriblSearchDataset.Metadata.Tags = make([]types.String, 0, len(resp.CriblSearchDataset.Metadata.Tags))
+			for _, v := range resp.CriblSearchDataset.Metadata.Tags {
+				r.CriblSearchDataset.Metadata.Tags = append(r.CriblSearchDataset.Metadata.Tags, types.StringValue(v))
+			}
+		}
+		r.CriblSearchDataset.ProviderID = types.StringValue(resp.CriblSearchDataset.ProviderID)
+		r.ProviderID = r.CriblSearchDataset.ProviderID
+		r.CriblSearchDataset.Type = types.StringValue(resp.CriblSearchDataset.Type)
+		r.Type = r.CriblSearchDataset.Type
 	}
 	if resp.EdgeDataset != nil {
 		r.EdgeDataset = &tfTypes.EdgeDataset{}

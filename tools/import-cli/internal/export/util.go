@@ -34,6 +34,32 @@ func groupIDForOutput(typeName string, gid string) string {
 	return gid
 }
 
+// allowedOutputFoldersFromGroupIDs maps resolved worker/search group IDs to module layout folder names.
+// default_search is also mapped to "search" so exports can include Search UI resources when that group is selected.
+func allowedOutputFoldersFromGroupIDs(groupIDs []string) map[string]bool {
+	m := make(map[string]bool, len(groupIDs)+1)
+	for _, g := range groupIDs {
+		m[g] = true
+		if g == "default_search" {
+			m["search"] = true
+		}
+	}
+	return m
+}
+
+// skipExportForGroupFilter reports whether a resource should be omitted when the user passed --group.
+// Only resources whose output folder (see groupIDForOutput) is in allowedOutputFoldersFromGroupIDs(groupIDs)
+// are exported; "global" and "search" are excluded unless the user included the corresponding scope
+// (search requires default_search in groupIDs).
+func skipExportForGroupFilter(typeName string, idMap map[string]string, groupFilter []string, groupIDs []string) bool {
+	if len(groupFilter) == 0 {
+		return false
+	}
+	out := groupIDForOutput(typeName, groupIDFromIDMap(idMap))
+	allowed := allowedOutputFoldersFromGroupIDs(groupIDs)
+	return !allowed[out]
+}
+
 // toRequestParams maps lowercase identifier keys (group_id, id, pack) to
 // request param names (GroupID, ID, Pack) expected by the SDK and converter.
 func toRequestParams(idMap map[string]string) map[string]string {

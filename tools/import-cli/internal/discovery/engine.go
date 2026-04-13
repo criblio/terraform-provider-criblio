@@ -4,6 +4,7 @@ package discovery
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -27,20 +28,24 @@ func eventBreakerRulesetIdentifiersFromCapture(gid string) ([]map[string]string,
 }
 
 // searchListIdentifiersFromCapture returns identifiers (and count) from the captured
-// list response body when the SDK failed to unmarshal (e.g. cribl_lake). Only for
-// criblio_search_dataset and criblio_search_dataset_provider.
+// list response body when the SDK failed to unmarshal (e.g. cribl_lake, union drift, strict JSON).
 func searchListIdentifiersFromCapture(e registry.Entry) ([]map[string]string, int, error) {
-	var key string
 	switch e.TypeName {
+	case "criblio_search_saved_query":
+		body := custom.GetAndClearSearchListBody(custom.PathSearchSaved)
+		return custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchSaved)
+	case "criblio_search_dashboard":
+		body := custom.GetAndClearSearchListBody(custom.PathSearchDashboards)
+		return custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchDashboards)
 	case "criblio_search_dataset":
-		key = custom.PathSearchDatasets
+		body := custom.GetAndClearSearchListBody(custom.PathSearchDatasets)
+		return custom.IdentifiersFromSearchListBody(body, custom.PathSearchDatasets)
 	case "criblio_search_dataset_provider":
-		key = custom.PathSearchDatasetProviders
+		body := custom.GetAndClearSearchListBody(custom.PathSearchDatasetProviders)
+		return custom.IdentifiersFromSearchListBody(body, custom.PathSearchDatasetProviders)
 	default:
 		return nil, 0, nil
 	}
-	body := custom.GetAndClearSearchListBody(key)
-	return custom.IdentifiersFromSearchListBody(body, key)
 }
 
 // unionUnmarshalIdentifiersFromCapture returns identifiers from the captured raw list response
@@ -68,8 +73,7 @@ func unionUnmarshalIdentifiersFromCapture(e registry.Entry, groupID string) ([]m
 }
 
 // isSDKUnionUnmarshalError reports whether err is the SDK failing to unmarshal a response
-// into a oneOf union type (GenericDataset, GenericProvider, InputCollector, NotificationTarget).
-// When true, discovery falls back to parsing the captured raw response body instead of failing.
+// into a oneOf union type. When true, discovery may fall back to parsing captured raw bodies.
 func isSDKUnionUnmarshalError(err error) bool {
 	if err == nil {
 		return false
@@ -78,10 +82,34 @@ func isSDKUnionUnmarshalError(err error) bool {
 	if !strings.Contains(s, "could not unmarshal") {
 		return false
 	}
-	return strings.Contains(s, "GenericDataset") ||
+	return strings.Contains(s, "union types for") ||
+		strings.Contains(s, "GenericDataset") ||
 		strings.Contains(s, "GenericProvider") ||
 		strings.Contains(s, "InputCollector") ||
 		strings.Contains(s, "NotificationTarget")
+}
+
+// isRecoverableListDecodeError is true for SDK union failures or JSON decode errors on list responses
+// where we can retry from HTTP-captured bodies.
+func isRecoverableListDecodeError(err error) bool {
+	if err == nil {
+		return false
+	}
+	if isSDKUnionUnmarshalError(err) {
+		return true
+	}
+	return strings.Contains(err.Error(), "error unmarshaling json response body")
+}
+
+// IsRecoverableListDecodeError reports whether err (including wrapped errors from discovery results)
+// is a list decode failure that should not abort export/dry-run. Unwraps fmt.Errorf chains.
+func IsRecoverableListDecodeError(err error) bool {
+	for e := err; e != nil; e = errors.Unwrap(e) {
+		if isRecoverableListDecodeError(e) {
+			return true
+		}
+	}
+	return false
 }
 
 // isSDKLibraryUnmarshalError reports whether err is the SDK failing to unmarshal lib="cribl"
@@ -136,10 +164,11 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 	groupIDs = append(groupIDs, edgeIDs...)
 	if len(groupIDs) == 0 && len(groupFilter) == 0 {
 		groupIDs = fallbackGroupIDs(onPrem)
-	} else {
-		// Always include "default" and "default_search" so resources under those groups (e.g. certificates, lookups, parser_lib_entry) are discovered.
+	} else if len(groupFilter) == 0 {
+		// Unfiltered export: include default + default_search so resources under those groups are discovered.
 		groupIDs = ensureDefaultGroups(groupIDs)
 	}
+	// When groupFilter is non-empty, use only matched worker group IDs (no injection of default/default_search).
 	if onPrem {
 		groupIDs = filterOutDefaultSearch(groupIDs)
 	}
@@ -177,9 +206,13 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 				count = len(streamNames) + len(edgeNames)
 				details = groupNames
 			} else if e.TypeName == "criblio_lakehouse_dataset_connection" {
-				ids, lhErr := listLakehouseDatasetConnectionIdentifiers(ctx, client)
-				if lhErr == nil {
-					count = len(ids)
+				if len(groupFilter) > 0 && skipDiscoveryForGroupFilter(e.TypeName, groupIDs) {
+					count = 0
+				} else {
+					ids, lhErr := listLakehouseDatasetConnectionIdentifiers(ctx, client)
+					if lhErr == nil {
+						count = len(ids)
+					}
 				}
 			} else if e.TypeName == "criblio_pack_routes" {
 				ids, prErr := listPackRoutesIdentifiers(ctx, client, groupIDs)
@@ -188,6 +221,10 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 				}
 			}
 			results = append(results, Result{TypeName: e.TypeName, Count: count, Details: details})
+			continue
+		}
+		if len(groupFilter) > 0 && skipDiscoveryForGroupFilter(e.TypeName, groupIDs) {
+			results = append(results, Result{TypeName: e.TypeName, Count: 0})
 			continue
 		}
 		count, perGroup, err := listOne(ctx, client, e, groupIDs)
@@ -403,14 +440,33 @@ func GetGroupIDs(ctx context.Context, client *sdk.CriblIo, groupFilter []string,
 	groupIDs = append(groupIDs, edgeIDs...)
 	if len(groupIDs) == 0 && len(groupFilter) == 0 {
 		groupIDs = fallbackGroupIDs(onPrem)
-	} else {
-		// Always include "default" and "default_search" so resources under those groups are listed.
+	} else if len(groupFilter) == 0 {
 		groupIDs = ensureDefaultGroups(groupIDs)
 	}
 	if onPrem {
 		groupIDs = filterOutDefaultSearch(groupIDs)
 	}
 	return groupIDs, nil
+}
+
+// skipDiscoveryForGroupFilter when --group is set, omit types that only land under global/ or search/
+// in module layout (lake, notification, search UI) unless default_search is among the resolved group IDs.
+func skipDiscoveryForGroupFilter(typeName string, groupIDs []string) bool {
+	hasDefaultSearch := false
+	for _, g := range groupIDs {
+		if g == "default_search" {
+			hasDefaultSearch = true
+			break
+		}
+	}
+	if strings.HasPrefix(typeName, "criblio_search_") {
+		return !hasDefaultSearch
+	}
+	switch typeName {
+	case "criblio_cribl_lake_dataset", "criblio_cribl_lake_house", "criblio_lakehouse_dataset_connection", "criblio_notification_target":
+		return true
+	}
+	return false
 }
 
 // filterOutDefaultSearch removes default_search from groupIDs. Used when on-prem since m/default_search/* is restricted.
@@ -514,7 +570,7 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 	if len(args) < 2 || !requestHasGroupID(args[1]) {
 		items, err := callListAndGetItems(ctx, method, args)
 		if err != nil {
-			if isSDKUnionUnmarshalError(err) {
+			if isRecoverableListDecodeError(err) {
 				if ids, _, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && len(ids) > 0 {
 					return ids, nil
 				}
@@ -555,7 +611,7 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 		default:
 			items, listErr := callListAndGetItems(ctx, method, args)
 			if listErr != nil {
-				if isSDKUnionUnmarshalError(listErr) {
+				if isRecoverableListDecodeError(listErr) {
 					if parsed, _, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && len(parsed) > 0 {
 						out = append(out, parsed...)
 					} else if parsed, _, parseErr := unionUnmarshalIdentifiersFromCapture(e, gid); parseErr == nil && len(parsed) > 0 {
@@ -608,7 +664,7 @@ func listIdentifiersForEventBreakerRuleset(ctx context.Context, method reflect.V
 func listIdentifiersForSearchTypes(ctx context.Context, method reflect.Value, e registry.Entry, gid string, args []reflect.Value) ([]map[string]string, error) {
 	items, err := callListAndGetItems(ctx, method, args)
 	if err != nil {
-		if isSDKUnionUnmarshalError(err) {
+		if isRecoverableListDecodeError(err) {
 			ids, _, parseErr := searchListIdentifiersFromCapture(e)
 			if parseErr != nil {
 				return nil, nil // continue without ids
@@ -1044,7 +1100,24 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 		// For search dataset/provider types, count after filtering out defaults so preview matches export.
 		if e.TypeName == "criblio_search_dataset_provider" || e.TypeName == "criblio_search_dataset" {
 			items, listErr := callListAndGetItems(ctx, method, args)
-			if listErr != nil && isSDKUnionUnmarshalError(listErr) {
+			if listErr != nil && isRecoverableListDecodeError(listErr) {
+				if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
+					return count, nil, nil
+				}
+				return 0, nil, nil
+			}
+			if listErr != nil {
+				return 0, nil, listErr
+			}
+			ids, idErr := identifiersFromItems(items, groupIDs[0], e)
+			if idErr != nil {
+				return 0, nil, idErr
+			}
+			return len(ids), nil, nil
+		}
+		if e.TypeName == "criblio_search_saved_query" || e.TypeName == "criblio_search_dashboard" {
+			items, listErr := callListAndGetItems(ctx, method, args)
+			if listErr != nil && isRecoverableListDecodeError(listErr) {
 				if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
 					return count, nil, nil
 				}
@@ -1062,6 +1135,9 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 		// criblio_cribl_lake_dataset: count after filtering DefaultCriblLakeDatasetIDs so discovery count matches export.
 		if e.TypeName == "criblio_cribl_lake_dataset" {
 			items, listErr := callListAndGetItems(ctx, method, args)
+			if listErr != nil && isRecoverableListDecodeError(listErr) {
+				return 0, nil, nil
+			}
 			if listErr != nil {
 				return 0, nil, listErr
 			}
@@ -1072,7 +1148,7 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 			return len(ids), nil, nil
 		}
 		n, err := callListAndCount(ctx, method, args)
-		if err != nil && isSDKUnionUnmarshalError(err) {
+		if err != nil && isRecoverableListDecodeError(err) {
 			if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
 				return count, nil, nil
 			}
@@ -1108,7 +1184,7 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 			var err error
 			n, err = callListAndCount(ctx, method, args)
 			if err != nil {
-				if isSDKUnionUnmarshalError(err) {
+				if isRecoverableListDecodeError(err) {
 					if _, count, parseErr := searchListIdentifiersFromCapture(e); parseErr == nil && count > 0 {
 						total += count
 						perGroup[gid] = count

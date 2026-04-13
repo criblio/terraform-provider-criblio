@@ -9,6 +9,72 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
+type CriblSearchDataset struct {
+	// Unique identifier for the dataset
+	ID string `json:"id"`
+	// Description of the dataset
+	Description *string `json:"description,omitempty"`
+	// Dataset provider ID
+	ProviderID string `json:"provider"`
+	// Dataset provider type, set automatically from the dataset provider
+	Type                 string           `json:"type"`
+	Metadata             *DatasetMetadata `json:"metadata,omitempty"`
+	AdditionalProperties any              `additionalProperties:"true" json:"-"`
+}
+
+func (c CriblSearchDataset) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CriblSearchDataset) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CriblSearchDataset) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CriblSearchDataset) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *CriblSearchDataset) GetProviderID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ProviderID
+}
+
+func (c *CriblSearchDataset) GetType() string {
+	if c == nil {
+		return ""
+	}
+	return c.Type
+}
+
+func (c *CriblSearchDataset) GetMetadata() *DatasetMetadata {
+	if c == nil {
+		return nil
+	}
+	return c.Metadata
+}
+
+func (c *CriblSearchDataset) GetAdditionalProperties() any {
+	if c == nil {
+		return nil
+	}
+	return c.AdditionalProperties
+}
+
 // S3Bucket - S3 bucket configuration
 type S3Bucket struct {
 	// S3 bucket name
@@ -2117,6 +2183,7 @@ const (
 	GenericDatasetTypeAzureBlobDataset            GenericDatasetType = "AzureBlobDataset"
 	GenericDatasetTypeGcsDataset                  GenericDatasetType = "GcsDataset"
 	GenericDatasetTypeAwsSecurityLakeDataset      GenericDatasetType = "AwsSecurityLakeDataset"
+	GenericDatasetTypeCriblSearchDataset          GenericDatasetType = "CriblSearchDataset"
 )
 
 type GenericDataset struct {
@@ -2142,6 +2209,7 @@ type GenericDataset struct {
 	AzureBlobDataset            *AzureBlobDataset            `queryParam:"inline" union:"member"`
 	GcsDataset                  *GcsDataset                  `queryParam:"inline" union:"member"`
 	AwsSecurityLakeDataset      *AwsSecurityLakeDataset      `queryParam:"inline" union:"member"`
+	CriblSearchDataset          *CriblSearchDataset          `queryParam:"inline" union:"member"`
 
 	Type GenericDatasetType
 }
@@ -2410,6 +2478,18 @@ func CreateGenericDatasetAwsSecurityLakeDataset(awsSecurityLakeDataset AwsSecuri
 	}
 }
 
+func CreateGenericDatasetCriblSearchDataset(criblSearchDataset CriblSearchDataset) GenericDataset {
+	typ := GenericDatasetTypeCriblSearchDataset
+
+	typStr := string(typ)
+	criblSearchDataset.Type = typStr
+
+	return GenericDataset{
+		CriblSearchDataset: &criblSearchDataset,
+		Type:               typ,
+	}
+}
+
 func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
@@ -2557,8 +2637,7 @@ func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 		u.APIElasticSearchDataset = apiElasticSearchDataset
 		u.Type = GenericDatasetTypeAPIElasticSearchDataset
 		return nil
-	case "S3Dataset", "s3":
-		// API returns discriminator "s3" per OpenAPI S3Dataset.type enum; "S3Dataset" is the legacy SDK constant.
+	case "S3Dataset":
 		s3Dataset := new(S3Dataset)
 		if err := utils.UnmarshalJSON(data, &s3Dataset, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == S3Dataset) type S3Dataset within GenericDataset: %w", string(data), err)
@@ -2620,6 +2699,15 @@ func (u *GenericDataset) UnmarshalJSON(data []byte) error {
 
 		u.AwsSecurityLakeDataset = awsSecurityLakeDataset
 		u.Type = GenericDatasetTypeAwsSecurityLakeDataset
+		return nil
+	case "CriblSearchDataset":
+		criblSearchDataset := new(CriblSearchDataset)
+		if err := utils.UnmarshalJSON(data, &criblSearchDataset, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CriblSearchDataset) type CriblSearchDataset within GenericDataset: %w", string(data), err)
+		}
+
+		u.CriblSearchDataset = criblSearchDataset
+		u.Type = GenericDatasetTypeCriblSearchDataset
 		return nil
 	}
 
@@ -2713,6 +2801,10 @@ func (u GenericDataset) MarshalJSON() ([]byte, error) {
 
 	if u.AwsSecurityLakeDataset != nil {
 		return utils.MarshalJSON(u.AwsSecurityLakeDataset, "", true)
+	}
+
+	if u.CriblSearchDataset != nil {
+		return utils.MarshalJSON(u.CriblSearchDataset, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type GenericDataset: all fields are null")

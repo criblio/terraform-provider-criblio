@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -48,6 +49,7 @@ type SearchDatasetDataSourceModel struct {
 	AzureBlobDataset            *tfTypes.AzureBlobDataset            `queryParam:"inline" tfsdk:"azure_blob_dataset"`
 	ClickHouseDataset           *tfTypes.ClickHouseDataset           `queryParam:"inline" tfsdk:"click_house_dataset"`
 	CriblLeaderDataset          *tfTypes.CriblLeaderDataset          `queryParam:"inline" tfsdk:"cribl_leader_dataset"`
+	CriblSearchDataset          *tfTypes.CriblSearchDataset          `queryParam:"inline" tfsdk:"cribl_search_dataset"`
 	Description                 types.String                         `tfsdk:"description"`
 	EdgeDataset                 *tfTypes.EdgeDataset                 `queryParam:"inline" tfsdk:"edge_dataset"`
 	GcsDataset                  *tfTypes.GcsDataset                  `queryParam:"inline" tfsdk:"gcs_dataset"`
@@ -954,6 +956,54 @@ func (r *SearchDatasetDataSource) Schema(ctx context.Context, req datasource.Sch
 					"path": schema.StringAttribute{
 						Computed:    true,
 						Description: `The directory from which to collect data`,
+					},
+					"provider_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider ID`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Dataset provider type, set automatically from the dataset provider`,
+					},
+				},
+			},
+			"cribl_search_dataset": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"additional_properties": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
+						Computed:    true,
+						Description: `Parsed as JSON.`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Description of the dataset`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the dataset`,
+					},
+					"metadata": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"created": schema.StringAttribute{
+								Computed:    true,
+								Description: `Creation timestamp`,
+							},
+							"enable_acceleration": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether acceleration is enabled for this dataset`,
+							},
+							"modified": schema.StringAttribute{
+								Computed:    true,
+								Description: `Last modification timestamp`,
+							},
+							"tags": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `Tags associated with the dataset`,
+							},
+						},
 					},
 					"provider_id": schema.StringAttribute{
 						Computed:    true,

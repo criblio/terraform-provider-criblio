@@ -7,11 +7,11 @@ import (
 )
 
 type SearchQueryInline struct {
-	Earliest       *SearchQueryEarliest `tfsdk:"earliest"`
-	Latest         *SearchQueryLatest   `tfsdk:"latest"`
-	ParentSearchID types.String         `tfsdk:"parent_search_id"`
-	Query          types.String         `tfsdk:"query"`
-	SampleRate     types.Float64        `tfsdk:"sample_rate"`
-	Timezone       types.String         `tfsdk:"timezone"`
-	Type           types.String         `tfsdk:"type"`
+	Earliest       *SearchQueryEarliest1 `tfsdk:"earliest"`
+	Latest         *SearchQueryLatest1   `tfsdk:"latest"`
+	ParentSearchID types.String          `tfsdk:"parent_search_id"`
+	Query          types.String          `tfsdk:"query"`
+	SampleRate     types.Float64         `tfsdk:"sample_rate"`
+	Timezone       types.String          `tfsdk:"timezone"`
+	Type           types.String          `tfsdk:"type"`
 }

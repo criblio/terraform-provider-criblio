@@ -116,6 +116,10 @@ func (u *UpdateDatasetByIDRequest) GetGenericDatasetAwsSecurityLakeDataset() *sh
 	return u.GetGenericDataset().AwsSecurityLakeDataset
 }
 
+func (u *UpdateDatasetByIDRequest) GetGenericDatasetCriblSearchDataset() *shared.CriblSearchDataset {
+	return u.GetGenericDataset().CriblSearchDataset
+}
+
 // UpdateDatasetByIDResponseBody - a list of Dataset objects
 type UpdateDatasetByIDResponseBody struct {
 	Items []shared.GenericDataset `json:"items,omitempty"`

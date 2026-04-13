@@ -6,4 +6,5 @@ type SearchQuery struct {
 	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" tfsdk:"search_query_saved"`
 	SearchQueryInline *SearchQueryInline `queryParam:"inline" tfsdk:"search_query_inline"`
 	SearchQueryValues *SearchQueryValues `queryParam:"inline" tfsdk:"search_query_values"`
+	SearchQueryMetric *SearchQueryMetric `queryParam:"inline" tfsdk:"search_query_metric"`
 }

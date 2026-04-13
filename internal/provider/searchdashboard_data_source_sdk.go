@@ -78,7 +78,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 			if elementsItem.DashboardElementVisualization.Search.SearchQueryInline != nil {
 				elements.DashboardElementVisualization.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
 				if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest != nil {
-					elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+					elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest1{}
 					if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str != nil {
 						elements.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Earliest.Str)
 					}
@@ -87,7 +87,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 					}
 				}
 				if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest != nil {
-					elements.DashboardElementVisualization.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+					elements.DashboardElementVisualization.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest1{}
 					if elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str != nil {
 						elements.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryInline.Latest.Str)
 					}
@@ -108,6 +108,39 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 				for _, v := range elementsItem.DashboardElementVisualization.Search.SearchQueryValues.Values {
 					elements.DashboardElementVisualization.Search.SearchQueryValues.Values = append(elements.DashboardElementVisualization.Search.SearchQueryValues.Values, types.StringValue(v))
 				}
+			}
+			if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric != nil {
+				elements.DashboardElementVisualization.Search.SearchQueryMetric = &tfTypes.SearchQueryMetric{}
+				if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest != nil {
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest = &tfTypes.SearchQueryEarliest2{}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Str)
+					}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Earliest.Number)
+					}
+				}
+				if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest != nil {
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest = &tfTypes.SearchQueryLatest2{}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Str)
+					}
+					if elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number != nil {
+						elements.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Latest.Number)
+					}
+				}
+				elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries = []tfTypes.PanelQueryDefinition{}
+
+				for _, queriesItem := range elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Queries {
+					var queries tfTypes.PanelQueryDefinition
+
+					queries.Alias = types.StringPointerValue(queriesItem.Alias)
+					queries.LocalID = types.StringValue(queriesItem.LocalID)
+					queries.Query = types.StringValue(queriesItem.Query)
+
+					elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries = append(elements.DashboardElementVisualization.Search.SearchQueryMetric.Queries, queries)
+				}
+				elements.DashboardElementVisualization.Search.SearchQueryMetric.Type = types.StringValue(string(elementsItem.DashboardElementVisualization.Search.SearchQueryMetric.Type))
 			}
 			elements.DashboardElementVisualization.Title = types.StringPointerValue(elementsItem.DashboardElementVisualization.Title)
 			if elementsItem.DashboardElementVisualization.TitleAction == nil {
@@ -154,7 +187,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 				if elementsItem.DashboardElementInput.Search.SearchQueryInline != nil {
 					elements.DashboardElementInput.Search.SearchQueryInline = &tfTypes.SearchQueryInline{}
 					if elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest != nil {
-						elements.DashboardElementInput.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest{}
+						elements.DashboardElementInput.Search.SearchQueryInline.Earliest = &tfTypes.SearchQueryEarliest1{}
 						if elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest.Str != nil {
 							elements.DashboardElementInput.Search.SearchQueryInline.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryInline.Earliest.Str)
 						}
@@ -163,7 +196,7 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 						}
 					}
 					if elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest != nil {
-						elements.DashboardElementInput.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest{}
+						elements.DashboardElementInput.Search.SearchQueryInline.Latest = &tfTypes.SearchQueryLatest1{}
 						if elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest.Str != nil {
 							elements.DashboardElementInput.Search.SearchQueryInline.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryInline.Latest.Str)
 						}
@@ -184,6 +217,39 @@ func (r *SearchDashboardDataSourceModel) RefreshFromSharedSearchDashboard(ctx co
 					for _, v := range elementsItem.DashboardElementInput.Search.SearchQueryValues.Values {
 						elements.DashboardElementInput.Search.SearchQueryValues.Values = append(elements.DashboardElementInput.Search.SearchQueryValues.Values, types.StringValue(v))
 					}
+				}
+				if elementsItem.DashboardElementInput.Search.SearchQueryMetric != nil {
+					elements.DashboardElementInput.Search.SearchQueryMetric = &tfTypes.SearchQueryMetric{}
+					if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest != nil {
+						elements.DashboardElementInput.Search.SearchQueryMetric.Earliest = &tfTypes.SearchQueryEarliest2{}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Str)
+						}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Earliest.Number)
+						}
+					}
+					if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest != nil {
+						elements.DashboardElementInput.Search.SearchQueryMetric.Latest = &tfTypes.SearchQueryLatest2{}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Str != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Latest.Str = types.StringPointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Str)
+						}
+						if elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Number != nil {
+							elements.DashboardElementInput.Search.SearchQueryMetric.Latest.Number = types.Float64PointerValue(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Latest.Number)
+						}
+					}
+					elements.DashboardElementInput.Search.SearchQueryMetric.Queries = []tfTypes.PanelQueryDefinition{}
+
+					for _, queriesItem1 := range elementsItem.DashboardElementInput.Search.SearchQueryMetric.Queries {
+						var queries1 tfTypes.PanelQueryDefinition
+
+						queries1.Alias = types.StringPointerValue(queriesItem1.Alias)
+						queries1.LocalID = types.StringValue(queriesItem1.LocalID)
+						queries1.Query = types.StringValue(queriesItem1.Query)
+
+						elements.DashboardElementInput.Search.SearchQueryMetric.Queries = append(elements.DashboardElementInput.Search.SearchQueryMetric.Queries, queries1)
+					}
+					elements.DashboardElementInput.Search.SearchQueryMetric.Type = types.StringValue(string(elementsItem.DashboardElementInput.Search.SearchQueryMetric.Type))
 				}
 			}
 			elements.DashboardElementInput.Title = types.StringPointerValue(elementsItem.DashboardElementInput.Title)

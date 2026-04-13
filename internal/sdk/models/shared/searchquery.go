@@ -9,6 +9,253 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
+type TypeMetric string
+
+const (
+	TypeMetricMetric TypeMetric = "metric"
+)
+
+func (e TypeMetric) ToPointer() *TypeMetric {
+	return &e
+}
+func (e *TypeMetric) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "metric":
+		*e = TypeMetric(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for TypeMetric: %v", v)
+	}
+}
+
+type SearchQueryEarliest2Type string
+
+const (
+	SearchQueryEarliest2TypeStr    SearchQueryEarliest2Type = "str"
+	SearchQueryEarliest2TypeNumber SearchQueryEarliest2Type = "number"
+)
+
+type SearchQueryEarliest2 struct {
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
+
+	Type SearchQueryEarliest2Type
+}
+
+func CreateSearchQueryEarliest2Str(str string) SearchQueryEarliest2 {
+	typ := SearchQueryEarliest2TypeStr
+
+	return SearchQueryEarliest2{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateSearchQueryEarliest2Number(number float64) SearchQueryEarliest2 {
+	typ := SearchQueryEarliest2TypeNumber
+
+	return SearchQueryEarliest2{
+		Number: &number,
+		Type:   typ,
+	}
+}
+
+func (u *SearchQueryEarliest2) UnmarshalJSON(data []byte) error {
+
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var str string = ""
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryEarliest2TypeStr,
+			Value: &str,
+		})
+	}
+
+	var number float64 = float64(0)
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryEarliest2TypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest2", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest2", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchQueryEarliest2Type)
+	switch best.Type {
+	case SearchQueryEarliest2TypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchQueryEarliest2TypeNumber:
+		u.Number = best.Value.(*float64)
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest2", string(data))
+}
+
+func (u SearchQueryEarliest2) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return utils.MarshalJSON(u.Str, "", true)
+	}
+
+	if u.Number != nil {
+		return utils.MarshalJSON(u.Number, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type SearchQueryEarliest2: all fields are null")
+}
+
+type SearchQueryLatest2Type string
+
+const (
+	SearchQueryLatest2TypeStr    SearchQueryLatest2Type = "str"
+	SearchQueryLatest2TypeNumber SearchQueryLatest2Type = "number"
+)
+
+type SearchQueryLatest2 struct {
+	Str    *string  `queryParam:"inline" union:"member"`
+	Number *float64 `queryParam:"inline" union:"member"`
+
+	Type SearchQueryLatest2Type
+}
+
+func CreateSearchQueryLatest2Str(str string) SearchQueryLatest2 {
+	typ := SearchQueryLatest2TypeStr
+
+	return SearchQueryLatest2{
+		Str:  &str,
+		Type: typ,
+	}
+}
+
+func CreateSearchQueryLatest2Number(number float64) SearchQueryLatest2 {
+	typ := SearchQueryLatest2TypeNumber
+
+	return SearchQueryLatest2{
+		Number: &number,
+		Type:   typ,
+	}
+}
+
+func (u *SearchQueryLatest2) UnmarshalJSON(data []byte) error {
+
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var str string = ""
+	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryLatest2TypeStr,
+			Value: &str,
+		})
+	}
+
+	var number float64 = float64(0)
+	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryLatest2TypeNumber,
+			Value: &number,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest2", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest2", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(SearchQueryLatest2Type)
+	switch best.Type {
+	case SearchQueryLatest2TypeStr:
+		u.Str = best.Value.(*string)
+		return nil
+	case SearchQueryLatest2TypeNumber:
+		u.Number = best.Value.(*float64)
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest2", string(data))
+}
+
+func (u SearchQueryLatest2) MarshalJSON() ([]byte, error) {
+	if u.Str != nil {
+		return utils.MarshalJSON(u.Str, "", true)
+	}
+
+	if u.Number != nil {
+		return utils.MarshalJSON(u.Number, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type SearchQueryLatest2: all fields are null")
+}
+
+type SearchQueryMetric struct {
+	Type     TypeMetric             `json:"type"`
+	Earliest *SearchQueryEarliest2  `json:"earliest,omitempty"`
+	Latest   *SearchQueryLatest2    `json:"latest,omitempty"`
+	Queries  []PanelQueryDefinition `json:"queries"`
+}
+
+func (s SearchQueryMetric) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SearchQueryMetric) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SearchQueryMetric) GetType() TypeMetric {
+	if s == nil {
+		return TypeMetric("")
+	}
+	return s.Type
+}
+
+func (s *SearchQueryMetric) GetEarliest() *SearchQueryEarliest2 {
+	if s == nil {
+		return nil
+	}
+	return s.Earliest
+}
+
+func (s *SearchQueryMetric) GetLatest() *SearchQueryLatest2 {
+	if s == nil {
+		return nil
+	}
+	return s.Latest
+}
+
+func (s *SearchQueryMetric) GetQueries() []PanelQueryDefinition {
+	if s == nil {
+		return []PanelQueryDefinition{}
+	}
+	return s.Queries
+}
+
 type TypeValues string
 
 const (
@@ -62,39 +309,39 @@ func (s *SearchQueryValues) GetValues() []string {
 	return s.Values
 }
 
-type SearchQueryEarliestType string
+type SearchQueryEarliest1Type string
 
 const (
-	SearchQueryEarliestTypeStr    SearchQueryEarliestType = "str"
-	SearchQueryEarliestTypeNumber SearchQueryEarliestType = "number"
+	SearchQueryEarliest1TypeStr    SearchQueryEarliest1Type = "str"
+	SearchQueryEarliest1TypeNumber SearchQueryEarliest1Type = "number"
 )
 
-type SearchQueryEarliest struct {
+type SearchQueryEarliest1 struct {
 	Str    *string  `queryParam:"inline" union:"member"`
 	Number *float64 `queryParam:"inline" union:"member"`
 
-	Type SearchQueryEarliestType
+	Type SearchQueryEarliest1Type
 }
 
-func CreateSearchQueryEarliestStr(str string) SearchQueryEarliest {
-	typ := SearchQueryEarliestTypeStr
+func CreateSearchQueryEarliest1Str(str string) SearchQueryEarliest1 {
+	typ := SearchQueryEarliest1TypeStr
 
-	return SearchQueryEarliest{
+	return SearchQueryEarliest1{
 		Str:  &str,
 		Type: typ,
 	}
 }
 
-func CreateSearchQueryEarliestNumber(number float64) SearchQueryEarliest {
-	typ := SearchQueryEarliestTypeNumber
+func CreateSearchQueryEarliest1Number(number float64) SearchQueryEarliest1 {
+	typ := SearchQueryEarliest1TypeNumber
 
-	return SearchQueryEarliest{
+	return SearchQueryEarliest1{
 		Number: &number,
 		Type:   typ,
 	}
 }
 
-func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
+func (u *SearchQueryEarliest1) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
 
@@ -102,7 +349,7 @@ func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  SearchQueryEarliestTypeStr,
+			Type:  SearchQueryEarliest1TypeStr,
 			Value: &str,
 		})
 	}
@@ -110,36 +357,36 @@ func (u *SearchQueryEarliest) UnmarshalJSON(data []byte) error {
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  SearchQueryEarliestTypeNumber,
+			Type:  SearchQueryEarliest1TypeNumber,
 			Value: &number,
 		})
 	}
 
 	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest1", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
 	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest1", string(data))
 	}
 
 	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(SearchQueryEarliestType)
+	u.Type = best.Type.(SearchQueryEarliest1Type)
 	switch best.Type {
-	case SearchQueryEarliestTypeStr:
+	case SearchQueryEarliest1TypeStr:
 		u.Str = best.Value.(*string)
 		return nil
-	case SearchQueryEarliestTypeNumber:
+	case SearchQueryEarliest1TypeNumber:
 		u.Number = best.Value.(*float64)
 		return nil
 	}
 
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest", string(data))
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryEarliest1", string(data))
 }
 
-func (u SearchQueryEarliest) MarshalJSON() ([]byte, error) {
+func (u SearchQueryEarliest1) MarshalJSON() ([]byte, error) {
 	if u.Str != nil {
 		return utils.MarshalJSON(u.Str, "", true)
 	}
@@ -148,42 +395,42 @@ func (u SearchQueryEarliest) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.Number, "", true)
 	}
 
-	return nil, errors.New("could not marshal union type SearchQueryEarliest: all fields are null")
+	return nil, errors.New("could not marshal union type SearchQueryEarliest1: all fields are null")
 }
 
-type SearchQueryLatestType string
+type SearchQueryLatest1Type string
 
 const (
-	SearchQueryLatestTypeStr    SearchQueryLatestType = "str"
-	SearchQueryLatestTypeNumber SearchQueryLatestType = "number"
+	SearchQueryLatest1TypeStr    SearchQueryLatest1Type = "str"
+	SearchQueryLatest1TypeNumber SearchQueryLatest1Type = "number"
 )
 
-type SearchQueryLatest struct {
+type SearchQueryLatest1 struct {
 	Str    *string  `queryParam:"inline" union:"member"`
 	Number *float64 `queryParam:"inline" union:"member"`
 
-	Type SearchQueryLatestType
+	Type SearchQueryLatest1Type
 }
 
-func CreateSearchQueryLatestStr(str string) SearchQueryLatest {
-	typ := SearchQueryLatestTypeStr
+func CreateSearchQueryLatest1Str(str string) SearchQueryLatest1 {
+	typ := SearchQueryLatest1TypeStr
 
-	return SearchQueryLatest{
+	return SearchQueryLatest1{
 		Str:  &str,
 		Type: typ,
 	}
 }
 
-func CreateSearchQueryLatestNumber(number float64) SearchQueryLatest {
-	typ := SearchQueryLatestTypeNumber
+func CreateSearchQueryLatest1Number(number float64) SearchQueryLatest1 {
+	typ := SearchQueryLatest1TypeNumber
 
-	return SearchQueryLatest{
+	return SearchQueryLatest1{
 		Number: &number,
 		Type:   typ,
 	}
 }
 
-func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
+func (u *SearchQueryLatest1) UnmarshalJSON(data []byte) error {
 
 	var candidates []utils.UnionCandidate
 
@@ -191,7 +438,7 @@ func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
 	var str string = ""
 	if err := utils.UnmarshalJSON(data, &str, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  SearchQueryLatestTypeStr,
+			Type:  SearchQueryLatest1TypeStr,
 			Value: &str,
 		})
 	}
@@ -199,36 +446,36 @@ func (u *SearchQueryLatest) UnmarshalJSON(data []byte) error {
 	var number float64 = float64(0)
 	if err := utils.UnmarshalJSON(data, &number, "", true, nil); err == nil {
 		candidates = append(candidates, utils.UnionCandidate{
-			Type:  SearchQueryLatestTypeNumber,
+			Type:  SearchQueryLatest1TypeNumber,
 			Value: &number,
 		})
 	}
 
 	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest1", string(data))
 	}
 
 	// Pick the best candidate using multi-stage filtering
 	best := utils.PickBestUnionCandidate(candidates, data)
 	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest1", string(data))
 	}
 
 	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(SearchQueryLatestType)
+	u.Type = best.Type.(SearchQueryLatest1Type)
 	switch best.Type {
-	case SearchQueryLatestTypeStr:
+	case SearchQueryLatest1TypeStr:
 		u.Str = best.Value.(*string)
 		return nil
-	case SearchQueryLatestTypeNumber:
+	case SearchQueryLatest1TypeNumber:
 		u.Number = best.Value.(*float64)
 		return nil
 	}
 
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest", string(data))
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQueryLatest1", string(data))
 }
 
-func (u SearchQueryLatest) MarshalJSON() ([]byte, error) {
+func (u SearchQueryLatest1) MarshalJSON() ([]byte, error) {
 	if u.Str != nil {
 		return utils.MarshalJSON(u.Str, "", true)
 	}
@@ -237,7 +484,7 @@ func (u SearchQueryLatest) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.Number, "", true)
 	}
 
-	return nil, errors.New("could not marshal union type SearchQueryLatest: all fields are null")
+	return nil, errors.New("could not marshal union type SearchQueryLatest1: all fields are null")
 }
 
 type TypeInline string
@@ -264,8 +511,8 @@ func (e *TypeInline) UnmarshalJSON(data []byte) error {
 }
 
 type SearchQueryInline struct {
-	Earliest *SearchQueryEarliest `json:"earliest,omitempty"`
-	Latest   *SearchQueryLatest   `json:"latest,omitempty"`
+	Earliest *SearchQueryEarliest1 `json:"earliest,omitempty"`
+	Latest   *SearchQueryLatest1   `json:"latest,omitempty"`
 	// Parent search ID for the search query. Optional.
 	ParentSearchID *string `default:"" json:"parentSearchId"`
 	Query          string  `json:"query"`
@@ -286,14 +533,14 @@ func (s *SearchQueryInline) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SearchQueryInline) GetEarliest() *SearchQueryEarliest {
+func (s *SearchQueryInline) GetEarliest() *SearchQueryEarliest1 {
 	if s == nil {
 		return nil
 	}
 	return s.Earliest
 }
 
-func (s *SearchQueryInline) GetLatest() *SearchQueryLatest {
+func (s *SearchQueryInline) GetLatest() *SearchQueryLatest1 {
 	if s == nil {
 		return nil
 	}
@@ -410,12 +657,14 @@ const (
 	SearchQueryTypeSearchQuerySaved  SearchQueryType = "SearchQuery_Saved"
 	SearchQueryTypeSearchQueryInline SearchQueryType = "SearchQuery_Inline"
 	SearchQueryTypeSearchQueryValues SearchQueryType = "SearchQuery_Values"
+	SearchQueryTypeSearchQueryMetric SearchQueryType = "SearchQuery_Metric"
 )
 
 type SearchQuery struct {
 	SearchQuerySaved  *SearchQuerySaved  `queryParam:"inline" union:"member"`
 	SearchQueryInline *SearchQueryInline `queryParam:"inline" union:"member"`
 	SearchQueryValues *SearchQueryValues `queryParam:"inline" union:"member"`
+	SearchQueryMetric *SearchQueryMetric `queryParam:"inline" union:"member"`
 
 	Type SearchQueryType
 }
@@ -443,6 +692,15 @@ func CreateSearchQuerySearchQueryValues(searchQueryValues SearchQueryValues) Sea
 
 	return SearchQuery{
 		SearchQueryValues: &searchQueryValues,
+		Type:              typ,
+	}
+}
+
+func CreateSearchQuerySearchQueryMetric(searchQueryMetric SearchQueryMetric) SearchQuery {
+	typ := SearchQueryTypeSearchQueryMetric
+
+	return SearchQuery{
+		SearchQueryMetric: &searchQueryMetric,
 		Type:              typ,
 	}
 }
@@ -476,6 +734,14 @@ func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 		})
 	}
 
+	var searchQueryMetric SearchQueryMetric = SearchQueryMetric{}
+	if err := utils.UnmarshalJSON(data, &searchQueryMetric, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  SearchQueryTypeSearchQueryMetric,
+			Value: &searchQueryMetric,
+		})
+	}
+
 	if len(candidates) == 0 {
 		return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQuery", string(data))
 	}
@@ -498,6 +764,9 @@ func (u *SearchQuery) UnmarshalJSON(data []byte) error {
 	case SearchQueryTypeSearchQueryValues:
 		u.SearchQueryValues = best.Value.(*SearchQueryValues)
 		return nil
+	case SearchQueryTypeSearchQueryMetric:
+		u.SearchQueryMetric = best.Value.(*SearchQueryMetric)
+		return nil
 	}
 
 	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SearchQuery", string(data))
@@ -514,6 +783,10 @@ func (u SearchQuery) MarshalJSON() ([]byte, error) {
 
 	if u.SearchQueryValues != nil {
 		return utils.MarshalJSON(u.SearchQueryValues, "", true)
+	}
+
+	if u.SearchQueryMetric != nil {
+		return utils.MarshalJSON(u.SearchQueryMetric, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type SearchQuery: all fields are null")

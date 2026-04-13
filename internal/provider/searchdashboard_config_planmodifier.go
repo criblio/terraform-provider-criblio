@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -14,6 +15,14 @@ import (
 // placeholders) while prior state has no config after Read — that mismatch causes perpetual
 // updates. When config is omitted in HCL, prefer prior state; otherwise strip null-like entries.
 type searchDashboardConfigMapPlanModifier struct{}
+
+// isJSONNullNormalized reports Terraform null/unknown or a normalized JSON null value.
+func isJSONNullNormalized(nv jsontypes.Normalized) bool {
+	if nv.IsNull() || nv.IsUnknown() {
+		return true
+	}
+	return strings.TrimSpace(nv.ValueString()) == "null"
+}
 
 func searchDashboardConfigMapUseStateWhenNullOnly() planmodifier.Map {
 	return searchDashboardConfigMapPlanModifier{}
