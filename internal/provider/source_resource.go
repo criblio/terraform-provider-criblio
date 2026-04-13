@@ -38916,7 +38916,10 @@ func (r *SourceResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	// Where prior state had null for optional attributes, do not keep API defaults in refreshed
 	// state (avoids perpetual +/− plan drift when config omits those attributes).
-	resp.Diagnostics.Append(refreshPlanWithPreserve(ctx, item, &data, false)...)
+	// Exception: import only stores group_id and id; preserve=false would strip API-filled input_*
+	// blocks and plan would show spurious + for every nested input (see sourcePriorStateIsImportSparse).
+	preserveNullTargets := sourcePriorStateIsImportSparse(ctx, item)
+	resp.Diagnostics.Append(refreshPlanWithPreserve(ctx, item, &data, preserveNullTargets)...)
 
 	if resp.Diagnostics.HasError() {
 		return

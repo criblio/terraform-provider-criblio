@@ -5,9 +5,11 @@
 package provider
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 )
@@ -112,6 +114,30 @@ func cloneTypesStringSlice(s []types.String) []types.String {
 	out := make([]types.String, len(s))
 	copy(out, s)
 	return out
+}
+
+// sourcePriorStateIsImportSparse is true when state only carries identity (group_id, id) and
+// every other root attribute is null or unknown — e.g. right after terraform import.
+// refreshPlanWithPreserve(..., false) would then wipe API-filled root input_* blocks; callers
+// should pass preserve=true so the first refresh keeps full inputs and matches generated config.
+func sourcePriorStateIsImportSparse(ctx context.Context, st types.Object) bool {
+	tv, err := st.ToTerraformValue(ctx)
+	if err != nil || tv.IsNull() || !tv.IsKnown() || !tv.Type().Is(tftypes.Object{}) {
+		return false
+	}
+	var m map[string]tftypes.Value
+	if err := tv.As(&m); err != nil {
+		return false
+	}
+	for k, v := range m {
+		if k == "group_id" || k == "id" {
+			continue
+		}
+		if v.IsKnown() && !v.IsNull() {
+			return false
+		}
+	}
+	return true
 }
 
 func (r *SourceResourceModel) syncRootInputFromFirstItem() {
