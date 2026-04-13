@@ -92,6 +92,9 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 					result, _ := json.Marshal(value)
 					elements.DashboardElementVisualization.Config[key] = jsontypes.NewNormalizedValue(string(result))
 				}
+			} else {
+				// Match HCL `config = {}`: empty map in state, not null (avoids refresh drift vs omitted API keys).
+				elements.DashboardElementVisualization.Config = make(map[string]jsontypes.Normalized)
 			}
 			elements.DashboardElementVisualization.HidePanel = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HidePanel)
 			elements.DashboardElementVisualization.HorizontalChart = types.BoolPointerValue(elementsItem.DashboardElementVisualization.HorizontalChart)
@@ -342,7 +345,13 @@ func (r *SearchDashboardResourceModel) RefreshFromSharedSearchDashboard(ctx cont
 
 		r.Elements = append(r.Elements, elements)
 	}
-	if len(resp.Groups) > 0 {
+	switch {
+	case resp.Groups == nil:
+		r.Groups = nil
+	case len(resp.Groups) == 0:
+		// API may return `"groups": {}`; represent as empty map in state for Optional+Computed consistency.
+		r.Groups = make(map[string]tfTypes.DashboardGroups)
+	default:
 		r.Groups = make(map[string]tfTypes.DashboardGroups, len(resp.Groups))
 		for dashboardGroupsKey, dashboardGroupsValue := range resp.Groups {
 			var dashboardGroupsResult tfTypes.DashboardGroups
