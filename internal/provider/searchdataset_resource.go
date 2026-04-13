@@ -2038,6 +2038,9 @@ func (r *SearchDatasetResource) Schema(ctx context.Context, req resource.SchemaR
 			},
 			"cribl_search_dataset": schema.SingleNestedAttribute{
 				Optional: true,
+				// Computed: API/Read fills this one-of from type; omitting it in config must not
+				// plan a destructive null that Read then repopulates (inconsistent result / drift).
+				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"additional_properties": schema.StringAttribute{
 						CustomType:  jsontypes.NormalizedType{},
