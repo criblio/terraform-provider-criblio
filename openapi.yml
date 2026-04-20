@@ -47835,6 +47835,904 @@ components:
                 - Basic (credentials secret)
                 - SSL User Certificate
             x-speakeasy-unknown-values: allow
+        CountedDatasetRuleset:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DatasetRuleset'
+        CountedDatatypeRuleset:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DatatypeRuleset'
+        LocalSearchEngine:
+            type: object
+            properties:
+                activeWorkflow:
+                    type: string
+                    enum:
+                    - provisioning
+                    - resizing
+                    - termination
+                    example: resizing
+                    description: The provisioning workflow that is currently active for the lakehouse engine, if any.
+                    x-speakeasy-unknown-values: allow
+                    x-speakeasy-terraform-ignore: true
+                datasets:
+                    type: array
+                    items:
+                        type: string
+                    example:
+                    - main
+                    description: The <code>id</code> values for Datasets that are linked to the lakehouse engine.
+                    x-speakeasy-terraform-ignore: true
+                deletionStartedAt:
+                    type: integer
+                    example: 1700000000500
+                    description: Timestamp (in Unix time) when deletion was initiated for the lakehouse engine (if applicable), in
+                        milliseconds.
+                    x-speakeasy-terraform-ignore: true
+                description:
+                    type: string
+                    example: Primary ingestion engine for the default local Dataset.
+                    description: Brief description of the lakehouse engine.
+                effectiveStatus:
+                    type: string
+                    enum:
+                    - blocked
+                    - delayed
+                    - failed
+                    - provisioning
+                    - ready
+                    - resizing
+                    - terminated
+                    example: ready
+                    description: Operational status of the lakehouse engine, accounting for both the engine and its underlying Worker
+                        Group. If the engine is ready but the Worker Group is not, reflects the Worker Group status. If the engine
+                        is not ready, reflects the engine status regardless of the Worker Group status.
+                    x-speakeasy-unknown-values: allow
+                    x-speakeasy-terraform-ignore: true
+                engineType:
+                    type: string
+                    const: local
+                    example: local
+                    description: Type of engine. For lakehouse engines, always <code>local</code>.
+                    x-speakeasy-terraform-ignore: true
+                hasMain:
+                    type: boolean
+                    example: true
+                    description: If <code>true</code>, the lakehouse engine currently owns the main Dataset.
+                    x-speakeasy-terraform-ignore: true
+                id:
+                    type: string
+                    example: local_ingest_primary
+                isComputeDeprovisioned:
+                    type: boolean
+                    example: false
+                    description: If <code>true</code>, compute for the lakehouse engine has been deprovisioned after termination.
+                    x-speakeasy-terraform-ignore: true
+                isStorageDeprovisioned:
+                    type: boolean
+                    example: false
+                    description: If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned
+                        up after termination.
+                    x-speakeasy-terraform-ignore: true
+                lastProvisionedMs:
+                    type: integer
+                    example: 1700000000000
+                    description: Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.
+                    x-speakeasy-terraform-ignore: true
+                metricsLastPublishedAt:
+                    type: integer
+                    example: 1700000001000
+                    description: Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.
+                    x-speakeasy-terraform-ignore: true
+                status:
+                    type: string
+                    enum:
+                    - failed
+                    - provisioning
+                    - ready
+                    - terminated
+                    - delayed
+                    - blocked
+                    - resizing
+                    example: ready
+                    x-speakeasy-unknown-values: allow
+                    x-speakeasy-terraform-ignore: true
+                tierSize:
+                    allOf:
+                    - $ref: '#/components/schemas/EngineSize'
+                    example: small
+                    description: Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse
+                        engine. Configuring sizes <code>3xlarge</code>, <code>4xlarge</code>,<code>5xlarge</code>, and <code>6xlarge</code>
+                        requires the <code>cribl_operator</code> role.
+            required:
+            - engineType
+            - id
+            - tierSize
+            description: 'Lakehouse engine: provisioned storage and compute for ingest and search.'
+        EngineSize:
+            type: string
+            enum:
+            - 3xsmall
+            - 2xsmall
+            - xsmall
+            - small
+            - medium
+            - large
+            - xlarge
+            - 2xlarge
+            - 3xlarge
+            - 4xlarge
+            - 5xlarge
+            - 6xlarge
+            x-speakeasy-unknown-values: allow
+        DatasetRuleset:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Ruleset identifier.
+                    enum:
+                    - default
+                    example: default
+                rules:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DatasetRule'
+                    description: Rules evaluated in order for dataset routing and optional extend.
+            required:
+            - id
+            - rules
+            description: Ordered list of dataset rules for Local Search (<code>/search/local_search/dataset-rulesets</code>).
+        CountedLocalSearchSource:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LocalSearchSource'
+        DatatypeRuleset:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Unique identifier for this datatype ruleset. For Search Local Search, this value is always <code>default</code>.
+                    enum:
+                    - default
+                    example: default
+                rules:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DatatypeRule'
+                    description: Rules evaluated in order for datatype routing.
+            required:
+            - id
+            - rules
+            description: Ordered list of datatype rules for Local Search (<code>/search/local_search/datatype-rulesets</code>).
+            example:
+                id: default
+                rules:
+                - id: rule_1
+                  name: json events
+                  description: Route events where vendor is cribl to generic_ndjson
+                  disabled: false
+                  kustoExpression: vendor == "cribl"
+                  datatype: generic_ndjson
+        CountedLocalSearchEngine:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    description: number of items present in the items array
+                    x-speakeasy-ignore: true
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LocalSearchEngine'
+        LocalSearchSourceWefSubscriptionItem:
+            type: object
+            description: WEF subscription entry for Local Search sources when <code>type</code> is <code>wef</code>.
+            required:
+            - subscriptionName
+            - contentFormat
+            - heartbeatInterval
+            - batchTimeout
+            - targets
+            properties:
+                subscriptionName:
+                    type: string
+                    description: Subscription name exposed to Windows clients.
+                version:
+                    type: string
+                    description: Version UUID for this subscription; changes when subscription parameters change.
+                contentFormat:
+                    type: string
+                    enum:
+                    - Raw
+                    - RenderedText
+                    description: Content format for delivered events.
+                    x-speakeasy-unknown-values: allow
+                heartbeatInterval:
+                    type: number
+                    minimum: 1
+                    description: Maximum seconds between endpoint check-ins before marking unavailable.
+                batchTimeout:
+                    type: number
+                    minimum: 0
+                    description: Seconds to collect events before sending to Cribl.
+                readExistingEvents:
+                    type: boolean
+                    description: Send previously existing events for new subscriptions.
+                sendBookmarks:
+                    type: boolean
+                    description: Track received events for resume after re-subscription.
+                compress:
+                    type: boolean
+                    description: Receive compressed events from the source.
+                targets:
+                    type: array
+                    description: DNS names of endpoints that forward these events (wildcards allowed).
+                    items:
+                        type: string
+                        minLength: 1
+                locale:
+                    type: string
+                    description: RFC 3066 locale for Windows clients (e.g. en-US).
+                querySelector:
+                    type: string
+                    enum:
+                    - simple
+                    - xml
+                    x-speakeasy-unknown-values: allow
+                metadata:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ItemsTypeMetadata'
+                queries:
+                    type: array
+                    items:
+                        type: object
+                        required:
+                        - path
+                        - queryExpression
+                        properties:
+                            path:
+                                type: string
+                            queryExpression:
+                                type: string
+                xmlQuery:
+                    type: string
+                id:
+                    type: string
+        LocalSearchSource:
+            type: object
+            properties:
+                authTokens:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            description:
+                                type: string
+                                description: Optional label for this token.
+                            enabled:
+                                type: boolean
+                                description: When false, the token is rejected.
+                            token:
+                                type: string
+                                description: Secret token string clients must present.
+                        required:
+                        - token
+                    description: Optional bearer or shared tokens accepted by this source.
+                description:
+                    type: string
+                    description: Optional description shown in configuration UIs.
+                disabled:
+                    type: boolean
+                    description: When true, the source does not accept new connections.
+                host:
+                    type: string
+                    description: Bind address for the listener.
+                id:
+                    type: string
+                    description: Source configuration id.
+                port:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+                    description: |-
+                        TCP port when the source type uses a single port field. Must be a valid listener port (1–65535). Each port may be used by at most one Local Search source at a time for the same host and protocol: the same port cannot be shared across different sources or different <code>type</code> values. In Cribl Cloud, the UI only lists ports from the workspace pre-provisioned pool (the set varies by environment; Splunk HEC commonly defaults to 8088). Ports already in use by another source, or outside the pool, are rejected by the API—pick an available port from the UI or API.
+                    example: 8088
+                splunkHecAPI:
+                    type: string
+                    description: Absolute path for Splunk HTTP Event Collector (HEC) API requests. Required when <code>type</code> is <code>splunk_hec</code> (for example <code>/services/collector</code>).
+                    pattern: ^/|^$
+                    example: /services/collector
+                splunkHecAcks:
+                    type: boolean
+                    description: When true, enable Splunk HEC acknowledgements. Used when <code>type</code> is <code>splunk_hec</code>.
+                criblAPI:
+                    type: string
+                    description: Absolute path for Cribl HTTP API requests (for example <code>/cribl/_bulk</code>). Used when <code>type</code> is <code>cribl_http</code>.
+                    pattern: ^/|^$
+                    example: /cribl/_bulk
+                elasticAPI:
+                    type: string
+                    description: Absolute path for Elasticsearch bulk API requests. Used when <code>type</code> is <code>elastic</code> (for example <code>/elastic/_bulk</code>).
+                    pattern: ^/|^$
+                    example: /elastic/_bulk
+                prometheusAPI:
+                    type: string
+                    description: Absolute path for Prometheus remote write requests. Used when <code>type</code> is <code>prometheus_rw</code> (for example <code>/write</code>).
+                    pattern: ^/
+                    example: /write
+                tcpPort:
+                    type: integer
+                    minimum: 0
+                    maximum: 65535
+                    description: TCP listen port when the source type uses a dedicated TCP port (for example <code>syslog</code>).
+                udpPort:
+                    type: integer
+                    minimum: 0
+                    maximum: 65535
+                    description: UDP listen port when applicable (for example <code>syslog</code> or <code>prometheus_rw</code> when required by the deployment).
+                subscriptions:
+                    type: array
+                    description: WEF subscriptions; required when <code>type</code> is <code>wef</code>.
+                    items:
+                        $ref: '#/components/schemas/LocalSearchSourceWefSubscriptionItem'
+                status:
+                    type: object
+                    properties:
+                        health:
+                            type: string
+                            description: Summary health label for the source process.
+                        metrics:
+                            type: object
+                            properties:
+                                numEventProcessors:
+                                    type: integer
+                                    description: Active event processor tasks.
+                                numInProgress:
+                                    type: integer
+                                    description: Events currently being processed.
+                            required:
+                            - numEventProcessors
+                            - numInProgress
+                            description: Lightweight counters for in-flight work.
+                        timestamp:
+                            type: integer
+                            description: Epoch milliseconds when this snapshot was taken.
+                    x-speakeasy-terraform-ignore: true
+                    required:
+                    - health
+                    - metrics
+                    - timestamp
+                    description: Last known health snapshot from the worker, when available.
+                tls:
+                    $ref: '#/components/schemas/TLSConfig'
+                    description: TLS material and policy for this listener (shape varies by source type).
+                type:
+                    type: string
+                    enum:
+                    - cribl_http
+                    - datadog_agent
+                    - elastic
+                    - http_raw
+                    - open_telemetry
+                    - prometheus_rw
+                    - splunk
+                    - splunk_hec
+                    - syslog
+                    - tcp
+                    - tcpjson
+                    - wef
+                    - wiz_webhook
+                    description: Protocol discriminator selecting the ingest source protocol and listener shape.
+                    example: splunk_hec
+                    x-speakeasy-unknown-values: allow
+            required:
+            - host
+            - id
+            - type
+            description: 'Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (<code>/search/local_search/sources</code>).'
+            example:
+                id: in_splunk_hec_1
+                type: splunk_hec
+                host: 0.0.0.0
+                port: 8088
+                description: Splunk HEC ingest for Local Search
+                disabled: false
+                splunkHecAPI: /services/collector
+                splunkHecAcks: false
+                authTokens:
+                - description: Primary HEC token
+                  enabled: true
+                  token: replace-with-your-hec-token
+                tls:
+                    disabled: true
+        DatatypeRule:
+            type: object
+            properties:
+                datatype:
+                    type: string
+                    description: Target datatype id for events that match <code>kustoExpression</code>.
+                    example: generic_ndjson
+                description:
+                    type: string
+                    description: Human-readable description of the rule.
+                    example: Route events where vendor is cribl to generic_ndjson
+                disabled:
+                    type: boolean
+                    description: When true, the rule is ignored for routing.
+                    example: false
+                id:
+                    type: string
+                    description: Stable identifier for the rule.
+                    example: rule_1
+                kustoExpression:
+                    type: string
+                    description: Kusto predicate that selects events for this rule.
+                    example: vendor == "cribl"
+                name:
+                    type: string
+                    description: Display name of the rule.
+                    example: json events
+            required:
+            - datatype
+            - id
+            - kustoExpression
+            - name
+            description: Rule that assigns a datatype to matching events.
+        DatasetRule:
+            type: object
+            properties:
+                dataset:
+                    type: string
+                    description: Dataset id when routing to a dataset; meaning depends on <code>sendDataTo</code>.
+                    example: main
+                description:
+                    type: string
+                    description: Human-readable description of the rule.
+                    example: data catch all
+                disabled:
+                    type: boolean
+                    description: When true, the rule is ignored for routing.
+                    example: false
+                extendExpression:
+                    type: string
+                    description: KQL-style extend expression to add or transform fields on matched events.
+                    example: vendor = toupper(vendor)
+                extendExpressionEnabled:
+                    type: boolean
+                    description: Whether <code>extendExpression</code> is applied for this rule.
+                    example: true
+                id:
+                    type: string
+                    description: Stable identifier for the rule.
+                    example: default
+                kustoExpression:
+                    type: string
+                    description: Kusto predicate that selects events for this rule.
+                    example: '*'
+                name:
+                    type: string
+                    description: Display name of the rule.
+                    example: main
+                sendDataTo:
+                    type: string
+                    enum:
+                    - destinationDataset
+                    - drop
+                    description: Whether matching events are sent to a dataset or dropped (<code>destinationDataset</code> vs <code>drop</code>).
+                    example: destinationDataset
+                    x-speakeasy-unknown-values: allow
+            required:
+            - id
+            - kustoExpression
+            - name
+            description: Rule that routes matching events to a dataset, drops them, or applies an extend expression.
+        TLSConfig:
+            type: object
+            properties:
+                certPath:
+                    type: string
+                    description: Filesystem or cloud path to the certificate PEM.
+                disabled:
+                    type: boolean
+                    description: When true, TLS is not terminated on this listener.
+                minVersion:
+                    $ref: '#/components/schemas/SecureVersion'
+                    description: Minimum TLS protocol version.
+                    example: TLSv1.2
+                privKeyPath:
+                    type: string
+                    description: Filesystem or cloud path to the private key PEM.
+            required:
+            - disabled
+            description: TLS listener settings for Local Search sources (paths often use cloud substitution tokens).
+        SecureVersion:
+            type: string
+            enum:
+            - TLSv1.3
+            - TLSv1.2
+            - TLSv1.1
+            - TLSv1
+            x-speakeasy-unknown-values: allow
+    examples:
+        HecTokenExamplesHecToken:
+            summary: Basic Hec Token
+            value:
+                enabled: true
+                metadata:
+                -   name: fieldX
+                    value: valueX
+                token: '12345678901'
+        HecTokenExamplesHecTokenWithIndexAccess:
+            summary: Hec Token with allowed indexes
+            value:
+                enabled: true
+                allowedIndexesAtToken:
+                - myIndex6
+                token: '12345678901'
+        LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+            summary: Single Dataset ruleset object
+            description: Excerpt from an example response body that shows a single Dataset ruleset object from the <code>items</code>
+                array.
+            value:
+                id: default
+                rules:
+                -   id: default
+                    name: main
+                    description: data catch all
+                    kustoExpression: '*'
+                    sendDataTo: destinationDataset
+                    dataset: main
+        LocalSearchDatasetRulesetCreateExamplesDefaultShape:
+            summary: Create the default catch-all dataset ruleset.
+            description: Example request body for a ruleset that routes all events to the main dataset using a wildcard Kusto filter.
+            value:
+                id: default
+                rules:
+                -   id: default
+                    name: main
+                    description: data catch all
+                    kustoExpression: '*'
+                    sendDataTo: destinationDataset
+                    dataset: main
+        LocalSearchDatasetRulesetCreateExamplesMinimal:
+            summary: Create a dataset ruleset with one minimal rule.
+            description: Example request body for creating a dataset ruleset with required rule fields and a simple Kusto filter.
+            value:
+                id: custom_ruleset
+                rules:
+                -   id: rule_1
+                    name: security logs
+                    kustoExpression: vendor == "cribl"
+                    dataset: main
+        LocalSearchDatasetRulesetCreateExamplesWithExtendExpression:
+            summary: Create a ruleset whose rule transforms fields with a KQL extend.
+            description: Example request body for creating a dataset ruleset where a rule applies an extend expression to matched
+                events.
+            value:
+                id: custom_ruleset
+                rules:
+                -   id: enrich_vendor
+                    name: normalize vendor
+                    kustoExpression: isnotempty(vendor)
+                    dataset: main
+                    extendExpression: vendor = toupper(vendor)
+                    extendExpressionEnabled: true
+        LocalSearchDatasetRulesetUpdateExamplesAddRule:
+            summary: Append a second routing rule to an existing ruleset.
+            description: Example request body for updating a dataset ruleset so a narrower rule routes matching events to another
+                dataset.
+            value:
+                id: default
+                rules:
+                -   id: secondary
+                    name: secondary route
+                    kustoExpression: sourcetype == "test"
+                    dataset: secondary_ds
+                -   id: default
+                    name: main
+                    description: data catch all
+                    kustoExpression: '*'
+                    sendDataTo: destinationDataset
+                    dataset: main
+        LocalSearchDatasetRulesetUpdateExamplesMinimal:
+            summary: Replace the ruleset with a single minimal routing rule.
+            description: Example request body for updating a dataset ruleset to a minimal rule list with only required rule fields.
+            value:
+                id: default
+                rules:
+                -   id: rule_1
+                    name: security logs
+                    kustoExpression: vendor == "cribl"
+                    dataset: main
+        LocalSearchDatasetRulesetUpdateExamplesWithExtendExpression:
+            summary: Update rules to apply a KQL extend expression on match.
+            description: Example request body for updating a dataset ruleset so a rule enriches events using a KQL extend expression.
+            value:
+                id: default
+                rules:
+                -   id: enrich
+                    name: enrich vendor
+                    kustoExpression: isnotempty(vendor)
+                    dataset: main
+                    extendExpression: vendor = toupper(vendor)
+                    extendExpressionEnabled: true
+        LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+            summary: Single Datatype ruleset object
+            description: Excerpt from an example response body that shows a single Datatype ruleset object from the <code>items</code>
+                array.
+            value:
+                id: default
+                rules:
+                -   id: rule_for_palo_alto_traffic
+                    name: Filter for Palo Alto Traffic Syslogs
+                    description: For finding and parsing Palo Alto Traffic Syslogs
+                    kustoExpression: __inputId="cribl_http:pan_traffic_syslog"
+                    datatype: pan_traffic_syslog
+        LocalSearchDatatypeRulesetCreateExamplesDefaultShape:
+            summary: Create the default catch-all datatype ruleset.
+            description: Example request body for creating a datatype ruleset that assigns all events to a primary datatype using
+                a wildcard Kusto filter.
+            value:
+                id: default
+                rules:
+                -   id: default
+                    name: catch all
+                    description: datatype catch all
+                    kustoExpression: '*'
+                    datatype: generic_ndjson
+        LocalSearchDatatypeRulesetCreateExamplesEmptyRules:
+            summary: Create a ruleset with no rules yet.
+            description: Example request body for creating an empty datatype ruleset reserved for later rule configuration.
+            value:
+                id: draft
+                rules: []
+        LocalSearchDatatypeRulesetCreateExamplesMinimal:
+            summary: Create a datatype ruleset with one minimal rule.
+            description: Example request body for creating a datatype ruleset with required rule fields and a simple Kusto filter.
+            value:
+                id: default
+                rules:
+                -   id: rule_1
+                    name: json events
+                    kustoExpression: vendor == "cribl"
+                    datatype: generic_ndjson
+        LocalSearchDatatypeRulesetUpdateExamplesAddRule:
+            summary: Append a second datatype rule to an existing ruleset.
+            description: Example request body for updating a datatype ruleset so a narrower rule assigns matching events to another
+                datatype.
+            value:
+                id: default
+                rules:
+                -   id: secondary
+                    name: secondary datatype
+                    kustoExpression: sourcetype == "test"
+                    datatype: secondary_dt
+                -   id: default
+                    name: catch all
+                    description: datatype catch all
+                    kustoExpression: '*'
+                    datatype: generic_ndjson
+        LocalSearchDatatypeRulesetUpdateExamplesMinimal:
+            summary: Replace the ruleset with a single minimal datatype rule.
+            description: Example request body for updating a datatype ruleset to a minimal rule list with only required rule fields.
+            value:
+                id: default
+                rules:
+                -   id: rule_1
+                    name: security logs
+                    kustoExpression: vendor == "cribl"
+                    datatype: generic_ndjson
+        LocalSearchDatatypeRulesetUpdateExamplesWithDisabledRule:
+            summary: Update rules so one mapping is disabled.
+            description: Example request body for updating a datatype ruleset where a rule remains defined but is excluded from matching.
+            value:
+                id: default
+                rules:
+                -   id: inactive
+                    name: unused mapping
+                    kustoExpression: 'false'
+                    datatype: archive
+                    disabled: true
+        LocalSearchEngineCountedResponseExamplesSingleEngine:
+            summary: Single lakehouse engine object
+            description: Excerpt from an example response body that shows a single lakehouse engine object from the <code>items</code>
+                array.
+            value:
+                id: local_ingest_primary
+                engineType: local
+                tierSize: small
+                description: Primary ingestion engine for the default local Dataset.
+                status: ready
+                effectiveStatus: ready
+                lastProvisionedMs: 1700000000000
+                datasets:
+                - main
+                hasMain: true
+                isStorageDeprovisioned: false
+                isComputeDeprovisioned: false
+                metricsLastPublishedAt: 1700000001000
+        LocalSearchEngineCreateExamplesMediumWithDescription:
+            summary: Create engine with medium tier size
+            description: Example request body for creating and provisioning a lakehouse engine using the <code>medium</code> tier
+                size for storage and compute, including a description.
+            value:
+                id: local_ingest_analytics
+                engineType: local
+                tierSize: medium
+                description: Dedicated engine for analytics workloads
+        LocalSearchEngineCreateExamplesMinimal:
+            summary: Create engine with only required parameters
+            description: Example request body for creating and provisioning a lakehouse engine with only the required parameters and
+                no optional metadata.
+            value:
+                id: local_ingest_min
+                engineType: local
+                tierSize: xsmall
+        LocalSearchEngineMansionCreateExamplesLargeOpsTier:
+            summary: Create engine with an operator-only tier size and description
+            description: Example request body for creating and provisioning a lakehouse engine with an operator-only tier size for
+                storage and compute and a description.
+            value:
+                id: local_ops_bulk_ingest
+                engineType: local
+                tierSize: 4xlarge
+                description: High-capacity lakehouse engine provisioned by operators
+        LocalSearchEngineMansionCreateExamplesMinimal:
+            summary: Create engine with the smallest operator-only tier size
+            description: Example request body for creating and provisioning a lakehouse engine with only required fields and the smallest
+                available operator-only tier size for storage and compute.
+            value:
+                id: local_ops_min
+                engineType: local
+                tierSize: 3xlarge
+        LocalSearchEngineMansionUpdateExamplesResizeToOpsTier:
+            summary: Update engine to an operator-only tier size
+            description: Example request body for updating an existing lakehouse engine to an operator-only tier size for storage
+                and compute.<br/><br/>The request body must include a complete representation of the lakehouse engine that you want
+                to update. This endpoint does not support partial updates.
+            value:
+                id: local_ops_bulk_ingest
+                engineType: local
+                tierSize: 5xlarge
+        LocalSearchEngineUpdateExamplesResize:
+            summary: Resize the engine to a large tier.
+            description: Example request body for increasing capacity while keeping operator-only tiers on the mansion route.
+            value:
+                id: local_ingest_primary
+                engineType: local
+                tierSize: large
+        LocalSearchEngineUpdateExamplesUpdateDescription:
+            summary: Update engine description without changing tier size
+            description: Example request body for updating only the description for an existing lakehouse engine.<br/><br/>The request
+                body must include a complete representation of the lakehouse engine that you want to update. This endpoint does not
+                support partial updates.
+            value:
+                id: local_ingest_primary
+                engineType: local
+                tierSize: small
+                description: Engine after workload consolidation.
+        LocalSearchSourceCountedResponseExamplesSingleSource:
+            summary: Single lakehouse engine Source
+            description: Excerpt from an example response body that shows a single lakehouse engine Source object from the <code>items</code>
+                array.
+            value:
+                id: in_cribl_http_1
+                type: cribl_http
+                host: 0.0.0.0
+                port: 10200
+                description: Primary Cribl HTTP ingest for the Worker Group
+                tls:
+                    disabled: false
+                    minVersion: TLSv1.3
+        LocalSearchSourceCreateExamplesCriblHttp:
+            summary: Create a Cribl HTTP lakehouse engine Source
+            description: Example request body for creating a lakehouse engine Source that listens for Cribl HTTP events.
+            value:
+                id: in_cribl_http_1
+                type: cribl_http
+                host: 0.0.0.0
+                port: 10200
+                tls:
+                    disabled: false
+                    minVersion: TLSv1.3
+        LocalSearchSourceCreateExamplesCriblHttpWithDescription:
+            summary: Create a Cribl HTTP lakehouse engine Source with description
+            description: Example request body for creating a Cribl HTTP lakehouse engine Source with an optional description.
+            value:
+                id: in_cribl_http_primary
+                type: cribl_http
+                host: 0.0.0.0
+                port: 10200
+                description: Primary Cribl HTTP ingest for the Worker Group
+                tls:
+                    disabled: false
+                    minVersion: TLSv1.3
+        LocalSearchSourceCreateExamplesSplunkHec:
+            summary: Create a Splunk HEC lakehouse engine Source
+            description: Example request body for creating a lakehouse engine Source that listens for Splunk HTTP Event Collector
+                (HEC) events.
+            value:
+                id: in_splunk_hec_1
+                type: splunk_hec
+                host: 0.0.0.0
+                port: 8088
+                description: Splunk HEC ingest for Local Search
+                disabled: false
+                splunkHecAPI: /services/collector
+                splunkHecAcks: false
+                authTokens:
+                - description: Primary HEC token
+                  enabled: true
+                  token: replace-with-your-hec-token
+                tls:
+                    disabled: true
+        LocalSearchSourceCreateExamplesSyslogTcp:
+            summary: Create a Syslog lakehouse engine Source
+            description: Example request body for creating a Syslog lakehouse engine Source that listens on TCP.
+            value:
+                id: in_syslog_1
+                type: syslog
+                host: 0.0.0.0
+                tcpPort: 601
+        LocalSearchSourceUpdateExamplesCriblHttp:
+            summary: Update a Cribl HTTP lakehouse engine Source
+            description: Example request body for updating the description for an existing Cribl HTTP lakehouse engine Source.<br/><br/>The
+                request body must include a complete representation of the lakehouse engine Source that you want to update. This endpoint
+                does not support partial updates.
+            value:
+                id: in_cribl_http_1
+                type: cribl_http
+                host: 0.0.0.0
+                port: 10200
+                description: Ingest from connected Worker Group
+                tls:
+                    disabled: false
+                    minVersion: TLSv1.3
+        LocalSearchSourceUpdateExamplesSplunkHec:
+            summary: Update a Syslog lakehouse engine Source to enable UDP
+            description: Example request body for updating a Syslog lakehouse engine Source to add a UDP port.<br/><br/>The request
+                body must include a complete representation of the lakehouse engine Source that you want to update. This endpoint
+                does not support partial updates.
+            value:
+                id: in_splunk_hec_1
+                type: splunk_hec
+                host: 0.0.0.0
+                port: 8088
+                splunkHecAPI: /services/collector/event
+                splunkHecAcks: true
+        LocalSearchSourceUpdateExamplesSyslogTcp:
+            summary: Add a UDP listen port to a Syslog source.
+            description: Example request body for enabling UDP on an existing Syslog Local Search source.
+            value:
+                id: in_syslog_1
+                type: syslog
+                host: 0.0.0.0
+                tcpPort: 601
+                udpPort: 514
 security:
     - clientOauth: []
     - organizationId: []
@@ -53126,6 +54024,953 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+    /m/default_search/search/local_search/engines:
+        post:
+            operationId: createLocalSearchEngine
+            tags:
+            - search
+            summary: Create a Local Search engine (Cribl.Cloud only)
+            description: Creates a new Local Search engine (Cribl.Cloud only). Tier sizes reserved for operators must be created
+                through the mansion endpoint instead.
+            x-speakeasy-entity-operation: SearchEngine#create
+            responses:
+                '200':
+                    description: The created engine configuration
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchEngine object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchEngine'
+                        examples:
+                            LocalSearchEngineCreateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchEngineCreateExamplesMinimal'
+                            LocalSearchEngineCreateExamplesMediumWithDescription:
+                                $ref: '#/components/examples/LocalSearchEngineCreateExamplesMediumWithDescription'
+        get:
+            operationId: getLocalSearchEngine
+            tags:
+            - search
+            summary: List Local Search engines (Cribl.Cloud only)
+            description: Returns all configured Local Search engine instances, including lifecycle metadata and dataset attachments
+                (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchEngines#get
+            responses:
+                '200':
+                    description: Paginated engine configurations for Local Search
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: offset
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Starting point from which to retrieve results for this request. Use with <code>limit</code> to paginate
+                    the response into manageable batches.
+            -   name: limit
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Maximum number of Local Search engines to return in the response for this request. Use with <code>offset</code>
+                    to paginate the response into manageable batches.
+            x-speakeasy-pagination:
+                type: offsetLimit
+                inputs:
+                -   name: offset
+                    in: parameters
+                    type: offset
+                -   name: limit
+                    in: parameters
+                    type: limit
+                outputs:
+                    results: $.items
+    /m/default_search/search/local_search/engines/mansion:
+        post:
+            operationId: createSearchLocalSearchEnginesMansion
+            tags:
+            - search
+            summary: Create a Local Search engine (operator tiers) (Cribl.Cloud only)
+            description: Creates an engine using tier sizes reserved for <code>cribl_operator</code> (Cribl.Cloud only). Callers
+                without that role receive HTTP 403.
+            responses:
+                '200':
+                    description: The created engine configuration
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchEngine object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchEngine'
+                        examples:
+                            LocalSearchEngineMansionCreateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchEngineMansionCreateExamplesMinimal'
+                            LocalSearchEngineMansionCreateExamplesLargeOpsTier:
+                                $ref: '#/components/examples/LocalSearchEngineMansionCreateExamplesLargeOpsTier'
+    /m/default_search/search/local_search/engines/{id}:
+        delete:
+            operationId: deleteLocalSearchEngineById
+            tags:
+            - search
+            summary: Delete a Local Search engine (Cribl.Cloud only)
+            description: Marks the engine for termination (Cribl.Cloud only). When the engine owns the main dataset and other
+                engines exist, supply <code>mainDatasetDestinationEngine</code> to reassign it first.
+            x-speakeasy-entity-operation: SearchEngine#delete
+            responses:
+                '200':
+                    description: The engine marked for deletion
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search engine to delete.
+            -   name: mainDatasetDestinationEngine
+                in: query
+                required: false
+                schema:
+                    type: string
+                description: Target engine <code>id</code> that receives the main dataset when the deleted engine currently owns
+                    it.
+                x-speakeasy-terraform-ignore: true
+        get:
+            operationId: getLocalSearchEngineById
+            tags:
+            - search
+            summary: Get a Local Search engine (Cribl.Cloud only)
+            description: Returns the specified Local Search engine with datasets and ingest metadata expanded when available (Cribl.Cloud
+                only).
+            x-speakeasy-entity-operation: SearchEngine#read
+            responses:
+                '200':
+                    description: The requested Local Search engine
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search engine to get.
+        patch:
+            operationId: updateLocalSearchEngineById
+            tags:
+            - search
+            summary: Update a Local Search engine (Cribl.Cloud only)
+            description: Updates an existing engine (Cribl.Cloud only). Resizes to operator tiers must use the mansion endpoint
+                instead.
+            x-speakeasy-entity-operation: SearchEngine#update
+            responses:
+                '200':
+                    description: The updated engine configuration
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchEngine object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchEngine'
+                        examples:
+                            LocalSearchEngineUpdateExamplesResize:
+                                $ref: '#/components/examples/LocalSearchEngineUpdateExamplesResize'
+                            LocalSearchEngineUpdateExamplesUpdateDescription:
+                                $ref: '#/components/examples/LocalSearchEngineUpdateExamplesUpdateDescription'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search engine to update.
+    /m/default_search/search/local_search/engines/mansion/{id}:
+        patch:
+            operationId: updateSearchLocalSearchEnginesMansionById
+            tags:
+            - search
+            x-speakeasy-group: searches.localSearches.engines.mansions
+            x-speakeasy-name-override: update
+            x-cribl-internal: false
+            x-cribl-availability: cloud
+            summary: Resize a Local Search engine to operator tiers (Cribl.Cloud only)
+            description: Resizes an engine to a tier size reserved for <code>cribl_operator</code> (Cribl.Cloud only). Callers
+                without that role receive HTTP 403.
+            responses:
+                '200':
+                    description: The updated engine configuration
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchEngine'
+                            examples:
+                                LocalSearchEngineCountedResponseExamplesSingleEngine:
+                                    $ref: '#/components/examples/LocalSearchEngineCountedResponseExamplesSingleEngine'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchEngine object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchEngine'
+                        examples:
+                            LocalSearchEngineMansionUpdateExamplesResizeToOpsTier:
+                                $ref: '#/components/examples/LocalSearchEngineMansionUpdateExamplesResizeToOpsTier'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search engine to resize using operator tiers.
+    /m/default_search/search/local_search/dataset-rulesets:
+        post:
+            operationId: createDatasetRule
+            tags:
+            - search
+            x-speakeasy-group: searches.localSearches.datasetRulesets
+            x-speakeasy-name-override: create
+            x-cribl-internal: false
+            x-cribl-availability: cloud
+            summary: Create a lakehouse engine Dataset ruleset (Cribl.Cloud only)
+            description: Create a new lakehouse engine Dataset ruleset (Cribl.Cloud only).
+            responses:
+                '200':
+                    description: The created lakehouse engine Dataset ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatasetRuleset'
+                            examples:
+                                LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: DatasetRuleset object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DatasetRuleset'
+                        examples:
+                            LocalSearchDatasetRulesetCreateExamplesDefaultShape:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetCreateExamplesDefaultShape'
+                            LocalSearchDatasetRulesetCreateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetCreateExamplesMinimal'
+                            LocalSearchDatasetRulesetCreateExamplesWithExtendExpression:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetCreateExamplesWithExtendExpression'
+        get:
+            operationId: getDatasetRule
+            tags:
+            - search
+            x-speakeasy-group: searches.localSearches.datasetRulesets
+            x-speakeasy-name-override: list
+            x-cribl-internal: false
+            x-cribl-availability: cloud
+            summary: List lakehouse engine Dataset rulesets (Cribl.Cloud only)
+            description: Get a list of all lakehouse engine Dataset rulesets (Cribl.Cloud only).
+            responses:
+                '200':
+                    description: Paginated lakehouse engine Dataset ruleset configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatasetRuleset'
+                            examples:
+                                LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: offset
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Starting point from which to retrieve results for this request. Use with <code>limit</code> to paginate
+                    the response into manageable batches.
+            -   name: limit
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Maximum number of Dataset rulesets to return in the response for this request. Use with <code>offset</code>
+                    to paginate the response into manageable batches.
+            x-speakeasy-pagination:
+                type: offsetLimit
+                inputs:
+                -   name: offset
+                    in: parameters
+                    type: offset
+                -   name: limit
+                    in: parameters
+                    type: limit
+                outputs:
+                    results: $.items
+    /m/default_search/search/local_search/dataset-rulesets/default:
+        delete:
+            operationId: deleteDatasetRuleById
+            tags:
+            - search
+            summary: Delete a lakehouse engine Dataset ruleset (Cribl.Cloud only)
+            description: Delete the specified lakehouse engine Dataset ruleset (Cribl.Cloud only).
+            responses:
+                '200':
+                    description: Deleted Dataset ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatasetRuleset'
+                            examples:
+                                LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        get:
+            operationId: getDatasetRuleById
+            tags:
+            - search
+            summary: Get a lakehouse engine Dataset ruleset (Cribl.Cloud only)
+            description: Get the specified lakehouse engine Dataset ruleset, including its ordered rule list (Cribl.Cloud only).
+            responses:
+                '200':
+                    description: The requested lakehouse engine Dataset ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatasetRuleset'
+                            examples:
+                                LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        patch:
+            operationId: updateDatasetRuleById
+            tags:
+            - search
+            summary: Update a lakehouse engine Dataset ruleset (Cribl.Cloud only)
+            description: Update the specified lakehouse engine Dataset ruleset (Cribl.Cloud only).Provide a complete representation
+                of the Dataset ruleset that you want to update in the request body. This endpoint does not support partial updates.
+                Cribl removes any omitted fields when updating the Dataset ruleset.<br/><br/>Confirm that the configuration in
+                your request body is correct before sending the request. If the configuration is incorrect, the updated Dataset
+                ruleset might not function as expected.
+            x-speakeasy-entity-operation: SearchDatasetRuleset#create,update,delete
+            responses:
+                '200':
+                    description: The updated lakehouse engine Dataset ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatasetRuleset'
+                            examples:
+                                LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatasetRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: DatasetRuleset object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DatasetRuleset'
+                        examples:
+                            LocalSearchDatasetRulesetUpdateExamplesAddRule:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetUpdateExamplesAddRule'
+                            LocalSearchDatasetRulesetUpdateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetUpdateExamplesMinimal'
+                            LocalSearchDatasetRulesetUpdateExamplesWithExtendExpression:
+                                $ref: '#/components/examples/LocalSearchDatasetRulesetUpdateExamplesWithExtendExpression'
+    /m/default_search/search/local_search/datatype-rulesets:
+        post:
+            operationId: createDatatypeRule
+            tags:
+            - search
+            summary: Create a lakehouse engine Datatype ruleset (Cribl.Cloud only)
+            description: Create a new lakehouse engine Datatype ruleset (Cribl.Cloud only). Terraform manages rulesets via PATCH on <code>…/datatype-rulesets/{id}</code> (see <code>SearchDatatypeRuleset#create,update,delete</code>); this POST remains for direct API clients.
+            responses:
+                '200':
+                    description: The created lakehouse engine Datatype ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatatypeRuleset'
+                            examples:
+                                LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: DatatypeRuleset object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DatatypeRuleset'
+                        examples:
+                            LocalSearchDatatypeRulesetCreateExamplesDefaultShape:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetCreateExamplesDefaultShape'
+                            LocalSearchDatatypeRulesetCreateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetCreateExamplesMinimal'
+                            LocalSearchDatatypeRulesetCreateExamplesEmptyRules:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetCreateExamplesEmptyRules'
+        get:
+            operationId: getDatatypeRule
+            tags:
+            - search
+            summary: List lakehouse engine Datatype rulesets (Cribl.Cloud only)
+            description: Get a list of all lakehouse engine Datatype rulesets (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchDatatypeRulesets#get
+            responses:
+                '200':
+                    description: Paginated lakehouse engine Datatype ruleset configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatatypeRuleset'
+                            examples:
+                                LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: offset
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Starting point from which to retrieve results for this request. Use with <code>limit</code> to paginate
+                    the response into manageable batches.
+            -   name: limit
+                in: query
+                required: false
+                schema:
+                    type: integer
+                description: Maximum number of Datatype rulesets to return in the response for this request. Use with <code>offset</code>
+                    to paginate the response into manageable batches.
+            x-speakeasy-pagination:
+                type: offsetLimit
+                inputs:
+                -   name: offset
+                    in: parameters
+                    type: offset
+                -   name: limit
+                    in: parameters
+                    type: limit
+                outputs:
+                    results: $.items
+    /m/default_search/search/local_search/datatype-rulesets/default:
+        delete:
+            operationId: deleteDatatypeRuleById
+            tags:
+            - search
+            summary: Delete a lakehouse engine Datatype ruleset (Cribl.Cloud only)
+            description: |-
+                Delete the specified lakehouse engine Datatype ruleset from configuration (Cribl.Cloud only).
+                Terraform resource lifecycle for <code>SearchDatatypeRuleset</code> maps create/update/destroy to <code>x-speakeasy-entity-operation</code> on <code>PATCH …/datatype-rulesets/default</code> only; this HTTP <code>DELETE</code> remains for direct API clients and is not a separate entity operation (avoids duplicate <code>#delete</code> with <code>#create,update,delete</code>).
+            responses:
+                '200':
+                    description: Deleted lakehouse engine Datatype ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatatypeRuleset'
+                            examples:
+                                LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        get:
+            operationId: getDatatypeRuleById
+            tags:
+            - search
+            summary: Get a lakehouse engine Datatype ruleset (Cribl.Cloud only)
+            description: |-
+                Get the specified lakehouse engine Datatype ruleset, including its ordered rule list (Cribl.Cloud only). The Datatyping UI reads <code>id=default</code>.
+            x-speakeasy-entity-operation: SearchDatatypeRuleset#get
+            responses:
+                '200':
+                    description: The requested lakehouse engine Datatype ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatatypeRuleset'
+                            examples:
+                                LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        patch:
+            operationId: updateDatatypeRuleById
+            tags:
+            - search
+            summary: Update a lakehouse engine Datatype ruleset (Cribl.Cloud only)
+            description: |-
+                Update the specified lakehouse engine Datatype ruleset (Cribl.Cloud only). To change the rules shown in the Search <strong>Get Data In</strong> &rarr; <strong>Datatyping</strong> UI, call this operation with path parameter <code>id=default</code> (same URL the UI uses for save). Provide a complete representation of the Datatype ruleset in the request body. This endpoint does not support partial updates: Cribl removes any omitted fields when updating the Datatype ruleset.
+
+                Confirm that the configuration in your request body is correct before sending the request. If the configuration is incorrect, the updated Datatype ruleset might not function as expected.
+            x-speakeasy-entity-operation: SearchDatatypeRuleset#create,update,delete
+            responses:
+                '200':
+                    description: The updated Datatype ruleset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedDatatypeRuleset'
+                            examples:
+                                LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset:
+                                    $ref: '#/components/examples/LocalSearchDatatypeRulesetCountedResponseExamplesSingleRuleset'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: DatatypeRuleset object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DatatypeRuleset'
+                        examples:
+                            LocalSearchDatatypeRulesetUpdateExamplesAddRule:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetUpdateExamplesAddRule'
+                            LocalSearchDatatypeRulesetUpdateExamplesMinimal:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetUpdateExamplesMinimal'
+                            LocalSearchDatatypeRulesetUpdateExamplesWithDisabledRule:
+                                $ref: '#/components/examples/LocalSearchDatatypeRulesetUpdateExamplesWithDisabledRule'
+    /m/default_search/search/local_search/sources:
+        post:
+            operationId: createSearchLocalSearchSources
+            tags:
+            - search
+            summary: Create a Local Search source (Cribl.Cloud only)
+            description: Creates a source on Local Search using a supported type; bind address and several per-type defaults are
+                enforced server-side (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchSource#create
+            responses:
+                '200':
+                    description: The created Local Search source configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchSource object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchSource'
+                        examples:
+                            LocalSearchSourceCreateExamplesCriblHttp:
+                                $ref: '#/components/examples/LocalSearchSourceCreateExamplesCriblHttp'
+                            LocalSearchSourceCreateExamplesCriblHttpWithDescription:
+                                $ref: '#/components/examples/LocalSearchSourceCreateExamplesCriblHttpWithDescription'
+                            LocalSearchSourceCreateExamplesSplunkHec:
+                                $ref: '#/components/examples/LocalSearchSourceCreateExamplesSplunkHec'
+                            LocalSearchSourceCreateExamplesSyslogTcp:
+                                $ref: '#/components/examples/LocalSearchSourceCreateExamplesSyslogTcp'
+        get:
+            operationId: getSearchLocalSearchSources
+            tags:
+            - search
+            summary: List Local Search sources (Cribl.Cloud only)
+            description: Returns supported Local Search sources configured, including connection endpoints and health metadata
+                when available (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchSources#get
+            responses:
+                '200':
+                    description: Paginated Local Search source configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /m/default_search/search/local_search/sources/{id}:
+        delete:
+            operationId: deleteSearchLocalSearchSourcesById
+            tags:
+            - search
+            summary: Delete a Local Search source (Cribl.Cloud only)
+            description: Deletes the specified source when it exists (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchSource#delete
+            responses:
+                '200':
+                    description: The sources returned after deletion
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search source to delete.
+        get:
+            operationId: getSearchLocalSearchSourcesById
+            tags:
+            - search
+            summary: Get a Local Search source (Cribl.Cloud only)
+            description: Returns the specified Local Search source when it exists and uses a supported source type (Cribl.Cloud
+                only).
+            x-speakeasy-entity-operation: SearchSource#get
+            responses:
+                '200':
+                    description: The requested Local Search source in a single-item list
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search source to get.
+        patch:
+            operationId: updateSearchLocalSearchSourcesById
+            tags:
+            - search
+            summary: Update a Local Search source (Cribl.Cloud only)
+            description: Updates an existing supported Local Search source (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchSource#update
+            responses:
+                '200':
+                    description: The updated Local Search source configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: LocalSearchSource object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LocalSearchSource'
+                        examples:
+                            LocalSearchSourceUpdateExamplesCriblHttp:
+                                $ref: '#/components/examples/LocalSearchSourceUpdateExamplesCriblHttp'
+                            LocalSearchSourceUpdateExamplesSplunkHec:
+                                $ref: '#/components/examples/LocalSearchSourceUpdateExamplesSplunkHec'
+                            LocalSearchSourceUpdateExamplesSyslogTcp:
+                                $ref: '#/components/examples/LocalSearchSourceUpdateExamplesSyslogTcp'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Local Search source to update.
+    /m/default_search/search/local_search/sources/{id}/hectoken:
+        post:
+            operationId: createSearchLocalSearchSourcesHecTokenById
+            tags:
+            - search
+            summary: Add an HEC token to a Splunk HEC Local Search source (Cribl.Cloud only)
+            description: Adds an HEC token with optional metadata to an existing <code>splunk_hec</code> Local Search source (Cribl.Cloud
+                only).
+            responses:
+                '200':
+                    description: Updated Splunk HEC source configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: AddHecTokenRequest object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddHecTokenRequest'
+                        examples:
+                            HecTokenExamplesHecToken:
+                                $ref: '#/components/examples/HecTokenExamplesHecToken'
+                            HecTokenExamplesHecTokenWithIndexAccess:
+                                $ref: '#/components/examples/HecTokenExamplesHecTokenWithIndexAccess'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Splunk HEC Local Search source receiving this token.
+    /m/default_search/search/local_search/sources/{id}/hectoken/{token}:
+        patch:
+            operationId: updateSearchLocalSearchSourcesHecTokenByIdAndToken
+            tags:
+            - search
+            summary: Update an HEC token on a Splunk HEC Local Search source (Cribl.Cloud only)
+            description: Updates metadata or enabled state for an existing HEC token on a <code>splunk_hec</code> Local Search
+                source (Cribl.Cloud only).
+            responses:
+                '200':
+                    description: Updated Splunk HEC source configurations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CountedLocalSearchSource'
+                            examples:
+                                LocalSearchSourceCountedResponseExamplesSingleSource:
+                                    $ref: '#/components/examples/LocalSearchSourceCountedResponseExamplesSingleSource'
+                '401':
+                    description: Unauthorized
+                '500':
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+            requestBody:
+                description: UpdateHecTokenRequest object
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateHecTokenRequest'
+                        examples:
+                            HecTokenExamplesHecToken:
+                                $ref: '#/components/examples/HecTokenExamplesHecToken'
+                            HecTokenExamplesHecTokenWithIndexAccess:
+                                $ref: '#/components/examples/HecTokenExamplesHecTokenWithIndexAccess'
+            parameters:
+            -   name: id
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The <code>id</code> of the Splunk HEC Local Search source that owns this token.
+            -   name: token
+                in: path
+                required: true
+                schema:
+                    type: string
+                description: The existing HEC token string to update on the Splunk HEC source.
     /search/datasets/{id}/acl:
         get:
             operationId: getDatasetAclById

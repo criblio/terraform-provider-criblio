@@ -25,6 +25,10 @@ internal/provider/types/pipeline_function_conf.go
 internal/sdk/models/shared/pipelinefunctionconf.go
 internal/sdk/models/shared/genericdataset.go
 internal/provider/searchdataset_resource_sdk.go
+internal/provider/searchdatasetruleset_resource.go
+internal/provider/searchdatasetruleset_delete.go
+internal/provider/searchdatatyperuleset_resource.go
+internal/provider/searchdatatyperuleset_delete.go
 internal/provider/searchdataset_resource.go
 internal/provider/searchdatasetprovider_data_source_sdk.go
 internal/provider/searchdatasetprovider_resource_sdk.go

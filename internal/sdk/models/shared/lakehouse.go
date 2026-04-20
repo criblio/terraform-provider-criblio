@@ -8,23 +8,23 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-// TierSize - Size of the lakehouse tier
-type TierSize string
+// LakehouseTierSize - Size of the lakehouse tier
+type LakehouseTierSize string
 
 const (
-	TierSizeSmall       TierSize = "small"
-	TierSizeMedium      TierSize = "medium"
-	TierSizeLarge       TierSize = "large"
-	TierSizeXlarge      TierSize = "xlarge"
-	TierSizeTwoxlarge   TierSize = "2xlarge"
-	TierSizeThreexlarge TierSize = "3xlarge"
-	TierSizeSixxlarge   TierSize = "6xlarge"
+	LakehouseTierSizeSmall       LakehouseTierSize = "small"
+	LakehouseTierSizeMedium      LakehouseTierSize = "medium"
+	LakehouseTierSizeLarge       LakehouseTierSize = "large"
+	LakehouseTierSizeXlarge      LakehouseTierSize = "xlarge"
+	LakehouseTierSizeTwoxlarge   LakehouseTierSize = "2xlarge"
+	LakehouseTierSizeThreexlarge LakehouseTierSize = "3xlarge"
+	LakehouseTierSizeSixxlarge   LakehouseTierSize = "6xlarge"
 )
 
-func (e TierSize) ToPointer() *TierSize {
+func (e LakehouseTierSize) ToPointer() *LakehouseTierSize {
 	return &e
 }
-func (e *TierSize) UnmarshalJSON(data []byte) error {
+func (e *LakehouseTierSize) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -43,10 +43,10 @@ func (e *TierSize) UnmarshalJSON(data []byte) error {
 	case "3xlarge":
 		fallthrough
 	case "6xlarge":
-		*e = TierSize(v)
+		*e = LakehouseTierSize(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TierSize: %v", v)
+		return fmt.Errorf("invalid value for LakehouseTierSize: %v", v)
 	}
 }
 
@@ -58,7 +58,7 @@ type Lakehouse struct {
 	// Status of the lakehouse
 	Status *string `json:"status,omitempty"`
 	// Size of the lakehouse tier
-	TierSize *TierSize `default:"small" json:"tierSize"`
+	TierSize *LakehouseTierSize `default:"small" json:"tierSize"`
 }
 
 func (l Lakehouse) MarshalJSON() ([]byte, error) {
@@ -93,7 +93,7 @@ func (l *Lakehouse) GetStatus() *string {
 	return l.Status
 }
 
-func (l *Lakehouse) GetTierSize() *TierSize {
+func (l *Lakehouse) GetTierSize() *LakehouseTierSize {
 	if l == nil {
 		return nil
 	}

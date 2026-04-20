@@ -6895,10 +6895,10 @@ func (r *SourceResourceModel) RefreshFromOperationsCreateInputResponseBody(ctx c
 
 						subscriptions.Metadata = append(subscriptions.Metadata, metadata62)
 					}
-					subscriptions.Queries = []tfTypes.Query{}
+					subscriptions.Queries = []tfTypes.InputWefQuery{}
 
 					for _, queriesItem := range subscriptionsItem.Queries {
-						var queries tfTypes.Query
+						var queries tfTypes.InputWefQuery
 
 						queries.Path = types.StringValue(queriesItem.Path)
 						queries.QueryExpression = types.StringValue(queriesItem.QueryExpression)
@@ -14512,10 +14512,10 @@ func (r *SourceResourceModel) RefreshFromOperationsGetInputByIDResponseBody(ctx 
 
 						subscriptions.Metadata = append(subscriptions.Metadata, metadata62)
 					}
-					subscriptions.Queries = []tfTypes.Query{}
+					subscriptions.Queries = []tfTypes.InputWefQuery{}
 
 					for _, queriesItem := range subscriptionsItem.Queries {
-						var queries tfTypes.Query
+						var queries tfTypes.InputWefQuery
 
 						queries.Path = types.StringValue(queriesItem.Path)
 						queries.QueryExpression = types.StringValue(queriesItem.QueryExpression)
@@ -22129,10 +22129,10 @@ func (r *SourceResourceModel) RefreshFromOperationsUpdateInputByIDResponseBody(c
 
 						subscriptions.Metadata = append(subscriptions.Metadata, metadata62)
 					}
-					subscriptions.Queries = []tfTypes.Query{}
+					subscriptions.Queries = []tfTypes.InputWefQuery{}
 
 					for _, queriesItem := range subscriptionsItem.Queries {
-						var queries tfTypes.Query
+						var queries tfTypes.InputWefQuery
 
 						queries.Path = types.StringValue(queriesItem.Path)
 						queries.QueryExpression = types.StringValue(queriesItem.QueryExpression)
@@ -42432,7 +42432,7 @@ func (r *SourceResourceModel) ToSharedInputUnion2(ctx context.Context) (*shared.
 					Value: value74,
 				})
 			}
-			queries := make([]shared.Query, 0, len(r.InputWef.Subscriptions[subscriptionsIndex].Queries))
+			queries := make([]shared.InputWefQuery, 0, len(r.InputWef.Subscriptions[subscriptionsIndex].Queries))
 			for queriesIndex := range r.InputWef.Subscriptions[subscriptionsIndex].Queries {
 				var path54 string
 				path54 = r.InputWef.Subscriptions[subscriptionsIndex].Queries[queriesIndex].Path.ValueString()
@@ -42440,7 +42440,7 @@ func (r *SourceResourceModel) ToSharedInputUnion2(ctx context.Context) (*shared.
 				var queryExpression string
 				queryExpression = r.InputWef.Subscriptions[subscriptionsIndex].Queries[queriesIndex].QueryExpression.ValueString()
 
-				queries = append(queries, shared.Query{
+				queries = append(queries, shared.InputWefQuery{
 					Path:            path54,
 					QueryExpression: queryExpression,
 				})

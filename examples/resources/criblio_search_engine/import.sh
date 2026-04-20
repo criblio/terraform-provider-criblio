@@ -1,0 +1,1 @@
+terraform import criblio_search_engine.my_criblio_search_engine "local_ingest_primary"
