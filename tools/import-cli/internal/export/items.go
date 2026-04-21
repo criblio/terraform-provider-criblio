@@ -184,6 +184,9 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 
 // appendResourceItemFromModel builds HCL attrs and appends a ResourceItem to out.Items (used for criblio_group and shared conversion path).
 func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}, groupFilter []string, groupIDs []string) error {
+	if skipResourceByID(typeName, idMap) {
+		return nil
+	}
 	if skipExportForGroupFilter(typeName, idMap, groupFilter, groupIDs) {
 		return nil
 	}

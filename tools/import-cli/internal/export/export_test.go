@@ -223,10 +223,25 @@ func TestSanitizeConvertError(t *testing.T) {
 	})
 }
 
+func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
+	// criblio_group export used to bypass skipResourceByID (only convertOneResource applied it).
+	out := &ExportResult{}
+	e := registry.Entry{
+		TypeName:       "criblio_group",
+		ModelTypeName:  "GroupResourceModel",
+		ImportIDFormat: "group_id",
+	}
+	idMap := map[string]string{"group_id": "search", "product": "stream"}
+	err := appendResourceItemFromModel(out, "criblio_group", e, idMap, nil, nil, nil)
+	require.NoError(t, err)
+	assert.Empty(t, out.Items)
+}
+
 func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip by exclusions.SkipExportIDs", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"id": "in_syslog"}))
+		assert.True(t, skipResourceByID("criblio_group", map[string]string{"group_id": "search", "product": "stream"}))
 	})
 	t.Run("skip when id equals group_id", func(t *testing.T) {
 		idMap := map[string]string{"group_id": "default", "id": "default"}

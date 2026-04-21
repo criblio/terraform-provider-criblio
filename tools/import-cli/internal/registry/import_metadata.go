@@ -95,11 +95,16 @@ var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_search_dataset_provider":      {SDKService: "Datasets", ListMethod: "ListDatasetProvider", GetMethod: "GetDatasetProviderByID", ImportIDFormat: "", OneOf: oneOfSearchDatasetProvider},
 	"criblio_search_macro":                 {SDKService: "Macros", ListMethod: "ListSearchMacro", GetMethod: "GetSearchMacroByID", ImportIDFormat: ""},
 	"criblio_search_saved_query":           {SDKService: "SavedQueries", ListMethod: "ListSavedQuery", GetMethod: "GetSavedQueryByID", ImportIDFormat: ""},
-	"criblio_search_usage_group":           {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
-	"criblio_secret":                       {SDKService: "Secrets", ListMethod: "ListRestSecret", GetMethod: "GetRestSecretByID", ImportIDFormat: ""},
-	"criblio_source":                       {SDKService: "Inputs", ListMethod: "ListInput", GetMethod: "GetInputByID", ImportIDFormat: "", OneOf: oneOfInput},
-	"criblio_subscription":                 {SDKService: "Subscriptions", ListMethod: "ListSubscription", GetMethod: "GetSubscriptionByID", ImportIDFormat: ""},
-	"criblio_workspace":                    {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
+	// List API is singleton GET .../dataset-rulesets/default; discovery synthesizes id=default when default_search is in scope.
+	"criblio_search_dataset_ruleset":  {SDKService: "Search", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
+	"criblio_search_datatype_ruleset": {SDKService: "Search", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
+	"criblio_search_engine":           {SDKService: "Search", ListMethod: "GetLocalSearchEngine", GetMethod: "GetLocalSearchEngineByID", ImportIDFormat: ""},
+	"criblio_search_source":           {SDKService: "Search", ListMethod: "GetSearchLocalSearchSources", GetMethod: "GetSearchLocalSearchSourcesByID", ImportIDFormat: ""},
+	"criblio_search_usage_group":      {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
+	"criblio_secret":                  {SDKService: "Secrets", ListMethod: "ListRestSecret", GetMethod: "GetRestSecretByID", ImportIDFormat: ""},
+	"criblio_source":                  {SDKService: "Inputs", ListMethod: "ListInput", GetMethod: "GetInputByID", ImportIDFormat: "", OneOf: oneOfInput},
+	"criblio_subscription":            {SDKService: "Subscriptions", ListMethod: "ListSubscription", GetMethod: "GetSubscriptionByID", ImportIDFormat: ""},
+	"criblio_workspace":               {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 }
 
 var importMetadataOverrides = map[string]ResourceMetadata{
@@ -144,6 +149,10 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_subscription":                 {ImportIDFormat: "json:group_id,id"},
 	"criblio_search_dataset":               {ImportIDFormat: "id"},
 	"criblio_search_dataset_provider":      {ImportIDFormat: "id"},
+	"criblio_search_engine":                {ImportIDFormat: "id", RefreshFromMethod: "RefreshFromSharedCountedLocalSearchEngine"},
+	"criblio_search_source":                {ImportIDFormat: "id", RefreshFromMethod: "RefreshFromSharedCountedLocalSearchSource"},
+	"criblio_search_dataset_ruleset":       {GetMethod: "GetDatasetRuleByID", ImportIDFormat: "id", RefreshFromMethod: "RefreshFromSharedCountedDatasetRuleset"},
+	"criblio_search_datatype_ruleset":      {GetMethod: "GetDatatypeRuleByID", ImportIDFormat: "id", RefreshFromMethod: "RefreshFromSharedCountedDatatypeRuleset"},
 	"criblio_search_usage_group":           {SDKService: "UsageGroups", ListMethod: "ListUsageGroup", GetMethod: "GetUsageGroupByID", ImportIDFormat: "id", RefreshFromMethod: "RefreshFromOperationsGetUsageGroupByIDResponseBody"},
 	"criblio_lakehouse_dataset_connection": {ImportIDFormat: "json:lakehouse_id,lake_dataset_id"},
 }

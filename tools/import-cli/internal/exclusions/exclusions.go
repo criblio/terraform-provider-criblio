@@ -21,6 +21,9 @@ var NoExportTypes = []string{
 // SkipExportIDs lists resource IDs to never export, by type.
 // Use for resources that fail apply (e.g. missing required attrs, API restrictions).
 var SkipExportIDs = map[string]map[string]bool{
+	"criblio_group": {
+		"search": true, // Local Search worker group: GetGroupsByID returns 400 / entity missing in many tenants; skip export.
+	},
 	"criblio_notification_target": {
 		"system_email":         true, // smtp_target requires host/port; system_email is built-in placeholder
 		"system_notifications": true, // oneOf type unsupported by provider
