@@ -1,0 +1,1 @@
+../../../../../examples/search-datatype-ruleset/main.tf
