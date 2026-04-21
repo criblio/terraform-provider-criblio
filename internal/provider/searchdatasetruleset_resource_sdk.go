@@ -14,49 +14,64 @@ func (r *SearchDatasetRulesetResourceModel) RefreshFromSharedCountedDatasetRules
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if len(resp.Items) == 0 {
-			diags.AddError("Unexpected response from API", "Missing response body array data.")
-			return diags
+		r.Items = []tfTypes.DatasetRuleset{}
+
+		for _, itemsItem := range resp.Items {
+			var items tfTypes.DatasetRuleset
+
+			items.ID = types.StringValue(string(itemsItem.ID))
+			items.Rules = []tfTypes.DatasetRule{}
+
+			for _, rulesItem := range itemsItem.Rules {
+				var rules tfTypes.DatasetRule
+
+				rules.Dataset = types.StringPointerValue(rulesItem.Dataset)
+				rules.Description = types.StringPointerValue(rulesItem.Description)
+				rules.Disabled = types.BoolPointerValue(rulesItem.Disabled)
+				rules.ExtendExpression = types.StringPointerValue(rulesItem.ExtendExpression)
+				rules.ExtendExpressionEnabled = types.BoolPointerValue(rulesItem.ExtendExpressionEnabled)
+				rules.ID = types.StringValue(rulesItem.ID)
+				rules.KustoExpression = types.StringValue(rulesItem.KustoExpression)
+				rules.Name = types.StringValue(rulesItem.Name)
+				if rulesItem.SendDataTo != nil {
+					rules.SendDataTo = types.StringValue(string(*rulesItem.SendDataTo))
+				} else {
+					rules.SendDataTo = types.StringNull()
+				}
+
+				items.Rules = append(items.Rules, rules)
+			}
+
+			r.Items = append(r.Items, items)
 		}
 
-		diags.Append(r.RefreshFromSharedDatasetRuleset(ctx, &resp.Items[0])...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		// Required attribute `rules`: mirror items so Read/import produce valid state alongside computed `items`.
+		r.Rules = pickDatasetRulesTFAfterRefresh(r.Items)
 	}
 
 	return diags
 }
 
-func (r *SearchDatasetRulesetResourceModel) RefreshFromSharedDatasetRuleset(ctx context.Context, resp *shared.DatasetRuleset) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.ID = types.StringValue(string(resp.ID))
-	r.Rules = []tfTypes.DatasetRule{}
-
-	for _, rulesItem := range resp.Rules {
-		var rules tfTypes.DatasetRule
-
-		rules.Dataset = types.StringPointerValue(rulesItem.Dataset)
-		rules.Description = types.StringPointerValue(rulesItem.Description)
-		rules.Disabled = types.BoolPointerValue(rulesItem.Disabled)
-		rules.ExtendExpression = types.StringPointerValue(rulesItem.ExtendExpression)
-		rules.ExtendExpressionEnabled = types.BoolPointerValue(rulesItem.ExtendExpressionEnabled)
-		rules.ID = types.StringValue(rulesItem.ID)
-		rules.KustoExpression = types.StringValue(rulesItem.KustoExpression)
-		rules.Name = types.StringValue(rulesItem.Name)
-		if rulesItem.SendDataTo != nil {
-			rules.SendDataTo = types.StringValue(string(*rulesItem.SendDataTo))
-		} else {
-			rules.SendDataTo = types.StringNull()
-		}
-
-		r.Rules = append(r.Rules, rules)
+func pickDatasetRulesTFAfterRefresh(items []tfTypes.DatasetRuleset) []tfTypes.DatasetRule {
+	if len(items) == 0 {
+		return []tfTypes.DatasetRule{}
 	}
+	if len(items) == 1 {
+		return normalizeDatasetRuleSlice(items[0].Rules)
+	}
+	for _, it := range items {
+		if it.ID.ValueString() == string(shared.DatasetRulesetIDDefault) {
+			return normalizeDatasetRuleSlice(it.Rules)
+		}
+	}
+	return normalizeDatasetRuleSlice(items[0].Rules)
+}
 
-	return diags
+func normalizeDatasetRuleSlice(in []tfTypes.DatasetRule) []tfTypes.DatasetRule {
+	if in == nil {
+		return []tfTypes.DatasetRule{}
+	}
+	return in
 }
 
 func (r *SearchDatasetRulesetResourceModel) ToSharedDatasetRuleset(ctx context.Context) (*shared.DatasetRuleset, diag.Diagnostics) {

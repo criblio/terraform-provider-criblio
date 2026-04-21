@@ -7,8 +7,11 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -41,11 +44,15 @@ func (r *SearchDatatypeRulesetResource) Metadata(ctx context.Context, req resour
 func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manages the Local Search **datatype routing** ruleset (the same ordered rules as Search **Get Data In** → **Datatyping** when id is `default`).\n\n" +
-			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.",
+			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.\n\n" +
+			"**Destroy:** Terraform-managed rule ids are removed from the API; other product rules may remain.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Ruleset identifier. Use ` + "`default`" + ` to match the **Get Data In** → **Datatyping** wizard (see Network: ` + "`GET …/datatype-rulesets/default`" + `). **Terraform only supports ` + "`default`" + ` today.** Other API ids may exist for direct clients.`,
+				Description: `Ruleset identifier. Use ` + "`default`" + ` to match **Get Data In** → **Datatyping** (same resource as <code>GET …/datatype-rulesets/default</code>). The API may expose other ids for non-Terraform clients.`,
+				Validators: []validator.String{
+					stringvalidator.OneOf("default"),
+				},
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -53,7 +60,7 @@ func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Ruleset identifier. The Search <strong>Get Data In</strong> &rarr; <strong>Datatyping</strong> UI loads and saves the ruleset whose id is <code>default</code> (see browser Network: <code>GET …/datatype-rulesets/default</code>). Use <code>default</code> in API clients and Terraform (<code>criblio_search_datatype_ruleset</code>) to manage the same ordered rules the UI shows. Other ids refer to additional named rulesets that may not appear in that wizard.`,
+							Description: `Ruleset identifier. For Terraform, only <code>default</code> is supported today (same ruleset as Search <strong>Get Data In</strong> → <strong>Datatyping</strong>). The API may expose other ids for direct clients; manage those outside Terraform unless support is added.`,
 						},
 						"rules": schema.ListNestedAttribute{
 							Computed: true,
@@ -85,7 +92,7 @@ func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource
 									},
 								},
 							},
-							Description: `Rules evaluated in order for datatype routing (read-only copy on ` + "`items`" + ` when returned by the API).`,
+							Description: `Rules evaluated in order for datatype routing. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.`,
 						},
 					},
 				},
@@ -120,7 +127,7 @@ func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource
 						},
 					},
 				},
-				Description: `Rules evaluated in order for datatype routing. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply.`,
+				Description: `Rules evaluated in order for datatype routing. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.`,
 			},
 		},
 	}
@@ -318,5 +325,12 @@ func (r *SearchDatatypeRulesetResource) Delete(ctx context.Context, req resource
 }
 
 func (r *SearchDatatypeRulesetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_datatype_ruleset.")
+	if req.ID != "default" {
+		resp.Diagnostics.AddError(
+			"Invalid import ID",
+			`Only the default ruleset is supported; use: terraform import criblio_search_datatype_ruleset.NAME default`,
+		)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

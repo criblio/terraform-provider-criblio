@@ -37,9 +37,34 @@ func (r *SearchDatatypeRulesetResourceModel) RefreshFromSharedCountedDatatypeRul
 
 			r.Items = append(r.Items, items)
 		}
+
+		// Required attribute `rules`: mirror items so Read/import produce valid state alongside computed `items`.
+		r.Rules = pickDatatypeRulesTFAfterRefresh(r.Items)
 	}
 
 	return diags
+}
+
+func pickDatatypeRulesTFAfterRefresh(items []tfTypes.DatatypeRuleset) []tfTypes.DatatypeRule {
+	if len(items) == 0 {
+		return []tfTypes.DatatypeRule{}
+	}
+	if len(items) == 1 {
+		return normalizeDatatypeRuleSlice(items[0].Rules)
+	}
+	for _, it := range items {
+		if it.ID.ValueString() == string(shared.DatatypeRulesetIDDefault) {
+			return normalizeDatatypeRuleSlice(it.Rules)
+		}
+	}
+	return normalizeDatatypeRuleSlice(items[0].Rules)
+}
+
+func normalizeDatatypeRuleSlice(in []tfTypes.DatatypeRule) []tfTypes.DatatypeRule {
+	if in == nil {
+		return []tfTypes.DatatypeRule{}
+	}
+	return in
 }
 
 func (r *SearchDatatypeRulesetResourceModel) ToSharedDatatypeRuleset(ctx context.Context) (*shared.DatatypeRuleset, diag.Diagnostics) {

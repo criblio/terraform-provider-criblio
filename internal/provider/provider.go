@@ -313,6 +313,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewSearchDashboardCategoryDataSource,
 		NewSearchDatasetDataSource,
 		NewSearchDatasetProviderDataSource,
+		NewSearchDatasetRulesetDataSource,
 		NewSearchDatatypeRulesetDataSource,
 		NewSearchDatatypeRulesetsDataSource,
 		NewSearchEngineDataSource,

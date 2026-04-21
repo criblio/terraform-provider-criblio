@@ -7,9 +7,8 @@ import (
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
-	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -33,8 +32,9 @@ type SearchDatasetRulesetResource struct {
 
 // SearchDatasetRulesetResourceModel describes the resource data model.
 type SearchDatasetRulesetResourceModel struct {
-	ID    types.String          `tfsdk:"id"`
-	Rules []tfTypes.DatasetRule `tfsdk:"rules"`
+	ID    types.String             `tfsdk:"id"`
+	Items []tfTypes.DatasetRuleset `tfsdk:"items"`
+	Rules []tfTypes.DatasetRule    `tfsdk:"rules"`
 }
 
 func (r *SearchDatasetRulesetResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -44,79 +44,114 @@ func (r *SearchDatasetRulesetResource) Metadata(ctx context.Context, req resourc
 func (r *SearchDatasetRulesetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manages the Local Search **dataset routing** ruleset (order, drop vs destination dataset, optional extend).\n\n" +
-			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.",
+			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.\n\n" +
+			"**Destroy:** Rules that only exist in Terraform state are removed from the API; reserved product rules may be preserved (see provider behavior).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Ruleset identifier. Terraform only supports ` + "`default`" + ` today. The HTTP API may expose other ids for direct clients.`,
+				Description: `Ruleset identifier. Use ` + "`default`" + ` for the workspace Local Search dataset ruleset. The HTTP API may expose other ids for direct clients.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default"),
+				},
+			},
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.`,
+						},
+						"rules": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"dataset": schema.StringAttribute{
+										Computed:    true,
+										Description: `Dataset id when routing to a dataset; meaning depends on <code>sendDataTo</code>.`,
+									},
+									"description": schema.StringAttribute{
+										Computed:    true,
+										Description: `Human-readable description of the rule.`,
+									},
+									"disabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `When true, the rule is ignored for routing.`,
+									},
+									"extend_expression": schema.StringAttribute{
+										Computed:    true,
+										Description: `KQL-style extend expression to add or transform fields on matched events.`,
+									},
+									"extend_expression_enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Whether <code>extendExpression</code> is applied for this rule.`,
+									},
+									"id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Stable identifier for the rule.`,
+									},
+									"kusto_expression": schema.StringAttribute{
+										Computed:    true,
+										Description: `Kusto predicate that selects events for this rule.`,
+									},
+									"name": schema.StringAttribute{
+										Computed:    true,
+										Description: `Display name of the rule.`,
+									},
+									"send_data_to": schema.StringAttribute{
+										Computed:    true,
+										Description: `Whether matching events are sent to a dataset or dropped (<code>destinationDataset</code> vs <code>drop</code>).`,
+									},
+								},
+							},
+							Description: `Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.`,
+						},
+					},
 				},
 			},
 			"rules": schema.ListNestedAttribute{
 				Required: true,
 				NestedObject: schema.NestedAttributeObject{
-					Validators: []validator.Object{
-						speakeasy_objectvalidators.NotNull(),
-					},
 					Attributes: map[string]schema.Attribute{
 						"dataset": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Dataset id when routing to a dataset; meaning depends on <code>sendDataTo</code>.`,
 						},
 						"description": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Human-readable description of the rule.`,
 						},
 						"disabled": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `When true, the rule is ignored for routing.`,
 						},
 						"extend_expression": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `KQL-style extend expression to add or transform fields on matched events.`,
 						},
 						"extend_expression_enabled": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Whether <code>extendExpression</code> is applied for this rule.`,
 						},
 						"id": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Stable identifier for the rule. Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
+							Required:    true,
+							Description: `Stable identifier for the rule.`,
 						},
 						"kusto_expression": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Kusto predicate that selects events for this rule. Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
+							Required:    true,
+							Description: `Kusto predicate that selects events for this rule.`,
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Display name of the rule. Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
+							Required:    true,
+							Description: `Display name of the rule.`,
 						},
 						"send_data_to": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Whether matching events are sent to a dataset or dropped (<code>destinationDataset</code> vs <code>drop</code>). possible known values include one of ["destinationDataset", "drop"]`,
 						},
 					},
 				},
-				Description: `Rules evaluated in order for dataset routing and optional extend. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply.`,
+				Description: `Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.`,
 			},
 		},
 	}
@@ -211,7 +246,35 @@ func (r *SearchDatasetRulesetResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	// Not Implemented; we rely entirely on CREATE API request response
+	res, err := r.client.Search.GetDatasetRuleByID(ctx)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.CountedDatasetRuleset != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedCountedDatasetRuleset(ctx, res.CountedDatasetRuleset)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -286,5 +349,12 @@ func (r *SearchDatasetRulesetResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *SearchDatasetRulesetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource search_dataset_ruleset.")
+	if req.ID != "default" {
+		resp.Diagnostics.AddError(
+			"Invalid import ID",
+			`Only the default ruleset is supported; use: terraform import criblio_search_dataset_ruleset.NAME default`,
+		)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

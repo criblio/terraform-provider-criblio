@@ -54503,6 +54503,7 @@ paths:
             - search
             summary: Get a lakehouse engine Dataset ruleset (Cribl.Cloud only)
             description: Get the specified lakehouse engine Dataset ruleset, including its ordered rule list (Cribl.Cloud only).
+            x-speakeasy-entity-operation: SearchDatasetRuleset#get
             responses:
                 '200':
                     description: The requested lakehouse engine Dataset ruleset
