@@ -1,1 +1,1 @@
-../../../../../examples/search-datatype-ruleset/main.tf
+../../../../../examples/search-dataset-ruleset/main.tf

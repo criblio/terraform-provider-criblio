@@ -1,6 +1,6 @@
 resource "criblio_search_engine" "my_searchengine" {
   description = "My Search Engine TF"
-  tier_size   = "2xlarge"
+  tier_size   = "small"
   id          = "my_search_engine_tf"
 }
 
