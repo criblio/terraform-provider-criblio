@@ -47985,7 +47985,8 @@ components:
             properties:
                 id:
                     type: string
-                    description: Ruleset identifier.
+                    description: |
+                        Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
                     enum:
                     - default
                     example: default
@@ -47993,11 +47994,15 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/DatasetRule'
-                    description: Rules evaluated in order for dataset routing and optional extend.
+                    description: |
+                        Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.
             required:
             - id
             - rules
-            description: Ordered list of dataset rules for Local Search (<code>/search/local_search/dataset-rulesets</code>).
+            description: |
+                Ordered list of dataset rules for Local Search (<code>/search/local_search/dataset-rulesets</code>).
+
+                <strong>Terraform</strong>: Treat this resource as a <strong>singleton</strong> ruleset: only the id <code>default</code> is supported, and each apply or update replaces the full <code>rules</code> collection in the API—no partial merge.
         CountedLocalSearchSource:
             type: object
             properties:
@@ -48014,7 +48019,8 @@ components:
             properties:
                 id:
                     type: string
-                    description: Unique identifier for this datatype ruleset. For Search Local Search, this value is always <code>default</code>.
+                    description: |
+                        Ruleset identifier. For Terraform, only <code>default</code> is supported today (same ruleset as Search <strong>Get Data In</strong> → <strong>Datatyping</strong>). The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
                     enum:
                     - default
                     example: default
@@ -48022,11 +48028,15 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/DatatypeRule'
-                    description: Rules evaluated in order for datatype routing.
+                    description: |
+                        Rules evaluated in order for datatype routing. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.
             required:
             - id
             - rules
-            description: Ordered list of datatype rules for Local Search (<code>/search/local_search/datatype-rulesets</code>).
+            description: |
+                Ordered list of datatype rules for Local Search (<code>/search/local_search/datatype-rulesets</code>).
+
+                <strong>Terraform</strong>: Treat this resource as a <strong>singleton</strong> ruleset: only the id <code>default</code> is supported, and each apply or update replaces the full <code>rules</code> collection in the API—no partial merge.
             example:
                 id: default
                 rules:
@@ -48047,9 +48057,12 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/LocalSearchEngine'
+        # Mirrors InputWef subscription item shape for Local Search wef sources only (InputWef stays inline above).
         LocalSearchSourceWefSubscriptionItem:
             type: object
-            description: WEF subscription entry for Local Search sources when <code>type</code> is <code>wef</code>.
+            description: >-
+                WEF subscription entry for Local Search when type is wef. Aligns with Stream InputWef subscription fields.
+                Use querySelector simple with queries, or xml with xmlQuery.
             required:
             - subscriptionName
             - contentFormat
@@ -48060,9 +48073,11 @@ components:
                 subscriptionName:
                     type: string
                     description: Subscription name exposed to Windows clients.
+                    example: subscription-1
                 version:
                     type: string
                     description: Version UUID for this subscription; changes when subscription parameters change.
+                    example: 7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f
                 contentFormat:
                     type: string
                     enum:
@@ -48070,44 +48085,69 @@ components:
                     - RenderedText
                     description: Content format for delivered events.
                     x-speakeasy-unknown-values: allow
+                    example: RenderedText
                 heartbeatInterval:
                     type: number
                     minimum: 1
                     description: Maximum seconds between endpoint check-ins before marking unavailable.
+                    example: 60
                 batchTimeout:
                     type: number
                     minimum: 0
                     description: Seconds to collect events before sending to Cribl.
+                    example: 5
                 readExistingEvents:
                     type: boolean
                     description: Send previously existing events for new subscriptions.
+                    example: false
+                    x-speakeasy-terraform-ignore: true
                 sendBookmarks:
                     type: boolean
                     description: Track received events for resume after re-subscription.
+                    example: true
+                    x-speakeasy-terraform-ignore: true
                 compress:
                     type: boolean
                     description: Receive compressed events from the source.
+                    example: false
+                    x-speakeasy-terraform-ignore: true
                 targets:
                     type: array
                     description: DNS names of endpoints that forward these events (wildcards allowed).
+                    example: []
                     items:
                         type: string
                         minLength: 1
                 locale:
                     type: string
                     description: RFC 3066 locale for Windows clients (e.g. en-US).
+                    example: en-US
+                    x-speakeasy-terraform-ignore: true
+                metadata:
+                    type: array
+                    example:
+                    - name: subscription
+                      value: '"wef-security"'
+                    items:
+                        $ref: '#/components/schemas/ItemsTypeMetadata'
+                    x-speakeasy-terraform-ignore: true
+                id:
+                    type: string
+                    example: default-subscription
                 querySelector:
                     type: string
+                    description: Query builder mode; simple with queries, or xml with xmlQuery.
                     enum:
                     - simple
                     - xml
                     x-speakeasy-unknown-values: allow
-                metadata:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ItemsTypeMetadata'
+                    example: simple
                 queries:
                     type: array
+                    description: Path and XPath selector entries when using simple mode.
+                    example:
+                    - path: Security
+                      queryExpression: '*'
                     items:
                         type: object
                         required:
@@ -48116,14 +48156,23 @@ components:
                         properties:
                             path:
                                 type: string
+                                description: Path attribute from the relevant XML Select element.
+                                example: Security
                             queryExpression:
                                 type: string
+                                description: XPath query inside the relevant XML Select element.
+                                example: '*'
                 xmlQuery:
                     type: string
-                id:
-                    type: string
+                    description: XPath query when using xml mode.
+                    example: //Event/System
         LocalSearchSource:
             type: object
+            x-speakeasy-entity: SearchSource
+            x-speakeasy-entity-description: |
+                Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (`/search/local_search/sources`).
+
+                **Terraform provisioning:** Creating many `criblio_search_source` resources in parallel in a single apply is not supported by the control plane. Create sources **one at a time** (for example with `depends_on` between resources). Allow **at least 60 seconds** between successive **create** operations in the same workspace (for example using [`time_sleep`](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) between dependents).
             properties:
                 authTokens:
                     type: array
@@ -48253,7 +48302,13 @@ components:
             - host
             - id
             - type
-            description: 'Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (<code>/search/local_search/sources</code>).'
+            description: >-
+                Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata
+                (<code>/search/local_search/sources</code>).
+                Terraform: creating many <code>criblio_search_source</code> resources in parallel is not supported by the
+                control plane. Provision sources one at a time, for example by chaining resources with
+                <code>depends_on</code>, and leave at least 60 seconds between successive create operations in the
+                same workspace (use <code>time_sleep</code> or equivalent between dependents).
             example:
                 id: in_splunk_hec_1
                 type: splunk_hec
@@ -54700,8 +54755,11 @@ paths:
             tags:
             - search
             summary: Create a Local Search source (Cribl.Cloud only)
-            description: Creates a source on Local Search using a supported type; bind address and several per-type defaults are
+            description: >-
+                Creates a source on Local Search using a supported type; bind address and several per-type defaults are
                 enforced server-side (Cribl.Cloud only).
+                Do not create many sources in parallel in a single Terraform apply; use sequential ordering with
+                depends_on and at least 60 seconds between create operations in the same workspace.
             x-speakeasy-entity-operation: SearchSource#create
             responses:
                 '200':

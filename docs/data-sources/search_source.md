@@ -3,12 +3,15 @@
 page_title: "criblio_search_source Data Source - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  SearchSource DataSource
+  Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (/search/local_search/sources).
+  Terraform provisioning: Creating many criblio_search_source resources in parallel in a single apply is not supported by the control plane. Create sources one at a time (for example with depends_on between resources). Allow at least 60 seconds between successive create operations in the same workspace (for example using time_sleep https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep between dependents).
 ---
 
 # criblio_search_source (Data Source)
 
-SearchSource DataSource
+Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (`/search/local_search/sources`).
+
+**Terraform provisioning:** Creating many `criblio_search_source` resources in parallel in a single apply is not supported by the control plane. Create sources **one at a time** (for example with `depends_on` between resources). Allow **at least 60 seconds** between successive **create** operations in the same workspace (for example using [`time_sleep`](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) between dependents).
 
 ## Example Usage
 
@@ -59,37 +62,23 @@ Read-Only:
 Read-Only:
 
 - `batch_timeout` (Number) Seconds to collect events before sending to Cribl.
-- `compress` (Boolean) Receive compressed events from the source.
 - `content_format` (String) Content format for delivered events.
 - `heartbeat_interval` (Number) Maximum seconds between endpoint check-ins before marking unavailable.
 - `id` (String)
-- `locale` (String) RFC 3066 locale for Windows clients (e.g. en-US).
-- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--subscriptions--metadata))
-- `queries` (Attributes List) (see [below for nested schema](#nestedatt--subscriptions--queries))
-- `query_selector` (String)
-- `read_existing_events` (Boolean) Send previously existing events for new subscriptions.
-- `send_bookmarks` (Boolean) Track received events for resume after re-subscription.
+- `queries` (Attributes List) Path and XPath selector entries when using simple mode. (see [below for nested schema](#nestedatt--subscriptions--queries))
+- `query_selector` (String) Query builder mode; simple with queries, or xml with xmlQuery.
 - `subscription_name` (String) Subscription name exposed to Windows clients.
 - `targets` (List of String) DNS names of endpoints that forward these events (wildcards allowed).
 - `version` (String) Version UUID for this subscription; changes when subscription parameters change.
-- `xml_query` (String)
-
-<a id="nestedatt--subscriptions--metadata"></a>
-### Nested Schema for `subscriptions.metadata`
-
-Read-Only:
-
-- `name` (String)
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)
-
+- `xml_query` (String) XPath query when using xml mode.
 
 <a id="nestedatt--subscriptions--queries"></a>
 ### Nested Schema for `subscriptions.queries`
 
 Read-Only:
 
-- `path` (String)
-- `query_expression` (String)
+- `path` (String) Path attribute from the relevant XML Select element.
+- `query_expression` (String) XPath query inside the relevant XML Select element.
 
 
 

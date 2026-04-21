@@ -3,12 +3,15 @@
 page_title: "criblio_search_dataset_ruleset Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  SearchDatasetRuleset Resource
+  Manages the Local Search dataset routing ruleset (order, drop vs destination dataset, optional extend).
+  Terraform: Only the ruleset id default is supported today. Treat this resource as a singleton: each apply or update sends the complete ordered rules list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.
 ---
 
 # criblio_search_dataset_ruleset (Resource)
 
-SearchDatasetRuleset Resource
+Manages the Local Search **dataset routing** ruleset (order, drop vs destination dataset, optional extend).
+
+**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.
 
 ## Example Usage
 
@@ -36,8 +39,8 @@ resource "criblio_search_dataset_ruleset" "my_searchdatasetruleset" {
 
 ### Required
 
-- `id` (String) Ruleset identifier. must be "default"
-- `rules` (Attributes List) Rules evaluated in order for dataset routing and optional extend. (see [below for nested schema](#nestedatt--rules))
+- `id` (String) Ruleset identifier. Terraform only supports `default` today. The HTTP API may expose other ids for direct clients.
+- `rules` (Attributes List) Rules evaluated in order for dataset routing and optional extend. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply. (see [below for nested schema](#nestedatt--rules))
 
 <a id="nestedatt--rules"></a>
 ### Nested Schema for `rules`

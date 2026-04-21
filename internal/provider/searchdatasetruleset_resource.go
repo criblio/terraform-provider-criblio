@@ -43,11 +43,12 @@ func (r *SearchDatasetRulesetResource) Metadata(ctx context.Context, req resourc
 
 func (r *SearchDatasetRulesetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "SearchDatasetRuleset Resource",
+		MarkdownDescription: "Manages the Local Search **dataset routing** ruleset (order, drop vs destination dataset, optional extend).\n\n" +
+			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Ruleset identifier. must be "default"`,
+				Description: `Ruleset identifier. Terraform only supports ` + "`default`" + ` today. The HTTP API may expose other ids for direct clients.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("default"),
 				},
@@ -115,7 +116,7 @@ func (r *SearchDatasetRulesetResource) Schema(ctx context.Context, req resource.
 						},
 					},
 				},
-				Description: `Rules evaluated in order for dataset routing and optional extend.`,
+				Description: `Rules evaluated in order for dataset routing and optional extend. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply.`,
 			},
 		},
 	}

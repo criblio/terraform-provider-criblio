@@ -3,12 +3,15 @@
 page_title: "criblio_search_datatype_ruleset Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  SearchDatatypeRuleset Resource
+  Manages the Local Search datatype routing ruleset (the same ordered rules as Search Get Data In → Datatyping when id is default).
+  Terraform: Only the ruleset id default is supported today. Treat this resource as a singleton: each apply or update sends the complete ordered rules list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.
 ---
 
 # criblio_search_datatype_ruleset (Resource)
 
-SearchDatatypeRuleset Resource
+Manages the Local Search **datatype routing** ruleset (the same ordered rules as Search **Get Data In** → **Datatyping** when id is `default`).
+
+**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.
 
 ## Example Usage
 
@@ -33,8 +36,8 @@ resource "criblio_search_datatype_ruleset" "my_searchdatatyperuleset" {
 
 ### Required
 
-- `id` (String) Ruleset identifier. The Search <strong>Get Data In</strong> &rarr; <strong>Datatyping</strong> UI loads and saves the ruleset whose id is <code>default</code> (see browser Network: <code>GET …/datatype-rulesets/default</code>). Use <code>default</code> in API clients and Terraform (<code>criblio_search_datatype_ruleset</code>) to manage the same ordered rules the UI shows. Other ids refer to additional named rulesets that may not appear in that wizard.
-- `rules` (Attributes List) Rules evaluated in order for datatype routing. (see [below for nested schema](#nestedatt--rules))
+- `id` (String) Ruleset identifier. Use `default` to match the **Get Data In** → **Datatyping** wizard (see Network: `GET …/datatype-rulesets/default`). **Terraform only supports `default` today.** Other API ids may exist for direct clients.
+- `rules` (Attributes List) Rules evaluated in order for datatype routing. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply. (see [below for nested schema](#nestedatt--rules))
 
 ### Read-Only
 
@@ -62,7 +65,7 @@ Optional:
 Read-Only:
 
 - `id` (String) Ruleset identifier. The Search <strong>Get Data In</strong> &rarr; <strong>Datatyping</strong> UI loads and saves the ruleset whose id is <code>default</code> (see browser Network: <code>GET …/datatype-rulesets/default</code>). Use <code>default</code> in API clients and Terraform (<code>criblio_search_datatype_ruleset</code>) to manage the same ordered rules the UI shows. Other ids refer to additional named rulesets that may not appear in that wizard.
-- `rules` (Attributes List) Rules evaluated in order for datatype routing. (see [below for nested schema](#nestedatt--items--rules))
+- `rules` (Attributes List) Rules evaluated in order for datatype routing (read-only copy on `items` when returned by the API). (see [below for nested schema](#nestedatt--items--rules))
 
 <a id="nestedatt--items--rules"></a>
 ### Nested Schema for `items.rules`

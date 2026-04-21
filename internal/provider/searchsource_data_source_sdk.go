@@ -61,21 +61,9 @@ func (r *SearchSourceDataSourceModel) RefreshFromSharedLocalSearchSource(ctx con
 		var subscriptions tfTypes.LocalSearchSourceWefSubscriptionItem
 
 		subscriptions.BatchTimeout = types.Float64Value(subscriptionsItem.BatchTimeout)
-		subscriptions.Compress = types.BoolPointerValue(subscriptionsItem.Compress)
 		subscriptions.ContentFormat = types.StringValue(string(subscriptionsItem.ContentFormat))
 		subscriptions.HeartbeatInterval = types.Float64Value(subscriptionsItem.HeartbeatInterval)
 		subscriptions.ID = types.StringPointerValue(subscriptionsItem.ID)
-		subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
-		subscriptions.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-		for _, metadataItem := range subscriptionsItem.Metadata {
-			var metadata tfTypes.ItemsTypeMetadata
-
-			metadata.Name = types.StringValue(metadataItem.Name)
-			metadata.Value = types.StringValue(metadataItem.Value)
-
-			subscriptions.Metadata = append(subscriptions.Metadata, metadata)
-		}
 		subscriptions.Queries = []tfTypes.LocalSearchSourceWefSubscriptionItemQuery{}
 
 		for _, queriesItem := range subscriptionsItem.Queries {
@@ -91,8 +79,6 @@ func (r *SearchSourceDataSourceModel) RefreshFromSharedLocalSearchSource(ctx con
 		} else {
 			subscriptions.QuerySelector = types.StringNull()
 		}
-		subscriptions.ReadExistingEvents = types.BoolPointerValue(subscriptionsItem.ReadExistingEvents)
-		subscriptions.SendBookmarks = types.BoolPointerValue(subscriptionsItem.SendBookmarks)
 		subscriptions.SubscriptionName = types.StringValue(subscriptionsItem.SubscriptionName)
 		subscriptions.Targets = make([]types.String, 0, len(subscriptionsItem.Targets))
 		for _, v := range subscriptionsItem.Targets {

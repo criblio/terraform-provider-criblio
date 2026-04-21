@@ -7,19 +7,14 @@ import (
 )
 
 type LocalSearchSourceWefSubscriptionItem struct {
-	BatchTimeout       types.Float64                               `tfsdk:"batch_timeout"`
-	Compress           types.Bool                                  `tfsdk:"compress"`
-	ContentFormat      types.String                                `tfsdk:"content_format"`
-	HeartbeatInterval  types.Float64                               `tfsdk:"heartbeat_interval"`
-	ID                 types.String                                `tfsdk:"id"`
-	Locale             types.String                                `tfsdk:"locale"`
-	Metadata           []ItemsTypeMetadata                         `tfsdk:"metadata"`
-	Queries            []LocalSearchSourceWefSubscriptionItemQuery `tfsdk:"queries"`
-	QuerySelector      types.String                                `tfsdk:"query_selector"`
-	ReadExistingEvents types.Bool                                  `tfsdk:"read_existing_events"`
-	SendBookmarks      types.Bool                                  `tfsdk:"send_bookmarks"`
-	SubscriptionName   types.String                                `tfsdk:"subscription_name"`
-	Targets            []types.String                              `tfsdk:"targets"`
-	Version            types.String                                `tfsdk:"version"`
-	XMLQuery           types.String                                `tfsdk:"xml_query"`
+	BatchTimeout      types.Float64                               `tfsdk:"batch_timeout"`
+	ContentFormat     types.String                                `tfsdk:"content_format"`
+	HeartbeatInterval types.Float64                               `tfsdk:"heartbeat_interval"`
+	ID                types.String                                `tfsdk:"id"`
+	Queries           []LocalSearchSourceWefSubscriptionItemQuery `tfsdk:"queries"`
+	QuerySelector     types.String                                `tfsdk:"query_selector"`
+	SubscriptionName  types.String                                `tfsdk:"subscription_name"`
+	Targets           []types.String                              `tfsdk:"targets"`
+	Version           types.String                                `tfsdk:"version"`
+	XMLQuery          types.String                                `tfsdk:"xml_query"`
 }

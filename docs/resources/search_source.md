@@ -3,12 +3,15 @@
 page_title: "criblio_search_source Resource - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  SearchSource Resource
+  Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (/search/local_search/sources).
+  Terraform provisioning: Creating many criblio_search_source resources in parallel in a single apply is not supported by the control plane. Create sources one at a time (for example with depends_on between resources). Allow at least 60 seconds between successive create operations in the same workspace (for example using time_sleep https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep between dependents).
 ---
 
 # criblio_search_source (Resource)
 
-SearchSource Resource
+Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (`/search/local_search/sources`).
+
+**Terraform provisioning:** Creating many `criblio_search_source` resources in parallel in a single apply is not supported by the control plane. Create sources **one at a time** (for example with `depends_on` between resources). Allow **at least 60 seconds** between successive **create** operations in the same workspace (for example using [`time_sleep`](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) between dependents).
 
 ## Example Usage
 
@@ -33,33 +36,22 @@ resource "criblio_search_source" "my_searchsource" {
   splunk_hec_api  = "/services/collector"
   subscriptions = [
     {
-      batch_timeout      = 3.51
-      compress           = false
-      content_format     = "Raw"
-      heartbeat_interval = 4.94
-      id                 = "...my_id..."
-      locale             = "...my_locale..."
-      metadata = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
+      batch_timeout      = 5
+      content_format     = "RenderedText"
+      heartbeat_interval = 60
+      id                 = "default-subscription"
       queries = [
         {
-          path             = "...my_path..."
-          query_expression = "...my_query_expression..."
+          path             = "Security"
+          query_expression = "*"
         }
       ]
-      query_selector       = "xml"
-      read_existing_events = false
-      send_bookmarks       = true
-      subscription_name    = "...my_subscription_name..."
+      query_selector    = "simple"
+      subscription_name = "subscription-1"
       targets = [
-        "..."
       ]
-      version   = "...my_version..."
-      xml_query = "...my_xml_query..."
+      version   = "7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f"
+      xml_query = "//Event/System"
     }
   ]
   tcp_port = 36722
@@ -115,37 +107,23 @@ Optional:
 Optional:
 
 - `batch_timeout` (Number) Seconds to collect events before sending to Cribl. Not Null
-- `compress` (Boolean) Receive compressed events from the source.
 - `content_format` (String) Content format for delivered events. possible known values include one of ["Raw", "RenderedText"]; Not Null
 - `heartbeat_interval` (Number) Maximum seconds between endpoint check-ins before marking unavailable. Not Null
 - `id` (String)
-- `locale` (String) RFC 3066 locale for Windows clients (e.g. en-US).
-- `metadata` (Attributes List) (see [below for nested schema](#nestedatt--subscriptions--metadata))
-- `queries` (Attributes List) (see [below for nested schema](#nestedatt--subscriptions--queries))
-- `query_selector` (String) possible known values include one of ["simple", "xml"]
-- `read_existing_events` (Boolean) Send previously existing events for new subscriptions.
-- `send_bookmarks` (Boolean) Track received events for resume after re-subscription.
+- `queries` (Attributes List) Path and XPath selector entries when using simple mode. (see [below for nested schema](#nestedatt--subscriptions--queries))
+- `query_selector` (String) Query builder mode; simple with queries, or xml with xmlQuery. possible known values include one of ["simple", "xml"]
 - `subscription_name` (String) Subscription name exposed to Windows clients. Not Null
 - `targets` (List of String) DNS names of endpoints that forward these events (wildcards allowed). Not Null
 - `version` (String) Version UUID for this subscription; changes when subscription parameters change.
-- `xml_query` (String)
-
-<a id="nestedatt--subscriptions--metadata"></a>
-### Nested Schema for `subscriptions.metadata`
-
-Optional:
-
-- `name` (String) Not Null
-- `value` (String) JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null
-
+- `xml_query` (String) XPath query when using xml mode.
 
 <a id="nestedatt--subscriptions--queries"></a>
 ### Nested Schema for `subscriptions.queries`
 
 Optional:
 
-- `path` (String) Not Null
-- `query_expression` (String) Not Null
+- `path` (String) Path attribute from the relevant XML Select element. Not Null
+- `query_expression` (String) XPath query inside the relevant XML Select element. Not Null
 
 
 

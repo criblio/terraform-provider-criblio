@@ -18,33 +18,22 @@ resource "criblio_search_source" "my_searchsource" {
   splunk_hec_api  = "/services/collector"
   subscriptions = [
     {
-      batch_timeout      = 3.51
-      compress           = false
-      content_format     = "Raw"
-      heartbeat_interval = 4.94
-      id                 = "...my_id..."
-      locale             = "...my_locale..."
-      metadata = [
-        {
-          name  = "...my_name..."
-          value = "...my_value..."
-        }
-      ]
+      batch_timeout      = 5
+      content_format     = "RenderedText"
+      heartbeat_interval = 60
+      id                 = "default-subscription"
       queries = [
         {
-          path             = "...my_path..."
-          query_expression = "...my_query_expression..."
+          path             = "Security"
+          query_expression = "*"
         }
       ]
-      query_selector       = "xml"
-      read_existing_events = false
-      send_bookmarks       = true
-      subscription_name    = "...my_subscription_name..."
+      query_selector    = "simple"
+      subscription_name = "subscription-1"
       targets = [
-        "..."
       ]
-      version   = "...my_version..."
-      xml_query = "...my_xml_query..."
+      version   = "7f0c2f2e-1c3b-4d2a-9d6e-5a1b2c3d4e5f"
+      xml_query = "//Event/System"
     }
   ]
   tcp_port = 36722

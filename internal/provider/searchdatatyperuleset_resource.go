@@ -40,11 +40,12 @@ func (r *SearchDatatypeRulesetResource) Metadata(ctx context.Context, req resour
 
 func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "SearchDatatypeRuleset Resource",
+		MarkdownDescription: "Manages the Local Search **datatype routing** ruleset (the same ordered rules as Search **Get Data In** → **Datatyping** when id is `default`).\n\n" +
+			"**Terraform:** Only the ruleset id `default` is supported today. Treat this resource as a **singleton**: each apply or update sends the **complete** ordered `rules` list to the API (similar to replacing all routes in one route table). Rules are not merged per entry; omitting a rule from configuration removes it on the next apply.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `Ruleset identifier. The Search <strong>Get Data In</strong> &rarr; <strong>Datatyping</strong> UI loads and saves the ruleset whose id is <code>default</code> (see browser Network: <code>GET …/datatype-rulesets/default</code>). Use <code>default</code> in API clients and Terraform (<code>criblio_search_datatype_ruleset</code>) to manage the same ordered rules the UI shows. Other ids refer to additional named rulesets that may not appear in that wizard.`,
+				Description: `Ruleset identifier. Use ` + "`default`" + ` to match the **Get Data In** → **Datatyping** wizard (see Network: ` + "`GET …/datatype-rulesets/default`" + `). **Terraform only supports ` + "`default`" + ` today.** Other API ids may exist for direct clients.`,
 			},
 			"items": schema.ListNestedAttribute{
 				Computed: true,
@@ -84,7 +85,7 @@ func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource
 									},
 								},
 							},
-							Description: `Rules evaluated in order for datatype routing.`,
+							Description: `Rules evaluated in order for datatype routing (read-only copy on ` + "`items`" + ` when returned by the API).`,
 						},
 					},
 				},
@@ -119,7 +120,7 @@ func (r *SearchDatatypeRulesetResource) Schema(ctx context.Context, req resource
 						},
 					},
 				},
-				Description: `Rules evaluated in order for datatype routing.`,
+				Description: `Rules evaluated in order for datatype routing. Create/update replaces the **entire** ordered list in the API (singleton-style); omitted rules are removed on apply.`,
 			},
 		},
 	}

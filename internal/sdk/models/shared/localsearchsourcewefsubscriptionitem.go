@@ -25,6 +25,7 @@ func (e *ContentFormat) IsExact() bool {
 	return false
 }
 
+// QuerySelector - Query builder mode; simple with queries, or xml with xmlQuery.
 type QuerySelector string
 
 const (
@@ -48,7 +49,9 @@ func (e *QuerySelector) IsExact() bool {
 }
 
 type LocalSearchSourceWefSubscriptionItemQuery struct {
-	Path            string `json:"path"`
+	// Path attribute from the relevant XML Select element.
+	Path string `json:"path"`
+	// XPath query inside the relevant XML Select element.
 	QueryExpression string `json:"queryExpression"`
 }
 
@@ -66,7 +69,7 @@ func (l *LocalSearchSourceWefSubscriptionItemQuery) GetQueryExpression() string 
 	return l.QueryExpression
 }
 
-// LocalSearchSourceWefSubscriptionItem - WEF subscription entry for Local Search sources when <code>type</code> is <code>wef</code>.
+// LocalSearchSourceWefSubscriptionItem - WEF subscription entry for Local Search when type is wef. Aligns with Stream InputWef subscription fields. Use querySelector simple with queries, or xml with xmlQuery.
 type LocalSearchSourceWefSubscriptionItem struct {
 	// Subscription name exposed to Windows clients.
 	SubscriptionName string `json:"subscriptionName"`
@@ -87,12 +90,15 @@ type LocalSearchSourceWefSubscriptionItem struct {
 	// DNS names of endpoints that forward these events (wildcards allowed).
 	Targets []string `json:"targets"`
 	// RFC 3066 locale for Windows clients (e.g. en-US).
-	Locale        *string                                     `json:"locale,omitempty"`
-	QuerySelector *QuerySelector                              `json:"querySelector,omitempty"`
-	Metadata      []ItemsTypeMetadata                         `json:"metadata,omitempty"`
-	Queries       []LocalSearchSourceWefSubscriptionItemQuery `json:"queries,omitempty"`
-	XMLQuery      *string                                     `json:"xmlQuery,omitempty"`
-	ID            *string                                     `json:"id,omitempty"`
+	Locale   *string             `json:"locale,omitempty"`
+	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
+	ID       *string             `json:"id,omitempty"`
+	// Query builder mode; simple with queries, or xml with xmlQuery.
+	QuerySelector *QuerySelector `json:"querySelector,omitempty"`
+	// Path and XPath selector entries when using simple mode.
+	Queries []LocalSearchSourceWefSubscriptionItemQuery `json:"queries,omitempty"`
+	// XPath query when using xml mode.
+	XMLQuery *string `json:"xmlQuery,omitempty"`
 }
 
 func (l *LocalSearchSourceWefSubscriptionItem) GetSubscriptionName() string {
@@ -165,18 +171,25 @@ func (l *LocalSearchSourceWefSubscriptionItem) GetLocale() *string {
 	return l.Locale
 }
 
-func (l *LocalSearchSourceWefSubscriptionItem) GetQuerySelector() *QuerySelector {
-	if l == nil {
-		return nil
-	}
-	return l.QuerySelector
-}
-
 func (l *LocalSearchSourceWefSubscriptionItem) GetMetadata() []ItemsTypeMetadata {
 	if l == nil {
 		return nil
 	}
 	return l.Metadata
+}
+
+func (l *LocalSearchSourceWefSubscriptionItem) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LocalSearchSourceWefSubscriptionItem) GetQuerySelector() *QuerySelector {
+	if l == nil {
+		return nil
+	}
+	return l.QuerySelector
 }
 
 func (l *LocalSearchSourceWefSubscriptionItem) GetQueries() []LocalSearchSourceWefSubscriptionItemQuery {
@@ -191,11 +204,4 @@ func (l *LocalSearchSourceWefSubscriptionItem) GetXMLQuery() *string {
 		return nil
 	}
 	return l.XMLQuery
-}
-
-func (l *LocalSearchSourceWefSubscriptionItem) GetID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.ID
 }

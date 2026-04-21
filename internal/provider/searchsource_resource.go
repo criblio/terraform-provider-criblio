@@ -64,7 +64,7 @@ func (r *SearchSourceResource) Metadata(ctx context.Context, req resource.Metada
 
 func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "SearchSource Resource",
+		MarkdownDescription: "Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (`/search/local_search/sources`).\n\n**Terraform provisioning:** Creating many `criblio_search_source` resources in parallel in a single apply is not supported by the control plane. Create sources **one at a time** (for example with `depends_on` between resources). Allow **at least 60 seconds** between successive **create** operations in the same workspace (for example using [`time_sleep`](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) between dependents).\n",
 		Attributes: map[string]schema.Attribute{
 			"auth_tokens": schema.ListNestedAttribute{
 				Computed: true,
@@ -176,11 +176,6 @@ func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRe
 								float64validator.AtLeast(0),
 							},
 						},
-						"compress": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Receive compressed events from the source.`,
-						},
 						"content_format": schema.StringAttribute{
 							Computed:    true,
 							Optional:    true,
@@ -202,38 +197,6 @@ func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRe
 							Computed: true,
 							Optional: true,
 						},
-						"locale": schema.StringAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `RFC 3066 locale for Windows clients (e.g. en-US).`,
-						},
-						"metadata": schema.ListNestedAttribute{
-							Computed: true,
-							Optional: true,
-							NestedObject: schema.NestedAttributeObject{
-								Validators: []validator.Object{
-									speakeasy_objectvalidators.NotNull(),
-								},
-								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `Not Null`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"value": schema.StringAttribute{
-										Computed:    true,
-										Optional:    true,
-										Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.). Not Null`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-								},
-							},
-						},
 						"queries": schema.ListNestedAttribute{
 							Computed: true,
 							Optional: true,
@@ -245,7 +208,7 @@ func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRe
 									"path": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Not Null`,
+										Description: `Path attribute from the relevant XML Select element. Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -253,28 +216,19 @@ func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRe
 									"query_expression": schema.StringAttribute{
 										Computed:    true,
 										Optional:    true,
-										Description: `Not Null`,
+										Description: `XPath query inside the relevant XML Select element. Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
 								},
 							},
+							Description: `Path and XPath selector entries when using simple mode.`,
 						},
 						"query_selector": schema.StringAttribute{
 							Computed:    true,
 							Optional:    true,
-							Description: `possible known values include one of ["simple", "xml"]`,
-						},
-						"read_existing_events": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Send previously existing events for new subscriptions.`,
-						},
-						"send_bookmarks": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Description: `Track received events for resume after re-subscription.`,
+							Description: `Query builder mode; simple with queries, or xml with xmlQuery. possible known values include one of ["simple", "xml"]`,
 						},
 						"subscription_name": schema.StringAttribute{
 							Computed:    true,
@@ -299,8 +253,9 @@ func (r *SearchSourceResource) Schema(ctx context.Context, req resource.SchemaRe
 							Description: `Version UUID for this subscription; changes when subscription parameters change.`,
 						},
 						"xml_query": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
+							Computed:    true,
+							Optional:    true,
+							Description: `XPath query when using xml mode.`,
 						},
 					},
 				},

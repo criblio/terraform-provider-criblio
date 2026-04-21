@@ -40,7 +40,7 @@ func (r *SearchSourcesDataSource) Metadata(ctx context.Context, req datasource.M
 // Schema defines the schema for the data source.
 func (r *SearchSourcesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "SearchSources DataSource",
+		MarkdownDescription: "Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (`/search/local_search/sources`).\n\n**Terraform provisioning:** Creating many `criblio_search_source` resources in parallel in a single apply is not supported by the control plane. Create sources **one at a time** (for example with `depends_on` between resources). Allow **at least 60 seconds** between successive **create** operations in the same workspace (for example using [`time_sleep`](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) between dependents).\n",
 
 		Attributes: map[string]schema.Attribute{
 			"items": schema.ListNestedAttribute{
@@ -115,10 +115,6 @@ func (r *SearchSourcesDataSource) Schema(ctx context.Context, req datasource.Sch
 										Computed:    true,
 										Description: `Seconds to collect events before sending to Cribl.`,
 									},
-									"compress": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Receive compressed events from the source.`,
-									},
 									"content_format": schema.StringAttribute{
 										Computed:    true,
 										Description: `Content format for delivered events.`,
@@ -130,47 +126,25 @@ func (r *SearchSourcesDataSource) Schema(ctx context.Context, req datasource.Sch
 									"id": schema.StringAttribute{
 										Computed: true,
 									},
-									"locale": schema.StringAttribute{
-										Computed:    true,
-										Description: `RFC 3066 locale for Windows clients (e.g. en-US).`,
-									},
-									"metadata": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"name": schema.StringAttribute{
-													Computed: true,
-												},
-												"value": schema.StringAttribute{
-													Computed:    true,
-													Description: `JavaScript expression to compute field's value, enclosed in quotes or backticks. (Can evaluate to a constant.)`,
-												},
-											},
-										},
-									},
 									"queries": schema.ListNestedAttribute{
 										Computed: true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"path": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `Path attribute from the relevant XML Select element.`,
 												},
 												"query_expression": schema.StringAttribute{
-													Computed: true,
+													Computed:    true,
+													Description: `XPath query inside the relevant XML Select element.`,
 												},
 											},
 										},
+										Description: `Path and XPath selector entries when using simple mode.`,
 									},
 									"query_selector": schema.StringAttribute{
-										Computed: true,
-									},
-									"read_existing_events": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Send previously existing events for new subscriptions.`,
-									},
-									"send_bookmarks": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Track received events for resume after re-subscription.`,
+										Description: `Query builder mode; simple with queries, or xml with xmlQuery.`,
 									},
 									"subscription_name": schema.StringAttribute{
 										Computed:    true,
@@ -186,7 +160,8 @@ func (r *SearchSourcesDataSource) Schema(ctx context.Context, req datasource.Sch
 										Description: `Version UUID for this subscription; changes when subscription parameters change.`,
 									},
 									"xml_query": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `XPath query when using xml mode.`,
 									},
 								},
 							},

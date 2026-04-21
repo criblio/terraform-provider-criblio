@@ -61,21 +61,9 @@ func (r *SearchSourceResourceModel) RefreshFromSharedLocalSearchSource(ctx conte
 		var subscriptions tfTypes.LocalSearchSourceWefSubscriptionItem
 
 		subscriptions.BatchTimeout = types.Float64Value(subscriptionsItem.BatchTimeout)
-		subscriptions.Compress = types.BoolPointerValue(subscriptionsItem.Compress)
 		subscriptions.ContentFormat = types.StringValue(string(subscriptionsItem.ContentFormat))
 		subscriptions.HeartbeatInterval = types.Float64Value(subscriptionsItem.HeartbeatInterval)
 		subscriptions.ID = types.StringPointerValue(subscriptionsItem.ID)
-		subscriptions.Locale = types.StringPointerValue(subscriptionsItem.Locale)
-		subscriptions.Metadata = []tfTypes.ItemsTypeMetadata{}
-
-		for _, metadataItem := range subscriptionsItem.Metadata {
-			var metadata tfTypes.ItemsTypeMetadata
-
-			metadata.Name = types.StringValue(metadataItem.Name)
-			metadata.Value = types.StringValue(metadataItem.Value)
-
-			subscriptions.Metadata = append(subscriptions.Metadata, metadata)
-		}
 		subscriptions.Queries = []tfTypes.LocalSearchSourceWefSubscriptionItemQuery{}
 
 		for _, queriesItem := range subscriptionsItem.Queries {
@@ -91,8 +79,6 @@ func (r *SearchSourceResourceModel) RefreshFromSharedLocalSearchSource(ctx conte
 		} else {
 			subscriptions.QuerySelector = types.StringNull()
 		}
-		subscriptions.ReadExistingEvents = types.BoolPointerValue(subscriptionsItem.ReadExistingEvents)
-		subscriptions.SendBookmarks = types.BoolPointerValue(subscriptionsItem.SendBookmarks)
 		subscriptions.SubscriptionName = types.StringValue(subscriptionsItem.SubscriptionName)
 		subscriptions.Targets = make([]types.String, 0, len(subscriptionsItem.Targets))
 		for _, v := range subscriptionsItem.Targets {
@@ -280,52 +266,33 @@ func (r *SearchSourceResourceModel) ToSharedLocalSearchSource(ctx context.Contex
 		var batchTimeout float64
 		batchTimeout = r.Subscriptions[subscriptionsIndex].BatchTimeout.ValueFloat64()
 
-		readExistingEvents := new(bool)
-		if !r.Subscriptions[subscriptionsIndex].ReadExistingEvents.IsUnknown() && !r.Subscriptions[subscriptionsIndex].ReadExistingEvents.IsNull() {
-			*readExistingEvents = r.Subscriptions[subscriptionsIndex].ReadExistingEvents.ValueBool()
-		} else {
-			readExistingEvents = nil
-		}
-		sendBookmarks := new(bool)
-		if !r.Subscriptions[subscriptionsIndex].SendBookmarks.IsUnknown() && !r.Subscriptions[subscriptionsIndex].SendBookmarks.IsNull() {
-			*sendBookmarks = r.Subscriptions[subscriptionsIndex].SendBookmarks.ValueBool()
-		} else {
-			sendBookmarks = nil
-		}
-		compress := new(bool)
-		if !r.Subscriptions[subscriptionsIndex].Compress.IsUnknown() && !r.Subscriptions[subscriptionsIndex].Compress.IsNull() {
-			*compress = r.Subscriptions[subscriptionsIndex].Compress.ValueBool()
-		} else {
-			compress = nil
-		}
+		// SearchSource#create.subscriptions.read_existing_eventsSearchSource#create.subscriptions.read_existing_events.enum impedance mismatch: boolean != string
+		var readExistingEvents *bool
+		// SearchSource#create.subscriptions.send_bookmarksSearchSource#create.subscriptions.send_bookmarks impedance mismatch: boolean != string
+		var sendBookmarks *bool
+		// SearchSource#create.subscriptions.compressSearchSource#create.subscriptions.compress impedance mismatch: boolean != array
+		var compress *bool
 		targets := make([]string, 0, len(r.Subscriptions[subscriptionsIndex].Targets))
 		for targetsIndex := range r.Subscriptions[subscriptionsIndex].Targets {
 			targets = append(targets, r.Subscriptions[subscriptionsIndex].Targets[targetsIndex].ValueString())
 		}
 		locale := new(string)
-		if !r.Subscriptions[subscriptionsIndex].Locale.IsUnknown() && !r.Subscriptions[subscriptionsIndex].Locale.IsNull() {
-			*locale = r.Subscriptions[subscriptionsIndex].Locale.ValueString()
+		if !r.Subscriptions[subscriptionsIndex].XMLQuery.IsUnknown() && !r.Subscriptions[subscriptionsIndex].XMLQuery.IsNull() {
+			*locale = r.Subscriptions[subscriptionsIndex].XMLQuery.ValueString()
 		} else {
 			locale = nil
+		}
+		id1 := new(string)
+		if !r.Subscriptions[subscriptionsIndex].ID.IsUnknown() && !r.Subscriptions[subscriptionsIndex].ID.IsNull() {
+			*id1 = r.Subscriptions[subscriptionsIndex].ID.ValueString()
+		} else {
+			id1 = nil
 		}
 		querySelector := new(shared.QuerySelector)
 		if !r.Subscriptions[subscriptionsIndex].QuerySelector.IsUnknown() && !r.Subscriptions[subscriptionsIndex].QuerySelector.IsNull() {
 			*querySelector = shared.QuerySelector(r.Subscriptions[subscriptionsIndex].QuerySelector.ValueString())
 		} else {
 			querySelector = nil
-		}
-		metadata := make([]shared.ItemsTypeMetadata, 0, len(r.Subscriptions[subscriptionsIndex].Metadata))
-		for metadataIndex := range r.Subscriptions[subscriptionsIndex].Metadata {
-			var name string
-			name = r.Subscriptions[subscriptionsIndex].Metadata[metadataIndex].Name.ValueString()
-
-			var value string
-			value = r.Subscriptions[subscriptionsIndex].Metadata[metadataIndex].Value.ValueString()
-
-			metadata = append(metadata, shared.ItemsTypeMetadata{
-				Name:  name,
-				Value: value,
-			})
 		}
 		queries := make([]shared.LocalSearchSourceWefSubscriptionItemQuery, 0, len(r.Subscriptions[subscriptionsIndex].Queries))
 		for queriesIndex := range r.Subscriptions[subscriptionsIndex].Queries {
@@ -346,12 +313,6 @@ func (r *SearchSourceResourceModel) ToSharedLocalSearchSource(ctx context.Contex
 		} else {
 			xmlQuery = nil
 		}
-		id1 := new(string)
-		if !r.Subscriptions[subscriptionsIndex].ID.IsUnknown() && !r.Subscriptions[subscriptionsIndex].ID.IsNull() {
-			*id1 = r.Subscriptions[subscriptionsIndex].ID.ValueString()
-		} else {
-			id1 = nil
-		}
 		subscriptions = append(subscriptions, shared.LocalSearchSourceWefSubscriptionItem{
 			SubscriptionName:   subscriptionName,
 			Version:            version,
@@ -363,11 +324,10 @@ func (r *SearchSourceResourceModel) ToSharedLocalSearchSource(ctx context.Contex
 			Compress:           compress,
 			Targets:            targets,
 			Locale:             locale,
+			ID:                 id1,
 			QuerySelector:      querySelector,
-			Metadata:           metadata,
 			Queries:            queries,
 			XMLQuery:           xmlQuery,
-			ID:                 id1,
 		})
 	}
 	var tls *shared.TLSConfig

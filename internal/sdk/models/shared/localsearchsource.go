@@ -119,7 +119,7 @@ func (e *LocalSearchSourceType) IsExact() bool {
 	return false
 }
 
-// LocalSearchSource - Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (<code>/search/local_search/sources</code>).
+// LocalSearchSource - Ingest source for Local Search: listen address, optional auth tokens, TLS, and health metadata (<code>/search/local_search/sources</code>). Terraform: creating many <code>criblio_search_source</code> resources in parallel is not supported by the control plane. Provision sources one at a time, for example by chaining resources with <code>depends_on</code>, and leave at least 60 seconds between successive create operations in the same workspace (use <code>time_sleep</code> or equivalent between dependents).
 type LocalSearchSource struct {
 	// Optional bearer or shared tokens accepted by this source.
 	AuthTokens []LocalSearchSourceAuthToken `json:"authTokens,omitempty"`

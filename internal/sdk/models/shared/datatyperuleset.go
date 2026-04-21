@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// DatatypeRulesetID - Unique identifier for this datatype ruleset. For Search Local Search, this value is always <code>default</code>.
+// DatatypeRulesetID - Ruleset identifier. For Terraform, only <code>default</code> is supported today (same ruleset as Search <strong>Get Data In</strong> → <strong>Datatyping</strong>). The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
 type DatatypeRulesetID string
 
 const (
@@ -32,10 +32,14 @@ func (e *DatatypeRulesetID) UnmarshalJSON(data []byte) error {
 }
 
 // DatatypeRuleset - Ordered list of datatype rules for Local Search (<code>/search/local_search/datatype-rulesets</code>).
+//
+// <strong>Terraform</strong>: Treat this resource as a <strong>singleton</strong> ruleset: only the id <code>default</code> is supported, and each apply or update replaces the full <code>rules</code> collection in the API—no partial merge.
 type DatatypeRuleset struct {
-	// Unique identifier for this datatype ruleset. For Search Local Search, this value is always <code>default</code>.
+	// Ruleset identifier. For Terraform, only <code>default</code> is supported today (same ruleset as Search <strong>Get Data In</strong> → <strong>Datatyping</strong>). The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
+	//
 	ID DatatypeRulesetID `json:"id"`
-	// Rules evaluated in order for datatype routing.
+	// Rules evaluated in order for datatype routing. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.
+	//
 	Rules []DatatypeRule `json:"rules"`
 }
 

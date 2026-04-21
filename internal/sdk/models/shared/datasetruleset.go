@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// DatasetRulesetID - Ruleset identifier.
+// DatasetRulesetID - Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
 type DatasetRulesetID string
 
 const (
@@ -32,10 +32,14 @@ func (e *DatasetRulesetID) UnmarshalJSON(data []byte) error {
 }
 
 // DatasetRuleset - Ordered list of dataset rules for Local Search (<code>/search/local_search/dataset-rulesets</code>).
+//
+// <strong>Terraform</strong>: Treat this resource as a <strong>singleton</strong> ruleset: only the id <code>default</code> is supported, and each apply or update replaces the full <code>rules</code> collection in the API—no partial merge.
 type DatasetRuleset struct {
-	// Ruleset identifier.
+	// Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
+	//
 	ID DatasetRulesetID `json:"id"`
-	// Rules evaluated in order for dataset routing and optional extend.
+	// Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.
+	//
 	Rules []DatasetRule `json:"rules"`
 }
 

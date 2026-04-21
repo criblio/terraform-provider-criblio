@@ -3333,7 +3333,7 @@ func (s *Search) UpdateDatatypeRuleByID(ctx context.Context, request shared.Data
 }
 
 // CreateSearchLocalSearchSources - Create a Local Search source (Cribl.Cloud only)
-// Creates a source on Local Search using a supported type; bind address and several per-type defaults are enforced server-side (Cribl.Cloud only).
+// Creates a source on Local Search using a supported type; bind address and several per-type defaults are enforced server-side (Cribl.Cloud only). Do not create many sources in parallel in a single Terraform apply; use sequential ordering with depends_on and at least 60 seconds between create operations in the same workspace.
 func (s *Search) CreateSearchLocalSearchSources(ctx context.Context, request shared.LocalSearchSource, opts ...operations.Option) (*operations.CreateSearchLocalSearchSourcesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
