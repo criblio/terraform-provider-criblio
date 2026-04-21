@@ -14,11 +14,11 @@ func TestSearchSource(t *testing.T) {
 	}
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
-			ProtoV6ProviderFactories:  providerFactory,
-			PreventPostDestroyRefresh: true,
+			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_source.cribl_http", "id", "example_in_cribl_http"),
 						resource.TestCheckResourceAttr("criblio_search_source.cribl_http", "type", "cribl_http"),

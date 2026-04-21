@@ -8,6 +8,7 @@ import (
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -177,6 +178,34 @@ func (r *SearchDatasetRulesetResource) Configure(ctx context.Context, req resour
 	r.client = client
 }
 
+// loadDatasetRulesetFromAPI refreshes computed `items` and mirrors `rules` from GET, same as Read.
+// Create/Update must call this after a successful PATCH so state matches a follow-up refresh (computed attrs are not in plan).
+func (r *SearchDatasetRulesetResource) loadDatasetRulesetFromAPI(ctx context.Context, data *SearchDatasetRulesetResourceModel) diag.Diagnostics {
+	var diags diag.Diagnostics
+	res, err := r.client.Search.GetDatasetRuleByID(ctx)
+	if err != nil {
+		diags.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			diags.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return diags
+	}
+	if res == nil {
+		diags.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return diags
+	}
+	if res.StatusCode != 200 {
+		diags.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return diags
+	}
+	if res.CountedDatasetRuleset == nil {
+		diags.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return diags
+	}
+	diags.Append(data.RefreshFromSharedCountedDatasetRuleset(ctx, res.CountedDatasetRuleset)...)
+	return diags
+}
+
 func (r *SearchDatasetRulesetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *SearchDatasetRulesetResourceModel
 	var plan types.Object
@@ -219,6 +248,11 @@ func (r *SearchDatasetRulesetResource) Create(ctx context.Context, req resource.
 	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(r.loadDatasetRulesetFromAPI(ctx, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -318,6 +352,11 @@ func (r *SearchDatasetRulesetResource) Update(ctx context.Context, req resource.
 	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(r.loadDatasetRulesetFromAPI(ctx, data)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -84,6 +84,7 @@ jobs:
 
   acceptance_test_cloud:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -112,6 +113,7 @@ jobs:
 
   acceptance_test_onprem:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4.2.2
 
@@ -182,6 +184,7 @@ jobs:
 
   integration_test_import_cli:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4.2.2
 
