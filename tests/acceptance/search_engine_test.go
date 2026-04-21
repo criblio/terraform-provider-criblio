@@ -22,7 +22,7 @@ func TestSearchEngine(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "id", "my_search_engine_tf"),
 						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "description", "My Search Engine TF"),
-						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "tier_size", "2xlarge"),
+						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "tier_size", "small"),
 					),
 				},
 			},

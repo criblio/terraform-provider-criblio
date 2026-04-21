@@ -15,6 +15,7 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_pack_routes":             {"id", "additional_properties", "items"},     // items is Computed; routes come from items[0], same as criblio_routes
 	"criblio_search_dataset":          {"id", "description", "provider_id", "type"}, // all computed/read-only; config comes from type-specific blocks only
 	"criblio_search_dataset_provider": {"id", "description", "provider_id", "type"},
+	"criblio_search_datatype_ruleset": {"items"}, // Computed mirror of API; config is `rules` only (same as provider schema intent).
 }
 
 // flattenItemsToAttrsTypes are resource types whose API returns payload in a list (Items) and schema

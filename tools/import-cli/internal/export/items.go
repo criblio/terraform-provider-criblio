@@ -124,6 +124,11 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if skipResourceWhenLibCribl(attrs) {
 		return nil, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap)
 	}
+	if r.TypeName == "criblio_search_datatype_ruleset" || r.TypeName == "criblio_search_dataset_ruleset" {
+		if injErr := injectSearchRulesetRulesForExport(r.TypeName, model, attrs, e); injErr != nil {
+			return nil, fmt.Sprintf("%s %v: search ruleset rules: %s", r.TypeName, idMap, sanitizeConvertError(injErr))
+		}
+	}
 	filterAttrsBySchema(attrs, e.ModelTypeName)
 	if r.TypeName == "criblio_pack_destination" && idMap["pack"] != "" {
 		attrs["pack"] = hcl.Value{Kind: hcl.KindString, String: idMap["pack"]}
@@ -230,6 +235,11 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if flattenItemsToAttrsTypes[typeName] {
 		if err := flattenFirstItemToAttrs(model, attrs, "items"); err != nil {
 			return fmt.Errorf("flatten: %w", err)
+		}
+	}
+	if typeName == "criblio_search_datatype_ruleset" || typeName == "criblio_search_dataset_ruleset" {
+		if err := injectSearchRulesetRulesForExport(typeName, model, attrs, e); err != nil {
+			return err
 		}
 	}
 	filterAttrsBySchema(attrs, e.ModelTypeName)
