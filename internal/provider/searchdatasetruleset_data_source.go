@@ -49,7 +49,7 @@ func (r *SearchDatasetRulesetDataSource) Schema(ctx context.Context, req datasou
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
 							Computed:    true,
-							Description: `Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.`,
+							Description: `Ruleset identifier. For Terraform, only <code>default</code> is supported today.`,
 						},
 						"rules": schema.ListNestedAttribute{
 							Computed: true,
@@ -93,7 +93,7 @@ func (r *SearchDatasetRulesetDataSource) Schema(ctx context.Context, req datasou
 									},
 								},
 							},
-							Description: `Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.`,
+							Description: `Rules evaluated in order for dataset routing and optional extend.`,
 						},
 					},
 				},

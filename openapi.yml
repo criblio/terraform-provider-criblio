@@ -47986,7 +47986,7 @@ components:
                 id:
                     type: string
                     description: |
-                        Ruleset identifier. For Terraform, only <code>default</code> is supported today. The API may expose other ids for direct clients; manage those outside Terraform unless support is added.
+                        Ruleset identifier. For Terraform, only <code>default</code> is supported today.
                     enum:
                     - default
                     example: default
@@ -47995,7 +47995,7 @@ components:
                     items:
                         $ref: '#/components/schemas/DatasetRule'
                     description: |
-                        Rules evaluated in order for dataset routing and optional extend. Create/update sends the <strong>entire</strong> ordered list (singleton-style: like replacing all routes in one route table). Terraform does not merge per rule; omitted rules are removed on the next apply.
+                        Rules evaluated in order for dataset routing and optional extend.
             required:
             - id
             - rules
