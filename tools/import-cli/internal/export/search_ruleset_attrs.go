@@ -12,8 +12,9 @@ import (
 
 // injectSearchRulesetRulesForExport ensures required `rules` appears in attrs for HCL export.
 // ModelToValue omits nil slices as null, then ResourceBlock skips nulls — Terraform then reports
-// missing required `rules`. Refresh only fills `items` for datatype ruleset; copy rules from items
-// here. For dataset ruleset, normalize nil Rules to an empty non-nil slice before conversion.
+// missing required `rules`. When the model has API data under computed `items` but top-level `rules`
+// is still nil (same as datatype), copy rules from items here. Dataset uses datasetRulesForExport
+// to mirror provider pickDatasetRulesTFAfterRefresh.
 func injectSearchRulesetRulesForExport(typeName string, model interface{}, attrs map[string]hcl.Value, e registry.Entry) error {
 	opts := hclOptionsForType(typeName, e)
 	switch typeName {
@@ -38,10 +39,7 @@ func injectSearchRulesetRulesForExport(typeName string, model interface{}, attrs
 		if !ok {
 			return nil
 		}
-		rules := pm.Rules
-		if rules == nil {
-			rules = []tfTypes.DatasetRule{}
-		}
+		rules := datasetRulesForExport(pm)
 		wrap := struct {
 			Rules []tfTypes.DatasetRule `tfsdk:"rules"`
 		}{Rules: rules}
@@ -56,6 +54,35 @@ func injectSearchRulesetRulesForExport(typeName string, model interface{}, attrs
 		return nil
 	}
 	return nil
+}
+
+// datasetRulesForExport mirrors pickDatasetRulesTFAfterRefresh: prefer top-level Rules; if empty, copy from computed Items (default id or sole element).
+func datasetRulesForExport(pm *provider.SearchDatasetRulesetResourceModel) []tfTypes.DatasetRule {
+	if pm == nil {
+		return []tfTypes.DatasetRule{}
+	}
+	if len(pm.Rules) > 0 {
+		return normalizeDatasetRuleSliceForExport(pm.Rules)
+	}
+	if len(pm.Items) == 0 {
+		return []tfTypes.DatasetRule{}
+	}
+	if len(pm.Items) == 1 {
+		return normalizeDatasetRuleSliceForExport(pm.Items[0].Rules)
+	}
+	for _, it := range pm.Items {
+		if it.ID.ValueString() == string(shared.DatasetRulesetIDDefault) {
+			return normalizeDatasetRuleSliceForExport(it.Rules)
+		}
+	}
+	return normalizeDatasetRuleSliceForExport(pm.Items[0].Rules)
+}
+
+func normalizeDatasetRuleSliceForExport(in []tfTypes.DatasetRule) []tfTypes.DatasetRule {
+	if in == nil {
+		return []tfTypes.DatasetRule{}
+	}
+	return in
 }
 
 func datatypeRulesForExport(pm *provider.SearchDatatypeRulesetResourceModel) []tfTypes.DatatypeRule {

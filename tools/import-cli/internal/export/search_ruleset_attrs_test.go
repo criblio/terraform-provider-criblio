@@ -59,6 +59,34 @@ func TestSearchDatasetRulesetExport_skipsReadOnlyItems(t *testing.T) {
 	require.False(t, hasItems, "items is Computed-only; export must not emit it")
 }
 
+func TestInjectSearchRulesetRulesForExport_datasetFillsRulesFromItems(t *testing.T) {
+	e := registryEntryForSearchDatasetRuleset(t)
+	model := &provider.SearchDatasetRulesetResourceModel{
+		ID: types.StringValue("default"),
+		Items: []ptypes.DatasetRuleset{
+			{
+				ID: types.StringValue("default"),
+				Rules: []ptypes.DatasetRule{
+					{
+						ID:              types.StringValue("rule_1"),
+						Name:            types.StringValue("n"),
+						KustoExpression: types.StringValue("*"),
+						SendDataTo:      types.StringValue("destinationDataset"),
+					},
+				},
+			},
+		},
+		Rules: nil,
+	}
+	attrs, err := hcl.ModelToValue(model, hclOptionsForType("criblio_search_dataset_ruleset", e))
+	require.NoError(t, err)
+	require.NoError(t, injectSearchRulesetRulesForExport("criblio_search_dataset_ruleset", model, attrs, e))
+	rv, ok := attrs["rules"]
+	require.True(t, ok)
+	require.Equal(t, hcl.KindList, rv.Kind)
+	require.Len(t, rv.List, 1)
+}
+
 func TestInjectSearchRulesetRulesForExport_datasetNilRulesBecomesEmptyList(t *testing.T) {
 	e := registryEntryForSearchDatasetRuleset(t)
 	model := &provider.SearchDatasetRulesetResourceModel{
