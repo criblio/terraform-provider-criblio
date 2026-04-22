@@ -6,30 +6,46 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
-// ConditionSpecificConfigs - Configuration specific to the notification condition
+// ConditionSpecificConfigs - Configuration specific to the notification condition. Shape depends on `condition`:
+// Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+// Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
+// For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
+// For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`.
 type ConditionSpecificConfigs struct {
-	// ID of the saved query this notification is associated with
-	SavedQueryID string `json:"savedQueryId"`
-	// Message template for the notification
-	Message string `json:"message"`
-	// Type of trigger (e.g., resultsCount)
+	// (Search) ID of the saved query this notification is associated with
+	SavedQueryID *string `json:"savedQueryId,omitempty"`
+	// (Search) Message template for the notification
+	Message *string `json:"message,omitempty"`
+	// (Search) Type of trigger (e.g., resultsCount)
 	TriggerType *string `json:"triggerType,omitempty"`
-	// Comparison operator (e.g., >, <, =)
+	// (Search) Comparison operator (e.g., >, <, =)
 	TriggerComparator *string `json:"triggerComparator,omitempty"`
-	// Threshold count for the trigger
+	// (Search) Threshold count for the trigger
 	TriggerCount *float64 `json:"triggerCount,omitempty"`
+	// (Stream) Input/source id, e.g. splunk:in_splunk_tcp. Used by high-volume, low-volume, no-data, and persistent-queue conditions
+	Name *string `json:"name,omitempty"`
+	// (Stream) Time window for the metric, e.g. 60s or 5m
+	TimeWindow *string `json:"timeWindow,omitempty"`
+	// (Stream) Data volume threshold for high-volume / low-volume; memory string parsed like 1TB, 420MB, 1KB
+	DataVolume *string `json:"dataVolume,omitempty"`
+	// (Stream) When true, also notify when the condition returns to the OK / resolved state
+	NotifyOnResolution *bool `json:"notifyOnResolution,omitempty"`
+	// (Stream) For persistent queue usage conditions; percent 0-99
+	UsageThreshold *float64 `json:"usageThreshold,omitempty"`
+	// (Stream) Optional scope to a specific worker group
+	WorkerGroup *string `json:"__workerGroup,omitempty"`
 }
 
-func (c *ConditionSpecificConfigs) GetSavedQueryID() string {
+func (c *ConditionSpecificConfigs) GetSavedQueryID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.SavedQueryID
 }
 
-func (c *ConditionSpecificConfigs) GetMessage() string {
+func (c *ConditionSpecificConfigs) GetMessage() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.Message
 }
@@ -55,6 +71,48 @@ func (c *ConditionSpecificConfigs) GetTriggerCount() *float64 {
 	return c.TriggerCount
 }
 
+func (c *ConditionSpecificConfigs) GetName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Name
+}
+
+func (c *ConditionSpecificConfigs) GetTimeWindow() *string {
+	if c == nil {
+		return nil
+	}
+	return c.TimeWindow
+}
+
+func (c *ConditionSpecificConfigs) GetDataVolume() *string {
+	if c == nil {
+		return nil
+	}
+	return c.DataVolume
+}
+
+func (c *ConditionSpecificConfigs) GetNotifyOnResolution() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.NotifyOnResolution
+}
+
+func (c *ConditionSpecificConfigs) GetUsageThreshold() *float64 {
+	if c == nil {
+		return nil
+	}
+	return c.UsageThreshold
+}
+
+func (c *ConditionSpecificConfigs) GetWorkerGroup() *string {
+	if c == nil {
+		return nil
+	}
+	return c.WorkerGroup
+}
+
 type Notification struct {
 	// Unique identifier for the notification
 	ID string `json:"id"`
@@ -66,7 +124,12 @@ type Notification struct {
 	Targets []string `json:"targets,omitempty"`
 	// Configuration for notification targets
 	TargetConfigs []TargetConfig `json:"targetConfigs,omitempty"`
-	// Configuration specific to the notification condition
+	// Configuration specific to the notification condition. Shape depends on `condition`:
+	// Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+	// Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
+	// For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
+	// For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`.
+	//
 	Conf *ConditionSpecificConfigs `json:"conf,omitempty"`
 	// Additional metadata for the notification
 	Metadata []MetadataItem `json:"metadata,omitempty"`

@@ -16,15 +16,27 @@ Notification Resource
 resource "criblio_notification" "my_notification" {
   condition = "true"
   conf = {
-    message            = "Message for notification"
-    saved_query_id     = "savedQueryId"
-    trigger_comparator = ">"
-    trigger_count      = 10
-    trigger_type       = "resultsCount"
+    data_volume          = "1TB"
+    message              = "Message for notification"
+    name                 = "splunk:in_splunk_tcp"
+    notify_on_resolution = true
+    saved_query_id       = "savedQueryId"
+    time_window          = "60s"
+    trigger_comparator   = ">"
+    trigger_count        = 10
+    trigger_type         = "resultsCount"
+    usage_threshold      = 90
+    worker_group         = "...my_worker_group..."
   }
   disabled = false
   group    = "myNotificationGroup"
   id       = "myUniqueNotificationId"
+  metadata = [
+    {
+      name  = "env"
+      value = "production"
+    }
+  ]
   target_configs = [
     {
       conf = {
@@ -51,9 +63,14 @@ resource "criblio_notification" "my_notification" {
 
 ### Optional
 
-- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--conf))
+- `conf` (Attributes) Configuration specific to the notification condition. Shape depends on `condition`:
+Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
+For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
+For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`. (see [below for nested schema](#nestedatt--conf))
 - `disabled` (Boolean) Whether the notification is disabled. Default: false
 - `group` (String) Group identifier for the notification. Default: "default_search"
+- `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--metadata))
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
 - `targets` (List of String) Targets to send any notifications to. Default: []
 
@@ -62,11 +79,26 @@ resource "criblio_notification" "my_notification" {
 
 Optional:
 
-- `message` (String) Message template for the notification. Not Null
-- `saved_query_id` (String) ID of the saved query this notification is associated with. Not Null
-- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
-- `trigger_count` (Number) Threshold count for the trigger
-- `trigger_type` (String) Type of trigger (e.g., resultsCount)
+- `data_volume` (String) (Stream) Data volume threshold for high-volume / low-volume; memory string parsed like 1TB, 420MB, 1KB
+- `message` (String) (Search) Message template for the notification
+- `name` (String) (Stream) Input/source id, e.g. splunk:in_splunk_tcp. Used by high-volume, low-volume, no-data, and persistent-queue conditions
+- `notify_on_resolution` (Boolean) (Stream) When true, also notify when the condition returns to the OK / resolved state
+- `saved_query_id` (String) (Search) ID of the saved query this notification is associated with
+- `time_window` (String) (Stream) Time window for the metric, e.g. 60s or 5m
+- `trigger_comparator` (String) (Search) Comparison operator (e.g., >, <, =)
+- `trigger_count` (Number) (Search) Threshold count for the trigger
+- `trigger_type` (String) (Search) Type of trigger (e.g., resultsCount)
+- `usage_threshold` (Number) (Stream) For persistent queue usage conditions; percent 0-99
+- `worker_group` (String) (Stream) Optional scope to a specific worker group
+
+
+<a id="nestedatt--metadata"></a>
+### Nested Schema for `metadata`
+
+Optional:
+
+- `name` (String) Metadata field name. Not Null
+- `value` (String) Metadata field value. Not Null
 
 
 <a id="nestedatt--target_configs"></a>

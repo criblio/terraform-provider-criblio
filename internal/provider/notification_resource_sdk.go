@@ -79,15 +79,31 @@ func (r *NotificationResourceModel) RefreshFromSharedNotification(ctx context.Co
 		r.Conf = nil
 	} else {
 		r.Conf = &tfTypes.ConditionSpecificConfigs{}
-		r.Conf.Message = types.StringValue(resp.Conf.Message)
-		r.Conf.SavedQueryID = types.StringValue(resp.Conf.SavedQueryID)
+		r.Conf.WorkerGroup = types.StringPointerValue(resp.Conf.WorkerGroup)
+		r.Conf.DataVolume = types.StringPointerValue(resp.Conf.DataVolume)
+		r.Conf.Message = types.StringPointerValue(resp.Conf.Message)
+		r.Conf.Name = types.StringPointerValue(resp.Conf.Name)
+		r.Conf.NotifyOnResolution = types.BoolPointerValue(resp.Conf.NotifyOnResolution)
+		r.Conf.SavedQueryID = types.StringPointerValue(resp.Conf.SavedQueryID)
+		r.Conf.TimeWindow = types.StringPointerValue(resp.Conf.TimeWindow)
 		r.Conf.TriggerComparator = types.StringPointerValue(resp.Conf.TriggerComparator)
 		r.Conf.TriggerCount = types.Float64PointerValue(resp.Conf.TriggerCount)
 		r.Conf.TriggerType = types.StringPointerValue(resp.Conf.TriggerType)
+		r.Conf.UsageThreshold = types.Float64PointerValue(resp.Conf.UsageThreshold)
 	}
 	r.Disabled = types.BoolPointerValue(resp.Disabled)
 	r.Group = types.StringPointerValue(resp.Group)
 	r.ID = types.StringValue(resp.ID)
+	r.Metadata = []tfTypes.MetadataItem{}
+
+	for _, metadataItem := range resp.Metadata {
+		var metadata tfTypes.MetadataItem
+
+		metadata.Name = types.StringValue(metadataItem.Name)
+		metadata.Value = types.StringValue(metadataItem.Value)
+
+		r.Metadata = append(r.Metadata, metadata)
+	}
 	r.TargetConfigs = []tfTypes.TargetConfig{}
 
 	for _, targetConfigsItem := range resp.TargetConfigs {
@@ -213,12 +229,18 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 	}
 	var conf1 *shared.ConditionSpecificConfigs
 	if r.Conf != nil {
-		var savedQueryID string
-		savedQueryID = r.Conf.SavedQueryID.ValueString()
-
-		var message string
-		message = r.Conf.Message.ValueString()
-
+		savedQueryID := new(string)
+		if !r.Conf.SavedQueryID.IsUnknown() && !r.Conf.SavedQueryID.IsNull() {
+			*savedQueryID = r.Conf.SavedQueryID.ValueString()
+		} else {
+			savedQueryID = nil
+		}
+		message := new(string)
+		if !r.Conf.Message.IsUnknown() && !r.Conf.Message.IsNull() {
+			*message = r.Conf.Message.ValueString()
+		} else {
+			message = nil
+		}
 		triggerType := new(string)
 		if !r.Conf.TriggerType.IsUnknown() && !r.Conf.TriggerType.IsNull() {
 			*triggerType = r.Conf.TriggerType.ValueString()
@@ -237,13 +259,68 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 		} else {
 			triggerCount = nil
 		}
-		conf1 = &shared.ConditionSpecificConfigs{
-			SavedQueryID:      savedQueryID,
-			Message:           message,
-			TriggerType:       triggerType,
-			TriggerComparator: triggerComparator,
-			TriggerCount:      triggerCount,
+		name := new(string)
+		if !r.Conf.Name.IsUnknown() && !r.Conf.Name.IsNull() {
+			*name = r.Conf.Name.ValueString()
+		} else {
+			name = nil
 		}
+		timeWindow := new(string)
+		if !r.Conf.TimeWindow.IsUnknown() && !r.Conf.TimeWindow.IsNull() {
+			*timeWindow = r.Conf.TimeWindow.ValueString()
+		} else {
+			timeWindow = nil
+		}
+		dataVolume := new(string)
+		if !r.Conf.DataVolume.IsUnknown() && !r.Conf.DataVolume.IsNull() {
+			*dataVolume = r.Conf.DataVolume.ValueString()
+		} else {
+			dataVolume = nil
+		}
+		notifyOnResolution := new(bool)
+		if !r.Conf.NotifyOnResolution.IsUnknown() && !r.Conf.NotifyOnResolution.IsNull() {
+			*notifyOnResolution = r.Conf.NotifyOnResolution.ValueBool()
+		} else {
+			notifyOnResolution = nil
+		}
+		usageThreshold := new(float64)
+		if !r.Conf.UsageThreshold.IsUnknown() && !r.Conf.UsageThreshold.IsNull() {
+			*usageThreshold = r.Conf.UsageThreshold.ValueFloat64()
+		} else {
+			usageThreshold = nil
+		}
+		workerGroup := new(string)
+		if !r.Conf.WorkerGroup.IsUnknown() && !r.Conf.WorkerGroup.IsNull() {
+			*workerGroup = r.Conf.WorkerGroup.ValueString()
+		} else {
+			workerGroup = nil
+		}
+		conf1 = &shared.ConditionSpecificConfigs{
+			SavedQueryID:       savedQueryID,
+			Message:            message,
+			TriggerType:        triggerType,
+			TriggerComparator:  triggerComparator,
+			TriggerCount:       triggerCount,
+			Name:               name,
+			TimeWindow:         timeWindow,
+			DataVolume:         dataVolume,
+			NotifyOnResolution: notifyOnResolution,
+			UsageThreshold:     usageThreshold,
+			WorkerGroup:        workerGroup,
+		}
+	}
+	metadata := make([]shared.MetadataItem, 0, len(r.Metadata))
+	for metadataIndex := range r.Metadata {
+		var name1 string
+		name1 = r.Metadata[metadataIndex].Name.ValueString()
+
+		var value string
+		value = r.Metadata[metadataIndex].Value.ValueString()
+
+		metadata = append(metadata, shared.MetadataItem{
+			Name:  name1,
+			Value: value,
+		})
 	}
 	group := new(string)
 	if !r.Group.IsUnknown() && !r.Group.IsNull() {
@@ -258,6 +335,7 @@ func (r *NotificationResourceModel) ToSharedNotification(ctx context.Context) (*
 		Targets:       targets,
 		TargetConfigs: targetConfigs,
 		Conf:          conf1,
+		Metadata:      metadata,
 		Group:         group,
 	}
 

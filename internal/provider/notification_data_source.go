@@ -37,6 +37,7 @@ type NotificationDataSourceModel struct {
 	Disabled      types.Bool                        `tfsdk:"disabled"`
 	Group         types.String                      `tfsdk:"group"`
 	ID            types.String                      `tfsdk:"id"`
+	Metadata      []tfTypes.MetadataItem            `tfsdk:"metadata"`
 	TargetConfigs []tfTypes.TargetConfig            `tfsdk:"target_configs"`
 	Targets       []types.String                    `tfsdk:"targets"`
 }
@@ -59,28 +60,56 @@ func (r *NotificationDataSource) Schema(ctx context.Context, req datasource.Sche
 			"conf": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"data_volume": schema.StringAttribute{
+						Computed:    true,
+						Description: `(Stream) Data volume threshold for high-volume / low-volume; memory string parsed like 1TB, 420MB, 1KB`,
+					},
 					"message": schema.StringAttribute{
 						Computed:    true,
-						Description: `Message template for the notification`,
+						Description: `(Search) Message template for the notification`,
+					},
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Description: `(Stream) Input/source id, e.g. splunk:in_splunk_tcp. Used by high-volume, low-volume, no-data, and persistent-queue conditions`,
+					},
+					"notify_on_resolution": schema.BoolAttribute{
+						Computed:    true,
+						Description: `(Stream) When true, also notify when the condition returns to the OK / resolved state`,
 					},
 					"saved_query_id": schema.StringAttribute{
 						Computed:    true,
-						Description: `ID of the saved query this notification is associated with`,
+						Description: `(Search) ID of the saved query this notification is associated with`,
+					},
+					"time_window": schema.StringAttribute{
+						Computed:    true,
+						Description: `(Stream) Time window for the metric, e.g. 60s or 5m`,
 					},
 					"trigger_comparator": schema.StringAttribute{
 						Computed:    true,
-						Description: `Comparison operator (e.g., >, <, =)`,
+						Description: `(Search) Comparison operator (e.g., >, <, =)`,
 					},
 					"trigger_count": schema.Float64Attribute{
 						Computed:    true,
-						Description: `Threshold count for the trigger`,
+						Description: `(Search) Threshold count for the trigger`,
 					},
 					"trigger_type": schema.StringAttribute{
 						Computed:    true,
-						Description: `Type of trigger (e.g., resultsCount)`,
+						Description: `(Search) Type of trigger (e.g., resultsCount)`,
+					},
+					"usage_threshold": schema.Float64Attribute{
+						Computed:    true,
+						Description: `(Stream) For persistent queue usage conditions; percent 0-99`,
+					},
+					"worker_group": schema.StringAttribute{
+						Computed:    true,
+						Description: `(Stream) Optional scope to a specific worker group`,
 					},
 				},
-				Description: `Configuration specific to the notification condition`,
+				MarkdownDescription: `Configuration specific to the notification condition. Shape depends on ` + "`" + `condition` + "`" + `:` + "\n" +
+					`Search: use ` + "`" + `savedQueryId` + "`" + `, ` + "`" + `message` + "`" + `, and optional ` + "`" + `triggerType` + "`" + ` / ` + "`" + `triggerComparator` + "`" + ` / ` + "`" + `triggerCount` + "`" + `.` + "\n" +
+					`Stream source metrics: for ` + "`" + `high-volume` + "`" + ` / ` + "`" + `low-volume` + "`" + ` use ` + "`" + `name` + "`" + `, ` + "`" + `timeWindow` + "`" + `, optional ` + "`" + `dataVolume` + "`" + ` (e.g. 1TB, 420MB), optional ` + "`" + `notifyOnResolution` + "`" + `, optional ` + "`" + `__workerGroup` + "`" + `.` + "\n" +
+					`For ` + "`" + `no-data` + "`" + ` use ` + "`" + `name` + "`" + `, ` + "`" + `timeWindow` + "`" + `, optional ` + "`" + `notifyOnResolution` + "`" + `, optional ` + "`" + `__workerGroup` + "`" + ` (no ` + "`" + `dataVolume` + "`" + `).` + "\n" +
+					`For ` + "`" + `persistent-queue-usage` + "`" + ` (and source variant) use ` + "`" + `name` + "`" + `, ` + "`" + `timeWindow` + "`" + `, ` + "`" + `usageThreshold` + "`" + ` (0-99 percent), optional ` + "`" + `notifyOnResolution` + "`" + `, optional ` + "`" + `__workerGroup` + "`" + `.`,
 			},
 			"disabled": schema.BoolAttribute{
 				Computed:    true,
@@ -97,6 +126,22 @@ func (r *NotificationDataSource) Schema(ctx context.Context, req datasource.Sche
 					stringvalidator.UTF8LengthAtMost(512),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
+			},
+			"metadata": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Metadata field name`,
+						},
+						"value": schema.StringAttribute{
+							Computed:    true,
+							Description: `Metadata field value`,
+						},
+					},
+				},
+				Description: `Additional metadata for the notification`,
 			},
 			"target_configs": schema.ListNestedAttribute{
 				Computed: true,

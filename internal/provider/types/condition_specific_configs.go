@@ -7,9 +7,15 @@ import (
 )
 
 type ConditionSpecificConfigs struct {
-	Message           types.String  `tfsdk:"message"`
-	SavedQueryID      types.String  `tfsdk:"saved_query_id"`
-	TriggerComparator types.String  `tfsdk:"trigger_comparator"`
-	TriggerCount      types.Float64 `tfsdk:"trigger_count"`
-	TriggerType       types.String  `tfsdk:"trigger_type"`
+	WorkerGroup        types.String  `tfsdk:"worker_group"`
+	DataVolume         types.String  `tfsdk:"data_volume"`
+	Message            types.String  `tfsdk:"message"`
+	Name               types.String  `tfsdk:"name"`
+	NotifyOnResolution types.Bool    `tfsdk:"notify_on_resolution"`
+	SavedQueryID       types.String  `tfsdk:"saved_query_id"`
+	TimeWindow         types.String  `tfsdk:"time_window"`
+	TriggerComparator  types.String  `tfsdk:"trigger_comparator"`
+	TriggerCount       types.Float64 `tfsdk:"trigger_count"`
+	TriggerType        types.String  `tfsdk:"trigger_type"`
+	UsageThreshold     types.Float64 `tfsdk:"usage_threshold"`
 }

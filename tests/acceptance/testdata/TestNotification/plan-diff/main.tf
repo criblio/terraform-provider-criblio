@@ -1,0 +1,1 @@
+../../../../../examples/notification/main.tf
