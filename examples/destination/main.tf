@@ -170,7 +170,7 @@ resource "criblio_destination" "my_databricks_destination" {
     id                 = "databricks_prod"
     type               = "databricks"
     description        = "Write data to Databricks"
-    workspace_id       = "https://my-workspace.cloud.databricks.com"
+    workspace_id       = "my-workspace.cloud.databricks.com" # FQDN only, not a URL
     catalog            = "main"
     schema             = "default"
     events_volume_name = "events_volume"

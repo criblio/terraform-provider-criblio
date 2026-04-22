@@ -68,8 +68,11 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	if !ok || len(ids) == 0 {
 		return false
 	}
-	// Use "id" key for types with ImportIDFormat "id"; group-scoped types use idMap["id"] as well.
+	// Match ImportIDFormat "id" and group-only maps (e.g. criblio_group uses group_id without "id").
 	if v := idMap["id"]; v != "" && ids[v] {
+		return true
+	}
+	if v := idMap["group_id"]; v != "" && ids[v] {
 		return true
 	}
 	return false

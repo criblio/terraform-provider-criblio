@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Query struct {
+type LocalSearchSourceWefSubscriptionItemQuery struct {
 	Path            types.String `tfsdk:"path"`
 	QueryExpression types.String `tfsdk:"query_expression"`
 }

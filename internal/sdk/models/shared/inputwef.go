@@ -246,36 +246,36 @@ func (e *QueryBuilderMode) IsExact() bool {
 	return false
 }
 
-type Query struct {
+type InputWefQuery struct {
 	// The Path attribute from the relevant XML Select element
 	Path string `json:"path"`
 	// The XPath query inside the relevant XML Select element
 	QueryExpression string `json:"queryExpression"`
 }
 
-func (q Query) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(q, "", false)
+func (i InputWefQuery) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
 }
 
-func (q *Query) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &q, "", false, nil); err != nil {
+func (i *InputWefQuery) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (q *Query) GetPath() string {
-	if q == nil {
+func (i *InputWefQuery) GetPath() string {
+	if i == nil {
 		return ""
 	}
-	return q.Path
+	return i.Path
 }
 
-func (q *Query) GetQueryExpression() string {
-	if q == nil {
+func (i *InputWefQuery) GetQueryExpression() string {
+	if i == nil {
 		return ""
 	}
-	return q.QueryExpression
+	return i.QueryExpression
 }
 
 type InputWefSubscription struct {
@@ -301,7 +301,7 @@ type InputWefSubscription struct {
 	QuerySelector *QueryBuilderMode `json:"querySelector,omitempty"`
 	// Fields to add to events ingested under this subscription
 	Metadata []ItemsTypeMetadata `json:"metadata,omitempty"`
-	Queries  []Query             `json:"queries,omitempty"`
+	Queries  []InputWefQuery     `json:"queries,omitempty"`
 	// The XPath query to use for selecting events
 	XMLQuery *string `json:"xmlQuery,omitempty"`
 	ID       any     `json:"id,omitempty"`
@@ -402,7 +402,7 @@ func (i *InputWefSubscription) GetMetadata() []ItemsTypeMetadata {
 	return i.Metadata
 }
 
-func (i *InputWefSubscription) GetQueries() []Query {
+func (i *InputWefSubscription) GetQueries() []InputWefQuery {
 	if i == nil {
 		return nil
 	}

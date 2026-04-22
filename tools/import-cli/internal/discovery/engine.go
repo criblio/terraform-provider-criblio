@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
@@ -218,6 +219,10 @@ func Discover(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, 
 				ids, prErr := listPackRoutesIdentifiers(ctx, client, groupIDs)
 				if prErr == nil {
 					count = len(ids)
+				}
+			} else if e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset" {
+				if slices.Contains(groupIDs, "default_search") {
+					count = 1
 				}
 			}
 			results = append(results, Result{TypeName: e.TypeName, Count: count, Details: details})
@@ -540,6 +545,12 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 	}
 	if e.TypeName == "criblio_lakehouse_dataset_connection" {
 		return listLakehouseDatasetConnectionIdentifiers(ctx, client)
+	}
+	if e.TypeName == "criblio_search_dataset_ruleset" || e.TypeName == "criblio_search_datatype_ruleset" {
+		if slices.Contains(groupIDs, "default_search") {
+			return []map[string]string{{"id": "default", "group_id": "default_search"}}, nil
+		}
+		return nil, nil
 	}
 	if e.TypeName == "criblio_pack_routes" {
 		return listPackRoutesIdentifiers(ctx, client, groupIDs)

@@ -6894,10 +6894,10 @@ func (r *SourceDataSourceModel) RefreshFromOperationsGetInputByIDResponseBody(ct
 
 						subscriptions.Metadata = append(subscriptions.Metadata, metadata62)
 					}
-					subscriptions.Queries = []tfTypes.Query{}
+					subscriptions.Queries = []tfTypes.InputWefQuery{}
 
 					for _, queriesItem := range subscriptionsItem.Queries {
-						var queries tfTypes.Query
+						var queries tfTypes.InputWefQuery
 
 						queries.Path = types.StringValue(queriesItem.Path)
 						queries.QueryExpression = types.StringValue(queriesItem.QueryExpression)

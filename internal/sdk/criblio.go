@@ -114,6 +114,9 @@ type CriblIo struct {
 	UsageGroups *UsageGroups
 	// Actions related to Datasets
 	Datasets *Datasets
+	// Actions related to Search
+	Search   *Search
+	Searches *Searches
 	// Actions related to Users ACL
 	UsersACL *UsersACL
 	// Actions related to Teams ACL
@@ -136,8 +139,6 @@ type CriblIo struct {
 	Macros *Macros
 	// Actions related to saved queries
 	SavedQueries *SavedQueries
-	// Actions related to Search
-	Search *Search
 	// Actions related to Database Connections
 	DatabaseConnections *DatabaseConnections
 	// Actions related to Event Breaker rules
@@ -358,9 +359,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.22.3",
+		SDKVersion: "1.23.18",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.22.3 2.879.6 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.23.18 2.879.6 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -416,6 +417,8 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.DashboardCategories = newDashboardCategories(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UsageGroups = newUsageGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Search = newSearch(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Searches = newSearches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.UsersACL = newUsersACL(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.TeamsACL = newTeamsACL(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.AppscopeConfigs = newAppscopeConfigs(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -427,7 +430,6 @@ func New(opts ...SDKOption) *CriblIo {
 	sdk.Dashboards = newDashboards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Macros = newMacros(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SavedQueries = newSavedQueries(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Search = newSearch(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseConnections = newDatabaseConnections(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.EventBreakerRules = newEventBreakerRules(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.GlobalVariables = newGlobalVariables(sdk, sdk.sdkConfiguration, sdk.hooks)

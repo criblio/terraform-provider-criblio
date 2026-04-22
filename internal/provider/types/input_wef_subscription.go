@@ -15,7 +15,7 @@ type InputWefSubscription struct {
 	ID                 jsontypes.Normalized `tfsdk:"id"`
 	Locale             types.String         `tfsdk:"locale"`
 	Metadata           []ItemsTypeMetadata  `tfsdk:"metadata"`
-	Queries            []Query              `tfsdk:"queries"`
+	Queries            []InputWefQuery      `tfsdk:"queries"`
 	QuerySelector      types.String         `tfsdk:"query_selector"`
 	ReadExistingEvents types.Bool           `tfsdk:"read_existing_events"`
 	SendBookmarks      types.Bool           `tfsdk:"send_bookmarks"`

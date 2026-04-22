@@ -323,6 +323,27 @@ func modelFromSearchItemJSON(modelType reflect.Type, itemJSON []byte) (interface
 	return modelVal.Interface(), nil
 }
 
+// bodyFromSearchRulesetGetResponse returns the Counted* payload for Local Search ruleset GET responses.
+func bodyFromSearchRulesetGetResponse(resp interface{}) (interface{}, error) {
+	switch r := resp.(type) {
+	case *operations.GetDatasetRuleByIDResponse:
+		if r == nil {
+			return nil, nil
+		}
+		if r.CountedDatasetRuleset != nil {
+			return r.CountedDatasetRuleset, nil
+		}
+	case *operations.GetDatatypeRuleByIDResponse:
+		if r == nil {
+			return nil, nil
+		}
+		if r.CountedDatatypeRuleset != nil {
+			return r.CountedDatatypeRuleset, nil
+		}
+	}
+	return nil, fmt.Errorf("search ruleset response has no Counted* body")
+}
+
 // callGetByID invokes the SDK Get* method for the entry and returns the response Object (ResponseBody).
 func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, requestParams map[string]string) (interface{}, error) {
 	clientVal := reflect.ValueOf(client)
@@ -336,6 +357,24 @@ func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, req
 	if svcField.Kind() == reflect.Ptr && svcField.IsNil() {
 		return nil, fmt.Errorf("SDK service %q is nil", e.SDKService)
 	}
+	// Search ruleset GETs are (ctx, opts ...operations.Option). MethodByName+reflect.Call/CallSlice is unreliable
+	// across how the method value is obtained; call the SDK directly.
+	if e.SDKService == "Search" {
+		switch e.GetMethod {
+		case "GetDatasetRuleByID":
+			resp, err := client.Search.GetDatasetRuleByID(ctx)
+			if err != nil {
+				return nil, err
+			}
+			return bodyFromSearchRulesetGetResponse(resp)
+		case "GetDatatypeRuleByID":
+			resp, err := client.Search.GetDatatypeRuleByID(ctx)
+			if err != nil {
+				return nil, err
+			}
+			return bodyFromSearchRulesetGetResponse(resp)
+		}
+	}
 	svc := svcField
 	if svc.Kind() == reflect.Ptr {
 		svc = svc.Elem()
@@ -347,6 +386,13 @@ func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, req
 	mt := method.Type()
 	if mt.NumIn() < 2 || mt.NumOut() != 2 {
 		return nil, fmt.Errorf("get method %s has unexpected signature", e.GetMethod)
+	}
+	// Variadic (ctx, opts ...operations.Option): must use CallSlice with a []T final arg, never Call with a slice.
+	if mt.IsVariadic() && mt.NumIn() == 2 && mt.In(1).Kind() == reflect.Slice {
+		optSlice := reflect.MakeSlice(mt.In(1), 0, 0)
+		args := []reflect.Value{reflect.ValueOf(ctx), optSlice}
+		outs := method.CallSlice(args)
+		return unwrapGetResponse(outs)
 	}
 	paramType := mt.In(1)
 	reqType := paramType
@@ -360,9 +406,16 @@ func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, req
 	if paramType.Kind() == reflect.Struct {
 		reqArg = reqVal.Elem()
 	}
-	// Pass only fixed args (ctx, request). Variadic opts ...Option are left empty.
+	// Pass only fixed args (ctx, request). Variadic opts ...Option after the request are left empty.
 	args := []reflect.Value{reflect.ValueOf(ctx), reqArg}
 	outs := method.Call(args)
+	return unwrapGetResponse(outs)
+}
+
+func unwrapGetResponse(outs []reflect.Value) (interface{}, error) {
+	if len(outs) != 2 {
+		return nil, fmt.Errorf("unexpected get method return count")
+	}
 	respVal := outs[0]
 	errVal := outs[1]
 	if !errVal.IsNil() {
@@ -376,13 +429,17 @@ func callGetByID(ctx context.Context, client *sdk.CriblIo, e registry.Entry, req
 		respVal = respVal.Elem()
 	}
 	objectField := respVal.FieldByName("Object")
-	if !objectField.IsValid() {
-		return nil, fmt.Errorf("response has no Object field")
+	if objectField.IsValid() && !(objectField.Kind() == reflect.Ptr && objectField.IsNil()) {
+		return objectField.Interface(), nil
 	}
-	if objectField.Kind() == reflect.Ptr && objectField.IsNil() {
-		return nil, nil
+	// Search (and similar) SDK responses use Counted* payloads instead of Object.
+	for _, name := range []string{"CountedLocalSearchEngine", "CountedLocalSearchSource", "CountedDatasetRuleset", "CountedDatatypeRuleset"} {
+		f := respVal.FieldByName(name)
+		if f.IsValid() && f.Kind() == reflect.Ptr && !f.IsNil() {
+			return f.Interface(), nil
+		}
 	}
-	return objectField.Interface(), nil
+	return nil, fmt.Errorf("response has no Object or supported Counted* body field")
 }
 
 func setRequestFields(reqVal reflect.Value, params map[string]string) {

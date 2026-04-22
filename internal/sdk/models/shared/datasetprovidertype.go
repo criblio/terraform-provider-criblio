@@ -7,40 +7,40 @@ import (
 	"fmt"
 )
 
-type ID string
+type DatasetProviderTypeID string
 
 const (
-	IDCriblEdge            ID = "cribl_edge"
-	IDCriblLeader          ID = "cribl_leader"
-	IDCriblMeta            ID = "cribl_meta"
-	IDS3                   ID = "s3"
-	IDAzureBlob            ID = "azure_blob"
-	IDGcs                  ID = "gcs"
-	IDAPIAzure             ID = "api_azure"
-	IDAPIAws               ID = "api_aws"
-	IDAPIGcp               ID = "api_gcp"
-	IDAPIHTTP              ID = "api_http"
-	IDAPIZoom              ID = "api_zoom"
-	IDAPIOkta              ID = "api_okta"
-	IDAPIMsgraph           ID = "api_msgraph"
-	IDCriblLake            ID = "cribl_lake"
-	IDCriblLocal           ID = "cribl_local"
-	IDCriblSearch          ID = "cribl_search"
-	IDAmazonSecurityLake   ID = "amazon_security_lake"
-	IDAPIGoogleWorkspace   ID = "api_google_workspace"
-	IDAPITailscale         ID = "api_tailscale"
-	IDAPIOpensearch        ID = "api_opensearch"
-	IDAPIElasticsearch     ID = "api_elasticsearch"
-	IDAPIAzureDataExplorer ID = "api_azure_data_explorer"
-	IDPrometheus           ID = "prometheus"
-	IDSnowflake            ID = "snowflake"
-	IDClickhouse           ID = "clickhouse"
+	DatasetProviderTypeIDCriblEdge            DatasetProviderTypeID = "cribl_edge"
+	DatasetProviderTypeIDCriblLeader          DatasetProviderTypeID = "cribl_leader"
+	DatasetProviderTypeIDCriblMeta            DatasetProviderTypeID = "cribl_meta"
+	DatasetProviderTypeIDS3                   DatasetProviderTypeID = "s3"
+	DatasetProviderTypeIDAzureBlob            DatasetProviderTypeID = "azure_blob"
+	DatasetProviderTypeIDGcs                  DatasetProviderTypeID = "gcs"
+	DatasetProviderTypeIDAPIAzure             DatasetProviderTypeID = "api_azure"
+	DatasetProviderTypeIDAPIAws               DatasetProviderTypeID = "api_aws"
+	DatasetProviderTypeIDAPIGcp               DatasetProviderTypeID = "api_gcp"
+	DatasetProviderTypeIDAPIHTTP              DatasetProviderTypeID = "api_http"
+	DatasetProviderTypeIDAPIZoom              DatasetProviderTypeID = "api_zoom"
+	DatasetProviderTypeIDAPIOkta              DatasetProviderTypeID = "api_okta"
+	DatasetProviderTypeIDAPIMsgraph           DatasetProviderTypeID = "api_msgraph"
+	DatasetProviderTypeIDCriblLake            DatasetProviderTypeID = "cribl_lake"
+	DatasetProviderTypeIDCriblLocal           DatasetProviderTypeID = "cribl_local"
+	DatasetProviderTypeIDCriblSearch          DatasetProviderTypeID = "cribl_search"
+	DatasetProviderTypeIDAmazonSecurityLake   DatasetProviderTypeID = "amazon_security_lake"
+	DatasetProviderTypeIDAPIGoogleWorkspace   DatasetProviderTypeID = "api_google_workspace"
+	DatasetProviderTypeIDAPITailscale         DatasetProviderTypeID = "api_tailscale"
+	DatasetProviderTypeIDAPIOpensearch        DatasetProviderTypeID = "api_opensearch"
+	DatasetProviderTypeIDAPIElasticsearch     DatasetProviderTypeID = "api_elasticsearch"
+	DatasetProviderTypeIDAPIAzureDataExplorer DatasetProviderTypeID = "api_azure_data_explorer"
+	DatasetProviderTypeIDPrometheus           DatasetProviderTypeID = "prometheus"
+	DatasetProviderTypeIDSnowflake            DatasetProviderTypeID = "snowflake"
+	DatasetProviderTypeIDClickhouse           DatasetProviderTypeID = "clickhouse"
 )
 
-func (e ID) ToPointer() *ID {
+func (e DatasetProviderTypeID) ToPointer() *DatasetProviderTypeID {
 	return &e
 }
-func (e *ID) UnmarshalJSON(data []byte) error {
+func (e *DatasetProviderTypeID) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -95,17 +95,17 @@ func (e *ID) UnmarshalJSON(data []byte) error {
 	case "snowflake":
 		fallthrough
 	case "clickhouse":
-		*e = ID(v)
+		*e = DatasetProviderTypeID(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ID: %v", v)
+		return fmt.Errorf("invalid value for DatasetProviderTypeID: %v", v)
 	}
 }
 
 type DatasetProviderType struct {
-	Description *string       `json:"description,omitempty"`
-	ID          ID            `json:"id"`
-	Locality    *OriginConfig `json:"locality,omitempty"`
+	Description *string               `json:"description,omitempty"`
+	ID          DatasetProviderTypeID `json:"id"`
+	Locality    *OriginConfig         `json:"locality,omitempty"`
 }
 
 func (d *DatasetProviderType) GetDescription() *string {
@@ -115,9 +115,9 @@ func (d *DatasetProviderType) GetDescription() *string {
 	return d.Description
 }
 
-func (d *DatasetProviderType) GetID() ID {
+func (d *DatasetProviderType) GetID() DatasetProviderTypeID {
 	if d == nil {
-		return ID("")
+		return DatasetProviderTypeID("")
 	}
 	return d.ID
 }

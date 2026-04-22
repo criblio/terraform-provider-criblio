@@ -150,9 +150,9 @@ func (r *CriblLakeHouseResourceModel) ToSharedLakehouse(ctx context.Context) (*s
 	} else {
 		status = nil
 	}
-	tierSize := new(shared.TierSize)
+	tierSize := new(shared.LakehouseTierSize)
 	if !r.TierSize.IsUnknown() && !r.TierSize.IsNull() {
-		*tierSize = shared.TierSize(r.TierSize.ValueString())
+		*tierSize = shared.LakehouseTierSize(r.TierSize.ValueString())
 	} else {
 		tierSize = nil
 	}
