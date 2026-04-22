@@ -2428,44 +2428,67 @@ components:
                 conf:
                     type: object
                     title: Condition-specific configs
-                    description: Configuration specific to the notification condition
+                    description: |
+                        Configuration specific to the notification condition. Shape depends on `condition`:
+                        Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+                        Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
+                        For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
+                        For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`.
                     properties:
                         savedQueryId:
                             type: string
-                            description: ID of the saved query this notification is associated with
+                            description: (Search) ID of the saved query this notification is associated with
                             example: savedQueryId
                         message:
                             type: string
-                            description: Message template for the notification
+                            description: (Search) Message template for the notification
                             example: Message for notification
                         triggerType:
                             type: string
-                            description: Type of trigger (e.g., resultsCount)
+                            description: (Search) Type of trigger (e.g., resultsCount)
                             example: resultsCount
                         triggerComparator:
                             type: string
-                            description: Comparison operator (e.g., >, <, =)
+                            description: (Search) Comparison operator (e.g., >, <, =)
                             example: '>'
                         triggerCount:
                             type: number
-                            description: Threshold count for the trigger
+                            description: (Search) Threshold count for the trigger
                             example: 10
-                    required:
-                        - savedQueryId
-                        - message
+                        name:
+                            type: string
+                            description: (Stream) Input/source id, e.g. splunk:in_splunk_tcp. Used by high-volume, low-volume, no-data, and persistent-queue conditions
+                            example: 'splunk:in_splunk_tcp'
+                        timeWindow:
+                            type: string
+                            description: (Stream) Time window for the metric, e.g. 60s or 5m
+                            example: 60s
+                        dataVolume:
+                            type: string
+                            description: (Stream) Data volume threshold for high-volume / low-volume; memory string parsed like 1TB, 420MB, 1KB
+                            example: 1TB
+                        notifyOnResolution:
+                            type: boolean
+                            description: (Stream) When true, also notify when the condition returns to the OK / resolved state
+                            example: true
+                        usageThreshold:
+                            type: number
+                            description: (Stream) For persistent queue usage conditions; percent 0-99
+                            example: 90
+                        __workerGroup:
+                            type: string
+                            description: (Stream) Optional scope to a specific worker group
                     example:
-                        savedQueryId: savedQuery123
-                        message: Alert triggered
-                        triggerType: resultsCount
-                        triggerComparator: '>'
-                        triggerCount: 5
+                        name: 'splunk:in_splunk_tcp'
+                        timeWindow: 60s
+                        dataVolume: 1TB
+                        notifyOnResolution: true
                 metadata:
                     type: array
                     title: Metadata
                     description: Additional metadata for the notification
                     items:
                         $ref: '#/components/schemas/MetadataItem'
-                    x-speakeasy-terraform-ignore: true
                     example:
                         - name: env
                           value: prod

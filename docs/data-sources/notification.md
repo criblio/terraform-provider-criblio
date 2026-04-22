@@ -28,9 +28,14 @@ data "criblio_notification" "my_notification" {
 ### Read-Only
 
 - `condition` (String) The condition that triggers this notification
-- `conf` (Attributes) Configuration specific to the notification condition (see [below for nested schema](#nestedatt--conf))
+- `conf` (Attributes) Configuration specific to the notification condition. Shape depends on `condition`:
+Search: use `savedQueryId`, `message`, and optional `triggerType` / `triggerComparator` / `triggerCount`.
+Stream source metrics: for `high-volume` / `low-volume` use `name`, `timeWindow`, optional `dataVolume` (e.g. 1TB, 420MB), optional `notifyOnResolution`, optional `__workerGroup`.
+For `no-data` use `name`, `timeWindow`, optional `notifyOnResolution`, optional `__workerGroup` (no `dataVolume`).
+For `persistent-queue-usage` (and source variant) use `name`, `timeWindow`, `usageThreshold` (0-99 percent), optional `notifyOnResolution`, optional `__workerGroup`. (see [below for nested schema](#nestedatt--conf))
 - `disabled` (Boolean) Whether the notification is disabled
 - `group` (String) Group identifier for the notification
+- `metadata` (Attributes List) Additional metadata for the notification (see [below for nested schema](#nestedatt--metadata))
 - `target_configs` (Attributes List) Configuration for notification targets (see [below for nested schema](#nestedatt--target_configs))
 - `targets` (List of String) Targets to send any notifications to
 
@@ -39,11 +44,26 @@ data "criblio_notification" "my_notification" {
 
 Read-Only:
 
-- `message` (String) Message template for the notification
-- `saved_query_id` (String) ID of the saved query this notification is associated with
-- `trigger_comparator` (String) Comparison operator (e.g., >, <, =)
-- `trigger_count` (Number) Threshold count for the trigger
-- `trigger_type` (String) Type of trigger (e.g., resultsCount)
+- `data_volume` (String) (Stream) Data volume threshold for high-volume / low-volume; memory string parsed like 1TB, 420MB, 1KB
+- `message` (String) (Search) Message template for the notification
+- `name` (String) (Stream) Input/source id, e.g. splunk:in_splunk_tcp. Used by high-volume, low-volume, no-data, and persistent-queue conditions
+- `notify_on_resolution` (Boolean) (Stream) When true, also notify when the condition returns to the OK / resolved state
+- `saved_query_id` (String) (Search) ID of the saved query this notification is associated with
+- `time_window` (String) (Stream) Time window for the metric, e.g. 60s or 5m
+- `trigger_comparator` (String) (Search) Comparison operator (e.g., >, <, =)
+- `trigger_count` (Number) (Search) Threshold count for the trigger
+- `trigger_type` (String) (Search) Type of trigger (e.g., resultsCount)
+- `usage_threshold` (Number) (Stream) For persistent queue usage conditions; percent 0-99
+- `worker_group` (String) (Stream) Optional scope to a specific worker group
+
+
+<a id="nestedatt--metadata"></a>
+### Nested Schema for `metadata`
+
+Read-Only:
+
+- `name` (String) Metadata field name
+- `value` (String) Metadata field value
 
 
 <a id="nestedatt--target_configs"></a>

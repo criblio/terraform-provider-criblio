@@ -39,15 +39,31 @@ func (r *NotificationDataSourceModel) RefreshFromSharedNotification(ctx context.
 		r.Conf = nil
 	} else {
 		r.Conf = &tfTypes.ConditionSpecificConfigs{}
-		r.Conf.Message = types.StringValue(resp.Conf.Message)
-		r.Conf.SavedQueryID = types.StringValue(resp.Conf.SavedQueryID)
+		r.Conf.WorkerGroup = types.StringPointerValue(resp.Conf.WorkerGroup)
+		r.Conf.DataVolume = types.StringPointerValue(resp.Conf.DataVolume)
+		r.Conf.Message = types.StringPointerValue(resp.Conf.Message)
+		r.Conf.Name = types.StringPointerValue(resp.Conf.Name)
+		r.Conf.NotifyOnResolution = types.BoolPointerValue(resp.Conf.NotifyOnResolution)
+		r.Conf.SavedQueryID = types.StringPointerValue(resp.Conf.SavedQueryID)
+		r.Conf.TimeWindow = types.StringPointerValue(resp.Conf.TimeWindow)
 		r.Conf.TriggerComparator = types.StringPointerValue(resp.Conf.TriggerComparator)
 		r.Conf.TriggerCount = types.Float64PointerValue(resp.Conf.TriggerCount)
 		r.Conf.TriggerType = types.StringPointerValue(resp.Conf.TriggerType)
+		r.Conf.UsageThreshold = types.Float64PointerValue(resp.Conf.UsageThreshold)
 	}
 	r.Disabled = types.BoolPointerValue(resp.Disabled)
 	r.Group = types.StringPointerValue(resp.Group)
 	r.ID = types.StringValue(resp.ID)
+	r.Metadata = []tfTypes.MetadataItem{}
+
+	for _, metadataItem := range resp.Metadata {
+		var metadata tfTypes.MetadataItem
+
+		metadata.Name = types.StringValue(metadataItem.Name)
+		metadata.Value = types.StringValue(metadataItem.Value)
+
+		r.Metadata = append(r.Metadata, metadata)
+	}
 	r.TargetConfigs = []tfTypes.TargetConfig{}
 
 	for _, targetConfigsItem := range resp.TargetConfigs {

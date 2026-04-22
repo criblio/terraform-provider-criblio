@@ -1,11 +1,11 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: 18af3515abf3441d88ffa914546d2cad
+  docChecksum: 2d87c2e764acc92f70a4a436775fce26
   speakeasyVersion: 1.761.1
   generationVersion: 2.879.6
-  releaseVersion: 1.23.18
-  configChecksum: 7f5af2da3aa8539b0d371d6eb180af9c
+  releaseVersion: 1.23.20
+  configChecksum: ea392af799a78ee0a6c2f5bf468d0c20
   published: true
 persistentEdits:
   generation_id: e52d5ce0-d97b-4ec8-89ab-e5f05e0474e8
@@ -276,7 +276,7 @@ trackedFiles:
     pristine_git_object: 1959198f7669fee4593aeb084e44e34317718e0d
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:610907c550ab0fe300d0d8806bda811ab06f859c
+    last_write_checksum: sha1:b08face5c86c8b849ed09c0501d61582349e065a
     pristine_git_object: 02f445a76d1365acf6ca17232bb2e4c0a07e52ea
   examples/resources/criblio_appscope_config/import-by-string-id.tf:
     id: 13b421bc255d
@@ -492,7 +492,7 @@ trackedFiles:
     pristine_git_object: 1b5c0571bf030c74ac03178be0a523d191acca90
   examples/resources/criblio_notification/resource.tf:
     id: 5ef7c90a053c
-    last_write_checksum: sha1:7644edbe7ac1f471b743dd69590b34584c00a75f
+    last_write_checksum: sha1:a3031bdee1483020dbe101652a6b2ca12fae7461
     pristine_git_object: 5baaa0c441ebb369b8d73295e1785306f6cce6e8
   examples/resources/criblio_notification_target/import-by-string-id.tf:
     id: 79900a8d1c6c
@@ -1280,19 +1280,19 @@ trackedFiles:
     pristine_git_object: 2ef4f04ed521d1cd2b50e0e44cb7475d4bb19568
   internal/provider/notification_data_source.go:
     id: 3e643e20aeba
-    last_write_checksum: sha1:7cc9ab34fc0da4d9be8747e6b6508a1432af94c4
+    last_write_checksum: sha1:dd897b7faaadfd9a9514bd5b44a12d017a2e34df
     pristine_git_object: b56101d0a0a3ae53df13e15323c5b6092b45615c
   internal/provider/notification_data_source_sdk.go:
     id: 3d2028d5767b
-    last_write_checksum: sha1:b3b74c2c37b05770297ca8a3eb255e6142a29c60
+    last_write_checksum: sha1:217d82675b2b48e2cf9c4b84351b91a94e077e8d
     pristine_git_object: 6f216cc76d4b47bd8271e901f3b0216ff80e10df
   internal/provider/notification_resource.go:
     id: 4e30e2941c05
-    last_write_checksum: sha1:85376c28a61b6a48f201226185d830aeb2f3bfd8
+    last_write_checksum: sha1:d489a07cbba1f7ccdb080443659dd518b64f45ef
     pristine_git_object: e80608b1051d6c6690611e8bf978f15a5dae8328
   internal/provider/notification_resource_sdk.go:
     id: 79b60613ec70
-    last_write_checksum: sha1:ad3ef663416910411c7e964c8991ceddb6cf7bab
+    last_write_checksum: sha1:f57e79fead9d399ff613c8896cb8de61f047c83d
     pristine_git_object: 2a4fd6cc773c9678e0ee43c7f2dd86d3f3fd5b8a
   internal/provider/notificationtarget_data_source.go:
     id: 4fc5ecdc05e8
@@ -1982,7 +1982,7 @@ trackedFiles:
     pristine_git_object: 0c3706b0a15b0f37fc4da333ddb33a78892d37ea
   internal/provider/types/condition_specific_configs.go:
     id: 17cfd44ba583
-    last_write_checksum: sha1:53340b6754672734a847212f896944056dec13b5
+    last_write_checksum: sha1:78762cc051960e260c8971075722c63022c1f90e
     pristine_git_object: eb3e64933cff632ef4b2e2c3b036d255c0d1876f
   internal/provider/types/config_bundles.go:
     id: 47da4e00cdd0
@@ -3246,6 +3246,8 @@ trackedFiles:
     id: 2e14b0204ded
     last_write_checksum: sha1:e2ccadb889c2fc1daa41f61deee1d4aa5c3505a4
     pristine_git_object: 7a58791953513d80a986e3dc89aa325d8f9376ca
+  internal/provider/types/metadata_item.go:
+    last_write_checksum: sha1:069e90e350298c92f85aa45a85d09a8106945cfe
   internal/provider/types/ms_graph_account_config.go:
     id: 5cd258aed97c
     last_write_checksum: sha1:b597cb13eef06e5f58452308408693768976decc
@@ -4398,7 +4400,7 @@ trackedFiles:
     pristine_git_object: bf71ee999b1aa29b59f13528fb9772327ebaf583
   internal/sdk/criblio.go:
     id: a2ae69529b28
-    last_write_checksum: sha1:fbbf35d3fa986b7f65a489ac3ebb37e0584ba2a0
+    last_write_checksum: sha1:700939c6f7bb5d4b1e4d7883009aeaee751233e9
     pristine_git_object: 9c817ff838a5053031217d727197743322914bb0
   internal/sdk/dashboardcategories.go:
     id: 1cc9a977a86d
@@ -8054,7 +8056,7 @@ trackedFiles:
     pristine_git_object: 786608cfdfc71716ff06d87db8e9338e8c2c6eb3
   internal/sdk/models/shared/notification.go:
     id: aeaf6c9a9f8a
-    last_write_checksum: sha1:8e3dc3eb8bb9f70dfd9043356bacaaaef2544529
+    last_write_checksum: sha1:6da7d7d0581af627207fdfb0151dd1c47f377e9a
     pristine_git_object: 551e63fe184329be8df41b607944b964dc5d0924
   internal/sdk/models/shared/notificationtarget.go:
     id: b9474f31857b
@@ -10609,7 +10611,7 @@ examples:
   createNotification:
     speakeasy-default-create-notification:
       requestBody:
-        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"savedQueryId": "savedQuery123", "message": "Alert triggered", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 5}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}
+        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"name": "splunk:in_splunk_tcp", "timeWindow": "60s", "dataVolume": "1TB", "notifyOnResolution": true}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"savedQueryId": "savedQuery123", "message": "Alert triggered", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 5}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}]}
@@ -10631,7 +10633,7 @@ examples:
         path:
           id: "notif-001"
       requestBody:
-        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"savedQueryId": "savedQuery123", "message": "Alert triggered", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 5}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}
+        application/json: {"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"name": "splunk:in_splunk_tcp", "timeWindow": "60s", "dataVolume": "1TB", "notifyOnResolution": true}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueNotificationId", "disabled": false, "condition": "true", "targets": ["target1", "target2"], "targetConfigs": [{"id": "webhookTarget"}], "conf": {"savedQueryId": "savedQuery123", "message": "Alert triggered", "triggerType": "resultsCount", "triggerComparator": ">", "triggerCount": 5}, "metadata": [{"name": "env", "value": "prod"}], "group": "myNotificationGroup"}]}
