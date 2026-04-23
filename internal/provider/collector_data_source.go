@@ -1287,6 +1287,10 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									"client_secret_param_name": schema.StringAttribute{
 										Computed: true,
 									},
+									"collect_body": schema.StringAttribute{
+										Computed:    true,
+										Description: `Body content for the collect request, used with the post_with_body collect method`,
+									},
 									"collect_method": schema.StringAttribute{
 										Computed: true,
 									},
@@ -1390,6 +1394,10 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 														Computed:    true,
 														ElementType: types.StringType,
 													},
+													"cur_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Description: `Optional relation for the current page in Link header pagination`,
+													},
 													"last_page_expr": schema.StringAttribute{
 														Computed: true,
 													},
@@ -1401,6 +1409,10 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 													},
 													"max_pages": schema.Int64Attribute{
 														Computed: true,
+													},
+													"next_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 													},
 													"offset": schema.Int64Attribute{
 														Computed: true,
@@ -1445,6 +1457,10 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 												Computed:    true,
 												ElementType: types.StringType,
 											},
+											"cur_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Description: `Optional relation for the current page in Link header pagination`,
+											},
 											"last_page_expr": schema.StringAttribute{
 												Computed: true,
 											},
@@ -1456,6 +1472,10 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 											},
 											"max_pages": schema.Int64Attribute{
 												Computed: true,
+											},
+											"next_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 											},
 											"offset": schema.Int64Attribute{
 												Computed: true,
@@ -1536,6 +1556,23 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 												Computed: true,
 											},
 										},
+									},
+									"scopes": schema.ListAttribute{
+										Computed:    true,
+										ElementType: types.StringType,
+										Description: `OAuth scopes when authentication is google_oauth or google_oauthSecret`,
+									},
+									"service_account_credentials": schema.StringAttribute{
+										Computed:    true,
+										Description: `Service account key JSON (or path reference) for google_oauth`,
+									},
+									"service_account_credentials_secret": schema.StringAttribute{
+										Computed:    true,
+										Description: `Secret reference for service account key when using google_oauthSecret`,
+									},
+									"subject": schema.StringAttribute{
+										Computed:    true,
+										Description: `Subject (e.g. admin user) for Google OAuth with domain-wide delegation`,
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,

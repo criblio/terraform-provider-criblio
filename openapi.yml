@@ -1471,6 +1471,25 @@ components:
                                         type: string
                                         title: Bearer token secret
                                         example: restBearerTokenSecret
+                                    scopes:
+                                        type: array
+                                        title: Google OAuth scopes
+                                        description: OAuth scopes when authentication is google_oauth or google_oauthSecret
+                                        items:
+                                            type: string
+                                    subject:
+                                        type: string
+                                        title: Google OAuth subject
+                                        description: Subject (e.g. admin user) for Google OAuth with domain-wide delegation
+                                        example: admin@example.com
+                                    serviceAccountCredentials:
+                                        type: string
+                                        title: Google service account credentials
+                                        description: Service account key JSON (or path reference) for google_oauth
+                                    serviceAccountCredentialsSecret:
+                                        type: string
+                                        title: Google service account credentials secret
+                                        description: Secret reference for service account key when using google_oauthSecret
                                     loginUrl:
                                         type: string
                                         title: Login URL
@@ -1587,11 +1606,11 @@ components:
                                         example:
                                             - name: limit
                                               value: '100'
-                                        collectBody:
-                                            type: string
-                                            title: Collect body
-                                            description: Body content for the collect request, used with the post_with_body collect method
-                                            example: '{"filter":"status=active"}'
+                                    collectBody:
+                                        type: string
+                                        title: Collect body
+                                        description: Body content for the collect request, used with the post_with_body collect method
+                                        example: '{"filter":"status=active"}'
                                     timeout:
                                         type: integer
                                         minimum: 0
@@ -2180,6 +2199,9 @@ components:
                         - offset
                         - cursor
                         - page
+                        - response_body
+                        - response_header
+                        - response_header_link
                     default: none
                     example: offset
                 offsetField:
@@ -2238,6 +2260,16 @@ components:
                     type: string
                     title: Total record field
                     example: totalRecords
+                nextRelationAttribute:
+                    type: string
+                    title: Next relation attribute
+                    description: Used for RFC 5988 Link header pagination (response_header_link)
+                    example: next
+                curRelationAttribute:
+                    type: string
+                    title: Current relation attribute
+                    description: Optional relation for the current page in Link header pagination
+                    example: self
         InputCollector:
             oneOf:
                 - $ref: '#/components/schemas/InputCollectorSplunk'

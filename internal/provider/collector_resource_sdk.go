@@ -789,7 +789,9 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			} else {
 				r.InputCollectorRest.Collector.Conf.Authentication = types.StringNull()
 			}
-			r.InputCollectorRest.Collector.Conf.AuthHeaderExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderExpr)
+			authHeaderExprValuable, authHeaderExprDiags := types.StringType.ValueFromString(ctx, types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderExpr))
+			diags.Append(authHeaderExprDiags...)
+			r.InputCollectorRest.Collector.Conf.AuthHeaderExpr = authHeaderExprValuable.(types.String)
 			r.InputCollectorRest.Collector.Conf.AuthHeaderKey = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.AuthHeaderKey)
 			r.InputCollectorRest.Collector.Conf.AuthRequestHeaders = []tfTypes.AuthRequestHeader{}
 
@@ -813,6 +815,7 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			}
 			r.InputCollectorRest.Collector.Conf.CaptureHeaders = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.CaptureHeaders)
 			r.InputCollectorRest.Collector.Conf.ClientSecretParamName = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ClientSecretParamName)
+			r.InputCollectorRest.Collector.Conf.CollectBody = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.CollectBody)
 			if resp.InputCollectorRest.Collector.Conf.CollectMethod != nil {
 				r.InputCollectorRest.Collector.Conf.CollectMethod = types.StringValue(string(*resp.InputCollectorRest.Collector.Conf.CollectMethod))
 			} else {
@@ -877,10 +880,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				for _, v := range resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
 					r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute = append(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute, types.StringValue(v))
 				}
+				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages)
+				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField)
@@ -904,10 +909,12 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 				for _, v := range resp.InputCollectorRest.Collector.Conf.Pagination.Attribute {
 					r.InputCollectorRest.Collector.Conf.Pagination.Attribute = append(r.InputCollectorRest.Collector.Conf.Pagination.Attribute, types.StringValue(v))
 				}
+				r.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr)
 				r.InputCollectorRest.Collector.Conf.Pagination.Limit = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.Limit)
 				r.InputCollectorRest.Collector.Conf.Pagination.LimitField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.LimitField)
 				r.InputCollectorRest.Collector.Conf.Pagination.MaxPages = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.MaxPages)
+				r.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Pagination.Offset = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.Offset)
 				r.InputCollectorRest.Collector.Conf.Pagination.OffsetField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.OffsetField)
 				r.InputCollectorRest.Collector.Conf.Pagination.PageField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.PageField)
@@ -949,6 +956,13 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 			for _, v := range resp.InputCollectorRest.Collector.Conf.SafeHeaders {
 				r.InputCollectorRest.Collector.Conf.SafeHeaders = append(r.InputCollectorRest.Collector.Conf.SafeHeaders, types.StringValue(v))
 			}
+			r.InputCollectorRest.Collector.Conf.Scopes = make([]types.String, 0, len(resp.InputCollectorRest.Collector.Conf.Scopes))
+			for _, v := range resp.InputCollectorRest.Collector.Conf.Scopes {
+				r.InputCollectorRest.Collector.Conf.Scopes = append(r.InputCollectorRest.Collector.Conf.Scopes, types.StringValue(v))
+			}
+			r.InputCollectorRest.Collector.Conf.ServiceAccountCredentials = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ServiceAccountCredentials)
+			r.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret)
+			r.InputCollectorRest.Collector.Conf.Subject = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Subject)
 			r.InputCollectorRest.Collector.Conf.Timeout = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Timeout)
 			r.InputCollectorRest.Collector.Conf.Token = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Token)
 			r.InputCollectorRest.Collector.Conf.TokenRespAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.TokenRespAttribute)
@@ -2370,6 +2384,28 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				tokenSecret1 = nil
 			}
+			scopes := make([]string, 0, len(r.InputCollectorRest.Collector.Conf.Scopes))
+			for scopesIndex := range r.InputCollectorRest.Collector.Conf.Scopes {
+				scopes = append(scopes, r.InputCollectorRest.Collector.Conf.Scopes[scopesIndex].ValueString())
+			}
+			subject := new(string)
+			if !r.InputCollectorRest.Collector.Conf.Subject.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Subject.IsNull() {
+				*subject = r.InputCollectorRest.Collector.Conf.Subject.ValueString()
+			} else {
+				subject = nil
+			}
+			serviceAccountCredentials := new(string)
+			if !r.InputCollectorRest.Collector.Conf.ServiceAccountCredentials.IsUnknown() && !r.InputCollectorRest.Collector.Conf.ServiceAccountCredentials.IsNull() {
+				*serviceAccountCredentials = r.InputCollectorRest.Collector.Conf.ServiceAccountCredentials.ValueString()
+			} else {
+				serviceAccountCredentials = nil
+			}
+			serviceAccountCredentialsSecret := new(string)
+			if !r.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret.IsUnknown() && !r.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret.IsNull() {
+				*serviceAccountCredentialsSecret = r.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret.ValueString()
+			} else {
+				serviceAccountCredentialsSecret = nil
+			}
 			loginURL := new(string)
 			if !r.InputCollectorRest.Collector.Conf.LoginURL.IsUnknown() && !r.InputCollectorRest.Collector.Conf.LoginURL.IsNull() {
 				*loginURL = r.InputCollectorRest.Collector.Conf.LoginURL.ValueString()
@@ -2493,6 +2529,12 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 					Name:  name5,
 					Value: value5,
 				})
+			}
+			collectBody := new(string)
+			if !r.InputCollectorRest.Collector.Conf.CollectBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.CollectBody.IsNull() {
+				*collectBody = r.InputCollectorRest.Collector.Conf.CollectBody.ValueString()
+			} else {
+				collectBody = nil
 			}
 			timeout1 := new(int64)
 			if !r.InputCollectorRest.Collector.Conf.Timeout.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Timeout.IsNull() {
@@ -2619,20 +2661,34 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					totalRecordField = nil
 				}
+				nextRelationAttribute := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute.IsNull() {
+					*nextRelationAttribute = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute.ValueString()
+				} else {
+					nextRelationAttribute = nil
+				}
+				curRelationAttribute := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute.IsNull() {
+					*curRelationAttribute = r.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute.ValueString()
+				} else {
+					curRelationAttribute = nil
+				}
 				pagination = &shared.PaginationConfig{
-					Type:             typeVar4,
-					OffsetField:      offsetField,
-					LimitField:       limitField,
-					Limit:            limit,
-					MaxPages:         maxPages,
-					ZeroIndexed:      zeroIndexed,
-					PageField:        pageField,
-					SizeField:        sizeField,
-					Size:             size,
-					Attribute:        attribute,
-					LastPageExpr:     lastPageExpr,
-					Offset:           offset,
-					TotalRecordField: totalRecordField,
+					Type:                  typeVar4,
+					OffsetField:           offsetField,
+					LimitField:            limitField,
+					Limit:                 limit,
+					MaxPages:              maxPages,
+					ZeroIndexed:           zeroIndexed,
+					PageField:             pageField,
+					SizeField:             sizeField,
+					Size:                  size,
+					Attribute:             attribute,
+					LastPageExpr:          lastPageExpr,
+					Offset:                offset,
+					TotalRecordField:      totalRecordField,
+					NextRelationAttribute: nextRelationAttribute,
+					CurRelationAttribute:  curRelationAttribute,
 				}
 			}
 			enableDiscoverCode := new(bool)
@@ -2787,20 +2843,34 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				} else {
 					totalRecordField1 = nil
 				}
+				nextRelationAttribute1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute.IsNull() {
+					*nextRelationAttribute1 = r.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute.ValueString()
+				} else {
+					nextRelationAttribute1 = nil
+				}
+				curRelationAttribute1 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute.IsNull() {
+					*curRelationAttribute1 = r.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute.ValueString()
+				} else {
+					curRelationAttribute1 = nil
+				}
 				pagination1 = &shared.PaginationConfig{
-					Type:             typeVar5,
-					OffsetField:      offsetField1,
-					LimitField:       limitField1,
-					Limit:            limit1,
-					MaxPages:         maxPages1,
-					ZeroIndexed:      zeroIndexed1,
-					PageField:        pageField1,
-					SizeField:        sizeField1,
-					Size:             size1,
-					Attribute:        attribute1,
-					LastPageExpr:     lastPageExpr1,
-					Offset:           offset1,
-					TotalRecordField: totalRecordField1,
+					Type:                  typeVar5,
+					OffsetField:           offsetField1,
+					LimitField:            limitField1,
+					Limit:                 limit1,
+					MaxPages:              maxPages1,
+					ZeroIndexed:           zeroIndexed1,
+					PageField:             pageField1,
+					SizeField:             sizeField1,
+					Size:                  size1,
+					Attribute:             attribute1,
+					LastPageExpr:          lastPageExpr1,
+					Offset:                offset1,
+					TotalRecordField:      totalRecordField1,
+					NextRelationAttribute: nextRelationAttribute1,
+					CurRelationAttribute:  curRelationAttribute1,
 				}
 			}
 			var retryRules *shared.RetryRulesConfiguration
@@ -2887,35 +2957,40 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				}
 			}
 			conf1 = &shared.InputCollectorRestConf{
-				Authentication:        authentication1,
-				Username:              username1,
-				Password:              password1,
-				CredentialsSecret:     credentialsSecret1,
-				Token:                 token1,
-				TokenSecret:           tokenSecret1,
-				LoginURL:              loginURL,
-				LoginBody:             loginBody,
-				AuthHeaderKey:         authHeaderKey,
-				AuthHeaderExpr:        authHeaderExpr,
-				ClientSecretParamName: clientSecretParamName,
-				AuthRequestParams:     authRequestParams,
-				TokenRespAttribute:    tokenRespAttribute,
-				AuthRequestHeaders:    authRequestHeaders,
-				CollectURL:            collectURL,
-				CollectMethod:         collectMethod,
-				CollectRequestHeaders: collectRequestHeaders,
-				CollectRequestParams:  collectRequestParams,
-				Timeout:               timeout1,
-				UseRoundRobinDNS:      useRoundRobinDns1,
-				DisableTimeFilter:     disableTimeFilter1,
-				DecodeURL:             decodeURL,
-				RejectUnauthorized:    rejectUnauthorized1,
-				CaptureHeaders:        captureHeaders,
-				SafeHeaders:           safeHeaders,
-				Discovery:             discovery,
-				Pagination:            pagination1,
-				RetryRules:            retryRules,
-				Scheduling:            scheduling,
+				Authentication:                  authentication1,
+				Username:                        username1,
+				Password:                        password1,
+				CredentialsSecret:               credentialsSecret1,
+				Token:                           token1,
+				TokenSecret:                     tokenSecret1,
+				Scopes:                          scopes,
+				Subject:                         subject,
+				ServiceAccountCredentials:       serviceAccountCredentials,
+				ServiceAccountCredentialsSecret: serviceAccountCredentialsSecret,
+				LoginURL:                        loginURL,
+				LoginBody:                       loginBody,
+				AuthHeaderKey:                   authHeaderKey,
+				AuthHeaderExpr:                  authHeaderExpr,
+				ClientSecretParamName:           clientSecretParamName,
+				AuthRequestParams:               authRequestParams,
+				TokenRespAttribute:              tokenRespAttribute,
+				AuthRequestHeaders:              authRequestHeaders,
+				CollectURL:                      collectURL,
+				CollectMethod:                   collectMethod,
+				CollectRequestHeaders:           collectRequestHeaders,
+				CollectRequestParams:            collectRequestParams,
+				CollectBody:                     collectBody,
+				Timeout:                         timeout1,
+				UseRoundRobinDNS:                useRoundRobinDns1,
+				DisableTimeFilter:               disableTimeFilter1,
+				DecodeURL:                       decodeURL,
+				RejectUnauthorized:              rejectUnauthorized1,
+				CaptureHeaders:                  captureHeaders,
+				SafeHeaders:                     safeHeaders,
+				Discovery:                       discovery,
+				Pagination:                      pagination1,
+				RetryRules:                      retryRules,
+				Scheduling:                      scheduling,
 			}
 		}
 		collector1 := shared.InputCollectorRestCollector{
@@ -4724,11 +4799,11 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 		typeVar16 := shared.TypeGcs(r.InputCollectorGCS.Collector.Type.ValueString())
 		var conf6 *shared.InputCollectorGCSConf
 		if r.InputCollectorGCS.Collector.Conf != nil {
-			serviceAccountCredentials := new(string)
+			serviceAccountCredentials1 := new(string)
 			if !r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.IsNull() {
-				*serviceAccountCredentials = r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.ValueString()
+				*serviceAccountCredentials1 = r.InputCollectorGCS.Collector.Conf.ServiceAccountCredentials.ValueString()
 			} else {
-				serviceAccountCredentials = nil
+				serviceAccountCredentials1 = nil
 			}
 			bucket1 := new(string)
 			if !r.InputCollectorGCS.Collector.Conf.Bucket.IsUnknown() && !r.InputCollectorGCS.Collector.Conf.Bucket.IsNull() {
@@ -4787,7 +4862,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				maxBatchSize2 = nil
 			}
 			conf6 = &shared.InputCollectorGCSConf{
-				ServiceAccountCredentials: serviceAccountCredentials,
+				ServiceAccountCredentials: serviceAccountCredentials1,
 				Bucket:                    bucket1,
 				Path:                      path2,
 				AuthType:                  authType1,

@@ -11,10 +11,13 @@ import (
 type PaginationConfigPaginationType string
 
 const (
-	PaginationConfigPaginationTypeNone   PaginationConfigPaginationType = "none"
-	PaginationConfigPaginationTypeOffset PaginationConfigPaginationType = "offset"
-	PaginationConfigPaginationTypeCursor PaginationConfigPaginationType = "cursor"
-	PaginationConfigPaginationTypePage   PaginationConfigPaginationType = "page"
+	PaginationConfigPaginationTypeNone               PaginationConfigPaginationType = "none"
+	PaginationConfigPaginationTypeOffset             PaginationConfigPaginationType = "offset"
+	PaginationConfigPaginationTypeCursor             PaginationConfigPaginationType = "cursor"
+	PaginationConfigPaginationTypePage               PaginationConfigPaginationType = "page"
+	PaginationConfigPaginationTypeResponseBody       PaginationConfigPaginationType = "response_body"
+	PaginationConfigPaginationTypeResponseHeader     PaginationConfigPaginationType = "response_header"
+	PaginationConfigPaginationTypeResponseHeaderLink PaginationConfigPaginationType = "response_header_link"
 )
 
 func (e PaginationConfigPaginationType) ToPointer() *PaginationConfigPaginationType {
@@ -33,6 +36,12 @@ func (e *PaginationConfigPaginationType) UnmarshalJSON(data []byte) error {
 	case "cursor":
 		fallthrough
 	case "page":
+		fallthrough
+	case "response_body":
+		fallthrough
+	case "response_header":
+		fallthrough
+	case "response_header_link":
 		*e = PaginationConfigPaginationType(v)
 		return nil
 	default:
@@ -54,6 +63,10 @@ type PaginationConfig struct {
 	LastPageExpr     *string                         `json:"lastPageExpr,omitempty"`
 	Offset           *int64                          `json:"offset,omitempty"`
 	TotalRecordField *string                         `json:"totalRecordField,omitempty"`
+	// Used for RFC 5988 Link header pagination (response_header_link)
+	NextRelationAttribute *string `json:"nextRelationAttribute,omitempty"`
+	// Optional relation for the current page in Link header pagination
+	CurRelationAttribute *string `json:"curRelationAttribute,omitempty"`
 }
 
 func (p PaginationConfig) MarshalJSON() ([]byte, error) {
@@ -156,4 +169,18 @@ func (p *PaginationConfig) GetTotalRecordField() *string {
 		return nil
 	}
 	return p.TotalRecordField
+}
+
+func (p *PaginationConfig) GetNextRelationAttribute() *string {
+	if p == nil {
+		return nil
+	}
+	return p.NextRelationAttribute
+}
+
+func (p *PaginationConfig) GetCurRelationAttribute() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CurRelationAttribute
 }

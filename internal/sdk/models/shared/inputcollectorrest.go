@@ -1194,6 +1194,14 @@ type InputCollectorRestConf struct {
 	CredentialsSecret *string                           `json:"credentialsSecret,omitempty"`
 	Token             *string                           `json:"token,omitempty"`
 	TokenSecret       *string                           `json:"tokenSecret,omitempty"`
+	// OAuth scopes when authentication is google_oauth or google_oauthSecret
+	Scopes []string `json:"scopes,omitempty"`
+	// Subject (e.g. admin user) for Google OAuth with domain-wide delegation
+	Subject *string `json:"subject,omitempty"`
+	// Service account key JSON (or path reference) for google_oauth
+	ServiceAccountCredentials *string `json:"serviceAccountCredentials,omitempty"`
+	// Secret reference for service account key when using google_oauthSecret
+	ServiceAccountCredentialsSecret *string `json:"serviceAccountCredentialsSecret,omitempty"`
 	// URL for authentication login
 	LoginURL *string `json:"loginUrl,omitempty"`
 	// Body content for login request
@@ -1212,17 +1220,19 @@ type InputCollectorRestConf struct {
 	CollectMethod         *InputCollectorRestCollectMethod `json:"collectMethod,omitempty"`
 	CollectRequestHeaders []CollectRequestHeader           `json:"collectRequestHeaders,omitempty"`
 	CollectRequestParams  []CollectRequestParam            `json:"collectRequestParams,omitempty"`
-	Timeout               *int64                           `json:"timeout,omitempty"`
-	UseRoundRobinDNS      *bool                            `json:"useRoundRobinDns,omitempty"`
-	DisableTimeFilter     *bool                            `json:"disableTimeFilter,omitempty"`
-	DecodeURL             *bool                            `default:"false" json:"decodeUrl"`
-	RejectUnauthorized    *bool                            `json:"rejectUnauthorized,omitempty"`
-	CaptureHeaders        *bool                            `default:"false" json:"captureHeaders"`
-	SafeHeaders           []string                         `json:"safeHeaders,omitempty"`
-	Discovery             DiscoveryConfiguration           `json:"discovery"`
-	Pagination            *PaginationConfig                `json:"pagination,omitempty"`
-	RetryRules            *RetryRulesConfiguration         `json:"retryRules,omitempty"`
-	Scheduling            *InternalScheduling              `json:"__scheduling,omitempty"`
+	// Body content for the collect request, used with the post_with_body collect method
+	CollectBody        *string                  `json:"collectBody,omitempty"`
+	Timeout            *int64                   `json:"timeout,omitempty"`
+	UseRoundRobinDNS   *bool                    `json:"useRoundRobinDns,omitempty"`
+	DisableTimeFilter  *bool                    `json:"disableTimeFilter,omitempty"`
+	DecodeURL          *bool                    `default:"false" json:"decodeUrl"`
+	RejectUnauthorized *bool                    `json:"rejectUnauthorized,omitempty"`
+	CaptureHeaders     *bool                    `default:"false" json:"captureHeaders"`
+	SafeHeaders        []string                 `json:"safeHeaders,omitempty"`
+	Discovery          DiscoveryConfiguration   `json:"discovery"`
+	Pagination         *PaginationConfig        `json:"pagination,omitempty"`
+	RetryRules         *RetryRulesConfiguration `json:"retryRules,omitempty"`
+	Scheduling         *InternalScheduling      `json:"__scheduling,omitempty"`
 }
 
 func (i InputCollectorRestConf) MarshalJSON() ([]byte, error) {
@@ -1276,6 +1286,34 @@ func (i *InputCollectorRestConf) GetTokenSecret() *string {
 		return nil
 	}
 	return i.TokenSecret
+}
+
+func (i *InputCollectorRestConf) GetScopes() []string {
+	if i == nil {
+		return nil
+	}
+	return i.Scopes
+}
+
+func (i *InputCollectorRestConf) GetSubject() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Subject
+}
+
+func (i *InputCollectorRestConf) GetServiceAccountCredentials() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ServiceAccountCredentials
+}
+
+func (i *InputCollectorRestConf) GetServiceAccountCredentialsSecret() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ServiceAccountCredentialsSecret
 }
 
 func (i *InputCollectorRestConf) GetLoginURL() *string {
@@ -1360,6 +1398,13 @@ func (i *InputCollectorRestConf) GetCollectRequestParams() []CollectRequestParam
 		return nil
 	}
 	return i.CollectRequestParams
+}
+
+func (i *InputCollectorRestConf) GetCollectBody() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CollectBody
 }
 
 func (i *InputCollectorRestConf) GetTimeout() *int64 {

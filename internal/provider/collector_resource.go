@@ -57,15 +57,15 @@ type CollectorResourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
 	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	IgnoreGroupJobsLimit      types.Bool                         `tfsdk:"ignore_group_jobs_limit"`
-	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
-	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
-	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
-	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs" tfPlanOnly:"true"`
-	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
-	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
-	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
-	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
-	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
+	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob"`
+	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake"`
+	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database"`
+	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs"`
+	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check"`
+	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest"`
+	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3"`
+	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script"`
+	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk"`
 	ResumeOnBoot              types.Bool                         `tfsdk:"resume_on_boot"`
 	TTL                       types.String                       `tfsdk:"ttl"`
 	WorkerAffinity            types.Bool                         `tfsdk:"worker_affinity"`
@@ -87,19 +87,19 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `The id of this collector instance. Requires replacement if changed.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `The id of this collector instance. Requires replacement if changed.`,
 			},
 			"ignore_group_jobs_limit": schema.BoolAttribute{
 				Computed: true,
@@ -2312,6 +2312,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								},
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
+										CustomType:  types.StringType,
 										Computed:    true,
 										Optional:    true,
 										Description: `Expression for auth header value`,
@@ -2389,6 +2390,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"client_secret_param_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+									},
+									"collect_body": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Body content for the collect request, used with the post_with_body collect method`,
 									},
 									"collect_method": schema.StringAttribute{
 										Computed:    true,
@@ -2563,6 +2569,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Optional:    true,
 														ElementType: types.StringType,
 													},
+													"cur_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Description: `Optional relation for the current page in Link header pagination`,
+													},
 													"last_page_expr": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
@@ -2582,6 +2593,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Optional:    true,
 														Default:     int64default.StaticInt64(0),
 														Description: `Default: 0`,
+													},
+													"next_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 													},
 													"offset": schema.Int64Attribute{
 														Computed: true,
@@ -2613,13 +2629,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Computed:    true,
 														Optional:    true,
 														Default:     stringdefault.StaticString(`none`),
-														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]`,
 														Validators: []validator.String{
 															stringvalidator.OneOf(
 																"none",
 																"offset",
 																"cursor",
 																"page",
+																"response_body",
+																"response_header",
+																"response_header_link",
 															),
 														},
 													},
@@ -2656,6 +2675,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"cur_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Optional relation for the current page in Link header pagination`,
+											},
 											"last_page_expr": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -2675,6 +2699,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional:    true,
 												Default:     int64default.StaticInt64(0),
 												Description: `Default: 0`,
+											},
+											"next_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 											},
 											"offset": schema.Int64Attribute{
 												Computed: true,
@@ -2706,13 +2735,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Computed:    true,
 												Optional:    true,
 												Default:     stringdefault.StaticString(`none`),
-												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"none",
 														"offset",
 														"cursor",
 														"page",
+														"response_body",
+														"response_header",
+														"response_header_link",
 													),
 												},
 											},
@@ -2822,6 +2854,27 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional: true,
 											},
 										},
+									},
+									"scopes": schema.ListAttribute{
+										Computed:    true,
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `OAuth scopes when authentication is google_oauth or google_oauthSecret`,
+									},
+									"service_account_credentials": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Service account key JSON (or path reference) for google_oauth`,
+									},
+									"service_account_credentials_secret": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Secret reference for service account key when using google_oauthSecret`,
+									},
+									"subject": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Subject (e.g. admin user) for Google OAuth with domain-wide delegation`,
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,
@@ -4645,209 +4698,6 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 	r.client = client
 }
 
-// collectorPreferStateBackup holds input and schedule values that RefreshFrom
-// restores when the API returns nil, so they can be re-applied after refreshPlan
-// overwrites them with empty.
-type collectorPreferStateBackup struct {
-	InputRest, ScheduleRest               interface{}
-	InputScript, ScheduleScript           interface{}
-	InputSplunk, ScheduleSplunk           interface{}
-	InputS3, ScheduleS3                   interface{}
-	InputAzureBlob, ScheduleAzureBlob     interface{}
-	InputCriblLake, ScheduleCriblLake     interface{}
-	InputDatabase, ScheduleDatabase       interface{}
-	InputGCS, ScheduleGCS                 interface{}
-	InputHealthCheck, ScheduleHealthCheck interface{}
-}
-
-func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {
-	saved := &collectorPreferStateBackup{}
-	if data.InputCollectorRest != nil {
-		saved.InputRest, saved.ScheduleRest = data.InputCollectorRest.Input, data.InputCollectorRest.Schedule
-	}
-	if data.InputCollectorScript != nil {
-		saved.InputScript, saved.ScheduleScript = data.InputCollectorScript.Input, data.InputCollectorScript.Schedule
-	}
-	if data.InputCollectorSplunk != nil {
-		saved.InputSplunk, saved.ScheduleSplunk = data.InputCollectorSplunk.Input, data.InputCollectorSplunk.Schedule
-	}
-	if data.InputCollectorS3 != nil {
-		saved.InputS3, saved.ScheduleS3 = data.InputCollectorS3.Input, data.InputCollectorS3.Schedule
-	}
-	if data.InputCollectorAzureBlob != nil {
-		saved.InputAzureBlob, saved.ScheduleAzureBlob = data.InputCollectorAzureBlob.Input, data.InputCollectorAzureBlob.Schedule
-	}
-	if data.InputCollectorCriblLake != nil {
-		saved.InputCriblLake, saved.ScheduleCriblLake = data.InputCollectorCriblLake.Input, data.InputCollectorCriblLake.Schedule
-	}
-	if data.InputCollectorDatabase != nil {
-		saved.InputDatabase, saved.ScheduleDatabase = data.InputCollectorDatabase.Input, data.InputCollectorDatabase.Schedule
-	}
-	if data.InputCollectorGCS != nil {
-		saved.InputGCS, saved.ScheduleGCS = data.InputCollectorGCS.Input, data.InputCollectorGCS.Schedule
-	}
-	if data.InputCollectorHealthCheck != nil {
-		saved.InputHealthCheck, saved.ScheduleHealthCheck = data.InputCollectorHealthCheck.Input, data.InputCollectorHealthCheck.Schedule
-	}
-	return saved
-}
-
-// collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
-// default structs when both API and plan return nil. This prevents drift when
-// the user doesn't configure these optional PreferState fields.
-func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
-	if data.InputCollectorRest != nil {
-		if data.InputCollectorRest.Input == nil {
-			data.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
-		}
-		if data.InputCollectorRest.Schedule == nil {
-			data.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
-		}
-	}
-	if data.InputCollectorScript != nil {
-		if data.InputCollectorScript.Input == nil {
-			data.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
-		}
-		if data.InputCollectorScript.Schedule == nil {
-			data.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
-		}
-	}
-	if data.InputCollectorSplunk != nil {
-		if data.InputCollectorSplunk.Input == nil {
-			data.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
-		}
-		if data.InputCollectorSplunk.Schedule == nil {
-			data.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
-		}
-	}
-	if data.InputCollectorS3 != nil {
-		if data.InputCollectorS3.Input == nil {
-			data.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
-		}
-		if data.InputCollectorS3.Schedule == nil {
-			data.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
-		}
-	}
-	if data.InputCollectorAzureBlob != nil {
-		if data.InputCollectorAzureBlob.Input == nil {
-			data.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
-		}
-		if data.InputCollectorAzureBlob.Schedule == nil {
-			data.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
-		}
-	}
-	if data.InputCollectorCriblLake != nil {
-		if data.InputCollectorCriblLake.Input == nil {
-			data.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
-		}
-		if data.InputCollectorCriblLake.Schedule == nil {
-			data.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
-		}
-	}
-	if data.InputCollectorDatabase != nil {
-		if data.InputCollectorDatabase.Input == nil {
-			data.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
-		}
-		if data.InputCollectorDatabase.Schedule == nil {
-			data.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
-		}
-	}
-	if data.InputCollectorGCS != nil {
-		if data.InputCollectorGCS.Input == nil {
-			data.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
-		}
-		if data.InputCollectorGCS.Schedule == nil {
-			data.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
-		}
-	}
-	if data.InputCollectorHealthCheck != nil {
-		if data.InputCollectorHealthCheck.Input == nil {
-			data.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
-		}
-		if data.InputCollectorHealthCheck.Schedule == nil {
-			data.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
-		}
-	}
-}
-
-func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
-	if saved == nil {
-		return
-	}
-	if data.InputCollectorRest != nil {
-		if data.InputCollectorRest.Input == nil && saved.InputRest != nil {
-			data.InputCollectorRest.Input = saved.InputRest.(*tfTypes.InputCollectorRestInput)
-		}
-		if data.InputCollectorRest.Schedule == nil && saved.ScheduleRest != nil {
-			data.InputCollectorRest.Schedule = saved.ScheduleRest.(*tfTypes.InputCollectorRestSchedule)
-		}
-	}
-	if data.InputCollectorScript != nil {
-		if data.InputCollectorScript.Input == nil && saved.InputScript != nil {
-			data.InputCollectorScript.Input = saved.InputScript.(*tfTypes.InputCollectorScriptInput)
-		}
-		if data.InputCollectorScript.Schedule == nil && saved.ScheduleScript != nil {
-			data.InputCollectorScript.Schedule = saved.ScheduleScript.(*tfTypes.InputCollectorScriptSchedule)
-		}
-	}
-	if data.InputCollectorSplunk != nil {
-		if data.InputCollectorSplunk.Input == nil && saved.InputSplunk != nil {
-			data.InputCollectorSplunk.Input = saved.InputSplunk.(*tfTypes.InputCollectorSplunkInput)
-		}
-		if data.InputCollectorSplunk.Schedule == nil && saved.ScheduleSplunk != nil {
-			data.InputCollectorSplunk.Schedule = saved.ScheduleSplunk.(*tfTypes.InputCollectorSplunkSchedule)
-		}
-	}
-	if data.InputCollectorS3 != nil {
-		if data.InputCollectorS3.Input == nil && saved.InputS3 != nil {
-			data.InputCollectorS3.Input = saved.InputS3.(*tfTypes.InputCollectorS3Input)
-		}
-		if data.InputCollectorS3.Schedule == nil && saved.ScheduleS3 != nil {
-			data.InputCollectorS3.Schedule = saved.ScheduleS3.(*tfTypes.InputCollectorS3Schedule)
-		}
-	}
-	if data.InputCollectorAzureBlob != nil {
-		if data.InputCollectorAzureBlob.Input == nil && saved.InputAzureBlob != nil {
-			data.InputCollectorAzureBlob.Input = saved.InputAzureBlob.(*tfTypes.InputCollectorAzureBlobInput)
-		}
-		if data.InputCollectorAzureBlob.Schedule == nil && saved.ScheduleAzureBlob != nil {
-			data.InputCollectorAzureBlob.Schedule = saved.ScheduleAzureBlob.(*tfTypes.InputCollectorAzureBlobSchedule)
-		}
-	}
-	if data.InputCollectorCriblLake != nil {
-		if data.InputCollectorCriblLake.Input == nil && saved.InputCriblLake != nil {
-			data.InputCollectorCriblLake.Input = saved.InputCriblLake.(*tfTypes.InputCollectorCriblLakeInput)
-		}
-		if data.InputCollectorCriblLake.Schedule == nil && saved.ScheduleCriblLake != nil {
-			data.InputCollectorCriblLake.Schedule = saved.ScheduleCriblLake.(*tfTypes.InputCollectorCriblLakeSchedule)
-		}
-	}
-	if data.InputCollectorDatabase != nil {
-		if data.InputCollectorDatabase.Input == nil && saved.InputDatabase != nil {
-			data.InputCollectorDatabase.Input = saved.InputDatabase.(*tfTypes.InputCollectorDatabaseInput)
-		}
-		if data.InputCollectorDatabase.Schedule == nil && saved.ScheduleDatabase != nil {
-			data.InputCollectorDatabase.Schedule = saved.ScheduleDatabase.(*tfTypes.InputCollectorDatabaseSchedule)
-		}
-	}
-	if data.InputCollectorGCS != nil {
-		if data.InputCollectorGCS.Input == nil && saved.InputGCS != nil {
-			data.InputCollectorGCS.Input = saved.InputGCS.(*tfTypes.InputCollectorGCSInput)
-		}
-		if data.InputCollectorGCS.Schedule == nil && saved.ScheduleGCS != nil {
-			data.InputCollectorGCS.Schedule = saved.ScheduleGCS.(*tfTypes.InputCollectorGCSSchedule)
-		}
-	}
-	if data.InputCollectorHealthCheck != nil {
-		if data.InputCollectorHealthCheck.Input == nil && saved.InputHealthCheck != nil {
-			data.InputCollectorHealthCheck.Input = saved.InputHealthCheck.(*tfTypes.InputCollectorHealthCheckInput)
-		}
-		if data.InputCollectorHealthCheck.Schedule == nil && saved.ScheduleHealthCheck != nil {
-			data.InputCollectorHealthCheck.Schedule = saved.ScheduleHealthCheck.(*tfTypes.InputCollectorHealthCheckSchedule)
-		}
-	}
-}
-
 func (r *CollectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *CollectorResourceModel
 	var plan types.Object
@@ -4898,15 +4748,11 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
-	collectorEnsureDefaultInputAndSchedule(data)
-	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -4966,8 +4812,6 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	collectorEnsureDefaultInputAndSchedule(data)
-
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -5018,15 +4862,11 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
-	collectorEnsureDefaultInputAndSchedule(data)
-	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

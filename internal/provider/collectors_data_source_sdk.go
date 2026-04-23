@@ -730,6 +730,7 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 					}
 					items.InputCollectorRest.Collector.Conf.CaptureHeaders = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CaptureHeaders)
 					items.InputCollectorRest.Collector.Conf.ClientSecretParamName = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.ClientSecretParamName)
+					items.InputCollectorRest.Collector.Conf.CollectBody = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.CollectBody)
 					if itemsItem.InputCollectorRest.Collector.Conf.CollectMethod != nil {
 						items.InputCollectorRest.Collector.Conf.CollectMethod = types.StringValue(string(*itemsItem.InputCollectorRest.Collector.Conf.CollectMethod))
 					} else {
@@ -794,10 +795,12 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 						for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
 							items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute = append(items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute, types.StringValue(v))
 						}
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages)
+						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField)
 						items.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField)
@@ -821,10 +824,12 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 						for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Pagination.Attribute {
 							items.InputCollectorRest.Collector.Conf.Pagination.Attribute = append(items.InputCollectorRest.Collector.Conf.Pagination.Attribute, types.StringValue(v))
 						}
+						items.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute)
 						items.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr)
 						items.InputCollectorRest.Collector.Conf.Pagination.Limit = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Limit)
 						items.InputCollectorRest.Collector.Conf.Pagination.LimitField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.LimitField)
 						items.InputCollectorRest.Collector.Conf.Pagination.MaxPages = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.MaxPages)
+						items.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute)
 						items.InputCollectorRest.Collector.Conf.Pagination.Offset = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.Offset)
 						items.InputCollectorRest.Collector.Conf.Pagination.OffsetField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.OffsetField)
 						items.InputCollectorRest.Collector.Conf.Pagination.PageField = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Pagination.PageField)
@@ -866,6 +871,13 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 					for _, v := range itemsItem.InputCollectorRest.Collector.Conf.SafeHeaders {
 						items.InputCollectorRest.Collector.Conf.SafeHeaders = append(items.InputCollectorRest.Collector.Conf.SafeHeaders, types.StringValue(v))
 					}
+					items.InputCollectorRest.Collector.Conf.Scopes = make([]types.String, 0, len(itemsItem.InputCollectorRest.Collector.Conf.Scopes))
+					for _, v := range itemsItem.InputCollectorRest.Collector.Conf.Scopes {
+						items.InputCollectorRest.Collector.Conf.Scopes = append(items.InputCollectorRest.Collector.Conf.Scopes, types.StringValue(v))
+					}
+					items.InputCollectorRest.Collector.Conf.ServiceAccountCredentials = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.ServiceAccountCredentials)
+					items.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret)
+					items.InputCollectorRest.Collector.Conf.Subject = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Subject)
 					items.InputCollectorRest.Collector.Conf.Timeout = types.Int64PointerValue(itemsItem.InputCollectorRest.Collector.Conf.Timeout)
 					items.InputCollectorRest.Collector.Conf.Token = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Token)
 					items.InputCollectorRest.Collector.Conf.TokenRespAttribute = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.TokenRespAttribute)

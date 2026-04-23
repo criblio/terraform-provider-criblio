@@ -465,6 +465,7 @@ resource "criblio_collector" "my_collector" {
         authentication           = "basic"
         capture_headers          = true
         client_secret_param_name = "client_secret"
+        collect_body             = "{\"filter\":\"status=active\"}"
         collect_method           = "get"
         collect_request_headers = [
           {
@@ -510,18 +511,20 @@ resource "criblio_collector" "my_collector" {
             attribute = [
               "records",
             ]
-            last_page_expr     = "$.data.isLastPage"
-            limit              = 100
-            limit_field        = "limit"
-            max_pages          = 10
-            offset             = 0
-            offset_field       = "offset"
-            page_field         = "page"
-            size               = 50
-            size_field         = "pageSize"
-            total_record_field = "totalRecords"
-            type               = "offset"
-            zero_indexed       = true
+            cur_relation_attribute  = "self"
+            last_page_expr          = "$.data.isLastPage"
+            limit                   = 100
+            limit_field             = "limit"
+            max_pages               = 10
+            next_relation_attribute = "next"
+            offset                  = 0
+            offset_field            = "offset"
+            page_field              = "page"
+            size                    = 50
+            size_field              = "pageSize"
+            total_record_field      = "totalRecords"
+            type                    = "offset"
+            zero_indexed            = true
           }
         }
         login_body = "{\"username\":\"user\",\"password\":\"pass\"}"
@@ -530,18 +533,20 @@ resource "criblio_collector" "my_collector" {
           attribute = [
             "records",
           ]
-          last_page_expr     = "$.data.isLastPage"
-          limit              = 100
-          limit_field        = "limit"
-          max_pages          = 10
-          offset             = 0
-          offset_field       = "offset"
-          page_field         = "page"
-          size               = 50
-          size_field         = "pageSize"
-          total_record_field = "totalRecords"
-          type               = "offset"
-          zero_indexed       = true
+          cur_relation_attribute  = "self"
+          last_page_expr          = "$.data.isLastPage"
+          limit                   = 100
+          limit_field             = "limit"
+          max_pages               = 10
+          next_relation_attribute = "next"
+          offset                  = 0
+          offset_field            = "offset"
+          page_field              = "page"
+          size                    = 50
+          size_field              = "pageSize"
+          total_record_field      = "totalRecords"
+          type                    = "offset"
+          zero_indexed            = true
         }
         password            = "restPassword"
         reject_unauthorized = true
@@ -569,12 +574,18 @@ resource "criblio_collector" "my_collector" {
             # ...
           }
         }
-        timeout              = 30
-        token                = "restBearerToken"
-        token_resp_attribute = "access_token"
-        token_secret         = "restBearerTokenSecret"
-        use_round_robin_dns  = false
-        username             = "restUser"
+        scopes = [
+          "..."
+        ]
+        service_account_credentials        = "...my_service_account_credentials..."
+        service_account_credentials_secret = "...my_service_account_credentials_secret..."
+        subject                            = "admin@example.com"
+        timeout                            = 30
+        token                              = "restBearerToken"
+        token_resp_attribute               = "access_token"
+        token_secret                       = "restBearerTokenSecret"
+        use_round_robin_dns                = false
+        username                           = "restUser"
       }
       type = "rest"
     }
@@ -1641,6 +1652,7 @@ Optional:
 - `authentication` (String) must be one of ["none", "basic", "basicSecret", "token", "tokenSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"]
 - `capture_headers` (Boolean) Default: false
 - `client_secret_param_name` (String)
+- `collect_body` (String) Body content for the collect request, used with the post_with_body collect method
 - `collect_method` (String) must be one of ["get", "post", "post_with_body", "other"]
 - `collect_request_headers` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_headers))
 - `collect_request_params` (Attributes List) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--collect_request_params))
@@ -1657,6 +1669,10 @@ Optional:
 - `retry_rules` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--retry_rules))
 - `safe_headers` (List of String)
 - `scheduling` (Attributes) (see [below for nested schema](#nestedatt--input_collector_rest--collector--conf--scheduling))
+- `scopes` (List of String) OAuth scopes when authentication is google_oauth or google_oauthSecret
+- `service_account_credentials` (String) Service account key JSON (or path reference) for google_oauth
+- `service_account_credentials_secret` (String) Secret reference for service account key when using google_oauthSecret
+- `subject` (String) Subject (e.g. admin user) for Google OAuth with domain-wide delegation
 - `timeout` (Number)
 - `token` (String)
 - `token_resp_attribute` (String) Attribute name for token in response
@@ -1737,17 +1753,19 @@ Optional:
 Optional:
 
 - `attribute` (List of String)
+- `cur_relation_attribute` (String) Optional relation for the current page in Link header pagination
 - `last_page_expr` (String)
 - `limit` (Number) Default: 100
 - `limit_field` (String)
 - `max_pages` (Number) Default: 0
+- `next_relation_attribute` (String) Used for RFC 5988 Link header pagination (response_header_link)
 - `offset` (Number)
 - `offset_field` (String)
 - `page_field` (String)
 - `size` (Number) Default: 50
 - `size_field` (String)
 - `total_record_field` (String)
-- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page"]
+- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]
 - `zero_indexed` (Boolean) Default: false
 
 
@@ -1758,17 +1776,19 @@ Optional:
 Optional:
 
 - `attribute` (List of String)
+- `cur_relation_attribute` (String) Optional relation for the current page in Link header pagination
 - `last_page_expr` (String)
 - `limit` (Number) Default: 100
 - `limit_field` (String)
 - `max_pages` (Number) Default: 0
+- `next_relation_attribute` (String) Used for RFC 5988 Link header pagination (response_header_link)
 - `offset` (Number)
 - `offset_field` (String)
 - `page_field` (String)
 - `size` (Number) Default: 50
 - `size_field` (String)
 - `total_record_field` (String)
-- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page"]
+- `type` (String) Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]
 - `zero_indexed` (Boolean) Default: false
 
 
