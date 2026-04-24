@@ -775,6 +775,7 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 			}
 			r.InputCollectorRest.Collector.Conf.CaptureHeaders = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.CaptureHeaders)
 			r.InputCollectorRest.Collector.Conf.ClientSecretParamName = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ClientSecretParamName)
+			r.InputCollectorRest.Collector.Conf.CollectBody = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.CollectBody)
 			if resp.InputCollectorRest.Collector.Conf.CollectMethod != nil {
 				r.InputCollectorRest.Collector.Conf.CollectMethod = types.StringValue(string(*resp.InputCollectorRest.Collector.Conf.CollectMethod))
 			} else {
@@ -839,10 +840,12 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 				for _, v := range resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute {
 					r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute = append(r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Attribute, types.StringValue(v))
 				}
+				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.CurRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.LastPageExpr)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Limit)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.LimitField)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.MaxPages)
+				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.NextRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.Offset)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.OffsetField)
 				r.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.Pagination.PageField)
@@ -866,10 +869,12 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 				for _, v := range resp.InputCollectorRest.Collector.Conf.Pagination.Attribute {
 					r.InputCollectorRest.Collector.Conf.Pagination.Attribute = append(r.InputCollectorRest.Collector.Conf.Pagination.Attribute, types.StringValue(v))
 				}
+				r.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.CurRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.LastPageExpr)
 				r.InputCollectorRest.Collector.Conf.Pagination.Limit = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.Limit)
 				r.InputCollectorRest.Collector.Conf.Pagination.LimitField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.LimitField)
 				r.InputCollectorRest.Collector.Conf.Pagination.MaxPages = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.MaxPages)
+				r.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.NextRelationAttribute)
 				r.InputCollectorRest.Collector.Conf.Pagination.Offset = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.Offset)
 				r.InputCollectorRest.Collector.Conf.Pagination.OffsetField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.OffsetField)
 				r.InputCollectorRest.Collector.Conf.Pagination.PageField = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Pagination.PageField)
@@ -911,6 +916,13 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 			for _, v := range resp.InputCollectorRest.Collector.Conf.SafeHeaders {
 				r.InputCollectorRest.Collector.Conf.SafeHeaders = append(r.InputCollectorRest.Collector.Conf.SafeHeaders, types.StringValue(v))
 			}
+			r.InputCollectorRest.Collector.Conf.Scopes = make([]types.String, 0, len(resp.InputCollectorRest.Collector.Conf.Scopes))
+			for _, v := range resp.InputCollectorRest.Collector.Conf.Scopes {
+				r.InputCollectorRest.Collector.Conf.Scopes = append(r.InputCollectorRest.Collector.Conf.Scopes, types.StringValue(v))
+			}
+			r.InputCollectorRest.Collector.Conf.ServiceAccountCredentials = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ServiceAccountCredentials)
+			r.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.ServiceAccountCredentialsSecret)
+			r.InputCollectorRest.Collector.Conf.Subject = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Subject)
 			r.InputCollectorRest.Collector.Conf.Timeout = types.Int64PointerValue(resp.InputCollectorRest.Collector.Conf.Timeout)
 			r.InputCollectorRest.Collector.Conf.Token = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Token)
 			r.InputCollectorRest.Collector.Conf.TokenRespAttribute = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.TokenRespAttribute)

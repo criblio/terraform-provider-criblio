@@ -450,6 +450,7 @@ resource "criblio_collector" "my_collector" {
         authentication           = "basic"
         capture_headers          = true
         client_secret_param_name = "client_secret"
+        collect_body             = "{\"filter\":\"status=active\"}"
         collect_method           = "get"
         collect_request_headers = [
           {
@@ -495,18 +496,20 @@ resource "criblio_collector" "my_collector" {
             attribute = [
               "records",
             ]
-            last_page_expr     = "$.data.isLastPage"
-            limit              = 100
-            limit_field        = "limit"
-            max_pages          = 10
-            offset             = 0
-            offset_field       = "offset"
-            page_field         = "page"
-            size               = 50
-            size_field         = "pageSize"
-            total_record_field = "totalRecords"
-            type               = "offset"
-            zero_indexed       = true
+            cur_relation_attribute  = "self"
+            last_page_expr          = "$.data.isLastPage"
+            limit                   = 100
+            limit_field             = "limit"
+            max_pages               = 10
+            next_relation_attribute = "next"
+            offset                  = 0
+            offset_field            = "offset"
+            page_field              = "page"
+            size                    = 50
+            size_field              = "pageSize"
+            total_record_field      = "totalRecords"
+            type                    = "offset"
+            zero_indexed            = true
           }
         }
         login_body = "{\"username\":\"user\",\"password\":\"pass\"}"
@@ -515,18 +518,20 @@ resource "criblio_collector" "my_collector" {
           attribute = [
             "records",
           ]
-          last_page_expr     = "$.data.isLastPage"
-          limit              = 100
-          limit_field        = "limit"
-          max_pages          = 10
-          offset             = 0
-          offset_field       = "offset"
-          page_field         = "page"
-          size               = 50
-          size_field         = "pageSize"
-          total_record_field = "totalRecords"
-          type               = "offset"
-          zero_indexed       = true
+          cur_relation_attribute  = "self"
+          last_page_expr          = "$.data.isLastPage"
+          limit                   = 100
+          limit_field             = "limit"
+          max_pages               = 10
+          next_relation_attribute = "next"
+          offset                  = 0
+          offset_field            = "offset"
+          page_field              = "page"
+          size                    = 50
+          size_field              = "pageSize"
+          total_record_field      = "totalRecords"
+          type                    = "offset"
+          zero_indexed            = true
         }
         password            = "restPassword"
         reject_unauthorized = true
@@ -554,12 +559,18 @@ resource "criblio_collector" "my_collector" {
             # ...
           }
         }
-        timeout              = 30
-        token                = "restBearerToken"
-        token_resp_attribute = "access_token"
-        token_secret         = "restBearerTokenSecret"
-        use_round_robin_dns  = false
-        username             = "restUser"
+        scopes = [
+          "..."
+        ]
+        service_account_credentials        = "...my_service_account_credentials..."
+        service_account_credentials_secret = "...my_service_account_credentials_secret..."
+        subject                            = "admin@example.com"
+        timeout                            = 30
+        token                              = "restBearerToken"
+        token_resp_attribute               = "access_token"
+        token_secret                       = "restBearerTokenSecret"
+        use_round_robin_dns                = false
+        username                           = "restUser"
       }
       type = "rest"
     }

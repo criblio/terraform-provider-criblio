@@ -205,7 +205,8 @@ resource "criblio_collector" "rest_api_collector_discovery_http" {
         discovery = {
           discover_type   = "http"
           discover_method = "get"
-          discover_url    = "foobar.com"
+          # API validates discoverUrl as a jsExpression; use a string literal, not a bare URL
+          discover_url = "'https://discover.test.example.com/v1'"
         }
         # Additional REST configuration
         authentication = "basic"
@@ -320,8 +321,429 @@ resource "criblio_collector" "rest_api_collector_discovery_list" {
     ignore_group_jobs_limit = false
   }
 }
+
+# ---------------------------------------------------------------------------
+# Extra REST examples (pagination, OAuth, post body). All hostnames are
+# intentionally fake (test.example, *.test.example) — replace for real use.
+# Cribl stores collectUrl, discoverUrl, loginUrl, and most header `value`
+# fields as **JavaScript expressions**; bare `https://...` is invalid. Use
+# string-literal form, e.g. 'https://host/path' in TF: "'https://host/path'"
+# ---------------------------------------------------------------------------
+
+resource "criblio_collector" "rest_okta_system_log_events" {
+  group_id = "default"
+  id       = "example-okta-system-log-events"
+  input_collector_rest = {
+    id                      = "example-okta-system-log-events"
+    environment             = "demo"
+    ignore_group_jobs_limit = false
+    remove_fields           = []
+    resume_on_boot          = false
+    streamtags              = ["okta", "example"]
+    ttl                     = "4h"
+    worker_affinity         = false
+    collector = {
+      type = "rest"
+      conf = {
+        discovery      = { discover_type = "none" }
+        collect_method = "get"
+        # collectUrl is a jsExpression in the API; wrap the URL in a string literal
+        collect_url         = "'https://idp.test.example.com/api/v1/system/log'"
+        authentication      = "none"
+        timeout             = 0
+        use_round_robin_dns = false
+        disable_time_filter = false
+        reject_unauthorized = true
+        capture_headers     = false
+        safe_headers        = []
+        pagination = {
+          type                    = "response_header_link"
+          next_relation_attribute = "next"
+          cur_relation_attribute  = "self"
+          max_pages               = 0
+        }
+        retry_rules = {
+          type            = "backoff"
+          interval        = 1000
+          limit           = 6
+          multiplier      = 2
+          max_interval_ms = 30000
+          codes           = [429, 503]
+          enable_header   = false
+        }
+        # Cribl JS: use $${ in Terraform to emit a literal ${ for the API
+        collect_request_params = [
+          {
+            name  = "since"
+            value = <<-E
+`$${new Date((earliest * 1000 || Date.now() - 7*24*60*60*1000)).toISOString()}`
+E
+          },
+          {
+            name  = "until"
+            value = <<-E
+`$${new Date((latest * 1000 || Date.now())).toISOString()}`
+E
+          },
+        ]
+        collect_request_headers = [
+          {
+            name = "Authorization"
+            # header value is also a jsExpression
+            value = "'SSWS test-api-token-replace-me'"
+          },
+        ]
+      }
+    }
+    input = {
+      breaker_rulesets       = ["cribl", "default"]
+      metadata               = []
+      output                 = "default"
+      pipeline               = "main"
+      preprocess             = { disabled = true }
+      send_to_routes         = true
+      stale_channel_flush_ms = 10000
+      throttle_rate_per_sec  = "0"
+      type                   = "collection"
+    }
+    schedule = {
+      cron_schedule       = "*/5 * * * *"
+      enabled             = true
+      max_concurrent_runs = 1
+      resume_missed       = true
+      skippable           = false
+      run = {
+        expression               = "true"
+        job_timeout              = "0"
+        log_level                = "info"
+        max_task_reschedule      = 1
+        max_task_size            = "10MB"
+        min_task_size            = "1MB"
+        mode                     = "run"
+        reschedule_dropped_tasks = true
+        time_range_type          = "relative"
+        timestamp_timezone       = "UTC"
+        earliest                 = -10
+        latest                   = -5
+      }
+    }
+  }
+}
+
+# Temporarily disabled: on-prem Cribl does not support the lib/jobs API used on
+# destroy (e.g. m/default/lib/jobs/example-google-workspace-admin-reports), so
+# post-test terraform destroy fails in on-prem integration runs. Re-enable for
+# Cloud or when local UI/API matches.
+# resource "criblio_collector" "rest_google_workspace_admin_reports" {
+#   group_id = "default"
+#   id       = "example-google-workspace-admin-reports"
+#   input_collector_rest = {
+#     id                      = "example-google-workspace-admin-reports"
+#     environment             = "demo"
+#     ignore_group_jobs_limit = false
+#     remove_fields           = []
+#     resume_on_boot          = false
+#     streamtags              = ["google", "gws", "example"]
+#     ttl                     = "4h"
+#     worker_affinity         = false
+#     collector = {
+#       type = "rest"
+#       conf = {
+#         discovery = {
+#           discover_type = "list"
+#           item_list     = ["admin", "login", "drive", "token"]
+#         }
+#         collect_method = "get"
+#         # Cribl discovery id: literal ${id} in the stored URL
+#         collect_url                 = "'https://admin.reports.test.example.com/v1/activity/users/all/applications/$${id}'"
+#         authentication              = "google_oauth"
+#         subject                     = "admin-audit@example.com"
+#         service_account_credentials = "eyJ0eXBlIjoidGVzdCJ9" # base64 JSON placeholder; replace in real use
+#         scopes = [
+#           "https://test.example.com/oauth/scope/reports.readonly", # test scope; use real product scopes in production
+#         ]
+#         timeout             = 0
+#         use_round_robin_dns = false
+#         disable_time_filter = false
+#         reject_unauthorized = true
+#         capture_headers     = false
+#         safe_headers        = []
+#         decode_url          = true
+#         pagination = {
+#           type           = "response_body"
+#           max_pages      = 50
+#           attribute      = ["nextPageToken"]
+#           last_page_expr = "nextPageToken === null"
+#         }
+#         retry_rules = {
+#           type              = "backoff"
+#           interval          = 1000
+#           limit             = 5
+#           multiplier        = 2
+#           max_interval_ms   = 20000
+#           codes             = [429, 503]
+#           enable_header     = true
+#           retry_header_name = "retry-after"
+#         }
+#         collect_request_params = [
+#           { name = "maxResults", value = "100" },
+#           {
+#             name  = "startTime"
+#             value = <<-E
+# `$${new Date((earliest * 1000 || Date.now() - 7*24*60*60*1000)).toISOString()}`
+# E
+#           },
+#           {
+#             name  = "endTime"
+#             value = <<-E
+# `$${new Date((latest * 1000 || Date.now())).toISOString()}`
+# E
+#           },
+#           {
+#             name  = "pageToken"
+#             value = <<-E
+# `$${__e && __e.nextPageToken != null ? __e.nextPageToken : undefined}`
+# E
+#           },
+#         ]
+#       }
+#     }
+#     input = {
+#       breaker_rulesets       = ["cribl", "default"]
+#       metadata               = []
+#       output                 = "default"
+#       pipeline               = "main"
+#       preprocess             = { disabled = true }
+#       send_to_routes         = true
+#       stale_channel_flush_ms = 10000
+#       throttle_rate_per_sec  = "0"
+#       type                   = "collection"
+#     }
+#     schedule = {
+#       cron_schedule       = "*/30 * * * *"
+#       enabled             = true
+#       max_concurrent_runs = 1
+#       resume_missed       = true
+#       skippable           = false
+#       run = {
+#         expression               = "true"
+#         job_timeout              = "60m"
+#         log_level                = "info"
+#         max_task_reschedule      = 1
+#         max_task_size            = "10MB"
+#         min_task_size            = "1MB"
+#         mode                     = "run"
+#         reschedule_dropped_tasks = true
+#         time_range_type          = "relative"
+#         earliest                 = -35
+#         latest                   = -5
+#         state_tracking = {
+#           enabled                 = true
+#           state_update_expression = "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}"
+#           state_merge_expression  = "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState"
+#         }
+#       }
+#     }
+#   }
+# }
+
+resource "criblio_collector" "rest_crowdstrike_combined_alerts" {
+  group_id = "default"
+  id       = "example-crowdstrike-combined-alerts"
+  input_collector_rest = {
+    id                      = "example-crowdstrike-combined-alerts"
+    environment             = "demo"
+    ignore_group_jobs_limit = false
+    remove_fields           = []
+    resume_on_boot          = false
+    streamtags              = ["crowdstrike", "example"]
+    ttl                     = "4h"
+    worker_affinity         = false
+    collector = {
+      type = "rest"
+      conf = {
+        discovery      = { discover_type = "none" }
+        collect_method = "post_with_body"
+        # For production, use a backtick-wrapped Cribl expression; static JSON is enough for local validation
+        collect_url          = "'https://falcon.test.example.com/alerts/combined/alerts/v1'"
+        collect_body         = "'{\"filter\":\"\",\"sort\":\"created_timestamp.asc\",\"limit\":1000}'"
+        authentication       = "login"
+        username             = "cs-client-id"
+        password             = "cs-client-secret"
+        login_url            = "'https://falcon.test.example.com/oauth2/token'"
+        login_body           = join("", ["`", "client_id=$${username}", "&client_secret=$${password}", "`"])
+        token_resp_attribute = "access_token"
+        auth_header_key      = "Authorization"
+        auth_header_expr     = join("", ["`", "Bearer $${token}", "`"])
+        auth_request_headers = [
+          { name = "Content-Type", value = "application/x-www-form-urlencoded" },
+          { name = "accept", value = "application/json" },
+        ]
+        collect_request_headers = [
+          { name = "Content-Type", value = "application/json" },
+          { name = "Accept", value = "application/json" },
+        ]
+        timeout             = 0
+        use_round_robin_dns = false
+        reject_unauthorized = false
+        capture_headers     = false
+        safe_headers        = []
+        pagination = {
+          type           = "response_body"
+          max_pages      = 250
+          attribute      = ["meta", "pagination", "after"]
+          last_page_expr = "meta && meta.pagination && (meta.pagination.after === null || meta.pagination.after === undefined || meta.pagination.after === '')"
+        }
+        retry_rules = {
+          type            = "backoff"
+          interval        = 1000
+          limit           = 5
+          multiplier      = 2
+          max_interval_ms = 20000
+          codes           = [429, 503]
+          enable_header   = false
+        }
+      }
+    }
+    input = {
+      breaker_rulesets       = ["cribl", "default"]
+      metadata               = []
+      output                 = "default"
+      pipeline               = "main"
+      preprocess             = { disabled = true }
+      send_to_routes         = true
+      stale_channel_flush_ms = 10000
+      throttle_rate_per_sec  = "0"
+      type                   = "collection"
+    }
+    schedule = {
+      cron_schedule       = "*/5 * * * *"
+      enabled             = true
+      max_concurrent_runs = 1
+      resume_missed       = true
+      skippable           = false
+      run = {
+        expression               = "true"
+        job_timeout              = "0"
+        log_level                = "info"
+        max_task_reschedule      = 1
+        max_task_size            = "10MB"
+        min_task_size            = "1MB"
+        mode                     = "run"
+        reschedule_dropped_tasks = true
+        time_range_type          = "relative"
+        timestamp_timezone       = "UTC"
+        earliest                 = -10
+        latest                   = -5
+      }
+    }
+  }
+}
+
+resource "criblio_collector" "rest_mode_audit_logs" {
+  group_id = "default"
+  id       = "example-mode-audit-logs"
+  input_collector_rest = {
+    id                      = "example-mode-audit-logs"
+    environment             = "demo"
+    ignore_group_jobs_limit = false
+    remove_fields           = []
+    resume_on_boot          = false
+    streamtags              = ["mode", "example"]
+    ttl                     = "4h"
+    worker_affinity         = false
+    collector = {
+      type = "rest"
+      conf = {
+        discovery           = { discover_type = "none" }
+        collect_method      = "get"
+        collect_url         = "'https://analytics.test.example.com/api/v1/audit_logs'"
+        authentication      = "none"
+        timeout             = 0
+        use_round_robin_dns = false
+        disable_time_filter = true
+        reject_unauthorized = false
+        capture_headers     = false
+        safe_headers        = []
+        pagination = {
+          type           = "response_body"
+          max_pages      = 1000
+          attribute      = ["metadata", "next_token"]
+          last_page_expr = "metadata && (metadata.next_token === null || metadata.next_token === undefined || metadata.next_token === '')"
+        }
+        retry_rules = {
+          type            = "backoff"
+          interval        = 1000
+          limit           = 5
+          multiplier      = 2
+          max_interval_ms = 20000
+          codes           = [429, 503]
+          enable_header   = false
+        }
+        collect_request_params = [
+          {
+            name  = "start_timestamp"
+            value = <<-E
+`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 10 * 60 * 1000).toISOString()}`
+E
+          },
+          {
+            name  = "end_timestamp"
+            value = <<-E
+`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 5 * 60 * 1000).toISOString()}`
+E
+          },
+          {
+            name  = "next_token"
+            value = <<-E
+`$${__e && __e.metadata && __e.metadata.next_token ? __e.metadata.next_token : undefined}`
+E
+          },
+        ]
+        collect_request_headers = [
+          { name = "Authorization", value = "'Basic dGVzdDp0ZXN0'" },
+          { name = "Content-Type", value = "'application/json'" },
+          { name = "Accept", value = "'application/json'" },
+        ]
+      }
+    }
+    input = {
+      breaker_rulesets       = ["cribl", "default"]
+      metadata               = []
+      output                 = "default"
+      pipeline               = "main"
+      preprocess             = { disabled = true }
+      send_to_routes         = true
+      stale_channel_flush_ms = 10000
+      throttle_rate_per_sec  = "0"
+      type                   = "collection"
+    }
+    schedule = {
+      cron_schedule       = "*/5 * * * *"
+      enabled             = true
+      max_concurrent_runs = 1
+      resume_missed       = true
+      skippable           = false
+      run = {
+        expression               = "true"
+        job_timeout              = "0"
+        log_level                = "info"
+        max_task_reschedule      = 1
+        max_task_size            = "10MB"
+        min_task_size            = "1MB"
+        mode                     = "run"
+        reschedule_dropped_tasks = true
+        time_range_type          = "relative"
+        timestamp_timezone       = "UTC"
+        earliest                 = -10
+        latest                   = -5
+      }
+    }
+  }
+}
+
 /*
-# collector type does not work in playground for now. Enable when fixed
+# Script collector: enable when your environment supports it
 resource "criblio_collector" "script_collector" {
   group_id = "default"
   id       = "script-demo-collector"

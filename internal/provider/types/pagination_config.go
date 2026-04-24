@@ -7,17 +7,19 @@ import (
 )
 
 type PaginationConfig struct {
-	Attribute        []types.String `tfsdk:"attribute"`
-	LastPageExpr     types.String   `tfsdk:"last_page_expr"`
-	Limit            types.Int64    `tfsdk:"limit"`
-	LimitField       types.String   `tfsdk:"limit_field"`
-	MaxPages         types.Int64    `tfsdk:"max_pages"`
-	Offset           types.Int64    `tfsdk:"offset"`
-	OffsetField      types.String   `tfsdk:"offset_field"`
-	PageField        types.String   `tfsdk:"page_field"`
-	Size             types.Int64    `tfsdk:"size"`
-	SizeField        types.String   `tfsdk:"size_field"`
-	TotalRecordField types.String   `tfsdk:"total_record_field"`
-	Type             types.String   `tfsdk:"type"`
-	ZeroIndexed      types.Bool     `tfsdk:"zero_indexed"`
+	Attribute             []types.String `tfsdk:"attribute"`
+	CurRelationAttribute  types.String   `tfsdk:"cur_relation_attribute"`
+	LastPageExpr          types.String   `tfsdk:"last_page_expr"`
+	Limit                 types.Int64    `tfsdk:"limit"`
+	LimitField            types.String   `tfsdk:"limit_field"`
+	MaxPages              types.Int64    `tfsdk:"max_pages"`
+	NextRelationAttribute types.String   `tfsdk:"next_relation_attribute"`
+	Offset                types.Int64    `tfsdk:"offset"`
+	OffsetField           types.String   `tfsdk:"offset_field"`
+	PageField             types.String   `tfsdk:"page_field"`
+	Size                  types.Int64    `tfsdk:"size"`
+	SizeField             types.String   `tfsdk:"size_field"`
+	TotalRecordField      types.String   `tfsdk:"total_record_field"`
+	Type                  types.String   `tfsdk:"type"`
+	ZeroIndexed           types.Bool     `tfsdk:"zero_indexed"`
 }

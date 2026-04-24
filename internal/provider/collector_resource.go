@@ -57,15 +57,15 @@ type CollectorResourceModel struct {
 	GroupID                   types.String                       `tfsdk:"group_id"`
 	ID                        types.String                       `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	IgnoreGroupJobsLimit      types.Bool                         `tfsdk:"ignore_group_jobs_limit"`
-	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob" tfPlanOnly:"true"`
-	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake" tfPlanOnly:"true"`
-	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database" tfPlanOnly:"true"`
-	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs" tfPlanOnly:"true"`
-	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check" tfPlanOnly:"true"`
-	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest" tfPlanOnly:"true"`
-	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3" tfPlanOnly:"true"`
-	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script" tfPlanOnly:"true"`
-	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk" tfPlanOnly:"true"`
+	InputCollectorAzureBlob   *tfTypes.InputCollectorAzureBlob   `queryParam:"inline" tfsdk:"input_collector_azure_blob"`
+	InputCollectorCriblLake   *tfTypes.InputCollectorCriblLake   `queryParam:"inline" tfsdk:"input_collector_cribl_lake"`
+	InputCollectorDatabase    *tfTypes.InputCollectorDatabase    `queryParam:"inline" tfsdk:"input_collector_database"`
+	InputCollectorGCS         *tfTypes.InputCollectorGCS         `queryParam:"inline" tfsdk:"input_collector_gcs"`
+	InputCollectorHealthCheck *tfTypes.InputCollectorHealthCheck `queryParam:"inline" tfsdk:"input_collector_health_check"`
+	InputCollectorRest        *tfTypes.InputCollectorRest        `queryParam:"inline" tfsdk:"input_collector_rest"`
+	InputCollectorS3          *tfTypes.InputCollectorS3          `queryParam:"inline" tfsdk:"input_collector_s3"`
+	InputCollectorScript      *tfTypes.InputCollectorScript      `queryParam:"inline" tfsdk:"input_collector_script"`
+	InputCollectorSplunk      *tfTypes.InputCollectorSplunk      `queryParam:"inline" tfsdk:"input_collector_splunk"`
 	ResumeOnBoot              types.Bool                         `tfsdk:"resume_on_boot"`
 	TTL                       types.String                       `tfsdk:"ttl"`
 	WorkerAffinity            types.Bool                         `tfsdk:"worker_affinity"`
@@ -81,31 +81,35 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("environment")}}),
 				},
+				Description: `Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).`,
 			},
 			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
+				Description: `The consumer group to which this instance belongs. Defaults to 'default'. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `The id of this collector instance. Requires replacement if changed.`,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `The id of this collector instance. Requires replacement if changed.`,
 			},
 			"ignore_group_jobs_limit": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ignore_group_jobs_limit")}}),
 				},
+				Description: `Mirrors ignore_group_jobs_limit from the active input_collector_* block (no root default; use nested field defaults).`,
 			},
 			"input_collector_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -2312,6 +2316,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								},
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
+										CustomType:  types.StringType,
 										Computed:    true,
 										Optional:    true,
 										Description: `Expression for auth header value`,
@@ -2389,6 +2394,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 									"client_secret_param_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+									},
+									"collect_body": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Body content for the collect request, used with the post_with_body collect method`,
 									},
 									"collect_method": schema.StringAttribute{
 										Computed:    true,
@@ -2563,6 +2573,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Optional:    true,
 														ElementType: types.StringType,
 													},
+													"cur_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Description: `Optional relation for the current page in Link header pagination`,
+													},
 													"last_page_expr": schema.StringAttribute{
 														Computed: true,
 														Optional: true,
@@ -2582,6 +2597,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Optional:    true,
 														Default:     int64default.StaticInt64(0),
 														Description: `Default: 0`,
+													},
+													"next_relation_attribute": schema.StringAttribute{
+														Computed:    true,
+														Optional:    true,
+														Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 													},
 													"offset": schema.Int64Attribute{
 														Computed: true,
@@ -2613,13 +2633,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 														Computed:    true,
 														Optional:    true,
 														Default:     stringdefault.StaticString(`none`),
-														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+														Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]`,
 														Validators: []validator.String{
 															stringvalidator.OneOf(
 																"none",
 																"offset",
 																"cursor",
 																"page",
+																"response_body",
+																"response_header",
+																"response_header_link",
 															),
 														},
 													},
@@ -2656,6 +2679,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional:    true,
 												ElementType: types.StringType,
 											},
+											"cur_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Optional relation for the current page in Link header pagination`,
+											},
 											"last_page_expr": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -2675,6 +2703,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional:    true,
 												Default:     int64default.StaticInt64(0),
 												Description: `Default: 0`,
+											},
+											"next_relation_attribute": schema.StringAttribute{
+												Computed:    true,
+												Optional:    true,
+												Description: `Used for RFC 5988 Link header pagination (response_header_link)`,
 											},
 											"offset": schema.Int64Attribute{
 												Computed: true,
@@ -2706,13 +2739,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Computed:    true,
 												Optional:    true,
 												Default:     stringdefault.StaticString(`none`),
-												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page"]`,
+												Description: `Default: "none"; must be one of ["none", "offset", "cursor", "page", "response_body", "response_header", "response_header_link"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"none",
 														"offset",
 														"cursor",
 														"page",
+														"response_body",
+														"response_header",
+														"response_header_link",
 													),
 												},
 											},
@@ -2822,6 +2858,27 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 												Optional: true,
 											},
 										},
+									},
+									"scopes": schema.ListAttribute{
+										Computed:    true,
+										Optional:    true,
+										ElementType: types.StringType,
+										Description: `OAuth scopes when authentication is google_oauth or google_oauthSecret`,
+									},
+									"service_account_credentials": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Service account key JSON (or path reference) for google_oauth`,
+									},
+									"service_account_credentials_secret": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Secret reference for service account key when using google_oauthSecret`,
+									},
+									"subject": schema.StringAttribute{
+										Computed:    true,
+										Optional:    true,
+										Description: `Subject (e.g. admin user) for Google OAuth with domain-wide delegation`,
 									},
 									"timeout": schema.Int64Attribute{
 										Computed: true,
@@ -4603,23 +4660,28 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"resume_on_boot": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("resume_on_boot")}}),
 				},
+				Description: `Mirrors resume_on_boot from the active input_collector_* block (no root default; nested block sets provider defaults).`,
 			},
 			"ttl": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ttl")}}),
 				},
+				Description: `Mirrors ttl from the active input_collector_* block (no root default; nested block sets provider defaults).`,
 			},
 			"worker_affinity": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("worker_affinity")}}),
 				},
-				Description: `If enabled, tasks are created and run by the same Worker Node`,
+				Description: `If enabled, tasks are created and run by the same Worker Node (no root default; use nested field defaults).`,
 			},
 		},
 	}
