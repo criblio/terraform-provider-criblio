@@ -81,10 +81,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 		Attributes: map[string]schema.Attribute{
 			"environment": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("environment")}}),
 				},
+				Description: `Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).`,
 			},
 			"group_id": schema.StringAttribute{
 				Required: true,
@@ -103,9 +105,12 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"ignore_group_jobs_limit": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ignore_group_jobs_limit")}}),
 				},
+				Description: `Mirrors ignore_group_jobs_limit from the active input_collector_* block. Default: false`,
 			},
 			"input_collector_azure_blob": schema.SingleNestedAttribute{
 				Optional: true,
@@ -4656,23 +4661,31 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"resume_on_boot": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(true),
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("resume_on_boot")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("resume_on_boot")}}),
 				},
+				Description: `Mirrors resume_on_boot from the active input_collector_* block. Default: true`,
 			},
 			"ttl": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`4h`),
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ttl")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ttl")}}),
 				},
+				Description: `Mirrors ttl from the active input_collector_* block. Default: "4h"`,
 			},
 			"worker_affinity": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("worker_affinity")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("worker_affinity")}}),
 				},
-				Description: `If enabled, tasks are created and run by the same Worker Node`,
+				Description: `If enabled, tasks are created and run by the same Worker Node. Default: false`,
 			},
 		},
 	}
@@ -4696,6 +4709,209 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 	}
 
 	r.client = client
+}
+
+// collectorPreferStateBackup holds input and schedule values that RefreshFrom
+// restores when the API returns nil, so they can be re-applied after refreshPlan
+// overwrites them with empty.
+type collectorPreferStateBackup struct {
+	InputRest, ScheduleRest               interface{}
+	InputScript, ScheduleScript           interface{}
+	InputSplunk, ScheduleSplunk           interface{}
+	InputS3, ScheduleS3                   interface{}
+	InputAzureBlob, ScheduleAzureBlob     interface{}
+	InputCriblLake, ScheduleCriblLake     interface{}
+	InputDatabase, ScheduleDatabase       interface{}
+	InputGCS, ScheduleGCS                 interface{}
+	InputHealthCheck, ScheduleHealthCheck interface{}
+}
+
+func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {
+	saved := &collectorPreferStateBackup{}
+	if data.InputCollectorRest != nil {
+		saved.InputRest, saved.ScheduleRest = data.InputCollectorRest.Input, data.InputCollectorRest.Schedule
+	}
+	if data.InputCollectorScript != nil {
+		saved.InputScript, saved.ScheduleScript = data.InputCollectorScript.Input, data.InputCollectorScript.Schedule
+	}
+	if data.InputCollectorSplunk != nil {
+		saved.InputSplunk, saved.ScheduleSplunk = data.InputCollectorSplunk.Input, data.InputCollectorSplunk.Schedule
+	}
+	if data.InputCollectorS3 != nil {
+		saved.InputS3, saved.ScheduleS3 = data.InputCollectorS3.Input, data.InputCollectorS3.Schedule
+	}
+	if data.InputCollectorAzureBlob != nil {
+		saved.InputAzureBlob, saved.ScheduleAzureBlob = data.InputCollectorAzureBlob.Input, data.InputCollectorAzureBlob.Schedule
+	}
+	if data.InputCollectorCriblLake != nil {
+		saved.InputCriblLake, saved.ScheduleCriblLake = data.InputCollectorCriblLake.Input, data.InputCollectorCriblLake.Schedule
+	}
+	if data.InputCollectorDatabase != nil {
+		saved.InputDatabase, saved.ScheduleDatabase = data.InputCollectorDatabase.Input, data.InputCollectorDatabase.Schedule
+	}
+	if data.InputCollectorGCS != nil {
+		saved.InputGCS, saved.ScheduleGCS = data.InputCollectorGCS.Input, data.InputCollectorGCS.Schedule
+	}
+	if data.InputCollectorHealthCheck != nil {
+		saved.InputHealthCheck, saved.ScheduleHealthCheck = data.InputCollectorHealthCheck.Input, data.InputCollectorHealthCheck.Schedule
+	}
+	return saved
+}
+
+// collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
+// default structs when both API and plan return nil. This prevents drift when
+// the user doesn't configure these optional PreferState fields.
+func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil {
+			data.InputCollectorRest.Input = &tfTypes.InputCollectorRestInput{}
+		}
+		if data.InputCollectorRest.Schedule == nil {
+			data.InputCollectorRest.Schedule = &tfTypes.InputCollectorRestSchedule{}
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil {
+			data.InputCollectorScript.Input = &tfTypes.InputCollectorScriptInput{}
+		}
+		if data.InputCollectorScript.Schedule == nil {
+			data.InputCollectorScript.Schedule = &tfTypes.InputCollectorScriptSchedule{}
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil {
+			data.InputCollectorSplunk.Input = &tfTypes.InputCollectorSplunkInput{}
+		}
+		if data.InputCollectorSplunk.Schedule == nil {
+			data.InputCollectorSplunk.Schedule = &tfTypes.InputCollectorSplunkSchedule{}
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil {
+			data.InputCollectorS3.Input = &tfTypes.InputCollectorS3Input{}
+		}
+		if data.InputCollectorS3.Schedule == nil {
+			data.InputCollectorS3.Schedule = &tfTypes.InputCollectorS3Schedule{}
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil {
+			data.InputCollectorAzureBlob.Input = &tfTypes.InputCollectorAzureBlobInput{}
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil {
+			data.InputCollectorAzureBlob.Schedule = &tfTypes.InputCollectorAzureBlobSchedule{}
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil {
+			data.InputCollectorCriblLake.Input = &tfTypes.InputCollectorCriblLakeInput{}
+		}
+		if data.InputCollectorCriblLake.Schedule == nil {
+			data.InputCollectorCriblLake.Schedule = &tfTypes.InputCollectorCriblLakeSchedule{}
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil {
+			data.InputCollectorDatabase.Input = &tfTypes.InputCollectorDatabaseInput{}
+		}
+		if data.InputCollectorDatabase.Schedule == nil {
+			data.InputCollectorDatabase.Schedule = &tfTypes.InputCollectorDatabaseSchedule{}
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil {
+			data.InputCollectorGCS.Input = &tfTypes.InputCollectorGCSInput{}
+		}
+		if data.InputCollectorGCS.Schedule == nil {
+			data.InputCollectorGCS.Schedule = &tfTypes.InputCollectorGCSSchedule{}
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil {
+			data.InputCollectorHealthCheck.Input = &tfTypes.InputCollectorHealthCheckInput{}
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil {
+			data.InputCollectorHealthCheck.Schedule = &tfTypes.InputCollectorHealthCheckSchedule{}
+		}
+	}
+}
+
+func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
+	if saved == nil {
+		return
+	}
+	if data.InputCollectorRest != nil {
+		if data.InputCollectorRest.Input == nil && saved.InputRest != nil {
+			data.InputCollectorRest.Input = saved.InputRest.(*tfTypes.InputCollectorRestInput)
+		}
+		if data.InputCollectorRest.Schedule == nil && saved.ScheduleRest != nil {
+			data.InputCollectorRest.Schedule = saved.ScheduleRest.(*tfTypes.InputCollectorRestSchedule)
+		}
+	}
+	if data.InputCollectorScript != nil {
+		if data.InputCollectorScript.Input == nil && saved.InputScript != nil {
+			data.InputCollectorScript.Input = saved.InputScript.(*tfTypes.InputCollectorScriptInput)
+		}
+		if data.InputCollectorScript.Schedule == nil && saved.ScheduleScript != nil {
+			data.InputCollectorScript.Schedule = saved.ScheduleScript.(*tfTypes.InputCollectorScriptSchedule)
+		}
+	}
+	if data.InputCollectorSplunk != nil {
+		if data.InputCollectorSplunk.Input == nil && saved.InputSplunk != nil {
+			data.InputCollectorSplunk.Input = saved.InputSplunk.(*tfTypes.InputCollectorSplunkInput)
+		}
+		if data.InputCollectorSplunk.Schedule == nil && saved.ScheduleSplunk != nil {
+			data.InputCollectorSplunk.Schedule = saved.ScheduleSplunk.(*tfTypes.InputCollectorSplunkSchedule)
+		}
+	}
+	if data.InputCollectorS3 != nil {
+		if data.InputCollectorS3.Input == nil && saved.InputS3 != nil {
+			data.InputCollectorS3.Input = saved.InputS3.(*tfTypes.InputCollectorS3Input)
+		}
+		if data.InputCollectorS3.Schedule == nil && saved.ScheduleS3 != nil {
+			data.InputCollectorS3.Schedule = saved.ScheduleS3.(*tfTypes.InputCollectorS3Schedule)
+		}
+	}
+	if data.InputCollectorAzureBlob != nil {
+		if data.InputCollectorAzureBlob.Input == nil && saved.InputAzureBlob != nil {
+			data.InputCollectorAzureBlob.Input = saved.InputAzureBlob.(*tfTypes.InputCollectorAzureBlobInput)
+		}
+		if data.InputCollectorAzureBlob.Schedule == nil && saved.ScheduleAzureBlob != nil {
+			data.InputCollectorAzureBlob.Schedule = saved.ScheduleAzureBlob.(*tfTypes.InputCollectorAzureBlobSchedule)
+		}
+	}
+	if data.InputCollectorCriblLake != nil {
+		if data.InputCollectorCriblLake.Input == nil && saved.InputCriblLake != nil {
+			data.InputCollectorCriblLake.Input = saved.InputCriblLake.(*tfTypes.InputCollectorCriblLakeInput)
+		}
+		if data.InputCollectorCriblLake.Schedule == nil && saved.ScheduleCriblLake != nil {
+			data.InputCollectorCriblLake.Schedule = saved.ScheduleCriblLake.(*tfTypes.InputCollectorCriblLakeSchedule)
+		}
+	}
+	if data.InputCollectorDatabase != nil {
+		if data.InputCollectorDatabase.Input == nil && saved.InputDatabase != nil {
+			data.InputCollectorDatabase.Input = saved.InputDatabase.(*tfTypes.InputCollectorDatabaseInput)
+		}
+		if data.InputCollectorDatabase.Schedule == nil && saved.ScheduleDatabase != nil {
+			data.InputCollectorDatabase.Schedule = saved.ScheduleDatabase.(*tfTypes.InputCollectorDatabaseSchedule)
+		}
+	}
+	if data.InputCollectorGCS != nil {
+		if data.InputCollectorGCS.Input == nil && saved.InputGCS != nil {
+			data.InputCollectorGCS.Input = saved.InputGCS.(*tfTypes.InputCollectorGCSInput)
+		}
+		if data.InputCollectorGCS.Schedule == nil && saved.ScheduleGCS != nil {
+			data.InputCollectorGCS.Schedule = saved.ScheduleGCS.(*tfTypes.InputCollectorGCSSchedule)
+		}
+	}
+	if data.InputCollectorHealthCheck != nil {
+		if data.InputCollectorHealthCheck.Input == nil && saved.InputHealthCheck != nil {
+			data.InputCollectorHealthCheck.Input = saved.InputHealthCheck.(*tfTypes.InputCollectorHealthCheckInput)
+		}
+		if data.InputCollectorHealthCheck.Schedule == nil && saved.ScheduleHealthCheck != nil {
+			data.InputCollectorHealthCheck.Schedule = saved.ScheduleHealthCheck.(*tfTypes.InputCollectorHealthCheckSchedule)
+		}
+	}
 }
 
 func (r *CollectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -4748,11 +4964,15 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -4812,6 +5032,8 @@ func (r *CollectorResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -4862,11 +5084,15 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
+	collectorEnsureDefaultInputAndSchedule(data)
+	saved := collectorPreservePreferStateFields(data)
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	collectorRestorePreferStateFields(data, saved)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

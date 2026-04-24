@@ -944,6 +944,8 @@ resource "criblio_collector" "my_collector" {
 
 ### Optional
 
+- `environment` (String) Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).
+- `ignore_group_jobs_limit` (Boolean) Mirrors ignore_group_jobs_limit from the active input_collector_* block. Default: false
 - `input_collector_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob))
 - `input_collector_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake))
 - `input_collector_database` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database))
@@ -953,14 +955,9 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
 - `input_collector_script` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
-
-### Read-Only
-
-- `environment` (String)
-- `ignore_group_jobs_limit` (Boolean)
-- `resume_on_boot` (Boolean)
-- `ttl` (String)
-- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node
+- `resume_on_boot` (Boolean) Mirrors resume_on_boot from the active input_collector_* block. Default: true
+- `ttl` (String) Mirrors ttl from the active input_collector_* block. Default: "4h"
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
 
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`
