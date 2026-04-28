@@ -128,6 +128,33 @@ func TestPruneSearchDashboardElementsCty_prefersVisualizationOverEmptyInputShell
 	require.False(t, r0.Type().HasAttribute("dashboard_element_input"))
 }
 
+// Regression: homogenization can set both search_query_inline (sparse shell from another row)
+// and search_query_metric; schema forbids both — Terraform reports ConflictsWith / missing inline fields.
+func TestPruneSearchQueryObjectCty_keepsExactlyOneIncludingMetric(t *testing.T) {
+	sparseInline := cty.ObjectVal(map[string]cty.Value{
+		"earliest": cty.ObjectVal(map[string]cty.Value{
+			"number": cty.NumberFloatVal(-300),
+		}),
+	})
+	metric := cty.ObjectVal(map[string]cty.Value{
+		"type": cty.StringVal("metric"),
+		"queries": cty.ListVal([]cty.Value{
+			cty.ObjectVal(map[string]cty.Value{
+				"local_id": cty.StringVal("q1"),
+				"query":    cty.StringVal(`dataset="logs"`),
+			}),
+		}),
+	})
+	s := cty.ObjectVal(map[string]cty.Value{
+		"search_query_inline": sparseInline,
+		"search_query_metric": metric,
+	})
+	out, err := pruneSearchQueryObjectCty(s)
+	require.NoError(t, err)
+	require.True(t, out.Type().HasAttribute("search_query_metric"))
+	require.False(t, out.Type().HasAttribute("search_query_inline"))
+}
+
 func TestCtyReplaceUnknownWithNullForHCL_hclwriteSafe(t *testing.T) {
 	unknownObj := cty.UnknownVal(cty.Object(map[string]cty.Type{
 		"x": cty.String,

@@ -469,8 +469,9 @@ func pruneNestedAttrSearch(v cty.Value) (cty.Value, error) {
 }
 
 func pruneSearchQueryObjectCty(s cty.Value) (cty.Value, error) {
-	exclusive := []string{"search_query_inline", "search_query_saved", "search_query_values"}
-	tie := []string{"search_query_inline", "search_query_saved", "search_query_values"}
+	// Provider schema: exactly one of inline | saved | values | metric (ConflictsWith).
+	exclusive := []string{"search_query_inline", "search_query_saved", "search_query_values", "search_query_metric"}
+	tie := []string{"search_query_metric", "search_query_saved", "search_query_values", "search_query_inline"}
 	chosen, err := ctyPickExclusiveOneOf(s, exclusive, ctyValueSubstanceScore, tie, false)
 	if err != nil {
 		return cty.NilVal, err
