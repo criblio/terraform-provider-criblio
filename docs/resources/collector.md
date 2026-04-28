@@ -113,7 +113,7 @@ resource "criblio_collector" "my_collector" {
       conf = {
         dataset = "my-dataset"
       }
-      type = "cribllake"
+      type = "cribl_lake"
     }
     environment             = "production"
     id                      = "myInputCollectorJobId"
@@ -944,8 +944,8 @@ resource "criblio_collector" "my_collector" {
 
 ### Optional
 
-- `environment` (String) Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).
-- `ignore_group_jobs_limit` (Boolean) Mirrors ignore_group_jobs_limit from the active input_collector_* block. Default: false
+- `environment` (String) Optional mirror of environment from the active input_collector_* block; omit to accept state/API without perpetual plan noise.
+- `ignore_group_jobs_limit` (Boolean) Mirrors ignore_group_jobs_limit from the active input_collector_* block (no root default; use nested field defaults).
 - `input_collector_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob))
 - `input_collector_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake))
 - `input_collector_database` (Attributes) (see [below for nested schema](#nestedatt--input_collector_database))
@@ -955,9 +955,9 @@ resource "criblio_collector" "my_collector" {
 - `input_collector_s3` (Attributes) (see [below for nested schema](#nestedatt--input_collector_s3))
 - `input_collector_script` (Attributes) (see [below for nested schema](#nestedatt--input_collector_script))
 - `input_collector_splunk` (Attributes) (see [below for nested schema](#nestedatt--input_collector_splunk))
-- `resume_on_boot` (Boolean) Mirrors resume_on_boot from the active input_collector_* block. Default: true
-- `ttl` (String) Mirrors ttl from the active input_collector_* block. Default: "4h"
-- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node. Default: false
+- `resume_on_boot` (Boolean) Mirrors resume_on_boot from the active input_collector_* block (no root default; nested block sets provider defaults).
+- `ttl` (String) Mirrors ttl from the active input_collector_* block (no root default; nested block sets provider defaults).
+- `worker_affinity` (Boolean) If enabled, tasks are created and run by the same Worker Node (no root default; use nested field defaults).
 
 <a id="nestedatt--input_collector_azure_blob"></a>
 ### Nested Schema for `input_collector_azure_blob`
@@ -1122,7 +1122,7 @@ Optional:
 Optional:
 
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake--collector--conf))
-- `type` (String) Not Null; must be "cribllake"
+- `type` (String) Not Null; must match the Stream jobs API ("cribl_lake"). The legacy spelling "cribllake" is accepted and sent as "cribl_lake".
 
 <a id="nestedatt--input_collector_cribl_lake--collector--conf"></a>
 ### Nested Schema for `input_collector_cribl_lake.collector.conf`

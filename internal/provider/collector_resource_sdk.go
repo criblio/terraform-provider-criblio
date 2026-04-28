@@ -4122,7 +4122,7 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 				Output:              output4,
 			}
 		}
-		typeVar12 := shared.TypeCribllake(r.InputCollectorCriblLake.Collector.Type.ValueString())
+		typeVar12 := shared.InputCollectorCriblLakeTypeCriblLake(r.InputCollectorCriblLake.Collector.Type.ValueString())
 		var conf4 *shared.InputCollectorCriblLakeConf
 		if r.InputCollectorCriblLake.Collector.Conf != nil {
 			dataset := new(string)

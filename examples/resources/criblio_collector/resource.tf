@@ -98,7 +98,7 @@ resource "criblio_collector" "my_collector" {
       conf = {
         dataset = "my-dataset"
       }
-      type = "cribllake"
+      type = "cribl_lake"
     }
     environment             = "production"
     id                      = "myInputCollectorJobId"
