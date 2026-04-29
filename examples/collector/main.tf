@@ -742,6 +742,9 @@ E
   }
 }
 
+/*
+# Not a valid collector type for on-prem, so commented out.
+
 resource "criblio_collector" "cribl_lake" {
   group_id = "default"
   id       = "cribl_logs_lake"
@@ -776,6 +779,7 @@ resource "criblio_collector" "cribl_lake" {
     worker_affinity = false
   }
 }
+*/
 
 /*
 # Script collector: enable when your environment supports it
