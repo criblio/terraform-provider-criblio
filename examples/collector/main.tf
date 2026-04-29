@@ -743,6 +743,45 @@ E
 }
 
 /*
+# Not a valid collector type for on-prem, so commented out.
+
+resource "criblio_collector" "cribl_lake" {
+  group_id = "default"
+  id       = "cribl_logs_lake"
+  input_collector_cribl_lake = {
+    collector = {
+      conf = {
+        dataset = "cribl_logs"
+      }
+      type = "cribl_lake"
+    }
+    id                      = "cribl_logs_lake"
+    ignore_group_jobs_limit = false
+    input = {
+      breaker_rulesets = [
+        "Cribl Ruleset",
+      ]
+      metadata = [
+        {
+          name  = "__replayed"
+          value = "true"
+        },
+      ]
+      send_to_routes         = true
+      stale_channel_flush_ms = 10000
+      throttle_rate_per_sec  = "0"
+      type                   = "collection"
+    }
+    remove_fields   = []
+    resume_on_boot  = true
+    streamtags      = []
+    ttl             = "4h"
+    worker_affinity = false
+  }
+}
+*/
+
+/*
 # Script collector: enable when your environment supports it
 resource "criblio_collector" "script_collector" {
   group_id = "default"

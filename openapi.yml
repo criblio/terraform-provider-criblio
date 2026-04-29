@@ -1252,7 +1252,7 @@ components:
                                 - splunk
                                 - s3
                                 - azureblob
-                                - cribllake
+                                - cribl_lake
                                 - database
                                 - gcs
                                 - healthcheck
@@ -1995,8 +1995,8 @@ components:
                             type:
                                 type: string
                                 enum:
-                                    - cribllake
-                                example: cribllake
+                                    - cribl_lake
+                                example: cribl_lake
                             conf:
                                 x-speakeasy-plan-modifiers: PreferState
                                 type: object

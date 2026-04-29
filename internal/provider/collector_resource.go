@@ -7,6 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"regexp"
+
 	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -34,7 +36,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -85,6 +86,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.PreferState(),
 					speakeasy_stringplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("environment")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("environment")}}),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 				Description: `Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).`,
 			},
@@ -600,10 +602,11 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 							"type": schema.StringAttribute{
 								Computed:    true,
 								Optional:    true,
-								Description: `Not Null; must be "cribllake"`,
+								Description: `Not Null; must match the Stream jobs API ("cribl_lake"). The legacy spelling "cribllake" is accepted and sent as "cribl_lake".`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
+										"cribl_lake",
 										"cribllake",
 									),
 								},
@@ -618,6 +621,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.UseStateForUnknown(),
 							custom_stringplanmodifier.PreferState(),
 						},
 					},
@@ -4707,51 +4711,85 @@ func (r *CollectorResource) Configure(ctx context.Context, req resource.Configur
 	r.client = client
 }
 
-// collectorPreferStateBackup holds input and schedule values that RefreshFrom
-// restores when the API returns nil, so they can be re-applied after refreshPlan
-// overwrites them with empty.
-type collectorPreferStateBackup struct {
-	InputRest, ScheduleRest               interface{}
-	InputScript, ScheduleScript           interface{}
-	InputSplunk, ScheduleSplunk           interface{}
-	InputS3, ScheduleS3                   interface{}
-	InputAzureBlob, ScheduleAzureBlob     interface{}
-	InputCriblLake, ScheduleCriblLake     interface{}
-	InputDatabase, ScheduleDatabase       interface{}
-	InputGCS, ScheduleGCS                 interface{}
-	InputHealthCheck, ScheduleHealthCheck interface{}
+// collectorEnvironmentSnapshot preserves hoisted/nested environment strings after RefreshFrom so they can be
+// restored after refreshPlanWithPreserve(..., false). That merge matches omitted optional attributes (e.g.
+// schedule leaf fields) to the plan and avoids inconsistent apply; without restoring environment, API-filled
+// environment would be cleared when config omits it (perpetual plan drift).
+type collectorEnvironmentSnapshot struct {
+	Root                           types.String
+	Rest, Script, Splunk, S3       types.String
+	AzureBlob, CriblLake, Database types.String
+	GCS, HealthCheck               types.String
 }
 
-func collectorPreservePreferStateFields(data *CollectorResourceModel) *collectorPreferStateBackup {
-	saved := &collectorPreferStateBackup{}
+func collectorSnapshotEnvironment(data *CollectorResourceModel) collectorEnvironmentSnapshot {
+	s := collectorEnvironmentSnapshot{Root: data.Environment}
 	if data.InputCollectorRest != nil {
-		saved.InputRest, saved.ScheduleRest = data.InputCollectorRest.Input, data.InputCollectorRest.Schedule
+		s.Rest = data.InputCollectorRest.Environment
 	}
 	if data.InputCollectorScript != nil {
-		saved.InputScript, saved.ScheduleScript = data.InputCollectorScript.Input, data.InputCollectorScript.Schedule
+		s.Script = data.InputCollectorScript.Environment
 	}
 	if data.InputCollectorSplunk != nil {
-		saved.InputSplunk, saved.ScheduleSplunk = data.InputCollectorSplunk.Input, data.InputCollectorSplunk.Schedule
+		s.Splunk = data.InputCollectorSplunk.Environment
 	}
 	if data.InputCollectorS3 != nil {
-		saved.InputS3, saved.ScheduleS3 = data.InputCollectorS3.Input, data.InputCollectorS3.Schedule
+		s.S3 = data.InputCollectorS3.Environment
 	}
 	if data.InputCollectorAzureBlob != nil {
-		saved.InputAzureBlob, saved.ScheduleAzureBlob = data.InputCollectorAzureBlob.Input, data.InputCollectorAzureBlob.Schedule
+		s.AzureBlob = data.InputCollectorAzureBlob.Environment
 	}
 	if data.InputCollectorCriblLake != nil {
-		saved.InputCriblLake, saved.ScheduleCriblLake = data.InputCollectorCriblLake.Input, data.InputCollectorCriblLake.Schedule
+		s.CriblLake = data.InputCollectorCriblLake.Environment
 	}
 	if data.InputCollectorDatabase != nil {
-		saved.InputDatabase, saved.ScheduleDatabase = data.InputCollectorDatabase.Input, data.InputCollectorDatabase.Schedule
+		s.Database = data.InputCollectorDatabase.Environment
 	}
 	if data.InputCollectorGCS != nil {
-		saved.InputGCS, saved.ScheduleGCS = data.InputCollectorGCS.Input, data.InputCollectorGCS.Schedule
+		s.GCS = data.InputCollectorGCS.Environment
 	}
 	if data.InputCollectorHealthCheck != nil {
-		saved.InputHealthCheck, saved.ScheduleHealthCheck = data.InputCollectorHealthCheck.Input, data.InputCollectorHealthCheck.Schedule
+		s.HealthCheck = data.InputCollectorHealthCheck.Environment
 	}
-	return saved
+	return s
+}
+
+func collectorRestoreEnvironmentFromSnapshot(data *CollectorResourceModel, snap collectorEnvironmentSnapshot) {
+	data.Environment = collectorRestoreEnvironmentIfNulled(data.Environment, snap.Root)
+	if data.InputCollectorRest != nil {
+		data.InputCollectorRest.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorRest.Environment, snap.Rest)
+	}
+	if data.InputCollectorScript != nil {
+		data.InputCollectorScript.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorScript.Environment, snap.Script)
+	}
+	if data.InputCollectorSplunk != nil {
+		data.InputCollectorSplunk.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorSplunk.Environment, snap.Splunk)
+	}
+	if data.InputCollectorS3 != nil {
+		data.InputCollectorS3.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorS3.Environment, snap.S3)
+	}
+	if data.InputCollectorAzureBlob != nil {
+		data.InputCollectorAzureBlob.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorAzureBlob.Environment, snap.AzureBlob)
+	}
+	if data.InputCollectorCriblLake != nil {
+		data.InputCollectorCriblLake.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorCriblLake.Environment, snap.CriblLake)
+	}
+	if data.InputCollectorDatabase != nil {
+		data.InputCollectorDatabase.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorDatabase.Environment, snap.Database)
+	}
+	if data.InputCollectorGCS != nil {
+		data.InputCollectorGCS.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorGCS.Environment, snap.GCS)
+	}
+	if data.InputCollectorHealthCheck != nil {
+		data.InputCollectorHealthCheck.Environment = collectorRestoreEnvironmentIfNulled(data.InputCollectorHealthCheck.Environment, snap.HealthCheck)
+	}
+}
+
+func collectorRestoreEnvironmentIfNulled(current, preserved types.String) types.String {
+	if current.IsNull() && !preserved.IsNull() && !preserved.IsUnknown() {
+		return preserved
+	}
+	return current
 }
 
 // collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
@@ -4832,84 +4870,6 @@ func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
 	}
 }
 
-func collectorRestorePreferStateFields(data *CollectorResourceModel, saved *collectorPreferStateBackup) {
-	if saved == nil {
-		return
-	}
-	if data.InputCollectorRest != nil {
-		if data.InputCollectorRest.Input == nil && saved.InputRest != nil {
-			data.InputCollectorRest.Input = saved.InputRest.(*tfTypes.InputCollectorRestInput)
-		}
-		if data.InputCollectorRest.Schedule == nil && saved.ScheduleRest != nil {
-			data.InputCollectorRest.Schedule = saved.ScheduleRest.(*tfTypes.InputCollectorRestSchedule)
-		}
-	}
-	if data.InputCollectorScript != nil {
-		if data.InputCollectorScript.Input == nil && saved.InputScript != nil {
-			data.InputCollectorScript.Input = saved.InputScript.(*tfTypes.InputCollectorScriptInput)
-		}
-		if data.InputCollectorScript.Schedule == nil && saved.ScheduleScript != nil {
-			data.InputCollectorScript.Schedule = saved.ScheduleScript.(*tfTypes.InputCollectorScriptSchedule)
-		}
-	}
-	if data.InputCollectorSplunk != nil {
-		if data.InputCollectorSplunk.Input == nil && saved.InputSplunk != nil {
-			data.InputCollectorSplunk.Input = saved.InputSplunk.(*tfTypes.InputCollectorSplunkInput)
-		}
-		if data.InputCollectorSplunk.Schedule == nil && saved.ScheduleSplunk != nil {
-			data.InputCollectorSplunk.Schedule = saved.ScheduleSplunk.(*tfTypes.InputCollectorSplunkSchedule)
-		}
-	}
-	if data.InputCollectorS3 != nil {
-		if data.InputCollectorS3.Input == nil && saved.InputS3 != nil {
-			data.InputCollectorS3.Input = saved.InputS3.(*tfTypes.InputCollectorS3Input)
-		}
-		if data.InputCollectorS3.Schedule == nil && saved.ScheduleS3 != nil {
-			data.InputCollectorS3.Schedule = saved.ScheduleS3.(*tfTypes.InputCollectorS3Schedule)
-		}
-	}
-	if data.InputCollectorAzureBlob != nil {
-		if data.InputCollectorAzureBlob.Input == nil && saved.InputAzureBlob != nil {
-			data.InputCollectorAzureBlob.Input = saved.InputAzureBlob.(*tfTypes.InputCollectorAzureBlobInput)
-		}
-		if data.InputCollectorAzureBlob.Schedule == nil && saved.ScheduleAzureBlob != nil {
-			data.InputCollectorAzureBlob.Schedule = saved.ScheduleAzureBlob.(*tfTypes.InputCollectorAzureBlobSchedule)
-		}
-	}
-	if data.InputCollectorCriblLake != nil {
-		if data.InputCollectorCriblLake.Input == nil && saved.InputCriblLake != nil {
-			data.InputCollectorCriblLake.Input = saved.InputCriblLake.(*tfTypes.InputCollectorCriblLakeInput)
-		}
-		if data.InputCollectorCriblLake.Schedule == nil && saved.ScheduleCriblLake != nil {
-			data.InputCollectorCriblLake.Schedule = saved.ScheduleCriblLake.(*tfTypes.InputCollectorCriblLakeSchedule)
-		}
-	}
-	if data.InputCollectorDatabase != nil {
-		if data.InputCollectorDatabase.Input == nil && saved.InputDatabase != nil {
-			data.InputCollectorDatabase.Input = saved.InputDatabase.(*tfTypes.InputCollectorDatabaseInput)
-		}
-		if data.InputCollectorDatabase.Schedule == nil && saved.ScheduleDatabase != nil {
-			data.InputCollectorDatabase.Schedule = saved.ScheduleDatabase.(*tfTypes.InputCollectorDatabaseSchedule)
-		}
-	}
-	if data.InputCollectorGCS != nil {
-		if data.InputCollectorGCS.Input == nil && saved.InputGCS != nil {
-			data.InputCollectorGCS.Input = saved.InputGCS.(*tfTypes.InputCollectorGCSInput)
-		}
-		if data.InputCollectorGCS.Schedule == nil && saved.ScheduleGCS != nil {
-			data.InputCollectorGCS.Schedule = saved.ScheduleGCS.(*tfTypes.InputCollectorGCSSchedule)
-		}
-	}
-	if data.InputCollectorHealthCheck != nil {
-		if data.InputCollectorHealthCheck.Input == nil && saved.InputHealthCheck != nil {
-			data.InputCollectorHealthCheck.Input = saved.InputHealthCheck.(*tfTypes.InputCollectorHealthCheckInput)
-		}
-		if data.InputCollectorHealthCheck.Schedule == nil && saved.ScheduleHealthCheck != nil {
-			data.InputCollectorHealthCheck.Schedule = saved.ScheduleHealthCheck.(*tfTypes.InputCollectorHealthCheckSchedule)
-		}
-	}
-}
-
 func (r *CollectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *CollectorResourceModel
 	var plan types.Object
@@ -4961,14 +4921,14 @@ func (r *CollectorResource) Create(ctx context.Context, req resource.CreateReque
 	}
 
 	collectorEnsureDefaultInputAndSchedule(data)
-	saved := collectorPreservePreferStateFields(data)
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	envSnap := collectorSnapshotEnvironment(data)
+	resp.Diagnostics.Append(refreshPlanWithPreserve(ctx, plan, &data, false)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	collectorRestorePreferStateFields(data, saved)
+	collectorRestoreEnvironmentFromSnapshot(data, envSnap)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -5081,14 +5041,14 @@ func (r *CollectorResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 
 	collectorEnsureDefaultInputAndSchedule(data)
-	saved := collectorPreservePreferStateFields(data)
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+	envSnap := collectorSnapshotEnvironment(data)
+	resp.Diagnostics.Append(refreshPlanWithPreserve(ctx, plan, &data, false)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	collectorRestorePreferStateFields(data, saved)
+	collectorRestoreEnvironmentFromSnapshot(data, envSnap)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

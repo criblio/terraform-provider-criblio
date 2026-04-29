@@ -577,26 +577,26 @@ func (i *InputCollectorCriblLakeInput) GetOutput() *string {
 	return i.Output
 }
 
-type TypeCribllake string
+type InputCollectorCriblLakeTypeCriblLake string
 
 const (
-	TypeCribllakeCribllake TypeCribllake = "cribllake"
+	InputCollectorCriblLakeTypeCriblLakeCriblLake InputCollectorCriblLakeTypeCriblLake = "cribl_lake"
 )
 
-func (e TypeCribllake) ToPointer() *TypeCribllake {
+func (e InputCollectorCriblLakeTypeCriblLake) ToPointer() *InputCollectorCriblLakeTypeCriblLake {
 	return &e
 }
-func (e *TypeCribllake) UnmarshalJSON(data []byte) error {
+func (e *InputCollectorCriblLakeTypeCriblLake) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
-	case "cribllake":
-		*e = TypeCribllake(v)
+	case "cribl_lake":
+		*e = InputCollectorCriblLakeTypeCriblLake(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for TypeCribllake: %v", v)
+		return fmt.Errorf("invalid value for InputCollectorCriblLakeTypeCriblLake: %v", v)
 	}
 }
 
@@ -624,8 +624,8 @@ func (i *InputCollectorCriblLakeConf) GetDataset() *string {
 }
 
 type InputCollectorCriblLakeCollector struct {
-	Type TypeCribllake                `json:"type"`
-	Conf *InputCollectorCriblLakeConf `json:"conf,omitempty"`
+	Type InputCollectorCriblLakeTypeCriblLake `json:"type"`
+	Conf *InputCollectorCriblLakeConf         `json:"conf,omitempty"`
 }
 
 func (i InputCollectorCriblLakeCollector) MarshalJSON() ([]byte, error) {
@@ -639,9 +639,9 @@ func (i *InputCollectorCriblLakeCollector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InputCollectorCriblLakeCollector) GetType() TypeCribllake {
+func (i *InputCollectorCriblLakeCollector) GetType() InputCollectorCriblLakeTypeCriblLake {
 	if i == nil {
-		return TypeCribllake("")
+		return InputCollectorCriblLakeTypeCriblLake("")
 	}
 	return i.Type
 }
