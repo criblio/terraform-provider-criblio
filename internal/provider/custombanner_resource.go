@@ -270,8 +270,8 @@ func (r *CustomBannerResource) Create(ctx context.Context, req resource.CreateRe
 	if createRes.StatusCode == 200 || createRes.StatusCode == 201 {
 		// POST succeeded — entity created
 		upsertStatusCode = createRes.StatusCode
-	} else if createRes.StatusCode == 404 || createRes.StatusCode == 405 {
-		// POST endpoint doesn't exist for this workspace version — fall back to PATCH
+	} else if createRes.StatusCode == 400 || createRes.StatusCode == 404 || createRes.StatusCode == 405 {
+		// 400 = banner already exists; 404/405 = endpoint absent — fall back to PATCH
 		res, patchErr := r.client.Banners.UpsertCustomBanner(ctx, *request)
 		if patchErr != nil {
 			resp.Diagnostics.AddError("failure to invoke API", patchErr.Error())

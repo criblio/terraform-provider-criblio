@@ -146,6 +146,9 @@ func (s *Banners) CreateCustomBanner(ctx context.Context, request shared.BannerM
 		}
 	case httpRes.StatusCode == 401:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 400:
+		// Banner already exists — caller should fall back to PATCH.
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404 || httpRes.StatusCode == 405:
 		// Endpoint doesn't exist — caller should fall back to PATCH.
 		utils.DrainBody(httpRes)
