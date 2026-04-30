@@ -247,25 +247,53 @@ func (r *CustomBannerResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	// This is a singleton resource — the API requires the fixed ID in the body on create.
+
 	customBannerID := "custom-banner"
 	request.ID = &customBannerID
-	res, err := r.client.Banners.UpsertCustomBanner(ctx, *request)
+
+	// On fresh workspaces the entity may not yet exist; try POST first to seed it,
+	// then fall back to PATCH if the entity already exists.
+	createRes, err := r.client.Banners.CreateCustomBanner(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		if createRes != nil && createRes.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(createRes.RawResponse))
 		}
 		return
 	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+	if createRes == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", createRes))
 		return
 	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+
+	var upsertStatusCode int
+	if createRes.StatusCode == 200 || createRes.StatusCode == 201 {
+		// POST succeeded — entity created
+		upsertStatusCode = createRes.StatusCode
+	} else if createRes.StatusCode == 404 || createRes.StatusCode == 405 {
+		// POST endpoint doesn't exist for this workspace version — fall back to PATCH
+		res, patchErr := r.client.Banners.UpsertCustomBanner(ctx, *request)
+		if patchErr != nil {
+			resp.Diagnostics.AddError("failure to invoke API", patchErr.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
+		}
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		upsertStatusCode = res.StatusCode
+	} else {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", createRes.StatusCode), debugResponse(createRes.RawResponse))
 		return
 	}
+	_ = upsertStatusCode
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
