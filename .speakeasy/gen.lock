@@ -1,11 +1,11 @@
 lockVersion: 2.0.0
 id: 1efe501f-0805-447e-ab12-75eb7c79386e
 management:
-  docChecksum: b73bc417fd5acf68d3e4c09957c7036e
+  docChecksum: b0e015c8a3cf3b86f04f5faeb82fa7ff
   speakeasyVersion: 1.761.1
   generationVersion: 2.879.6
-  releaseVersion: 1.23.24
-  configChecksum: 92f27ebd96ba57181ee9e696f7ea5d63
+  releaseVersion: 1.23.28
+  configChecksum: d9181315f626e44ab38519c55e762807
   published: true
 persistentEdits:
   generation_id: e52d5ce0-d97b-4ec8-89ab-e5f05e0474e8
@@ -76,6 +76,8 @@ trackedFiles:
     id: f79607209359
     last_write_checksum: sha1:f5608d776ab01fa4934aafbe7a7a2f02d71a91cd
     pristine_git_object: 8a9a74bccb55fe0a635a0b91de0612f18edc0f5d
+  examples/data-sources/criblio_custom_banner/data-source.tf:
+    last_write_checksum: sha1:694b5eea608096830ea47e13ac60eb4e63dae663
   examples/data-sources/criblio_database_connection/data-source.tf:
     id: 59593f101660
     last_write_checksum: sha1:ade7bb8696ddaf5333a9ad680b9170b49575a412
@@ -276,7 +278,7 @@ trackedFiles:
     pristine_git_object: 1959198f7669fee4593aeb084e44e34317718e0d
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:972ab8c6acf27ac31d0688fc94660de3214e5095
+    last_write_checksum: sha1:6c4bfdd1f78838b52879073a05692d9d189b13fc
     pristine_git_object: 02f445a76d1365acf6ca17232bb2e4c0a07e52ea
   examples/resources/criblio_appscope_config/import-by-string-id.tf:
     id: 13b421bc255d
@@ -342,6 +344,8 @@ trackedFiles:
     id: ddb90d448758
     last_write_checksum: sha1:879870539e729700fc0f825ee3995a0109ab3758
     pristine_git_object: fa7f6e739f6638e23555c380af9d341f2567773a
+  examples/resources/criblio_custom_banner/resource.tf:
+    last_write_checksum: sha1:1933f6b4a146cc83b18e795d7db49bdb5f1e5995
   examples/resources/criblio_database_connection/import-by-string-id.tf:
     id: c423a3812a14
     last_write_checksum: sha1:dd6a65ce995ba4ab8023a6637cefb2a96dc0d9ce
@@ -1072,6 +1076,10 @@ trackedFiles:
     id: 2a5ad67422ea
     last_write_checksum: sha1:5ea07608d3d8c86c5606493de8d7a0805093d90c
     pristine_git_object: bc29925b10b60c194830a1d6b69b3b477e6abd43
+  internal/provider/custombanner_data_source.go:
+    last_write_checksum: sha1:f23ea8dcbd284b9ad9ccef472bce7c1029346e09
+  internal/provider/custombanner_data_source_sdk.go:
+    last_write_checksum: sha1:0ca9bf23ad21d70fa983d95ae7dc8e6752dbc651
   internal/provider/databaseconnection_data_source.go:
     id: c35ca622e07a
     last_write_checksum: sha1:f3f1056c33c6b377bfa1890f7a8b21603bc4dfe9
@@ -1377,7 +1385,7 @@ trackedFiles:
     last_write_checksum: sha1:0068ff58bf9a9b8dc515dc49ba402d046f496527
     pristine_git_object: d33a38e31adb886ad4fd8b139b199f2684c4516b
   internal/provider/provider.go:
-    last_write_checksum: sha1:1d0f28040b70a63a248a5ea4f1fabb6f924cf7f2
+    last_write_checksum: sha1:5e2280e466afe095fe9bdf01e60d5852ec9b329c
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:ace8bc53054bb1d8ee8689acf3e4323de75a6297
@@ -1926,6 +1934,8 @@ trackedFiles:
     id: a805f5b830f0
     last_write_checksum: sha1:f65347950fbbbf1bd72ae5d7634c2c20be1b3145
     pristine_git_object: 40f600ed2fc503ae8b4fd0d2e0308cc0898482d4
+  internal/provider/types/banner_message.go:
+    last_write_checksum: sha1:f9b5bb4c91d4856ad78ebbd9357fb4d6094f0aa0
   internal/provider/types/cert_options_type.go:
     id: ca9d394b9c73
     last_write_checksum: sha1:4b4340e2becb0fca337256c7e14b5d30bbf79d82
@@ -4370,7 +4380,7 @@ trackedFiles:
     pristine_git_object: 4515dd2e9a397f55faec002ca91c9f0b681fe019
   internal/sdk/banners.go:
     id: 59a7f9ef4382
-    last_write_checksum: sha1:ad1aa8aace188dc9896b7933bd217e0d7902cb68
+    last_write_checksum: sha1:008284baacbdba8b7e543285f429d7441e7a8989
     pristine_git_object: 31d6e777031dbd1d31f3b47991ce2e9c4ba5eb14
   internal/sdk/certificates.go:
     id: 046da0c60b45
@@ -4402,7 +4412,7 @@ trackedFiles:
     pristine_git_object: bf71ee999b1aa29b59f13528fb9772327ebaf583
   internal/sdk/criblio.go:
     id: a2ae69529b28
-    last_write_checksum: sha1:f0217feee13102dbc0de45cfc69f786d23be5c8d
+    last_write_checksum: sha1:1e7e6f590635212abe0fbd709df4de0c9727b7b9
     pristine_git_object: 9c817ff838a5053031217d727197743322914bb0
   internal/sdk/dashboardcategories.go:
     id: 1cc9a977a86d
@@ -4696,10 +4706,6 @@ trackedFiles:
     id: 1b883ac55844
     last_write_checksum: sha1:bb0c4ca92765cafb722af0adad659c34cfa152fc
     pristine_git_object: 2873e22a14c4f86f3103d418afbea26c465b3704
-  internal/sdk/models/operations/createbannermessage.go:
-    id: d5aba3c5a4e0
-    last_write_checksum: sha1:7eb9ed76fb32e26c7c437cc3321ef6ff4bfc7fa0
-    pristine_git_object: d5a2480ac8785faae94af10e49e2f2b2f3c9bf95
   internal/sdk/models/operations/createbreakersbypack.go:
     id: c2e8d0022a18
     last_write_checksum: sha1:ac446c4aaa3f457875073f4b39f290a747fd1e60
@@ -5128,10 +5134,6 @@ trackedFiles:
     id: b9882ab89e06
     last_write_checksum: sha1:5ca6cbaa6920fdab313d118657837ee0c42e8199
     pristine_git_object: d92da80ff8ea5f9eeedad574322ef244a684c0ef
-  internal/sdk/models/operations/deletebannermessagebyid.go:
-    id: 3b5ef925c76b
-    last_write_checksum: sha1:e6f31bc0a205b3d375e371e4f0b5b2e645aa3df1
-    pristine_git_object: 27191a73c9fe0c47f62a7de7ab609b75bda11bc8
   internal/sdk/models/operations/deletebreakersbypackandid.go:
     id: 462a2e08e69e
     last_write_checksum: sha1:f90d7cf97b1cdd5c93ce7341d7b4cda24da60267
@@ -5436,10 +5438,6 @@ trackedFiles:
     id: "628923277002"
     last_write_checksum: sha1:8ff5b03c69f2eefbe952a2438b41d9784e9c8472
     pristine_git_object: 402fdee80ca20f7d66ffdc7acf4333f18ae851a7
-  internal/sdk/models/operations/getbannermessagebyid.go:
-    id: c0c9487b79ca
-    last_write_checksum: sha1:74d69bb07d7b0a43780cc9507dae02e3d43da1df
-    pristine_git_object: 390b746fa5417816afabf6de0c8ecd9667043283
   internal/sdk/models/operations/getbreakersbypack.go:
     id: 02eefe6ea0d5
     last_write_checksum: sha1:38414e84b5b4cfb699345f7ab852034922052a18
@@ -5484,6 +5482,8 @@ trackedFiles:
     id: 8be93cdd6935
     last_write_checksum: sha1:d822a8cfe646dcda54180fbda764055f79ffa649
     pristine_git_object: 8fc28e711b33d21560f4115446625e5a04a07d7d
+  internal/sdk/models/operations/getcustombanner.go:
+    last_write_checksum: sha1:1be6fbd6563bc968a16e7df81c13930dc2de3348
   internal/sdk/models/operations/getdashboardcategorybyid.go:
     id: 8dd69c9065f5
     last_write_checksum: sha1:0fc052b1cf248d3651c30c404a529cb57e98c4ee
@@ -6168,10 +6168,6 @@ trackedFiles:
     id: e492b7e10357
     last_write_checksum: sha1:c20bf2ddb72b025332b0b594841db9f54c2c122b
     pristine_git_object: 6eb6129264ff8ec3e55ffeb97fa1d3494867a154
-  internal/sdk/models/operations/listbannermessage.go:
-    id: 33ee30a83a6e
-    last_write_checksum: sha1:9018f7d67a2cf8ef2c016781912051d4540f2790
-    pristine_git_object: 868ecef91c68d2f44ee5630686180038e7b27131
   internal/sdk/models/operations/listbulletinmessage.go:
     id: e9e1beef8901
     last_write_checksum: sha1:f0e49af573b6dda32d5abec14a80d2ffe52015e7
@@ -6400,10 +6396,6 @@ trackedFiles:
     id: 7a556d6e9c50
     last_write_checksum: sha1:21b0b6a2a0239d7a3c00533e97e9716f39d4115d
     pristine_git_object: 879e0b8cbce10339418cacdb9dab2155f4550af5
-  internal/sdk/models/operations/updatebannermessagebyid.go:
-    id: ee762d8ee5a1
-    last_write_checksum: sha1:baefa8b1264e20f7320174b9dbb9d06ec29ba37c
-    pristine_git_object: 42134181a1d18f5145a5276c1683c378807b08e6
   internal/sdk/models/operations/updatebreakersbypackandid.go:
     id: 67780b57806a
     last_write_checksum: sha1:40b7ef03fc361652829d9f9f60f554dae42762a5
@@ -6692,6 +6684,8 @@ trackedFiles:
     id: fc184fdb8dc5
     last_write_checksum: sha1:2289a1c65a95f09028c7940317656a5734a7de0f
     pristine_git_object: e1f9329f0a18783f55662e72535db9cdff64bb0f
+  internal/sdk/models/operations/upsertcustombanner.go:
+    last_write_checksum: sha1:61191d075944cb554c5e6167b6052605df5a4de9
   internal/sdk/models/operations/v1workspacescreateworkspace.go:
     id: 212a200adb49
     last_write_checksum: sha1:db4838bd4a042a4faee3afe36b3924a86ff3b821
@@ -10278,6 +10272,9 @@ examples:
           application/json: {}
   listBannerMessage:
     speakeasy-default-list-banner-message:
+      parameters:
+        path:
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}]}
@@ -10285,6 +10282,9 @@ examples:
           application/json: {"message": "This is my error message string"}
   createBannerMessage:
     speakeasy-default-create-banner-message:
+      parameters:
+        path:
+          groupId: "default"
       requestBody:
         application/json: {"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}
       responses:
@@ -10297,6 +10297,7 @@ examples:
       parameters:
         path:
           id: "bnr-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}]}
@@ -10307,6 +10308,7 @@ examples:
       parameters:
         path:
           id: "bnr-001"
+          groupId: "default"
       requestBody:
         application/json: {"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}
       responses:
@@ -10319,6 +10321,7 @@ examples:
       parameters:
         path:
           id: "bnr-001"
+          groupId: "default"
       responses:
         "200":
           application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}]}
@@ -15470,6 +15473,22 @@ examples:
       responses:
         "200":
           application/json: {}
+  getCustomBanner:
+    speakeasy-default-get-custom-banner:
+      responses:
+        "200":
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}]}
+        "500":
+          application/json: {"message": "This is my error message string"}
+  upsertCustomBanner:
+    speakeasy-default-upsert-custom-banner:
+      requestBody:
+        application/json: {"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}
+      responses:
+        "200":
+          application/json: {"items": [{"id": "myUniqueBannerMessageId", "enabled": true, "type": "custom", "created": 2025, "theme": "purple", "invertFontColor": false, "message": "This is the banner message to be displayed", "link": "https://thisisarealwebsite.com", "linkDisplay": "This flavor text redirects to link", "customThemes": ["themes"]}]}
+        "500":
+          application/json: {"message": "This is my error message string"}
 examplesVersion: 1.0.2
 generatedTests: {}
 generatedFiles:

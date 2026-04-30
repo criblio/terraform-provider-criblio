@@ -944,7 +944,7 @@ resource "criblio_collector" "my_collector" {
 
 ### Optional
 
-- `environment` (String) Optional mirror of environment from the active input_collector_* block; omit to accept state/API without perpetual plan noise.
+- `environment` (String) Mirrors the environment from the active input_collector_* block. May be set in configuration or left unset (computed).
 - `ignore_group_jobs_limit` (Boolean) Mirrors ignore_group_jobs_limit from the active input_collector_* block (no root default; use nested field defaults).
 - `input_collector_azure_blob` (Attributes) (see [below for nested schema](#nestedatt--input_collector_azure_blob))
 - `input_collector_cribl_lake` (Attributes) (see [below for nested schema](#nestedatt--input_collector_cribl_lake))
