@@ -1,1 +1,1 @@
-../../../../examples/custom-banner/main.tf
+../../../../../examples/custom-banner/main.tf
