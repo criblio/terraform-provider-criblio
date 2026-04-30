@@ -12,6 +12,3 @@ data "criblio_custom_banner" "maintenance" {
   depends_on = [criblio_custom_banner.my_custom_banner]
 }
 
-output "banner_message" {
-  value = length(data.criblio_custom_banner.maintenance.items) > 0 ? data.criblio_custom_banner.maintenance.items[0].message : null
-}
