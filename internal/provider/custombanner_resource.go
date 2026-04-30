@@ -247,6 +247,9 @@ func (r *CustomBannerResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	// This is a singleton resource — the API requires the fixed ID in the body on create.
+	customBannerID := "custom-banner"
+	request.ID = &customBannerID
 	res, err := r.client.Banners.UpsertCustomBanner(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
