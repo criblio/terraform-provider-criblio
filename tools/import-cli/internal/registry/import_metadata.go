@@ -55,6 +55,7 @@ var (
 var importMetadataBase = map[string]ResourceMetadata{
 	"criblio_appscope_config":              {SDKService: "AppscopeConfigs", ListMethod: "ListAppscopeLibEntry", GetMethod: "GetAppscopeLibEntryByID", ImportIDFormat: ""},
 	"criblio_certificate":                  {SDKService: "Certificates", ListMethod: "ListCertificate", GetMethod: "GetCertificateByID", ImportIDFormat: ""},
+	"criblio_custom_banner":                {SDKService: "Banners", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_collector":                    {SDKService: "SavedJobs", ListMethod: "ListCollectors", GetMethod: "GetSavedJobByID", ImportIDFormat: "", OneOf: &OneOfConfig{ReadOnlyAttr: "items", DiscriminatorField: "type", BlockNamePrefix: "input_collector_", KeysToSkip: []string{"status"}, UnsupportedDiscriminatorValues: []string{"scheduledSearch", "executor"}, NestedDiscriminatorField: "collector.type"}},
 	"criblio_commit":                       {SDKService: "", ListMethod: "", GetMethod: "", ImportIDFormat: ""},
 	"criblio_cribl_lake_dataset":           {SDKService: "Lake", ListMethod: "GetCriblLakeDatasetByLakeID", GetMethod: "GetCriblLakeDatasetByLakeIDAndID", ImportIDFormat: ""},

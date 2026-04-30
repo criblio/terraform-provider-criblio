@@ -1,4 +1,4 @@
-resource "criblio_custom_banner" "my_custombanner" {
+resource "criblio_custom_banner" "my_custom_banner" {
   enabled = true
   message = "Scheduled maintenance window: Saturday 2am-4am UTC"
   theme   = "purple"
@@ -9,8 +9,9 @@ resource "criblio_custom_banner" "my_custombanner" {
 }
 
 data "criblio_custom_banner" "maintenance" {
+  depends_on = [criblio_custom_banner.my_custom_banner]
 }
 
 output "banner_message" {
-  value = data.criblio_custom_banner.maintenance.items[0].message
+  value = length(data.criblio_custom_banner.maintenance.items) > 0 ? data.criblio_custom_banner.maintenance.items[0].message : null
 }
