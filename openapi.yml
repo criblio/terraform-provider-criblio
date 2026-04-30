@@ -49767,16 +49767,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
-    /system/banners:
+    /system/banners/custom-banner:
         get:
-            operationId: listBannerMessage
+            x-speakeasy-entity-operation: CustomBanner#get
+            operationId: getCustomBanner
             tags:
                 - banners
-            summary: Get a list of BannerMessage objects
-            description: Get a list of BannerMessage objects
+            summary: Get CustomBanner
+            description: Get CustomBanner
             responses:
                 '200':
-                    description: a list of BannerMessage objects
+                    description: a CustomBanner object
                     content:
                         application/json:
                             schema:
@@ -49787,82 +49788,7 @@ paths:
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/BannerMessage'
-                '401':
-                    description: Unauthorized
-                '500':
-                    description: Unexpected error
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Error'
-        post:
-            operationId: createBannerMessage
-            tags:
-                - banners
-            summary: Create BannerMessage
-            description: Create BannerMessage
-            requestBody:
-                description: New BannerMessage object
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/BannerMessage'
-            responses:
-                '200':
-                    description: a list of BannerMessage objects
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    count:
-                                        x-speakeasy-ignore: true
-                                        type: integer
-                                        description: number of items present in the items array
-                                    items:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/BannerMessage'
-                '401':
-                    description: Unauthorized
-                '500':
-                    description: Unexpected error
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Error'
-    /system/banners/{id}:
-        get:
-            operationId: getBannerMessageById
-            tags:
-                - banners
-            summary: Get BannerMessage by ID
-            description: Get BannerMessage by ID
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                    example: bnr-001
-                  description: Unique ID to GET
-            responses:
-                '200':
-                    description: a list of BannerMessage objects
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    count:
-                                        x-speakeasy-ignore: true
-                                        type: integer
-                                        description: number of items present in the items array
-                                    items:
+                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/BannerMessage'
@@ -49875,22 +49801,14 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            operationId: updateBannerMessageById
+            x-speakeasy-entity-operation: CustomBanner#create,update,delete
+            operationId: upsertCustomBanner
             tags:
                 - banners
-            summary: Update BannerMessage
-            description: Update BannerMessage
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                    example: bnr-001
-                  description: Unique ID to PATCH
-                  example: bnr-001
+            summary: Create or Update CustomBanner
+            description: Create or Update CustomBanner
             requestBody:
-                description: BannerMessage object to be updated
+                description: CustomBanner object to be created or updated
                 required: true
                 content:
                     application/json:
@@ -49898,7 +49816,7 @@ paths:
                             $ref: '#/components/schemas/BannerMessage'
             responses:
                 '200':
-                    description: a list of BannerMessage objects
+                    description: a CustomBanner object
                     content:
                         application/json:
                             schema:
@@ -49909,45 +49827,7 @@ paths:
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/BannerMessage'
-                '401':
-                    description: Unauthorized
-                '500':
-                    description: Unexpected error
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Error'
-        delete:
-            operationId: deleteBannerMessageById
-            tags:
-                - banners
-            summary: Delete BannerMessage
-            description: Delete BannerMessage
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                    example: bnr-001
-                  description: Unique ID to DELETE
-                  example: bnr-001
-            responses:
-                '200':
-                    description: a list of BannerMessage objects
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    count:
-                                        x-speakeasy-ignore: true
-                                        type: integer
-                                        description: number of items present in the items array
-                                    items:
+                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/BannerMessage'

@@ -65,3 +65,5 @@ internal/provider/packdestination_data_source.go
 internal/provider/packlookups_data_source.go
 internal/provider/packvars_data_source.go
 internal/provider/packsource_data_source.go
+internal/provider/custombanner_resource_sdk.go
+internal/provider/custombanner_resource.go
