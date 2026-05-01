@@ -1237,14 +1237,16 @@ func mergePackCreateConfigIntoModel(data *PackResourceModel, cfg *PackResourceMo
 
 // effectivePackIDForAPI returns the pack ID to use for pack API calls (GetPacksByID, pack/settings, etc.).
 // The Cribl API normalizes pack IDs (e.g. to lowercase) when creating; these endpoints are case-sensitive.
-// When Items is populated from an install response, use Items[0].ID; otherwise use lowercase of config id.
+// When Items is populated from an install response, use Items[0].ID (which holds the server-normalized ID).
+// Otherwise use the config/imported ID as-is: lowercasing the fallback would break imports of packs whose
+// API-stored ID contains uppercase letters (e.g. marketplace packs like "Cribl_Pack_for_Amazon_Security_Findings_Format_").
 func effectivePackIDForAPI(data *PackResourceModel) string {
 	if len(data.Items) > 0 && !data.Items[0].ID.IsNull() && !data.Items[0].ID.IsUnknown() {
 		if s := strings.TrimSpace(data.Items[0].ID.ValueString()); s != "" {
 			return s
 		}
 	}
-	return strings.ToLower(strings.TrimSpace(data.ID.ValueString()))
+	return strings.TrimSpace(data.ID.ValueString())
 }
 
 // packInstallDisplayName returns the human-readable name for UI-style pack install POST (items array).

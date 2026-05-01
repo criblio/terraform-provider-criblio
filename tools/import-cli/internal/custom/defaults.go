@@ -204,6 +204,9 @@ func ApplyGroupDefaults(attrs map[string]hcl.Value, model interface{}) {
 	if !gm.Provisioned.IsNull() && !gm.Provisioned.IsUnknown() {
 		setBool("provisioned", gm.Provisioned.ValueBool())
 	}
+	if !gm.Inherits.IsNull() && !gm.Inherits.IsUnknown() && gm.Inherits.ValueString() != "" {
+		setStr("inherits", gm.Inherits.ValueString())
+	}
 	if gm.Cloud != nil && !gm.Cloud.Provider.IsNull() && !gm.Cloud.Provider.IsUnknown() {
 		if cloud, ok := attrs["cloud"]; ok && cloud.Kind == hcl.KindMap && cloud.Map != nil {
 			cloud.Map["provider"] = hcl.Value{Kind: hcl.KindString, String: gm.Cloud.Provider.ValueString()}
