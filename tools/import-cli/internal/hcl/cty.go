@@ -127,6 +127,9 @@ func PruneSearchDashboardElementsCty(val cty.Value) (cty.Value, error) {
 		return val, nil
 	}
 	l := val.LengthInt()
+	if l == 0 {
+		return val, nil
+	}
 	out := make([]cty.Value, l)
 	for i := 0; i < l; i++ {
 		ev := val.Index(cty.NumberIntVal(int64(i)))
@@ -159,6 +162,9 @@ func StripSearchDashboardElementsConfigNullKeysCty(val cty.Value) (cty.Value, er
 		return val, nil
 	}
 	l := val.LengthInt()
+	if l == 0 {
+		return val, nil
+	}
 	out := make([]cty.Value, l)
 	for i := 0; i < l; i++ {
 		ev := val.Index(cty.NumberIntVal(int64(i)))

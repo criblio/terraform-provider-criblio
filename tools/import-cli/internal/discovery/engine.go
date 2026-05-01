@@ -28,6 +28,22 @@ func eventBreakerRulesetIdentifiersFromCapture(gid string) ([]map[string]string,
 	return custom.ParseEventBreakerRulesetListBody(body, gid)
 }
 
+// filterSearchDashboardIDs removes pack-scoped dashboard IDs (containing ".") from the list.
+// Pack-scoped dashboards (e.g. "cribl-criblvision-for-stream.sh1eceuw4") belong to their parent pack
+// and cannot be managed as standalone criblio_search_dashboard resources.
+func filterSearchDashboardIDs(typeName string, ids []map[string]string) []map[string]string {
+	if typeName != "criblio_search_dashboard" {
+		return ids
+	}
+	filtered := ids[:0]
+	for _, m := range ids {
+		if !strings.Contains(m["id"], ".") {
+			filtered = append(filtered, m)
+		}
+	}
+	return filtered
+}
+
 // searchListIdentifiersFromCapture returns identifiers (and count) from the captured
 // list response body when the SDK failed to unmarshal (e.g. cribl_lake, union drift, strict JSON).
 func searchListIdentifiersFromCapture(e registry.Entry) ([]map[string]string, int, error) {
@@ -37,7 +53,12 @@ func searchListIdentifiersFromCapture(e registry.Entry) ([]map[string]string, in
 		return custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchSaved)
 	case "criblio_search_dashboard":
 		body := custom.GetAndClearSearchListBody(custom.PathSearchDashboards)
-		return custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchDashboards)
+		ids, _, err := custom.IdentifiersFromItemsIDsOnly(body, custom.PathSearchDashboards)
+		if err != nil {
+			return nil, 0, err
+		}
+		filtered := filterSearchDashboardIDs(e.TypeName, ids)
+		return filtered, len(filtered), nil
 	case "criblio_search_dataset":
 		body := custom.GetAndClearSearchListBody(custom.PathSearchDatasets)
 		return custom.IdentifiersFromSearchListBody(body, custom.PathSearchDatasets)
@@ -597,7 +618,11 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 		if e.TypeName == "criblio_cribl_lake_dataset" {
 			scope = "default"
 		}
-		return identifiersFromItems(items, scope, e)
+		ids, idErr := identifiersFromItems(items, scope, e)
+		if idErr != nil {
+			return nil, idErr
+		}
+		return filterSearchDashboardIDs(e.TypeName, ids), nil
 	}
 	var out []map[string]string
 	for _, gid := range groupIDs {
@@ -781,6 +806,11 @@ func identifiersFromItems(items reflect.Value, groupID string, e registry.Entry)
 		}
 		// Skip default Cribl Lake datasets (cribl_logs, default_*, etc.) so only user-created are imported.
 		if e.TypeName == "criblio_cribl_lake_dataset" && custom.DefaultCriblLakeDatasetIDs[id] {
+			continue
+		}
+		// Skip pack-scoped resources (id contains ".") — pack-owned items bleed into top-level list APIs
+		// but belong to their pack, not standalone resources (e.g. criblio_pack_breakers, pack macros).
+		if (e.TypeName == "criblio_event_breaker_ruleset" || e.TypeName == "criblio_search_macro") && strings.Contains(id, ".") {
 			continue
 		}
 		// Skip built-in destinations (default, devnull) so only user-created are imported.

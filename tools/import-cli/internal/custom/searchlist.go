@@ -510,6 +510,10 @@ func ParseEventBreakerRulesetListBody(body []byte, groupID string) ([]map[string
 		if item.Lib != nil && *item.Lib == EventBreakerLibCribl {
 			continue
 		}
+		// Skip pack-scoped rulesets (id contains ".") — these belong to criblio_pack_breakers, not criblio_event_breaker_ruleset.
+		if strings.Contains(item.ID, ".") {
+			continue
+		}
 		out = append(out, map[string]string{"id": item.ID, "group_id": groupID})
 	}
 	return out, nil

@@ -393,42 +393,46 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		}
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGroupsByIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
+	// Groups with non-lowercase IDs (e.g. "TestAzure") fail the API's ^[a-z] pattern on PATCH.
+	// Skip the update entirely and refresh state from GET to avoid a permanent error.
+	if regexp.MustCompile(`^[a-z]`).MatchString(data.ID.ValueString()) {
+		request, requestDiags := data.ToOperationsUpdateGroupsByIDRequest(ctx)
+		resp.Diagnostics.Append(requestDiags...)
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.Groups.UpdateGroupsByID(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		if resp.Diagnostics.HasError() {
+			return
 		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx, res.Object)...)
+		res, err := r.client.Groups.UpdateGroupsByID(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
+		}
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		if !(res.Object != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromOperationsUpdateGroupsByIDResponseBody(ctx, res.Object)...)
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
+		if resp.Diagnostics.HasError() {
+			return
+		}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
-	if resp.Diagnostics.HasError() {
-		return
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 	request1, request1Diags := data.ToOperationsGetGroupsByIDRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)

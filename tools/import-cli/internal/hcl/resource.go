@@ -38,6 +38,7 @@ func DefaultResourceBlockOptions() *ResourceBlockOptions {
 			"criblio_project":                 {"subscriptions", "destinations"},
 			"criblio_search_dataset_ruleset":  {"rules"},
 			"criblio_search_datatype_ruleset": {"rules"},
+			"criblio_search_dashboard":        {"elements"},
 		},
 	}
 }

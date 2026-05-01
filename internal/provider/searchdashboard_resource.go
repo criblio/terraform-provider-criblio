@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -29,6 +30,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"io"
+	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -1288,6 +1291,13 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
+	// Pack-scoped dashboards (id contains ".") cannot be read or managed as standalone resources.
+	// Remove from state so Terraform treats them as deleted rather than failing the refresh.
+	if strings.Contains(data.ID.ValueString(), ".") {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+
 	request, requestDiags := data.ToOperationsGetSearchDashboardByIDRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1309,6 +1319,17 @@ func (r *SearchDashboardResource) Read(ctx context.Context, req resource.ReadReq
 	if res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
+	}
+	if res.StatusCode == 500 && res.RawResponse != nil && res.RawResponse.Body != nil {
+		// Pack-scoped dashboards (id = "{pack}.{dashboardId}") return HTTP 500 "Invalid context {pack}"
+		// when the parent pack no longer exists (e.g. after destroy+recreate). Treat this as not-found
+		// so Terraform removes the resource from state rather than failing the apply.
+		body, _ := io.ReadAll(res.RawResponse.Body)
+		res.RawResponse.Body = io.NopCloser(bytes.NewReader(body))
+		if bytes.Contains(body, []byte("Invalid context")) {
+			resp.State.RemoveResource(ctx)
+			return
+		}
 	}
 	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
@@ -1431,5 +1452,16 @@ func (r *SearchDashboardResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *SearchDashboardResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	// Pack-scoped dashboard IDs contain "." (e.g. "pack-name.dashboard-id"). These are managed by
+	// their parent pack and cannot be imported as standalone criblio_search_dashboard resources.
+	if strings.Contains(req.ID, ".") {
+		resp.Diagnostics.AddError(
+			"Cannot import pack-scoped search dashboard",
+			fmt.Sprintf("Dashboard ID %q contains a dot, which indicates it belongs to a pack. "+
+				"Pack-scoped dashboards cannot be managed as standalone criblio_search_dashboard resources. "+
+				"Remove this import block from your configuration.", req.ID),
+		)
+		return
+	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

@@ -39,6 +39,12 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if flattenItemsToTopLevelTypes[r.TypeName] {
 		flattenItemsListToTopLevel(attrs)
 	}
+	// criblio_pack: exports is an install-time parameter (RequiresReplaceIfConfigured). The API does
+	// not return it on GET so state has exports=null after import, while items[0].exports (flattened
+	// above) can be ["*"], causing destroy+recreate on every apply. Drop it from HCL config.
+	if r.TypeName == "criblio_pack" {
+		delete(attrs, "exports")
+	}
 	// criblio_routes and criblio_pack_routes: inject additional_properties from model into each route.
 	// HCL skips it by default (readOnlyAttrs); API returns it, causing drift. Align both resources.
 	injectRoutesAdditionalProperties := func(routes []ptypes.RoutesRoute, routesVal hcl.Value) hcl.Value {
@@ -202,6 +208,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	if flattenItemsToTopLevelTypes[typeName] {
 		flattenItemsListToTopLevel(attrs)
+	}
+	if typeName == "criblio_pack" {
+		delete(attrs, "exports")
 	}
 	// criblio_group requires product (stream|edge); provider model may not set it from API. Use product from idMap (we set it in ListGroupIdentifiersAndItems).
 	// Emit streamtags = [] explicitly when empty so config matches state (API returns []).
