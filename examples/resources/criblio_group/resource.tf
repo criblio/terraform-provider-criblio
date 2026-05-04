@@ -4,7 +4,7 @@ resource "criblio_group" "my_group" {
     region   = "us-east-1"
   }
   description           = "Production Edge configuration group"
-  estimated_ingest_rate = 500000
+  estimated_ingest_rate = 1024
   id                    = "config-group-prod-edge"
   inherits              = "base-config"
   is_fleet              = false

@@ -55,10 +55,21 @@ func (e *ConfigGroupType) IsExact() bool {
 }
 
 type ConfigGroup struct {
-	Cloud                   *ConfigGroupCloud    `json:"cloud,omitempty"`
-	ConfigVersion           *string              `json:"configVersion,omitempty"`
-	DeployingWorkerCount    *float64             `json:"deployingWorkerCount,omitempty"`
-	Description             *string              `json:"description,omitempty"`
+	Cloud                *ConfigGroupCloud `json:"cloud,omitempty"`
+	ConfigVersion        *string           `json:"configVersion,omitempty"`
+	DeployingWorkerCount *float64          `json:"deployingWorkerCount,omitempty"`
+	Description          *string           `json:"description,omitempty"`
+	// Estimated ingest rate for the group. Supported values map to Max est ingest rate (MB/s):
+	//   - 1024 -> 12 MB/s
+	//   - 2048 -> 24 MB/s
+	//   - 3072 -> 36 MB/s
+	//   - 4096 -> 48 MB/s
+	//   - 5120 -> 60 MB/s
+	//   - 7168 -> 84 MB/s
+	//   - 10240 -> 120 MB/s
+	//   - 13312 -> 156 MB/s
+	//   - 15360 -> 180 MB/s
+	//
 	EstimatedIngestRate     *float64             `json:"estimatedIngestRate,omitempty"`
 	Git                     *ConfigGroupGit      `json:"git,omitempty"`
 	ID                      string               `json:"id"`

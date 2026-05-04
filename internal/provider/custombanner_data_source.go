@@ -49,7 +49,7 @@ func (r *CustomBannerDataSource) Schema(ctx context.Context, req datasource.Sche
 					Attributes: map[string]schema.Attribute{
 						"created": schema.Float64Attribute{
 							Computed:    true,
-							Description: `Time created`,
+							Description: `Time created (Unix epoch seconds)`,
 						},
 						"custom_themes": schema.ListAttribute{
 							Computed:    true,

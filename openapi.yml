@@ -94,8 +94,8 @@ components:
                 created:
                     type: number
                     title: Time
-                    description: Time created
-                    example: '2025-09-29T14:15:00Z'
+                    description: Time created (Unix epoch seconds)
+                    example: 1759154100
                 theme:
                     type: string
                     title: Background color
@@ -44945,7 +44945,18 @@ components:
                     example: Production Edge configuration group
                 estimatedIngestRate:
                     type: number
-                    example: 500000
+                    example: 1024
+                    description: |
+                        Estimated ingest rate for the group. Supported values map to Max est ingest rate (MB/s):
+                          - 1024 -> 12 MB/s
+                          - 2048 -> 24 MB/s
+                          - 3072 -> 36 MB/s
+                          - 4096 -> 48 MB/s
+                          - 5120 -> 60 MB/s
+                          - 7168 -> 84 MB/s
+                          - 10240 -> 120 MB/s
+                          - 13312 -> 156 MB/s
+                          - 15360 -> 180 MB/s
                 git:
                     type: object
                     x-speakeasy-terraform-ignore: true

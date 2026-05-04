@@ -38,7 +38,7 @@ type BannerMessage struct {
 	// Show a banner on top of all pages
 	Enabled bool       `json:"enabled"`
 	Type    BannerType `json:"type"`
-	// Time created
+	// Time created (Unix epoch seconds)
 	Created         *float64 `json:"created,omitempty"`
 	Theme           string   `json:"theme"`
 	InvertFontColor *bool    `json:"invertFontColor,omitempty"`
