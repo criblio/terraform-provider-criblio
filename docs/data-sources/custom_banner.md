@@ -29,7 +29,7 @@ data "criblio_custom_banner" "my_custombanner" {
 
 Read-Only:
 
-- `created` (Number) Time created
+- `created` (Number) Time created (Unix epoch seconds)
 - `custom_themes` (List of String)
 - `enabled` (Boolean) Show a banner on top of all pages
 - `id` (String)

@@ -71,6 +71,16 @@ func (r *DeployResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 						"estimated_ingest_rate": schema.Float64Attribute{
 							Computed: true,
+							MarkdownDescription: `Estimated ingest rate for the group. Supported values map to Max est ingest rate (MB/s):` + "\n" +
+								`  - 1024 -> 12 MB/s` + "\n" +
+								`  - 2048 -> 24 MB/s` + "\n" +
+								`  - 3072 -> 36 MB/s` + "\n" +
+								`  - 4096 -> 48 MB/s` + "\n" +
+								`  - 5120 -> 60 MB/s` + "\n" +
+								`  - 7168 -> 84 MB/s` + "\n" +
+								`  - 10240 -> 120 MB/s` + "\n" +
+								`  - 13312 -> 156 MB/s` + "\n" +
+								`  - 15360 -> 180 MB/s`,
 						},
 						"id": schema.StringAttribute{
 							Computed: true,

@@ -38,7 +38,16 @@ Read-Only:
 
 - `cloud` (Attributes) (see [below for nested schema](#nestedatt--items--cloud))
 - `description` (String)
-- `estimated_ingest_rate` (Number)
+- `estimated_ingest_rate` (Number) Estimated ingest rate for the group. Supported values map to Max est ingest rate (MB/s):
+  - 1024 -> 12 MB/s
+  - 2048 -> 24 MB/s
+  - 3072 -> 36 MB/s
+  - 4096 -> 48 MB/s
+  - 5120 -> 60 MB/s
+  - 7168 -> 84 MB/s
+  - 10240 -> 120 MB/s
+  - 13312 -> 156 MB/s
+  - 15360 -> 180 MB/s
 - `id` (String)
 - `inherits` (String)
 - `is_fleet` (Boolean)
