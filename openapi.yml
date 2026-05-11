@@ -1722,10 +1722,18 @@ components:
                                                 title: Discover request parameters
                                                 items:
                                                     type: object
-                                                    example:
-                                                        param: value
+                                                    properties:
+                                                        name:
+                                                            type: string
+                                                            title: Parameter name
+                                                            example: param
+                                                        value:
+                                                            type: string
+                                                            title: Parameter value
+                                                            example: value
                                                 example:
-                                                    - param: value
+                                                    - name: param
+                                                      value: value
                                             discoverBody:
                                                 type: string
                                                 title: Discover body

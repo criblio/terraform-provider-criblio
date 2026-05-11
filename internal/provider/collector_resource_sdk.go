@@ -863,6 +863,16 @@ func (r *CollectorResourceModel) RefreshFromSharedInputCollector(ctx context.Con
 
 				r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders = append(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders, discoverRequestHeaders)
 			}
+			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = []tfTypes.DiscoverRequestParam{}
+
+			for _, discoverRequestParamsItem := range resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams {
+				var discoverRequestParams tfTypes.DiscoverRequestParam
+
+				discoverRequestParams.Name = types.StringPointerValue(discoverRequestParamsItem.Name)
+				discoverRequestParams.Value = types.StringPointerValue(discoverRequestParamsItem.Value)
+
+				r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = append(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams, discoverRequestParams)
+			}
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType = types.StringValue(string(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverType))
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL)
 			r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode)
@@ -2732,7 +2742,25 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			} else {
 				manualDiscoverResult = nil
 			}
-			discoverRequestParams := make([]shared.DiscoverRequestParam, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams))
+			discoverRequestParams := make([]shared.DiscoverRequestParam, 0, len(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams))
+			for discoverRequestParamsIndex := range r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams {
+				name7 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Name.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Name.IsNull() {
+					*name7 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Name.ValueString()
+				} else {
+					name7 = nil
+				}
+				value7 := new(string)
+				if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Value.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Value.IsNull() {
+					*value7 = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams[discoverRequestParamsIndex].Value.ValueString()
+				} else {
+					value7 = nil
+				}
+				discoverRequestParams = append(discoverRequestParams, shared.DiscoverRequestParam{
+					Name:  name7,
+					Value: value7,
+				})
+			}
 			discoverBody := new(string)
 			if !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsUnknown() && !r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.IsNull() {
 				*discoverBody = r.InputCollectorRest.Collector.Conf.Discovery.DiscoverBody.ValueString()
@@ -3275,15 +3303,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata2 := make([]shared.InputCollectorS3Metadatum, 0, len(r.InputCollectorS3.Input.Metadata))
 			for metadataIndex2 := range r.InputCollectorS3.Input.Metadata {
-				var name7 string
-				name7 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Name.ValueString()
+				var name8 string
+				name8 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Name.ValueString()
 
-				var value7 string
-				value7 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Value.ValueString()
+				var value8 string
+				value8 = r.InputCollectorS3.Input.Metadata[metadataIndex2].Value.ValueString()
 
 				metadata2 = append(metadata2, shared.InputCollectorS3Metadatum{
-					Name:  name7,
-					Value: value7,
+					Name:  name8,
+					Value: value8,
 				})
 			}
 			pipeline2 := new(string)
@@ -3688,15 +3716,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata3 := make([]shared.InputCollectorAzureBlobMetadatum, 0, len(r.InputCollectorAzureBlob.Input.Metadata))
 			for metadataIndex3 := range r.InputCollectorAzureBlob.Input.Metadata {
-				var name8 string
-				name8 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Name.ValueString()
+				var name9 string
+				name9 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Name.ValueString()
 
-				var value8 string
-				value8 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Value.ValueString()
+				var value9 string
+				value9 = r.InputCollectorAzureBlob.Input.Metadata[metadataIndex3].Value.ValueString()
 
 				metadata3 = append(metadata3, shared.InputCollectorAzureBlobMetadatum{
-					Name:  name8,
-					Value: value8,
+					Name:  name9,
+					Value: value9,
 				})
 			}
 			pipeline3 := new(string)
@@ -4087,15 +4115,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata4 := make([]shared.InputCollectorCriblLakeMetadatum, 0, len(r.InputCollectorCriblLake.Input.Metadata))
 			for metadataIndex4 := range r.InputCollectorCriblLake.Input.Metadata {
-				var name9 string
-				name9 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Name.ValueString()
+				var name10 string
+				name10 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Name.ValueString()
 
-				var value9 string
-				value9 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Value.ValueString()
+				var value10 string
+				value10 = r.InputCollectorCriblLake.Input.Metadata[metadataIndex4].Value.ValueString()
 
 				metadata4 = append(metadata4, shared.InputCollectorCriblLakeMetadatum{
-					Name:  name9,
-					Value: value9,
+					Name:  name10,
+					Value: value10,
 				})
 			}
 			pipeline4 := new(string)
@@ -4417,15 +4445,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata5 := make([]shared.InputCollectorDatabaseMetadatum, 0, len(r.InputCollectorDatabase.Input.Metadata))
 			for metadataIndex5 := range r.InputCollectorDatabase.Input.Metadata {
-				var name10 string
-				name10 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Name.ValueString()
+				var name11 string
+				name11 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Name.ValueString()
 
-				var value10 string
-				value10 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Value.ValueString()
+				var value11 string
+				value11 = r.InputCollectorDatabase.Input.Metadata[metadataIndex5].Value.ValueString()
 
 				metadata5 = append(metadata5, shared.InputCollectorDatabaseMetadatum{
-					Name:  name10,
-					Value: value10,
+					Name:  name11,
+					Value: value11,
 				})
 			}
 			pipeline5 := new(string)
@@ -4761,15 +4789,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata6 := make([]shared.InputCollectorGCSMetadatum, 0, len(r.InputCollectorGCS.Input.Metadata))
 			for metadataIndex6 := range r.InputCollectorGCS.Input.Metadata {
-				var name11 string
-				name11 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Name.ValueString()
+				var name12 string
+				name12 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Name.ValueString()
 
-				var value11 string
-				value11 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Value.ValueString()
+				var value12 string
+				value12 = r.InputCollectorGCS.Input.Metadata[metadataIndex6].Value.ValueString()
 
 				metadata6 = append(metadata6, shared.InputCollectorGCSMetadatum{
-					Name:  name11,
-					Value: value11,
+					Name:  name12,
+					Value: value12,
 				})
 			}
 			pipeline6 := new(string)
@@ -5153,15 +5181,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata7 := make([]shared.InputCollectorHealthCheckMetadatum, 0, len(r.InputCollectorHealthCheck.Input.Metadata))
 			for metadataIndex7 := range r.InputCollectorHealthCheck.Input.Metadata {
-				var name12 string
-				name12 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Name.ValueString()
+				var name13 string
+				name13 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Name.ValueString()
 
-				var value12 string
-				value12 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Value.ValueString()
+				var value13 string
+				value13 = r.InputCollectorHealthCheck.Input.Metadata[metadataIndex7].Value.ValueString()
 
 				metadata7 = append(metadata7, shared.InputCollectorHealthCheckMetadatum{
-					Name:  name12,
-					Value: value12,
+					Name:  name13,
+					Value: value13,
 				})
 			}
 			pipeline7 := new(string)
@@ -5532,15 +5560,15 @@ func (r *CollectorResourceModel) ToSharedInputCollector(ctx context.Context) (*s
 			}
 			metadata8 := make([]shared.InputCollectorScriptMetadatum, 0, len(r.InputCollectorScript.Input.Metadata))
 			for metadataIndex8 := range r.InputCollectorScript.Input.Metadata {
-				var name13 string
-				name13 = r.InputCollectorScript.Input.Metadata[metadataIndex8].Name.ValueString()
+				var name14 string
+				name14 = r.InputCollectorScript.Input.Metadata[metadataIndex8].Name.ValueString()
 
-				var value13 string
-				value13 = r.InputCollectorScript.Input.Metadata[metadataIndex8].Value.ValueString()
+				var value14 string
+				value14 = r.InputCollectorScript.Input.Metadata[metadataIndex8].Value.ValueString()
 
 				metadata8 = append(metadata8, shared.InputCollectorScriptMetadatum{
-					Name:  name13,
-					Value: value13,
+					Name:  name14,
+					Value: value14,
 				})
 			}
 			pipeline8 := new(string)
