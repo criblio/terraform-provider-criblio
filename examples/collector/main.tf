@@ -248,6 +248,7 @@ resource "criblio_collector" "rest_api_collector_discovery_http" {
   }
 }
 
+/*
 resource "criblio_collector" "rest_conf_update_test" {
   group_id = "default"
   id       = "rest-conf-update-test"
@@ -269,6 +270,7 @@ resource "criblio_collector" "rest_conf_update_test" {
     ignore_group_jobs_limit = false
   }
 }
+*/
 
 resource "criblio_collector" "rest_api_collector_discovery_json" {
   group_id = "default"
