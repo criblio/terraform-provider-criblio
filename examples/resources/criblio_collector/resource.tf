@@ -480,7 +480,8 @@ resource "criblio_collector" "my_collector" {
           ]
           discover_request_params = [
             {
-              # ...
+              name  = "param"
+              value = "value"
             }
           ]
           discover_type        = "http"

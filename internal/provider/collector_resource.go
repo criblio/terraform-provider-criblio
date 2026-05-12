@@ -7,8 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"regexp"
-
 	speakeasy_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -36,6 +34,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -109,7 +108,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_cribl_lake"), FieldPath: path.Root("input_collector_cribl_lake").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ignore_group_jobs_limit")}}),
+					speakeasy_boolplanmodifier.UseHoistedValue([]speakeasy_planmodifierutils.HoistedSource{speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_splunk"), FieldPath: path.Root("input_collector_splunk").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_rest"), FieldPath: path.Root("input_collector_rest").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_s3"), FieldPath: path.Root("input_collector_s3").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_azure_blob"), FieldPath: path.Root("input_collector_azure_blob").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_database"), FieldPath: path.Root("input_collector_database").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_gcs"), FieldPath: path.Root("input_collector_gcs").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_health_check"), FieldPath: path.Root("input_collector_health_check").AtName("ignore_group_jobs_limit")}, speakeasy_planmodifierutils.HoistedSource{AssociatedTypePath: path.Root("input_collector_script"), FieldPath: path.Root("input_collector_script").AtName("ignore_group_jobs_limit")}}),
 				},
 				Description: `Mirrors ignore_group_jobs_limit from the active input_collector_* block (no root default; use nested field defaults).`,
 			},
@@ -124,7 +123,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
@@ -240,7 +239,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -372,7 +371,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -589,7 +588,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"dataset": schema.StringAttribute{
@@ -643,7 +642,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -775,7 +774,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -992,7 +991,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"connection_id": schema.StringAttribute{
@@ -1051,7 +1050,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -1183,7 +1182,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -1400,7 +1399,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"auth_type": schema.StringAttribute{
@@ -1509,7 +1508,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -1641,7 +1640,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -1858,7 +1857,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
@@ -1967,7 +1966,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -2099,7 +2098,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -2316,7 +2315,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"auth_header_expr": schema.StringAttribute{
@@ -2525,7 +2524,16 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 													Validators: []validator.Object{
 														speakeasy_objectvalidators.NotNull(),
 													},
-													Attributes: map[string]schema.Attribute{},
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+															Optional: true,
+														},
+													},
 												},
 											},
 											"discover_type": schema.StringAttribute{
@@ -2954,7 +2962,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -3086,7 +3094,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -3303,7 +3311,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"aws_api_key": schema.StringAttribute{
@@ -3424,7 +3432,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -3556,7 +3564,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -3773,7 +3781,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"collect_script": schema.StringAttribute{
@@ -3830,7 +3838,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -3962,7 +3970,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -4179,7 +4187,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
-									custom_objectplanmodifier.PreferState(),
+									custom_objectplanmodifier.PreferConfigOrState(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"authentication": schema.StringAttribute{
@@ -4324,7 +4332,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"breaker_rulesets": schema.ListAttribute{
@@ -4456,7 +4464,7 @@ func (r *CollectorResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							custom_objectplanmodifier.PreferState(),
+							custom_objectplanmodifier.PreferConfigOrState(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"cron_schedule": schema.StringAttribute{
@@ -4792,9 +4800,6 @@ func collectorRestoreEnvironmentIfNulled(current, preserved types.String) types.
 	return current
 }
 
-// collectorEnsureDefaultInputAndSchedule populates input and schedule with empty
-// default structs when both API and plan return nil. This prevents drift when
-// the user doesn't configure these optional PreferState fields.
 func collectorEnsureDefaultInputAndSchedule(data *CollectorResourceModel) {
 	if data.InputCollectorRest != nil {
 		if data.InputCollectorRest.Input == nil {

@@ -1362,7 +1362,14 @@ func (r *CollectorDataSource) Schema(ctx context.Context, req datasource.SchemaR
 											"discover_request_params": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
-													Attributes: map[string]schema.Attribute{},
+													Attributes: map[string]schema.Attribute{
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
 												},
 											},
 											"discover_type": schema.StringAttribute{

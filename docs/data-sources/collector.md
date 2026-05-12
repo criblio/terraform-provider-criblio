@@ -828,6 +828,11 @@ Read-Only:
 <a id="nestedatt--input_collector_rest--collector--conf--discovery--discover_request_params"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.discovery.discover_request_params`
 
+Read-Only:
+
+- `name` (String)
+- `value` (String)
+
 
 <a id="nestedatt--input_collector_rest--collector--conf--discovery--pagination"></a>
 ### Nested Schema for `input_collector_rest.collector.conf.discovery.pagination`

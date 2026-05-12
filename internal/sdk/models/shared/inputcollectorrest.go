@@ -904,6 +904,8 @@ func (d *DiscoverRequestHeader) GetValue() *string {
 }
 
 type DiscoverRequestParam struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 func (d DiscoverRequestParam) MarshalJSON() ([]byte, error) {
@@ -915,6 +917,20 @@ func (d *DiscoverRequestParam) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DiscoverRequestParam) GetName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Name
+}
+
+func (d *DiscoverRequestParam) GetValue() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Value
 }
 
 type DiscoveryConfiguration struct {

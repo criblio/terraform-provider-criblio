@@ -207,6 +207,22 @@ resource "criblio_collector" "rest_api_collector_discovery_http" {
           discover_method = "get"
           # API validates discoverUrl as a jsExpression; use a string literal, not a bare URL
           discover_url = "'https://discover.test.example.com/v1'"
+          discover_request_params = [
+            {
+              name  = "filter"
+              value = "'active=true'"
+            },
+            {
+              name  = "limit"
+              value = "'100'"
+            }
+          ]
+          discover_request_headers = [
+            {
+              name  = "X-Custom-Header"
+              value = "'test-value'"
+            }
+          ]
         }
         # Additional REST configuration
         authentication = "basic"
@@ -231,6 +247,30 @@ resource "criblio_collector" "rest_api_collector_discovery_http" {
     ignore_group_jobs_limit = false
   }
 }
+
+/*
+resource "criblio_collector" "rest_conf_update_test" {
+  group_id = "default"
+  id       = "rest-conf-update-test"
+  input_collector_rest = {
+    collector = {
+      type = "rest"
+      conf = {
+        authentication = "none"
+        discovery      = { discover_type = "none" }
+        # Change this value after initial apply to test Bug 2 fix
+        timeout             = 60
+        collect_method      = "get"
+        collect_url         = "'https://api.test.example.com/data'"
+        reject_unauthorized = false
+      }
+    }
+    environment             = "demo"
+    id                      = "rest-conf-update-test"
+    ignore_group_jobs_limit = false
+  }
+}
+*/
 
 resource "criblio_collector" "rest_api_collector_discovery_json" {
   group_id = "default"

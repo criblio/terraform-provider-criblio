@@ -778,6 +778,16 @@ func (r *CollectorsDataSourceModel) RefreshFromOperationsListCollectorsResponseB
 
 						items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders = append(items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders, discoverRequestHeaders)
 					}
+					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = []tfTypes.DiscoverRequestParam{}
+
+					for _, discoverRequestParamsItem := range itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams {
+						var discoverRequestParams tfTypes.DiscoverRequestParam
+
+						discoverRequestParams.Name = types.StringPointerValue(discoverRequestParamsItem.Name)
+						discoverRequestParams.Value = types.StringPointerValue(discoverRequestParamsItem.Value)
+
+						items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = append(items.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams, discoverRequestParams)
+					}
 					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverType = types.StringValue(string(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverType))
 					items.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL = types.StringPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL)
 					items.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode = types.BoolPointerValue(itemsItem.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode)

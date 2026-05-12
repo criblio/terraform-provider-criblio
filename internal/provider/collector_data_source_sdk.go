@@ -823,6 +823,16 @@ func (r *CollectorDataSourceModel) RefreshFromSharedInputCollector(ctx context.C
 
 				r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders = append(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestHeaders, discoverRequestHeaders)
 			}
+			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = []tfTypes.DiscoverRequestParam{}
+
+			for _, discoverRequestParamsItem := range resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams {
+				var discoverRequestParams tfTypes.DiscoverRequestParam
+
+				discoverRequestParams.Name = types.StringPointerValue(discoverRequestParamsItem.Name)
+				discoverRequestParams.Value = types.StringPointerValue(discoverRequestParamsItem.Value)
+
+				r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams = append(r.InputCollectorRest.Collector.Conf.Discovery.DiscoverRequestParams, discoverRequestParams)
+			}
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverType = types.StringValue(string(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverType))
 			r.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL = types.StringPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.DiscoverURL)
 			r.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode = types.BoolPointerValue(resp.InputCollectorRest.Collector.Conf.Discovery.EnableDiscoverCode)
