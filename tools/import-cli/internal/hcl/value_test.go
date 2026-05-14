@@ -193,6 +193,217 @@ func TestReplaceSecretValuesWithVariableRefs_token_timeout_secs_not_secret(t *te
 	assert.Equal(t, "3600", attrs["output_open_telemetry"].Map["token_timeout_secs"].String)
 }
 
+func TestReplaceSecretValuesWithVariableRefs_password(t *testing.T) {
+	// password fields (e.g. in Redis functions) should be treated as secrets.
+	attrs := map[string]Value{
+		"conf": {
+			Kind: KindMap,
+			Map: map[string]Value{
+				"functions": {
+					Kind: KindList,
+					List: []Value{
+						{
+							Kind: KindMap,
+							Map: map[string]Value{
+								"id":       {Kind: KindString, String: "redis-1"},
+								"password": {Kind: KindString, String: "test-password"},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "pipeline_default_redis_populater")
+	require.Len(t, used, 1)
+	assert.Contains(t, used[0], "password")
+	// password should now be KindSensitive with variable name
+	pwVal := attrs["conf"].Map["functions"].List[0].Map["password"]
+	assert.Equal(t, KindSensitive, pwVal.Kind)
+	assert.True(t, isVariableName(pwVal.Sensitive))
+}
+
+func TestReplaceSecretValuesWithVariableRefs_sensitive_attributes(t *testing.T) {
+	// Various sensitive attribute names should be treated as secrets.
+	testCases := []struct {
+		attrName string
+		value    string
+	}{
+		{"password", "secret-pass"},
+		{"api_key", "my-api-key"},
+		{"secret", "my-secret"},
+		{"auth_token", "my-auth-token"},
+		{"client_secret", "my-client-secret"},
+		{"access_key", "my-access-key"},
+		{"secret_key", "my-secret-key"},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.attrName, func(t *testing.T) {
+			attrs := map[string]Value{
+				"config": {
+					Kind: KindMap,
+					Map: map[string]Value{
+						tc.attrName: {Kind: KindString, String: tc.value},
+					},
+				},
+			}
+			used := ReplaceSecretValuesWithVariableRefs(attrs, "resource_test")
+			require.Len(t, used, 1)
+			assert.Contains(t, used[0], tc.attrName)
+			val := attrs["config"].Map[tc.attrName]
+			assert.Equal(t, KindSensitive, val.Kind)
+		})
+	}
+}
+
+func TestReplaceSecretValuesWithVariableRefs_json_with_password(t *testing.T) {
+	// JSON string containing password (e.g. pipeline function conf with redis password).
+	// The password should be replaced with a variable reference within the JSON.
+	attrs := map[string]Value{
+		"conf": {
+			Kind: KindMap,
+			Map: map[string]Value{
+				"functions": {
+					Kind: KindList,
+					List: []Value{
+						{
+							Kind: KindMap,
+							Map: map[string]Value{
+								"id":   {Kind: KindString, String: "redis"},
+								"conf": {Kind: KindString, String: `{"authType":"manual","commands":[{"command":"get","keyExpr":"test"}],"password":"test-password","url":"localhost:6379"}`},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "pipeline_default_redis_test")
+	require.Len(t, used, 1)
+	// Variable name should include the sensitive field name (password)
+	assert.Contains(t, used[0], "password")
+	// The conf JSON string should remain KindString but with password as variable reference
+	confVal := attrs["conf"].Map["functions"].List[0].Map["conf"]
+	assert.Equal(t, KindString, confVal.Kind)
+	assert.Contains(t, confVal.String, `"password":"${var.`)
+	assert.Contains(t, confVal.String, `"commands"`)
+	assert.NotContains(t, confVal.String, "test-password")
+	// MaskedVarNames should be populated
+	assert.Len(t, confVal.MaskedVarNames, 1)
+	assert.Contains(t, confVal.MaskedVarNames[0], "password")
+}
+
+func TestReplaceSecretValuesWithVariableRefs_json_without_password(t *testing.T) {
+	// JSON string without sensitive fields should NOT be modified.
+	attrs := map[string]Value{
+		"conf": {
+			Kind: KindMap,
+			Map: map[string]Value{
+				"functions": {
+					Kind: KindList,
+					List: []Value{
+						{
+							Kind: KindMap,
+							Map: map[string]Value{
+								"id":   {Kind: KindString, String: "eval"},
+								"conf": {Kind: KindString, String: `{"add":[{"name":"test","value":"123"}]}`},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "pipeline_default_test")
+	assert.Empty(t, used)
+	// The conf JSON string should remain as-is
+	confVal := attrs["conf"].Map["functions"].List[0].Map["conf"]
+	assert.Equal(t, KindString, confVal.Kind)
+	assert.Contains(t, confVal.String, "test")
+}
+
+func TestReplaceSecretValuesWithVariableRefs_nested_json_password(t *testing.T) {
+	// JSON with password nested inside an object - should have variable reference.
+	attrs := map[string]Value{
+		"config": {
+			Kind: KindMap,
+			Map: map[string]Value{
+				"settings": {Kind: KindString, String: `{"database":{"host":"localhost","password":"db-secret"}}`},
+			},
+		},
+	}
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "resource_test")
+	require.Len(t, used, 1)
+	// Variable name should include nested path and sensitive field name
+	assert.Contains(t, used[0], "database_password")
+	val := attrs["config"].Map["settings"]
+	assert.Equal(t, KindString, val.Kind)
+	assert.Contains(t, val.String, `"password":"${var.`)
+	assert.Contains(t, val.String, `"host":"localhost"`)
+	assert.NotContains(t, val.String, "db-secret")
+}
+
+func TestMaskSensitiveValuesInJSON(t *testing.T) {
+	// Test the MaskSensitiveValuesInJSON function directly.
+	testCases := []struct {
+		name         string
+		input        string
+		resourceName string
+		attrPath     string
+		expectVars   []string
+	}{
+		{
+			name:         "password at top level",
+			input:        `{"password":"secret","url":"localhost"}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   []string{"test_resource_conf_password"},
+		},
+		{
+			name:         "password nested",
+			input:        `{"db":{"password":"secret","host":"localhost"}}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   []string{"test_resource_conf_db_password"},
+		},
+		{
+			name:         "no sensitive fields",
+			input:        `{"host":"localhost","port":6379}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   nil,
+		},
+		{
+			name:         "multiple sensitive fields",
+			input:        `{"password":"pass1","api_key":"key1","host":"localhost"}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   []string{"test_resource_conf_api_key", "test_resource_conf_password"},
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result, varNames := MaskSensitiveValuesInJSON(tc.input, tc.resourceName, tc.attrPath)
+			if tc.expectVars == nil {
+				assert.Nil(t, varNames)
+				assert.Equal(t, tc.input, result)
+			} else {
+				assert.Len(t, varNames, len(tc.expectVars))
+				for _, ev := range tc.expectVars {
+					assert.Contains(t, varNames, ev)
+				}
+				// Check that variable references are in the JSON
+				for _, varName := range varNames {
+					assert.Contains(t, result, "${var."+varName+"}")
+				}
+				assert.NotContains(t, result, "secret")
+				assert.NotContains(t, result, "pass1")
+				assert.NotContains(t, result, "key1")
+			}
+		})
+	}
+}
+
 // TestModelToValue_complex_nested validates lists, maps, and nested objects.
 func TestModelToValue_complex_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{

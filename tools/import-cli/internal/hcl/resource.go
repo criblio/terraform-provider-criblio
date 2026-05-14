@@ -206,6 +206,9 @@ func FileWithResources(resources []ResourceInput, opts *ResourceBlockOptions) (*
 		quoted := `"` + VarRefPlaceholderPrefix + n + VarRefPlaceholderSuffix + `"`
 		b = bytes.ReplaceAll(b, []byte(quoted), []byte("jsonencode(var."+n+")"))
 	}
+	// Fix escaped variable references in JSON strings: $${var.xxx} -> ${var.xxx}
+	// hclwrite escapes $ to $$ to prevent interpolation, but we want actual interpolation
+	b = bytes.ReplaceAll(b, []byte("$${var."), []byte("${var."))
 	// Re-parse so the file reflects the replacement (for callers that use the file object)
 	parsed, _ := hclwrite.ParseConfig(b, "", hclv2.Pos{Line: 1, Column: 1})
 	if parsed != nil {
