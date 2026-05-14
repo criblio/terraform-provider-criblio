@@ -46,6 +46,9 @@ type Value struct {
 	// VarName: variable name when Kind == KindVariableRef (plain var.x, not jsonencode).
 	Sensitive string
 	VarName   string
+	// MaskedVarNames: variable names for sensitive fields that were masked within a JSON string.
+	// Used to generate tfvars for masked values while keeping the JSON structure intact.
+	MaskedVarNames []string
 }
 
 // IsNull returns true if the value is explicitly null.
@@ -472,18 +475,93 @@ func sanitizeVarName(resourceName, path string) string {
 	return s
 }
 
-// pathRefersToTokenAttribute is true when path denotes the credential field `token`, not
-// unrelated names that merely contain "token" (e.g. token_timeout_secs).
-func pathRefersToTokenAttribute(path string) bool {
-	if path == "token" {
-		return true
+// sensitiveAttributeNames lists attribute names that should be treated as secrets.
+var sensitiveAttributeNames = []string{
+	"token",
+	"password",
+	"secret",
+	"auth_token",
+	"api_key",
+	"apikey",
+	"passphrase",
+	"private_key",
+	"priv_key",
+	"client_secret",
+	"access_key",
+	"secret_key",
+	"credentials",
+}
+
+// pathRefersToSensitiveAttribute is true when path denotes a sensitive credential field,
+// not unrelated names that merely contain the sensitive word (e.g. token_timeout_secs).
+func pathRefersToSensitiveAttribute(path string) bool {
+	for _, attr := range sensitiveAttributeNames {
+		if path == attr {
+			return true
+		}
+		if strings.HasSuffix(path, "."+attr) || strings.Contains(path, "."+attr+".") {
+			return true
+		}
 	}
-	return strings.HasSuffix(path, ".token") || strings.Contains(path, ".token.")
+	return false
+}
+
+// MaskSensitiveValuesInJSON masks sensitive values within a JSON string by replacing their values
+// with Terraform variable references. Returns the masked JSON and a map of field paths to variable names.
+// This preserves the JSON structure so it remains valid for API calls.
+func MaskSensitiveValuesInJSON(jsonStr, resourceName, attrPath string) (string, []string) {
+	var data map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &data); err != nil {
+		return jsonStr, nil
+	}
+	var varNames []string
+	maskSensitiveValuesInMap(data, "", resourceName, attrPath, &varNames)
+	if len(varNames) == 0 {
+		return jsonStr, nil
+	}
+	masked, err := json.Marshal(data)
+	if err != nil {
+		return jsonStr, nil
+	}
+	return string(masked), varNames
+}
+
+// maskSensitiveValuesInMap recursively masks sensitive values in a map by replacing them with variable references.
+// Appends generated variable names to varNames.
+func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceName, attrPath string, varNames *[]string) {
+	for key, val := range data {
+		currentPath := key
+		if pathPrefix != "" {
+			currentPath = pathPrefix + "_" + key
+		}
+		for _, sensitiveKey := range sensitiveAttributeNames {
+			if key == sensitiveKey {
+				if str, ok := val.(string); ok && str != "" {
+					varName := sanitizeVarName(resourceName, attrPath+"_"+currentPath)
+					data[key] = "${var." + varName + "}"
+					*varNames = append(*varNames, varName)
+				}
+			}
+		}
+		if nested, ok := val.(map[string]interface{}); ok {
+			maskSensitiveValuesInMap(nested, currentPath, resourceName, attrPath, varNames)
+		}
+		if arr, ok := val.([]interface{}); ok {
+			for i, item := range arr {
+				if m, ok := item.(map[string]interface{}); ok {
+					maskSensitiveValuesInMap(m, fmt.Sprintf("%s_%d", currentPath, i), resourceName, attrPath, varNames)
+				}
+			}
+		}
+	}
 }
 
 // ReplaceSecretValuesWithVariableRefs recursively replaces secret-looking string values with
 // KindSensitive and Sensitive set to a variable name (var.<name> will be emitted in HCL).
 // resourceName is used to build unique variable names. Returns the list of variable names used.
+//
+// For JSON strings containing sensitive keys (e.g. pipeline function conf with password), it masks
+// the sensitive values within the JSON rather than replacing the entire JSON, preserving API validity.
 //
 // Mutates attrs in place. Safe because we only modify Value structs (Kind, Sensitive, String),
 // not the map keys or structure.
@@ -493,15 +571,23 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 	replaceInValue = func(v *Value, path string) {
 		switch v.Kind {
 		case KindString:
-			// Replace secret refs (#42:...) and any `token` attribute value (emit as jsonencode(var.xxx)).
+			// Replace secret refs (#42:...) and any sensitive attribute value (emit as jsonencode(var.xxx)).
 			shouldReplace := IsSecretValue(v.String) ||
-				(pathRefersToTokenAttribute(path) && v.String != "")
+				(pathRefersToSensitiveAttribute(path) && v.String != "")
 			if shouldReplace {
 				name := sanitizeVarName(resourceName, path)
 				v.Kind = KindSensitive
 				v.Sensitive = name
 				v.String = ""
 				used = append(used, name)
+			} else if isValidJSON(v.String) {
+				// For JSON strings, mask sensitive values in place rather than replacing the whole JSON.
+				// This preserves the JSON structure for API validation (e.g. pipeline function conf).
+				if masked, varNames := MaskSensitiveValuesInJSON(v.String, resourceName, path); len(varNames) > 0 {
+					v.String = masked
+					v.MaskedVarNames = varNames
+					used = append(used, varNames...)
+				}
 			}
 		case KindList:
 			for i := range v.List {
@@ -614,6 +700,14 @@ func CollectSecretVariableNames(attrs map[string]Value) []string {
 			if v.VarName != "" && isVariableName(v.VarName) && !seen[v.VarName] {
 				seen[v.VarName] = true
 				names = append(names, v.VarName)
+			}
+		case KindString:
+			// Collect variable names from masked JSON strings.
+			for _, name := range v.MaskedVarNames {
+				if name != "" && isVariableName(name) && !seen[name] {
+					seen[name] = true
+					names = append(names, name)
+				}
 			}
 		case KindList:
 			for _, el := range v.List {
