@@ -475,7 +475,7 @@ func sanitizeVarName(resourceName, path string) string {
 	return s
 }
 
-// sensitiveAttributeNames lists attribute names that should be treated as secrets.
+// sensitiveAttributeNames lists exact attribute names that should be treated as secrets.
 var sensitiveAttributeNames = []string{
 	"token",
 	"password",
@@ -490,17 +490,50 @@ var sensitiveAttributeNames = []string{
 	"access_key",
 	"secret_key",
 	"credentials",
+	"aws_secret_key",
+	"aws_api_key",
+}
+
+// sensitiveSuffixes lists suffixes that indicate a sensitive field (e.g. aws_secret_key ends with _secret_key).
+var sensitiveSuffixes = []string{
+	"_password",
+	"_secret",
+	"_secret_key",
+	"_api_key",
+	"_apikey",
+	"_token",
+	"_auth_token",
+	"_private_key",
+	"_priv_key",
+	"_access_key",
+	"_credentials",
+	"_passphrase",
 }
 
 // pathRefersToSensitiveAttribute is true when path denotes a sensitive credential field,
 // not unrelated names that merely contain the sensitive word (e.g. token_timeout_secs).
 func pathRefersToSensitiveAttribute(path string) bool {
+	// Check exact match or dotted path match
 	for _, attr := range sensitiveAttributeNames {
 		if path == attr {
 			return true
 		}
 		if strings.HasSuffix(path, "."+attr) || strings.Contains(path, "."+attr+".") {
 			return true
+		}
+	}
+	// Check suffix match (e.g. aws_secret_key ends with _secret_key)
+	for _, suffix := range sensitiveSuffixes {
+		if strings.HasSuffix(path, suffix) {
+			return true
+		}
+		// Also check the last path component for suffix
+		lastDot := strings.LastIndex(path, ".")
+		if lastDot >= 0 {
+			lastPart := path[lastDot+1:]
+			if strings.HasSuffix(lastPart, suffix) {
+				return true
+			}
 		}
 	}
 	return false
@@ -526,6 +559,23 @@ func MaskSensitiveValuesInJSON(jsonStr, resourceName, attrPath string) (string, 
 	return string(masked), varNames
 }
 
+// isSensitiveKey returns true if the key is a sensitive field name.
+func isSensitiveKey(key string) bool {
+	// Check exact match
+	for _, sensitiveKey := range sensitiveAttributeNames {
+		if key == sensitiveKey {
+			return true
+		}
+	}
+	// Check suffix match (e.g. aws_secret_key ends with _secret_key)
+	for _, suffix := range sensitiveSuffixes {
+		if strings.HasSuffix(key, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
 // maskSensitiveValuesInMap recursively masks sensitive values in a map by replacing them with variable references.
 // Appends generated variable names to varNames.
 func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceName, attrPath string, varNames *[]string) {
@@ -534,13 +584,11 @@ func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceN
 		if pathPrefix != "" {
 			currentPath = pathPrefix + "_" + key
 		}
-		for _, sensitiveKey := range sensitiveAttributeNames {
-			if key == sensitiveKey {
-				if str, ok := val.(string); ok && str != "" {
-					varName := sanitizeVarName(resourceName, attrPath+"_"+currentPath)
-					data[key] = "${var." + varName + "}"
-					*varNames = append(*varNames, varName)
-				}
+		if isSensitiveKey(key) {
+			if str, ok := val.(string); ok && str != "" {
+				varName := sanitizeVarName(resourceName, attrPath+"_"+currentPath)
+				data[key] = "${var." + varName + "}"
+				*varNames = append(*varNames, varName)
 			}
 		}
 		if nested, ok := val.(map[string]interface{}); ok {
