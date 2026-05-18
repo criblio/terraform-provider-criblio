@@ -64,6 +64,7 @@ func (v Value) IsSensitive() bool {
 // PruneEmptyLists returns a copy of v with map entries whose value is an empty list
 // removed recursively. Use when SkipEmptyListAttributes is true to avoid emitting
 // nested empty lists that violate schema (e.g. list must contain at least 1 element).
+// Also filters out invalid items from urls lists (items with missing or empty url fields).
 func PruneEmptyLists(v Value) Value {
 	if v.Kind == KindMap {
 		out := make(map[string]Value, len(v.Map))
@@ -71,6 +72,13 @@ func PruneEmptyLists(v Value) Value {
 			val = PruneEmptyLists(val)
 			if val.Kind == KindList && len(val.List) == 0 {
 				continue
+			}
+			// Filter urls list items with empty/missing url field (loadBalanced=false case)
+			if k == "urls" && val.Kind == KindList {
+				val = filterUrlsListItemsValue(val)
+				if len(val.List) == 0 {
+					continue
+				}
 			}
 			out[k] = val
 		}
@@ -84,6 +92,28 @@ func PruneEmptyLists(v Value) Value {
 		return Value{Kind: KindList, List: list}
 	}
 	return v
+}
+
+// filterUrlsListItemsValue filters out items from a urls list where the url field is missing or empty.
+// When loadBalanced=false, the API may return urls: [{ weight: 1 }] or urls: [{ url: "", weight: 1 }],
+// but the terraform schema requires url to be non-null and match the URL regex.
+func filterUrlsListItemsValue(v Value) Value {
+	if v.Kind != KindList {
+		return v
+	}
+	filtered := make([]Value, 0, len(v.List))
+	for _, item := range v.List {
+		if item.Kind != KindMap {
+			filtered = append(filtered, item)
+			continue
+		}
+		urlVal, hasUrl := item.Map["url"]
+		if !hasUrl || (urlVal.Kind == KindString && urlVal.String == "") || urlVal.Kind == KindNull {
+			continue
+		}
+		filtered = append(filtered, item)
+	}
+	return Value{Kind: KindList, List: filtered}
 }
 
 // PruneNulls returns a copy of v with null map entries removed recursively.
@@ -576,9 +606,65 @@ func isSensitiveKey(key string) bool {
 	return false
 }
 
+// sensitiveHeaderNames lists HTTP header names whose values should be treated as sensitive.
+// These are matched case-insensitively.
+var sensitiveHeaderNames = []string{
+	"authorization",
+	"x-api-key",
+	"x-auth-token",
+	"x-access-token",
+	"api-key",
+	"apikey",
+	"bearer",
+	"proxy-authorization",
+	"www-authenticate",
+	"x-csrf-token",
+	"x-xsrf-token",
+}
+
+// isSensitiveHeaderName returns true if the header name indicates a sensitive value.
+func isSensitiveHeaderName(name string) bool {
+	lower := strings.ToLower(name)
+	for _, h := range sensitiveHeaderNames {
+		if lower == h {
+			return true
+		}
+	}
+	return false
+}
+
+// isHeaderLikeObject checks if a map looks like a header object (has "name" and "value" fields)
+// and returns whether the value should be masked based on the header name.
+func isHeaderLikeObject(m map[string]interface{}) (shouldMask bool, nameVal string) {
+	// Check for "name"/"value" pattern
+	name, hasName := m["name"]
+	_, hasValue := m["value"]
+	if !hasName || !hasValue {
+		return false, ""
+	}
+	nameStr, ok := name.(string)
+	if !ok {
+		return false, ""
+	}
+	return isSensitiveHeaderName(nameStr), nameStr
+}
+
 // maskSensitiveValuesInMap recursively masks sensitive values in a map by replacing them with variable references.
 // Appends generated variable names to varNames.
 func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceName, attrPath string, varNames *[]string) {
+	// Check if this is a header-like object with sensitive header name
+	if shouldMask, headerName := isHeaderLikeObject(data); shouldMask {
+		if valStr, ok := data["value"].(string); ok && valStr != "" {
+			currentPath := "value"
+			if pathPrefix != "" {
+				currentPath = pathPrefix + "_value"
+			}
+			varName := sanitizeVarName(resourceName, attrPath+"_"+currentPath+"_"+sanitizeVarName("", headerName))
+			data["value"] = "${var." + varName + "}"
+			*varNames = append(*varNames, varName)
+		}
+	}
+
 	for key, val := range data {
 		currentPath := key
 		if pathPrefix != "" {
@@ -611,6 +697,9 @@ func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceN
 // For JSON strings containing sensitive keys (e.g. pipeline function conf with password), it masks
 // the sensitive values within the JSON rather than replacing the entire JSON, preserving API validity.
 //
+// Also detects header-like objects (maps with "name" and "value" fields) and masks the "value"
+// when "name" is a sensitive header name (e.g. "Authorization", "X-API-Key").
+//
 // Mutates attrs in place. Safe because we only modify Value structs (Kind, Sensitive, String),
 // not the map keys or structure.
 func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName string) []string {
@@ -642,6 +731,18 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 				replaceInValue(&v.List[i], path+fmt.Sprintf("[%d]", i))
 			}
 		case KindMap:
+			// Check if this map is a header-like object (has "name" and "value" fields)
+			// and mask the "value" if "name" is a sensitive header name (e.g. "Authorization")
+			if shouldMask, headerName := isHeaderLikeValue(v.Map); shouldMask {
+				if valEntry, hasVal := v.Map["value"]; hasVal && valEntry.Kind == KindString && valEntry.String != "" {
+					varName := sanitizeVarName(resourceName, path+".value_"+sanitizeVarName("", headerName))
+					valEntry.Kind = KindSensitive
+					valEntry.Sensitive = varName
+					valEntry.String = ""
+					v.Map["value"] = valEntry
+					used = append(used, varName)
+				}
+			}
 			for k, val := range v.Map {
 				replaceInValue(&val, path+"."+k)
 				v.Map[k] = val
@@ -653,6 +754,20 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 		attrs[k] = val
 	}
 	return used
+}
+
+// isHeaderLikeValue checks if a Value map looks like a header object (has "name" and "value" fields)
+// and returns whether the value should be masked based on the header name.
+func isHeaderLikeValue(m map[string]Value) (shouldMask bool, nameVal string) {
+	nameEntry, hasName := m["name"]
+	_, hasValue := m["value"]
+	if !hasName || !hasValue {
+		return false, ""
+	}
+	if nameEntry.Kind != KindString {
+		return false, ""
+	}
+	return isSensitiveHeaderName(nameEntry.String), nameEntry.String
 }
 
 // isValidJSON returns true if s is valid JSON (RFC 7159). Used to detect values that must be
