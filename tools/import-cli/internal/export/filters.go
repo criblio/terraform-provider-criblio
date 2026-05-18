@@ -85,3 +85,101 @@ func skipResourceWhenLibCribl(attrs map[string]hcl.Value) bool {
 	}
 	return v.String == "cribl"
 }
+
+// DefaultResource reports whether the resource is a built-in Cribl default.
+func DefaultResource(typeName string, idMap map[string]string, attrs map[string]hcl.Value) bool {
+	if skipResourceWhenLibCribl(attrs) {
+		return true
+	}
+	if criblDefaultTag(attrs) {
+		return true
+	}
+	id := idMap["id"]
+	pack := idMap["pack"]
+	switch typeName {
+	case "criblio_destination":
+		return custom.DefaultDestinationIDs[id]
+	case "criblio_pack_destination":
+		if custom.DefaultPackIDs[pack] {
+			return true
+		}
+		return custom.DefaultDestinationIDs[id]
+	case "criblio_search_dataset":
+		return custom.DefaultSearchDatasetIDs[id]
+	case "criblio_search_dataset_provider":
+		return custom.DefaultSearchDatasetProviderIDs[id]
+	case "criblio_cribl_lake_dataset":
+		return custom.DefaultCriblLakeDatasetIDs[id]
+	case "criblio_group":
+		// Groups are filtered in post-processing (filterEmptyDefaultGroups) to keep
+		// default groups that have user-created resources within them.
+		return false
+	case "criblio_pack":
+		return custom.DefaultPackIDs[id]
+	case "criblio_pipeline":
+		if custom.DefaultPipelineIDs[id] {
+			return true
+		}
+		if strings.HasPrefix(id, "pack:") {
+			packName := strings.TrimPrefix(id, "pack:")
+			return custom.DefaultPackIDs[packName]
+		}
+		return false
+	case "criblio_grok":
+		return custom.DefaultGrokIDs[id]
+	case "criblio_parquet_schema":
+		return custom.DefaultParquetSchemaIDs[id]
+	case "criblio_schema":
+		return custom.DefaultSchemaIDs[id]
+	case "criblio_source":
+		return custom.DefaultSourceIDs[id]
+	case "criblio_event_breaker_ruleset":
+		return custom.DefaultEventBreakerRulesetIDs[id]
+	case "criblio_pack_breakers":
+		if custom.DefaultPackIDs[pack] {
+			return true
+		}
+		return custom.DefaultEventBreakerRulesetIDs[id]
+	case "criblio_pack_pipeline":
+		if custom.DefaultPackIDs[pack] {
+			return true
+		}
+		return custom.DefaultPipelineIDs[id]
+	case "criblio_pack_source":
+		if custom.DefaultPackIDs[pack] {
+			return true
+		}
+		return custom.DefaultSourceIDs[id]
+	case "criblio_pack_vars":
+		return custom.DefaultPackIDs[pack]
+	case "criblio_routes", "criblio_pack_routes":
+		// Routes are a singleton per group/pack; users modify but don't create them from scratch.
+		return true
+	case "criblio_search_dataset_ruleset":
+		return custom.DefaultSearchDatasetRulesetIDs[id]
+	case "criblio_search_datatype_ruleset":
+		return custom.DefaultSearchDatatypeRulesetIDs[id]
+	case "criblio_search_saved_query":
+		return custom.DefaultSearchSavedQueryIDs[id]
+	}
+	return false
+}
+
+// criblDefaultTag reports whether attrs contains the cribl:default tag.
+func criblDefaultTag(attrs map[string]hcl.Value) bool {
+	v, ok := attrs["tags"]
+	if !ok {
+		return false
+	}
+	if v.Kind == hcl.KindString {
+		return v.String == custom.CriblDefaultTag
+	}
+	if v.Kind == hcl.KindList {
+		for _, item := range v.List {
+			if item.Kind == hcl.KindString && item.String == custom.CriblDefaultTag {
+				return true
+			}
+		}
+	}
+	return false
+}
