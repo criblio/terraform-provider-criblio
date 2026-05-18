@@ -498,14 +498,10 @@ var sensitiveAttributeNames = []string{
 var sensitiveSuffixes = []string{
 	"_password",
 	"_secret",
-	"_secret_key",
-	"_api_key",
+	"_key",
 	"_apikey",
 	"_token",
 	"_auth_token",
-	"_private_key",
-	"_priv_key",
-	"_access_key",
 	"_credentials",
 	"_passphrase",
 }
