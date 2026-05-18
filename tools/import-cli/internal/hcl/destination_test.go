@@ -106,6 +106,63 @@ func TestItemMapToBlock_omits_empty_lists(t *testing.T) {
 	assert.NotContains(t, value.Map, "urls", "empty urls list must be omitted to satisfy SizeAtLeast(1)")
 }
 
+func TestItemMapToBlock_omits_urls_with_empty_url(t *testing.T) {
+	// When loadBalanced=false, API returns urls: [{ weight: 1 }] or urls: [{ url: "", weight: 1 }].
+	// The urls[].url field has NotNull and regex validators, so we must omit urls entirely when
+	// all items have empty/missing url values.
+	t.Run("urls with missing url field omitted", func(t *testing.T) {
+		item := map[string]string{
+			"type": `"webhook"`,
+			"id":   `"my-webhook"`,
+			"url":  `"https://example.com/webhook"`,
+			"urls": `[{"weight": 1}]`,
+		}
+		_, value, err := ItemMapToBlock(item, "type", "output_", "", []string{"status"}, nil)
+		require.NoError(t, err)
+		assert.Contains(t, value.Map, "url")
+		assert.NotContains(t, value.Map, "urls", "urls with items missing url field must be omitted")
+	})
+
+	t.Run("urls with empty string url omitted", func(t *testing.T) {
+		item := map[string]string{
+			"type": `"webhook"`,
+			"id":   `"my-webhook"`,
+			"url":  `"https://example.com/webhook"`,
+			"urls": `[{"url": "", "weight": 1}]`,
+		}
+		_, value, err := ItemMapToBlock(item, "type", "output_", "", []string{"status"}, nil)
+		require.NoError(t, err)
+		assert.Contains(t, value.Map, "url")
+		assert.NotContains(t, value.Map, "urls", "urls with empty url strings must be omitted")
+	})
+
+	t.Run("urls with valid urls preserved", func(t *testing.T) {
+		item := map[string]string{
+			"type": `"webhook"`,
+			"id":   `"my-webhook"`,
+			"urls": `[{"url": "https://example.com/webhook", "weight": 1}]`,
+		}
+		_, value, err := ItemMapToBlock(item, "type", "output_", "", []string{"status"}, nil)
+		require.NoError(t, err)
+		assert.Contains(t, value.Map, "urls", "urls with valid url values must be preserved")
+		require.Len(t, value.Map["urls"].List, 1)
+		assert.Equal(t, "https://example.com/webhook", value.Map["urls"].List[0].Map["url"].String)
+	})
+
+	t.Run("mixed urls filters invalid items", func(t *testing.T) {
+		item := map[string]string{
+			"type": `"webhook"`,
+			"id":   `"my-webhook"`,
+			"urls": `[{"url": "", "weight": 1}, {"url": "https://valid.com", "weight": 2}]`,
+		}
+		_, value, err := ItemMapToBlock(item, "type", "output_", "", []string{"status"}, nil)
+		require.NoError(t, err)
+		assert.Contains(t, value.Map, "urls", "urls should be preserved when at least one valid item exists")
+		require.Len(t, value.Map["urls"].List, 1, "only valid url items should remain")
+		assert.Equal(t, "https://valid.com", value.Map["urls"].List[0].Map["url"].String)
+	})
+}
+
 func TestItemMapToBlock_notification_target_suffix(t *testing.T) {
 	t.Run("smtp type gets _target suffix", func(t *testing.T) {
 		item := map[string]string{"type": `"smtp"`, "id": `"system_email"`}

@@ -217,6 +217,10 @@ func jsonMapToValueMap(item map[string]string, keysToSkip map[string]bool) (map[
 			return nil, fmt.Errorf("%s: %w", k, err)
 		}
 		v = omitEmptyListsFromValue(v)
+		// Filter urls list items with empty/missing url field (loadBalanced=false case)
+		if sk == "urls" && v.Kind == KindList {
+			v = filterUrlsListItems(v)
+		}
 		// Don't emit empty lists; provider often has listvalidator.SizeAtLeast(1).
 		if v.Kind == KindList && len(v.List) == 0 {
 			continue
@@ -234,6 +238,7 @@ func OmitEmptyListsFromValue(v Value) Value {
 
 // omitEmptyListsFromValue returns a copy of v with empty list values omitted from nested maps.
 // Used so nested attributes like urls = [] are not written (avoids SizeAtLeast(1) errors).
+// Also filters out invalid items from urls lists (items with missing or empty url fields).
 func omitEmptyListsFromValue(v Value) Value {
 	switch v.Kind {
 	case KindMap:
@@ -242,6 +247,13 @@ func omitEmptyListsFromValue(v Value) Value {
 			cleaned := omitEmptyListsFromValue(ev)
 			if cleaned.Kind == KindList && len(cleaned.List) == 0 {
 				continue
+			}
+			// Filter urls list items that have empty or missing url field
+			if k == "urls" && cleaned.Kind == KindList {
+				cleaned = filterUrlsListItems(cleaned)
+				if len(cleaned.List) == 0 {
+					continue
+				}
 			}
 			m[k] = cleaned
 		}
@@ -255,6 +267,28 @@ func omitEmptyListsFromValue(v Value) Value {
 	default:
 		return v
 	}
+}
+
+// filterUrlsListItems filters out items from a urls list where the url field is missing or empty.
+// When loadBalanced=false, the API may return urls: [{ weight: 1 }] or urls: [{ url: "", weight: 1 }],
+// but the terraform schema requires url to be non-null and match the URL regex.
+func filterUrlsListItems(v Value) Value {
+	if v.Kind != KindList {
+		return v
+	}
+	filtered := make([]Value, 0, len(v.List))
+	for _, item := range v.List {
+		if item.Kind != KindMap {
+			filtered = append(filtered, item)
+			continue
+		}
+		urlVal, hasUrl := item.Map["url"]
+		if !hasUrl || (urlVal.Kind == KindString && urlVal.String == "") || urlVal.Kind == KindNull {
+			continue
+		}
+		filtered = append(filtered, item)
+	}
+	return Value{Kind: KindList, List: filtered}
 }
 
 // jsonStringToValue parses a JSON value string and converts it to Value.
