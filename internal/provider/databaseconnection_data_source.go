@@ -57,10 +57,12 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 				Computed: true,
 			},
 			"config_obj": schema.StringAttribute{
-				Computed: true,
+				Computed:  true,
+				Sensitive: true,
 			},
 			"connection_string": schema.StringAttribute{
-				Computed: true,
+				Computed:  true,
+				Sensitive: true,
 			},
 			"connection_timeout": schema.Float64Attribute{
 				Computed: true,
@@ -80,7 +82,8 @@ func (r *DatabaseConnectionDataSource) Schema(ctx context.Context, req datasourc
 				Description: `Unique ID to GET`,
 			},
 			"password": schema.StringAttribute{
-				Computed: true,
+				Computed:  true,
+				Sensitive: true,
 			},
 			"request_timeout": schema.Float64Attribute{
 				Computed: true,

@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -62,12 +63,20 @@ func (r *DatabaseConnectionResource) Schema(ctx context.Context, req resource.Sc
 				Required: true,
 			},
 			"config_obj": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:  true,
+				Optional:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"connection_string": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:  true,
+				Optional:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"connection_timeout": schema.Float64Attribute{
 				Computed: true,
@@ -104,8 +113,12 @@ func (r *DatabaseConnectionResource) Schema(ctx context.Context, req resource.Sc
 				Description: `Unique ID to PATCH. Requires replacement if changed.`,
 			},
 			"password": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:  true,
+				Optional:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 			"request_timeout": schema.Float64Attribute{
 				Computed: true,

@@ -42,10 +42,10 @@ resource "criblio_database_connection" "my_databaseconnection" {
 
 ### Optional
 
-- `config_obj` (String)
-- `connection_string` (String)
+- `config_obj` (String, Sensitive)
+- `connection_string` (String, Sensitive)
 - `connection_timeout` (Number)
-- `password` (String)
+- `password` (String, Sensitive)
 - `request_timeout` (Number)
 - `tags` (String)
 - `user` (String)
