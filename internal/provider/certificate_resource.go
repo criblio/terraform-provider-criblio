@@ -7,6 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -87,8 +89,11 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"in_use": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.PreferState(),
+				},
 				ElementType: types.StringType,
 				Description: `List of configurations that reference this certificate`,
 			},
@@ -100,6 +105,9 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 			"priv_key": schema.StringAttribute{
 				Required:  true,
 				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.PreferState(),
+				},
 			},
 		},
 	}

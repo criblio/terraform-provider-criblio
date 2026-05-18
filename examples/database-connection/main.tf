@@ -15,7 +15,3 @@ resource "criblio_database_connection" "my_databaseconnection" {
   tags               = "test"
   user               = "test"
 }
-
-output "database_connection" {
-  value = criblio_database_connection.my_databaseconnection
-}
