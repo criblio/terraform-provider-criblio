@@ -141,15 +141,11 @@ func DefaultResource(typeName string, idMap map[string]string, attrs map[string]
 		}
 		return custom.DefaultEventBreakerRulesetIDs[id]
 	case "criblio_pack_pipeline":
-		if custom.DefaultPackIDs[pack] {
-			return true
-		}
-		return custom.DefaultPipelineIDs[id]
+		// Only check if the pack itself is a default; pipeline IDs like "main" are valid inside user packs.
+		return custom.DefaultPackIDs[pack]
 	case "criblio_pack_source":
-		if custom.DefaultPackIDs[pack] {
-			return true
-		}
-		return custom.DefaultSourceIDs[id]
+		// Only check if the pack itself is a default; source IDs are valid inside user packs.
+		return custom.DefaultPackIDs[pack]
 	case "criblio_pack_vars":
 		return custom.DefaultPackIDs[pack]
 	case "criblio_routes", "criblio_pack_routes":

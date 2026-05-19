@@ -169,24 +169,28 @@ func Convert(ctx context.Context, client *sdk.CriblIo, e registry.Entry, request
 	return converted, nil
 }
 
-// fillPackPipelineConf fills the pack pipeline model's Conf. GetPipelinesByPackWithID returns only
-// Routes (items), not the pipeline definition. We try Pipelines.GetPipelineByID (lib) for the same
-// group/id; if that returns one pipeline we use it. Otherwise we set minimal conf so HCL is valid.
+// fillPackPipelineConf fills the pack pipeline model's Conf. GetPipelinesByPackWithID returns the
+// pipeline definition for pack pipelines. We need Pack, GroupID, and ID to fetch the correct content.
 func fillPackPipelineConf(ctx context.Context, client *sdk.CriblIo, converted interface{}, requestParams map[string]string) {
 	pm, ok := converted.(*provider.PackPipelineResourceModel)
-	if !ok || client == nil || client.Pipelines == nil {
+	if !ok || client == nil || client.Routes == nil {
 		return
 	}
 	groupID := requestParams["GroupID"]
 	id := requestParams["ID"]
+	pack := requestParams["Pack"]
 	if groupID == "" {
 		groupID = "default"
 	}
-	if id == "" {
+	if id == "" || pack == "" {
 		ensureMinimalPackPipelineConf(pm)
 		return
 	}
-	resp, err := client.Pipelines.GetPipelineByID(ctx, operations.GetPipelineByIDRequest{GroupID: groupID, ID: id})
+	resp, err := client.Routes.GetPipelinesByPackWithID(ctx, operations.GetPipelinesByPackWithIDRequest{
+		GroupID: groupID,
+		Pack:    pack,
+		ID:      id,
+	})
 	if err != nil || resp == nil || resp.Object == nil {
 		ensureMinimalPackPipelineConf(pm)
 		return
