@@ -13,6 +13,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
+	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/generator"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
@@ -37,6 +38,7 @@ type ExportResult struct {
 	Items           []generator.ResourceItem
 	ListSkipped     []ListSkipReason // types skipped at list (no metadata, list failed, or list returned 0 ids)
 	ConvertSkipped  []string         // one message per resource that failed convert/hcl/import
+	DefaultsSkipped int              // count of resources skipped due to --exclude-defaults
 	DiscoveredTotal int              // sum of discovery counts for types we attempted (set by caller)
 }
 
@@ -46,13 +48,14 @@ type ProgressFunc func(format string, args ...interface{})
 // ToResourceItems turns discovery results into generator ResourceItems for types
 // that have GetMethod and ImportIDFormat. Uses groupIDs for list/get requests.
 // parallel limits concurrent API calls (default 5); use 1 for sequential.
+// excludeDefaults, when true, skips built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs).
 // progress, when non-nil, is called to report progress per resource type.
 // Continues on list-level and per-item errors so as many resources as possible are exported;
 // failed types or items are recorded in result.ListSkipped and result.ConvertSkipped.
 // Caller should set result.DiscoveredTotal to the sum of discovery counts for reporting.
 // groupFilter is the CLI --group slice; when non-empty, export only resources whose output folder
 // matches a resolved worker/search group (see skipExportForGroupFilter).
-func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, progress ProgressFunc) (result *ExportResult, err error) {
+func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, excludeDefaults bool, progress ProgressFunc) (result *ExportResult, err error) {
 	if parallel < 1 {
 		parallel = 1
 	}
@@ -97,7 +100,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr)))
 					continue
 				}
-				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model, groupFilter, groupIDs); appendErr != nil {
+				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model, groupFilter, groupIDs, excludeDefaults); appendErr != nil {
 					if errors.Is(appendErr, ErrSkipResourceLibCribl) {
 						out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap))
 					} else {
@@ -159,7 +162,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 		}
 		if parallel <= 1 {
 			for _, idMap := range idMaps {
-				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs)
+				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, out)
 				if skipMsg != "" {
 					out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
 				} else if item != nil {
@@ -177,7 +180,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					defer wg.Done()
 					sem <- struct{}{}
 					defer func() { <-sem }()
-					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs)
+					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, out)
 					mu.Lock()
 					if skipMsg != "" {
 						out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
@@ -192,5 +195,39 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 	}
 	// ConvertSkipped is informational (oneOf unsupported, skip by config, etc.); do not treat as fatal error.
 	// printExportSummary reports skipped resources; export succeeds with best-effort output.
+
+	// Post-process: if excludeDefaults, remove default group resources that have no user-created resources.
+	if excludeDefaults {
+		filterEmptyDefaultGroups(out)
+	}
+
 	return out, nil
+}
+
+// filterEmptyDefaultGroups removes criblio_group resources for default groups (default, default_fleet, defaultHybrid)
+// if no other user-created resources exist in that group. Modifies out.Items in place.
+func filterEmptyDefaultGroups(out *ExportResult) {
+	// Count non-group resources per group_id
+	resourcesPerGroup := make(map[string]int)
+	for _, item := range out.Items {
+		if item.TypeName == "criblio_group" {
+			continue
+		}
+		if item.GroupID != "" {
+			resourcesPerGroup[item.GroupID]++
+		}
+	}
+
+	// Filter out default group resources that have no other resources
+	filtered := make([]generator.ResourceItem, 0, len(out.Items))
+	for _, item := range out.Items {
+		if item.TypeName == "criblio_group" && custom.DefaultGroupIDs[item.GroupID] {
+			if resourcesPerGroup[item.GroupID] == 0 {
+				out.DefaultsSkipped++
+				continue
+			}
+		}
+		filtered = append(filtered, item)
+	}
+	out.Items = filtered
 }

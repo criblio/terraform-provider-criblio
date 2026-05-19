@@ -45,18 +45,19 @@ func (f *logFilterWriter) Write(p []byte) (n int, err error) {
 // NewExportCommand returns the export subcommand.
 func NewExportCommand() *cobra.Command {
 	var (
-		outputDir   string
-		include     []string
-		exclude     []string
-		group       []string
-		flat        bool // if true, use flat layout (output-dir/<type>/); default is group-by (output-dir/<group_id>/<type>/)
-		parallel    int
-		dryRun      bool
-		verbose     bool
-		serverURL   string
-		orgID       string
-		workspaceID string
-		cloudDomain string
+		outputDir       string
+		include         []string
+		exclude         []string
+		group           []string
+		flat            bool // if true, use flat layout (output-dir/<type>/); default is group-by (output-dir/<group_id>/<type>/)
+		parallel        int
+		dryRun          bool
+		verbose         bool
+		excludeDefaults bool
+		serverURL       string
+		orgID           string
+		workspaceID     string
+		cloudDomain     string
 	)
 	v := viper.New()
 	cfg := config.NewConfig(v)
@@ -162,7 +163,7 @@ func NewExportCommand() *cobra.Command {
 			progress := func(format string, args ...interface{}) {
 				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
 			}
-			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, progress)
+			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, excludeDefaults, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
 			if exportErr != nil {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())
@@ -199,6 +200,7 @@ func NewExportCommand() *cobra.Command {
 	exp.Flags().IntVar(&parallel, "parallel", 5, "Max concurrent API calls during export (default 5).")
 	exp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
 	exp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
+	exp.Flags().BoolVar(&excludeDefaults, "exclude-defaults", false, "Exclude built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs)")
 
 	exp.Flags().StringVar(&serverURL, "server-url", "", "On-prem base URL")
 	exp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")
@@ -332,6 +334,9 @@ func printExportSummary(cmd *cobra.Command, res *export.ExportResult, verbose bo
 				fmt.Fprintf(out, "  %s: %s\n", s.TypeName, s.Reason)
 			}
 		}
+	}
+	if res.DefaultsSkipped > 0 {
+		fmt.Fprintf(out, "Skipped %d built-in default resources (--exclude-defaults).\n", res.DefaultsSkipped)
 	}
 	if len(res.ConvertSkipped) > 0 {
 		if verbose {
