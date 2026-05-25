@@ -519,6 +519,55 @@ func TestReplaceSecretValuesWithVariableRefs_masks_xapikey_header(t *testing.T) 
 	assert.Equal(t, KindSensitive, header.Map["value"].Kind)
 }
 
+func TestReplaceSecretValuesWithVariableRefs_masks_all_extra_http_headers(t *testing.T) {
+	// All values in extra_http_headers should be masked, regardless of header name
+	// This matches UI behavior where extra HTTP headers are treated as sensitive
+	// Uses KindVariableRef (plain var.x) since header values are plain strings, not JSON.
+	attrs := map[string]Value{
+		"extra_http_headers": {
+			Kind: KindList,
+			List: []Value{
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "X-google-api-key"},
+						"value": {Kind: KindString, String: "tests"},
+					},
+				},
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "X-Webhook-Access-Key"},
+						"value": {Kind: KindString, String: "test"},
+					},
+				},
+			},
+		},
+	}
+
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "destination_webhook")
+
+	require.Len(t, used, 2, "should mask both header values")
+	header0 := attrs["extra_http_headers"].List[0]
+	header1 := attrs["extra_http_headers"].List[1]
+
+	// Should use KindVariableRef (plain var.x) not KindSensitive (jsonencode)
+	assert.Equal(t, KindVariableRef, header0.Map["value"].Kind, "first header value should use plain var ref")
+	assert.Equal(t, KindVariableRef, header1.Map["value"].Kind, "second header value should use plain var ref")
+
+	// Verify variable names include header name for uniqueness
+	assert.Contains(t, header0.Map["value"].VarName, "X_google_api_key", "var name should include sanitized header name")
+	assert.Contains(t, header1.Map["value"].VarName, "X_Webhook_Access_Key", "var name should include sanitized header name")
+
+	// Verify String is cleared (value moved to VarName)
+	assert.Empty(t, header0.Map["value"].String, "original string should be cleared")
+	assert.Empty(t, header1.Map["value"].String, "original string should be cleared")
+
+	// Verify "name" field is unchanged (not re-processed as sensitive)
+	assert.Equal(t, KindString, header0.Map["name"].Kind, "header name should remain as string")
+	assert.Equal(t, "X-google-api-key", header0.Map["name"].String, "header name value should be unchanged")
+}
+
 func TestPruneEmptyLists_filters_urls_with_empty_url(t *testing.T) {
 	// Simulate what ModelToValue produces for output_webhook with empty urls
 	// When loadBalanced=false, the model contains urls: [{url: "", weight: 1}]
