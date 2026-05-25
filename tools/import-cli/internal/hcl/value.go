@@ -606,6 +606,13 @@ func isSensitiveKey(key string) bool {
 	return false
 }
 
+// isInsideExtraHttpHeaders returns true if the path is inside an extra_http_headers list.
+// All values in extra_http_headers are treated as sensitive (matching UI behavior).
+// Checks both snake_case (Terraform) and camelCase (API) formats.
+func isInsideExtraHttpHeaders(path string) bool {
+	return strings.Contains(path, "extra_http_headers[") || strings.Contains(path, "extraHttpHeaders_")
+}
+
 // sensitiveHeaderNames lists HTTP header names whose values should be treated as sensitive.
 // These are matched case-insensitively.
 var sensitiveHeaderNames = []string{
@@ -651,9 +658,30 @@ func isHeaderLikeObject(m map[string]interface{}) (shouldMask bool, nameVal stri
 
 // maskSensitiveValuesInMap recursively masks sensitive values in a map by replacing them with variable references.
 // Appends generated variable names to varNames.
+//
+// Note: This function operates on map[string]interface{} (JSON data), while ReplaceSecretValuesWithVariableRefs
+// operates on Value types (Terraform model data). Both handle extra_http_headers masking with similar logic
+// but different input types. The path separator convention here uses "_" to match JSON key flattening.
 func maskSensitiveValuesInMap(data map[string]interface{}, pathPrefix, resourceName, attrPath string, varNames *[]string) {
-	// Check if this is a header-like object with sensitive header name
-	if shouldMask, headerName := isHeaderLikeObject(data); shouldMask {
+	// Check if this map is inside extraHttpHeaders - all header values should be masked
+	// (matching UI behavior where all extra HTTP headers are treated as sensitive).
+	// headerName is extracted for unique variable naming even though masking is unconditional.
+	if isInsideExtraHttpHeaders(pathPrefix) {
+		if valStr, ok := data["value"].(string); ok && valStr != "" {
+			headerName := ""
+			if nameVal, hasName := data["name"].(string); hasName {
+				headerName = nameVal
+			}
+			currentPath := "value"
+			if pathPrefix != "" {
+				currentPath = pathPrefix + "_value"
+			}
+			varName := sanitizeVarName(resourceName, attrPath+"_"+currentPath+"_"+sanitizeVarName("", headerName))
+			data["value"] = "${var." + varName + "}"
+			*varNames = append(*varNames, varName)
+		}
+	} else if shouldMask, headerName := isHeaderLikeObject(data); shouldMask {
+		// Header-like object with sensitive header name (e.g. "Authorization")
 		if valStr, ok := data["value"].(string); ok && valStr != "" {
 			currentPath := "value"
 			if pathPrefix != "" {
@@ -731,9 +759,29 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 				replaceInValue(&v.List[i], path+fmt.Sprintf("[%d]", i))
 			}
 		case KindMap:
-			// Check if this map is a header-like object (has "name" and "value" fields)
-			// and mask the "value" if "name" is a sensitive header name (e.g. "Authorization")
-			if shouldMask, headerName := isHeaderLikeValue(v.Map); shouldMask {
+			// Check if this map is inside extra_http_headers - all header values should be masked
+			// (matching UI behavior where all extra HTTP headers are treated as sensitive).
+			// Uses KindVariableRef (plain var.x) since header values are plain strings, not JSON.
+			// headerName is extracted for unique variable naming even though masking is unconditional.
+			//
+			// Note: This operates on Value types (Terraform model data), while maskSensitiveValuesInMap
+			// operates on map[string]interface{} (JSON data). The path separator convention here uses "."
+			// to match Terraform attribute paths.
+			if isInsideExtraHttpHeaders(path) {
+				if valEntry, hasVal := v.Map["value"]; hasVal && valEntry.Kind == KindString && valEntry.String != "" {
+					headerName := ""
+					if nameEntry, hasName := v.Map["name"]; hasName && nameEntry.Kind == KindString {
+						headerName = nameEntry.String
+					}
+					varName := sanitizeVarName(resourceName, path+".value_"+sanitizeVarName("", headerName))
+					valEntry.Kind = KindVariableRef
+					valEntry.VarName = varName
+					valEntry.String = ""
+					v.Map["value"] = valEntry
+					used = append(used, varName)
+				}
+			} else if shouldMask, headerName := isHeaderLikeValue(v.Map); shouldMask {
+				// Header-like object with sensitive header name (e.g. "Authorization")
 				if valEntry, hasVal := v.Map["value"]; hasVal && valEntry.Kind == KindString && valEntry.String != "" {
 					varName := sanitizeVarName(resourceName, path+".value_"+sanitizeVarName("", headerName))
 					valEntry.Kind = KindSensitive
@@ -743,6 +791,8 @@ func ReplaceSecretValuesWithVariableRefs(attrs map[string]Value, resourceName st
 					used = append(used, varName)
 				}
 			}
+			// Process remaining map entries. Already-masked "value" entries have Kind != KindString,
+			// so they won't be re-processed by nested calls.
 			for k, val := range v.Map {
 				replaceInValue(&val, path+"."+k)
 				v.Map[k] = val
