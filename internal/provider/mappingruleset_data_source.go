@@ -5,11 +5,15 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -25,7 +29,6 @@ func NewMappingRulesetDataSource() datasource.DataSource {
 
 // MappingRulesetDataSource is the data source implementation.
 type MappingRulesetDataSource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
@@ -33,7 +36,6 @@ type MappingRulesetDataSource struct {
 type MappingRulesetDataSourceModel struct {
 	Active  types.Bool                  `tfsdk:"active"`
 	Conf    *tfTypes.MappingRulesetConf `tfsdk:"conf"`
-	ID      types.String                `tfsdk:"id"`
 	Product types.String                `tfsdk:"product"`
 }
 
@@ -58,69 +60,33 @@ func (r *MappingRulesetDataSource) Schema(ctx context.Context, req datasource.Sc
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Computed: true,
-											NestedObject: schema.NestedAttributeObject{
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Description: `Name of the field to add`,
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Description: `Value to assign to the field`,
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-									},
-								},
 								"description": schema.StringAttribute{
 									Computed:    true,
-									Description: `Simple description of this step`,
+									Description: `Rule name / simple description of this mapping rule`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
-									Description: `If true, data will not be pushed through this function`,
+									Description: `If true, this mapping rule will be disabled`,
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
 									Description: `Filter that selects data to be fed through this Function`,
 								},
-								"final": schema.BoolAttribute{
-									Computed:    true,
-									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
-									Description: `Group ID`,
-								},
-								"id": schema.StringAttribute{
-									Computed:    true,
-									Description: `Function ID`,
+									Description: `The Worker Group to map matching events to`,
 								},
 							},
 						},
-						Description: `List of functions to pass data through`,
+						Description: `List of mapping rules`,
 					},
 				},
 			},
-			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `The id of the mapping ruleset to get`,
-			},
 			"product": schema.StringAttribute{
 				Required:    true,
-				Description: `Name of the Cribl product to get the mappings for. must be one of ["stream", "edge"]`,
+				Description: `Name of the Cribl product. must be one of ["stream", "edge"]`,
 				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"stream",
-						"edge",
-					),
+					stringvalidator.OneOf("stream", "edge"),
 				},
 			},
 		},
@@ -128,19 +94,16 @@ func (r *MappingRulesetDataSource) Schema(ctx context.Context, req datasource.Sc
 }
 
 func (r *MappingRulesetDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
 	}
 
 	client, ok := req.ProviderData.(*sdk.CriblIo)
-
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected DataSource Configure Type",
 			fmt.Sprintf("Expected *sdk.CriblIo, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
-
 		return
 	}
 
@@ -165,12 +128,12 @@ func (r *MappingRulesetDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx)
+	request, requestDiags := data.ToGetRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	res, err := r.client.GetAdminProductsMappingsByProductAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -187,16 +150,55 @@ func (r *MappingRulesetDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res.Object)...)
 
+	resp.Diagnostics.Append(data.RefreshFromResponse(ctx, res.Object)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+// Helper methods for SDK conversion
+
+func (r *MappingRulesetDataSourceModel) ToGetRequest(ctx context.Context) (*operations.GetAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	return &operations.GetAdminProductsMappingsByProductAndIDRequest{
+		Product: r.Product.ValueString(),
+	}, diags
+}
+
+func (r *MappingRulesetDataSourceModel) RefreshFromResponse(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+	if len(resp.Items) == 0 {
+		diags.AddError("Unexpected response from API", "Missing response body array data.")
+		return diags
+	}
+	diags.Append(r.refreshFromMappingRuleset(ctx, &resp.Items[0])...)
+	return diags
+}
+
+func (r *MappingRulesetDataSourceModel) refreshFromMappingRuleset(ctx context.Context, resp *shared.MappingRuleset) diag.Diagnostics {
+	var diags diag.Diagnostics
+	r.Active = types.BoolPointerValue(resp.Active)
+	if resp.Conf == nil {
+		r.Conf = nil
+	} else {
+		r.Conf = &tfTypes.MappingRulesetConf{}
+		r.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
+
+		for _, fn := range resp.Conf.Functions {
+			r.Conf.Functions = append(r.Conf.Functions, tfTypes.MappingRulesetFunctionConf{
+				Description: types.StringPointerValue(fn.Description),
+				Disabled:    types.BoolPointerValue(fn.Disabled),
+				Filter:      types.StringPointerValue(fn.Filter),
+				GroupID:     types.StringPointerValue(fn.GroupID),
+			})
+		}
+	}
+	return diags
 }

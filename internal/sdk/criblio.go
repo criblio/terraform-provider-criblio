@@ -359,9 +359,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *CriblIo {
 	sdk := &CriblIo{
-		SDKVersion: "1.23.36",
+		SDKVersion: "1.23.45",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.23.36 2.879.6 github.com/criblio/terraform-provider-criblio/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.23.45 2.879.6 github.com/criblio/terraform-provider-criblio/internal/sdk",
 			ServerList: ServerList,
 			ServerVariables: map[string]map[string]string{
 				"cloud": {
@@ -969,7 +969,7 @@ func (s *CriblIo) DeleteAdminProductsMappingsByProductAndID(ctx context.Context,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/default", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1160,8 +1160,6 @@ func (s *CriblIo) DeleteAdminProductsMappingsByProductAndID(ctx context.Context,
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 404:
-		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -1195,7 +1193,7 @@ func (s *CriblIo) GetAdminProductsMappingsByProductAndID(ctx context.Context, re
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/default", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1421,7 +1419,7 @@ func (s *CriblIo) UpdateAdminProductsMappingsByProductAndID(ctx context.Context,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/admin/products/{product}/mappings/default", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1619,6 +1617,8 @@ func (s *CriblIo) UpdateAdminProductsMappingsByProductAndID(ctx context.Context,
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

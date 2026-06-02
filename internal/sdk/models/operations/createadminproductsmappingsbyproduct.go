@@ -3,51 +3,22 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// CreateAdminProductsMappingsByProductProduct - Name of the Cribl product to create the mappings for
-type CreateAdminProductsMappingsByProductProduct string
-
-const (
-	CreateAdminProductsMappingsByProductProductStream CreateAdminProductsMappingsByProductProduct = "stream"
-	CreateAdminProductsMappingsByProductProductEdge   CreateAdminProductsMappingsByProductProduct = "edge"
-)
-
-func (e CreateAdminProductsMappingsByProductProduct) ToPointer() *CreateAdminProductsMappingsByProductProduct {
-	return &e
-}
-func (e *CreateAdminProductsMappingsByProductProduct) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "stream":
-		fallthrough
-	case "edge":
-		*e = CreateAdminProductsMappingsByProductProduct(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateAdminProductsMappingsByProductProduct: %v", v)
-	}
-}
-
 type CreateAdminProductsMappingsByProductRequest struct {
-	// Name of the Cribl product to create the mappings for
-	Product CreateAdminProductsMappingsByProductProduct `pathParam:"style=simple,explode=false,name=product"`
+	// Name of the Cribl product (stream or edge)
+	Product string `pathParam:"style=simple,explode=false,name=product"`
 	// The id of the mapping ruleset to get
 	ID string `queryParam:"style=form,explode=true,name=id"`
 	// MappingRuleset object
 	MappingRuleset shared.MappingRuleset `request:"mediaType=application/json"`
 }
 
-func (c *CreateAdminProductsMappingsByProductRequest) GetProduct() CreateAdminProductsMappingsByProductProduct {
+func (c *CreateAdminProductsMappingsByProductRequest) GetProduct() string {
 	if c == nil {
-		return CreateAdminProductsMappingsByProductProduct("")
+		return ""
 	}
 	return c.Product
 }

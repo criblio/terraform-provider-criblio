@@ -1,6 +1,5 @@
 # Example: Stream mapping ruleset - routes workers to different fleets based on environment and role
 resource "criblio_mapping_ruleset" "stream_mappings" {
-  id      = "stream_mappings"
   product = "stream"
 
   conf = {
@@ -11,16 +10,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "prod-leaders"
+              value = "'prod-leaders'"
             }
           ]
         }
         description = "Production leaders"
         disabled    = false
         filter      = "env == \"prod\" && role == \"leader\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Production workers
@@ -28,16 +25,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "prod-workers"
+              value = "'prod-workers'"
             }
           ]
         }
         description = "Production workers"
         disabled    = false
         filter      = "env == \"prod\" && role == \"worker\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Staging environment
@@ -45,16 +40,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "staging-fleet"
+              value = "'staging-fleet'"
             }
           ]
         }
         description = "Staging environment"
         disabled    = false
         filter      = "env == \"staging\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Development environment
@@ -62,16 +55,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "dev-fleet"
+              value = "'dev-fleet'"
             }
           ]
         }
         description = "Development environment"
         disabled    = false
         filter      = "env == \"dev\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Operations specific routing
@@ -79,16 +70,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "ops-fleet"
+              value = "'ops-fleet'"
             }
           ]
         }
         description = "Operations team workers"
         disabled    = false
         filter      = "team == \"operations\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Default fallback - catch all
@@ -96,16 +85,14 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "default-fleet"
+              value = "'default-fleet'"
             }
           ]
         }
         description = "Default fallback"
         disabled    = false
         filter      = "true"
-        final       = true
         group_id    = "default"
-        id          = "eval"
       }
     ]
   }
@@ -113,7 +100,6 @@ resource "criblio_mapping_ruleset" "stream_mappings" {
 
 # Example: Edge mapping ruleset - routes edge devices by region and device type
 resource "criblio_mapping_ruleset" "edge_mappings" {
-  id      = "edge_mappings"
   product = "edge"
 
   conf = {
@@ -131,9 +117,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "North America network devices"
         disabled    = false
         filter      = "region == \"na\" && device_type == \"network\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # North America region - IoT devices
@@ -148,9 +132,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "North America IoT devices"
         disabled    = false
         filter      = "region == \"na\" && device_type == \"iot\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Europe region - all devices
@@ -165,9 +147,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "Europe edge devices"
         disabled    = false
         filter      = "region == \"eu\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Asia Pacific region
@@ -182,9 +162,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "Asia Pacific edge devices"
         disabled    = false
         filter      = "region == \"apac\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # High priority devices
@@ -199,9 +177,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "High priority devices"
         disabled    = false
         filter      = "priority == \"high\""
-        final       = false
         group_id    = "default"
-        id          = "eval"
       },
       {
         # Default fallback for unknown devices
@@ -216,9 +192,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
         description = "Default edge fleet"
         disabled    = false
         filter      = "true"
-        final       = true
         group_id    = "default"
-        id          = "eval"
       }
     ]
   }

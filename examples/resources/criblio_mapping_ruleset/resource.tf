@@ -16,10 +16,10 @@ resource "criblio_mapping_ruleset" "my_mappingruleset" {
         filter      = "true"
         final       = false
         group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        id          = "eval"
       }
     ]
   }
-  id      = "my-mapping-ruleset-id"
+  id      = "...my_id..."
   product = "stream"
 }

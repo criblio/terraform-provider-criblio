@@ -3,58 +3,20 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// GetAdminProductsMappingsByProductAndIDProduct - Name of the Cribl product to get the mappings for
-type GetAdminProductsMappingsByProductAndIDProduct string
-
-const (
-	GetAdminProductsMappingsByProductAndIDProductStream GetAdminProductsMappingsByProductAndIDProduct = "stream"
-	GetAdminProductsMappingsByProductAndIDProductEdge   GetAdminProductsMappingsByProductAndIDProduct = "edge"
-)
-
-func (e GetAdminProductsMappingsByProductAndIDProduct) ToPointer() *GetAdminProductsMappingsByProductAndIDProduct {
-	return &e
-}
-func (e *GetAdminProductsMappingsByProductAndIDProduct) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "stream":
-		fallthrough
-	case "edge":
-		*e = GetAdminProductsMappingsByProductAndIDProduct(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetAdminProductsMappingsByProductAndIDProduct: %v", v)
-	}
-}
-
 type GetAdminProductsMappingsByProductAndIDRequest struct {
-	// Name of the Cribl product to get the mappings for
-	Product GetAdminProductsMappingsByProductAndIDProduct `pathParam:"style=simple,explode=false,name=product"`
-	// The id of the mapping ruleset to get
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Name of the Cribl product (stream or edge)
+	Product string `pathParam:"style=simple,explode=false,name=product"`
 }
 
-func (g *GetAdminProductsMappingsByProductAndIDRequest) GetProduct() GetAdminProductsMappingsByProductAndIDProduct {
-	if g == nil {
-		return GetAdminProductsMappingsByProductAndIDProduct("")
-	}
-	return g.Product
-}
-
-func (g *GetAdminProductsMappingsByProductAndIDRequest) GetID() string {
+func (g *GetAdminProductsMappingsByProductAndIDRequest) GetProduct() string {
 	if g == nil {
 		return ""
 	}
-	return g.ID
+	return g.Product
 }
 
 // GetAdminProductsMappingsByProductAndIDResponseBody - a list of MappingRuleset objects

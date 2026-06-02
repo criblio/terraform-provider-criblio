@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -29,23 +30,10 @@ func (r *MappingsDataSourceModel) RefreshFromOperationsGetAdminProductsMappingsB
 				for _, functionsItem := range itemsItem.Conf.Functions {
 					var functions tfTypes.MappingRulesetFunctionConf
 
-					functions.Conf = &tfTypes.FunctionSpecificConfigs{}
-					functions.Conf.Add = []tfTypes.Add{}
-
-					for _, addItem := range functionsItem.Conf.Add {
-						var add tfTypes.Add
-
-						add.Name = types.StringValue(addItem.Name)
-						add.Value = types.StringValue(addItem.Value)
-
-						functions.Conf.Add = append(functions.Conf.Add, add)
-					}
 					functions.Description = types.StringPointerValue(functionsItem.Description)
 					functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 					functions.Filter = types.StringPointerValue(functionsItem.Filter)
-					functions.Final = types.BoolPointerValue(functionsItem.Final)
 					functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-					functions.ID = types.StringValue(functionsItem.ID)
 
 					items.Conf.Functions = append(items.Conf.Functions, functions)
 				}
@@ -62,9 +50,8 @@ func (r *MappingsDataSourceModel) RefreshFromOperationsGetAdminProductsMappingsB
 func (r *MappingsDataSourceModel) ToOperationsGetAdminProductsMappingsByProductRequest(ctx context.Context) (*operations.GetAdminProductsMappingsByProductRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	product := operations.GetAdminProductsMappingsByProductProduct(r.Product.ValueString())
 	out := operations.GetAdminProductsMappingsByProductRequest{
-		Product: product,
+		Product: r.Product.ValueString(),
 	}
 
 	return &out, diags
