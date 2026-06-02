@@ -3,23 +3,29 @@
 package provider
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
+
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
+	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	speakeasy_objectvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"slices"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -32,15 +38,14 @@ func NewMappingRulesetResource() resource.Resource {
 
 // MappingRulesetResource defines the resource implementation.
 type MappingRulesetResource struct {
-	// Provider configured SDK client.
 	client *sdk.CriblIo
 }
 
 // MappingRulesetResourceModel describes the resource data model.
 type MappingRulesetResourceModel struct {
+	ID      types.String                `tfsdk:"id"`
 	Active  types.Bool                  `tfsdk:"active"`
 	Conf    *tfTypes.MappingRulesetConf `tfsdk:"conf"`
-	ID      types.String                `queryParam:"style=form,explode=true,name=id" tfsdk:"id"`
 	Product types.String                `tfsdk:"product"`
 }
 
@@ -55,6 +60,9 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 			"active": schema.BoolAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"conf": schema.SingleNestedAttribute{
 				Computed: true,
@@ -68,53 +76,18 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 								speakeasy_objectvalidators.NotNull(),
 							},
 							Attributes: map[string]schema.Attribute{
-								"conf": schema.SingleNestedAttribute{
-									Computed: true,
-									Optional: true,
-									Attributes: map[string]schema.Attribute{
-										"add": schema.ListNestedAttribute{
-											Computed: true,
-											Optional: true,
-											NestedObject: schema.NestedAttributeObject{
-												Validators: []validator.Object{
-													speakeasy_objectvalidators.NotNull(),
-												},
-												Attributes: map[string]schema.Attribute{
-													"name": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Name of the field to add. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-													"value": schema.StringAttribute{
-														Computed:    true,
-														Optional:    true,
-														Description: `Value to assign to the field. Not Null`,
-														Validators: []validator.String{
-															speakeasy_stringvalidators.NotNull(),
-														},
-													},
-												},
-											},
-											Description: `List of fields to add to the event`,
-										},
-									},
-									Description: `Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
-								},
 								"description": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Simple description of this step`,
+									Description: `Rule name / simple description of this mapping rule`,
 								},
 								"disabled": schema.BoolAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `If true, data will not be pushed through this function`,
+									Description: `If true, this mapping rule will be disabled`,
+									PlanModifiers: []planmodifier.Bool{
+										boolplanmodifier.UseStateForUnknown(),
+									},
 								},
 								"filter": schema.StringAttribute{
 									Computed:    true,
@@ -124,40 +97,65 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 								},
 								"final": schema.BoolAttribute{
 									Computed:    true,
-									Optional:    true,
-									Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
+									Description: `Always true (required by API)`,
 								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Group ID`,
+									Description: `The Worker Group to map matching events to`,
 								},
 								"id": schema.StringAttribute{
 									Computed:    true,
+									Description: `Function ID (always "eval")`,
+								},
+								"conf": schema.SingleNestedAttribute{
+									Computed:    true,
 									Optional:    true,
-									Description: `Function ID. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
+									Description: `Function-specific configuration`,
+									PlanModifiers: []planmodifier.Object{
+										objectplanmodifier.UseStateForUnknown(),
+									},
+									Attributes: map[string]schema.Attribute{
+										"add": schema.ListNestedAttribute{
+											Computed:    true,
+											Optional:    true,
+											Description: `List of fields to add to the event`,
+											PlanModifiers: []planmodifier.List{
+												listplanmodifier.UseStateForUnknown(),
+											},
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Required:    true,
+														Description: `Name of the field to add`,
+													},
+													"value": schema.StringAttribute{
+														Required:    true,
+														Description: `Value to assign to the field`,
+													},
+												},
+											},
+										},
 									},
 								},
 							},
 						},
-						Description: `List of functions to pass data through`,
+						Description: `List of mapping rules`,
 					},
 				},
 			},
-			"id": schema.StringAttribute{
-				Required:    true,
-				Description: `The id of the mapping ruleset to get`,
-			},
 			"product": schema.StringAttribute{
 				Required:    true,
-				Description: `Name of the Cribl product to create the mappings for. must be one of ["stream", "edge"]`,
+				Description: `Name of the Cribl product. must be one of ["stream", "edge"]`,
 				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"stream",
-						"edge",
-					),
+					stringvalidator.OneOf("stream", "edge"),
+				},
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `The ID of the mapping ruleset (always "default")`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 		},
@@ -165,19 +163,16 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 }
 
 func (r *MappingRulesetResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
 	}
 
 	client, ok := req.ProviderData.(*sdk.CriblIo)
-
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
 			fmt.Sprintf("Expected *sdk.CriblIo, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
-
 		return
 	}
 
@@ -202,13 +197,13 @@ func (r *MappingRulesetResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateAdminProductsMappingsByProductRequest(ctx)
+	request, requestDiags := data.ToUpdateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.CreateAdminProductsMappingsByProduct(ctx, *request)
+
+	res, err := r.client.UpdateAdminProductsMappingsByProductAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -224,23 +219,21 @@ func (r *MappingRulesetResource) Create(ctx context.Context, req resource.Create
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateAdminProductsMappingsByProductResponseBody(ctx, res.Object)...)
 
+	resp.Diagnostics.Append(data.RefreshFromUpdateResponse(ctx, res.Object)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -262,12 +255,12 @@ func (r *MappingRulesetResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx)
+	request, requestDiags := data.ToGetRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	res, err := r.client.GetAdminProductsMappingsByProductAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -288,17 +281,16 @@ func (r *MappingRulesetResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx, res.Object)...)
 
+	resp.Diagnostics.Append(data.RefreshFromGetResponse(ctx, res.Object)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -316,12 +308,12 @@ func (r *MappingRulesetResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateAdminProductsMappingsByProductAndIDRequest(ctx)
+	request, requestDiags := data.ToUpdateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
 	res, err := r.client.UpdateAdminProductsMappingsByProductAndID(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -338,23 +330,21 @@ func (r *MappingRulesetResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
+	if res.Object == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateAdminProductsMappingsByProductAndIDResponseBody(ctx, res.Object)...)
 
+	resp.Diagnostics.Append(data.RefreshFromUpdateResponse(ctx, res.Object)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -371,18 +361,18 @@ func (r *MappingRulesetResource) Delete(ctx context.Context, req resource.Delete
 		UnhandledNullAsEmpty:    true,
 		UnhandledUnknownAsEmpty: true,
 	})...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteAdminProductsMappingsByProductAndIDRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.DeleteAdminProductsMappingsByProductAndID(ctx, *request)
+	// The singleton ruleset cannot be deleted — clear all rules instead.
+	res, err := r.client.UpdateAdminProductsMappingsByProductAndID(ctx, operations.UpdateAdminProductsMappingsByProductAndIDRequest{
+		Product: data.Product.ValueString(),
+		MappingRuleset: shared.MappingRuleset{
+			ID:   "default",
+			Conf: &shared.MappingRulesetConf{Functions: []shared.MappingRulesetFunctionConf{}},
+		},
+	})
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -390,37 +380,170 @@ func (r *MappingRulesetResource) Delete(ctx context.Context, req resource.Delete
 		}
 		return
 	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	switch res.StatusCode {
-	case 200, 404:
-		break
-	default:
+	if res == nil || res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-
 }
 
 func (r *MappingRulesetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
-	dec.DisallowUnknownFields()
-	var data struct {
-		ID      string                                                   `json:"id"`
-		Product operations.GetAdminProductsMappingsByProductAndIDProduct `json:"product"`
-	}
+	productValues := []string{"stream", "edge"}
 
-	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "...", "product": "stream"}': `+err.Error())
+	if !slices.Contains(productValues, req.ID) {
+		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("ID must be one of %v but was %s", productValues, req.ID))
 		return
 	}
 
-	if len(data.ID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
-		return
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("product"), req.ID)...)
+}
+
+// Helper methods for SDK conversion
+
+func (r *MappingRulesetResourceModel) ToGetRequest(ctx context.Context) (*operations.GetAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+	return &operations.GetAdminProductsMappingsByProductAndIDRequest{
+		Product: r.Product.ValueString(),
+	}, diags
+}
+
+func (r *MappingRulesetResourceModel) ToUpdateRequest(ctx context.Context) (*operations.UpdateAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var conf *shared.MappingRulesetConf
+	if r.Conf != nil {
+		functions := make([]shared.MappingRulesetFunctionConf, 0, len(r.Conf.Functions))
+		for _, fn := range r.Conf.Functions {
+			var filter *string
+			if !fn.Filter.IsUnknown() && !fn.Filter.IsNull() {
+				v := fn.Filter.ValueString()
+				filter = &v
+			}
+			var description *string
+			if !fn.Description.IsUnknown() && !fn.Description.IsNull() {
+				v := fn.Description.ValueString()
+				description = &v
+			}
+			var disabled *bool
+			if !fn.Disabled.IsUnknown() && !fn.Disabled.IsNull() {
+				v := fn.Disabled.ValueBool()
+				disabled = &v
+			}
+
+			// final: API requires this to always be true
+			final := true
+
+			var groupID *string
+			if !fn.GroupID.IsUnknown() && !fn.GroupID.IsNull() {
+				v := fn.GroupID.ValueString()
+				groupID = &v
+			}
+
+			// Build function-specific conf with add fields
+			// API requires name to be "groupId" and value to be the worker group ID
+			var fnConf shared.FunctionSpecificConfigs
+			if fn.Conf != nil && len(fn.Conf.Add) > 0 {
+				addFields := make([]shared.Add, 0, len(fn.Conf.Add))
+				for _, addField := range fn.Conf.Add {
+					addFields = append(addFields, shared.Add{
+						Name:  addField.Name.ValueString(),
+						Value: addField.Value.ValueString(),
+					})
+				}
+				fnConf.Add = addFields
+			} else if groupID != nil {
+				// Auto-generate conf.add with groupId when group_id is provided.
+				// Value must be a JS string literal — wrap in single quotes.
+				fnConf.Add = []shared.Add{
+					{Name: "groupId", Value: "'" + *groupID + "'"},
+				}
+			}
+
+			functions = append(functions, shared.MappingRulesetFunctionConf{
+				ID:          shared.MappingRulesetFunctionConfIDEval,
+				Filter:      filter,
+				Description: description,
+				Disabled:    disabled,
+				Final:       final,
+				GroupID:     groupID,
+				Conf:        fnConf,
+			})
+		}
+		conf = &shared.MappingRulesetConf{
+			Functions: functions,
+		}
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("product"), data.Product)...)
+
+	var active *bool
+	if !r.Active.IsUnknown() && !r.Active.IsNull() {
+		v := r.Active.ValueBool()
+		active = &v
+	}
+
+	return &operations.UpdateAdminProductsMappingsByProductAndIDRequest{
+		Product: r.Product.ValueString(),
+		MappingRuleset: shared.MappingRuleset{
+			ID:     "default",
+			Conf:   conf,
+			Active: active,
+		},
+	}, diags
+}
+
+func (r *MappingRulesetResourceModel) RefreshFromUpdateResponse(ctx context.Context, resp *operations.UpdateAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+	if len(resp.Items) == 0 {
+		diags.AddError("Unexpected response from API", "Missing response body array data.")
+		return diags
+	}
+	diags.Append(r.refreshFromMappingRuleset(ctx, &resp.Items[0])...)
+	return diags
+}
+
+func (r *MappingRulesetResourceModel) RefreshFromGetResponse(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+	if len(resp.Items) == 0 {
+		diags.AddError("Unexpected response from API", "Missing response body array data.")
+		return diags
+	}
+	diags.Append(r.refreshFromMappingRuleset(ctx, &resp.Items[0])...)
+	return diags
+}
+
+func (r *MappingRulesetResourceModel) refreshFromMappingRuleset(ctx context.Context, resp *shared.MappingRuleset) diag.Diagnostics {
+	var diags diag.Diagnostics
+	r.ID = types.StringValue(resp.ID)
+	r.Active = types.BoolPointerValue(resp.Active)
+	if resp.Conf == nil {
+		r.Conf = nil
+	} else {
+		r.Conf = &tfTypes.MappingRulesetConf{}
+		r.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
+
+		for _, fn := range resp.Conf.Functions {
+			fnConf := tfTypes.MappingRulesetFunctionConf{
+				Description: types.StringPointerValue(fn.Description),
+				Disabled:    types.BoolPointerValue(fn.Disabled),
+				Filter:      types.StringPointerValue(fn.Filter),
+				Final:       types.BoolValue(fn.Final),
+				GroupID:     types.StringPointerValue(fn.GroupID),
+				ID:          types.StringValue(string(fn.ID)),
+			}
+
+			// Populate conf.add if present
+			if len(fn.Conf.Add) > 0 {
+				fnConf.Conf = &tfTypes.MappingRulesetFunctionSpecificConf{
+					Add: make([]tfTypes.MappingRulesetAddField, 0, len(fn.Conf.Add)),
+				}
+				for _, addField := range fn.Conf.Add {
+					fnConf.Conf.Add = append(fnConf.Conf.Add, tfTypes.MappingRulesetAddField{
+						Name:  types.StringValue(addField.Name),
+						Value: types.StringValue(addField.Value),
+					})
+				}
+			}
+
+			r.Conf.Functions = append(r.Conf.Functions, fnConf)
+		}
+	}
+	return diags
 }

@@ -43,32 +43,14 @@ Read-Only:
 
 Read-Only:
 
-- `functions` (Attributes List) List of functions to pass data through (see [below for nested schema](#nestedatt--items--conf--functions))
+- `functions` (Attributes List) List of mapping rules (see [below for nested schema](#nestedatt--items--conf--functions))
 
 <a id="nestedatt--items--conf--functions"></a>
 ### Nested Schema for `items.conf.functions`
 
 Read-Only:
 
-- `conf` (Attributes) (see [below for nested schema](#nestedatt--items--conf--functions--conf))
-- `description` (String) Simple description of this step
-- `disabled` (Boolean) If true, data will not be pushed through this function
+- `description` (String) Rule name / simple description of this mapping rule
+- `disabled` (Boolean) If true, this mapping rule will be disabled
 - `filter` (String) Filter that selects data to be fed through this Function
-- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
-- `group_id` (String) Group ID
-- `id` (String) Function ID
-
-<a id="nestedatt--items--conf--functions--conf"></a>
-### Nested Schema for `items.conf.functions.conf`
-
-Read-Only:
-
-- `add` (Attributes List) List of fields to add to the event (see [below for nested schema](#nestedatt--items--conf--functions--conf--add))
-
-<a id="nestedatt--items--conf--functions--conf--add"></a>
-### Nested Schema for `items.conf.functions.conf.add`
-
-Read-Only:
-
-- `name` (String) Name of the field to add
-- `value` (String) Value to assign to the field
+- `group_id` (String) The Worker Group to map matching events to

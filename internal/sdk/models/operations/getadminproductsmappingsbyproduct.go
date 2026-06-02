@@ -3,47 +3,18 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// GetAdminProductsMappingsByProductProduct - Name of the Cribl product to get the mappings for
-type GetAdminProductsMappingsByProductProduct string
-
-const (
-	GetAdminProductsMappingsByProductProductStream GetAdminProductsMappingsByProductProduct = "stream"
-	GetAdminProductsMappingsByProductProductEdge   GetAdminProductsMappingsByProductProduct = "edge"
-)
-
-func (e GetAdminProductsMappingsByProductProduct) ToPointer() *GetAdminProductsMappingsByProductProduct {
-	return &e
-}
-func (e *GetAdminProductsMappingsByProductProduct) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "stream":
-		fallthrough
-	case "edge":
-		*e = GetAdminProductsMappingsByProductProduct(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetAdminProductsMappingsByProductProduct: %v", v)
-	}
-}
-
 type GetAdminProductsMappingsByProductRequest struct {
-	// Name of the Cribl product to get the mappings for
-	Product GetAdminProductsMappingsByProductProduct `pathParam:"style=simple,explode=false,name=product"`
+	// Name of the Cribl product (stream or edge)
+	Product string `pathParam:"style=simple,explode=false,name=product"`
 }
 
-func (g *GetAdminProductsMappingsByProductRequest) GetProduct() GetAdminProductsMappingsByProductProduct {
+func (g *GetAdminProductsMappingsByProductRequest) GetProduct() string {
 	if g == nil {
-		return GetAdminProductsMappingsByProductProduct("")
+		return ""
 	}
 	return g.Product
 }

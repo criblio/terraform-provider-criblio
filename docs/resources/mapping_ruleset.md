@@ -31,11 +31,11 @@ resource "criblio_mapping_ruleset" "my_mappingruleset" {
         filter      = "true"
         final       = false
         group_id    = "...my_group_id..."
-        id          = "...my_id..."
+        id          = "eval"
       }
     ]
   }
-  id      = "my-mapping-ruleset-id"
+  id      = "...my_id..."
   product = "stream"
 }
 ```
@@ -45,33 +45,39 @@ resource "criblio_mapping_ruleset" "my_mappingruleset" {
 
 ### Required
 
-- `id` (String) The id of the mapping ruleset to get
-- `product` (String) Name of the Cribl product to create the mappings for. must be one of ["stream", "edge"]
+- `product` (String) Name of the Cribl product. must be one of ["stream", "edge"]
 
 ### Optional
 
 - `active` (Boolean)
 - `conf` (Attributes) (see [below for nested schema](#nestedatt--conf))
 
+### Read-Only
+
+- `id` (String) The ID of the mapping ruleset (always "default")
+
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
 
 Optional:
 
-- `functions` (Attributes List) List of functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
+- `functions` (Attributes List) List of mapping rules (see [below for nested schema](#nestedatt--conf--functions))
 
 <a id="nestedatt--conf--functions"></a>
 ### Nested Schema for `conf.functions`
 
 Optional:
 
-- `conf` (Attributes) Not Null (see [below for nested schema](#nestedatt--conf--functions--conf))
-- `description` (String) Simple description of this step
-- `disabled` (Boolean) If true, data will not be pushed through this function
+- `conf` (Attributes) Function-specific configuration (see [below for nested schema](#nestedatt--conf--functions--conf))
+- `description` (String) Rule name / simple description of this mapping rule
+- `disabled` (Boolean) If true, this mapping rule will be disabled
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
-- `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
-- `group_id` (String) Group ID
-- `id` (String) Function ID. Not Null
+- `group_id` (String) The Worker Group to map matching events to
+
+Read-Only:
+
+- `final` (Boolean) Always true (required by API)
+- `id` (String) Function ID (always "eval")
 
 <a id="nestedatt--conf--functions--conf"></a>
 ### Nested Schema for `conf.functions.conf`
@@ -83,10 +89,10 @@ Optional:
 <a id="nestedatt--conf--functions--conf--add"></a>
 ### Nested Schema for `conf.functions.conf.add`
 
-Optional:
+Required:
 
-- `name` (String) Name of the field to add. Not Null
-- `value` (String) Value to assign to the field. Not Null
+- `name` (String) Name of the field to add
+- `value` (String) Value to assign to the field
 
 ## Import
 
@@ -97,15 +103,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_mapping_ruleset.my_criblio_mapping_ruleset
-  id = jsonencode({
-    id      = "..."
-    product = "stream"
-  })
+  id = "stream"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_mapping_ruleset.my_criblio_mapping_ruleset '{"id": "...", "product": "stream"}'
+terraform import criblio_mapping_ruleset.my_criblio_mapping_ruleset "stream"
 ```

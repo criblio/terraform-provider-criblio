@@ -44,11 +44,11 @@ func (r *MappingRulesetDataSourceModel) RefreshFromSharedMappingRuleset(ctx cont
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
-			functions.Conf = &tfTypes.FunctionSpecificConfigs{}
-			functions.Conf.Add = []tfTypes.Add{}
+			functions.Conf = &tfTypes.MappingRulesetFunctionSpecificConf{}
+			functions.Conf.Add = []tfTypes.MappingRulesetAddField{}
 
 			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.Add
+				var add tfTypes.MappingRulesetAddField
 
 				add.Name = types.StringValue(addItem.Name)
 				add.Value = types.StringValue(addItem.Value)
@@ -58,14 +58,13 @@ func (r *MappingRulesetDataSourceModel) RefreshFromSharedMappingRuleset(ctx cont
 			functions.Description = types.StringPointerValue(functionsItem.Description)
 			functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 			functions.Filter = types.StringPointerValue(functionsItem.Filter)
-			functions.Final = types.BoolPointerValue(functionsItem.Final)
+			functions.Final = types.BoolValue(functionsItem.Final)
 			functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-			functions.ID = types.StringValue(functionsItem.ID)
+			functions.ID = types.StringValue(string(functionsItem.ID))
 
 			r.Conf.Functions = append(r.Conf.Functions, functions)
 		}
 	}
-	r.ID = types.StringValue(resp.ID)
 
 	return diags
 }
@@ -73,13 +72,11 @@ func (r *MappingRulesetDataSourceModel) RefreshFromSharedMappingRuleset(ctx cont
 func (r *MappingRulesetDataSourceModel) ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx context.Context) (*operations.GetAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	product := operations.GetAdminProductsMappingsByProductAndIDProduct(r.Product.ValueString())
-	var id string
-	id = r.ID.ValueString()
+	var product string
+	product = r.Product.ValueString()
 
 	out := operations.GetAdminProductsMappingsByProductAndIDRequest{
 		Product: product,
-		ID:      id,
 	}
 
 	return &out, diags
