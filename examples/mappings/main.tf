@@ -1,18 +1,4 @@
 # Example: Stream mapping ruleset - routes workers to different fleets based on environment and role
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
 resource "criblio_mapping_ruleset" "stream_mappings" {
   product = "stream"
 
