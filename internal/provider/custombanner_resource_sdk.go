@@ -42,10 +42,14 @@ func (r *CustomBannerResourceModel) RefreshFromOperationsGetCustomBannerResponse
 			r.Created = types.Float64PointerValue(first.Created)
 			r.ID = types.StringPointerValue(first.ID)
 			r.InvertFontColor = types.BoolPointerValue(first.InvertFontColor)
+			r.Link = types.StringPointerValue(first.Link)
+			r.LinkDisplay = types.StringPointerValue(first.LinkDisplay)
 		} else {
 			r.Created = types.Float64Null()
 			r.ID = types.StringNull()
 			r.InvertFontColor = types.BoolNull()
+			r.Link = types.StringNull()
+			r.LinkDisplay = types.StringNull()
 		}
 	}
 
