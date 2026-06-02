@@ -19,7 +19,7 @@ import (
 )
 
 // convertOneResource fetches a single resource via the converter, builds HCL attrs, and returns a ResourceItem or skip message.
-func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Result, e registry.Entry, idMap map[string]string, groupFilter []string, groupIDs []string, excludeDefaults bool, out *ExportResult) (item *generator.ResourceItem, skipMsg string) {
+func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Result, e registry.Entry, idMap map[string]string, groupFilter []string, groupIDs []string, excludeDefaults bool, includeOverride IncludeOverride, out *ExportResult) (item *generator.ResourceItem, skipMsg string) {
 	if skipExportForGroupFilter(r.TypeName, idMap, groupFilter, groupIDs) {
 		return nil, ""
 	}
@@ -130,7 +130,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if skipResourceWhenLibCribl(attrs) {
 		return nil, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap)
 	}
-	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs) {
+	if excludeDefaults && DefaultResource(r.TypeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil, fmt.Sprintf("%s %v: built-in default (--exclude-defaults)", r.TypeName, idMap)
 	}
@@ -198,7 +198,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 }
 
 // appendResourceItemFromModel builds HCL attrs and appends a ResourceItem to out.Items (used for criblio_group and shared conversion path).
-func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}, groupFilter []string, groupIDs []string, excludeDefaults bool) error {
+func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.Entry, idMap map[string]string, model interface{}, groupFilter []string, groupIDs []string, excludeDefaults bool, includeOverride IncludeOverride) error {
 	if skipResourceByID(typeName, idMap) {
 		return nil
 	}
@@ -259,7 +259,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if skipResourceWhenLibCribl(attrs) {
 		return ErrSkipResourceLibCribl
 	}
-	if excludeDefaults && DefaultResource(typeName, idMap, attrs) {
+	if excludeDefaults && DefaultResource(typeName, idMap, attrs, includeOverride) {
 		out.DefaultsSkipped++
 		return nil
 	}
