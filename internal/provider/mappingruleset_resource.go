@@ -506,10 +506,18 @@ func (r *MappingRulesetResourceModel) refreshFromMappingRuleset(ctx context.Cont
 	if resp.Conf == nil {
 		r.Conf = nil
 	} else {
+		// Preserve prior conf.add values indexed by position so that JS expressions
+		// the user wrote (e.g. "'prod-leaders'") are not overwritten by the API's
+		// evaluated result (e.g. "prod-leaders").
+		var priorFunctions []tfTypes.MappingRulesetFunctionConf
+		if r.Conf != nil {
+			priorFunctions = r.Conf.Functions
+		}
+
 		r.Conf = &tfTypes.MappingRulesetConf{}
 		r.Conf.Functions = []tfTypes.MappingRulesetFunctionConf{}
 
-		for _, fn := range resp.Conf.Functions {
+		for i, fn := range resp.Conf.Functions {
 			fnConf := tfTypes.MappingRulesetFunctionConf{
 				Description: types.StringPointerValue(fn.Description),
 				Disabled:    types.BoolPointerValue(fn.Disabled),
@@ -519,8 +527,11 @@ func (r *MappingRulesetResourceModel) refreshFromMappingRuleset(ctx context.Cont
 				ID:          types.StringValue(string(fn.ID)),
 			}
 
-			// Populate conf.add if present
-			if len(fn.Conf.Add) > 0 {
+			// Prefer prior state's conf.add so JS expressions are preserved.
+			// Fall back to API response only when there is no prior state entry.
+			if i < len(priorFunctions) && priorFunctions[i].Conf != nil {
+				fnConf.Conf = priorFunctions[i].Conf
+			} else if len(fn.Conf.Add) > 0 {
 				fnConf.Conf = &tfTypes.MappingRulesetFunctionSpecificConf{
 					Add: make([]tfTypes.MappingRulesetAddField, 0, len(fn.Conf.Add)),
 				}

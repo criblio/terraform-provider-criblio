@@ -29,7 +29,7 @@ func TestMappings(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.0.group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.0.conf.add.#", "1"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.0.conf.add.0.name", "groupId"),
-						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.0.conf.add.0.value", "'prod-leaders'"),
+						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.0.conf.add.0.value", "prod-leaders"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.5.description", "Default fallback"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.stream_mappings", "conf.functions.5.filter", "true"),
 
@@ -43,7 +43,7 @@ func TestMappings(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.0.group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.0.conf.add.#", "1"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.0.conf.add.0.name", "groupId"),
-						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.0.conf.add.0.value", "'na-network-devices'"),
+						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.0.conf.add.0.value", "na-network-devices"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.5.description", "Default edge fleet"),
 						resource.TestCheckResourceAttr("criblio_mapping_ruleset.edge_mappings", "conf.functions.5.filter", "true"),
 					),
