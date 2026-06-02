@@ -98,6 +98,9 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 								"final": schema.BoolAttribute{
 									Computed:    true,
 									Description: `Always true (required by API)`,
+									PlanModifiers: []planmodifier.Bool{
+										boolplanmodifier.UseStateForUnknown(),
+									},
 								},
 								"group_id": schema.StringAttribute{
 									Computed:    true,
@@ -107,6 +110,9 @@ func (r *MappingRulesetResource) Schema(ctx context.Context, req resource.Schema
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `Function ID (always "eval")`,
+									PlanModifiers: []planmodifier.String{
+										stringplanmodifier.UseStateForUnknown(),
+									},
 								},
 								"conf": schema.SingleNestedAttribute{
 									Computed:    true,

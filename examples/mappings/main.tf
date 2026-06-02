@@ -1,4 +1,18 @@
 # Example: Stream mapping ruleset - routes workers to different fleets based on environment and role
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 resource "criblio_mapping_ruleset" "stream_mappings" {
   product = "stream"
 
@@ -110,7 +124,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'na-network-devices'"
+              value = "na-network-devices"
             }
           ]
         }
@@ -125,7 +139,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'na-iot-devices'"
+              value = "na-iot-devices"
             }
           ]
         }
@@ -140,7 +154,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'eu-edge-devices'"
+              value = "eu-edge-devices"
             }
           ]
         }
@@ -155,7 +169,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'apac-edge-devices'"
+              value = "apac-edge-devices"
             }
           ]
         }
@@ -170,7 +184,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'high-priority-fleet'"
+              value = "high-priority-fleet"
             }
           ]
         }
@@ -185,7 +199,7 @@ resource "criblio_mapping_ruleset" "edge_mappings" {
           add = [
             {
               name  = "groupId"
-              value = "'default-edge-fleet'"
+              value = "default-edge-fleet"
             }
           ]
         }
