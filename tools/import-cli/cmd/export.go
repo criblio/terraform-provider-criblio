@@ -45,19 +45,20 @@ func (f *logFilterWriter) Write(p []byte) (n int, err error) {
 // NewExportCommand returns the export subcommand.
 func NewExportCommand() *cobra.Command {
 	var (
-		outputDir       string
-		include         []string
-		exclude         []string
-		group           []string
-		flat            bool // if true, use flat layout (output-dir/<type>/); default is group-by (output-dir/<group_id>/<type>/)
-		parallel        int
-		dryRun          bool
-		verbose         bool
-		excludeDefaults bool
-		serverURL       string
-		orgID           string
-		workspaceID     string
-		cloudDomain     string
+		outputDir         string
+		include           []string
+		exclude           []string
+		group             []string
+		flat              bool // if true, use flat layout (output-dir/<type>/); default is group-by (output-dir/<group_id>/<type>/)
+		parallel          int
+		dryRun            bool
+		verbose           bool
+		excludeDefaults   bool
+		includeDefaultIDs []string
+		serverURL         string
+		orgID             string
+		workspaceID       string
+		cloudDomain       string
 	)
 	v := viper.New()
 	cfg := config.NewConfig(v)
@@ -163,7 +164,8 @@ func NewExportCommand() *cobra.Command {
 			progress := func(format string, args ...interface{}) {
 				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
 			}
-			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, excludeDefaults, progress)
+			includeOverride := export.ParseIncludeDefaultIDs(includeDefaultIDs)
+			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, excludeDefaults, includeOverride, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
 			if exportErr != nil {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())
@@ -201,6 +203,7 @@ func NewExportCommand() *cobra.Command {
 	exp.Flags().BoolVar(&dryRun, "dry-run", false, "Preview resource counts and types only; no conversion or file writes. Uses List* API only (no Get*ByID).")
 	exp.Flags().BoolVar(&verbose, "verbose", false, "Enable debug logging")
 	exp.Flags().BoolVar(&excludeDefaults, "exclude-defaults", false, "Exclude built-in Cribl resources (lib=cribl, tags=cribl:default, known default IDs)")
+	exp.Flags().StringSliceVar(&includeDefaultIDs, "include-default-ids", nil, "Resource IDs to include even when --exclude-defaults is set. Use 'id' for any type or 'type:id' for specific type (e.g. criblio_source:in_system_metrics)")
 
 	exp.Flags().StringVar(&serverURL, "server-url", "", "On-prem base URL")
 	exp.Flags().StringVar(&orgID, "org-id", "", "Cribl org identifier")

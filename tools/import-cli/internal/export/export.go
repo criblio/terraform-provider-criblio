@@ -55,7 +55,7 @@ type ProgressFunc func(format string, args ...interface{})
 // Caller should set result.DiscoveredTotal to the sum of discovery counts for reporting.
 // groupFilter is the CLI --group slice; when non-empty, export only resources whose output folder
 // matches a resolved worker/search group (see skipExportForGroupFilter).
-func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, excludeDefaults bool, progress ProgressFunc) (result *ExportResult, err error) {
+func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Registry, results []discovery.Result, groupIDs []string, groupFilter []string, parallel int, excludeDefaults bool, includeOverride IncludeOverride, progress ProgressFunc) (result *ExportResult, err error) {
 	if parallel < 1 {
 		parallel = 1
 	}
@@ -100,7 +100,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: %s", r.TypeName, idMap, sanitizeConvertError(convErr)))
 					continue
 				}
-				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model, groupFilter, groupIDs, excludeDefaults); appendErr != nil {
+				if appendErr := appendResourceItemFromModel(out, r.TypeName, e, idMap, model, groupFilter, groupIDs, excludeDefaults, includeOverride); appendErr != nil {
 					if errors.Is(appendErr, ErrSkipResourceLibCribl) {
 						out.ConvertSkipped = append(out.ConvertSkipped, fmt.Sprintf("%s %v: lib is cribl (built-in, skip export)", r.TypeName, idMap))
 					} else {
@@ -162,7 +162,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 		}
 		if parallel <= 1 {
 			for _, idMap := range idMaps {
-				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, out)
+				item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, out)
 				if skipMsg != "" {
 					out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
 				} else if item != nil {
@@ -180,7 +180,7 @@ func ToResourceItems(ctx context.Context, client *sdk.CriblIo, reg *registry.Reg
 					defer wg.Done()
 					sem <- struct{}{}
 					defer func() { <-sem }()
-					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, out)
+					item, skipMsg := convertOneResource(ctx, client, r, e, idMap, groupFilter, groupIDs, excludeDefaults, includeOverride, out)
 					mu.Lock()
 					if skipMsg != "" {
 						out.ConvertSkipped = append(out.ConvertSkipped, skipMsg)
