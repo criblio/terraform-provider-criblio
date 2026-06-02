@@ -229,11 +229,6 @@ func (r *MappingRulesetResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -296,12 +291,6 @@ func (r *MappingRulesetResource) Read(ctx context.Context, req resource.ReadRequ
 
 func (r *MappingRulesetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var data *MappingRulesetResourceModel
-	var plan types.Object
-
-	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	merge(ctx, req, resp, &data)
 	if resp.Diagnostics.HasError() {
@@ -336,11 +325,6 @@ func (r *MappingRulesetResource) Update(ctx context.Context, req resource.Update
 	}
 
 	resp.Diagnostics.Append(data.RefreshFromUpdateResponse(ctx, res.Object)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
