@@ -87,6 +87,12 @@ func InvalidateToken(config *CriblConfig) {
 	tokenCache.Delete(key)
 }
 
+// RefreshToken invalidates the cached token for config and fetches a fresh token.
+func RefreshToken(ctx context.Context, config *CriblConfig) (string, error) {
+	InvalidateToken(config)
+	return GetToken(ctx, config)
+}
+
 func tokenCacheKey(config *CriblConfig) (string, error) {
 	if config == nil {
 		return "", fmt.Errorf("config is required for authentication")
@@ -100,7 +106,7 @@ func tokenCacheKey(config *CriblConfig) (string, error) {
 	if config.ClientID == "" || config.ClientSecret == "" {
 		return "", fmt.Errorf("cloud authentication requires client ID and client secret")
 	}
-	return fmt.Sprintf("%s:%s:%s", config.ClientID, config.ClientSecret, cloudDomain(config)), nil
+	return fmt.Sprintf("%s:%s", config.ClientID, config.ClientSecret), nil
 }
 
 func cloudDomain(config *CriblConfig) string {

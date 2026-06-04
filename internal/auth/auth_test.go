@@ -119,6 +119,47 @@ func TestGetTokenLoopbackIP(t *testing.T) {
 	}
 }
 
+func TestCloudAuthSettingsStandardDomains(t *testing.T) {
+	testCases := []struct {
+		name         string
+		domain       string
+		expectedURL  string
+		expectedAud  string
+		expectedForm bool
+	}{
+		{
+			name:        "cloud",
+			domain:      "cribl.cloud",
+			expectedURL: "https://login.cribl.cloud/oauth/token",
+			expectedAud: "https://api.cribl.cloud",
+		},
+		{
+			name:        "playground",
+			domain:      "cribl-playground.cloud",
+			expectedURL: "https://login.cribl-playground.cloud/oauth/token",
+			expectedAud: "https://api.cribl-playground.cloud",
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			authURL, audience, useFormEncoded, err := cloudAuthSettings(test.domain)
+			if err != nil {
+				t.Fatalf("cloudAuthSettings returned error: %v", err)
+			}
+			if authURL != test.expectedURL {
+				t.Fatalf("auth URL = %q, expected %q", authURL, test.expectedURL)
+			}
+			if audience != test.expectedAud {
+				t.Fatalf("audience = %q, expected %q", audience, test.expectedAud)
+			}
+			if useFormEncoded != test.expectedForm {
+				t.Fatalf("useFormEncoded = %v, expected %v", useFormEncoded, test.expectedForm)
+			}
+		})
+	}
+}
+
 func TestGetTokenGovDomain(t *testing.T) {
 	ClearTokenCache()
 	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
@@ -362,6 +403,20 @@ func TestTokenCacheDistinctKeys(t *testing.T) {
 	}
 }
 
+func TestTokenCacheCloudKeyMatchesHook(t *testing.T) {
+	key, err := tokenCacheKey(&CriblConfig{
+		ClientID:     "client-id",
+		ClientSecret: "client-secret",
+		CloudDomain:  "cribl-playground.cloud",
+	})
+	if err != nil {
+		t.Fatalf("tokenCacheKey returned error: %v", err)
+	}
+	if key != "client-id:client-secret" {
+		t.Fatalf("cloud cache key = %q, expected current hook format", key)
+	}
+}
+
 func TestInvalidateToken(t *testing.T) {
 	ClearTokenCache()
 	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
@@ -386,6 +441,36 @@ func TestInvalidateToken(t *testing.T) {
 	InvalidateToken(config)
 	if _, err := GetToken(context.Background(), config); err != nil {
 		t.Fatalf("GetToken after invalidation returned error: %v", err)
+	}
+
+	if requestCount != 2 {
+		t.Fatalf("request count = %d, expected 2", requestCount)
+	}
+}
+
+func TestRefreshTokenInvalidatesCache(t *testing.T) {
+	ClearTokenCache()
+	t.Setenv("CRIBL_CLOUD_DOMAIN", "")
+
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"access_token":"token","expires_in":3600}`))
+	}))
+	defer server.Close()
+
+	config := &CriblConfig{
+		ClientID:     "client-id",
+		ClientSecret: "client-secret",
+		CloudDomain:  server.URL,
+	}
+
+	if _, err := GetToken(context.Background(), config); err != nil {
+		t.Fatalf("GetToken returned error: %v", err)
+	}
+	if _, err := RefreshToken(context.Background(), config); err != nil {
+		t.Fatalf("RefreshToken returned error: %v", err)
 	}
 
 	if requestCount != 2 {
