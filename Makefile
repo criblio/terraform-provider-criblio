@@ -16,7 +16,10 @@ test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 unit-test: 
-	go test -v ./internal/auth/... ./internal/sdk/credentials ./internal/sdk/internal/hooks
+	go test -v ./internal/auth/... ./internal/sdk/credentials ./internal/sdk/internal/hooks ./tools/sync-openapi
+
+sync-openapi:
+	go run ./tools/sync-openapi
 
 unit-test-import-cli:
 	go test -v ./tools/import-cli/...
@@ -47,4 +50,3 @@ sbom: install-sbom-tools
 	syft scan . -o cyclonedx-json=sbom-cyclonedx.json
 	@echo "SBOM files generated:"
 	@ls -la sbom-*.json 
-
