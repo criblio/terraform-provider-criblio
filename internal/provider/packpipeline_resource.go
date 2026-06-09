@@ -161,9 +161,10 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
-									Description: `Function ID. Not Null`,
+									Description: `Cribl pipeline function type ID (e.g. eval, serde, publish_metrics). Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
+										speakeasy_stringvalidators.IsCriblPipelineFunctionID(),
 									},
 								},
 							},

@@ -1,0 +1,82 @@
+package stringvalidators
+
+import (
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+)
+
+// knownCriblFunctionIDs lists valid Cribl Stream pipeline function type identifiers.
+// Source:  curl -s  -H "Authorization: Bearer $TOKEN" "https://<workspaceId>-<organizationId>.cribl.cloud/api/v1/functions"  | jq '[.items[].id] | sort'
+var knownCriblFunctionIDs = []string{
+	"aggregate_metrics",
+	"aggregation",
+	"auto_timestamp",
+	"cef",
+	"chain",
+	"clone",
+	"code",
+	"comment",
+	"distinct",
+	"dns_lookup",
+	"drop",
+	"drop_dimensions",
+	"dynamic_sampling",
+	"eval",
+	"event_breaker",
+	"eventstats",
+	"externaldata",
+	"flatten",
+	"foldkeys",
+	"gen_stats",
+	"geoip",
+	"grok",
+	"handlebars",
+	"join",
+	"json_unroll",
+	"lake_export",
+	"limit",
+	"local_search_datatype_parser",
+	"local_search_ruleset_runner",
+	"local_search_schema_mapper",
+	"local_search_time_range_normalizer",
+	"local_search_transformer",
+	"lookup",
+	"mask",
+	"mv_expand",
+	"mv_pull",
+	"notification_policies",
+	"notifications",
+	"notify",
+	"numerify",
+	"otlp_logs",
+	"otlp_metrics",
+	"otlp_traces",
+	"pack",
+	"pivot",
+	"publish_metrics",
+	"redis",
+	"regex_extract",
+	"regex_filter",
+	"rename",
+	"rollup_metrics",
+	"sampling",
+	"search_engine_export",
+	"send",
+	"sensitive_data_scanner",
+	"serde",
+	"serialize",
+	"sidlookup",
+	"snmp_trap_serialize",
+	"sort",
+	"store",
+	"suppress",
+	"trim_timestamp",
+	"union",
+	"unroll",
+	"window",
+	"xml_unroll",
+}
+
+func IsCriblPipelineFunctionID() validator.String {
+	return stringvalidator.OneOf(knownCriblFunctionIDs...)
+}
