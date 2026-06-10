@@ -1,0 +1,36 @@
+actions:
+  - target: "$.paths./m/{groupId}/system/certificates.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: certificate
+  - target: "$.paths./m/{groupId}/system/certificates/{id}.get"
+    update:
+      x-terraform-read: certificate
+  - target: "$.paths./m/{groupId}/system/certificates/{id}.patch"
+    update:
+      x-terraform-update: certificate
+  - target: "$.paths./m/{groupId}/system/certificates/{id}.delete"
+    update:
+      x-terraform-delete: certificate
+  - target: "$.components.schemas.Certificate.properties.privKey"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.Certificate.properties.passphrase"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.Certificate.properties.certExpiryDate"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.Certificate.properties.id"
+    update:
+      x-terraform-force-new: true
+  - target: "$.components.schemas.Certificate.properties"
+    update:
+      inUse:
+        type: array
+        items:
+          type: string
+        x-terraform-computed: true
+        description: "List of configurations that reference this certificate."
