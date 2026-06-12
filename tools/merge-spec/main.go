@@ -127,10 +127,12 @@ func writeCloudOnlyPaths(filename string, paths []string) error {
 	output.WriteString("// Source: x-cribl-availability annotations in upstream-openapi.yml.\n")
 	output.WriteString("// Regenerate: make merge\n")
 	output.WriteString("package auth\n\n")
-	output.WriteString("var cloudOnlyPaths = map[string]bool{\n")
+	output.WriteString("func init() {\n")
+	output.WriteString("\tcloudOnlyPaths = map[string]bool{\n")
 	for _, path := range paths {
-		fmt.Fprintf(&output, "\t%q: true,\n", path)
+		fmt.Fprintf(&output, "\t\t%q: true,\n", path)
 	}
+	output.WriteString("\t}\n")
 	output.WriteString("}\n")
 
 	if err := os.WriteFile(filename, output.Bytes(), 0644); err != nil {
