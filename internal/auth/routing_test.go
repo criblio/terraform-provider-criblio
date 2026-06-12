@@ -190,11 +190,23 @@ func TestConstructBaseURL(t *testing.T) {
 }
 
 func TestIsRestrictedOnPremEndpoint(t *testing.T) {
+	originalCloudOnlyPaths := cloudOnlyPaths
+	cloudOnlyPaths = map[string]bool{
+		"/search/datasets":                  true,
+		"/products/lake/lakes/{lakeId}":     true,
+		"/p/{pack}/search/macros/{id}/move": true,
+	}
+	t.Cleanup(func() {
+		cloudOnlyPaths = originalCloudOnlyPaths
+	})
+
 	tests := []struct {
 		path     string
 		expected bool
 	}{
 		{"/m/default/search/datasets", true},
+		{"/api/v1/m/default/products/lake/lakes/main", true},
+		{"/m/default/p/search/search/macros/macro-1/move", true},
 		{"/m/default/system/certificates/my-cert", false},
 		{"/m/default/system/config-search", false},
 	}
