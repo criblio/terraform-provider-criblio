@@ -14,11 +14,30 @@ func TestRunPrefixesUnwrapsAndAppliesOverlay(t *testing.T) {
 	input := filepath.Join(dir, "upstream-openapi.yml")
 	overlay := filepath.Join(dir, "terraform-overlay.yml")
 	output := filepath.Join(dir, "merged-spec.yml")
+	cloudOnlyOutput := filepath.Join(dir, "cloud_only_paths.go")
 
 	writeFile(t, input, `openapi: 3.1.0
 paths:
+  /search/datasets:
+    get:
+      x-cribl-availability: cloud
+      responses:
+        "200":
+          description: ok
+  /search/jobs:
+    get:
+      x-cribl-availability: both
+      responses:
+        "200":
+          description: ok
+    post:
+      x-cribl-availability: cloud
+      responses:
+        "200":
+          description: ok
   /system/certificates:
     post:
+      x-cribl-availability: both
       responses:
         "200":
           content:
@@ -26,6 +45,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CountedCertificate"
     get:
+      x-cribl-availability: both
       responses:
         "200":
           content:
@@ -34,6 +54,7 @@ paths:
                 $ref: "#/components/schemas/CountedCertificate"
   /system/certificates/{id}:
     get:
+      x-cribl-availability: both
       responses:
         "200":
           content:
@@ -48,6 +69,7 @@ paths:
             type: string
   /system/strings:
     get:
+      x-cribl-availability: both
       responses:
         "200":
           content:
@@ -56,6 +78,7 @@ paths:
                 $ref: "#/components/schemas/CountedString"
   /master/groups:
     get:
+      x-cribl-availability: both
       responses:
         "200":
           description: ok
@@ -99,7 +122,7 @@ components:
       x-terraform-force-new: true
 `)
 
-	if err := run(input, overlay, output); err != nil {
+	if err := run(input, overlay, output, cloudOnlyOutput); err != nil {
 		t.Fatalf("run returned error: %v", err)
 	}
 
@@ -124,6 +147,11 @@ components:
 	assertSchemaRef(t, outputNode, "$.paths./m/{groupId}/system/certificates/{id}.get.responses.200.content.application/json.schema", "#/components/schemas/Certificate")
 	assertArrayItemsRef(t, outputNode, "$.paths./m/{groupId}/system/certificates.get.responses.200.content.application/json.schema", "#/components/schemas/Certificate")
 	assertArrayItemsType(t, outputNode, "$.paths./m/{groupId}/system/strings.get.responses.200.content.application/json.schema", "string")
+
+	cloudOnlyPaths := readFile(t, cloudOnlyOutput)
+	assertContains(t, cloudOnlyPaths, `"/search/datasets": true`)
+	assertNotContains(t, cloudOnlyPaths, `"/search/jobs": true`)
+	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
 }
 
 func writeFile(t *testing.T, filename, content string) {

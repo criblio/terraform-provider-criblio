@@ -189,19 +189,20 @@ func TestConstructBaseURL(t *testing.T) {
 	}
 }
 
-func TestIsRestrictedOnPremEndpointAlwaysFalse(t *testing.T) {
-	restrictedInOldHook := []string{
-		"/products/search/jobs",
-		"/products/lake/lakes",
-		"/v1/organizations/org/workspaces",
-		"/api/v1/organizations/org/workspaces",
-		"/search/jobs",
-		"/m/default_search/search/dashboards",
+func TestIsRestrictedOnPremEndpoint(t *testing.T) {
+	tests := []struct {
+		path     string
+		expected bool
+	}{
+		{"/m/default/search/datasets", true},
+		{"/m/default/system/certificates/my-cert", false},
+		{"/m/default/system/config-search", false},
 	}
 
-	for _, path := range restrictedInOldHook {
-		if IsRestrictedOnPremEndpoint(path) {
-			t.Errorf("IsRestrictedOnPremEndpoint(%q) = true, expected false while Phase 0.3b is deferred", path)
+	for _, test := range tests {
+		result := IsRestrictedOnPremEndpoint(test.path)
+		if result != test.expected {
+			t.Errorf("IsRestrictedOnPremEndpoint(%q) = %v, expected %v", test.path, result, test.expected)
 		}
 	}
 }

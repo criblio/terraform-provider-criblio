@@ -1,0 +1,555 @@
+package parser
+
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"sort"
+	"strings"
+	"unicode"
+
+	"github.com/pb33f/libopenapi"
+	"go.yaml.in/yaml/v3"
+)
+
+var httpMethods = map[string]bool{
+	"get":     true,
+	"put":     true,
+	"post":    true,
+	"delete":  true,
+	"options": true,
+	"head":    true,
+	"patch":   true,
+	"trace":   true,
+}
+
+// ParseFile reads an OpenAPI document and returns annotated Terraform resources.
+func ParseFile(filename string) ([]ResourceDef, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("read spec: %v", err)
+	}
+	return Parse(content)
+}
+
+// Parse reads an OpenAPI document and returns annotated Terraform resources.
+func Parse(content []byte) ([]ResourceDef, error) {
+	if _, err := libopenapi.NewDocument(content); err != nil {
+		return nil, fmt.Errorf("parse OpenAPI document: %v", err)
+	}
+
+	var root yaml.Node
+	if err := yaml.Unmarshal(content, &root); err != nil {
+		return nil, fmt.Errorf("parse OpenAPI YAML: %v", err)
+	}
+
+	doc := documentMapping(&root)
+	schemas, ok := lookupSchemas(doc)
+	if !ok {
+		return nil, fmt.Errorf("components.schemas mapping not found")
+	}
+	paths, ok := mappingValue(doc, "paths")
+	if !ok || paths.Kind != yaml.MappingNode {
+		return nil, fmt.Errorf("paths mapping not found")
+	}
+
+	resources := map[string]*ResourceDef{}
+	for index := 0; index < len(paths.Content); index += 2 {
+		path := paths.Content[index].Value
+		pathItem := paths.Content[index+1]
+		if pathItem.Kind != yaml.MappingNode {
+			continue
+		}
+		if err := collectOperations(resources, schemas, path, pathItem); err != nil {
+			return nil, err
+		}
+	}
+
+	names := make([]string, 0, len(resources))
+	for name := range resources {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+
+	defs := make([]ResourceDef, 0, len(names))
+	for _, name := range names {
+		resource := resources[name]
+		if resource.SchemaName == "" {
+			resource.SchemaName = resource.Create.RequestSchema
+		}
+		if err := populateFields(resource, schemas); err != nil {
+			return nil, err
+		}
+		defs = append(defs, *resource)
+	}
+	return defs, nil
+}
+
+func collectOperations(resources map[string]*ResourceDef, schemas *yaml.Node, path string, pathItem *yaml.Node) error {
+	for index := 0; index < len(pathItem.Content); index += 2 {
+		method := pathItem.Content[index].Value
+		if !httpMethods[method] {
+			continue
+		}
+		operation := pathItem.Content[index+1]
+		if operation.Kind != yaml.MappingNode {
+			continue
+		}
+
+		if boolAnnotation(operation, "x-terraform-resource") {
+			name, ok := stringAnnotation(operation, "x-terraform-resource-name")
+			if !ok || name == "" {
+				return fmt.Errorf("%s %s missing x-terraform-resource-name", strings.ToUpper(method), path)
+			}
+			resource := ensureResource(resources, name)
+			resource.Create = operationDef(method, path, operation)
+			resource.SchemaName = resource.Create.RequestSchema
+			continue
+		}
+
+		for _, annotation := range []struct {
+			key string
+			set func(*ResourceDef, OperationDef)
+		}{
+			{"x-terraform-read", func(r *ResourceDef, op OperationDef) { r.Read = op }},
+			{"x-terraform-update", func(r *ResourceDef, op OperationDef) { r.Update = op }},
+			{"x-terraform-delete", func(r *ResourceDef, op OperationDef) { r.Delete = op }},
+		} {
+			name, ok := stringAnnotation(operation, annotation.key)
+			if !ok || name == "" {
+				continue
+			}
+			resource := ensureResource(resources, name)
+			annotation.set(resource, operationDef(method, path, operation))
+		}
+	}
+	return nil
+}
+
+func ensureResource(resources map[string]*ResourceDef, name string) *ResourceDef {
+	resource, ok := resources[name]
+	if ok {
+		return resource
+	}
+	resource = &ResourceDef{
+		Name:       name,
+		TypeName:   "criblio_" + snake(name),
+		StructName: exportName(name),
+	}
+	resources[name] = resource
+	return resource
+}
+
+func operationDef(method, path string, operation *yaml.Node) OperationDef {
+	return OperationDef{
+		Method:         strings.ToUpper(method),
+		Path:           path,
+		OperationID:    scalarValue(operation, "operationId"),
+		RequestSchema:  schemaRefName(requestSchema(operation)),
+		ResponseSchema: schemaRefName(responseSchema(operation)),
+		PathParams:     pathParams(operation),
+	}
+}
+
+func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
+	schema, ok := mappingValue(schemas, resource.SchemaName)
+	if !ok {
+		return fmt.Errorf("resource %q schema %q not found", resource.Name, resource.SchemaName)
+	}
+
+	postFields := schemaPropertySet(schema)
+	getFields := map[string]bool{}
+	if resource.Read.ResponseSchema != "" {
+		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
+			getFields = schemaPropertySet(readSchema)
+		}
+	}
+
+	fields, variants, err := parseSchemaFields(resource.StructName, schema, schemas, postFields, getFields)
+	if err != nil {
+		return err
+	}
+	if resource.Read.ResponseSchema != "" && resource.Read.ResponseSchema != resource.SchemaName {
+		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
+			readFields, readVariants, err := parseSchemaFields(resource.StructName, readSchema, schemas, postFields, getFields)
+			if err != nil {
+				return err
+			}
+			existing := map[string]bool{}
+			for _, field := range fields {
+				existing[field.APIName] = true
+			}
+			for _, field := range readFields {
+				if existing[field.APIName] {
+					continue
+				}
+				field.Computed = true
+				field.Required = false
+				field.Optional = false
+				fields = append(fields, field)
+			}
+			variants = append(variants, readVariants...)
+		}
+	}
+	fields = appendPathParams(fields, resource.Create.PathParams)
+	fields = appendPathParams(fields, resource.Read.PathParams)
+	fields = appendPathParams(fields, resource.Update.PathParams)
+	fields = appendPathParams(fields, resource.Delete.PathParams)
+	sort.SliceStable(fields, func(i, j int) bool {
+		return fields[i].TerraformName < fields[j].TerraformName
+	})
+	resource.Fields = fields
+	resource.OneOfVariants = variants
+	return nil
+}
+
+func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {
+	required := requiredSet(schema)
+	properties, ok := mappingValue(schema, "properties")
+	if !ok || properties.Kind != yaml.MappingNode {
+		return nil, nil, nil
+	}
+
+	var fields []FieldDef
+	var variants []OneOfVariantDef
+	for index := 0; index < len(properties.Content); index += 2 {
+		apiName := properties.Content[index].Value
+		property := properties.Content[index+1]
+		if boolAnnotation(property, "x-terraform-ignore") {
+			continue
+		}
+
+		if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
+			for _, variantRef := range oneOf.Content {
+				schemaName := schemaRefName(variantRef)
+				variantSchema, ok := mappingValue(schemas, schemaName)
+				if !ok {
+					return nil, nil, fmt.Errorf("oneOf schema %q not found", schemaName)
+				}
+				variantFields, _, err := parseSchemaFields(schemaName, variantSchema, schemas, schemaPropertySet(variantSchema), schemaPropertySet(variantSchema))
+				if err != nil {
+					return nil, nil, err
+				}
+				variants = append(variants, OneOfVariantDef{
+					APIName:       schemaName,
+					TerraformName: snake(schemaName),
+					GoName:        exportName(schemaName),
+					ModelName:     exportName(schemaName) + "Model",
+					SchemaName:    schemaName,
+					Fields:        variantFields,
+				})
+			}
+			continue
+		}
+
+		field := fieldDef(apiName, property)
+		field.RequestField = postFields[apiName]
+		field.Required = required[apiName]
+		field.Optional = !field.Required
+		if boolAnnotation(property, "readOnly") || boolAnnotation(property, "x-terraform-computed") || (getFields[apiName] && !postFields[apiName]) {
+			field.Computed = true
+			field.Required = false
+			field.Optional = false
+		}
+		if boolAnnotation(property, "writeOnly") {
+			field.Sensitive = true
+			field.PreferState = true
+			field.ApplyStrategy = "stringFromAPIOrPrior"
+		}
+		if boolAnnotation(property, "x-terraform-sensitive") {
+			field.Sensitive = true
+		}
+		if boolAnnotation(property, "x-terraform-prefer-state") {
+			field.PreferState = true
+		}
+		if boolAnnotation(property, "x-terraform-force-new") {
+			field.ForceNew = true
+		}
+		if field.PreferState && field.Sensitive {
+			field.ApplyStrategy = "stringFromAPIOrPrior"
+		} else if field.PreferState {
+			field.ApplyStrategy = "preferState"
+		}
+		fields = append(fields, field)
+	}
+	return fields, variants, nil
+}
+
+func fieldDef(apiName string, property *yaml.Node) FieldDef {
+	tfName := apiName
+	if renamed, ok := stringAnnotation(property, "x-terraform-name"); ok && renamed != "" {
+		tfName = renamed
+	}
+	field := FieldDef{
+		APIName:       apiName,
+		TerraformName: snake(tfName),
+		GoName:        exportName(tfName),
+		Type:          schemaType(property),
+		ElementType:   elementType(property),
+		Description:   scalarValue(property, "description"),
+		CustomType:    scalarValue(property, "x-terraform-custom-type"),
+		ReadOnly:      boolAnnotation(property, "readOnly"),
+		WriteOnly:     boolAnnotation(property, "writeOnly"),
+	}
+	return field
+}
+
+func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
+	existing := map[string]bool{}
+	for _, field := range fields {
+		existing[field.TerraformName] = true
+	}
+	for _, param := range params {
+		if existing[param.TerraformName] {
+			for index := range fields {
+				if fields[index].TerraformName == param.TerraformName {
+					fields[index].Required = true
+					fields[index].Optional = false
+					fields[index].Computed = false
+					fields[index].ForceNew = true
+					fields[index].PathParam = true
+				}
+			}
+			continue
+		}
+		fields = append(fields, param)
+		existing[param.TerraformName] = true
+	}
+	return fields
+}
+
+func pathParams(operation *yaml.Node) []FieldDef {
+	parameters, ok := mappingValue(operation, "parameters")
+	if !ok || parameters.Kind != yaml.SequenceNode {
+		return nil
+	}
+	var params []FieldDef
+	for _, parameter := range parameters.Content {
+		if scalarValue(parameter, "in") != "path" {
+			continue
+		}
+		apiName := scalarValue(parameter, "name")
+		params = append(params, FieldDef{
+			APIName:       apiName,
+			TerraformName: snake(apiName),
+			GoName:        exportName(apiName),
+			Type:          "string",
+			Description:   scalarValue(parameter, "description"),
+			Required:      true,
+			ForceNew:      true,
+			PathParam:     true,
+		})
+	}
+	return params
+}
+
+func requestSchema(operation *yaml.Node) *yaml.Node {
+	requestBody, ok := mappingValue(operation, "requestBody")
+	if !ok {
+		return nil
+	}
+	content, ok := mappingValue(requestBody, "content")
+	if !ok || content.Kind != yaml.MappingNode {
+		return nil
+	}
+	mediaType, ok := mappingValue(content, "application/json")
+	if !ok {
+		return nil
+	}
+	schema, _ := mappingValue(mediaType, "schema")
+	return schema
+}
+
+func responseSchema(operation *yaml.Node) *yaml.Node {
+	responses, ok := mappingValue(operation, "responses")
+	if !ok || responses.Kind != yaml.MappingNode {
+		return nil
+	}
+	response, ok := mappingValue(responses, "200")
+	if !ok {
+		return nil
+	}
+	content, ok := mappingValue(response, "content")
+	if !ok || content.Kind != yaml.MappingNode {
+		return nil
+	}
+	mediaType, ok := mappingValue(content, "application/json")
+	if !ok {
+		return nil
+	}
+	schema, _ := mappingValue(mediaType, "schema")
+	return schema
+}
+
+func schemaRefName(node *yaml.Node) string {
+	if node == nil {
+		return ""
+	}
+	if ref, ok := mappingValue(node, "$ref"); ok {
+		return strings.TrimPrefix(ref.Value, "#/components/schemas/")
+	}
+	if items, ok := mappingValue(node, "items"); ok {
+		return schemaRefName(items)
+	}
+	return ""
+}
+
+func schemaPropertySet(schema *yaml.Node) map[string]bool {
+	set := map[string]bool{}
+	properties, ok := mappingValue(schema, "properties")
+	if !ok || properties.Kind != yaml.MappingNode {
+		return set
+	}
+	for index := 0; index < len(properties.Content); index += 2 {
+		set[properties.Content[index].Value] = true
+	}
+	return set
+}
+
+func requiredSet(schema *yaml.Node) map[string]bool {
+	set := map[string]bool{}
+	required, ok := mappingValue(schema, "required")
+	if !ok || required.Kind != yaml.SequenceNode {
+		return set
+	}
+	for _, item := range required.Content {
+		set[item.Value] = true
+	}
+	return set
+}
+
+func schemaType(node *yaml.Node) string {
+	if ref := schemaRefName(node); ref != "" {
+		return exportName(ref)
+	}
+	typ := scalarValue(node, "type")
+	switch typ {
+	case "string", "boolean", "integer", "number", "array", "object":
+		return typ
+	default:
+		return "string"
+	}
+}
+
+func elementType(node *yaml.Node) string {
+	items, ok := mappingValue(node, "items")
+	if !ok {
+		return ""
+	}
+	return schemaType(items)
+}
+
+func lookupSchemas(root *yaml.Node) (*yaml.Node, bool) {
+	components, ok := mappingValue(root, "components")
+	if !ok || components.Kind != yaml.MappingNode {
+		return nil, false
+	}
+	return mappingValue(components, "schemas")
+}
+
+func documentMapping(root *yaml.Node) *yaml.Node {
+	if root.Kind == yaml.DocumentNode && len(root.Content) > 0 {
+		return root.Content[0]
+	}
+	return root
+}
+
+func mappingValue(node *yaml.Node, key string) (*yaml.Node, bool) {
+	if node == nil || node.Kind != yaml.MappingNode {
+		return nil, false
+	}
+	for index := 0; index < len(node.Content); index += 2 {
+		if node.Content[index].Value == key {
+			return node.Content[index+1], true
+		}
+	}
+	return nil, false
+}
+
+func scalarValue(node *yaml.Node, key string) string {
+	value, ok := mappingValue(node, key)
+	if !ok || value.Kind != yaml.ScalarNode {
+		return ""
+	}
+	return value.Value
+}
+
+func boolAnnotation(node *yaml.Node, key string) bool {
+	value, ok := mappingValue(node, key)
+	return ok && value.Kind == yaml.ScalarNode && value.Value == "true"
+}
+
+func stringAnnotation(node *yaml.Node, key string) (string, bool) {
+	value, ok := mappingValue(node, key)
+	if !ok || value.Kind != yaml.ScalarNode {
+		return "", false
+	}
+	return value.Value, true
+}
+
+func snake(value string) string {
+	var output bytes.Buffer
+	var previousLower bool
+	for index, r := range value {
+		if r == '-' || r == ' ' {
+			output.WriteByte('_')
+			previousLower = false
+			continue
+		}
+		if unicode.IsUpper(r) && index > 0 && previousLower {
+			output.WriteByte('_')
+		}
+		if r == '_' {
+			output.WriteByte('_')
+			previousLower = false
+			continue
+		}
+		output.WriteRune(unicode.ToLower(r))
+		previousLower = unicode.IsLower(r) || unicode.IsDigit(r)
+	}
+	return output.String()
+}
+
+func exportName(value string) string {
+	parts := strings.FieldsFunc(value, func(r rune) bool {
+		return r == '_' || r == '-' || r == ' ' || r == '/'
+	})
+	var output strings.Builder
+	for _, part := range parts {
+		if part == "" {
+			continue
+		}
+		lower := strings.ToLower(part)
+		if initialism, ok := initialisms[lower]; ok {
+			output.WriteString(initialism)
+			continue
+		}
+		runes := []rune(part)
+		runes[0] = unicode.ToUpper(runes[0])
+		output.WriteString(string(runes))
+	}
+	name := output.String()
+	for lower, initialism := range initialisms {
+		name = strings.ReplaceAll(name, exportPlain(lower), initialism)
+	}
+	return name
+}
+
+var initialisms = map[string]string{
+	"acl":  "ACL",
+	"api":  "API",
+	"id":   "ID",
+	"url":  "URL",
+	"uri":  "URI",
+	"json": "JSON",
+	"tls":  "TLS",
+}
+
+func exportPlain(value string) string {
+	if value == "" {
+		return ""
+	}
+	runes := []rune(value)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
+}
