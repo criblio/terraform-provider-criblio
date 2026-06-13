@@ -24,6 +24,10 @@ sync-openapi:
 merge:
 	go run ./tools/merge-spec
 
+generate: merge
+	go run ./tools/codegen --spec merged-spec.yml
+	gofmt -w internal/provider/*_client.go internal/provider/*_types.go internal/provider/*_resource.go internal/provider/*_data_source.go tests/acceptance/*_test.go
+
 unit-test-import-cli:
 	go test -v ./tools/import-cli/...
 

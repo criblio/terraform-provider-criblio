@@ -26,3 +26,4 @@ dist/*
 .speakeasy-*
 upstream-openapi.yml
 merged-spec.yml
+internal/auth/cloud_only_paths.go
