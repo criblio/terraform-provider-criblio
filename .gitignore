@@ -8,6 +8,10 @@
 **/.speakeasy/logs/
 terraform-provider-criblio
 goatify
+/behavioral-extractor
+/agentic-codegen
+tools/behavioral-extractor/
+tools/agentic-codegen/
 tests/e2e/local-plugins/registry.terraform.io/criblio/criblio/999.99.9/darwin_arm64/terraform-provider-criblio_v999.99.9
 **/.speakeasy/temp/
 **/.speakeasy/logs/
