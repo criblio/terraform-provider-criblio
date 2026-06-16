@@ -1,82 +1,119 @@
 package stringvalidators
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"context"
+	"fmt"
+	"strings"
+	"sync"
+
+	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-// knownCriblFunctionIDs lists valid Cribl Stream pipeline function type identifiers.
-// Source:  curl -s  -H "Authorization: Bearer $TOKEN" "https://<workspaceId>-<organizationId>.cribl.cloud/api/v1/functions"  | jq '[.items[].id] | sort'
-var knownCriblFunctionIDs = []string{
-	"aggregate_metrics",
-	"aggregation",
-	"auto_timestamp",
-	"cef",
-	"chain",
-	"clone",
-	"code",
-	"comment",
-	"distinct",
-	"dns_lookup",
-	"drop",
-	"drop_dimensions",
-	"dynamic_sampling",
-	"eval",
-	"event_breaker",
-	"eventstats",
-	"externaldata",
-	"flatten",
-	"foldkeys",
-	"gen_stats",
-	"geoip",
-	"grok",
-	"handlebars",
-	"join",
-	"json_unroll",
-	"lake_export",
-	"limit",
-	"local_search_datatype_parser",
-	"local_search_ruleset_runner",
-	"local_search_schema_mapper",
-	"local_search_time_range_normalizer",
-	"local_search_transformer",
-	"lookup",
-	"mask",
-	"mv_expand",
-	"mv_pull",
-	"notification_policies",
-	"notifications",
-	"notify",
-	"numerify",
-	"otlp_logs",
-	"otlp_metrics",
-	"otlp_traces",
-	"pack",
-	"pivot",
-	"publish_metrics",
-	"redis",
-	"regex_extract",
-	"regex_filter",
-	"rename",
-	"rollup_metrics",
-	"sampling",
-	"search_engine_export",
-	"send",
-	"sensitive_data_scanner",
-	"serde",
-	"serialize",
-	"sidlookup",
-	"snmp_trap_serialize",
-	"sort",
-	"store",
-	"suppress",
-	"trim_timestamp",
-	"union",
-	"unroll",
-	"window",
-	"xml_unroll",
+// IsCriblPipelineFunctionID returns a validator that fetches valid function IDs
+// from the Cribl API at plan time. client is a pointer to the resource's SDK
+// client field; it will be nil until Configure runs, at which point
+// ValidateString dereferences it to make the API call.
+//
+// Results are cached in the validator instance so the API is only called once
+// per resource lifetime regardless of how many function entries are validated.
+func IsCriblPipelineFunctionID(client **sdk.CriblIo) validator.String {
+	return &criblPipelineFunctionIDValidator{client: client}
 }
 
-func IsCriblPipelineFunctionID() validator.String {
-	return stringvalidator.OneOf(knownCriblFunctionIDs...)
+type criblPipelineFunctionIDValidator struct {
+	client **sdk.CriblIo
+
+	mu        sync.Mutex
+	cachedIDs map[string]struct{}
+}
+
+func (v *criblPipelineFunctionIDValidator) Description(_ context.Context) string {
+	return "value must be a valid Cribl pipeline function ID"
+}
+
+func (v *criblPipelineFunctionIDValidator) MarkdownDescription(ctx context.Context) string {
+	return v.Description(ctx)
+}
+
+func (v *criblPipelineFunctionIDValidator) ValidateString(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+	value := req.ConfigValue.ValueString()
+
+	ids, err := v.functionIDs(ctx)
+	if err != nil {
+		// Warn rather than error so a transient API failure doesn't block plan.
+		resp.Diagnostics.AddAttributeWarning(
+			req.Path,
+			"Could not validate pipeline function ID",
+			fmt.Sprintf("Failed to fetch function list from Cribl API: %s. Skipping validation.", err),
+		)
+		return
+	}
+
+	if _, ok := ids[value]; !ok {
+		resp.Diagnostics.AddAttributeError(
+			req.Path,
+			"Invalid pipeline function ID",
+			fmt.Sprintf("%s: %q is not a known Cribl pipeline function ID. Known IDs: %s", req.Path, value, sortedKeys(ids)),
+		)
+	}
+}
+
+func (v *criblPipelineFunctionIDValidator) functionIDs(ctx context.Context) (map[string]struct{}, error) {
+	v.mu.Lock()
+	defer v.mu.Unlock()
+
+	if v.cachedIDs != nil {
+		return v.cachedIDs, nil
+	}
+
+	client := v.resolveClient()
+	if client == nil {
+		return nil, fmt.Errorf("SDK client not configured and no CRIBL_* environment variables found")
+	}
+
+	resp, err := client.Functions.ListFunction(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if resp.Object == nil {
+		return nil, fmt.Errorf("empty response (status %d)", resp.StatusCode)
+	}
+
+	ids := make(map[string]struct{}, len(resp.Object.Items))
+	for _, fn := range resp.Object.Items {
+		if id := strings.TrimSpace(fn.GetID()); id != "" {
+			ids[id] = struct{}{}
+		}
+	}
+
+	v.cachedIDs = ids
+	return ids, nil
+}
+
+// resolveClient returns the configured resource client if available, otherwise
+// falls back to a bare sdk.New() whose CriblTerraformHook will pick up auth
+// from CRIBL_* environment variables — the same path used during terraform validate.
+func (v *criblPipelineFunctionIDValidator) resolveClient() *sdk.CriblIo {
+	if v.client != nil && *v.client != nil {
+		return *v.client
+	}
+	return sdk.New()
+}
+
+func sortedKeys(m map[string]struct{}) string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	// sort inline — avoid importing "sort" just for error messages
+	for i := 1; i < len(keys); i++ {
+		for j := i; j > 0 && keys[j] < keys[j-1]; j-- {
+			keys[j], keys[j-1] = keys[j-1], keys[j]
+		}
+	}
+	return strings.Join(keys, ", ")
 }
