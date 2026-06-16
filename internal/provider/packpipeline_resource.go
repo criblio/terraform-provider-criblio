@@ -164,7 +164,7 @@ func (r *PackPipelineResource) Schema(ctx context.Context, req resource.SchemaRe
 									Description: `Cribl pipeline function type ID (e.g. eval, serde, publish_metrics). Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
-										speakeasy_stringvalidators.IsCriblPipelineFunctionID(),
+										speakeasy_stringvalidators.IsCriblPipelineFunctionID(&r.client),
 									},
 								},
 							},

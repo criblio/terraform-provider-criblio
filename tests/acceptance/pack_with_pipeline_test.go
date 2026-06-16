@@ -69,7 +69,7 @@ func TestPackPipeline(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					PlanOnly:        true,
-					ExpectError:     regexp.MustCompile(`Invalid Attribute Value Match`),
+					ExpectError:     regexp.MustCompile(`Invalid pipeline function ID`),
 				},
 			},
 		})
