@@ -20,7 +20,7 @@ func TestSearchEngine(t *testing.T) {
 				{
 					ConfigDirectory: config.TestNameDirectory(),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "id", "my_search_tf_engine"),
+						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "id", "my_search_engine"),
 						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "description", "My Search Engine TF"),
 						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "tier_size", "small"),
 					),
