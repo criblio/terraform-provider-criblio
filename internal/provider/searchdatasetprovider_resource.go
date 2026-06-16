@@ -2171,18 +2171,18 @@ func (r *SearchDatasetProviderResource) Configure(ctx context.Context, req resou
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.CriblIo)
+	clients, ok := req.ProviderData.(*ProviderClients)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.CriblIo, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ProviderClients, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = clients.Legacy
 }
 
 func (r *SearchDatasetProviderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

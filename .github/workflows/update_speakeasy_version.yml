@@ -1,8 +1,13 @@
 name: Update Speakeasy Version
 on:
+  # Disabled in Phase 1.0 before generated-file migration work.
   # schedule:
   #   - cron: "0 0 1,15 * *"
-  workflow_dispatch:
+  # Previously:
+  # workflow_dispatch:
+  push:
+    branches:
+      - __disabled__
 
 jobs:
   update_speakeasy_version:

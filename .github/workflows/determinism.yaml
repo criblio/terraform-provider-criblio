@@ -1,6 +1,11 @@
 name: Test Determinism
 on:
-  workflow_dispatch:
+  # Disabled in Phase 1.0 before generated-file migration work.
+  # Previously:
+  # workflow_dispatch:
+  push:
+    branches:
+      - __disabled__
 
 jobs:
   validate-determinism:
