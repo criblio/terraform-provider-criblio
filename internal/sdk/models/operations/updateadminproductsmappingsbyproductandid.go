@@ -3,60 +3,22 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// UpdateAdminProductsMappingsByProductAndIDProduct - Name of the Cribl product to update the mappings for
-type UpdateAdminProductsMappingsByProductAndIDProduct string
-
-const (
-	UpdateAdminProductsMappingsByProductAndIDProductStream UpdateAdminProductsMappingsByProductAndIDProduct = "stream"
-	UpdateAdminProductsMappingsByProductAndIDProductEdge   UpdateAdminProductsMappingsByProductAndIDProduct = "edge"
-)
-
-func (e UpdateAdminProductsMappingsByProductAndIDProduct) ToPointer() *UpdateAdminProductsMappingsByProductAndIDProduct {
-	return &e
-}
-func (e *UpdateAdminProductsMappingsByProductAndIDProduct) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "stream":
-		fallthrough
-	case "edge":
-		*e = UpdateAdminProductsMappingsByProductAndIDProduct(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateAdminProductsMappingsByProductAndIDProduct: %v", v)
-	}
-}
-
 type UpdateAdminProductsMappingsByProductAndIDRequest struct {
-	// Name of the Cribl product to update the mappings for
-	Product UpdateAdminProductsMappingsByProductAndIDProduct `pathParam:"style=simple,explode=false,name=product"`
-	// The id of the mapping ruleset to update
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Name of the Cribl product (stream or edge)
+	Product string `pathParam:"style=simple,explode=false,name=product"`
 	// MappingRuleset object
 	MappingRuleset shared.MappingRuleset `request:"mediaType=application/json"`
 }
 
-func (u *UpdateAdminProductsMappingsByProductAndIDRequest) GetProduct() UpdateAdminProductsMappingsByProductAndIDProduct {
-	if u == nil {
-		return UpdateAdminProductsMappingsByProductAndIDProduct("")
-	}
-	return u.Product
-}
-
-func (u *UpdateAdminProductsMappingsByProductAndIDRequest) GetID() string {
+func (u *UpdateAdminProductsMappingsByProductAndIDRequest) GetProduct() string {
 	if u == nil {
 		return ""
 	}
-	return u.ID
+	return u.Product
 }
 
 func (u *UpdateAdminProductsMappingsByProductAndIDRequest) GetMappingRuleset() shared.MappingRuleset {

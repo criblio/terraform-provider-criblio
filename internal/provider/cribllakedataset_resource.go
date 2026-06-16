@@ -54,7 +54,7 @@ func (r *CriblLakeDatasetResource) Metadata(ctx context.Context, req resource.Me
 
 func (r *CriblLakeDatasetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "CriblLakeDataset Resource",
+		MarkdownDescription: "CriblLakeDataset Resource.\n\n**Terraform provisioning:** The product does not support parallel dataset creation. Do not create many datasets in parallel in a single Terraform apply. Use sequential ordering with `depends_on` between create operations in the same workspace.\n",
 		Attributes: map[string]schema.Attribute{
 			"accelerated_fields": schema.ListAttribute{
 				Computed:    true,

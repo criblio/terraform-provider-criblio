@@ -1,0 +1,189 @@
+openapi: 3.1.0
+paths:
+  /m/{groupId}/system/certificates:
+    post:
+      operationId: createCertificate
+      x-terraform-resource: true
+      x-terraform-resource-name: certificate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateCreate"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+  /m/{groupId}/system/certificates/{id}:
+    get:
+      operationId: getCertificateByID
+      x-terraform-read: certificate
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+    patch:
+      operationId: updateCertificateByID
+      x-terraform-update: certificate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateCreate"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+    delete:
+      operationId: deleteCertificateByID
+      x-terraform-delete: certificate
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+  /destinations:
+    post:
+      operationId: createDestination
+      x-terraform-resource: true
+      x-terraform-resource-name: destination
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Destination"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Destination"
+components:
+  schemas:
+    CertificateCreate:
+      type: object
+      required:
+        - cert
+        - id
+        - privKey
+      properties:
+        cert:
+          type: string
+        id:
+          type: string
+          x-terraform-force-new: true
+        privKey:
+          type: string
+          writeOnly: true
+        passphrase:
+          type: string
+          x-terraform-sensitive: true
+          x-terraform-prefer-state: true
+        displayName:
+          type: string
+          x-terraform-name: display_name
+        conf:
+          type: string
+          x-terraform-custom-type: jsontypes.NormalizedType{}
+        ignored:
+          type: string
+          x-terraform-ignore: true
+    Certificate:
+      type: object
+      properties:
+        cert:
+          type: string
+        id:
+          type: string
+        privKey:
+          type: string
+          writeOnly: true
+        passphrase:
+          type: string
+          x-terraform-sensitive: true
+          x-terraform-prefer-state: true
+        certExpiryDate:
+          type: string
+          readOnly: true
+        inUse:
+          type: array
+          items:
+            type: string
+          x-terraform-computed: true
+    Destination:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        output:
+          oneOf:
+            - $ref: "#/components/schemas/OutputAzureBlob"
+            - $ref: "#/components/schemas/OutputElastic"
+            - $ref: "#/components/schemas/OutputS3"
+    OutputAzureBlob:
+      type: object
+      properties:
+        accountKey:
+          type: string
+          x-terraform-sensitive: true
+          x-terraform-prefer-state: true
+        container:
+          type: string
+    OutputElastic:
+      type: object
+      properties:
+        url:
+          type: string
+    OutputS3:
+      type: object
+      properties:
+        bucket:
+          type: string

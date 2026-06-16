@@ -11,26 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *MappingRulesetResourceModel) RefreshFromOperationsCreateAdminProductsMappingsByProductResponseBody(ctx context.Context, resp *operations.CreateAdminProductsMappingsByProductResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		if len(resp.Items) == 0 {
-			diags.AddError("Unexpected response from API", "Missing response body array data.")
-			return diags
-		}
-
-		diags.Append(r.RefreshFromSharedMappingRuleset(ctx, &resp.Items[0])...)
-
-		if diags.HasError() {
-			return diags
-		}
-
-	}
-
-	return diags
-}
-
 func (r *MappingRulesetResourceModel) RefreshFromOperationsGetAdminProductsMappingsByProductAndIDResponseBody(ctx context.Context, resp *operations.GetAdminProductsMappingsByProductAndIDResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -84,11 +64,11 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 		for _, functionsItem := range resp.Conf.Functions {
 			var functions tfTypes.MappingRulesetFunctionConf
 
-			functions.Conf = &tfTypes.FunctionSpecificConfigs{}
-			functions.Conf.Add = []tfTypes.Add{}
+			functions.Conf = &tfTypes.MappingRulesetFunctionSpecificConf{}
+			functions.Conf.Add = []tfTypes.MappingRulesetAddField{}
 
 			for _, addItem := range functionsItem.Conf.Add {
-				var add tfTypes.Add
+				var add tfTypes.MappingRulesetAddField
 
 				add.Name = types.StringValue(addItem.Name)
 				add.Value = types.StringValue(addItem.Value)
@@ -98,9 +78,9 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 			functions.Description = types.StringPointerValue(functionsItem.Description)
 			functions.Disabled = types.BoolPointerValue(functionsItem.Disabled)
 			functions.Filter = types.StringPointerValue(functionsItem.Filter)
-			functions.Final = types.BoolPointerValue(functionsItem.Final)
+			functions.Final = types.BoolValue(functionsItem.Final)
 			functions.GroupID = types.StringPointerValue(functionsItem.GroupID)
-			functions.ID = types.StringValue(functionsItem.ID)
+			functions.ID = types.StringValue(string(functionsItem.ID))
 
 			r.Conf.Functions = append(r.Conf.Functions, functions)
 		}
@@ -110,54 +90,14 @@ func (r *MappingRulesetResourceModel) RefreshFromSharedMappingRuleset(ctx contex
 	return diags
 }
 
-func (r *MappingRulesetResourceModel) ToOperationsCreateAdminProductsMappingsByProductRequest(ctx context.Context) (*operations.CreateAdminProductsMappingsByProductRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	product := operations.CreateAdminProductsMappingsByProductProduct(r.Product.ValueString())
-	var id string
-	id = r.ID.ValueString()
-
-	mappingRuleset, mappingRulesetDiags := r.ToSharedMappingRuleset(ctx)
-	diags.Append(mappingRulesetDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateAdminProductsMappingsByProductRequest{
-		Product:        product,
-		ID:             id,
-		MappingRuleset: *mappingRuleset,
-	}
-
-	return &out, diags
-}
-
-func (r *MappingRulesetResourceModel) ToOperationsDeleteAdminProductsMappingsByProductAndIDRequest(ctx context.Context) (*operations.DeleteAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	product := operations.DeleteAdminProductsMappingsByProductAndIDProduct(r.Product.ValueString())
-	var id string
-	id = r.ID.ValueString()
-
-	out := operations.DeleteAdminProductsMappingsByProductAndIDRequest{
-		Product: product,
-		ID:      id,
-	}
-
-	return &out, diags
-}
-
 func (r *MappingRulesetResourceModel) ToOperationsGetAdminProductsMappingsByProductAndIDRequest(ctx context.Context) (*operations.GetAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	product := operations.GetAdminProductsMappingsByProductAndIDProduct(r.Product.ValueString())
-	var id string
-	id = r.ID.ValueString()
+	var product string
+	product = r.Product.ValueString()
 
 	out := operations.GetAdminProductsMappingsByProductAndIDRequest{
 		Product: product,
-		ID:      id,
 	}
 
 	return &out, diags
@@ -166,9 +106,8 @@ func (r *MappingRulesetResourceModel) ToOperationsGetAdminProductsMappingsByProd
 func (r *MappingRulesetResourceModel) ToOperationsUpdateAdminProductsMappingsByProductAndIDRequest(ctx context.Context) (*operations.UpdateAdminProductsMappingsByProductAndIDRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	product := operations.UpdateAdminProductsMappingsByProductAndIDProduct(r.Product.ValueString())
-	var id string
-	id = r.ID.ValueString()
+	var product string
+	product = r.Product.ValueString()
 
 	mappingRuleset, mappingRulesetDiags := r.ToSharedMappingRuleset(ctx)
 	diags.Append(mappingRulesetDiags...)
@@ -179,7 +118,6 @@ func (r *MappingRulesetResourceModel) ToOperationsUpdateAdminProductsMappingsByP
 
 	out := operations.UpdateAdminProductsMappingsByProductAndIDRequest{
 		Product:        product,
-		ID:             id,
 		MappingRuleset: *mappingRuleset,
 	}
 
@@ -202,9 +140,7 @@ func (r *MappingRulesetResourceModel) ToSharedMappingRuleset(ctx context.Context
 			} else {
 				filter = nil
 			}
-			var id1 string
-			id1 = r.Conf.Functions[functionsIndex].ID.ValueString()
-
+			id1 := shared.MappingRulesetFunctionConfID(r.Conf.Functions[functionsIndex].ID.ValueString())
 			description := new(string)
 			if !r.Conf.Functions[functionsIndex].Description.IsUnknown() && !r.Conf.Functions[functionsIndex].Description.IsNull() {
 				*description = r.Conf.Functions[functionsIndex].Description.ValueString()
@@ -217,12 +153,9 @@ func (r *MappingRulesetResourceModel) ToSharedMappingRuleset(ctx context.Context
 			} else {
 				disabled = nil
 			}
-			final := new(bool)
-			if !r.Conf.Functions[functionsIndex].Final.IsUnknown() && !r.Conf.Functions[functionsIndex].Final.IsNull() {
-				*final = r.Conf.Functions[functionsIndex].Final.ValueBool()
-			} else {
-				final = nil
-			}
+			var final bool
+			final = r.Conf.Functions[functionsIndex].Final.ValueBool()
+
 			add := make([]shared.Add, 0, len(r.Conf.Functions[functionsIndex].Conf.Add))
 			for addIndex := range r.Conf.Functions[functionsIndex].Conf.Add {
 				var name string

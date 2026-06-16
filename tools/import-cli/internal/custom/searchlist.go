@@ -40,6 +40,21 @@ var SkipPacks = map[string]bool{
 	"HelloPacks": true,
 }
 
+// DefaultPackIDs are built-in pack IDs that ship with Cribl.
+var DefaultPackIDs = map[string]bool{
+	"HelloPacks":      true,
+	"example-pack-id": true,
+	"string":          true,
+}
+
+// DefaultGroupIDs are built-in group IDs that ship with Cribl.
+// These are skipped when --exclude-defaults is used.
+var DefaultGroupIDs = map[string]bool{
+	"default":       true,
+	"default_fleet": true,
+	"defaultHybrid": true,
+}
+
 // DefaultSearchDatasetProviderIDs are built-in dataset provider IDs that are never imported.
 // We skip these when parsing the dataset-providers list so only user-created providers are imported.
 var DefaultSearchDatasetProviderIDs = map[string]bool{
@@ -49,6 +64,7 @@ var DefaultSearchDatasetProviderIDs = map[string]bool{
 	"cribl_s3sample_provider": true,
 	"cribl_meta":              true,
 	"cribl_lake":              true,
+	"lakehouse":               true,
 }
 
 // DefaultSearchDatasetIDs are built-in search dataset IDs that are never imported.
@@ -61,13 +77,42 @@ var DefaultSearchDatasetIDs = map[string]bool{
 	"default_metrics": true,
 	"default_spans":   true,
 	"S3":              true, // default S3 dataset
+	"main":            true, // default search dataset
 }
 
-// DefaultDestinationIDs are built-in destination IDs (default, devnull) that are never imported.
+// DefaultSearchDatasetRulesetIDs are built-in search dataset ruleset IDs.
+var DefaultSearchDatasetRulesetIDs = map[string]bool{
+	"default": true,
+}
+
+// DefaultSearchDatatypeRulesetIDs are built-in search datatype ruleset IDs.
+var DefaultSearchDatatypeRulesetIDs = map[string]bool{
+	"default": true,
+}
+
+// DefaultSearchSavedQueryIDs are built-in search saved query IDs (prefixed with cribl_).
+var DefaultSearchSavedQueryIDs = map[string]bool{
+	"cribl_search_finished_1h": true,
+	"cribl_search_started_1h":  true,
+}
+
+// DefaultDestinationIDs are built-in destination IDs that are never imported.
 // We skip these when listing destinations so only user-created destinations are exported.
 var DefaultDestinationIDs = map[string]bool{
-	"default": true,
-	"devnull": true,
+	"default":               true,
+	"devnull":               true,
+	"engine_router":         true,
+	"metrics_engine_router": true,
+	// OTel default destinations
+	"otel-data-router": true,
+	"otel-logs":        true,
+	"otel-metrics":     true,
+	"otel-traces":      true,
+	// Elastic integration defaults
+	"elastic-otel":       true,
+	"elastic-prometheus": true,
+	// Cribl HTTP route default
+	"cribl_http_route": true,
 }
 
 // DefaultCriblLakeDatasetIDs are built-in Cribl Lake dataset IDs that are never imported.
@@ -80,6 +125,103 @@ var DefaultCriblLakeDatasetIDs = map[string]bool{
 	"default_metrics": true,
 	"default_spans":   true,
 	"S3":              true,
+}
+
+// DefaultPipelineIDs are built-in pipeline IDs that ship with Cribl.
+var DefaultPipelineIDs = map[string]bool{
+	"cisco_asa":            true,
+	"cisco_estreamer":      true,
+	"cribl_metrics_rollup": true,
+	"devnull":              true,
+	"kubernetes_logs":      true,
+	"main":                 true,
+	"metrics_ingest":       true, // search-specific default pipeline
+	"palo_alto_traffic":    true,
+	"passthru":             true,
+	"prometheus_metrics":   true,
+	"wineventlogs":         true,
+}
+
+// DefaultGrokIDs are built-in grok pattern library IDs.
+var DefaultGrokIDs = map[string]bool{
+	"aws":           true,
+	"core-patterns": true,
+	"firewalls":     true,
+	"httpd":         true,
+	"java":          true,
+	"linux-syslog":  true,
+}
+
+// DefaultParquetSchemaIDs are built-in parquet schema IDs.
+var DefaultParquetSchemaIDs = map[string]bool{
+	"sample_compression_encoding": true,
+	"sample_logical_types":        true,
+	"sample_nested":               true,
+	"sample_parquet":              true,
+	"sample_primitive":            true,
+	"sample_repetition_type":      true,
+	"syslog_parquet":              true,
+}
+
+// DefaultSchemaIDs are built-in schema IDs.
+var DefaultSchemaIDs = map[string]bool{
+	"cribl_internal": true,
+	"sample_schema":  true,
+}
+
+// DefaultSourceIDs are built-in source IDs.
+var DefaultSourceIDs = map[string]bool{
+	// Stream sources
+	"CriblLogs":       true,
+	"CriblMetrics":    true,
+	"http":            true,
+	"in_appscope_tcp": true,
+	"in_appscope_tls": true,
+	"in_cribl_http":   true,
+	"in_cribl_tcp":    true,
+	"in_elastic":      true,
+	"in_splunk_hec":   true,
+	"in_splunk_tcp":   true,
+	"in_syslog":       true,
+	"in_tcp":          true,
+	"in_tcp_json":     true,
+	"open_telemetry":  true,
+	// Edge sources
+	"in_appscope":        true,
+	"in_file_auto":       true,
+	"in_file_varlog":     true,
+	"in_journal_local":   true,
+	"in_kube_events":     true,
+	"in_kube_logs":       true,
+	"in_kube_metrics":    true,
+	"in_snmp_trap":       true,
+	"in_system_metrics":  true,
+	"in_system_state":    true,
+	"in_win_event_logs":  true,
+	"in_windows_metrics": true,
+}
+
+// DefaultEventBreakerRulesetIDs are built-in event breaker ruleset IDs.
+// Used across groups, packs, and search contexts.
+var DefaultEventBreakerRulesetIDs = map[string]bool{
+	"Apache Ruleset":               true,
+	"AWS Ruleset":                  true,
+	"AWS VPC Flow Ruleset":         true,
+	"Bro Ruleset":                  true,
+	"Cisco ASA Ruleset":            true,
+	"Cisco Ruleset":                true,
+	"Cribl":                        true,
+	"Cribl - Do Not Break Ruleset": true,
+	"Cribl Search":                 true,
+	"CrowdStrike Ruleset":          true,
+	"CSV Ruleset":                  true,
+	"JSON Newline Delimited":       true,
+	"NDJSON Ruleset":               true,
+	"Office 365":                   true,
+	"Palo Alto Ruleset":            true,
+	"Splunk Search Ruleset":        true,
+	"Syslog Ruleset":               true,
+	"Wiz Ruleset":                  true,
 }
 
 // SearchDatasetTypeCriblLake is the API type for Cribl Lake datasets. They appear in the search

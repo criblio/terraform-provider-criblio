@@ -813,6 +813,14 @@ func identifiersFromItems(items reflect.Value, groupID string, e registry.Entry)
 		if (e.TypeName == "criblio_event_breaker_ruleset" || e.TypeName == "criblio_search_macro") && strings.Contains(id, ".") {
 			continue
 		}
+		// Skip pack pipelines (id starts with "pack:") — they belong to criblio_pack_pipeline, not criblio_pipeline.
+		if e.TypeName == "criblio_pipeline" && strings.HasPrefix(id, "pack:") {
+			continue
+		}
+		// Strip "pack:" prefix from pack pipeline IDs if present (API may return full ID format).
+		if e.TypeName == "criblio_pack_pipeline" && strings.HasPrefix(id, "pack:") {
+			id = strings.TrimPrefix(id, "pack:")
+		}
 		// Skip built-in destinations (default, devnull) so only user-created are imported.
 		if (e.TypeName == "criblio_destination" || e.TypeName == "criblio_pack_destination") && custom.DefaultDestinationIDs[id] {
 			continue

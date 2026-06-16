@@ -3,13 +3,39 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/internal/utils"
 )
 
+// MappingRulesetFunctionConfID - Function ID (always "eval" for mapping rules)
+type MappingRulesetFunctionConfID string
+
+const (
+	MappingRulesetFunctionConfIDEval MappingRulesetFunctionConfID = "eval"
+)
+
+func (e MappingRulesetFunctionConfID) ToPointer() *MappingRulesetFunctionConfID {
+	return &e
+}
+func (e *MappingRulesetFunctionConfID) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "eval":
+		*e = MappingRulesetFunctionConfID(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for MappingRulesetFunctionConfID: %v", v)
+	}
+}
+
 type Add struct {
-	// Name of the field to add
+	// Name of the field to add (use "groupId" to set the Worker Group)
 	Name string `json:"name"`
-	// Value to assign to the field
+	// Value evaluated as a JavaScript expression. Wrap string literals in single quotes (e.g., 'my-fleet' sends the string my-fleet)
 	Value string `json:"value"`
 }
 
@@ -42,16 +68,16 @@ func (f *FunctionSpecificConfigs) GetAdd() []Add {
 type MappingRulesetFunctionConf struct {
 	// Filter that selects data to be fed through this Function
 	Filter *string `default:"true" json:"filter"`
-	// Function ID
-	ID string `json:"id"`
+	// Function ID (always "eval" for mapping rules)
+	ID MappingRulesetFunctionConfID `json:"id"`
 	// Simple description of this step
 	Description *string `json:"description,omitempty"`
 	// If true, data will not be pushed through this function
 	Disabled *bool `json:"disabled,omitempty"`
-	// If enabled, stops the results of this Function from being passed to the downstream Functions
-	Final *bool                   `json:"final,omitempty"`
+	// Must be true for all mapping rule functions (required by API)
+	Final bool                    `json:"final"`
 	Conf  FunctionSpecificConfigs `json:"conf"`
-	// Group ID
+	// The Worker Group to map matching events to
 	GroupID *string `json:"groupId,omitempty"`
 }
 
@@ -73,9 +99,9 @@ func (m *MappingRulesetFunctionConf) GetFilter() *string {
 	return m.Filter
 }
 
-func (m *MappingRulesetFunctionConf) GetID() string {
+func (m *MappingRulesetFunctionConf) GetID() MappingRulesetFunctionConfID {
 	if m == nil {
-		return ""
+		return MappingRulesetFunctionConfID("")
 	}
 	return m.ID
 }
@@ -94,9 +120,9 @@ func (m *MappingRulesetFunctionConf) GetDisabled() *bool {
 	return m.Disabled
 }
 
-func (m *MappingRulesetFunctionConf) GetFinal() *bool {
+func (m *MappingRulesetFunctionConf) GetFinal() bool {
 	if m == nil {
-		return nil
+		return false
 	}
 	return m.Final
 }

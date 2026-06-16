@@ -1,0 +1,3 @@
+# Generated files that should not be overwritten.
+# One repo-relative path per line.
+tests/acceptance/certificate_test.go

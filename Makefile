@@ -16,7 +16,23 @@ test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 unit-test: 
-	go test -v ./internal/sdk/credentials ./internal/sdk/internal/hooks
+	go test -v ./internal/auth/... ./internal/restclient/... ./internal/sdk/credentials ./internal/sdk/internal/hooks ./tools/sync-openapi ./tools/merge-spec/...
+
+sync-openapi:
+	go run ./tools/sync-openapi
+
+merge:
+	go run ./tools/merge-spec
+
+generate: merge
+	go run ./tools/codegen --spec merged-spec.yml
+	gofmt -w internal/provider/*_client.go internal/provider/*_types.go internal/provider/*_resource.go internal/provider/*_data_source.go tests/acceptance/*_test.go
+
+migrate:
+	@scripts/migrate.sh migrate
+
+migrate-batch:
+	@scripts/migrate.sh batch
 
 unit-test-import-cli:
 	go test -v ./tools/import-cli/...
@@ -47,4 +63,3 @@ sbom: install-sbom-tools
 	syft scan . -o cyclonedx-json=sbom-cyclonedx.json
 	@echo "SBOM files generated:"
 	@ls -la sbom-*.json 
-

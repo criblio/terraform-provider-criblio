@@ -3,58 +3,20 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"net/http"
 )
 
-// DeleteAdminProductsMappingsByProductAndIDProduct - Name of the Cribl product to delete the mappings for
-type DeleteAdminProductsMappingsByProductAndIDProduct string
-
-const (
-	DeleteAdminProductsMappingsByProductAndIDProductStream DeleteAdminProductsMappingsByProductAndIDProduct = "stream"
-	DeleteAdminProductsMappingsByProductAndIDProductEdge   DeleteAdminProductsMappingsByProductAndIDProduct = "edge"
-)
-
-func (e DeleteAdminProductsMappingsByProductAndIDProduct) ToPointer() *DeleteAdminProductsMappingsByProductAndIDProduct {
-	return &e
-}
-func (e *DeleteAdminProductsMappingsByProductAndIDProduct) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "stream":
-		fallthrough
-	case "edge":
-		*e = DeleteAdminProductsMappingsByProductAndIDProduct(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for DeleteAdminProductsMappingsByProductAndIDProduct: %v", v)
-	}
-}
-
 type DeleteAdminProductsMappingsByProductAndIDRequest struct {
-	// Name of the Cribl product to delete the mappings for
-	Product DeleteAdminProductsMappingsByProductAndIDProduct `pathParam:"style=simple,explode=false,name=product"`
-	// The id of the mapping ruleset to delete
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Name of the Cribl product (stream or edge)
+	Product string `pathParam:"style=simple,explode=false,name=product"`
 }
 
-func (d *DeleteAdminProductsMappingsByProductAndIDRequest) GetProduct() DeleteAdminProductsMappingsByProductAndIDProduct {
-	if d == nil {
-		return DeleteAdminProductsMappingsByProductAndIDProduct("")
-	}
-	return d.Product
-}
-
-func (d *DeleteAdminProductsMappingsByProductAndIDRequest) GetID() string {
+func (d *DeleteAdminProductsMappingsByProductAndIDRequest) GetProduct() string {
 	if d == nil {
 		return ""
 	}
-	return d.ID
+	return d.Product
 }
 
 // DeleteAdminProductsMappingsByProductAndIDResponseBody - a list of MappingRuleset objects

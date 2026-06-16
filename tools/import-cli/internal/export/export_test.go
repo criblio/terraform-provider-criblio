@@ -25,7 +25,7 @@ func TestToResourceItems_empty_results(t *testing.T) {
 		{TypeName: "criblio_source", Count: 0},
 		{TypeName: "criblio_pipeline", Count: 0},
 	}
-	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, nil)
+	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Empty(t, result.Items)
@@ -37,7 +37,7 @@ func TestToResourceItems_nil_client_list_skipped(t *testing.T) {
 	results := []discovery.Result{
 		{TypeName: "criblio_source", Count: 1},
 	}
-	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, nil)
+	result, err := ToResourceItems(ctx, nil, reg, results, []string{"default"}, nil, 1, false, IncludeOverride{}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, result)
 	assert.Empty(t, result.Items)
@@ -232,7 +232,7 @@ func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
 		ImportIDFormat: "group_id",
 	}
 	idMap := map[string]string{"group_id": "search", "product": "stream"}
-	err := appendResourceItemFromModel(out, "criblio_group", e, idMap, nil, nil, nil)
+	err := appendResourceItemFromModel(out, "criblio_group", e, idMap, nil, nil, nil, false, IncludeOverride{})
 	require.NoError(t, err)
 	assert.Empty(t, out.Items)
 }
@@ -282,6 +282,72 @@ func TestSkipResourceWhenLibCribl(t *testing.T) {
 	t.Run("not skip when lib missing", func(t *testing.T) {
 		attrs := map[string]hcl.Value{}
 		assert.False(t, skipResourceWhenLibCribl(attrs))
+	})
+}
+
+func TestDefaultResource(t *testing.T) {
+	noOverride := IncludeOverride{}
+	t.Run("skip when lib is cribl", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"lib": {Kind: hcl.KindString, String: "cribl"}}
+		assert.True(t, DefaultResource("criblio_grok", map[string]string{"id": "custom"}, attrs, noOverride))
+	})
+	t.Run("skip when tags equals cribl:default", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindString, String: "cribl:default"}}
+		assert.True(t, DefaultResource("criblio_search_dataset", map[string]string{"id": "custom"}, attrs, noOverride))
+	})
+	t.Run("not skip when tags is partial cribl match", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindString, String: "my-cribl-app"}}
+		assert.False(t, DefaultResource("criblio_appscope_config", map[string]string{"id": "custom"}, attrs, noOverride))
+	})
+	t.Run("skip when tags list contains cribl:default", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindList, List: []hcl.Value{
+			{Kind: hcl.KindString, String: "other"},
+			{Kind: hcl.KindString, String: "cribl:default"},
+		}}}
+		assert.True(t, DefaultResource("criblio_search_dataset", map[string]string{"id": "custom"}, attrs, noOverride))
+	})
+	t.Run("skip default pipeline IDs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		assert.True(t, DefaultResource("criblio_pipeline", map[string]string{"id": "devnull"}, attrs, noOverride))
+		assert.True(t, DefaultResource("criblio_pipeline", map[string]string{"id": "main"}, attrs, noOverride))
+		assert.True(t, DefaultResource("criblio_pipeline", map[string]string{"id": "passthru"}, attrs, noOverride))
+	})
+	t.Run("skip default grok IDs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		assert.True(t, DefaultResource("criblio_grok", map[string]string{"id": "aws"}, attrs, noOverride))
+		assert.True(t, DefaultResource("criblio_grok", map[string]string{"id": "core-patterns"}, attrs, noOverride))
+	})
+	t.Run("skip default source IDs", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblLogs"}, attrs, noOverride))
+		assert.True(t, DefaultResource("criblio_source", map[string]string{"id": "CriblMetrics"}, attrs, noOverride))
+	})
+	t.Run("not skip user-created resources", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		assert.False(t, DefaultResource("criblio_pipeline", map[string]string{"id": "my_custom_pipeline"}, attrs, noOverride))
+		assert.False(t, DefaultResource("criblio_grok", map[string]string{"id": "my_grok"}, attrs, noOverride))
+		assert.False(t, DefaultResource("criblio_source", map[string]string{"id": "my_source"}, attrs, noOverride))
+	})
+	t.Run("not skip when tags is empty list", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindList, List: []hcl.Value{}}}
+		assert.False(t, DefaultResource("criblio_search_dataset", map[string]string{"id": "custom"}, attrs, noOverride))
+	})
+	t.Run("include override bypasses lib=cribl", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"lib": {Kind: hcl.KindString, String: "cribl"}}
+		override := ParseIncludeDefaultIDs([]string{"in_system_metrics"})
+		assert.False(t, DefaultResource("criblio_source", map[string]string{"id": "in_system_metrics"}, attrs, override))
+	})
+	t.Run("include override bypasses cribl:default tag", func(t *testing.T) {
+		attrs := map[string]hcl.Value{"tags": {Kind: hcl.KindString, String: "cribl:default"}}
+		override := ParseIncludeDefaultIDs([]string{"criblio_source:CriblLogs"})
+		assert.False(t, DefaultResource("criblio_source", map[string]string{"id": "CriblLogs"}, attrs, override))
+		assert.True(t, DefaultResource("criblio_destination", map[string]string{"id": "CriblLogs"}, attrs, override))
+	})
+	t.Run("include override unqualified matches any type", func(t *testing.T) {
+		attrs := map[string]hcl.Value{}
+		override := ParseIncludeDefaultIDs([]string{"devnull"})
+		assert.False(t, DefaultResource("criblio_pipeline", map[string]string{"id": "devnull"}, attrs, override))
+		assert.False(t, DefaultResource("criblio_destination", map[string]string{"id": "devnull"}, attrs, override))
 	})
 }
 

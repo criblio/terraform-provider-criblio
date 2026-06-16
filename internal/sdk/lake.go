@@ -32,7 +32,7 @@ func newLake(rootSDK *CriblIo, sdkConfig config.SDKConfiguration, hooks *hooks.H
 }
 
 // CreateCriblLakeDatasetByLakeID - Create a Dataset in the specified Lake
-// Create a Dataset in the specified Lake
+// Create a Dataset in the specified Lake. The product does not support parallel dataset creation; do not create many datasets in parallel in a single Terraform apply. Use sequential ordering with depends_on between create operations in the same workspace.
 func (s *Lake) CreateCriblLakeDatasetByLakeID(ctx context.Context, request operations.CreateCriblLakeDatasetByLakeIDRequest, opts ...operations.Option) (*operations.CreateCriblLakeDatasetByLakeIDResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

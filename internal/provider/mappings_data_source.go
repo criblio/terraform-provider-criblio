@@ -60,54 +60,25 @@ func (r *MappingsDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
-											"conf": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"add": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"name": schema.StringAttribute{
-																	Computed:    true,
-																	Description: `Name of the field to add`,
-																},
-																"value": schema.StringAttribute{
-																	Computed:    true,
-																	Description: `Value to assign to the field`,
-																},
-															},
-														},
-														Description: `List of fields to add to the event`,
-													},
-												},
-											},
 											"description": schema.StringAttribute{
 												Computed:    true,
-												Description: `Simple description of this step`,
+												Description: `Rule name / simple description of this mapping rule`,
 											},
 											"disabled": schema.BoolAttribute{
 												Computed:    true,
-												Description: `If true, data will not be pushed through this function`,
+												Description: `If true, this mapping rule will be disabled`,
 											},
 											"filter": schema.StringAttribute{
 												Computed:    true,
 												Description: `Filter that selects data to be fed through this Function`,
 											},
-											"final": schema.BoolAttribute{
-												Computed:    true,
-												Description: `If enabled, stops the results of this Function from being passed to the downstream Functions`,
-											},
 											"group_id": schema.StringAttribute{
 												Computed:    true,
-												Description: `Group ID`,
-											},
-											"id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Function ID`,
+												Description: `The Worker Group to map matching events to`,
 											},
 										},
 									},
-									Description: `List of functions to pass data through`,
+									Description: `List of mapping rules`,
 								},
 							},
 						},

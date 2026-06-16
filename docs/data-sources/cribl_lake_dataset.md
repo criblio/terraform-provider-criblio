@@ -3,12 +3,15 @@
 page_title: "criblio_cribl_lake_dataset Data Source - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  CriblLakeDataset DataSource
+  CriblLakeDataset Resource.
+  Terraform provisioning: The product does not support parallel dataset creation. Do not create many datasets in parallel in a single Terraform apply. Use sequential ordering with depends_on between create operations in the same workspace.
 ---
 
 # criblio_cribl_lake_dataset (Data Source)
 
-CriblLakeDataset DataSource
+CriblLakeDataset Resource.
+
+**Terraform provisioning:** The product does not support parallel dataset creation. Do not create many datasets in parallel in a single Terraform apply. Use sequential ordering with `depends_on` between create operations in the same workspace.
 
 ## Example Usage
 

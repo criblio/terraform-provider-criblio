@@ -380,6 +380,27 @@ func TestMaskSensitiveValuesInJSON(t *testing.T) {
 			attrPath:     "conf",
 			expectVars:   []string{"test_resource_conf_api_key", "test_resource_conf_password"},
 		},
+		{
+			name:         "authorization header in list",
+			input:        `{"collect_request_headers":[{"name":"Authorization","value":"Bearer secret123"},{"name":"Content-Type","value":"application/json"}]}`,
+			resourceName: "test_collector",
+			attrPath:     "conf",
+			expectVars:   []string{"test_collector_conf_collect_request_headers_0_value_Authorization"},
+		},
+		{
+			name:         "x-api-key header",
+			input:        `{"headers":[{"name":"X-Api-Key","value":"my-api-key"}]}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   []string{"test_resource_conf_headers_0_value_X_Api_Key"},
+		},
+		{
+			name:         "non-sensitive header not masked",
+			input:        `{"headers":[{"name":"Content-Type","value":"application/json"}]}`,
+			resourceName: "test_resource",
+			attrPath:     "conf",
+			expectVars:   nil,
+		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -422,4 +443,229 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	expr := conf.ToHCLExpr()
 	assert.True(t, len(expr) > 0)
 	assert.Contains(t, expr, "{")
+}
+
+func TestReplaceSecretValuesWithVariableRefs_masks_authorization_header(t *testing.T) {
+	// Simulate what ModelToValue produces for collect_request_headers with Authorization header
+	attrs := map[string]Value{
+		"collect_request_headers": {
+			Kind: KindList,
+			List: []Value{
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "Authorization"},
+						"value": {Kind: KindString, String: "Bearer secret-token"},
+					},
+				},
+			},
+		},
+	}
+
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "test_resource")
+
+	// The value should be masked
+	require.Len(t, used, 1, "should have one masked variable")
+	header := attrs["collect_request_headers"].List[0]
+	assert.Equal(t, KindString, header.Map["name"].Kind, "name should remain as string")
+	assert.Equal(t, "Authorization", header.Map["name"].String)
+	assert.Equal(t, KindSensitive, header.Map["value"].Kind, "value should be marked sensitive")
+}
+
+func TestReplaceSecretValuesWithVariableRefs_preserves_non_sensitive_headers(t *testing.T) {
+	attrs := map[string]Value{
+		"headers": {
+			Kind: KindList,
+			List: []Value{
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "Content-Type"},
+						"value": {Kind: KindString, String: "application/json"},
+					},
+				},
+			},
+		},
+	}
+
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "test_resource")
+
+	assert.Empty(t, used, "no variables should be masked for non-sensitive headers")
+	header := attrs["headers"].List[0]
+	assert.Equal(t, KindString, header.Map["value"].Kind, "value should remain as string")
+	assert.Equal(t, "application/json", header.Map["value"].String)
+}
+
+func TestReplaceSecretValuesWithVariableRefs_masks_xapikey_header(t *testing.T) {
+	attrs := map[string]Value{
+		"extra_headers": {
+			Kind: KindList,
+			List: []Value{
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "X-API-Key"},
+						"value": {Kind: KindString, String: "my-api-key"},
+					},
+				},
+			},
+		},
+	}
+
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "test_resource")
+
+	require.Len(t, used, 1)
+	header := attrs["extra_headers"].List[0]
+	assert.Equal(t, KindSensitive, header.Map["value"].Kind)
+}
+
+func TestReplaceSecretValuesWithVariableRefs_masks_all_extra_http_headers(t *testing.T) {
+	// All values in extra_http_headers should be masked, regardless of header name
+	// This matches UI behavior where extra HTTP headers are treated as sensitive
+	// Uses KindVariableRef (plain var.x) since header values are plain strings, not JSON.
+	attrs := map[string]Value{
+		"extra_http_headers": {
+			Kind: KindList,
+			List: []Value{
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "X-google-api-key"},
+						"value": {Kind: KindString, String: "tests"},
+					},
+				},
+				{
+					Kind: KindMap,
+					Map: map[string]Value{
+						"name":  {Kind: KindString, String: "X-Webhook-Access-Key"},
+						"value": {Kind: KindString, String: "test"},
+					},
+				},
+			},
+		},
+	}
+
+	used := ReplaceSecretValuesWithVariableRefs(attrs, "destination_webhook")
+
+	require.Len(t, used, 2, "should mask both header values")
+	header0 := attrs["extra_http_headers"].List[0]
+	header1 := attrs["extra_http_headers"].List[1]
+
+	// Should use KindVariableRef (plain var.x) not KindSensitive (jsonencode)
+	assert.Equal(t, KindVariableRef, header0.Map["value"].Kind, "first header value should use plain var ref")
+	assert.Equal(t, KindVariableRef, header1.Map["value"].Kind, "second header value should use plain var ref")
+
+	// Verify variable names include header name for uniqueness
+	assert.Contains(t, header0.Map["value"].VarName, "X_google_api_key", "var name should include sanitized header name")
+	assert.Contains(t, header1.Map["value"].VarName, "X_Webhook_Access_Key", "var name should include sanitized header name")
+
+	// Verify String is cleared (value moved to VarName)
+	assert.Empty(t, header0.Map["value"].String, "original string should be cleared")
+	assert.Empty(t, header1.Map["value"].String, "original string should be cleared")
+
+	// Verify "name" field is unchanged (not re-processed as sensitive)
+	assert.Equal(t, KindString, header0.Map["name"].Kind, "header name should remain as string")
+	assert.Equal(t, "X-google-api-key", header0.Map["name"].String, "header name value should be unchanged")
+}
+
+func TestPruneEmptyLists_filters_urls_with_empty_url(t *testing.T) {
+	// Simulate what ModelToValue produces for output_webhook with empty urls
+	// When loadBalanced=false, the model contains urls: [{url: "", weight: 1}]
+	outputWebhook := Value{
+		Kind: KindMap,
+		Map: map[string]Value{
+			"url": {Kind: KindString, String: "http://localhost:9000"},
+			"urls": {
+				Kind: KindList,
+				List: []Value{
+					{
+						Kind: KindMap,
+						Map: map[string]Value{
+							"url":    {Kind: KindString, String: ""},
+							"weight": {Kind: KindNumber, Number: 1},
+						},
+					},
+				},
+			},
+			"type": {Kind: KindString, String: "webhook"},
+		},
+	}
+
+	pruned := PruneEmptyLists(outputWebhook)
+
+	// urls should be filtered out because the url field is empty
+	_, hasUrls := pruned.Map["urls"]
+	assert.False(t, hasUrls, "urls with empty url items should be filtered out")
+
+	// url (singular) should still be present
+	urlVal, hasUrl := pruned.Map["url"]
+	assert.True(t, hasUrl, "url (singular) should be preserved")
+	assert.Equal(t, "http://localhost:9000", urlVal.String)
+}
+
+func TestPruneEmptyLists_preserves_urls_with_valid_url(t *testing.T) {
+	outputWebhook := Value{
+		Kind: KindMap,
+		Map: map[string]Value{
+			"urls": {
+				Kind: KindList,
+				List: []Value{
+					{
+						Kind: KindMap,
+						Map: map[string]Value{
+							"url":    {Kind: KindString, String: "http://localhost:9000"},
+							"weight": {Kind: KindNumber, Number: 1},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	pruned := PruneEmptyLists(outputWebhook)
+
+	urlsVal, hasUrls := pruned.Map["urls"]
+	assert.True(t, hasUrls, "urls with valid url items should be preserved")
+	require.Len(t, urlsVal.List, 1)
+	assert.Equal(t, "http://localhost:9000", urlsVal.List[0].Map["url"].String)
+}
+
+func TestPruneEmptyLists_filters_nested_urls_in_output_block(t *testing.T) {
+	// Simulate nested structure like: output_webhook = { urls = [{url: "", weight: 1}] }
+	attrs := Value{
+		Kind: KindMap,
+		Map: map[string]Value{
+			"output_webhook": {
+				Kind: KindMap,
+				Map: map[string]Value{
+					"url": {Kind: KindString, String: "http://localhost:9000"},
+					"urls": {
+						Kind: KindList,
+						List: []Value{
+							{
+								Kind: KindMap,
+								Map: map[string]Value{
+									"url":    {Kind: KindString, String: ""},
+									"weight": {Kind: KindNumber, Number: 1},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	pruned := PruneEmptyLists(attrs)
+
+	// urls inside output_webhook should be filtered
+	outputBlock, hasOutput := pruned.Map["output_webhook"]
+	require.True(t, hasOutput, "output_webhook should exist")
+	_, hasUrls := outputBlock.Map["urls"]
+	assert.False(t, hasUrls, "nested urls with empty url items should be filtered out")
+
+	// url (singular) should still be present
+	urlVal, hasUrl := outputBlock.Map["url"]
+	assert.True(t, hasUrl, "url (singular) should be preserved")
+	assert.Equal(t, "http://localhost:9000", urlVal.String)
 }
