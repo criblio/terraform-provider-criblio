@@ -2,6 +2,7 @@ package tests
 
 import (
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -43,6 +44,32 @@ func TestPackPipeline(t *testing.T) {
 							plancheck.ExpectEmptyPlan(),
 						},
 					},
+				},
+			},
+		})
+	})
+
+	t.Run("valid-function-id", func(t *testing.T) {
+		resource.UnitTest(t, resource.TestCase{
+			ProtoV6ProviderFactories: providerFactory,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory:    config.TestNameDirectory(),
+					PlanOnly:           true,
+					ExpectNonEmptyPlan: true,
+				},
+			},
+		})
+	})
+
+	t.Run("invalid-function-id", func(t *testing.T) {
+		resource.UnitTest(t, resource.TestCase{
+			ProtoV6ProviderFactories: providerFactory,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.TestNameDirectory(),
+					PlanOnly:        true,
+					ExpectError:     regexp.MustCompile(`Invalid pipeline function ID`),
 				},
 			},
 		})
