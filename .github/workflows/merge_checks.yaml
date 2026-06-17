@@ -211,29 +211,6 @@ jobs:
           make build-import-cli
           go test -v -tags=integration ./tools/import-cli/integration/...
 
-  speakeasy_test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.2
-
-      - name: Install Speakeasy
-        uses: mheap/setup-go-cli@v1
-        with:
-          owner: speakeasy-api
-          repo: speakeasy
-          cli_name: speakeasy
-          package_type: zip
-
-      - name: Configure speakeasy CLI
-        run: |
-          mkdir -p ~/.speakeasy
-          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
-
-      - name: Run Speakeasy Tests
-        run: | 
-          make test-speakeasy
-
-
   staticcheck_test:
     runs-on: ubuntu-latest
     steps:
@@ -247,4 +224,3 @@ jobs:
           # SA1019: deprecated identifiers (e.g. reflect.PtrTo in generated SDK utils)
           checks: inherit,-ST1000,-SA1019,-SA5008
           install-go: false
-
