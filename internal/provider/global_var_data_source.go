@@ -113,7 +113,7 @@ func (d *GlobalVarDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGlobalVarAPIToState(apiModel, &model, false)
+	applyGlobalVarAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -85,7 +85,7 @@ func (d *SchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySchemaAPIToState(apiModel, &model, false)
+	applySchemaAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

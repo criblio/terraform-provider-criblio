@@ -103,7 +103,7 @@ func (r *SchemaResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySchemaAPIToState(apiModel, &model, true)
+	applySchemaAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -122,7 +122,7 @@ func (r *SchemaResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySchemaAPIToState(apiModel, &model, true)
+	applySchemaAPIToState(apiModel, &model, true, isSchemaImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -137,7 +137,7 @@ func (r *SchemaResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySchemaAPIToState(apiModel, &model, true)
+	applySchemaAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -175,26 +175,36 @@ func (r *SchemaResource) ImportState(ctx context.Context, req resource.ImportSta
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }
 
-func applySchemaAPIToState(api *SchemaModel, state *SchemaModel, preserveInputs bool) {
+func isSchemaImportState(state *SchemaModel) bool {
+	if state == nil {
+		return false
+	}
+	if state.Schema.IsNull() || state.Schema.IsUnknown() {
+		return true
+	}
+	return false
+}
+
+func applySchemaAPIToState(api *SchemaModel, state *SchemaModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || state.Description.IsNull() || state.Description.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description
 		}
 	}
-	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || state.Schema.IsNull() || state.Schema.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Schema.IsNull() || state.Schema.IsUnknown())) {
 		if !api.Schema.IsNull() && !api.Schema.IsUnknown() {
 			state.Schema = api.Schema
 		}

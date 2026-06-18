@@ -43,7 +43,7 @@ func TestCertificate(t *testing.T) {
 					ImportState:             true,
 					ImportStateId:           `{"group_id":"default","id":"my-demo-cert-001"}`,
 					ImportStateVerify:       true,
-					ImportStateVerifyIgnore: []string{"priv_key", "passphrase"},
+					ImportStateVerifyIgnore: []string{"ca_path", "cert_path", "passphrase", "passphrase_path", "priv_key", "priv_key_path"},
 				},
 			},
 		})

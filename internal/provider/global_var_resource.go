@@ -162,7 +162,7 @@ func (r *GlobalVarResource) Create(ctx context.Context, req resource.CreateReque
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGlobalVarAPIToState(apiModel, &model, true)
+	applyGlobalVarAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -181,7 +181,7 @@ func (r *GlobalVarResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGlobalVarAPIToState(apiModel, &model, true)
+	applyGlobalVarAPIToState(apiModel, &model, true, isGlobalVarImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -196,7 +196,7 @@ func (r *GlobalVarResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGlobalVarAPIToState(apiModel, &model, true)
+	applyGlobalVarAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -234,48 +234,58 @@ func (r *GlobalVarResource) ImportState(ctx context.Context, req resource.Import
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }
 
-func applyGlobalVarAPIToState(api *GlobalVarModel, state *GlobalVarModel, preserveInputs bool) {
+func isGlobalVarImportState(state *GlobalVarModel) bool {
+	if state == nil {
+		return false
+	}
+	if state.Type.IsNull() || state.Type.IsUnknown() {
+		return true
+	}
+	return false
+}
+
+func applyGlobalVarAPIToState(api *GlobalVarModel, state *GlobalVarModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || state.Args.IsNull() || state.Args.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) {
 		if !api.Args.IsNull() && !api.Args.IsUnknown() {
 			state.Args = api.Args
 		} else if state.Args.IsNull() || state.Args.IsUnknown() {
 			state.Args = types.ListValueMust(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}, nil)
 		}
 	}
-	if !preserveInputs || state.Description.IsNull() || state.Description.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description
 		}
 	}
-	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || state.Lib.IsNull() || state.Lib.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Lib.IsNull() || state.Lib.IsUnknown())) {
 		if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
 			state.Lib = api.Lib
 		}
 	}
-	if !preserveInputs || state.Tags.IsNull() || state.Tags.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
 		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 			state.Tags = api.Tags
 		}
 	}
-	if !preserveInputs || state.Type.IsNull() || state.Type.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Type.IsNull() || state.Type.IsUnknown())) {
 		if !api.Type.IsNull() && !api.Type.IsUnknown() {
 			state.Type = api.Type
 		}
 	}
-	if !preserveInputs || state.Value.IsNull() || state.Value.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Value.IsNull() || state.Value.IsUnknown())) {
 		if !api.Value.IsNull() && !api.Value.IsUnknown() {
 			state.Value = api.Value
 		}

@@ -176,6 +176,51 @@ func TestConvertFromResponseBody_certificateGeneratedModel(t *testing.T) {
 	assert.Empty(t, cert.InUse)
 }
 
+func TestConvertFromResponseBody_schemaGeneratedModelNormalizedJSON(t *testing.T) {
+	ctx := context.Background()
+	e := registry.Entry{
+		TypeName:       "criblio_schema",
+		ModelTypeName:  "SchemaResourceModel",
+		GetMethod:      "GetLibSchemasByID",
+		ImportIDFormat: "json:group_id,id",
+	}
+	body := &struct {
+		Items []struct {
+			Description string         `json:"description,omitempty"`
+			ID          string         `json:"id,omitempty"`
+			Schema      map[string]any `json:"schema,omitempty"`
+		} `json:"items"`
+	}{
+		Items: []struct {
+			Description string         `json:"description,omitempty"`
+			ID          string         `json:"id,omitempty"`
+			Schema      map[string]any `json:"schema,omitempty"`
+		}{
+			{
+				Description: "schema from API",
+				ID:          "my-schema",
+				Schema: map[string]any{
+					"type":       "object",
+					"properties": map[string]any{"message": map[string]any{"type": "string"}},
+				},
+			},
+		},
+	}
+
+	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, map[string]string{
+		"GroupID": "default",
+		"ID":      "my-schema",
+	})
+	require.NoError(t, err)
+
+	schemaModel, ok := model.(*provider.SchemaResourceModel)
+	require.True(t, ok, "model should be *SchemaResourceModel")
+	assert.Equal(t, "default", schemaModel.GroupID.ValueString())
+	assert.Equal(t, "my-schema", schemaModel.ID.ValueString())
+	require.False(t, schemaModel.Schema.IsNull())
+	assert.Contains(t, schemaModel.Schema.ValueString(), `"type":"object"`)
+}
+
 func TestConvertFromResponseBodyWithIdentifiers_injects_required_fields(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)

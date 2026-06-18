@@ -117,7 +117,7 @@ func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true)
+	applyRegexAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -136,7 +136,7 @@ func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true)
+	applyRegexAPIToState(apiModel, &model, true, isRegexImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -151,7 +151,7 @@ func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true)
+	applyRegexAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -189,41 +189,51 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }
 
-func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs bool) {
+func isRegexImportState(state *RegexModel) bool {
+	if state == nil {
+		return false
+	}
+	if state.Regex.IsNull() || state.Regex.IsUnknown() {
+		return true
+	}
+	return false
+}
+
+func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || state.Description.IsNull() || state.Description.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description
 		}
 	}
-	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || state.Lib.IsNull() || state.Lib.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Lib.IsNull() || state.Lib.IsUnknown())) {
 		if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
 			state.Lib = api.Lib
 		}
 	}
-	if !preserveInputs || state.Regex.IsNull() || state.Regex.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Regex.IsNull() || state.Regex.IsUnknown())) {
 		if !api.Regex.IsNull() && !api.Regex.IsUnknown() {
 			state.Regex = api.Regex
 		}
 	}
-	if !preserveInputs || state.SampleData.IsNull() || state.SampleData.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.SampleData.IsNull() || state.SampleData.IsUnknown())) {
 		if !api.SampleData.IsNull() && !api.SampleData.IsUnknown() {
 			state.SampleData = api.SampleData
 		}
 	}
-	if !preserveInputs || state.Tags.IsNull() || state.Tags.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
 		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 			state.Tags = api.Tags
 		}

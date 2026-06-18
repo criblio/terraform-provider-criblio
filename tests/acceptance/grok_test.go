@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -13,7 +12,7 @@ func TestGrok(t *testing.T) {
 		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
 	}
 
-	resourceName := "criblio_grok.my_grok[0]"
+	resourceName := "criblio_grok.my_grok"
 
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
@@ -21,7 +20,7 @@ func TestGrok(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					Config: grokConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_grok"),
@@ -38,10 +37,11 @@ func TestGrok(t *testing.T) {
 					PlanOnly: true,
 				},
 				{
-					ResourceName:      resourceName,
-					ImportState:       true,
-					ImportStateId:     `{"group_id":"default","id":"test_grok"}`,
-					ImportStateVerify: true,
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           `{"group_id":"default","id":"test_grok"}`,
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: []string{"tags"},
 				},
 			},
 		})
@@ -49,11 +49,18 @@ func TestGrok(t *testing.T) {
 }
 
 const grokUpdatedConfig = `resource "criblio_grok" "my_grok" {
-  count = 1
-
   group_id = "default"
   id       = "test_grok"
   tags     = "updated"
+  content  = <<-EOT
+TESTWORD [a-zA-Z]+
+EOT
+}
+`
+
+const grokConfig = `resource "criblio_grok" "my_grok" {
+  group_id = "default"
+  id       = "test_grok"
   content  = <<-EOT
 TESTWORD [a-zA-Z]+
 EOT

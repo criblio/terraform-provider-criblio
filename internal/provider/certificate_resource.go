@@ -161,7 +161,7 @@ func (r *CertificateResource) Create(ctx context.Context, req resource.CreateReq
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, true)
+	applyCertificateAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -180,7 +180,7 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, true)
+	applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -195,7 +195,7 @@ func (r *CertificateResource) Update(ctx context.Context, req resource.UpdateReq
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, true)
+	applyCertificateAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -233,21 +233,34 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }
 
-func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, preserveInputs bool) {
+func isCertificateImportState(state *CertificateModel) bool {
+	if state == nil {
+		return false
+	}
+	if state.Cert.IsNull() || state.Cert.IsUnknown() {
+		return true
+	}
+	if state.PrivKey.IsNull() || state.PrivKey.IsUnknown() {
+		return true
+	}
+	return false
+}
+
+func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || state.Ca.IsNull() || state.Ca.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Ca.IsNull() || state.Ca.IsUnknown())) {
 		if !api.Ca.IsNull() && !api.Ca.IsUnknown() {
 			state.Ca = api.Ca
 		}
 	}
-	if !preserveInputs || state.CaPath.IsNull() || state.CaPath.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.CaPath.IsNull() || state.CaPath.IsUnknown())) {
 		if !api.CaPath.IsNull() && !api.CaPath.IsUnknown() {
 			state.CaPath = api.CaPath
 		}
 	}
-	if !preserveInputs || state.Cert.IsNull() || state.Cert.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown())) {
 		if !api.Cert.IsNull() && !api.Cert.IsUnknown() {
 			state.Cert = api.Cert
 		}
@@ -257,22 +270,22 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	} else if state.CertExpiryDate.IsNull() || state.CertExpiryDate.IsUnknown() {
 		state.CertExpiryDate = types.StringValue("")
 	}
-	if !preserveInputs || state.CertPath.IsNull() || state.CertPath.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.CertPath.IsNull() || state.CertPath.IsUnknown())) {
 		if !api.CertPath.IsNull() && !api.CertPath.IsUnknown() {
 			state.CertPath = api.CertPath
 		}
 	}
-	if !preserveInputs || state.Description.IsNull() || state.Description.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description
 		}
 	}
-	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
@@ -282,22 +295,22 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	} else if state.InUse.IsNull() || state.InUse.IsUnknown() {
 		state.InUse = types.ListValueMust(types.StringType, nil)
 	}
-	if !preserveInputs || state.Passphrase.IsNull() || state.Passphrase.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Passphrase.IsNull() || state.Passphrase.IsUnknown())) {
 		if !api.Passphrase.IsNull() && !api.Passphrase.IsUnknown() {
 			state.Passphrase = stringFromAPIOrPrior(api.Passphrase.ValueString(), state.Passphrase)
 		}
 	}
-	if !preserveInputs || state.PassphrasePath.IsNull() || state.PassphrasePath.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.PassphrasePath.IsNull() || state.PassphrasePath.IsUnknown())) {
 		if !api.PassphrasePath.IsNull() && !api.PassphrasePath.IsUnknown() {
 			state.PassphrasePath = api.PassphrasePath
 		}
 	}
-	if !preserveInputs || state.PrivKey.IsNull() || state.PrivKey.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.PrivKey.IsNull() || state.PrivKey.IsUnknown())) {
 		if !api.PrivKey.IsNull() && !api.PrivKey.IsUnknown() {
 			state.PrivKey = stringFromAPIOrPrior(api.PrivKey.ValueString(), state.PrivKey)
 		}
 	}
-	if !preserveInputs || state.PrivKeyPath.IsNull() || state.PrivKeyPath.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.PrivKeyPath.IsNull() || state.PrivKeyPath.IsUnknown())) {
 		if !api.PrivKeyPath.IsNull() && !api.PrivKeyPath.IsUnknown() {
 			state.PrivKeyPath = api.PrivKeyPath
 		}

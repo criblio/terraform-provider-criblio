@@ -106,7 +106,7 @@ func (r *GrokResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGrokAPIToState(apiModel, &model, true)
+	applyGrokAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -125,7 +125,7 @@ func (r *GrokResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGrokAPIToState(apiModel, &model, true)
+	applyGrokAPIToState(apiModel, &model, true, isGrokImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -140,7 +140,7 @@ func (r *GrokResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGrokAPIToState(apiModel, &model, true)
+	applyGrokAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -178,21 +178,31 @@ func (r *GrokResource) ImportState(ctx context.Context, req resource.ImportState
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 }
 
-func applyGrokAPIToState(api *GrokModel, state *GrokModel, preserveInputs bool) {
+func isGrokImportState(state *GrokModel) bool {
+	if state == nil {
+		return false
+	}
+	if state.Content.IsNull() || state.Content.IsUnknown() {
+		return true
+	}
+	return false
+}
+
+func applyGrokAPIToState(api *GrokModel, state *GrokModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || state.Content.IsNull() || state.Content.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Content.IsNull() || state.Content.IsUnknown())) {
 		if !api.Content.IsNull() && !api.Content.IsUnknown() {
 			state.Content = api.Content
 		}
 	}
-	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
@@ -202,7 +212,7 @@ func applyGrokAPIToState(api *GrokModel, state *GrokModel, preserveInputs bool) 
 	} else if state.Size.IsNull() || state.Size.IsUnknown() {
 		state.Size = types.Float64Value(0)
 	}
-	if !preserveInputs || state.Tags.IsNull() || state.Tags.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
 		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 			state.Tags = api.Tags
 		}

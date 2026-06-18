@@ -97,6 +97,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"planModifierType":                 planModifierType,
 		"planModifierCalls":                planModifierCalls,
 		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
+		"importSentinelFields":             importSentinelFields,
 		"pathParamFields":                  pathParamFields,
 		"jsonImport":                       jsonImport,
 		"nestedObjectList":                 nestedObjectList,
@@ -443,6 +444,16 @@ func pathParamFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range resource.Fields {
 		if field.PathParam {
+			fields = append(fields, field)
+		}
+	}
+	return fields
+}
+
+func importSentinelFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, field := range resource.Fields {
+		if field.Required && !field.PathParam && !field.Computed {
 			fields = append(fields, field)
 		}
 	}

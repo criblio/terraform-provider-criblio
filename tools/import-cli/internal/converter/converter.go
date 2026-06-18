@@ -16,6 +16,7 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -390,6 +391,13 @@ func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
 			return err
 		}
 		field.Set(reflect.ValueOf(types.Float64Value(value)))
+		return nil
+	case reflect.TypeOf(jsontypes.Normalized{}):
+		var value string
+		if err := json.Unmarshal(raw, &value); err != nil {
+			value = string(raw)
+		}
+		field.Set(reflect.ValueOf(jsontypes.NewNormalizedValue(value)))
 		return nil
 	case reflect.TypeOf(types.List{}):
 		var values []string

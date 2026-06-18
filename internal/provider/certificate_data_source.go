@@ -134,7 +134,7 @@ func (d *CertificateDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, false)
+	applyCertificateAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

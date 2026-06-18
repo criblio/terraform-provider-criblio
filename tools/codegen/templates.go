@@ -458,7 +458,7 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, true)
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -477,7 +477,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, true)
+	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -492,7 +492,7 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, true)
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -532,13 +532,28 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 {{- end }}
 }
 
-func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .StructName }}Model, preserveInputs bool) {
+func is{{ .StructName }}ImportState(state *{{ .StructName }}Model) bool {
+	if state == nil {
+		return false
+	}
+{{- $sentinels := importSentinelFields . }}
+{{- if $sentinels }}
+{{- range $sentinels }}
+	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		return true
+	}
+{{- end }}
+{{- end }}
+	return false
+}
+
+func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .StructName }}Model, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
 {{- range .Fields }}
 {{- if not .Computed }}
-	if !preserveInputs || state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())) {
 {{- end }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
@@ -583,7 +598,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
-	if api.{{ .GoName }} != nil && (!preserveInputs || state.{{ .GoName }} == nil) {
+	if api.{{ .GoName }} != nil && (!preserveInputs || (fillMissingInputs && state.{{ .GoName }} == nil)) {
 		state.{{ .GoName }} = &{{ .ModelName }}{}
 {{- range .Fields }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
@@ -717,7 +732,7 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, false)
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -825,7 +840,7 @@ func Test{{ .StructName }}(t *testing.T) {
 					ImportState:             true,
 					ImportStateId:           ` + "`" + `{"group_id":"default","id":"my-demo-cert-001"}` + "`" + `,
 					ImportStateVerify:       true,
-					ImportStateVerifyIgnore: []string{"priv_key", "passphrase"},
+					ImportStateVerifyIgnore: []string{"ca_path", "cert_path", "passphrase", "passphrase_path", "priv_key", "priv_key_path"},
 				},
 			},
 		})
@@ -910,7 +925,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -919,7 +933,7 @@ func TestGrok(t *testing.T) {
 		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
 	}
 
-	resourceName := "criblio_grok.my_grok[0]"
+	resourceName := "criblio_grok.my_grok"
 
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
@@ -927,7 +941,7 @@ func TestGrok(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					Config: grokConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_grok"),
@@ -944,10 +958,11 @@ func TestGrok(t *testing.T) {
 					PlanOnly:        true,
 				},
 				{
-					ResourceName:      resourceName,
-					ImportState:       true,
-					ImportStateId:     ` + "`" + `{"group_id":"default","id":"test_grok"}` + "`" + `,
-					ImportStateVerify: true,
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           ` + "`" + `{"group_id":"default","id":"test_grok"}` + "`" + `,
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: []string{"tags"},
 				},
 			},
 		})
@@ -955,11 +970,18 @@ func TestGrok(t *testing.T) {
 }
 
 const grokUpdatedConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
-  count = 1
-
   group_id = "default"
   id       = "test_grok"
   tags     = "updated"
+  content  = <<-EOT
+TESTWORD [a-zA-Z]+
+EOT
+}
+` + "`" + `
+
+const grokConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
+  group_id = "default"
+  id       = "test_grok"
   content  = <<-EOT
 TESTWORD [a-zA-Z]+
 EOT
