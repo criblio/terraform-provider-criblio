@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -440,6 +441,9 @@ func objectListValue(raw json.RawMessage) (types.List, error) {
 	if err := json.Unmarshal(raw, &objects); err != nil {
 		return types.List{}, err
 	}
+	for index := range objects {
+		objects[index] = terraformNameMap(objects[index])
+	}
 	attrTypes := map[string]attr.Type{}
 	for _, object := range objects {
 		for key, value := range object {
@@ -479,6 +483,7 @@ func objectValue(raw json.RawMessage) (types.Object, error) {
 	if err := json.Unmarshal(raw, &object); err != nil {
 		return types.Object{}, err
 	}
+	object = terraformNameMap(object)
 	attrTypes := make(map[string]attr.Type, len(object))
 	for key, value := range object {
 		attrTypes[key] = inferredAttrType(value)
@@ -496,6 +501,56 @@ func objectValue(raw json.RawMessage) (types.Object, error) {
 		return types.Object{}, DiagnosticsToError(diags, "types.Object", "")
 	}
 	return result, nil
+}
+
+func terraformNameMap(input map[string]any) map[string]any {
+	output := make(map[string]any, len(input))
+	for key, value := range input {
+		output[apiKeyToTerraformName(key)] = terraformNameValue(value)
+	}
+	return output
+}
+
+func terraformNameValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return terraformNameMap(typed)
+	case []any:
+		output := make([]any, len(typed))
+		for index, item := range typed {
+			output[index] = terraformNameValue(item)
+		}
+		return output
+	default:
+		return value
+	}
+}
+
+func apiKeyToTerraformName(key string) string {
+	prefix := ""
+	if strings.HasPrefix(key, "__template_") {
+		prefix = "__template_"
+		key = strings.TrimPrefix(key, prefix)
+	}
+	var output strings.Builder
+	var previous rune
+	for index, char := range key {
+		if char == '_' {
+			output.WriteRune(char)
+			previous = char
+			continue
+		}
+		if unicode.IsUpper(char) {
+			if index > 0 && previous != '_' {
+				output.WriteByte('_')
+			}
+			output.WriteRune(unicode.ToLower(char))
+		} else {
+			output.WriteRune(char)
+		}
+		previous = char
+	}
+	return prefix + output.String()
 }
 
 func inferredAttrType(value any) attr.Type {

@@ -17,7 +17,7 @@ func newMappingRulesetAPI(client *restclient.Client) MappingRulesetAPI {
 }
 
 func (a MappingRulesetAPI) Create(ctx context.Context, model MappingRulesetModel) (*MappingRulesetModel, error) {
-	return restclient.Post[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()), model)
 }
 
 func (a MappingRulesetAPI) Read(ctx context.Context, model MappingRulesetModel) (*MappingRulesetModel, error) {

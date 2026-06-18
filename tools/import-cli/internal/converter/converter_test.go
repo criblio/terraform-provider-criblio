@@ -121,6 +121,39 @@ func TestObjectListValue(t *testing.T) {
 	assert.Equal(t, types.ObjectType{AttrTypes: provider.GlobalVarArgsAttrTypes()}, value.ElementType(context.Background()))
 }
 
+func TestObjectListValueNormalizesAPIKeysToTerraformNames(t *testing.T) {
+	value, err := objectListValue(json.RawMessage(`[{
+		"name": "test",
+		"eventBreakerRegex": "/[\\n\\r]+/",
+		"maxEventBytes": 51200,
+		"parserEnabled": false,
+		"shouldUseDataRaw": false,
+		"timestampAnchorRegex": "/^/",
+		"timestamp": {
+			"type": "auto",
+			"length": 150
+		}
+	}]`))
+	require.NoError(t, err)
+
+	elementType, ok := value.ElementType(context.Background()).(types.ObjectType)
+	require.True(t, ok)
+	assert.Contains(t, elementType.AttrTypes, "event_breaker_regex")
+	assert.Contains(t, elementType.AttrTypes, "max_event_bytes")
+	assert.Contains(t, elementType.AttrTypes, "parser_enabled")
+	assert.Contains(t, elementType.AttrTypes, "should_use_data_raw")
+	assert.Contains(t, elementType.AttrTypes, "timestamp_anchor_regex")
+	assert.NotContains(t, elementType.AttrTypes, "eventBreakerRegex")
+	assert.NotContains(t, elementType.AttrTypes, "timestampAnchorRegex")
+
+	first := value.Elements()[0].(types.Object)
+	attrs := first.Attributes()
+	assert.Contains(t, attrs, "timestamp_anchor_regex")
+	timestamp := attrs["timestamp"].(types.Object)
+	assert.Contains(t, timestamp.Attributes(), "type")
+	assert.Contains(t, timestamp.Attributes(), "length")
+}
+
 // TestConvertFromResponseBody_destination verifies the correct RefreshFrom* method is invoked
 // for another resource type (GetOutputByID -> RefreshFromOperationsGetOutputByIDResponseBody).
 func TestConvertFromResponseBody_destination(t *testing.T) {

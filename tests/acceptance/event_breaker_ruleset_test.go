@@ -59,7 +59,7 @@ func eventBreakerRulesetConfig(description string) string {
     name                   = "phase2"
     parser_enabled         = false
     should_use_data_raw    = false
-    timestamp              = { type = "auto" }
+    timestamp              = { length = 150, type = "auto" }
     timestamp_anchor_regex = "/^/"
     type                   = "regex"
   }]

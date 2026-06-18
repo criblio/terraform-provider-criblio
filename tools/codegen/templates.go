@@ -9,6 +9,8 @@ import (
 {{- if needsFmt . }}
 	"fmt"
 {{- end }}
+	"strings"
+	"unicode"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -103,6 +105,9 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 			if err != nil {
 				return nil, err
 			}
+			if value == nil {
+				continue
+			}
 			output[key] = value
 		}
 		return output, nil
@@ -113,13 +118,169 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 			if err != nil {
 				return nil, err
 			}
-			output[key] = value
+			if value == nil {
+				continue
+			}
+			output[{{ .StructName }}TerraformNameToAPIName(key)] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
 		return typed.ValueString(), nil
 	default:
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
+func {{ .StructName }}TerraformNameToAPIName(name string) string {
+	prefix := ""
+	if strings.HasPrefix(name, "__template_") {
+		prefix = "__template_"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	var output strings.Builder
+	upperNext := false
+	for _, char := range name {
+		if char == '_' {
+			upperNext = true
+			continue
+		}
+		if upperNext {
+			output.WriteRune(unicode.ToUpper(char))
+			upperNext = false
+			continue
+		}
+		output.WriteRune(char)
+	}
+	return prefix + output.String()
+}
+
+func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if value == nil {
+		return {{ .StructName }}TerraformNullValue(typ)
+	}
+	if typ.Equal(types.BoolType) {
+		typed, ok := value.(bool)
+		if !ok {
+			return nil, fmt.Errorf("expected bool, got %T", value)
+		}
+		return types.BoolValue(typed), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Int64Value(int64(typed)), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Float64Value(typed), nil
+	}
+	if typ.Equal(types.StringType) {
+		typed, ok := value.(string)
+		if !ok {
+			return nil, fmt.Errorf("expected string, got %T", value)
+		}
+		return types.StringValue(typed), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		input, ok := value.([]any)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		output := make([]attr.Value, 0, len(input))
+		for _, item := range input {
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, nested)
+		}
+		value, diags := types.ListValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.MapType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(input))
+		for key, item := range input {
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.MapValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.ObjectType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+			item, ok := input[apiKey]
+			if !ok {
+				item, ok = input[key]
+			}
+			if !ok {
+				nested, err := {{ .StructName }}TerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				output[key] = nested
+				continue
+			}
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, attrType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.ObjectValue(typed.AttrTypes, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
+func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.BoolType) {
+		return types.BoolNull(), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		return types.Int64Null(), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		return types.Float64Null(), nil
+	}
+	if typ.Equal(types.StringType) {
+		return types.StringNull(), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		return types.ListNull(typed.ElemType), nil
+	case types.MapType:
+		return types.MapNull(typed.ElemType), nil
+	case types.ObjectType:
+		return types.ObjectNull(typed.AttrTypes), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
 	}
 }
 
@@ -147,21 +308,21 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- range .Fields }}
 {{- if nestedObjectList . }}
 	if input.{{ .GoName }} != nil {
-		value, diags := types.ListValueFrom(context.Background(), types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, input.{{ .GoName }})
-		if diags.HasError() {
-			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ListType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
 		}
-		m.{{ .GoName }} = value
+		m.{{ .GoName }} = value.(types.List)
 	} else {
 		m.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
 	}
 {{- else if nestedObject . }}
 	if input.{{ .GoName }} != nil {
-		value, diags := types.ObjectValueFrom(context.Background(), {{ .NestedAttrTypes }}(), input.{{ .GoName }})
-		if diags.HasError() {
-			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
 		}
-		m.{{ .GoName }} = value
+		m.{{ .GoName }} = value.(types.Object)
 	} else {
 		m.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
@@ -247,7 +408,7 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 }
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
+	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
@@ -876,7 +1037,9 @@ The ` + "[`terraform import` command](https://developer.hashicorp.com/terraform/
 ` + "```" + `
 `
 
-const testTemplate = `package tests
+const testTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
+
+package tests
 
 {{- if eq .Name "certificate" }}
 import (
