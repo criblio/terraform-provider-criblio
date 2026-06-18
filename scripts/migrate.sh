@@ -207,9 +207,13 @@ run_build() {
 
 run_acceptance() {
   local resource="$1"
+  local test_file
+  test_file="$(acceptance_test_file "$resource")"
+  local test_pattern
+  test_pattern="$(acceptance_test_pattern "$test_file" "$resource")"
   local test_args=("./tests/acceptance")
-  if [[ -f "tests/acceptance/${resource}_test.go" ]]; then
-    test_args=("./tests/acceptance" "-run" "(?i:${resource})")
+  if [[ -n "$test_file" && -f "tests/acceptance/${test_file}" ]]; then
+    test_args=("./tests/acceptance" "-run" "$test_pattern")
   fi
   if is_true "$DRY_RUN"; then
     echo "DRY_RUN=true: would run acceptance test: go test -v -timeout 20m ${test_args[*]}"
@@ -221,6 +225,44 @@ run_acceptance() {
     echo "acceptance test failed" >&2
     return 1
   fi
+}
+
+compact_name() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -d '_-'
+}
+
+acceptance_test_file() {
+  local resource="$1"
+  local stem
+  stem="$(printf '%s' "$resource" | sed -E 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]')"
+  if [[ -f "tests/acceptance/${stem}_test.go" ]]; then
+    printf '%s\n' "${stem}_test.go"
+    return 0
+  fi
+  local compact
+  compact="$(compact_name "$resource")"
+  local file base
+  for file in tests/acceptance/*_test.go; do
+    base="$(basename "$file" _test.go)"
+    if [[ "$(compact_name "$base")" == "$compact" ]]; then
+      printf '%s\n' "$(basename "$file")"
+      return 0
+    fi
+  done
+}
+
+acceptance_test_pattern() {
+  local test_file="$1"
+  local resource="$2"
+  if [[ -n "$test_file" && -f "tests/acceptance/${test_file}" ]]; then
+    local test_name
+    test_name="$(sed -n -E 's/^func (Test[[:alnum:]_]+)\(.*/\1/p' "tests/acceptance/${test_file}" | head -1)"
+    if [[ -n "$test_name" ]]; then
+      printf '^%s$\n' "$test_name"
+      return 0
+    fi
+  fi
+  printf '(?i:%s)\n' "$resource"
 }
 
 migrate_bucket_a() {

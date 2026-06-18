@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -83,7 +84,7 @@ func (r *CertificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Computed:    false,
 				Description: `Worker group ID.`,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -92,7 +93,8 @@ func (r *CertificateResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Computed:    false,
 				Description: `Unique identifier for the certificate.`,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
 			"in_use": schema.ListAttribute{
@@ -235,17 +237,17 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.Ca.IsNull() || state.Ca.IsUnknown() {
 		if !api.Ca.IsNull() && !api.Ca.IsUnknown() {
 			state.Ca = api.Ca
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.CaPath.IsNull() || state.CaPath.IsUnknown() {
 		if !api.CaPath.IsNull() && !api.CaPath.IsUnknown() {
 			state.CaPath = api.CaPath
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.Cert.IsNull() || state.Cert.IsUnknown() {
 		if !api.Cert.IsNull() && !api.Cert.IsUnknown() {
 			state.Cert = api.Cert
 		}
@@ -255,22 +257,22 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	} else if state.CertExpiryDate.IsNull() || state.CertExpiryDate.IsUnknown() {
 		state.CertExpiryDate = types.StringValue("")
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.CertPath.IsNull() || state.CertPath.IsUnknown() {
 		if !api.CertPath.IsNull() && !api.CertPath.IsUnknown() {
 			state.CertPath = api.CertPath
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.Description.IsNull() || state.Description.IsUnknown() {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.GroupID.IsNull() || state.GroupID.IsUnknown() {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.ID.IsNull() || state.ID.IsUnknown() {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {
 			state.ID = api.ID
 		}
@@ -280,22 +282,22 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	} else if state.InUse.IsNull() || state.InUse.IsUnknown() {
 		state.InUse = types.ListValueMust(types.StringType, nil)
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.Passphrase.IsNull() || state.Passphrase.IsUnknown() {
 		if !api.Passphrase.IsNull() && !api.Passphrase.IsUnknown() {
 			state.Passphrase = stringFromAPIOrPrior(api.Passphrase.ValueString(), state.Passphrase)
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.PassphrasePath.IsNull() || state.PassphrasePath.IsUnknown() {
 		if !api.PassphrasePath.IsNull() && !api.PassphrasePath.IsUnknown() {
 			state.PassphrasePath = api.PassphrasePath
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.PrivKey.IsNull() || state.PrivKey.IsUnknown() {
 		if !api.PrivKey.IsNull() && !api.PrivKey.IsUnknown() {
 			state.PrivKey = stringFromAPIOrPrior(api.PrivKey.ValueString(), state.PrivKey)
 		}
 	}
-	if !preserveInputs {
+	if !preserveInputs || state.PrivKeyPath.IsNull() || state.PrivKeyPath.IsUnknown() {
 		if !api.PrivKeyPath.IsNull() && !api.PrivKeyPath.IsUnknown() {
 			state.PrivKeyPath = api.PrivKeyPath
 		}

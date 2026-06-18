@@ -57,14 +57,14 @@ func (r renderer) render(resources []parser.ResourceDef) ([]renderedFile, error)
 }
 
 func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
-	prefix := "internal/provider/" + resource.Name
+	prefix := "internal/provider/" + resource.FileStem
 	return []parser.OutputFile{
 		{Path: prefix + "_types.go", Kind: "types"},
 		{Path: prefix + "_client.go", Kind: "client"},
 		{Path: prefix + "_resource.go", Kind: "resource"},
 		{Path: prefix + "_data_source.go", Kind: "data_source"},
-		{Path: "docs/resources/" + resource.Name + ".md", Kind: "doc"},
-		{Path: "tests/acceptance/" + resource.Name + "_test.go", Kind: "test"},
+		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
+		{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"},
 	}
 }
 
@@ -74,22 +74,32 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":          goType,
-		"schemaAttribute": schemaAttribute,
-		"schemaTypeName":  schemaTypeName,
-		"schemaSections":  schemaSections,
-		"zeroValue":       zeroValue,
-		"pathExpr":        pathExpr,
-		"jsonName":        jsonName,
-		"apiType":         apiType,
-		"legacyGoType":    legacyGoType,
-		"resourceType":    resourceType,
-		"exampleUsage":    exampleUsage,
-		"importBlock":     importBlock,
-		"importCommand":   importCommand,
-		"joinDocFields":   joinDocFields,
-		"pathParamFields": pathParamFields,
-		"jsonImport":      jsonImport,
+		"goType":                           goType,
+		"schemaAttribute":                  schemaAttribute,
+		"schemaTypeName":                   schemaTypeName,
+		"schemaSections":                   schemaSections,
+		"zeroValue":                        zeroValue,
+		"pathExpr":                         pathExpr,
+		"jsonName":                         jsonName,
+		"apiType":                          apiType,
+		"legacyGoType":                     legacyGoType,
+		"resourceType":                     resourceType,
+		"typeNameSuffix":                   typeNameSuffix,
+		"exampleUsage":                     exampleUsage,
+		"importBlock":                      importBlock,
+		"importCommand":                    importCommand,
+		"joinDocFields":                    joinDocFields,
+		"needsFmt":                         needsFmt,
+		"needsAttr":                        needsAttr,
+		"needsPlanModifier":                needsPlanModifier,
+		"needsFrameworkStringPlanModifier": needsFrameworkStringPlanModifier,
+		"needsCustomPlanModifier":          needsCustomPlanModifier,
+		"planModifierType":                 planModifierType,
+		"planModifierCalls":                planModifierCalls,
+		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
+		"pathParamFields":                  pathParamFields,
+		"jsonImport":                       jsonImport,
+		"nestedObjectList":                 nestedObjectList,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -170,6 +180,9 @@ func legacyGoType(field parser.FieldDef) string {
 	case "number":
 		return "types.Float64"
 	case "array":
+		if nestedObjectList(field) {
+			return "types.List"
+		}
 		return "[]types.String"
 	case "object":
 		return "types.Map"
@@ -179,6 +192,9 @@ func legacyGoType(field parser.FieldDef) string {
 }
 
 func apiType(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "[]" + field.NestedAPIModelName
+	}
 	switch field.Type {
 	case "boolean":
 		return "*bool"
@@ -196,6 +212,9 @@ func apiType(field parser.FieldDef) string {
 }
 
 func schemaAttribute(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "schema.ListNestedAttribute"
+	}
 	switch field.Type {
 	case "boolean":
 		return "schema.BoolAttribute"
@@ -213,6 +232,9 @@ func schemaAttribute(field parser.FieldDef) string {
 }
 
 func schemaTypeName(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "List of Object"
+	}
 	switch field.Type {
 	case "boolean":
 		return "Boolean"
@@ -230,6 +252,9 @@ func schemaTypeName(field parser.FieldDef) string {
 }
 
 func zeroValue(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "types.ListValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
+	}
 	switch goType(field) {
 	case "types.Bool":
 		return "types.BoolValue(false)"
@@ -253,7 +278,138 @@ func jsonName(field parser.FieldDef) string {
 }
 
 func resourceType(resource parser.ResourceDef) string {
-	return "criblio_" + resource.Name
+	return resource.TypeName
+}
+
+func typeNameSuffix(resource parser.ResourceDef) string {
+	return strings.TrimPrefix(resource.TypeName, "criblio_")
+}
+
+func needsFmt(resource parser.ResourceDef) bool {
+	for _, field := range resource.Fields {
+		if field.Type == "array" || field.Type == "object" {
+			return true
+		}
+	}
+	return false
+}
+
+func needsAttr(resource parser.ResourceDef) bool {
+	for _, field := range resource.Fields {
+		if nestedObjectList(field) {
+			return true
+		}
+	}
+	return false
+}
+
+func nestedObjectList(field parser.FieldDef) bool {
+	return field.Type == "array" && field.ElementType == "object" && len(field.Fields) > 0
+}
+
+func needsPlanModifier(resource parser.ResourceDef) bool {
+	for _, field := range resource.Fields {
+		if len(planModifierCalls(field)) > 0 {
+			return true
+		}
+		for _, nested := range field.Fields {
+			if len(planModifierCalls(nested)) > 0 {
+				return true
+			}
+		}
+		if len(nestedObjectPlanModifierCalls(field)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func needsFrameworkStringPlanModifier(resource parser.ResourceDef) bool {
+	for _, field := range resource.Fields {
+		if field.ForceNew {
+			return true
+		}
+		for _, nested := range field.Fields {
+			if nested.ForceNew {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func needsCustomPlanModifier(resource parser.ResourceDef, kind string) bool {
+	for _, field := range resource.Fields {
+		if field.SuppressDiff && customPlanModifierKind(field) == kind {
+			return true
+		}
+		if nestedObjectList(field) && field.SuppressDiff && kind == "object" {
+			return true
+		}
+		for _, nested := range field.Fields {
+			if nested.SuppressDiff && customPlanModifierKind(nested) == kind {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func planModifierType(field parser.FieldDef) string {
+	switch field.Type {
+	case "boolean":
+		return "Bool"
+	case "integer":
+		return "Int64"
+	case "number":
+		return "Float64"
+	case "array":
+		return "List"
+	case "object":
+		return "Map"
+	default:
+		return "String"
+	}
+}
+
+func planModifierCalls(field parser.FieldDef) []string {
+	var calls []string
+	if field.ForceNew {
+		calls = append(calls, "stringplanmodifier.RequiresReplaceIfConfigured()")
+	}
+	if field.SuppressDiff {
+		packageName := customPlanModifierPackage(field)
+		calls = append(calls, fmt.Sprintf("%s.SuppressDiff(%s.ExplicitSuppress)", packageName, packageName))
+	}
+	return calls
+}
+
+func nestedObjectPlanModifierCalls(field parser.FieldDef) []string {
+	if !nestedObjectList(field) || !field.SuppressDiff {
+		return nil
+	}
+	return []string{"custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)"}
+}
+
+func customPlanModifierKind(field parser.FieldDef) string {
+	switch field.Type {
+	case "boolean":
+		return "bool"
+	case "integer":
+		return "int64"
+	case "number":
+		return "float64"
+	case "array":
+		return "list"
+	case "object":
+		return "map"
+	default:
+		return "string"
+	}
+}
+
+func customPlanModifierPackage(field parser.FieldDef) string {
+	return "custom_" + customPlanModifierKind(field) + "planmodifier"
 }
 
 func exampleUsage(resource parser.ResourceDef) string {

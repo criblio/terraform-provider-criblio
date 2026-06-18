@@ -393,10 +393,15 @@ func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
 		return nil
 	case reflect.TypeOf(types.List{}):
 		var values []string
-		if err := json.Unmarshal(raw, &values); err != nil {
+		if err := json.Unmarshal(raw, &values); err == nil {
+			field.Set(reflect.ValueOf(types.ListValueMust(types.StringType, stringValues(values))))
+			return nil
+		}
+		value, err := objectListValue(raw)
+		if err != nil {
 			return err
 		}
-		field.Set(reflect.ValueOf(types.ListValueMust(types.StringType, stringValues(values))))
+		field.Set(reflect.ValueOf(value))
 		return nil
 	}
 
@@ -412,6 +417,41 @@ func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
 		field.Set(reflect.ValueOf(tfValues))
 	}
 	return nil
+}
+
+func objectListValue(raw json.RawMessage) (types.List, error) {
+	var objects []map[string]string
+	if err := json.Unmarshal(raw, &objects); err != nil {
+		return types.List{}, err
+	}
+	attrTypes := map[string]attr.Type{}
+	for _, object := range objects {
+		for key := range object {
+			attrTypes[key] = types.StringType
+		}
+	}
+	objectType := types.ObjectType{AttrTypes: attrTypes}
+	values := make([]attr.Value, 0, len(objects))
+	for _, object := range objects {
+		attrs := make(map[string]attr.Value, len(attrTypes))
+		for key := range attrTypes {
+			if value, ok := object[key]; ok {
+				attrs[key] = types.StringValue(value)
+			} else {
+				attrs[key] = types.StringNull()
+			}
+		}
+		objectValue, diags := types.ObjectValue(attrTypes, attrs)
+		if diags.HasError() {
+			return types.List{}, DiagnosticsToError(diags, "types.List", "")
+		}
+		values = append(values, objectValue)
+	}
+	listValue, diags := types.ListValue(objectType, values)
+	if diags.HasError() {
+		return types.List{}, DiagnosticsToError(diags, "types.List", "")
+	}
+	return listValue, nil
 }
 
 func stringValues(values []string) []attr.Value {

@@ -2,12 +2,14 @@ package converter
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -102,6 +104,21 @@ func TestResourceModelTypes_hasEntriesForSupportedTypes(t *testing.T) {
 	assert.Contains(t, types, "SourceResourceModel")
 	assert.Contains(t, types, "PipelineResourceModel")
 	assert.Contains(t, types, "RoutesResourceModel")
+}
+
+func TestObjectListValue(t *testing.T) {
+	value, err := objectListValue(json.RawMessage(`[{"name":"val","type":"number"}]`))
+	require.NoError(t, err)
+	require.False(t, value.IsNull())
+	require.False(t, value.IsUnknown())
+
+	var args []provider.GlobalVarArgsModel
+	diags := value.ElementsAs(context.Background(), &args, false)
+	require.False(t, diags.HasError(), diags)
+	require.Len(t, args, 1)
+	assert.Equal(t, "val", args[0].Name.ValueString())
+	assert.Equal(t, "number", args[0].Type.ValueString())
+	assert.Equal(t, types.ObjectType{AttrTypes: provider.GlobalVarArgsAttrTypes()}, value.ElementType(context.Background()))
 }
 
 // TestConvertFromResponseBody_destination verifies the correct RefreshFrom* method is invoked

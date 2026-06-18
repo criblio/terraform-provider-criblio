@@ -1,4 +1,112 @@
 actions:
+  - target: "$.paths./m/{groupId}/lib/vars.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: GlobalVar
+  - target: "$.paths./m/{groupId}/lib/vars/{id}.get"
+    update:
+      x-terraform-read: GlobalVar
+  - target: "$.paths./m/{groupId}/lib/vars/{id}.patch"
+    update:
+      x-terraform-update: GlobalVar
+  - target: "$.paths./m/{groupId}/lib/vars/{id}.delete"
+    update:
+      x-terraform-delete: GlobalVar
+  - target: "$.components.schemas.GlobalVar.properties"
+    update:
+      args:
+        type: array
+        title: Args
+        description: Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).
+        x-terraform-prefer-state: true
+        x-terraform-suppress-diff: explicit
+        items:
+          type: object
+          x-terraform-suppress-diff: explicit
+          required:
+            - type
+            - name
+          properties:
+            type:
+              type: string
+              description: Argument type (e.g. number, string)
+              example: number
+              x-terraform-suppress-diff: explicit
+            name:
+              type: string
+              description: Argument name
+              example: val
+              x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.GlobalVar.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.GlobalVar.properties.lib"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.GlobalVar.properties.type"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.GlobalVar.properties.value"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/lib/grok.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: grok
+  - target: "$.paths./m/{groupId}/lib/grok/{id}.get"
+    update:
+      x-terraform-read: grok
+  - target: "$.paths./m/{groupId}/lib/grok/{id}.patch"
+    update:
+      x-terraform-update: grok
+  - target: "$.paths./m/{groupId}/lib/grok/{id}.delete"
+    update:
+      x-terraform-delete: grok
+  - target: "$.components.schemas.GrokFile.properties.size"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.GrokFile.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/lib/regex.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: regex
+  - target: "$.paths./m/{groupId}/lib/regex/{id}.get"
+    update:
+      x-terraform-read: regex
+  - target: "$.paths./m/{groupId}/lib/regex/{id}.patch"
+    update:
+      x-terraform-update: regex
+  - target: "$.paths./m/{groupId}/lib/regex/{id}.delete"
+    update:
+      x-terraform-delete: regex
+  - target: "$.components.schemas.RegexLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/lib/schemas.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: schema
+  - target: "$.paths./m/{groupId}/lib/schemas/{id}.get"
+    update:
+      x-terraform-read: schema
+  - target: "$.paths./m/{groupId}/lib/schemas/{id}.patch"
+    update:
+      x-terraform-update: schema
+  - target: "$.paths./m/{groupId}/lib/schemas/{id}.delete"
+    update:
+      x-terraform-delete: schema
+  - target: "$.components.schemas.SchemaLibEntry.properties.schema"
+    update:
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  - target: "$.components.schemas.SchemaLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./m/{groupId}/system/certificates.post"
     update:
       x-terraform-resource: true
@@ -26,6 +134,7 @@ actions:
   - target: "$.components.schemas.Certificate.properties.id"
     update:
       x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
   - target: "$.components.schemas.Certificate.properties"
     update:
       inUse:

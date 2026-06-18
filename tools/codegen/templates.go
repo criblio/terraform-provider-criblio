@@ -6,8 +6,13 @@ package provider
 import (
 	"context"
 	"encoding/json"
+{{- if needsFmt . }}
 	"fmt"
+{{- end }}
 
+{{ if needsAttr . }}
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -47,12 +52,56 @@ type {{ .StructName }}APIModel struct {
 	{{ .GoName }} {{ apiType . }} ` + "`json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 }
+{{ range .Fields }}
+{{- if nestedObjectList . }}
+
+type {{ .NestedModelName }} struct {
+{{- range .Fields }}
+	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
+{{- end }}
+}
+
+type {{ .NestedAPIModelName }} struct {
+{{- range .Fields }}
+	{{ .GoName }} {{ apiType . }} ` + "`json:\"{{ jsonName . }}\"`" + `
+{{- end }}
+}
+
+func {{ .NestedAttrTypes }}() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range .Fields }}
+		"{{ .TerraformName }}": types.StringType,
+{{- end }}
+	}
+}
+{{- end }}
+{{- end }}
 
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
 {{- if and .RequestField (not .Computed) }}
-{{- if eq .Type "array" }}
+{{- if nestedObjectList . }}
+	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+		var values []{{ .NestedModelName }}
+		diags := m.{{ .GoName }}.ElementsAs(context.Background(), &values, false)
+		if diags.HasError() {
+			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", diags)
+		}
+		apiValues := make([]{{ .NestedAPIModelName }}, 0, len(values))
+		for _, value := range values {
+			var item {{ .NestedAPIModelName }}
+{{- range .Fields }}
+			if !value.{{ .GoName }}.IsNull() && !value.{{ .GoName }}.IsUnknown() {
+				itemValue := value.{{ .GoName }}.ValueString()
+				item.{{ .GoName }} = &itemValue
+			}
+{{- end }}
+			apiValues = append(apiValues, item)
+		}
+		output["{{ .APIName }}"] = apiValues
+	}
+{{- else if eq .Type "array" }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 		var values []string
 		diags := m.{{ .GoName }}.ElementsAs(context.Background(), &values, false)
@@ -98,7 +147,35 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		return err
 	}
 {{- range .Fields }}
-{{- if eq .Type "array" }}
+{{- if nestedObjectList . }}
+	if input.{{ .GoName }} != nil {
+		values := make([]attr.Value, 0, len(input.{{ .GoName }}))
+		for _, inputValue := range input.{{ .GoName }} {
+			attrs := map[string]attr.Value{
+{{- range .Fields }}
+				"{{ .TerraformName }}": types.StringNull(),
+{{- end }}
+			}
+{{- range .Fields }}
+			if inputValue.{{ .GoName }} != nil {
+				attrs["{{ .TerraformName }}"] = types.StringValue(*inputValue.{{ .GoName }})
+			}
+{{- end }}
+			value, diags := types.ObjectValue({{ .NestedAttrTypes }}(), attrs)
+			if diags.HasError() {
+				return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
+			}
+			values = append(values, value)
+		}
+		value, diags := types.ListValue(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, values)
+		if diags.HasError() {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
+		}
+		m.{{ .GoName }} = value
+	} else {
+		m.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	}
+{{- else if eq .Type "array" }}
 	if input.{{ .GoName }} != nil {
 		value, diags := types.ListValueFrom(context.Background(), types.StringType, input.{{ .GoName }})
 		if diags.HasError() {
@@ -210,12 +287,37 @@ import (
 	"fmt"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+{{- if needsCustomPlanModifier . "bool" }}
+	custom_boolplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/boolplanmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "float64" }}
+	custom_float64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/float64planmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "int64" }}
+	custom_int64planmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/int64planmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "list" }}
+	custom_listplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/listplanmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "map" }}
+	custom_mapplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/mapplanmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "object" }}
+	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
+{{- end }}
+{{- if needsCustomPlanModifier . "string" }}
+	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+{{- if needsPlanModifier . }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+{{- end }}
+{{- if needsFrameworkStringPlanModifier . }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -236,7 +338,7 @@ func New{{ .StructName }}Resource() resource.Resource {
 }
 
 func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_{{ .Name }}"
+	resp.TypeName = req.ProviderTypeName + "_{{ typeNameSuffix . }}"
 }
 
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
@@ -244,6 +346,57 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
 {{- range .Fields }}
+{{- if nestedObjectList . }}
+			"{{ .TerraformName }}": schema.ListNestedAttribute{
+				Required: {{ .Required }},
+				Optional: {{ .Optional }},
+				Computed: {{ .Computed }},
+{{- if .Sensitive }}
+				Sensitive: true,
+{{- end }}
+{{- $calls := planModifierCalls . }}
+{{- if $calls }}
+				PlanModifiers: []planmodifier.{{ planModifierType . }}{
+{{- range $calls }}
+					{{ . }},
+{{- end }}
+				},
+{{- end }}
+{{- if .Description }}
+				Description: ` + "`{{ .Description }}`" + `,
+{{- end }}
+				NestedObject: schema.NestedAttributeObject{
+{{- $objectCalls := nestedObjectPlanModifierCalls . }}
+{{- if $objectCalls }}
+					PlanModifiers: []planmodifier.Object{
+{{- range $objectCalls }}
+						{{ . }},
+{{- end }}
+					},
+{{- end }}
+					Attributes: map[string]schema.Attribute{
+{{- range .Fields }}
+						"{{ .TerraformName }}": {{ schemaAttribute . }}{
+							Required: {{ .Required }},
+							Optional: {{ .Optional }},
+							Computed: {{ .Computed }},
+{{- $nestedCalls := planModifierCalls . }}
+{{- if $nestedCalls }}
+							PlanModifiers: []planmodifier.{{ planModifierType . }}{
+{{- range $nestedCalls }}
+								{{ . }},
+{{- end }}
+							},
+{{- end }}
+{{- if .Description }}
+							Description: ` + "`{{ .Description }}`" + `,
+{{- end }}
+						},
+{{- end }}
+					},
+				},
+			},
+{{- else }}
 			"{{ .TerraformName }}": {{ schemaAttribute . }}{
 				Required: {{ .Required }},
 				Optional: {{ .Optional }},
@@ -257,9 +410,12 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 {{- if eq .CustomType "jsontypes.NormalizedType{}" }}
 				CustomType: jsontypes.NormalizedType{},
 {{- end }}
-{{- if .ForceNew }}
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+{{- $calls := planModifierCalls . }}
+{{- if $calls }}
+				PlanModifiers: []planmodifier.{{ planModifierType . }}{
+{{- range $calls }}
+					{{ . }},
+{{- end }}
 				},
 {{- end }}
 {{- if eq .Type "array" }}
@@ -269,6 +425,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 				ElementType: types.StringType,
 {{- end }}
 			},
+{{- end }}
 {{- end }}
 		},
 	}
@@ -381,7 +538,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- range .Fields }}
 {{- if not .Computed }}
-	if !preserveInputs {
+	if !preserveInputs || state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 {{- end }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
@@ -426,7 +583,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
-	if !preserveInputs && api.{{ .GoName }} != nil {
+	if api.{{ .GoName }} != nil && (!preserveInputs || state.{{ .GoName }} == nil) {
 		state.{{ .GoName }} = &{{ .ModelName }}{}
 {{- range .Fields }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
@@ -476,7 +633,7 @@ func New{{ .StructName }}DataSource() datasource.DataSource {
 }
 
 func (d *{{ .StructName }}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_{{ .Name }}"
+	resp.TypeName = req.ProviderTypeName + "_{{ typeNameSuffix . }}"
 }
 
 func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
@@ -484,6 +641,30 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{- range .Fields }}
+{{- if nestedObjectList . }}
+			"{{ .TerraformName }}": schema.ListNestedAttribute{
+				Required: {{ .PathParam }},
+				Computed: {{ not .PathParam }},
+{{- if .Sensitive }}
+				Sensitive: true,
+{{- end }}
+{{- if .Description }}
+				Description: ` + "`{{ .Description }}`" + `,
+{{- end }}
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{- range .Fields }}
+						"{{ .TerraformName }}": {{ schemaAttribute . }}{
+							Computed: true,
+{{- if .Description }}
+							Description: ` + "`{{ .Description }}`" + `,
+{{- end }}
+						},
+{{- end }}
+					},
+				},
+			},
+{{- else }}
 			"{{ .TerraformName }}": {{ schemaAttribute . }}{
 				Required: {{ .PathParam }},
 				Computed: {{ not .PathParam }},
@@ -503,6 +684,7 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 				ElementType: types.StringType,
 {{- end }}
 			},
+{{- end }}
 {{- end }}
 		},
 	}
@@ -649,6 +831,285 @@ func Test{{ .StructName }}(t *testing.T) {
 		})
 	})
 }
+{{- else if eq .StructName "GlobalVar" }}
+import (
+	"os"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestGlobalVar(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	resourceName := "criblio_global_var.my_globalvar"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.TestNameDirectory(),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "id", "sample_globalvar"),
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "description", "test"),
+						resource.TestCheckResourceAttr(resourceName, "lib", "test"),
+						resource.TestCheckResourceAttr(resourceName, "tags", "test"),
+						resource.TestCheckResourceAttr(resourceName, "args.#", "2"),
+						resource.TestCheckResourceAttr(resourceName, "args.0.name", "val"),
+						resource.TestCheckResourceAttr(resourceName, "args.0.type", "number"),
+					),
+				},
+				{
+					Config: globalVarUpdatedConfig,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "description", "test updated"),
+						resource.TestCheckResourceAttr(resourceName, "value", "200"),
+						resource.TestCheckResourceAttr(resourceName, "args.#", "1"),
+					),
+				},
+				{
+					Config:   globalVarUpdatedConfig,
+					PlanOnly:        true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     ` + "`" + `{"group_id":"default","id":"sample_globalvar"}` + "`" + `,
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+const globalVarUpdatedConfig = ` + "`" + `resource "criblio_global_var" "my_globalvar" {
+  args = [
+    {
+      name = "val"
+      type = "number"
+    }
+  ]
+  description = "test updated"
+  group_id    = "default"
+  id          = "sample_globalvar"
+  lib         = "test"
+  tags        = "test"
+  type        = "number"
+  value       = "200"
+}
+` + "`" + `
+{{- else if eq .StructName "Grok" }}
+import (
+	"os"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestGrok(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is 'prohibited by current license'")
+	}
+
+	resourceName := "criblio_grok.my_grok[0]"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.TestNameDirectory(),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "id", "test_grok"),
+					),
+				},
+				{
+					Config: grokUpdatedConfig,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "tags", "updated"),
+					),
+				},
+				{
+					Config:   grokUpdatedConfig,
+					PlanOnly:        true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     ` + "`" + `{"group_id":"default","id":"test_grok"}` + "`" + `,
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+const grokUpdatedConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
+  count = 1
+
+  group_id = "default"
+  id       = "test_grok"
+  tags     = "updated"
+  content  = <<-EOT
+TESTWORD [a-zA-Z]+
+EOT
+}
+` + "`" + `
+{{- else if eq .StructName "Regex" }}
+import (
+	"os"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestRegex(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	resourceName := "criblio_regex.my_regex"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.TestNameDirectory(),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "description", "test_regex_2"),
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "lib", "custom"),
+						resource.TestCheckResourceAttr(resourceName, "tags", "test"),
+						resource.TestCheckResourceAttr(resourceName, "id", "test_regex_2"),
+					),
+				},
+				{
+					Config: regexUpdatedConfig,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "description", "test_regex_updated"),
+						resource.TestCheckResourceAttr(resourceName, "sample_data", "10.0.0.1"),
+					),
+				},
+				{
+					Config:   regexUpdatedConfig,
+					PlanOnly:        true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     ` + "`" + `{"group_id":"default","id":"test_regex_2"}` + "`" + `,
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+const regexUpdatedConfig = ` + "`" + `resource "criblio_regex" "my_regex" {
+  description = "test_regex_updated"
+  group_id    = "default"
+  id          = "test_regex_2"
+  lib         = "custom"
+  regex       = "/\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b/"
+  sample_data = "10.0.0.1"
+  tags        = "test"
+}
+` + "`" + `
+{{- else if eq .StructName "Schema" }}
+import (
+	"os"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestSchema(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	resourceName := "criblio_schema.my_schema"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					ConfigDirectory: config.StaticDirectory("testdata/TestSchemas/plan-diff"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "description", "test schema"),
+						resource.TestCheckResourceAttr(resourceName, "id", "my_schema"),
+					),
+				},
+				{
+					Config: schemaUpdatedConfig,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "description", "test schema updated"),
+					),
+				},
+				{
+					Config:   schemaUpdatedConfig,
+					PlanOnly:        true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     ` + "`" + `{"group_id":"default","id":"my_schema"}` + "`" + `,
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+const schemaUpdatedConfig = ` + "`" + `resource "criblio_schema" "my_schema" {
+  description = "test schema updated"
+  group_id    = "default"
+  id          = "my_schema"
+  schema      = <<-EOT
+{
+  "$id": "https://example.com/person.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person",
+  "type": "object",
+  "required": ["firstName", "lastName", "age"],
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "description": "The person's first name."
+    },
+    "lastName": {
+      "type": "string",
+      "description": "The person's last name."
+    },
+    "age": {
+      "description": "Age in years which must be greater than zero, less than 42.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 42
+    }
+  }
+}
+EOT
+}
+` + "`" + `
 {{- else }}
 import "testing"
 
