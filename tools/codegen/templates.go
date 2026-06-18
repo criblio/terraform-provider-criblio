@@ -496,192 +496,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-{{- if nestedObjectList . }}
-			"{{ .TerraformName }}": schema.ListNestedAttribute{
-				Required: {{ .Required }},
-				Optional: {{ .Optional }},
-				Computed: {{ .Computed }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- $calls := planModifierCalls . }}
-{{- if $calls }}
-				PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $calls }}
-					{{ . }},
-{{- end }}
-				},
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-				NestedObject: schema.NestedAttributeObject{
-{{- $objectCalls := nestedObjectPlanModifierCalls . }}
-{{- if $objectCalls }}
-					PlanModifiers: []planmodifier.Object{
-{{- range $objectCalls }}
-						{{ . }},
-{{- end }}
-					},
-{{- end }}
-					Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-						"{{ .TerraformName }}": {{ schemaAttribute . }}{
-							Required: {{ .Required }},
-							Optional: {{ .Optional }},
-							Computed: {{ .Computed }},
-{{- $nestedCalls := planModifierCalls . }}
-{{- if $nestedCalls }}
-							PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $nestedCalls }}
-								{{ . }},
-{{- end }}
-							},
-{{- end }}
-{{- if .Description }}
-							Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if nestedObjectList . }}
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-									"{{ .TerraformName }}": {{ schemaAttribute . }}{
-										Required: {{ .Required }},
-										Optional: {{ .Optional }},
-										Computed: {{ .Computed }},
-{{- if .Description }}
-										Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-									},
-{{- end }}
-								},
-							},
-{{- end }}
-{{- if nestedObject . }}
-							Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-								"{{ .TerraformName }}": {{ schemaAttribute . }}{
-									Required: {{ .Required }},
-									Optional: {{ .Optional }},
-									Computed: {{ .Computed }},
-{{- if .Description }}
-									Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if nestedObject . }}
-									Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-										"{{ .TerraformName }}": {{ schemaAttribute . }}{
-											Required: {{ .Required }},
-											Optional: {{ .Optional }},
-											Computed: {{ .Computed }},
-{{- if .Description }}
-											Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-										},
-{{- end }}
-									},
-{{- end }}
-								},
-{{- end }}
-							},
-{{- end }}
-						},
-{{- end }}
-					},
-				},
-			},
-{{- else }}
-			"{{ .TerraformName }}": {{ schemaAttribute . }}{
-				Required: {{ .Required }},
-				Optional: {{ .Optional }},
-				Computed: {{ .Computed }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .CustomType "jsontypes.NormalizedType{}" }}
-				CustomType: jsontypes.NormalizedType{},
-{{- end }}
-{{- if nestedObject . }}
-				Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-					"{{ .TerraformName }}": {{ schemaAttribute . }}{
-						Required: {{ .Required }},
-						Optional: {{ .Optional }},
-						Computed: {{ .Computed }},
-{{- if .Description }}
-						Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if nestedObjectList . }}
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-								"{{ .TerraformName }}": {{ schemaAttribute . }}{
-									Required: {{ .Required }},
-									Optional: {{ .Optional }},
-									Computed: {{ .Computed }},
-{{- if .Description }}
-									Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-								},
-{{- end }}
-							},
-						},
-{{- end }}
-{{- if nestedObject . }}
-						Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-							"{{ .TerraformName }}": {{ schemaAttribute . }}{
-								Required: {{ .Required }},
-								Optional: {{ .Optional }},
-								Computed: {{ .Computed }},
-{{- if .Description }}
-								Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if nestedObjectList . }}
-								NestedObject: schema.NestedAttributeObject{
-									Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-										"{{ .TerraformName }}": {{ schemaAttribute . }}{
-											Required: {{ .Required }},
-											Optional: {{ .Optional }},
-											Computed: {{ .Computed }},
-{{- if .Description }}
-											Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-										},
-{{- end }}
-									},
-								},
-{{- end }}
-							},
-{{- end }}
-						},
-{{- end }}
-					},
-{{- end }}
-				},
-{{- end }}
-{{- $calls := planModifierCalls . }}
-{{- if $calls }}
-				PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $calls }}
-					{{ . }},
-{{- end }}
-				},
-{{- end }}
-{{- if eq .Type "array" }}
-				ElementType: types.StringType,
-{{- end }}
-{{- if and (eq .Type "object") (not (nestedObject .)) }}
-				ElementType: types.StringType,
-{{- end }}
-			},
-{{- end }}
-{{- end }}
+{{ schemaAttributes .Fields "\t\t\t" -}}
 		},
 	}
 }
@@ -780,8 +595,22 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		resp.Diagnostics.AddError("Missing required field", ` + "`The field {{ .TerraformName }} is required but was not found in the json encoded ID.`" + `)
 		return
 	}
+{{- end }}
+	var model {{ .StructName }}Model
+{{- range pathParamFields . }}
+	model.{{ .GoName }} = types.StringValue(data.{{ .GoName }})
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), data.{{ .GoName }})...)
 {{- end }}
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 {{- end }}

@@ -124,6 +124,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"planModifierType":                 planModifierType,
 		"planModifierCalls":                planModifierCalls,
 		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
+		"schemaAttributes":                 schemaAttributes,
 		"importSentinelFields":             importSentinelFields,
 		"pathParamFields":                  pathParamFields,
 		"jsonImport":                       jsonImport,
@@ -376,6 +377,58 @@ func schemaAttribute(field parser.FieldDef) string {
 	default:
 		return "schema.StringAttribute"
 	}
+}
+
+func schemaAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeSchemaAttribute(&output, field, indent)
+	}
+	return output.String()
+}
+
+func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent string) {
+	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
+	fmt.Fprintf(output, "%s\tRequired: %t,\n", indent, field.Required)
+	fmt.Fprintf(output, "%s\tOptional: %t,\n", indent, field.Optional)
+	fmt.Fprintf(output, "%s\tComputed: %t,\n", indent, field.Computed)
+	if field.Sensitive {
+		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
+	}
+	if field.Description != "" {
+		fmt.Fprintf(output, "%s\tDescription: `%s`,\n", indent, field.Description)
+	}
+	if field.CustomType == "jsontypes.NormalizedType{}" {
+		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
+	}
+	if calls := planModifierCalls(field); len(calls) > 0 {
+		fmt.Fprintf(output, "%s\tPlanModifiers: []planmodifier.%s{\n", indent, planModifierType(field))
+		for _, call := range calls {
+			fmt.Fprintf(output, "%s\t\t%s,\n", indent, call)
+		}
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	}
+	if nestedObjectList(field) {
+		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
+		if calls := nestedObjectPlanModifierCalls(field); len(calls) > 0 {
+			fmt.Fprintf(output, "%s\t\tPlanModifiers: []planmodifier.Object{\n", indent)
+			for _, call := range calls {
+				fmt.Fprintf(output, "%s\t\t\t%s,\n", indent, call)
+			}
+			fmt.Fprintf(output, "%s\t\t},\n", indent)
+		}
+		fmt.Fprintf(output, "%s\t\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t\t"))
+		fmt.Fprintf(output, "%s\t\t},\n", indent)
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if nestedObject(field) {
+		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if field.Type == "array" || field.Type == "object" {
+		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
+	}
+	fmt.Fprintf(output, "%s},\n", indent)
 }
 
 func schemaTypeName(field parser.FieldDef) string {

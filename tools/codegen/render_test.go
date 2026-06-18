@@ -105,6 +105,8 @@ func TestRenderedSnippets(t *testing.T) {
 	resourceContent := renderTemplate(t, "resource", certificate)
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, false)")
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))")
+	assertContains(t, resourceContent, "apiModel, err := r.api.Read(ctx, model)")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
 	assertContains(t, resourceContent, "if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown()))")
 	assertContains(t, resourceContent, "api.DisplayName.IsNull()")
 	assertContains(t, resourceContent, "if !api.InUse.IsNull() && !api.InUse.IsUnknown()")
@@ -151,6 +153,13 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil && (!preserveInputs || (fillMissingInputs && state.OutputAzureBlob == nil))")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
+
+	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
+	mappingRulesetResource := renderTemplate(t, "resource", mappingRuleset)
+	assertContains(t, mappingRulesetResource, `"conf": schema.SingleNestedAttribute{`)
+	assertContains(t, mappingRulesetResource, `"add": schema.ListNestedAttribute{`)
+	assertContains(t, mappingRulesetResource, `"name": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, `"value": schema.StringAttribute{`)
 }
 
 func TestRestWriteCall(t *testing.T) {

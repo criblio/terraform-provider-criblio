@@ -86,13 +86,13 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"rules": schema.ListNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `A list of rules that will be applied, in order, to the input data stream`,
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress),
 				},
-				Description: `A list of rules that will be applied, in order, to the input data stream`,
 				NestedObject: schema.NestedAttributeObject{
 					PlanModifiers: []planmodifier.Object{
 						custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress),
@@ -349,12 +349,25 @@ func (r *EventBreakerRulesetResource) ImportState(ctx context.Context, req resou
 		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if data.ID == "" {
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
+	var model EventBreakerRulesetModel
+	model.GroupID = types.StringValue(data.GroupID)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	model.ID = types.StringValue(data.ID)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyEventBreakerRulesetAPIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
 func isEventBreakerRulesetImportState(state *EventBreakerRulesetModel) bool {

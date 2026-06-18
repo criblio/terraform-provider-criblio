@@ -96,6 +96,30 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 									Optional:    false,
 									Computed:    false,
 									Description: `Configuration for the Mapping Rule function.`,
+									Attributes: map[string]schema.Attribute{
+										"add": schema.ListNestedAttribute{
+											Required:    true,
+											Optional:    false,
+											Computed:    false,
+											Description: `The group assignment action for the Mapping Rule.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `Always <code>groupId</code> to specify the assignment type.`,
+													},
+													"value": schema.StringAttribute{
+														Required:    true,
+														Optional:    false,
+														Computed:    false,
+														Description: `The <code>id</code> of the group to assign the Worker or Edge Node to if the Mapping Rule applies.`,
+													},
+												},
+											},
+										},
+									},
 								},
 								"group_id": schema.StringAttribute{
 									Required:    false,
@@ -222,12 +246,25 @@ func (r *MappingRulesetResource) ImportState(ctx context.Context, req resource.I
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if data.Product == "" {
 		resp.Diagnostics.AddError("Missing required field", `The field product is required but was not found in the json encoded ID.`)
 		return
 	}
+	var model MappingRulesetModel
+	model.ID = types.StringValue(data.ID)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	model.Product = types.StringValue(data.Product)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("product"), data.Product)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyMappingRulesetAPIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
 func isMappingRulesetImportState(state *MappingRulesetModel) bool {
