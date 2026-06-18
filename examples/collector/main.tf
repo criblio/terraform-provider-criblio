@@ -723,21 +723,21 @@ resource "criblio_collector" "rest_mode_audit_logs" {
         collect_request_params = [
           {
             name  = "start_timestamp"
-            value = <<-E
+            value = <<-EOT
 `$${new Date(Math.floor(Date.now() / 60000) * 60000 - 10 * 60 * 1000).toISOString()}`
-E
+EOT
           },
           {
             name  = "end_timestamp"
-            value = <<-E
+            value = <<-EOT
 `$${new Date(Math.floor(Date.now() / 60000) * 60000 - 5 * 60 * 1000).toISOString()}`
-E
+EOT
           },
           {
             name  = "next_token"
-            value = <<-E
+            value = <<-EOT
 `$${__e && __e.metadata && __e.metadata.next_token ? __e.metadata.next_token : undefined}`
-E
+EOT
           },
         ]
         collect_request_headers = [
@@ -885,4 +885,3 @@ resource "criblio_collector" "script_collector" {
   }
 }
 */
-

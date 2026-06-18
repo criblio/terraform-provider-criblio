@@ -22,13 +22,17 @@ func TestCertificate(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					ConfigDirectory:    config.TestNameDirectory(),
+					ExpectNonEmptyPlan: true,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 						resource.TestCheckResourceAttr(resourceName, "id", "my-demo-cert-001"),
 						resource.TestCheckResourceAttr(resourceName, "description", "Demo x509 certificate for Cribl configuration"),
 						resource.TestCheckResourceAttr(resourceName, "in_use.#", "0"),
 					),
+				},
+				{
+					ConfigDirectory: config.TestNameDirectory(),
 				},
 				{
 					ConfigDirectory: config.TestNameDirectory(),
