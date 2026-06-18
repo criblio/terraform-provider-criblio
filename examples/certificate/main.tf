@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    criblio = {
+      source = "criblio/criblio"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 resource "criblio_certificate" "my_certificate" {
   ca       = file("${path.module}/server.crt")
   cert     = file("${path.module}/server.crt")
@@ -5,7 +19,6 @@ resource "criblio_certificate" "my_certificate" {
 
   description = "Demo x509 certificate for Cribl configuration"
   id          = "my-demo-cert-001"
-  in_use      = ["wef-prod"]
   group_id    = "default"
 
   passphrase = "SecurityPassphrase"

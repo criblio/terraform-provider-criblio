@@ -43,6 +43,10 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "stringFromAPIOrPrior(api.Passphrase.ValueString(), state.Passphrase)")
 	assertContains(t, resourceContent, "stringplanmodifier.RequiresReplace()")
 	assertContains(t, resourceContent, "state.InUse = types.ListValueMust(types.StringType, nil)")
+	assertContains(t, resourceContent, "clients, ok := req.ProviderData.(*ProviderClients)")
+	assertContains(t, resourceContent, "r.client = clients.RC")
+	assertContains(t, resourceContent, `json:"group_id"`)
+	assertContains(t, resourceContent, `path.Root("group_id")`)
 	assertNotContains(t, resourceContent, "speakeasy_")
 	assertNotContains(t, resourceContent, "internal/sdk")
 

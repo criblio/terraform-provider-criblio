@@ -88,6 +88,8 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"importBlock":     importBlock,
 		"importCommand":   importCommand,
 		"joinDocFields":   joinDocFields,
+		"pathParamFields": pathParamFields,
+		"jsonImport":      jsonImport,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -279,6 +281,20 @@ func importCommand(resource parser.ResourceDef) string {
 		return fmt.Sprintf("terraform import %s.my_%s '{\"group_id\": \"default\", \"id\": \"cert-001\"}'", resourceType(resource), resourceType(resource))
 	}
 	return strings.TrimSpace(string(content))
+}
+
+func pathParamFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, field := range resource.Fields {
+		if field.PathParam {
+			fields = append(fields, field)
+		}
+	}
+	return fields
+}
+
+func jsonImport(resource parser.ResourceDef) bool {
+	return len(pathParamFields(resource)) > 1
 }
 
 func generatedExample(resource parser.ResourceDef) string {

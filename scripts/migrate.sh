@@ -207,16 +207,15 @@ run_build() {
 
 run_acceptance() {
   local resource="$1"
-  local test="./tests/acceptance"
+  local test_args=("./tests/acceptance")
   if [[ -f "tests/acceptance/${resource}_test.go" ]]; then
-    test="./tests/acceptance -run ${resource}"
+    test_args=("./tests/acceptance" "-run" "(?i:${resource})")
   fi
   if is_true "$DRY_RUN"; then
-    echo "DRY_RUN=true: would run acceptance test: go test -v -timeout 20m ${test}"
+    echo "DRY_RUN=true: would run acceptance test: go test -v -timeout 20m ${test_args[*]}"
     return 0
   fi
-  # shellcheck disable=SC2086
-  if go test -v -timeout 20m ${test}; then
+  if go test -v -timeout 20m "${test_args[@]}"; then
     echo "acceptance test passed"
   else
     echo "acceptance test failed" >&2

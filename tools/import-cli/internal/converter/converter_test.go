@@ -128,6 +128,37 @@ func TestConvertFromResponseBody_destination(t *testing.T) {
 	assert.True(t, ok, "model should be *DestinationResourceModel")
 }
 
+func TestConvertFromResponseBody_certificateGeneratedModel(t *testing.T) {
+	ctx := context.Background()
+	reg := buildTestRegistry(t)
+	e, ok := reg.ByTypeName("criblio_certificate")
+	require.True(t, ok, "registry must contain criblio_certificate")
+
+	body := &operations.GetCertificateByIDResponseBody{
+		Items: []shared.Certificate{
+			{
+				ID:          "my-cert",
+				Cert:        "cert-body",
+				Description: stringPtr("generated certificate"),
+				InUse:       []string{},
+			},
+		},
+	}
+	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, map[string]string{
+		"GroupID": "default",
+		"ID":      "my-cert",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, model)
+
+	cert, ok := model.(*provider.CertificateResourceModel)
+	require.True(t, ok, "model should be *CertificateResourceModel")
+	assert.Equal(t, "default", cert.GroupID.ValueString())
+	assert.Equal(t, "my-cert", cert.ID.ValueString())
+	assert.Equal(t, "generated certificate", cert.Description.ValueString())
+	assert.Empty(t, cert.InUse)
+}
+
 func TestConvertFromResponseBodyWithIdentifiers_injects_required_fields(t *testing.T) {
 	ctx := context.Background()
 	reg := buildTestRegistry(t)
