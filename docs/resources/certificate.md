@@ -19,8 +19,8 @@ resource "criblio_certificate" "my_certificate" {
   description = "Short description of x509 certificate"
   group_id    = "default"
   id          = "myUniqueCertId"
-  passphrase = "SecurityPassphrase"
-  priv_key   = "dont-share-this-key"
+  passphrase  = "SecurityPassphrase"
+  priv_key    = "dont-share-this-key"
 }
 ```
 
