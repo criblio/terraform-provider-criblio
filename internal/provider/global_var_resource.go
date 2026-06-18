@@ -251,8 +251,6 @@ func applyGlobalVarAPIToState(api *GlobalVarModel, state *GlobalVarModel, preser
 	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) {
 		if !api.Args.IsNull() && !api.Args.IsUnknown() {
 			state.Args = api.Args
-		} else if state.Args.IsNull() || state.Args.IsUnknown() {
-			state.Args = types.ListValueMust(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}, nil)
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {

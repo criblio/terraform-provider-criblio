@@ -562,9 +562,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- else if eq .ApplyStrategy "preferState" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}
-		} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		}{{- if and .Computed (not .Optional) }} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = {{ zeroValue . }}
 		}
+	{{- end }}
 {{- else }}
 {{- if eq .Type "array" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
