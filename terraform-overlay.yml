@@ -146,3 +146,121 @@ actions:
           type: string
         x-terraform-computed: true
         description: "List of configurations that reference this certificate."
+
+  - target: "$.paths./m/{groupId}/lib/parsers.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: ParserLibEntry
+  - target: "$.paths./m/{groupId}/lib/parsers/{id}.get"
+    update:
+      x-terraform-read: ParserLibEntry
+  - target: "$.paths./m/{groupId}/lib/parsers/{id}.patch"
+    update:
+      x-terraform-update: ParserLibEntry
+  - target: "$.paths./m/{groupId}/lib/parsers/{id}.delete"
+    update:
+      x-terraform-delete: ParserLibEntry
+  - target: "$.components.schemas.ParserLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.ParserLibEntry.properties.lib"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.ParserLibEntry.properties.type"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/lib/parquet-schemas.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: ParquetSchema
+  - target: "$.paths./m/{groupId}/lib/parquet-schemas/{id}.get"
+    update:
+      x-terraform-read: ParquetSchema
+  - target: "$.paths./m/{groupId}/lib/parquet-schemas/{id}.patch"
+    update:
+      x-terraform-update: ParquetSchema
+  - target: "$.paths./m/{groupId}/lib/parquet-schemas/{id}.delete"
+    update:
+      x-terraform-delete: ParquetSchema
+  - target: "$.components.schemas.SchemaLibEntry.properties.schema"
+    update:
+      x-terraform-custom-type: jsontypes.NormalizedType{}
+  - target: "$.components.schemas.SchemaLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/lib/breakers.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: EventBreakerRuleset
+  - target: "$.paths./m/{groupId}/lib/breakers/{id}.get"
+    update:
+      x-terraform-read: EventBreakerRuleset
+  - target: "$.paths./m/{groupId}/lib/breakers/{id}.patch"
+    update:
+      x-terraform-update: EventBreakerRuleset
+  - target: "$.paths./m/{groupId}/lib/breakers/{id}.delete"
+    update:
+      x-terraform-delete: EventBreakerRuleset
+  - target: "$.components.schemas.EventBreakerRuleset.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.EventBreakerRuleset.properties.lib"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.EventBreakerRuleset.properties.minRawLength"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.EventBreakerRuleset.properties.rules"
+    update:
+      x-terraform-suppress-diff: explicit
+      items:
+        properties:
+          delimiter:
+            type: string
+            title: Field delimiter
+          delimiterRegex:
+            type: string
+            title: Field delimiter regex
+          escapeChar:
+            type: string
+            title: Escape character
+          eventBreakerRegex:
+            type: string
+            title: Event breaker regex
+          fieldsLineRegex:
+            type: string
+            title: Fields line regex
+          headerLineRegex:
+            type: string
+            title: Header line regex
+          quoteChar:
+            type: string
+            title: Quote character
+
+  - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: MappingRuleset
+  - target: "$.paths./admin/products/{product}/mappings/{id}.get"
+    update:
+      x-terraform-read: MappingRuleset
+  - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
+    update:
+      x-terraform-update: MappingRuleset
+  - target: "$.paths./admin/products/{product}/mappings/{id}.delete"
+    update:
+      x-terraform-delete: MappingRuleset
+  - target: "$.components.schemas.MappingRuleset.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.MappingRuleset.properties.conf"
+    update:
+      properties:
+        functions:
+          items:
+            properties:
+              groupId:
+                type: string
+                description: The Worker Group to map matching events to.

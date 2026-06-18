@@ -65,6 +65,12 @@ func TestRenderedSnippets(t *testing.T) {
 	dataSourceContent := renderTemplate(t, "data_source", certificate)
 	assertContains(t, dataSourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
 
+	docContent := renderTemplate(t, "doc", certificate)
+	assertContains(t, docContent, `resource "criblio_certificate" "my_certificate"`)
+	assertContains(t, docContent, `display_name = "Upstream Certificate"`)
+	assertContains(t, docContent, `group_id = "default"`)
+	assertContains(t, docContent, `name = "precision"`)
+
 	destination := resourceByName(t, resources, "destination")
 	destinationTypes := renderTemplate(t, "types", destination)
 	assertContains(t, destinationTypes, "OutputAzureBlob *OutputAzureBlobModel")

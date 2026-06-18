@@ -52,6 +52,7 @@ func Parse(content []byte) ([]ResourceDef, error) {
 	if !ok || paths.Kind != yaml.MappingNode {
 		return nil, fmt.Errorf("paths mapping not found")
 	}
+	examples, _ := lookupExamples(doc)
 
 	resources := map[string]*ResourceDef{}
 	for index := 0; index < len(paths.Content); index += 2 {
@@ -60,7 +61,7 @@ func Parse(content []byte) ([]ResourceDef, error) {
 		if pathItem.Kind != yaml.MappingNode {
 			continue
 		}
-		if err := collectOperations(resources, schemas, path, pathItem); err != nil {
+		if err := collectOperations(resources, schemas, examples, path, pathItem); err != nil {
 			return nil, err
 		}
 	}
@@ -85,7 +86,7 @@ func Parse(content []byte) ([]ResourceDef, error) {
 	return defs, nil
 }
 
-func collectOperations(resources map[string]*ResourceDef, schemas *yaml.Node, path string, pathItem *yaml.Node) error {
+func collectOperations(resources map[string]*ResourceDef, schemas, examples *yaml.Node, path string, pathItem *yaml.Node) error {
 	for index := 0; index < len(pathItem.Content); index += 2 {
 		method := pathItem.Content[index].Value
 		if !httpMethods[method] {
@@ -102,9 +103,8 @@ func collectOperations(resources map[string]*ResourceDef, schemas *yaml.Node, pa
 				return fmt.Errorf("%s %s missing x-terraform-resource-name", strings.ToUpper(method), path)
 			}
 			resource := ensureResource(resources, name)
-			resource.Create = operationDef(method, path, operation)
+			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
-			continue
 		}
 
 		for _, annotation := range []struct {
@@ -120,7 +120,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas *yaml.Node, pa
 				continue
 			}
 			resource := ensureResource(resources, name)
-			annotation.set(resource, operationDef(method, path, operation))
+			annotation.set(resource, operationDef(method, path, operation, examples))
 		}
 	}
 	return nil
@@ -141,7 +141,7 @@ func ensureResource(resources map[string]*ResourceDef, name string) *ResourceDef
 	return resource
 }
 
-func operationDef(method, path string, operation *yaml.Node) OperationDef {
+func operationDef(method, path string, operation, examples *yaml.Node) OperationDef {
 	return OperationDef{
 		Method:         strings.ToUpper(method),
 		Path:           path,
@@ -149,6 +149,7 @@ func operationDef(method, path string, operation *yaml.Node) OperationDef {
 		RequestSchema:  schemaRefName(requestSchema(operation)),
 		ResponseSchema: schemaRefName(responseSchema(operation)),
 		PathParams:     pathParams(operation),
+		Examples:       requestExamples(operation, examples),
 	}
 }
 
@@ -319,6 +320,26 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAPIModelName = modelName + exportName(tfName) + "APIModel"
 		field.NestedAttrTypes = modelName + exportName(tfName) + "AttrTypes"
 	}
+	if field.Type == "object" {
+		objectSchema := property
+		if schemaName := schemaRefName(property); schemaName != "" {
+			var found bool
+			objectSchema, found = mappingValue(schemas, schemaName)
+			if !found {
+				return FieldDef{}, fmt.Errorf("object schema %q not found", schemaName)
+			}
+		}
+		if properties, ok := mappingValue(objectSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
+			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))
+			if err != nil {
+				return FieldDef{}, err
+			}
+			field.Fields = fields
+			field.NestedModelName = modelName + exportName(tfName) + "Model"
+			field.NestedAPIModelName = modelName + exportName(tfName) + "APIModel"
+			field.NestedAttrTypes = modelName + exportName(tfName) + "AttrTypes"
+		}
+	}
 	return field, nil
 }
 
@@ -372,6 +393,57 @@ func pathParams(operation *yaml.Node) []FieldDef {
 }
 
 func requestSchema(operation *yaml.Node) *yaml.Node {
+	mediaType := requestJSONMediaType(operation)
+	if mediaType == nil {
+		return nil
+	}
+	schema, _ := mappingValue(mediaType, "schema")
+	return schema
+}
+
+func requestExamples(operation, examples *yaml.Node) []ExampleDef {
+	mediaType := requestJSONMediaType(operation)
+	if mediaType == nil {
+		return nil
+	}
+
+	var defs []ExampleDef
+	exampleItems, ok := mappingValue(mediaType, "examples")
+	if ok && exampleItems.Kind == yaml.MappingNode {
+		for index := 0; index < len(exampleItems.Content); index += 2 {
+			name := exampleItems.Content[index].Value
+			example := resolveExample(exampleItems.Content[index+1], examples)
+			value, ok := mappingValue(example, "value")
+			if !ok {
+				continue
+			}
+			decoded, err := decodeExampleValue(value)
+			if err != nil {
+				continue
+			}
+			defs = append(defs, ExampleDef{
+				Name:    name,
+				Summary: scalarValue(example, "summary"),
+				Value:   decoded,
+			})
+		}
+	}
+	if len(defs) > 0 {
+		return defs
+	}
+
+	example, ok := mappingValue(mediaType, "example")
+	if !ok {
+		return nil
+	}
+	decoded, err := decodeExampleValue(example)
+	if err != nil {
+		return nil
+	}
+	return []ExampleDef{{Name: "example", Value: decoded}}
+}
+
+func requestJSONMediaType(operation *yaml.Node) *yaml.Node {
 	requestBody, ok := mappingValue(operation, "requestBody")
 	if !ok {
 		return nil
@@ -384,8 +456,31 @@ func requestSchema(operation *yaml.Node) *yaml.Node {
 	if !ok {
 		return nil
 	}
-	schema, _ := mappingValue(mediaType, "schema")
-	return schema
+	return mediaType
+}
+
+func resolveExample(example, examples *yaml.Node) *yaml.Node {
+	ref, ok := mappingValue(example, "$ref")
+	if !ok || ref.Kind != yaml.ScalarNode {
+		return example
+	}
+	name := strings.TrimPrefix(ref.Value, "#/components/examples/")
+	if name == ref.Value || examples == nil {
+		return example
+	}
+	resolved, ok := mappingValue(examples, name)
+	if !ok {
+		return example
+	}
+	return resolved
+}
+
+func decodeExampleValue(node *yaml.Node) (any, error) {
+	var value any
+	if err := node.Decode(&value); err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 func responseSchema(operation *yaml.Node) *yaml.Node {
@@ -473,6 +568,14 @@ func lookupSchemas(root *yaml.Node) (*yaml.Node, bool) {
 		return nil, false
 	}
 	return mappingValue(components, "schemas")
+}
+
+func lookupExamples(root *yaml.Node) (*yaml.Node, bool) {
+	components, ok := mappingValue(root, "components")
+	if !ok || components.Kind != yaml.MappingNode {
+		return nil, false
+	}
+	return mappingValue(components, "examples")
 }
 
 func documentMapping(root *yaml.Node) *yaml.Node {

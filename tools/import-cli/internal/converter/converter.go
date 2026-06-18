@@ -20,6 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 // RefreshFromMethodName returns the RefreshFrom* method name for the given SDK Get method.
@@ -411,6 +412,13 @@ func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
 		}
 		field.Set(reflect.ValueOf(value))
 		return nil
+	case reflect.TypeOf(types.Object{}):
+		value, err := objectValue(raw)
+		if err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(value))
+		return nil
 	}
 
 	if field.Type() == reflect.TypeOf([]types.String{}) {
@@ -428,25 +436,29 @@ func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
 }
 
 func objectListValue(raw json.RawMessage) (types.List, error) {
-	var objects []map[string]string
+	var objects []map[string]any
 	if err := json.Unmarshal(raw, &objects); err != nil {
 		return types.List{}, err
 	}
 	attrTypes := map[string]attr.Type{}
 	for _, object := range objects {
-		for key := range object {
-			attrTypes[key] = types.StringType
+		for key, value := range object {
+			attrTypes[key] = inferredAttrType(value)
 		}
 	}
 	objectType := types.ObjectType{AttrTypes: attrTypes}
 	values := make([]attr.Value, 0, len(objects))
 	for _, object := range objects {
 		attrs := make(map[string]attr.Value, len(attrTypes))
-		for key := range attrTypes {
+		for key, typ := range attrTypes {
 			if value, ok := object[key]; ok {
-				attrs[key] = types.StringValue(value)
+				attrValue, err := attrValueFromAny(value, typ)
+				if err != nil {
+					return types.List{}, err
+				}
+				attrs[key] = attrValue
 			} else {
-				attrs[key] = types.StringNull()
+				attrs[key] = nullValue(typ)
 			}
 		}
 		objectValue, diags := types.ObjectValue(attrTypes, attrs)
@@ -460,6 +472,117 @@ func objectListValue(raw json.RawMessage) (types.List, error) {
 		return types.List{}, DiagnosticsToError(diags, "types.List", "")
 	}
 	return listValue, nil
+}
+
+func objectValue(raw json.RawMessage) (types.Object, error) {
+	var object map[string]any
+	if err := json.Unmarshal(raw, &object); err != nil {
+		return types.Object{}, err
+	}
+	attrTypes := make(map[string]attr.Type, len(object))
+	for key, value := range object {
+		attrTypes[key] = inferredAttrType(value)
+	}
+	attrs := make(map[string]attr.Value, len(object))
+	for key, value := range object {
+		attrValue, err := attrValueFromAny(value, attrTypes[key])
+		if err != nil {
+			return types.Object{}, err
+		}
+		attrs[key] = attrValue
+	}
+	result, diags := types.ObjectValue(attrTypes, attrs)
+	if diags.HasError() {
+		return types.Object{}, DiagnosticsToError(diags, "types.Object", "")
+	}
+	return result, nil
+}
+
+func inferredAttrType(value any) attr.Type {
+	switch typed := value.(type) {
+	case bool:
+		return types.BoolType
+	case float64:
+		return types.Float64Type
+	case []any:
+		if len(typed) > 0 {
+			return types.ListType{ElemType: inferredAttrType(typed[0])}
+		}
+		return types.ListType{ElemType: types.StringType}
+	case map[string]any:
+		attrTypes := make(map[string]attr.Type, len(typed))
+		for key, nested := range typed {
+			attrTypes[key] = inferredAttrType(nested)
+		}
+		return types.ObjectType{AttrTypes: attrTypes}
+	default:
+		return types.StringType
+	}
+}
+
+func attrValueFromAny(value any, typ attr.Type) (attr.Value, error) {
+	if value == nil {
+		return nullValue(typ), nil
+	}
+	switch typ := typ.(type) {
+	case basetypes.BoolType:
+		value, _ := value.(bool)
+		return types.BoolValue(value), nil
+	case basetypes.Float64Type:
+		value, _ := value.(float64)
+		return types.Float64Value(value), nil
+	case basetypes.StringType:
+		return types.StringValue(fmt.Sprintf("%v", value)), nil
+	case types.ListType:
+		values, _ := value.([]any)
+		elements := make([]attr.Value, 0, len(values))
+		for _, item := range values {
+			element, err := attrValueFromAny(item, typ.ElementType())
+			if err != nil {
+				return nil, err
+			}
+			elements = append(elements, element)
+		}
+		result, diags := types.ListValue(typ.ElementType(), elements)
+		if diags.HasError() {
+			return nil, DiagnosticsToError(diags, "types.List", "")
+		}
+		return result, nil
+	case types.ObjectType:
+		object, _ := value.(map[string]any)
+		attrs := make(map[string]attr.Value, len(typ.AttrTypes))
+		for key, attrType := range typ.AttrTypes {
+			attrValue, err := attrValueFromAny(object[key], attrType)
+			if err != nil {
+				return nil, err
+			}
+			attrs[key] = attrValue
+		}
+		result, diags := types.ObjectValue(typ.AttrTypes, attrs)
+		if diags.HasError() {
+			return nil, DiagnosticsToError(diags, "types.Object", "")
+		}
+		return result, nil
+	default:
+		return types.StringValue(fmt.Sprintf("%v", value)), nil
+	}
+}
+
+func nullValue(typ attr.Type) attr.Value {
+	switch typ := typ.(type) {
+	case basetypes.BoolType:
+		return types.BoolNull()
+	case basetypes.Float64Type:
+		return types.Float64Null()
+	case basetypes.StringType:
+		return types.StringNull()
+	case types.ListType:
+		return types.ListNull(typ.ElementType())
+	case types.ObjectType:
+		return types.ObjectNull(typ.AttrTypes)
+	default:
+		return types.StringNull()
+	}
 }
 
 func stringValues(values []string) []attr.Value {

@@ -14,35 +14,35 @@ import (
 var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
-type SchemaModel struct {
+type ParquetSchemaModel struct {
 	Description types.String         `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type SchemaResourceModel struct {
+type ParquetSchemaResourceModel struct {
 	Description types.String         `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type SchemaDataSourceModel struct {
+type ParquetSchemaDataSourceModel struct {
 	Description types.String         `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
 	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type SchemaAPIModel struct {
+type ParquetSchemaAPIModel struct {
 	Description *string `json:"description,omitempty"`
 	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
 	Schema      *string `json:"schema,omitempty"`
 }
 
-func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
+func ParquetSchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	if value.IsNull() || value.IsUnknown() {
 		return nil, nil
 	}
@@ -58,7 +58,7 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.List:
 		output := make([]any, 0, len(typed.Elements()))
 		for _, element := range typed.Elements() {
-			value, err := SchemaTerraformValueToJSON(element)
+			value, err := ParquetSchemaTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -68,7 +68,7 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Map:
 		output := make(map[string]any, len(typed.Elements()))
 		for key, element := range typed.Elements() {
-			value, err := SchemaTerraformValueToJSON(element)
+			value, err := ParquetSchemaTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -78,7 +78,7 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
 		for key, attribute := range typed.Attributes() {
-			value, err := SchemaTerraformValueToJSON(attribute)
+			value, err := ParquetSchemaTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
 			}
@@ -92,24 +92,24 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	}
 }
 
-func (m SchemaModel) MarshalJSON() ([]byte, error) {
+func (m ParquetSchemaModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		value, err := SchemaTerraformValueToJSON(m.Description)
+		value, err := ParquetSchemaTerraformValueToJSON(m.Description)
 		if err != nil {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		value, err := SchemaTerraformValueToJSON(m.ID)
+		value, err := ParquetSchemaTerraformValueToJSON(m.ID)
 		if err != nil {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
 	}
 	if !m.Schema.IsNull() && !m.Schema.IsUnknown() {
-		value, err := SchemaTerraformValueToJSON(m.Schema)
+		value, err := ParquetSchemaTerraformValueToJSON(m.Schema)
 		if err != nil {
 			return nil, fmt.Errorf("convert schema to API value: %v", err)
 		}
@@ -118,8 +118,8 @@ func (m SchemaModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
-func (m *SchemaModel) UnmarshalJSON(data []byte) error {
-	var input SchemaAPIModel
+func (m *ParquetSchemaModel) UnmarshalJSON(data []byte) error {
+	var input ParquetSchemaAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
 	}

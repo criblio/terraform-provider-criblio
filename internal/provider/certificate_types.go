@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -77,37 +78,127 @@ type CertificateAPIModel struct {
 	PrivKeyPath    *string  `json:"privKeyPath,omitempty"`
 }
 
+func CertificateTerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := CertificateTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := CertificateTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := CertificateTerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
 func (m CertificateModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Ca.IsNull() && !m.Ca.IsUnknown() {
-		output["ca"] = m.Ca.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.Ca)
+		if err != nil {
+			return nil, fmt.Errorf("convert ca to API value: %v", err)
+		}
+		output["ca"] = value
 	}
 	if !m.CaPath.IsNull() && !m.CaPath.IsUnknown() {
-		output["caPath"] = m.CaPath.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.CaPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert ca_path to API value: %v", err)
+		}
+		output["caPath"] = value
 	}
 	if !m.Cert.IsNull() && !m.Cert.IsUnknown() {
-		output["cert"] = m.Cert.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.Cert)
+		if err != nil {
+			return nil, fmt.Errorf("convert cert to API value: %v", err)
+		}
+		output["cert"] = value
 	}
 	if !m.CertPath.IsNull() && !m.CertPath.IsUnknown() {
-		output["certPath"] = m.CertPath.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.CertPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert cert_path to API value: %v", err)
+		}
+		output["certPath"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		output["description"] = m.Description.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		output["id"] = m.ID.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
 	}
 	if !m.Passphrase.IsNull() && !m.Passphrase.IsUnknown() {
-		output["passphrase"] = m.Passphrase.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.Passphrase)
+		if err != nil {
+			return nil, fmt.Errorf("convert passphrase to API value: %v", err)
+		}
+		output["passphrase"] = value
 	}
 	if !m.PassphrasePath.IsNull() && !m.PassphrasePath.IsUnknown() {
-		output["passphrasePath"] = m.PassphrasePath.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.PassphrasePath)
+		if err != nil {
+			return nil, fmt.Errorf("convert passphrase_path to API value: %v", err)
+		}
+		output["passphrasePath"] = value
 	}
 	if !m.PrivKey.IsNull() && !m.PrivKey.IsUnknown() {
-		output["privKey"] = m.PrivKey.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.PrivKey)
+		if err != nil {
+			return nil, fmt.Errorf("convert priv_key to API value: %v", err)
+		}
+		output["privKey"] = value
 	}
 	if !m.PrivKeyPath.IsNull() && !m.PrivKeyPath.IsUnknown() {
-		output["privKeyPath"] = m.PrivKeyPath.ValueString()
+		value, err := CertificateTerraformValueToJSON(m.PrivKeyPath)
+		if err != nil {
+			return nil, fmt.Errorf("convert priv_key_path to API value: %v", err)
+		}
+		output["privKeyPath"] = value
 	}
 	return json.Marshal(output)
 }

@@ -24,6 +24,14 @@ type OperationDef struct {
 	RequestSchema  string
 	ResponseSchema string
 	PathParams     []FieldDef
+	Examples       []ExampleDef
+}
+
+// ExampleDef describes a request-body example attached to an OpenAPI operation.
+type ExampleDef struct {
+	Name    string
+	Summary string
+	Value   any
 }
 
 // FieldDef describes one Terraform model field.

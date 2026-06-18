@@ -14,68 +14,43 @@ import (
 var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
-type GlobalVarModel struct {
-	Args        types.List   `tfsdk:"args" json:"args,omitempty"`
+type ParserLibEntryModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
 	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
 	Type        types.String `tfsdk:"type" json:"type,omitempty"`
-	Value       types.String `tfsdk:"value" json:"value,omitempty"`
 }
 
-type GlobalVarResourceModel struct {
-	Args        types.List   `tfsdk:"args" json:"args,omitempty"`
+type ParserLibEntryResourceModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
 	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
 	Type        types.String `tfsdk:"type" json:"type,omitempty"`
-	Value       types.String `tfsdk:"value" json:"value,omitempty"`
 }
 
-type GlobalVarDataSourceModel struct {
-	Args        types.List   `tfsdk:"args" json:"args,omitempty"`
+type ParserLibEntryDataSourceModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
 	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
 	Type        types.String `tfsdk:"type" json:"type,omitempty"`
-	Value       types.String `tfsdk:"value" json:"value,omitempty"`
 }
 
-type GlobalVarAPIModel struct {
-	Args        any     `json:"args,omitempty"`
+type ParserLibEntryAPIModel struct {
 	Description *string `json:"description,omitempty"`
 	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
 	Lib         *string `json:"lib,omitempty"`
 	Tags        *string `json:"tags,omitempty"`
 	Type        *string `json:"type,omitempty"`
-	Value       *string `json:"value,omitempty"`
 }
 
-type GlobalVarArgsModel struct {
-	Type types.String `tfsdk:"type" json:"type,omitempty"`
-	Name types.String `tfsdk:"name" json:"name,omitempty"`
-}
-
-type GlobalVarArgsAPIModel struct {
-	Type *string `json:"type,omitempty"`
-	Name *string `json:"name,omitempty"`
-}
-
-func GlobalVarArgsAttrTypes() map[string]attr.Type {
-	return map[string]attr.Type{
-		"type": types.StringType,
-		"name": types.StringType,
-	}
-}
-
-func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
+func ParserLibEntryTerraformValueToJSON(value attr.Value) (any, error) {
 	if value.IsNull() || value.IsUnknown() {
 		return nil, nil
 	}
@@ -91,7 +66,7 @@ func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.List:
 		output := make([]any, 0, len(typed.Elements()))
 		for _, element := range typed.Elements() {
-			value, err := GlobalVarTerraformValueToJSON(element)
+			value, err := ParserLibEntryTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -101,7 +76,7 @@ func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Map:
 		output := make(map[string]any, len(typed.Elements()))
 		for key, element := range typed.Elements() {
-			value, err := GlobalVarTerraformValueToJSON(element)
+			value, err := ParserLibEntryTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -111,7 +86,7 @@ func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
 		for key, attribute := range typed.Attributes() {
-			value, err := GlobalVarTerraformValueToJSON(attribute)
+			value, err := ParserLibEntryTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
 			}
@@ -125,73 +100,50 @@ func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
 	}
 }
 
-func (m GlobalVarModel) MarshalJSON() ([]byte, error) {
+func (m ParserLibEntryModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
-	if !m.Args.IsNull() && !m.Args.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Args)
-		if err != nil {
-			return nil, fmt.Errorf("convert args to API value: %v", err)
-		}
-		output["args"] = value
-	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Description)
+		value, err := ParserLibEntryTerraformValueToJSON(m.Description)
 		if err != nil {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.ID)
+		value, err := ParserLibEntryTerraformValueToJSON(m.ID)
 		if err != nil {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
 	}
 	if !m.Lib.IsNull() && !m.Lib.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Lib)
+		value, err := ParserLibEntryTerraformValueToJSON(m.Lib)
 		if err != nil {
 			return nil, fmt.Errorf("convert lib to API value: %v", err)
 		}
 		output["lib"] = value
 	}
 	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Tags)
+		value, err := ParserLibEntryTerraformValueToJSON(m.Tags)
 		if err != nil {
 			return nil, fmt.Errorf("convert tags to API value: %v", err)
 		}
 		output["tags"] = value
 	}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Type)
+		value, err := ParserLibEntryTerraformValueToJSON(m.Type)
 		if err != nil {
 			return nil, fmt.Errorf("convert type to API value: %v", err)
 		}
 		output["type"] = value
 	}
-	if !m.Value.IsNull() && !m.Value.IsUnknown() {
-		value, err := GlobalVarTerraformValueToJSON(m.Value)
-		if err != nil {
-			return nil, fmt.Errorf("convert value to API value: %v", err)
-		}
-		output["value"] = value
-	}
 	return json.Marshal(output)
 }
 
-func (m *GlobalVarModel) UnmarshalJSON(data []byte) error {
-	var input GlobalVarAPIModel
+func (m *ParserLibEntryModel) UnmarshalJSON(data []byte) error {
+	var input ParserLibEntryAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
-	}
-	if input.Args != nil {
-		value, diags := types.ListValueFrom(context.Background(), types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}, input.Args)
-		if diags.HasError() {
-			return fmt.Errorf("convert args from API value: %v", diags)
-		}
-		m.Args = value
-	} else {
-		m.Args = types.ListNull(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()})
 	}
 	if input.Description != nil {
 		m.Description = types.StringValue(*input.Description)
@@ -222,11 +174,6 @@ func (m *GlobalVarModel) UnmarshalJSON(data []byte) error {
 		m.Type = types.StringValue(*input.Type)
 	} else {
 		m.Type = types.StringNull()
-	}
-	if input.Value != nil {
-		m.Value = types.StringValue(*input.Value)
-	} else {
-		m.Value = types.StringNull()
 	}
 	return nil
 }

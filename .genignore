@@ -67,11 +67,5 @@ internal/provider/packvars_data_source.go
 internal/provider/packsource_data_source.go
 internal/provider/custombanner_resource_sdk.go
 internal/provider/custombanner_resource.go
-internal/provider/mappingruleset_resource.go
-internal/provider/mappingruleset_resource_sdk.go
-internal/provider/mappingruleset_data_source.go
-internal/provider/mappingruleset_data_source_sdk.go
 internal/provider/mappings_data_source.go
 internal/provider/mappings_data_source_sdk.go
-internal/provider/types/mapping_ruleset_function_conf.go
-internal/provider/types/mapping_ruleset.go

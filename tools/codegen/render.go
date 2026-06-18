@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -88,9 +89,11 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"exampleUsage":                     exampleUsage,
 		"importBlock":                      importBlock,
 		"importCommand":                    importCommand,
+		"docSchema":                        docSchema,
 		"joinDocFields":                    joinDocFields,
 		"needsFmt":                         needsFmt,
 		"needsAttr":                        needsAttr,
+		"needsNestedObject":                needsNestedObject,
 		"needsPlanModifier":                needsPlanModifier,
 		"needsFrameworkStringPlanModifier": needsFrameworkStringPlanModifier,
 		"needsCustomPlanModifier":          needsCustomPlanModifier,
@@ -101,6 +104,9 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"pathParamFields":                  pathParamFields,
 		"jsonImport":                       jsonImport,
 		"nestedObjectList":                 nestedObjectList,
+		"nestedObject":                     nestedObject,
+		"nestedObjectFields":               nestedObjectFields,
+		"attrType":                         attrType,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -128,6 +134,98 @@ func joinDocFields(fields []parser.FieldDef) string {
 	return strings.Join(lines, "\n")
 }
 
+func docSchema(resource parser.ResourceDef) string {
+	var output strings.Builder
+	writeDocAttributeSections(&output, "", resource.Fields, true)
+	writeNestedDocSections(&output, "", resource.Fields)
+	return strings.TrimSpace(output.String())
+}
+
+func writeDocAttributeSections(output *strings.Builder, prefix string, fields []parser.FieldDef, topLevel bool) {
+	sections := fieldDocSections(fields, topLevel)
+	for _, section := range []struct {
+		title  string
+		fields []parser.FieldDef
+	}{
+		{"Required", sections.Required},
+		{"Optional", sections.Optional},
+		{"Read-Only", sections.Computed},
+	} {
+		if len(section.fields) == 0 {
+			continue
+		}
+		if prefix == "" {
+			fmt.Fprintf(output, "### %s\n\n", section.title)
+		} else {
+			fmt.Fprintf(output, "%s:\n\n", section.title)
+		}
+		for _, field := range section.fields {
+			fmt.Fprintf(output, "- `%s` (%s", field.TerraformName, docTypeName(field))
+			if field.Sensitive {
+				output.WriteString(", Sensitive")
+			}
+			output.WriteString(")")
+			if field.Description != "" {
+				output.WriteString(" " + field.Description)
+			}
+			if nestedObjectList(field) || nestedObject(field) {
+				fmt.Fprintf(output, " (see [below for nested schema](#nestedatt--%s))", docAnchor(joinPath(prefix, field.TerraformName)))
+			}
+			output.WriteString("\n")
+		}
+		output.WriteString("\n")
+	}
+}
+
+func writeNestedDocSections(output *strings.Builder, prefix string, fields []parser.FieldDef) {
+	for _, field := range fields {
+		if !nestedObjectList(field) && !nestedObject(field) {
+			continue
+		}
+		path := joinPath(prefix, field.TerraformName)
+		fmt.Fprintf(output, "<a id=\"nestedatt--%s\"></a>\n", docAnchor(path))
+		fmt.Fprintf(output, "### Nested Schema for `%s`\n\n", path)
+		writeDocAttributeSections(output, path, field.Fields, false)
+		writeNestedDocSections(output, path, field.Fields)
+	}
+}
+
+func fieldDocSections(fields []parser.FieldDef, topLevel bool) schemaDocSections {
+	var sections schemaDocSections
+	for _, field := range fields {
+		switch {
+		case field.Required:
+			sections.Required = append(sections.Required, field)
+		case field.Computed && !field.Optional && (!topLevel || (!field.PathParam && !field.ForceNew)):
+			sections.Computed = append(sections.Computed, field)
+		default:
+			sections.Optional = append(sections.Optional, field)
+		}
+	}
+	return sections
+}
+
+func docTypeName(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "Attributes List"
+	}
+	if nestedObject(field) {
+		return "Attributes"
+	}
+	return schemaTypeName(field)
+}
+
+func joinPath(prefix, name string) string {
+	if prefix == "" {
+		return name
+	}
+	return prefix + "." + name
+}
+
+func docAnchor(path string) string {
+	return strings.ReplaceAll(path, ".", "--")
+}
+
 type schemaDocSections struct {
 	Required []parser.FieldDef
 	Optional []parser.FieldDef
@@ -153,6 +251,9 @@ func goType(field parser.FieldDef) string {
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.Normalized"
 	}
+	if nestedObject(field) {
+		return "types.Object"
+	}
 	switch field.Type {
 	case "boolean":
 		return "types.Bool"
@@ -172,6 +273,9 @@ func goType(field parser.FieldDef) string {
 func legacyGoType(field parser.FieldDef) string {
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.Normalized"
+	}
+	if nestedObject(field) {
+		return "types.Object"
 	}
 	switch field.Type {
 	case "boolean":
@@ -194,7 +298,10 @@ func legacyGoType(field parser.FieldDef) string {
 
 func apiType(field parser.FieldDef) string {
 	if nestedObjectList(field) {
-		return "[]" + field.NestedAPIModelName
+		return "any"
+	}
+	if nestedObject(field) {
+		return "any"
 	}
 	switch field.Type {
 	case "boolean":
@@ -216,6 +323,9 @@ func schemaAttribute(field parser.FieldDef) string {
 	if nestedObjectList(field) {
 		return "schema.ListNestedAttribute"
 	}
+	if nestedObject(field) {
+		return "schema.SingleNestedAttribute"
+	}
 	switch field.Type {
 	case "boolean":
 		return "schema.BoolAttribute"
@@ -236,6 +346,9 @@ func schemaTypeName(field parser.FieldDef) string {
 	if nestedObjectList(field) {
 		return "List of Object"
 	}
+	if nestedObject(field) {
+		return "Object"
+	}
 	switch field.Type {
 	case "boolean":
 		return "Boolean"
@@ -255,6 +368,9 @@ func schemaTypeName(field parser.FieldDef) string {
 func zeroValue(field parser.FieldDef) string {
 	if nestedObjectList(field) {
 		return "types.ListValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
+	}
+	if nestedObject(field) {
+		return "types.ObjectValueMust(" + field.NestedAttrTypes + "(), map[string]attr.Value{})"
 	}
 	switch goType(field) {
 	case "types.Bool":
@@ -287,17 +403,21 @@ func typeNameSuffix(resource parser.ResourceDef) string {
 }
 
 func needsFmt(resource parser.ResourceDef) bool {
+	return true
+}
+
+func needsAttr(resource parser.ResourceDef) bool {
 	for _, field := range resource.Fields {
-		if field.Type == "array" || field.Type == "object" {
+		if nestedObjectList(field) || nestedObject(field) {
 			return true
 		}
 	}
 	return false
 }
 
-func needsAttr(resource parser.ResourceDef) bool {
+func needsNestedObject(resource parser.ResourceDef) bool {
 	for _, field := range resource.Fields {
-		if nestedObjectList(field) {
+		if nestedObject(field) {
 			return true
 		}
 	}
@@ -306,6 +426,48 @@ func needsAttr(resource parser.ResourceDef) bool {
 
 func nestedObjectList(field parser.FieldDef) bool {
 	return field.Type == "array" && field.ElementType == "object" && len(field.Fields) > 0
+}
+
+func nestedObject(field parser.FieldDef) bool {
+	return field.Type == "object" && len(field.Fields) > 0
+}
+
+func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	var walk func([]parser.FieldDef)
+	walk = func(items []parser.FieldDef) {
+		for _, item := range items {
+			if nestedObjectList(item) || nestedObject(item) {
+				fields = append(fields, item)
+				walk(item.Fields)
+			}
+		}
+	}
+	walk(resource.Fields)
+	return fields
+}
+
+func attrType(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "types.ListType{ElemType: types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}}"
+	}
+	if nestedObject(field) {
+		return "types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}"
+	}
+	switch field.Type {
+	case "boolean":
+		return "types.BoolType"
+	case "integer":
+		return "types.Int64Type"
+	case "number":
+		return "types.Float64Type"
+	case "array":
+		return "types.ListType{ElemType: types.StringType}"
+	case "object":
+		return "types.MapType{ElemType: types.StringType}"
+	default:
+		return "types.StringType"
+	}
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {
@@ -414,12 +576,131 @@ func customPlanModifierPackage(field parser.FieldDef) string {
 }
 
 func exampleUsage(resource parser.ResourceDef) string {
+	if content, ok := upstreamExampleUsage(resource); ok {
+		return content
+	}
 	path := filepath.Join("examples", "resources", resourceType(resource), "resource.tf")
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return generatedExample(resource)
 	}
 	return strings.TrimSpace(string(content))
+}
+
+func upstreamExampleUsage(resource parser.ResourceDef) (string, bool) {
+	for _, example := range resource.Create.Examples {
+		values := exampleObject(example.Value)
+		if len(values) == 0 {
+			continue
+		}
+		var output strings.Builder
+		fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "my_"+resource.FileStem)
+		writeExampleFields(&output, resource.Fields, values, 1)
+		output.WriteString("}")
+		return output.String(), true
+	}
+	return "", false
+}
+
+func writeExampleFields(output *strings.Builder, fields []parser.FieldDef, values map[string]any, indentLevel int) {
+	for _, field := range fields {
+		if field.Computed && !field.Optional {
+			continue
+		}
+		value, ok := values[field.APIName]
+		if !ok {
+			value, ok = values[field.TerraformName]
+		}
+		if !ok && field.PathParam {
+			value, ok = exampleValue(field), true
+		}
+		if !ok {
+			continue
+		}
+		writeExampleField(output, field, value, indentLevel)
+	}
+}
+
+func writeExampleField(output *strings.Builder, field parser.FieldDef, value any, indentLevel int) {
+	indent := strings.Repeat("  ", indentLevel)
+	if nestedObject(field) {
+		values := exampleObject(value)
+		if len(values) == 0 {
+			return
+		}
+		fmt.Fprintf(output, "%s%s = {\n", indent, field.TerraformName)
+		writeExampleFields(output, field.Fields, values, indentLevel+1)
+		fmt.Fprintf(output, "%s}\n", indent)
+		return
+	}
+	if nestedObjectList(field) {
+		values := exampleList(value)
+		if len(values) == 0 {
+			return
+		}
+		fmt.Fprintf(output, "%s%s = [\n", indent, field.TerraformName)
+		for _, item := range values {
+			itemValues := exampleObject(item)
+			if len(itemValues) == 0 {
+				continue
+			}
+			fmt.Fprintf(output, "%s  {\n", indent)
+			writeExampleFields(output, field.Fields, itemValues, indentLevel+2)
+			fmt.Fprintf(output, "%s  }\n", indent)
+		}
+		fmt.Fprintf(output, "%s]\n", indent)
+		return
+	}
+	fmt.Fprintf(output, "%s%s = %s\n", indent, field.TerraformName, hclValue(value))
+}
+
+func exampleObject(value any) map[string]any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed
+	case map[any]any:
+		values := make(map[string]any, len(typed))
+		for key, value := range typed {
+			keyString, ok := key.(string)
+			if ok {
+				values[keyString] = value
+			}
+		}
+		return values
+	default:
+		return nil
+	}
+}
+
+func exampleList(value any) []any {
+	switch typed := value.(type) {
+	case []any:
+		return typed
+	default:
+		return nil
+	}
+}
+
+func hclValue(value any) string {
+	switch typed := value.(type) {
+	case string:
+		return strconv.Quote(typed)
+	case bool:
+		if typed {
+			return "true"
+		}
+		return "false"
+	case int:
+		return strconv.Itoa(typed)
+	case int64:
+		return strconv.FormatInt(typed, 10)
+	case float64:
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	case nil:
+		return "null"
+	default:
+		return strconv.Quote(fmt.Sprint(typed))
+	}
 }
 
 func importBlock(resource parser.ResourceDef) string {
@@ -488,6 +769,9 @@ func generatedImportBlock(resource parser.ResourceDef) string {
 }
 
 func exampleValue(field parser.FieldDef) string {
+	if field.PathParam && field.TerraformName == "product" {
+		return "stream"
+	}
 	if field.PathParam && field.TerraformName == "group_id" {
 		return "default"
 	}

@@ -4,8 +4,10 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -52,25 +54,99 @@ type RegexAPIModel struct {
 	Tags        *string `json:"tags,omitempty"`
 }
 
+func RegexTerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := RegexTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := RegexTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := RegexTerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
 func (m RegexModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		output["description"] = m.Description.ValueString()
+		value, err := RegexTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		output["id"] = m.ID.ValueString()
+		value, err := RegexTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
 	}
 	if !m.Lib.IsNull() && !m.Lib.IsUnknown() {
-		output["lib"] = m.Lib.ValueString()
+		value, err := RegexTerraformValueToJSON(m.Lib)
+		if err != nil {
+			return nil, fmt.Errorf("convert lib to API value: %v", err)
+		}
+		output["lib"] = value
 	}
 	if !m.Regex.IsNull() && !m.Regex.IsUnknown() {
-		output["regex"] = m.Regex.ValueString()
+		value, err := RegexTerraformValueToJSON(m.Regex)
+		if err != nil {
+			return nil, fmt.Errorf("convert regex to API value: %v", err)
+		}
+		output["regex"] = value
 	}
 	if !m.SampleData.IsNull() && !m.SampleData.IsUnknown() {
-		output["sampleData"] = m.SampleData.ValueString()
+		value, err := RegexTerraformValueToJSON(m.SampleData)
+		if err != nil {
+			return nil, fmt.Errorf("convert sample_data to API value: %v", err)
+		}
+		output["sampleData"] = value
 	}
 	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		output["tags"] = m.Tags.ValueString()
+		value, err := RegexTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
 	}
 	return json.Marshal(output)
 }

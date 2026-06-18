@@ -18,6 +18,12 @@ func TestParseCertificateResource(t *testing.T) {
 	if certificate.Read.Path != "/m/{groupId}/system/certificates/{id}" {
 		t.Fatalf("read path = %q", certificate.Read.Path)
 	}
+	if len(certificate.Create.Examples) != 1 {
+		t.Fatalf("create example count = %d", len(certificate.Create.Examples))
+	}
+	if certificate.Create.Examples[0].Name != "CertificateCreateExample" {
+		t.Fatalf("create example name = %q", certificate.Create.Examples[0].Name)
+	}
 
 	groupID := fieldByTFName(t, certificate.Fields, "group_id")
 	if !groupID.Required || !groupID.ForceNew || !groupID.PathParam {

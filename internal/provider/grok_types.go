@@ -4,8 +4,10 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -44,13 +46,71 @@ type GrokAPIModel struct {
 	Tags    *string  `json:"tags,omitempty"`
 }
 
+func GrokTerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := GrokTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := GrokTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := GrokTerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
 func (m GrokModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Content.IsNull() && !m.Content.IsUnknown() {
-		output["content"] = m.Content.ValueString()
+		value, err := GrokTerraformValueToJSON(m.Content)
+		if err != nil {
+			return nil, fmt.Errorf("convert content to API value: %v", err)
+		}
+		output["content"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		output["id"] = m.ID.ValueString()
+		value, err := GrokTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
 	}
 	return json.Marshal(output)
 }
