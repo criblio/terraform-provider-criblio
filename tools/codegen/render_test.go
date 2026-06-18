@@ -36,13 +36,22 @@ func TestRenderedSnippets(t *testing.T) {
 	resources := parseFixture(t)
 	certificate := resourceByName(t, resources, "certificate")
 	resourceContent := renderTemplate(t, "resource", certificate)
-	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true)")
-	assertContains(t, resourceContent, "if !preserveInputs {")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, false)")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))")
+	assertContains(t, resourceContent, "if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown()))")
 	assertContains(t, resourceContent, "api.DisplayName.IsNull()")
 	assertContains(t, resourceContent, "if !api.InUse.IsNull() && !api.InUse.IsUnknown()")
 	assertContains(t, resourceContent, "stringFromAPIOrPrior(api.Passphrase.ValueString(), state.Passphrase)")
-	assertContains(t, resourceContent, "stringplanmodifier.RequiresReplace()")
+	assertContains(t, resourceContent, "stringplanmodifier.RequiresReplaceIfConfigured()")
+	assertContains(t, resourceContent, "custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress)")
+	assertContains(t, resourceContent, "custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress)")
+	assertContains(t, resourceContent, "custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "state.InUse = types.ListValueMust(types.StringType, nil)")
+	assertNotContains(t, resourceContent, "state.Args = types.ListValueMust(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()}, nil)")
+	assertContains(t, resourceContent, "clients, ok := req.ProviderData.(*ProviderClients)")
+	assertContains(t, resourceContent, "r.client = clients.RC")
+	assertContains(t, resourceContent, `json:"group_id"`)
+	assertContains(t, resourceContent, `path.Root("group_id")`)
 	assertNotContains(t, resourceContent, "speakeasy_")
 	assertNotContains(t, resourceContent, "internal/sdk")
 
@@ -54,7 +63,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.InUse)")
 
 	dataSourceContent := renderTemplate(t, "data_source", certificate)
-	assertContains(t, dataSourceContent, "applyCertificateAPIToState(apiModel, &model, false)")
+	assertContains(t, dataSourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
 
 	destination := resourceByName(t, resources, "destination")
 	destinationTypes := renderTemplate(t, "types", destination)
@@ -63,6 +72,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationTypes, "OutputS3 *OutputS3Model")
 
 	destinationResource := renderTemplate(t, "resource", destination)
+	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil && (!preserveInputs || (fillMissingInputs && state.OutputAzureBlob == nil))")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
 }

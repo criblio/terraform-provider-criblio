@@ -133,6 +133,7 @@ func ensureResource(resources map[string]*ResourceDef, name string) *ResourceDef
 	}
 	resource = &ResourceDef{
 		Name:       name,
+		FileStem:   snake(name),
 		TypeName:   "criblio_" + snake(name),
 		StructName: exportName(name),
 	}
@@ -242,7 +243,10 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			continue
 		}
 
-		field := fieldDef(apiName, property)
+		field, err := fieldDef(modelName, apiName, property, schemas)
+		if err != nil {
+			return nil, nil, err
+		}
 		field.RequestField = postFields[apiName]
 		field.Required = required[apiName]
 		field.Optional = !field.Required
@@ -262,6 +266,9 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 		if boolAnnotation(property, "x-terraform-prefer-state") {
 			field.PreferState = true
 		}
+		if suppressDiffAnnotation(property) {
+			field.SuppressDiff = true
+		}
 		if boolAnnotation(property, "x-terraform-force-new") {
 			field.ForceNew = true
 		}
@@ -275,7 +282,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 	return fields, variants, nil
 }
 
-func fieldDef(apiName string, property *yaml.Node) FieldDef {
+func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef, error) {
 	tfName := apiName
 	if renamed, ok := stringAnnotation(property, "x-terraform-name"); ok && renamed != "" {
 		tfName = renamed
@@ -291,7 +298,28 @@ func fieldDef(apiName string, property *yaml.Node) FieldDef {
 		ReadOnly:      boolAnnotation(property, "readOnly"),
 		WriteOnly:     boolAnnotation(property, "writeOnly"),
 	}
-	return field
+	if field.Type == "array" && field.ElementType == "object" {
+		items, ok := mappingValue(property, "items")
+		if !ok {
+			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
+		}
+		if schemaName := schemaRefName(items); schemaName != "" {
+			var found bool
+			items, found = mappingValue(schemas, schemaName)
+			if !found {
+				return FieldDef{}, fmt.Errorf("array item schema %q not found", schemaName)
+			}
+		}
+		fields, _, err := parseSchemaFields(modelName+exportName(tfName), items, schemas, schemaPropertySet(items), schemaPropertySet(items))
+		if err != nil {
+			return FieldDef{}, err
+		}
+		field.Fields = fields
+		field.NestedModelName = modelName + exportName(tfName) + "Model"
+		field.NestedAPIModelName = modelName + exportName(tfName) + "APIModel"
+		field.NestedAttrTypes = modelName + exportName(tfName) + "AttrTypes"
+	}
+	return field, nil
 }
 
 func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
@@ -477,6 +505,19 @@ func scalarValue(node *yaml.Node, key string) string {
 func boolAnnotation(node *yaml.Node, key string) bool {
 	value, ok := mappingValue(node, key)
 	return ok && value.Kind == yaml.ScalarNode && value.Value == "true"
+}
+
+func suppressDiffAnnotation(node *yaml.Node) bool {
+	value, ok := mappingValue(node, "x-terraform-suppress-diff")
+	if !ok || value.Kind != yaml.ScalarNode {
+		return false
+	}
+	switch strings.ToLower(value.Value) {
+	case "true", "explicit", "explicit-suppress", "explicit_suppress":
+		return true
+	default:
+		return false
+	}
 }
 
 func stringAnnotation(node *yaml.Node, key string) (string, bool) {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/tools/codegen/parser"
 )
@@ -30,7 +31,7 @@ func run(specPath, ignorePath, outputDir, resourceName string) error {
 	}
 	if resourceName != "" {
 		resources = slices.DeleteFunc(resources, func(resource parser.ResourceDef) bool {
-			return resource.Name != resourceName
+			return !resourceMatches(resource, resourceName)
 		})
 	}
 
@@ -50,4 +51,21 @@ func run(specPath, ignorePath, outputDir, resourceName string) error {
 		fmt.Printf("write %s\n", file.Path)
 	}
 	return nil
+}
+
+func resourceMatches(resource parser.ResourceDef, name string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(name, "_", ""))
+	for _, candidate := range []string{
+		resource.Name,
+		resource.FileStem,
+		strings.TrimPrefix(resource.TypeName, "criblio_"),
+	} {
+		if strings.EqualFold(candidate, name) {
+			return true
+		}
+		if strings.ToLower(strings.ReplaceAll(candidate, "_", "")) == normalized {
+			return true
+		}
+	}
+	return false
 }
