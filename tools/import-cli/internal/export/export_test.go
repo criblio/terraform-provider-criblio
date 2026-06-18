@@ -237,6 +237,24 @@ func TestAppendResourceItemFromModel_skipsSearchWorkerGroup(t *testing.T) {
 	assert.Empty(t, out.Items)
 }
 
+func TestLifecycleIgnoreChangesForConvertedResource_certificateUsesProviderStatePreservation(t *testing.T) {
+	ignored := lifecycleIgnoreChangesForConvertedResource("criblio_certificate", map[string]hcl.Value{
+		"cert":     {Kind: hcl.KindVariableRef, VarName: "certificate_cert"},
+		"priv_key": {Kind: hcl.KindVariableRef, VarName: "certificate_priv_key"},
+	})
+
+	assert.Empty(t, ignored, "certificate should not need import-cli lifecycle ignores with generated REST resource state preservation")
+}
+
+func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {
+	opts := hclOptionsForType("criblio_certificate", registry.Entry{})
+	require.NotNil(t, opts)
+
+	assert.True(t, opts.SkipAttributes["in_use"])
+	assert.True(t, opts.SkipAttributes["passphrase"])
+	assert.False(t, opts.SkipAttributes["ca"])
+}
+
 func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip by exclusions.SkipExportIDs", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))
@@ -491,6 +509,13 @@ func TestFilterAttrsBySchema(t *testing.T) {
 		filterAttrsBySchema(attrs, "unknown_type")
 		assert.Contains(t, attrs, "id")
 	})
+}
+
+func TestHclOptionsForType_skipsGrokComputedAttrs(t *testing.T) {
+	opts := hclOptionsForType("criblio_grok", registry.Entry{})
+	require.NotNil(t, opts)
+	assert.True(t, opts.SkipAttributes["size"])
+	assert.True(t, opts.SkipAttributes["tags"])
 }
 
 func TestRawJSONToItemMap(t *testing.T) {

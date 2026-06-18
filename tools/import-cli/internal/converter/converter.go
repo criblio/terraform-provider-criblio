@@ -1,5 +1,5 @@
 // Package converter converts SDK API responses into provider ResourceModel instances
-// using reflection and provider RefreshFrom* methods.
+// using reflection, provider RefreshFrom* methods, and generated model metadata.
 package converter
 
 import (
@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
@@ -15,6 +16,8 @@ import (
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -268,6 +271,10 @@ func convertFromResponseBody(ctx context.Context, e registry.Entry, modelType re
 	}
 	method := modelVal.MethodByName(refreshMethodName)
 	if !method.IsValid() {
+		converted, err := convertGeneratedModelFromResponseBody(e, modelType, responseBody)
+		if err == nil {
+			return converted, nil
+		}
 		return nil, fmt.Errorf("%s: model %s has no method %s", e.TypeName, e.ModelTypeName, refreshMethodName)
 	}
 	mt := method.Type()
@@ -286,6 +293,181 @@ func convertFromResponseBody(ctx context.Context, e registry.Entry, modelType re
 		return nil, err
 	}
 	return modelVal.Interface(), nil
+}
+
+func convertGeneratedModelFromResponseBody(e registry.Entry, modelType reflect.Type, responseBody interface{}) (interface{}, error) {
+	item, err := firstResponseItem(responseBody)
+	if err != nil {
+		return nil, err
+	}
+	itemJSON, err := json.Marshal(item.Interface())
+	if err != nil {
+		return nil, fmt.Errorf("%s: marshal response item: %w", e.TypeName, err)
+	}
+	var values map[string]json.RawMessage
+	if err := json.Unmarshal(itemJSON, &values); err != nil {
+		return nil, fmt.Errorf("%s: decode response item: %w", e.TypeName, err)
+	}
+
+	modelVal := reflect.New(modelType)
+	if err := populateGeneratedModel(modelVal.Elem(), values); err != nil {
+		return nil, fmt.Errorf("%s: populate generated model: %w", e.TypeName, err)
+	}
+	return modelVal.Interface(), nil
+}
+
+func firstResponseItem(responseBody interface{}) (reflect.Value, error) {
+	if responseBody == nil {
+		return reflect.Value{}, fmt.Errorf("response body is nil")
+	}
+	respVal := reflect.ValueOf(responseBody)
+	if respVal.Kind() == reflect.Ptr {
+		if respVal.IsNil() {
+			return reflect.Value{}, fmt.Errorf("response body is nil")
+		}
+		respVal = respVal.Elem()
+	}
+	if respVal.Kind() != reflect.Struct {
+		return reflect.Value{}, fmt.Errorf("response body %T is not a struct", responseBody)
+	}
+	items := respVal.FieldByName("Items")
+	if !items.IsValid() || items.Kind() != reflect.Slice {
+		return reflect.Value{}, fmt.Errorf("response body has no Items slice")
+	}
+	if items.Len() == 0 {
+		return reflect.Value{}, fmt.Errorf("response body has no items")
+	}
+	return items.Index(0), nil
+}
+
+func populateGeneratedModel(model reflect.Value, values map[string]json.RawMessage) error {
+	for i := 0; i < model.NumField(); i++ {
+		field := model.Field(i)
+		if !field.CanSet() {
+			continue
+		}
+		jsonName := model.Type().Field(i).Tag.Get("json")
+		jsonName = strings.Split(jsonName, ",")[0]
+		if jsonName == "" || jsonName == "-" {
+			continue
+		}
+		raw, ok := values[jsonName]
+		if !ok || string(raw) == "null" {
+			continue
+		}
+		if err := setGeneratedModelField(field, raw); err != nil {
+			return fmt.Errorf("%s: %w", model.Type().Field(i).Name, err)
+		}
+	}
+	return nil
+}
+
+func setGeneratedModelField(field reflect.Value, raw json.RawMessage) error {
+	switch field.Type() {
+	case reflect.TypeOf(types.String{}):
+		var value string
+		if err := json.Unmarshal(raw, &value); err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(types.StringValue(value)))
+		return nil
+	case reflect.TypeOf(types.Bool{}):
+		var value bool
+		if err := json.Unmarshal(raw, &value); err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(types.BoolValue(value)))
+		return nil
+	case reflect.TypeOf(types.Int64{}):
+		var value int64
+		if err := json.Unmarshal(raw, &value); err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(types.Int64Value(value)))
+		return nil
+	case reflect.TypeOf(types.Float64{}):
+		var value float64
+		if err := json.Unmarshal(raw, &value); err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(types.Float64Value(value)))
+		return nil
+	case reflect.TypeOf(jsontypes.Normalized{}):
+		var value string
+		if err := json.Unmarshal(raw, &value); err != nil {
+			value = string(raw)
+		}
+		field.Set(reflect.ValueOf(jsontypes.NewNormalizedValue(value)))
+		return nil
+	case reflect.TypeOf(types.List{}):
+		var values []string
+		if err := json.Unmarshal(raw, &values); err == nil {
+			field.Set(reflect.ValueOf(types.ListValueMust(types.StringType, stringValues(values))))
+			return nil
+		}
+		value, err := objectListValue(raw)
+		if err != nil {
+			return err
+		}
+		field.Set(reflect.ValueOf(value))
+		return nil
+	}
+
+	if field.Type() == reflect.TypeOf([]types.String{}) {
+		var values []string
+		if err := json.Unmarshal(raw, &values); err != nil {
+			return err
+		}
+		tfValues := make([]types.String, 0, len(values))
+		for _, value := range values {
+			tfValues = append(tfValues, types.StringValue(value))
+		}
+		field.Set(reflect.ValueOf(tfValues))
+	}
+	return nil
+}
+
+func objectListValue(raw json.RawMessage) (types.List, error) {
+	var objects []map[string]string
+	if err := json.Unmarshal(raw, &objects); err != nil {
+		return types.List{}, err
+	}
+	attrTypes := map[string]attr.Type{}
+	for _, object := range objects {
+		for key := range object {
+			attrTypes[key] = types.StringType
+		}
+	}
+	objectType := types.ObjectType{AttrTypes: attrTypes}
+	values := make([]attr.Value, 0, len(objects))
+	for _, object := range objects {
+		attrs := make(map[string]attr.Value, len(attrTypes))
+		for key := range attrTypes {
+			if value, ok := object[key]; ok {
+				attrs[key] = types.StringValue(value)
+			} else {
+				attrs[key] = types.StringNull()
+			}
+		}
+		objectValue, diags := types.ObjectValue(attrTypes, attrs)
+		if diags.HasError() {
+			return types.List{}, DiagnosticsToError(diags, "types.List", "")
+		}
+		values = append(values, objectValue)
+	}
+	listValue, diags := types.ListValue(objectType, values)
+	if diags.HasError() {
+		return types.List{}, DiagnosticsToError(diags, "types.List", "")
+	}
+	return listValue, nil
+}
+
+func stringValues(values []string) []attr.Value {
+	out := make([]attr.Value, 0, len(values))
+	for _, value := range values {
+		out = append(out, types.StringValue(value))
+	}
+	return out
 }
 
 // modelFromSearchItemJSON builds a SearchDataset or SearchDatasetProvider model from a list-item

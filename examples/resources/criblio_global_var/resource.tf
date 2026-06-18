@@ -11,5 +11,5 @@ resource "criblio_global_var" "my_globalvar" {
   lib         = "custom"
   tags        = "test"
   type        = "number"
-  value       = 100
+  value       = "100"
 }

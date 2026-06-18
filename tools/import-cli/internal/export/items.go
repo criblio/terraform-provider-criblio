@@ -171,30 +171,30 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		ImportID: importID,
 		GroupID:  groupIDForOutput(e.TypeName, groupIDFromIDMap(idMap)),
 	}
-	if r.TypeName == "criblio_appscope_config" {
+	it.LifecycleIgnoreChanges = lifecycleIgnoreChangesForConvertedResource(r.TypeName, attrs)
+	return &it, ""
+}
+
+func lifecycleIgnoreChangesForConvertedResource(typeName string, attrs map[string]hcl.Value) []string {
+	if typeName == "criblio_appscope_config" {
 		// Deeply nested Optional+Computed fields (cacertpath, buffer, allowbinary, headers, etc.)
 		// are set to null/empty by the provider Read but absent from HCL, causing perpetual drift.
-		it.LifecycleIgnoreChanges = []string{"config"}
+		return []string{"config"}
 	}
-	if r.TypeName == "criblio_certificate" {
-		// ca, in_use are computed; cert, priv_key, passphrase are sensitive/read-only from API.
-		it.LifecycleIgnoreChanges = []string{"ca", "cert", "in_use", "passphrase", "priv_key"}
-	}
-	if r.TypeName == "criblio_secret" {
+	if typeName == "criblio_secret" {
 		// value is sensitive; description, tags may be computed.
-		it.LifecycleIgnoreChanges = []string{"description", "tags", "value"}
+		return []string{"description", "tags", "value"}
 	}
-	if r.TypeName == "criblio_pack_destination" {
+	if typeName == "criblio_pack_destination" {
 		// OneOf block structure may differ slightly from provider Read (e.g. optional nulls).
 		// Ignore the output block we emit to suppress drift.
 		for k := range attrs {
 			if strings.HasPrefix(k, "output_") {
-				it.LifecycleIgnoreChanges = []string{k}
-				break
+				return []string{k}
 			}
 		}
 	}
-	return &it, ""
+	return nil
 }
 
 // appendResourceItemFromModel builds HCL attrs and appends a ResourceItem to out.Items (used for criblio_group and shared conversion path).

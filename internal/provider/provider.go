@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
@@ -199,14 +198,16 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		sdk.WithClient(httpClient),
 	}
 
+	restCredentials := providerRestCredentials(clientOauth, serverUrlParams)
+
 	clients := &ProviderClients{
 		Legacy: sdk.New(opts...),
 		RC: restclient.New(restclient.Config{
-			BaseURL:             providerRestBaseURL(serverUrl, serverUrlParams),
-			ProviderOrgID:       serverUrlParams["organizationId"],
-			ProviderWorkspaceID: serverUrlParams["workspaceId"],
-			ProviderCloudDomain: serverUrlParams["cloudDomain"],
-			Credentials:         providerRestCredentials(clientOauth, serverUrlParams),
+			BaseURL:             providerRestBaseURL(serverUrl, restCredentials),
+			ProviderOrgID:       restCredentials.OrganizationID,
+			ProviderWorkspaceID: restCredentials.Workspace,
+			ProviderCloudDomain: restCredentials.CloudDomain,
+			Credentials:         restCredentials,
 			BearerToken:         data.BearerAuth.ValueString(),
 			HTTPClient:          httpClient,
 		}),
@@ -218,30 +219,48 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	resp.ResourceData = clients
 }
 
-func providerRestBaseURL(serverURL string, params map[string]string) string {
-	if strings.Contains(serverURL, "{workspaceId}") || strings.Contains(serverURL, "{workspaceName}") ||
-		strings.Contains(serverURL, "{organizationId}") || strings.Contains(serverURL, "{cloudDomain}") {
-		replacer := strings.NewReplacer(
-			"{workspaceId}", params["workspaceId"],
-			"{workspaceName}", params["workspaceId"],
-			"{organizationId}", params["organizationId"],
-			"{cloudDomain}", params["cloudDomain"],
-		)
-		return replacer.Replace(serverURL)
-	}
-	return serverURL
+func providerRestBaseURL(serverURL string, credentials *auth.CriblConfig) string {
+	return auth.ConstructBaseURL(auth.ConstructBaseURLInput{BaseURL: serverURL}, credentials)
 }
 
 func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[string]string) *auth.CriblConfig {
-	return &auth.CriblConfig{
-		ClientID:        clientOauth.ClientID,
-		ClientSecret:    clientOauth.ClientSecret,
-		OrganizationID:  params["organizationId"],
-		Workspace:       params["workspaceId"],
-		CloudDomain:     params["cloudDomain"],
-		OnpremServerURL: os.Getenv("CRIBL_ONPREM_SERVER_URL"),
-		OnpremUsername:  os.Getenv("CRIBL_ONPREM_USERNAME"),
-		OnpremPassword:  os.Getenv("CRIBL_ONPREM_PASSWORD"),
+	credentials := &auth.CriblConfig{}
+	if loaded, err := auth.GetCredentials(); err == nil && loaded != nil {
+		credentials = loaded
+	}
+
+	if clientOauth.ClientID != "" {
+		credentials.ClientID = clientOauth.ClientID
+	}
+	if clientOauth.ClientSecret != "" {
+		credentials.ClientSecret = clientOauth.ClientSecret
+	}
+
+	credentials.OrganizationID = providerRestParam(params["organizationId"], credentials.OrganizationID, "ian")
+	credentials.Workspace = providerRestParam(params["workspaceId"], credentials.Workspace, "main")
+	credentials.CloudDomain = providerRestParam(params["cloudDomain"], credentials.CloudDomain, "cribl.cloud")
+
+	if value := os.Getenv("CRIBL_ONPREM_SERVER_URL"); value != "" {
+		credentials.OnpremServerURL = value
+	}
+	if value := os.Getenv("CRIBL_ONPREM_USERNAME"); value != "" {
+		credentials.OnpremUsername = value
+	}
+	if value := os.Getenv("CRIBL_ONPREM_PASSWORD"); value != "" {
+		credentials.OnpremPassword = value
+	}
+
+	return credentials
+}
+
+func providerRestParam(providerValue, credentialValue, defaultValue string) string {
+	switch {
+	case providerValue == "":
+		return credentialValue
+	case providerValue != defaultValue || credentialValue == "":
+		return providerValue
+	default:
+		return credentialValue
 	}
 }
 

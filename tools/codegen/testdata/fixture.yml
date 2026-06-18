@@ -118,6 +118,7 @@ components:
         id:
           type: string
           x-terraform-force-new: true
+          x-terraform-suppress-diff: explicit
         privKey:
           type: string
           writeOnly: true
@@ -131,6 +132,23 @@ components:
         conf:
           type: string
           x-terraform-custom-type: jsontypes.NormalizedType{}
+        args:
+          type: array
+          x-terraform-prefer-state: true
+          x-terraform-suppress-diff: explicit
+          items:
+            type: object
+            x-terraform-suppress-diff: explicit
+            required:
+              - type
+              - name
+            properties:
+              type:
+                type: string
+                x-terraform-suppress-diff: explicit
+              name:
+                type: string
+                x-terraform-suppress-diff: explicit
         ignored:
           type: string
           x-terraform-ignore: true
@@ -151,6 +169,23 @@ components:
         certExpiryDate:
           type: string
           readOnly: true
+        args:
+          type: array
+          x-terraform-prefer-state: true
+          x-terraform-suppress-diff: explicit
+          items:
+            type: object
+            x-terraform-suppress-diff: explicit
+            required:
+              - type
+              - name
+            properties:
+              type:
+                type: string
+                x-terraform-suppress-diff: explicit
+              name:
+                type: string
+                x-terraform-suppress-diff: explicit
         inUse:
           type: array
           items:

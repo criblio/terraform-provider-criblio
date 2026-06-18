@@ -2,12 +2,14 @@ package converter
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -104,6 +106,21 @@ func TestResourceModelTypes_hasEntriesForSupportedTypes(t *testing.T) {
 	assert.Contains(t, types, "RoutesResourceModel")
 }
 
+func TestObjectListValue(t *testing.T) {
+	value, err := objectListValue(json.RawMessage(`[{"name":"val","type":"number"}]`))
+	require.NoError(t, err)
+	require.False(t, value.IsNull())
+	require.False(t, value.IsUnknown())
+
+	var args []provider.GlobalVarArgsModel
+	diags := value.ElementsAs(context.Background(), &args, false)
+	require.False(t, diags.HasError(), diags)
+	require.Len(t, args, 1)
+	assert.Equal(t, "val", args[0].Name.ValueString())
+	assert.Equal(t, "number", args[0].Type.ValueString())
+	assert.Equal(t, types.ObjectType{AttrTypes: provider.GlobalVarArgsAttrTypes()}, value.ElementType(context.Background()))
+}
+
 // TestConvertFromResponseBody_destination verifies the correct RefreshFrom* method is invoked
 // for another resource type (GetOutputByID -> RefreshFromOperationsGetOutputByIDResponseBody).
 func TestConvertFromResponseBody_destination(t *testing.T) {
@@ -126,6 +143,82 @@ func TestConvertFromResponseBody_destination(t *testing.T) {
 	require.NotNil(t, model)
 	_, ok = model.(*provider.DestinationResourceModel)
 	assert.True(t, ok, "model should be *DestinationResourceModel")
+}
+
+func TestConvertFromResponseBody_certificateGeneratedModel(t *testing.T) {
+	ctx := context.Background()
+	reg := buildTestRegistry(t)
+	e, ok := reg.ByTypeName("criblio_certificate")
+	require.True(t, ok, "registry must contain criblio_certificate")
+
+	body := &operations.GetCertificateByIDResponseBody{
+		Items: []shared.Certificate{
+			{
+				ID:          "my-cert",
+				Cert:        "cert-body",
+				Description: stringPtr("generated certificate"),
+				InUse:       []string{},
+			},
+		},
+	}
+	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, map[string]string{
+		"GroupID": "default",
+		"ID":      "my-cert",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, model)
+
+	cert, ok := model.(*provider.CertificateResourceModel)
+	require.True(t, ok, "model should be *CertificateResourceModel")
+	assert.Equal(t, "default", cert.GroupID.ValueString())
+	assert.Equal(t, "my-cert", cert.ID.ValueString())
+	assert.Equal(t, "generated certificate", cert.Description.ValueString())
+	assert.Empty(t, cert.InUse)
+}
+
+func TestConvertFromResponseBody_schemaGeneratedModelNormalizedJSON(t *testing.T) {
+	ctx := context.Background()
+	e := registry.Entry{
+		TypeName:       "criblio_schema",
+		ModelTypeName:  "SchemaResourceModel",
+		GetMethod:      "GetLibSchemasByID",
+		ImportIDFormat: "json:group_id,id",
+	}
+	body := &struct {
+		Items []struct {
+			Description string         `json:"description,omitempty"`
+			ID          string         `json:"id,omitempty"`
+			Schema      map[string]any `json:"schema,omitempty"`
+		} `json:"items"`
+	}{
+		Items: []struct {
+			Description string         `json:"description,omitempty"`
+			ID          string         `json:"id,omitempty"`
+			Schema      map[string]any `json:"schema,omitempty"`
+		}{
+			{
+				Description: "schema from API",
+				ID:          "my-schema",
+				Schema: map[string]any{
+					"type":       "object",
+					"properties": map[string]any{"message": map[string]any{"type": "string"}},
+				},
+			},
+		},
+	}
+
+	model, err := ConvertFromResponseBodyWithIdentifiers(ctx, e, body, map[string]string{
+		"GroupID": "default",
+		"ID":      "my-schema",
+	})
+	require.NoError(t, err)
+
+	schemaModel, ok := model.(*provider.SchemaResourceModel)
+	require.True(t, ok, "model should be *SchemaResourceModel")
+	assert.Equal(t, "default", schemaModel.GroupID.ValueString())
+	assert.Equal(t, "my-schema", schemaModel.ID.ValueString())
+	require.False(t, schemaModel.Schema.IsNull())
+	assert.Contains(t, schemaModel.Schema.ValueString(), `"type":"object"`)
 }
 
 func TestConvertFromResponseBodyWithIdentifiers_injects_required_fields(t *testing.T) {

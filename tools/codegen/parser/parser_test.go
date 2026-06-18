@@ -25,8 +25,8 @@ func TestParseCertificateResource(t *testing.T) {
 	}
 
 	id := fieldByTFName(t, certificate.Fields, "id")
-	if !id.Required || !id.ForceNew {
-		t.Fatalf("id flags = required:%v forceNew:%v", id.Required, id.ForceNew)
+	if !id.Required || !id.ForceNew || !id.SuppressDiff {
+		t.Fatalf("id flags = required:%v forceNew:%v suppressDiff:%v", id.Required, id.ForceNew, id.SuppressDiff)
 	}
 
 	privKey := fieldByTFName(t, certificate.Fields, "priv_key")
@@ -47,6 +47,21 @@ func TestParseCertificateResource(t *testing.T) {
 	inUse := fieldByTFName(t, certificate.Fields, "in_use")
 	if !inUse.Computed || inUse.Type != "array" {
 		t.Fatalf("in_use computed/type = %v/%q", inUse.Computed, inUse.Type)
+	}
+
+	args := fieldByTFName(t, certificate.Fields, "args")
+	if args.Type != "array" || args.ElementType != "object" || args.ApplyStrategy != "preferState" || !args.SuppressDiff {
+		t.Fatalf("args type/element/strategy/suppressDiff = %q/%q/%q/%v", args.Type, args.ElementType, args.ApplyStrategy, args.SuppressDiff)
+	}
+	if args.NestedModelName != "CertificateArgsModel" || args.NestedAPIModelName != "CertificateArgsAPIModel" {
+		t.Fatalf("args nested model names = %q/%q", args.NestedModelName, args.NestedAPIModelName)
+	}
+	if len(args.Fields) != 2 {
+		t.Fatalf("args nested field count = %d", len(args.Fields))
+	}
+	argName := fieldByTFName(t, args.Fields, "name")
+	if !argName.Required || argName.Type != "string" || !argName.SuppressDiff {
+		t.Fatalf("args.name required/type/suppressDiff = %v/%q/%v", argName.Required, argName.Type, argName.SuppressDiff)
 	}
 
 	renamed := fieldByTFName(t, certificate.Fields, "display_name")
