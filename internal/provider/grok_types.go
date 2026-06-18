@@ -52,9 +52,6 @@ func (m GrokModel) MarshalJSON() ([]byte, error) {
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
 		output["id"] = m.ID.ValueString()
 	}
-	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		output["tags"] = m.Tags.ValueString()
-	}
 	return json.Marshal(output)
 }
 

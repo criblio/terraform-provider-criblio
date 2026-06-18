@@ -511,10 +511,11 @@ func TestFilterAttrsBySchema(t *testing.T) {
 	})
 }
 
-func TestHclOptionsForType_skipsGrokComputedSize(t *testing.T) {
+func TestHclOptionsForType_skipsGrokComputedAttrs(t *testing.T) {
 	opts := hclOptionsForType("criblio_grok", registry.Entry{})
 	require.NotNil(t, opts)
 	assert.True(t, opts.SkipAttributes["size"])
+	assert.True(t, opts.SkipAttributes["tags"])
 }
 
 func TestRawJSONToItemMap(t *testing.T) {

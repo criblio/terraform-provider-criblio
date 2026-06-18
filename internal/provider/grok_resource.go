@@ -72,8 +72,8 @@ func (r *GrokResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			},
 			"tags": schema.StringAttribute{
 				Required: false,
-				Optional: true,
-				Computed: false,
+				Optional: false,
+				Computed: true,
 			},
 		},
 	}
@@ -212,10 +212,10 @@ func applyGrokAPIToState(api *GrokModel, state *GrokModel, preserveInputs bool, 
 	} else if state.Size.IsNull() || state.Size.IsUnknown() {
 		state.Size = types.Float64Value(0)
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
-		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
-			state.Tags = api.Tags
-		}
+	if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
+		state.Tags = api.Tags
+	} else if state.Tags.IsNull() || state.Tags.IsUnknown() {
+		state.Tags = types.StringValue("")
 	}
 }
 

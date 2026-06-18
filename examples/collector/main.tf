@@ -415,15 +415,11 @@ resource "criblio_collector" "rest_okta_system_log_events" {
         collect_request_params = [
           {
             name  = "since"
-            value = <<-E
-`$${new Date((earliest * 1000 || Date.now() - 7*24*60*60*1000)).toISOString()}`
-E
+            value = "`$${new Date((earliest * 1000 || Date.now() - 7*24*60*60*1000)).toISOString()}`"
           },
           {
             name  = "until"
-            value = <<-E
-`$${new Date((latest * 1000 || Date.now())).toISOString()}`
-E
+            value = "`$${new Date((latest * 1000 || Date.now())).toISOString()}`"
           },
         ]
         collect_request_headers = [
@@ -723,21 +719,15 @@ resource "criblio_collector" "rest_mode_audit_logs" {
         collect_request_params = [
           {
             name  = "start_timestamp"
-            value = <<-EOT
-`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 10 * 60 * 1000).toISOString()}`
-EOT
+            value = "`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 10 * 60 * 1000).toISOString()}`"
           },
           {
             name  = "end_timestamp"
-            value = <<-EOT
-`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 5 * 60 * 1000).toISOString()}`
-EOT
+            value = "`$${new Date(Math.floor(Date.now() / 60000) * 60000 - 5 * 60 * 1000).toISOString()}`"
           },
           {
             name  = "next_token"
-            value = <<-EOT
-`$${__e && __e.metadata && __e.metadata.next_token ? __e.metadata.next_token : undefined}`
-EOT
+            value = "`$${__e && __e.metadata && __e.metadata.next_token ? __e.metadata.next_token : undefined}`"
           },
         ]
         collect_request_headers = [

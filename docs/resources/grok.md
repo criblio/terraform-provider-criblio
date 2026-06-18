@@ -32,14 +32,11 @@ resource "criblio_grok" "my_grok" {
 - `id` (String)
 
 
-### Optional
-
-- `tags` (String)
-
 
 ### Read-Only
 
 - `size` (Number)
+- `tags` (String)
 
 ## Import
 

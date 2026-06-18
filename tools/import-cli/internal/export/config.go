@@ -7,7 +7,7 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_certificate":             {"in_use", "passphrase"},                     // in_use is Computed; passphrase is write-only/sensitive
 	"criblio_destination":             {"environment", "pipeline", "type"},          // root attrs are Computed-only (hoisted from active output_*); configure inside output_* only
 	"criblio_global_var":              {"items"},                                    // provider marks items as Computed only; config comes from GetByID and we flatten Items[0]
-	"criblio_grok":                    {"size"},                                     // size is API-owned and Computed-only
+	"criblio_grok":                    {"size", "tags"},                             // size/tags are API-owned and Computed-only
 	"criblio_group_system_settings":   {"items"},                                    // provider marks items as read-only; configurable attrs are top-level (api, backups, etc.)
 	"criblio_pack_vars":               {"items"},                                    // items is Computed; config comes from flattenFirstItemToAttrs (description, lib, tags, type, value)
 	"criblio_pack_breakers":           {"items"},                                    // items is read-only (Computed); id, group_id, pack are configurable

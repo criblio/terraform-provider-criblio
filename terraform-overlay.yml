@@ -66,6 +66,9 @@ actions:
   - target: "$.components.schemas.GrokFile.properties.size"
     update:
       x-terraform-computed: true
+  - target: "$.components.schemas.GrokFile.properties.tags"
+    update:
+      x-terraform-computed: true
   - target: "$.components.schemas.GrokFile.properties.id"
     update:
       x-terraform-suppress-diff: explicit

@@ -950,7 +950,7 @@ func TestGrok(t *testing.T) {
 				{
 					Config: grokUpdatedConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr(resourceName, "tags", "updated"),
+						resource.TestCheckResourceAttr(resourceName, "content", "UPDATEDWORD [a-zA-Z]+\n"),
 					),
 				},
 				{
@@ -972,9 +972,8 @@ func TestGrok(t *testing.T) {
 const grokUpdatedConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
   group_id = "default"
   id       = "test_grok"
-  tags     = "updated"
   content  = <<-EOT
-TESTWORD [a-zA-Z]+
+UPDATEDWORD [a-zA-Z]+
 EOT
 }
 ` + "`" + `
