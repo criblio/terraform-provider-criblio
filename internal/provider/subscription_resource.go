@@ -171,7 +171,7 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySubscriptionAPIToState(apiModel, &model, false, isSubscriptionImportState(&model))
+	applySubscriptionAPIToState(apiModel, &model, true, isSubscriptionImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -255,6 +255,9 @@ func applySubscriptionAPIToState(api *SubscriptionModel, state *SubscriptionMode
 		if !api.Consumer.IsNull() && !api.Consumer.IsUnknown() {
 			state.Consumer = api.Consumer
 		}
+	}
+	if len(state.Consumer.AttributeTypes(context.Background())) == 0 {
+		state.Consumer = types.ObjectNull(SubscriptionConsumerAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {

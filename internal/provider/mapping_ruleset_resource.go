@@ -201,7 +201,7 @@ func (r *MappingRulesetResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyMappingRulesetAPIToState(apiModel, &model, false, isMappingRulesetImportState(&model))
+	applyMappingRulesetAPIToState(apiModel, &model, true, isMappingRulesetImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -287,6 +287,9 @@ func applyMappingRulesetAPIToState(api *MappingRulesetModel, state *MappingRules
 		if !api.Conf.IsNull() && !api.Conf.IsUnknown() {
 			state.Conf = api.Conf
 		}
+	}
+	if len(state.Conf.AttributeTypes(context.Background())) == 0 {
+		state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())
 	}
 	if !api.ID.IsNull() && !api.ID.IsUnknown() {
 		state.ID = api.ID

@@ -548,7 +548,7 @@ func (r *GroupSystemSettingsResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGroupSystemSettingsAPIToState(apiModel, &model, false, isGroupSystemSettingsImportState(&model))
+	applyGroupSystemSettingsAPIToState(apiModel, &model, true, isGroupSystemSettingsImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -634,20 +634,32 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 			state.API = api.API
 		}
 	}
+	if len(state.API.AttributeTypes(context.Background())) == 0 {
+		state.API = types.ObjectNull(GroupSystemSettingsAPIFieldAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Apps.IsNull() || state.Apps.IsUnknown())) {
 		if !api.Apps.IsNull() && !api.Apps.IsUnknown() {
 			state.Apps = api.Apps
 		}
+	}
+	if len(state.Apps.AttributeTypes(context.Background())) == 0 {
+		state.Apps = types.ObjectNull(GroupSystemSettingsAppsAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Backups.IsNull() || state.Backups.IsUnknown())) {
 		if !api.Backups.IsNull() && !api.Backups.IsUnknown() {
 			state.Backups = api.Backups
 		}
 	}
+	if len(state.Backups.AttributeTypes(context.Background())) == 0 {
+		state.Backups = types.ObjectNull(GroupSystemSettingsBackupsAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.CustomLogo.IsNull() || state.CustomLogo.IsUnknown())) {
 		if !api.CustomLogo.IsNull() && !api.CustomLogo.IsUnknown() {
 			state.CustomLogo = api.CustomLogo
 		}
+	}
+	if len(state.CustomLogo.AttributeTypes(context.Background())) == 0 {
+		state.CustomLogo = types.ObjectNull(GroupSystemSettingsCustomLogoAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
@@ -659,60 +671,96 @@ func applyGroupSystemSettingsAPIToState(api *GroupSystemSettingsModel, state *Gr
 			state.Pii = api.Pii
 		}
 	}
+	if len(state.Pii.AttributeTypes(context.Background())) == 0 {
+		state.Pii = types.ObjectNull(GroupSystemSettingsPiiAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Proxy.IsNull() || state.Proxy.IsUnknown())) {
 		if !api.Proxy.IsNull() && !api.Proxy.IsUnknown() {
 			state.Proxy = api.Proxy
 		}
+	}
+	if len(state.Proxy.AttributeTypes(context.Background())) == 0 {
+		state.Proxy = types.ObjectNull(GroupSystemSettingsProxyAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Rollback.IsNull() || state.Rollback.IsUnknown())) {
 		if !api.Rollback.IsNull() && !api.Rollback.IsUnknown() {
 			state.Rollback = api.Rollback
 		}
 	}
+	if len(state.Rollback.AttributeTypes(context.Background())) == 0 {
+		state.Rollback = types.ObjectNull(GroupSystemSettingsRollbackAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Shutdown.IsNull() || state.Shutdown.IsUnknown())) {
 		if !api.Shutdown.IsNull() && !api.Shutdown.IsUnknown() {
 			state.Shutdown = api.Shutdown
 		}
+	}
+	if len(state.Shutdown.AttributeTypes(context.Background())) == 0 {
+		state.Shutdown = types.ObjectNull(GroupSystemSettingsShutdownAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Sni.IsNull() || state.Sni.IsUnknown())) {
 		if !api.Sni.IsNull() && !api.Sni.IsUnknown() {
 			state.Sni = api.Sni
 		}
 	}
+	if len(state.Sni.AttributeTypes(context.Background())) == 0 {
+		state.Sni = types.ObjectNull(GroupSystemSettingsSniAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Sockets.IsNull() || state.Sockets.IsUnknown())) {
 		if !api.Sockets.IsNull() && !api.Sockets.IsUnknown() {
 			state.Sockets = api.Sockets
 		}
+	}
+	if len(state.Sockets.AttributeTypes(context.Background())) == 0 {
+		state.Sockets = types.ObjectNull(GroupSystemSettingsSocketsAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Support.IsNull() || state.Support.IsUnknown())) {
 		if !api.Support.IsNull() && !api.Support.IsUnknown() {
 			state.Support = api.Support
 		}
 	}
+	if len(state.Support.AttributeTypes(context.Background())) == 0 {
+		state.Support = types.ObjectNull(GroupSystemSettingsSupportAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.System.IsNull() || state.System.IsUnknown())) {
 		if !api.System.IsNull() && !api.System.IsUnknown() {
 			state.System = api.System
 		}
+	}
+	if len(state.System.AttributeTypes(context.Background())) == 0 {
+		state.System = types.ObjectNull(GroupSystemSettingsSystemAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.TLS.IsNull() || state.TLS.IsUnknown())) {
 		if !api.TLS.IsNull() && !api.TLS.IsUnknown() {
 			state.TLS = api.TLS
 		}
 	}
+	if len(state.TLS.AttributeTypes(context.Background())) == 0 {
+		state.TLS = types.ObjectNull(GroupSystemSettingsTLSAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.UpgradeGroupSettings.IsNull() || state.UpgradeGroupSettings.IsUnknown())) {
 		if !api.UpgradeGroupSettings.IsNull() && !api.UpgradeGroupSettings.IsUnknown() {
 			state.UpgradeGroupSettings = api.UpgradeGroupSettings
 		}
+	}
+	if len(state.UpgradeGroupSettings.AttributeTypes(context.Background())) == 0 {
+		state.UpgradeGroupSettings = types.ObjectNull(GroupSystemSettingsUpgradeGroupSettingsAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.UpgradeSettings.IsNull() || state.UpgradeSettings.IsUnknown())) {
 		if !api.UpgradeSettings.IsNull() && !api.UpgradeSettings.IsUnknown() {
 			state.UpgradeSettings = api.UpgradeSettings
 		}
 	}
+	if len(state.UpgradeSettings.AttributeTypes(context.Background())) == 0 {
+		state.UpgradeSettings = types.ObjectNull(GroupSystemSettingsUpgradeSettingsAttrTypes())
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Workers.IsNull() || state.Workers.IsUnknown())) {
 		if !api.Workers.IsNull() && !api.Workers.IsUnknown() {
 			state.Workers = api.Workers
 		}
+	}
+	if len(state.Workers.AttributeTypes(context.Background())) == 0 {
+		state.Workers = types.ObjectNull(GroupSystemSettingsWorkersAttrTypes())
 	}
 }
 

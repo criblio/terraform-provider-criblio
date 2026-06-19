@@ -164,7 +164,7 @@ func (r *KeyResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyKeyAPIToState(apiModel, &model, false, isKeyImportState(&model))
+	applyKeyAPIToState(apiModel, &model, true, isKeyImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

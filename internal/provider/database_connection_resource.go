@@ -175,7 +175,7 @@ func (r *DatabaseConnectionResource) Read(ctx context.Context, req resource.Read
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyDatabaseConnectionAPIToState(apiModel, &model, false, isDatabaseConnectionImportState(&model))
+	applyDatabaseConnectionAPIToState(apiModel, &model, true, isDatabaseConnectionImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

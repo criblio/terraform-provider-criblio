@@ -463,8 +463,8 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if eq .StructName "Key" }}
 	id := model.ID.ValueString()
-	model.ID = types.StringNull()
-	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	return normalizeKeyAPIModel(apiModel, id), err
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
 {{- end }}
@@ -479,7 +479,7 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 	}
 	for _, item := range *items {
 		if item.ID.ValueString() == id {
-			return &item, nil
+			return normalizeKeyAPIModel(&item, model.ID.ValueString()), nil
 		}
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
@@ -491,8 +491,11 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if eq .StructName "Key" }}
 	id := model.ID.ValueString()
-	model.ID = types.StringNull()
-	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	if apiID := keyAPIID(model); apiID != "" {
+		model.ID = types.StringValue(apiID)
+	}
+	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	return normalizeKeyAPIModel(apiModel, id), err
 {{- else }}
 	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
 {{- end }}
@@ -536,6 +539,19 @@ func keyAPIID(model KeyModel) string {
 		return model.KeyID.ValueString()
 	}
 	return model.ID.ValueString()
+}
+
+func normalizeKeyAPIModel(model *KeyModel, terraformID string) *KeyModel {
+	if model == nil {
+		return nil
+	}
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		model.KeyID = model.ID
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
 }
 {{- end }}
 `
@@ -663,7 +679,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, false, is{{ .StructName }}ImportState(&model))
+	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -815,6 +831,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		state.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
 	} else if len(state.{{ .GoName }}.Elements()) == 0 {
 		state.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+	}
+{{- else if nestedObject . }}
+	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
+		state.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
 {{- end }}
 {{- end }}

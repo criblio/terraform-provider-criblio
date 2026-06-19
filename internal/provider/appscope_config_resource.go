@@ -1136,7 +1136,7 @@ func (r *AppscopeConfigResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyAppscopeConfigAPIToState(apiModel, &model, false, isAppscopeConfigImportState(&model))
+	applyAppscopeConfigAPIToState(apiModel, &model, true, isAppscopeConfigImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -1226,6 +1226,9 @@ func applyAppscopeConfigAPIToState(api *AppscopeConfigModel, state *AppscopeConf
 		if !api.Config.IsNull() && !api.Config.IsUnknown() {
 			state.Config = api.Config
 		}
+	}
+	if len(state.Config.AttributeTypes(context.Background())) == 0 {
+		state.Config = types.ObjectNull(AppscopeConfigConfigAttrTypes())
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {

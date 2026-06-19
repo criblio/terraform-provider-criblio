@@ -20,8 +20,8 @@ func newKeyAPI(client *restclient.Client) KeyAPI {
 
 func (a KeyAPI) Create(ctx context.Context, model KeyModel) (*KeyModel, error) {
 	id := model.ID.ValueString()
-	model.ID = types.StringNull()
-	return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	apiModel, err := restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	return normalizeKeyAPIModel(apiModel, id), err
 }
 
 func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
@@ -32,7 +32,7 @@ func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
 	}
 	for _, item := range *items {
 		if item.ID.ValueString() == id {
-			return &item, nil
+			return normalizeKeyAPIModel(&item, model.ID.ValueString()), nil
 		}
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
@@ -40,8 +40,11 @@ func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
 
 func (a KeyAPI) Update(ctx context.Context, model KeyModel) (*KeyModel, error) {
 	id := model.ID.ValueString()
-	model.ID = types.StringNull()
-	return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	if apiID := keyAPIID(model); apiID != "" {
+		model.ID = types.StringValue(apiID)
+	}
+	apiModel, err := restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+	return normalizeKeyAPIModel(apiModel, id), err
 }
 
 func (a KeyAPI) Delete(ctx context.Context, model KeyModel) error {
@@ -55,4 +58,17 @@ func keyAPIID(model KeyModel) string {
 		return model.KeyID.ValueString()
 	}
 	return model.ID.ValueString()
+}
+
+func normalizeKeyAPIModel(model *KeyModel, terraformID string) *KeyModel {
+	if model == nil {
+		return nil
+	}
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		model.KeyID = model.ID
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
 }

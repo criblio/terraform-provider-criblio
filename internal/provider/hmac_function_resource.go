@@ -141,7 +141,7 @@ func (r *HmacFunctionResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyHmacFunctionAPIToState(apiModel, &model, false, isHmacFunctionImportState(&model))
+	applyHmacFunctionAPIToState(apiModel, &model, true, isHmacFunctionImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -180,7 +180,7 @@ func (r *CertificateResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyCertificateAPIToState(apiModel, &model, false, isCertificateImportState(&model))
+	applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
