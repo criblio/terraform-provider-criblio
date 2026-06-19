@@ -117,6 +117,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "state.InUse = types.ListValueMust(types.StringType, nil)")
 	assertNotContains(t, resourceContent, "state.Args = types.ListValueMust(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()}, nil)")
+	assertContains(t, resourceContent, "len(state.Args.Elements()) == 0")
 	assertContains(t, resourceContent, "clients, ok := req.ProviderData.(*ProviderClients)")
 	assertContains(t, resourceContent, "r.client = clients.RC")
 	assertContains(t, resourceContent, `json:"group_id"`)
@@ -160,6 +161,14 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetResource, `"add": schema.ListNestedAttribute{`)
 	assertContains(t, mappingRulesetResource, `"name": schema.StringAttribute{`)
 	assertContains(t, mappingRulesetResource, `"value": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, `"id": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, "Optional: true,")
+
+	mappingRulesetTypes := renderTemplate(t, "types", mappingRuleset)
+	assertContains(t, mappingRulesetTypes, "func mappingRulesetID(model MappingRulesetModel) string")
+	assertContains(t, mappingRulesetTypes, `return "default"`)
+	assertContains(t, mappingRulesetTypes, `function["id"] = "eval"`)
+	assertContains(t, mappingRulesetTypes, `function["final"] = true`)
 }
 
 func TestRestWriteCall(t *testing.T) {

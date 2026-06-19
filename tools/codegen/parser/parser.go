@@ -201,8 +201,43 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 		return fields[i].TerraformName < fields[j].TerraformName
 	})
 	resource.Fields = fields
+	applyResourceCompatibility(resource)
 	resource.OneOfVariants = variants
 	return nil
+}
+
+func applyResourceCompatibility(resource *ResourceDef) {
+	if resource == nil || resource.StructName != "MappingRuleset" {
+		return
+	}
+	for index := range resource.Fields {
+		field := &resource.Fields[index]
+		if field.TerraformName == "id" {
+			field.Required = false
+			field.Optional = true
+			field.Computed = true
+		}
+		if field.TerraformName == "conf" {
+			makeMappingRulesetFunctionDefaultsOptional(field)
+		}
+	}
+}
+
+func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
+	for index := range field.Fields {
+		nested := &field.Fields[index]
+		if nested.TerraformName == "functions" {
+			for nestedIndex := range nested.Fields {
+				functionField := &nested.Fields[nestedIndex]
+				if functionField.TerraformName == "id" || functionField.TerraformName == "final" {
+					functionField.Required = false
+					functionField.Optional = true
+					functionField.Computed = false
+				}
+			}
+			return
+		}
+	}
 }
 
 func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {

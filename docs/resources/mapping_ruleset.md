@@ -58,13 +58,13 @@ resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
 
 ### Required
 
-- `id` (String) Unique identifier for the Mapping Ruleset.
 - `product` (String) The name of the Cribl product that contains the Mapping Ruleset.
 
 ### Optional
 
 - `active` (Boolean) If <code>true</code>, the Mapping Ruleset is active. Otherwise, <code>false</code>.
 - `conf` (Attributes) Configuration for the Mapping Ruleset. (see [below for nested schema](#nestedatt--conf))
+- `id` (String) Unique identifier for the Mapping Ruleset.
 
 <a id="nestedatt--conf"></a>
 ### Nested Schema for `conf`
@@ -78,14 +78,14 @@ Optional:
 
 Required:
 
-- `id` (String) Function type. Always <code>eval</code> for Mapping Rules.
-- `final` (Boolean) Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.
 - `conf` (Attributes) Configuration for the Mapping Rule function. (see [below for nested schema](#nestedatt--conf--functions--conf))
 
 Optional:
 
+- `id` (String) Function type. Always <code>eval</code> for Mapping Rules.
 - `filter` (String) Boolean filter expression used to determine whether the Mapping Rule applies. Evaluated against the Worker or Edge Node context.
 - `disabled` (Boolean) If <code>true</code>, the function is disabled. Otherwise, <code>false</code>.
+- `final` (Boolean) Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.
 - `description` (String) Brief description of the function.
 - `group_id` (String) The Worker Group to map matching events to.
 

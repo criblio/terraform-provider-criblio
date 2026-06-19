@@ -880,6 +880,10 @@ func pathExpr(op parser.OperationDef) string {
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
+		if op.Path == "/admin/products/{product}/mappings/{id}" && param.TerraformName == "id" {
+			args = append(args, "mappingRulesetID(model)")
+			continue
+		}
 		args = append(args, "model."+param.GoName+".ValueString()")
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"

@@ -62,8 +62,8 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"id": schema.StringAttribute{
-									Required:    true,
-									Optional:    false,
+									Required:    false,
+									Optional:    true,
 									Computed:    false,
 									Description: `Function type. Always <code>eval</code> for Mapping Rules.`,
 								},
@@ -80,8 +80,8 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 									Description: `If <code>true</code>, the function is disabled. Otherwise, <code>false</code>.`,
 								},
 								"final": schema.BoolAttribute{
-									Required:    true,
-									Optional:    false,
+									Required:    false,
+									Optional:    true,
 									Computed:    false,
 									Description: `Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.`,
 								},
@@ -133,9 +133,9 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"id": schema.StringAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
+				Required:    false,
+				Optional:    true,
+				Computed:    true,
 				Description: `Unique identifier for the Mapping Ruleset.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
@@ -288,10 +288,8 @@ func applyMappingRulesetAPIToState(api *MappingRulesetModel, state *MappingRules
 			state.Conf = api.Conf
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
-		if !api.ID.IsNull() && !api.ID.IsUnknown() {
-			state.ID = api.ID
-		}
+	if !api.ID.IsNull() && !api.ID.IsUnknown() {
+		state.ID = api.ID
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Product.IsNull() || state.Product.IsUnknown())) {
 		if !api.Product.IsNull() && !api.Product.IsUnknown() {

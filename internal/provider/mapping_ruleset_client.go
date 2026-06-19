@@ -17,15 +17,15 @@ func newMappingRulesetAPI(client *restclient.Client) MappingRulesetAPI {
 }
 
 func (a MappingRulesetAPI) Create(ctx context.Context, model MappingRulesetModel) (*MappingRulesetModel, error) {
-	return restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)), model)
 }
 
 func (a MappingRulesetAPI) Read(ctx context.Context, model MappingRulesetModel) (*MappingRulesetModel, error) {
-	return restclient.Get[MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()))
+	return restclient.Get[MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)))
 }
 
 func (a MappingRulesetAPI) Update(ctx context.Context, model MappingRulesetModel) (*MappingRulesetModel, error) {
-	return restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[MappingRulesetModel, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), mappingRulesetID(model)), model)
 }
 
 func (a MappingRulesetAPI) Delete(ctx context.Context, model MappingRulesetModel) error {

@@ -131,6 +131,42 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 	}
 }
 
+{{- if eq .StructName "MappingRuleset" }}
+
+func mappingRulesetID(model MappingRulesetModel) string {
+	if model.ID.IsNull() || model.ID.IsUnknown() || model.ID.ValueString() == "" {
+		return "default"
+	}
+	return model.ID.ValueString()
+}
+
+func mappingRulesetConfWithDefaults(value any) any {
+	conf, ok := value.(map[string]any)
+	if !ok {
+		return value
+	}
+	functions, ok := conf["functions"].([]any)
+	if !ok {
+		return value
+	}
+	for index, item := range functions {
+		function, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		if id, ok := function["id"].(string); !ok || id == "" {
+			function["id"] = "eval"
+		}
+		if _, ok := function["final"]; !ok {
+			function["final"] = true
+		}
+		functions[index] = function
+	}
+	conf["functions"] = functions
+	return conf
+}
+{{- end }}
+
 func {{ .StructName }}TerraformNameToAPIName(name string) string {
 	prefix := ""
 	if strings.HasPrefix(name, "__template_") {
@@ -293,9 +329,15 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
+{{- if and (eq $.StructName "MappingRuleset") (eq .TerraformName "conf") }}
+		value = mappingRulesetConfWithDefaults(value)
+{{- end }}
 		output["{{ .APIName }}"] = value
 	}
 {{- end }}
+{{- end }}
+{{- if eq .StructName "MappingRuleset" }}
+	output["id"] = mappingRulesetID(m)
 {{- end }}
 	return json.Marshal(output)
 }
@@ -655,7 +697,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- range .Fields }}
 {{- if not .Computed }}
-	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())) {
+	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())){{- if nestedObjectList . }} || (!api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() && !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0){{- end }} {
 {{- end }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {

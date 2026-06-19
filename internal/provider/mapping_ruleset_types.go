@@ -177,6 +177,39 @@ func MappingRulesetTerraformValueToJSON(value attr.Value) (any, error) {
 	}
 }
 
+func mappingRulesetID(model MappingRulesetModel) string {
+	if model.ID.IsNull() || model.ID.IsUnknown() || model.ID.ValueString() == "" {
+		return "default"
+	}
+	return model.ID.ValueString()
+}
+
+func mappingRulesetConfWithDefaults(value any) any {
+	conf, ok := value.(map[string]any)
+	if !ok {
+		return value
+	}
+	functions, ok := conf["functions"].([]any)
+	if !ok {
+		return value
+	}
+	for index, item := range functions {
+		function, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		if id, ok := function["id"].(string); !ok || id == "" {
+			function["id"] = "eval"
+		}
+		if _, ok := function["final"]; !ok {
+			function["final"] = true
+		}
+		functions[index] = function
+	}
+	conf["functions"] = functions
+	return conf
+}
+
 func MappingRulesetTerraformNameToAPIName(name string) string {
 	prefix := ""
 	if strings.HasPrefix(name, "__template_") {
@@ -344,15 +377,10 @@ func (m MappingRulesetModel) MarshalJSON() ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("convert conf to API value: %v", err)
 		}
+		value = mappingRulesetConfWithDefaults(value)
 		output["conf"] = value
 	}
-	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		value, err := MappingRulesetTerraformValueToJSON(m.ID)
-		if err != nil {
-			return nil, fmt.Errorf("convert id to API value: %v", err)
-		}
-		output["id"] = value
-	}
+	output["id"] = mappingRulesetID(m)
 	return json.Marshal(output)
 }
 

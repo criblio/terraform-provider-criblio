@@ -406,7 +406,7 @@ func applyEventBreakerRulesetAPIToState(api *EventBreakerRulesetModel, state *Ev
 			state.MinRawLength = api.MinRawLength
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Rules.IsNull() || state.Rules.IsUnknown())) {
+	if !preserveInputs || (fillMissingInputs && (state.Rules.IsNull() || state.Rules.IsUnknown())) || (!api.Rules.IsNull() && !api.Rules.IsUnknown() && !state.Rules.IsNull() && !state.Rules.IsUnknown() && len(state.Rules.Elements()) == 0) {
 		if !api.Rules.IsNull() && !api.Rules.IsUnknown() {
 			state.Rules = api.Rules
 		}

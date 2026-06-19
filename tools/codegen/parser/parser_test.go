@@ -102,6 +102,30 @@ func TestParseOneOfVariants(t *testing.T) {
 	}
 }
 
+func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
+	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
+	if err != nil {
+		t.Fatalf("ParseFile returned error: %v", err)
+	}
+
+	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
+	id := fieldByTFName(t, mappingRuleset.Fields, "id")
+	if id.Required || !id.Optional || !id.Computed {
+		t.Fatalf("mapping ruleset id flags = required:%v optional:%v computed:%v", id.Required, id.Optional, id.Computed)
+	}
+
+	conf := fieldByTFName(t, mappingRuleset.Fields, "conf")
+	functions := fieldByTFName(t, conf.Fields, "functions")
+	functionID := fieldByTFName(t, functions.Fields, "id")
+	if functionID.Required || !functionID.Optional || functionID.Computed {
+		t.Fatalf("mapping function id flags = required:%v optional:%v computed:%v", functionID.Required, functionID.Optional, functionID.Computed)
+	}
+	final := fieldByTFName(t, functions.Fields, "final")
+	if final.Required || !final.Optional || final.Computed {
+		t.Fatalf("mapping function final flags = required:%v optional:%v computed:%v", final.Required, final.Optional, final.Computed)
+	}
+}
+
 func resourceByName(t *testing.T, resources []ResourceDef, name string) ResourceDef {
 	t.Helper()
 	for _, resource := range resources {

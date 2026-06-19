@@ -51,6 +51,7 @@ func TestMappingRuleset(t *testing.T) {
 
 func mappingRulesetConfig(product, final, description, filter, id string) string {
 	return `resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
+  active  = true
   product = "` + product + `"
   id      = "` + id + `"
   conf = {

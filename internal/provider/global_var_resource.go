@@ -261,7 +261,7 @@ func applyGlobalVarAPIToState(api *GlobalVarModel, state *GlobalVarModel, preser
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) {
+	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) || (!api.Args.IsNull() && !api.Args.IsUnknown() && !state.Args.IsNull() && !state.Args.IsUnknown() && len(state.Args.Elements()) == 0) {
 		if !api.Args.IsNull() && !api.Args.IsUnknown() {
 			state.Args = api.Args
 		}
