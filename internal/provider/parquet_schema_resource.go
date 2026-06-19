@@ -122,7 +122,7 @@ func (r *ParquetSchemaResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyParquetSchemaAPIToState(apiModel, &model, true, isParquetSchemaImportState(&model))
+	applyParquetSchemaAPIToState(apiModel, &model, false, isParquetSchemaImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

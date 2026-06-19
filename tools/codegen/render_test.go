@@ -104,7 +104,7 @@ func TestRenderedSnippets(t *testing.T) {
 	certificate := resourceByName(t, resources, "certificate")
 	resourceContent := renderTemplate(t, "resource", certificate)
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, false)")
-	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, false, isCertificateImportState(&model))")
 	assertContains(t, resourceContent, "apiModel, err := r.api.Read(ctx, model)")
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
 	assertContains(t, resourceContent, "if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown()))")
@@ -183,6 +183,12 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, keyClient, `return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)`)
 	assertContains(t, keyClient, `The keys API does not support deleting key metadata`)
 	assertContains(t, keyClient, `func keyAPIID(model KeyModel) string`)
+	keyResource := renderTemplate(t, "resource", key)
+	assertContains(t, keyResource, `"algorithm": schema.StringAttribute{`)
+	assertContains(t, keyResource, "Optional: true,")
+	assertContains(t, keyResource, "Computed: true,")
+	keyTypes := renderTemplate(t, "types", key)
+	assertContains(t, keyTypes, `output["algorithm"] = value`)
 }
 
 func TestRestWriteCall(t *testing.T) {

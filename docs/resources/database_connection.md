@@ -38,7 +38,7 @@ resource "criblio_database_connection" "my_database_connection" {
 
 ### Optional
 
-- `config_obj` (String)
+- `config_obj` (String, Sensitive)
 - `connection_string` (String, Sensitive)
 - `connection_timeout` (Number)
 - `creds_secrets` (String, Sensitive)

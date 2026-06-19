@@ -1136,7 +1136,7 @@ func (r *AppscopeConfigResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyAppscopeConfigAPIToState(apiModel, &model, true, isAppscopeConfigImportState(&model))
+	applyAppscopeConfigAPIToState(apiModel, &model, false, isAppscopeConfigImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

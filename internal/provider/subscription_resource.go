@@ -171,7 +171,7 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applySubscriptionAPIToState(apiModel, &model, true, isSubscriptionImportState(&model))
+	applySubscriptionAPIToState(apiModel, &model, false, isSubscriptionImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

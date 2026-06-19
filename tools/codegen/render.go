@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"text/template"
@@ -83,14 +84,17 @@ func shouldSkipExistingOutput(path string, output parser.OutputFile) (bool, erro
 
 func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	prefix := "internal/provider/" + resource.FileStem
-	return []parser.OutputFile{
+	files := []parser.OutputFile{
 		{Path: prefix + "_types.go", Kind: "types"},
 		{Path: prefix + "_client.go", Kind: "client"},
 		{Path: prefix + "_resource.go", Kind: "resource"},
-		{Path: prefix + "_data_source.go", Kind: "data_source"},
 		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
 		{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"},
 	}
+	if resource.StructName != "GroupSystemSettings" {
+		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+	}
+	return files
 }
 
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {

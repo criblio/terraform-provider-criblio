@@ -30,17 +30,17 @@ resource "criblio_key" "my_key" {
 
 ### Required
 
-- `algorithm` (String)
 - `group_id` (String) Worker group ID.
 - `id` (String)
-- `keyclass` (Number)
-- `kms` (String)
 
 ### Optional
 
+- `algorithm` (String)
 - `description` (String)
 - `expires` (Number)
 - `iv_size` (Integer) Length of the initialization vector, in bytes
+- `keyclass` (Number)
+- `kms` (String)
 - `use_iv` (Boolean) Seed encryption with a [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) to make the key more random and unique. Must be enabled with the aes-256-gcm algorithm.
 
 ### Read-Only
@@ -61,6 +61,7 @@ import {
   id = jsonencode({
     group_id = "default"
     id       = "key-001"
+    key_id   = "myKeyId"
   })
 }
 ```
@@ -68,5 +69,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_key.my_criblio_key '{"group_id": "default", "id": "key-001"}'
+terraform import criblio_key.my_criblio_key '{"group_id": "default", "id": "key-001", "key_id": "myKeyId"}'
 ```

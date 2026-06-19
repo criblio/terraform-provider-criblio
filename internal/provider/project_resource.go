@@ -133,7 +133,7 @@ func (r *ProjectResource) Read(ctx context.Context, req resource.ReadRequest, re
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyProjectAPIToState(apiModel, &model, true, isProjectImportState(&model))
+	applyProjectAPIToState(apiModel, &model, false, isProjectImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

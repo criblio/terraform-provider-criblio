@@ -293,6 +293,12 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			field.Required = false
 			field.Optional = false
 		}
+		if boolAnnotation(property, "x-terraform-optional-computed") {
+			field.Computed = true
+			field.Required = false
+			field.Optional = true
+			field.OptionalComputed = true
+		}
 		if boolAnnotation(property, "writeOnly") {
 			field.Sensitive = true
 			field.PreferState = true

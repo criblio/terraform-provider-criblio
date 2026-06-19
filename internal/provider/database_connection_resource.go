@@ -48,9 +48,10 @@ func (r *DatabaseConnectionResource) Schema(_ context.Context, _ resource.Schema
 				Computed: false,
 			},
 			"config_obj": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:  false,
+				Optional:  true,
+				Computed:  false,
+				Sensitive: true,
 			},
 			"connection_string": schema.StringAttribute{
 				Required:  false,
@@ -174,7 +175,7 @@ func (r *DatabaseConnectionResource) Read(ctx context.Context, req resource.Read
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyDatabaseConnectionAPIToState(apiModel, &model, true, isDatabaseConnectionImportState(&model))
+	applyDatabaseConnectionAPIToState(apiModel, &model, false, isDatabaseConnectionImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -267,7 +268,7 @@ func applyDatabaseConnectionAPIToState(api *DatabaseConnectionModel, state *Data
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ConfigObj.IsNull() || state.ConfigObj.IsUnknown())) {
 		if !api.ConfigObj.IsNull() && !api.ConfigObj.IsUnknown() {
-			state.ConfigObj = api.ConfigObj
+			state.ConfigObj = stringFromAPIOrPrior(api.ConfigObj.ValueString(), state.ConfigObj)
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ConnectionString.IsNull() || state.ConnectionString.IsUnknown())) {

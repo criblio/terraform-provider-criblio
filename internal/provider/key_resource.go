@@ -43,9 +43,9 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 		MarkdownDescription: "Key Resource",
 		Attributes: map[string]schema.Attribute{
 			"algorithm": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required: false,
+				Optional: true,
+				Computed: true,
 			},
 			"created": schema.Float64Attribute{
 				Required: false,
@@ -89,7 +89,7 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 			"iv_size": schema.Int64Attribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Length of the initialization vector, in bytes`,
 			},
 			"key_id": schema.StringAttribute{
@@ -99,14 +99,14 @@ func (r *KeyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Description: `API-assigned key ID returned by Cribl.`,
 			},
 			"keyclass": schema.Float64Attribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required: false,
+				Optional: true,
+				Computed: true,
 			},
 			"kms": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
+				Required: false,
+				Optional: true,
+				Computed: true,
 			},
 			"use_iv": schema.BoolAttribute{
 				Required:    false,
@@ -164,7 +164,7 @@ func (r *KeyResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyKeyAPIToState(apiModel, &model, true, isKeyImportState(&model))
+	applyKeyAPIToState(apiModel, &model, false, isKeyImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -240,15 +240,6 @@ func isKeyImportState(state *KeyModel) bool {
 	if state == nil {
 		return false
 	}
-	if state.Algorithm.IsNull() || state.Algorithm.IsUnknown() {
-		return true
-	}
-	if state.Keyclass.IsNull() || state.Keyclass.IsUnknown() {
-		return true
-	}
-	if state.Kms.IsNull() || state.Kms.IsUnknown() {
-		return true
-	}
 	return false
 }
 
@@ -256,10 +247,8 @@ func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fil
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Algorithm.IsNull() || state.Algorithm.IsUnknown())) {
-		if !api.Algorithm.IsNull() && !api.Algorithm.IsUnknown() {
-			state.Algorithm = api.Algorithm
-		}
+	if !api.Algorithm.IsNull() && !api.Algorithm.IsUnknown() {
+		state.Algorithm = api.Algorithm
 	}
 	if !api.Created.IsNull() && !api.Created.IsUnknown() {
 		state.Created = api.Created
@@ -291,25 +280,19 @@ func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fil
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.IvSize.IsNull() || state.IvSize.IsUnknown())) {
-		if !api.IvSize.IsNull() && !api.IvSize.IsUnknown() {
-			state.IvSize = api.IvSize
-		}
+	if !api.IvSize.IsNull() && !api.IvSize.IsUnknown() {
+		state.IvSize = api.IvSize
 	}
 	if !api.KeyID.IsNull() && !api.KeyID.IsUnknown() {
 		state.KeyID = api.KeyID
 	} else if state.KeyID.IsNull() || state.KeyID.IsUnknown() {
 		state.KeyID = types.StringValue("")
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Keyclass.IsNull() || state.Keyclass.IsUnknown())) {
-		if !api.Keyclass.IsNull() && !api.Keyclass.IsUnknown() {
-			state.Keyclass = api.Keyclass
-		}
+	if !api.Keyclass.IsNull() && !api.Keyclass.IsUnknown() {
+		state.Keyclass = api.Keyclass
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Kms.IsNull() || state.Kms.IsUnknown())) {
-		if !api.Kms.IsNull() && !api.Kms.IsUnknown() {
-			state.Kms = api.Kms
-		}
+	if !api.Kms.IsNull() && !api.Kms.IsUnknown() {
+		state.Kms = api.Kms
 	}
 	if !preserveInputs || (fillMissingInputs && (state.UseIV.IsNull() || state.UseIV.IsUnknown())) {
 		if !api.UseIV.IsNull() && !api.UseIV.IsUnknown() {

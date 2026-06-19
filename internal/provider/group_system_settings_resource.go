@@ -548,7 +548,7 @@ func (r *GroupSystemSettingsResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyGroupSystemSettingsAPIToState(apiModel, &model, true, isGroupSystemSettingsImportState(&model))
+	applyGroupSystemSettingsAPIToState(apiModel, &model, false, isGroupSystemSettingsImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

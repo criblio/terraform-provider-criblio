@@ -147,6 +147,10 @@ func TestParseKeyQueryID(t *testing.T) {
 	if keyID.APIName != "terraformKeyId" || !keyID.Computed {
 		t.Fatalf("key_id = api:%q computed:%v", keyID.APIName, keyID.Computed)
 	}
+	algorithm := fieldByTFName(t, key.Fields, "algorithm")
+	if !algorithm.Optional || !algorithm.Computed || algorithm.Required {
+		t.Fatalf("algorithm flags = required:%v optional:%v computed:%v", algorithm.Required, algorithm.Optional, algorithm.Computed)
+	}
 	if hasField(key.Fields, "plain_key") || hasField(key.Fields, "cipher_key") {
 		t.Fatalf("key material fields should be ignored")
 	}

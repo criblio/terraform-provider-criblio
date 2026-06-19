@@ -368,6 +368,7 @@ components:
           x-terraform-computed: true
         algorithm:
           type: string
+          x-terraform-optional-computed: true
         plainKey:
           type: string
           x-terraform-ignore: true

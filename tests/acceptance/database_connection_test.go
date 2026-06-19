@@ -49,7 +49,7 @@ func TestDatabaseConnection(t *testing.T) {
 					ImportState:             true,
 					ImportStateId:           `{"group_id":"default","id":"my_databaseconnection"}`,
 					ImportStateVerify:       true,
-					ImportStateVerifyIgnore: []string{"connection_string", "creds_secrets", "password", "text_secret"},
+					ImportStateVerifyIgnore: []string{"config_obj", "connection_string", "creds_secrets", "password", "text_secret"},
 				},
 			},
 		})

@@ -137,7 +137,7 @@ func (r *ParserLibEntryResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyParserLibEntryAPIToState(apiModel, &model, true, isParserLibEntryImportState(&model))
+	applyParserLibEntryAPIToState(apiModel, &model, false, isParserLibEntryImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

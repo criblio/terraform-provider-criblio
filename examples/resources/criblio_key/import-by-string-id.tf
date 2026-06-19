@@ -3,5 +3,6 @@ import {
   id = jsonencode({
     group_id = "default"
     id       = "key-001"
+    key_id   = "myKeyId"
   })
 }

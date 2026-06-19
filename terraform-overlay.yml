@@ -287,6 +287,18 @@ actions:
       x-terraform-name: id
       x-terraform-suppress-diff: explicit
       x-terraform-prefer-state: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.algorithm"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.keyclass"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.kms"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.ivSize"
+    update:
+      x-terraform-optional-computed: true
   - target: "$.components.schemas.KeyMetadataEntity.properties"
     update:
       terraformKeyId:
@@ -363,6 +375,10 @@ actions:
     update:
       x-terraform-suppress-diff: explicit
   - target: "$.components.schemas.DatabaseConnectionConfig.properties.connectionString"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.configObj"
     update:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true

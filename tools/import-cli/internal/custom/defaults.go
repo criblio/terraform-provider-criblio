@@ -234,3 +234,51 @@ func ApplyProjectDefaults(attrs map[string]hcl.Value) {
 		attrs["destinations"] = emptyList
 	}
 }
+
+// ApplySubscriptionDefaults removes empty legacy consumer blocks. Terraform cannot
+// type-check `consumer = {}` against the generated nested object schema, and an
+// empty consumer means the subscription has no legacy consumer configuration.
+func ApplySubscriptionDefaults(attrs map[string]hcl.Value) {
+	consumer, ok := attrs["consumer"]
+	if !ok || subscriptionConsumerHasConfig(consumer) {
+		return
+	}
+	delete(attrs, "consumer")
+}
+
+func subscriptionConsumerHasConfig(value hcl.Value) bool {
+	switch value.Kind {
+	case hcl.KindNull:
+		return false
+	case hcl.KindString:
+		return value.String != ""
+	case hcl.KindBool:
+		return true
+	case hcl.KindNumber:
+		return true
+	case hcl.KindSensitive, hcl.KindVariableRef:
+		return true
+	case hcl.KindList:
+		if len(value.List) == 0 {
+			return false
+		}
+		for _, item := range value.List {
+			if subscriptionConsumerHasConfig(item) {
+				return true
+			}
+		}
+		return false
+	case hcl.KindMap:
+		if len(value.Map) == 0 {
+			return false
+		}
+		for _, item := range value.Map {
+			if subscriptionConsumerHasConfig(item) {
+				return true
+			}
+		}
+		return false
+	default:
+		return true
+	}
+}

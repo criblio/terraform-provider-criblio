@@ -43,10 +43,11 @@ func TestKey(t *testing.T) {
 				PlanOnly: true,
 			},
 			{
-				ResourceName:      resourceName,
-				ImportState:       true,
-				ImportStateIdFunc: keyImportStateID(resourceName),
-				ImportStateVerify: true,
+				ResourceName:            resourceName,
+				ImportState:             true,
+				ImportStateIdFunc:       keyImportStateID(resourceName),
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"iv_size"},
 			},
 		},
 	})

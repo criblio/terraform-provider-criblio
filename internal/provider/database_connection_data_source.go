@@ -40,8 +40,9 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 				Computed: true,
 			},
 			"config_obj": schema.StringAttribute{
-				Required: false,
-				Computed: true,
+				Required:  false,
+				Computed:  true,
+				Sensitive: true,
 			},
 			"connection_string": schema.StringAttribute{
 				Required:  false,

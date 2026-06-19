@@ -323,7 +323,7 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
-{{- if and .RequestField (not .Computed) }}
+{{- if and .RequestField (or (not .Computed) .OptionalComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
 		if err != nil {
@@ -663,7 +663,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+	apply{{ .StructName }}APIToState(apiModel, &model, false, is{{ .StructName }}ImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

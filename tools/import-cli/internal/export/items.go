@@ -103,6 +103,9 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_project" {
 		custom.ApplyProjectDefaults(attrs)
 	}
+	if r.TypeName == "criblio_subscription" {
+		custom.ApplySubscriptionDefaults(attrs)
+	}
 	if r.TypeName == "criblio_pack" {
 		custom.ApplyPackDefaults(attrs)
 	}
@@ -143,7 +146,15 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_pack_destination" && idMap["pack"] != "" {
 		attrs["pack"] = hcl.Value{Kind: hcl.KindString, String: idMap["pack"]}
 	}
-	importID, idErr := generator.BuildImportID(e.ImportIDFormat, idMap)
+	buildIDMap := idMap
+	if r.TypeName == "criblio_key" && idMap["id"] != "" {
+		buildIDMap = make(map[string]string, len(idMap)+1)
+		for k, v := range idMap {
+			buildIDMap[k] = v
+		}
+		buildIDMap["key_id"] = idMap["id"]
+	}
+	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)
 	if idErr != nil {
 		return nil, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr))
 	}
@@ -226,6 +237,9 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	if typeName == "criblio_project" {
 		custom.ApplyProjectDefaults(attrs)
 	}
+	if typeName == "criblio_subscription" {
+		custom.ApplySubscriptionDefaults(attrs)
+	}
 	if typeName == "criblio_pack" {
 		custom.ApplyPackDefaults(attrs)
 	}
@@ -255,7 +269,15 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		out.DefaultsSkipped++
 		return nil
 	}
-	importID, idErr := generator.BuildImportID(e.ImportIDFormat, idMap)
+	buildIDMap := idMap
+	if typeName == "criblio_key" && idMap["id"] != "" {
+		buildIDMap = make(map[string]string, len(idMap)+1)
+		for k, v := range idMap {
+			buildIDMap[k] = v
+		}
+		buildIDMap["key_id"] = idMap["id"]
+	}
+	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)
 	if idErr != nil {
 		return fmt.Errorf("import ID: %w", idErr)
 	}

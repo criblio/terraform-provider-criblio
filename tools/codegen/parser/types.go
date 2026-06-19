@@ -49,6 +49,7 @@ type FieldDef struct {
 	Required           bool
 	Optional           bool
 	Computed           bool
+	OptionalComputed   bool
 	Sensitive          bool
 	PreferState        bool
 	SuppressDiff       bool
