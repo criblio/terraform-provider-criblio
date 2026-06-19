@@ -5,9 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestEventBreakerRuleset(t *testing.T) {
@@ -15,30 +13,57 @@ func TestEventBreakerRuleset(t *testing.T) {
 		time.Sleep(1 * time.Second)
 	}
 
-	t.Run("plan-diff", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			ProtoV6ProviderFactories:  providerFactory,
-			PreventPostDestroyRefresh: true,
-			Steps: []resource.TestStep{
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "id", "test_eventbreakerruleset"),
-						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "description", "test"),
-						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "group_id", "default"),
-						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "lib", "custom"),
-						resource.TestCheckResourceAttr("criblio_event_breaker_ruleset.my_eventbreakerruleset", "tags", "test"),
-					),
-				},
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					ConfigPlanChecks: resource.ConfigPlanChecks{
-						PreApply: []plancheck.PlanCheck{
-							plancheck.ExpectEmptyPlan(),
-						},
-					},
-				},
+	resourceName := "criblio_event_breaker_ruleset.my_eventbreakerruleset"
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: eventBreakerRulesetConfig("phase2"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+					resource.TestCheckResourceAttr(resourceName, "id", "phase2_event_breaker"),
+					resource.TestCheckResourceAttr(resourceName, "description", "phase2"),
+					resource.TestCheckResourceAttr(resourceName, "rules.#", "1"),
+				),
 			},
-		})
+			{
+				Config: eventBreakerRulesetConfig("phase2 updated"),
+				Check:  resource.TestCheckResourceAttr(resourceName, "description", "phase2 updated"),
+			},
+			{Config: eventBreakerRulesetConfig("phase2 updated"), PlanOnly: true},
+			{
+				ResourceName:      resourceName,
+				ImportState:       true,
+				ImportStateId:     `{"group_id":"default","id":"phase2_event_breaker"}`,
+				ImportStateVerify: true,
+			},
+		},
 	})
+}
+
+func eventBreakerRulesetConfig(description string) string {
+	return `resource "criblio_event_breaker_ruleset" "my_eventbreakerruleset" {
+  description    = "` + description + `"
+  group_id       = "default"
+  id             = "phase2_event_breaker"
+  lib            = "custom"
+  min_raw_length = 256
+  rules = [{
+    condition              = "true"
+    disabled               = false
+    event_breaker_regex    = "/[\\n\\r]+(?!\\s)/"
+    fields                 = []
+    max_event_bytes        = 51200
+    name                   = "phase2"
+    parser_enabled         = false
+    should_use_data_raw    = false
+    timestamp              = { length = 150, type = "auto" }
+    timestamp_anchor_regex = "/^/"
+    type                   = "regex"
+  }]
+  tags = "phase2"
+}
+`
 }

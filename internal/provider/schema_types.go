@@ -4,8 +4,12 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"strings"
+	"unicode"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -40,16 +44,237 @@ type SchemaAPIModel struct {
 	Schema      *string `json:"schema,omitempty"`
 }
 
+func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := SchemaTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := SchemaTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := SchemaTerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[SchemaTerraformNameToAPIName(key)] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
+func SchemaTerraformNameToAPIName(name string) string {
+	prefix := ""
+	if strings.HasPrefix(name, "__template_") {
+		prefix = "__template_"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	var output strings.Builder
+	upperNext := false
+	for _, char := range name {
+		if char == '_' {
+			upperNext = true
+			continue
+		}
+		if upperNext {
+			output.WriteRune(unicode.ToUpper(char))
+			upperNext = false
+			continue
+		}
+		output.WriteRune(char)
+	}
+	return prefix + output.String()
+}
+
+func SchemaAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if value == nil {
+		return SchemaTerraformNullValue(typ)
+	}
+	if typ.Equal(types.BoolType) {
+		typed, ok := value.(bool)
+		if !ok {
+			return nil, fmt.Errorf("expected bool, got %T", value)
+		}
+		return types.BoolValue(typed), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Int64Value(int64(typed)), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Float64Value(typed), nil
+	}
+	if typ.Equal(types.StringType) {
+		typed, ok := value.(string)
+		if !ok {
+			return nil, fmt.Errorf("expected string, got %T", value)
+		}
+		return types.StringValue(typed), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		input, ok := value.([]any)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		output := make([]attr.Value, 0, len(input))
+		for _, item := range input {
+			nested, err := SchemaAPIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, nested)
+		}
+		value, diags := types.ListValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.MapType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(input))
+		for key, item := range input {
+			nested, err := SchemaAPIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.MapValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.ObjectType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			apiKey := SchemaTerraformNameToAPIName(key)
+			item, ok := input[apiKey]
+			if !ok {
+				item, ok = input[key]
+			}
+			if !ok {
+				nested, err := SchemaTerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				output[key] = nested
+				continue
+			}
+			nested, err := SchemaAPIValueToTerraformValue(item, attrType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.ObjectValue(typed.AttrTypes, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
+func SchemaTerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.BoolType) {
+		return types.BoolNull(), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		return types.Int64Null(), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		return types.Float64Null(), nil
+	}
+	if typ.Equal(types.StringType) {
+		return types.StringNull(), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		return types.ListNull(typed.ElemType), nil
+	case types.MapType:
+		return types.MapNull(typed.ElemType), nil
+	case types.ObjectType:
+		return types.ObjectNull(typed.AttrTypes), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
 func (m SchemaModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		output["description"] = m.Description.ValueString()
+		value, err := SchemaTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		output["id"] = m.ID.ValueString()
+		value, err := SchemaTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
 	}
 	if !m.Schema.IsNull() && !m.Schema.IsUnknown() {
-		output["schema"] = m.Schema.ValueString()
+		value, err := SchemaTerraformValueToJSON(m.Schema)
+		if err != nil {
+			return nil, fmt.Errorf("convert schema to API value: %v", err)
+		}
+		output["schema"] = value
 	}
 	return json.Marshal(output)
 }

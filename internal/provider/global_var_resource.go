@@ -45,35 +45,35 @@ func (r *GlobalVarResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 		MarkdownDescription: "GlobalVar Resource",
 		Attributes: map[string]schema.Attribute{
 			"args": schema.ListNestedAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Required:    false,
+				Optional:    true,
+				Computed:    false,
+				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress),
 				},
-				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
 				NestedObject: schema.NestedAttributeObject{
 					PlanModifiers: []planmodifier.Object{
 						custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"type": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Argument type (e.g. number, string)`,
 							PlanModifiers: []planmodifier.String{
 								custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Argument type (e.g. number, string)`,
 						},
 						"name": schema.StringAttribute{
-							Required: true,
-							Optional: false,
-							Computed: false,
+							Required:    true,
+							Optional:    false,
+							Computed:    false,
+							Description: `Argument name`,
 							PlanModifiers: []planmodifier.String{
 								custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Argument name`,
 						},
 					},
 				},
@@ -226,12 +226,25 @@ func (r *GlobalVarResource) ImportState(ctx context.Context, req resource.Import
 		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if data.ID == "" {
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
+	var model GlobalVarModel
+	model.GroupID = types.StringValue(data.GroupID)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	model.ID = types.StringValue(data.ID)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyGlobalVarAPIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
 func isGlobalVarImportState(state *GlobalVarModel) bool {
@@ -248,10 +261,15 @@ func applyGlobalVarAPIToState(api *GlobalVarModel, state *GlobalVarModel, preser
 	if api == nil || state == nil {
 		return
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) {
+	if !preserveInputs || (fillMissingInputs && (state.Args.IsNull() || state.Args.IsUnknown())) || (!api.Args.IsNull() && !api.Args.IsUnknown() && !state.Args.IsNull() && !state.Args.IsUnknown() && len(state.Args.Elements()) == 0) {
 		if !api.Args.IsNull() && !api.Args.IsUnknown() {
 			state.Args = api.Args
 		}
+	}
+	if state.Args.IsNull() || state.Args.IsUnknown() {
+		state.Args = types.ListNull(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()})
+	} else if len(state.Args.Elements()) == 0 {
+		state.Args = types.ListValueMust(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}, nil)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {

@@ -1,25 +1,24 @@
 resource "criblio_mapping_ruleset" "my_mappingruleset" {
-  active = false
   conf = {
     functions = [
       {
         conf = {
           add = [
             {
-              name  = "...my_name..."
-              value = "...my_value..."
+              name  = "groupId"
+              value = "'default'"
             }
           ]
         }
-        description = "...my_description..."
-        disabled    = true
+        description = "Default routing"
+        disabled    = false
         filter      = "true"
-        final       = false
-        group_id    = "...my_group_id..."
+        final       = true
+        group_id    = "default"
         id          = "eval"
       }
     ]
   }
-  id      = "...my_id..."
+  id      = "default"
   product = "stream"
 }

@@ -21,26 +21,26 @@ import (
 var _ = jsontypes.NormalizedType{}
 var _ = types.String{}
 
-var _ resource.Resource = &RegexResource{}
-var _ resource.ResourceWithConfigure = &RegexResource{}
-var _ resource.ResourceWithImportState = &RegexResource{}
+var _ resource.Resource = &ParquetSchemaResource{}
+var _ resource.ResourceWithConfigure = &ParquetSchemaResource{}
+var _ resource.ResourceWithImportState = &ParquetSchemaResource{}
 
-type RegexResource struct {
+type ParquetSchemaResource struct {
 	client *restclient.Client
-	api    RegexAPI
+	api    ParquetSchemaAPI
 }
 
-func NewRegexResource() resource.Resource {
-	return &RegexResource{}
+func NewParquetSchemaResource() resource.Resource {
+	return &ParquetSchemaResource{}
 }
 
-func (r *RegexResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_regex"
+func (r *ParquetSchemaResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_parquet_schema"
 }
 
-func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ParquetSchemaResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Regex Resource",
+		MarkdownDescription: "ParquetSchema Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Required: false,
@@ -65,32 +65,18 @@ func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
 				},
 			},
-			"lib": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
-			},
-			"regex": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
-			},
-			"sample_data": schema.StringAttribute{
-				Required:    false,
-				Optional:    true,
+			"schema": schema.StringAttribute{
+				Required:    true,
+				Optional:    false,
 				Computed:    false,
-				Description: `Optionally, paste in sample data to match against this regex`,
-			},
-			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: true,
-				Computed: false,
+				Description: `JSON schema matching standards of draft version 2019-09`,
+				CustomType:  jsontypes.NormalizedType{},
 			},
 		},
 	}
 }
 
-func (r *RegexResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ParquetSchemaResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -103,11 +89,11 @@ func (r *RegexResource) Configure(_ context.Context, req resource.ConfigureReque
 		return
 	}
 	r.client = clients.RC
-	r.api = newRegexAPI(r.client)
+	r.api = newParquetSchemaAPI(r.client)
 }
 
-func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var model RegexModel
+func (r *ParquetSchemaResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var model ParquetSchemaModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -117,12 +103,12 @@ func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, false)
+	applyParquetSchemaAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var model RegexModel
+func (r *ParquetSchemaResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var model ParquetSchemaModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -136,12 +122,12 @@ func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, isRegexImportState(&model))
+	applyParquetSchemaAPIToState(apiModel, &model, true, isParquetSchemaImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var model RegexModel
+func (r *ParquetSchemaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var model ParquetSchemaModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -151,12 +137,12 @@ func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, false)
+	applyParquetSchemaAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var model RegexModel
+func (r *ParquetSchemaResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var model ParquetSchemaModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -166,7 +152,7 @@ func (r *RegexResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 }
 
-func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ParquetSchemaResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
@@ -185,7 +171,7 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
-	var model RegexModel
+	var model ParquetSchemaModel
 	model.GroupID = types.StringValue(data.GroupID)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	model.ID = types.StringValue(data.ID)
@@ -198,21 +184,21 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, false, false)
+	applyParquetSchemaAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func isRegexImportState(state *RegexModel) bool {
+func isParquetSchemaImportState(state *ParquetSchemaModel) bool {
 	if state == nil {
 		return false
 	}
-	if state.Regex.IsNull() || state.Regex.IsUnknown() {
+	if state.Schema.IsNull() || state.Schema.IsUnknown() {
 		return true
 	}
 	return false
 }
 
-func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs bool, fillMissingInputs bool) {
+func applyParquetSchemaAPIToState(api *ParquetSchemaModel, state *ParquetSchemaModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
@@ -231,28 +217,13 @@ func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs boo
 			state.ID = api.ID
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Lib.IsNull() || state.Lib.IsUnknown())) {
-		if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
-			state.Lib = api.Lib
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.Regex.IsNull() || state.Regex.IsUnknown())) {
-		if !api.Regex.IsNull() && !api.Regex.IsUnknown() {
-			state.Regex = api.Regex
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.SampleData.IsNull() || state.SampleData.IsUnknown())) {
-		if !api.SampleData.IsNull() && !api.SampleData.IsUnknown() {
-			state.SampleData = api.SampleData
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
-		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
-			state.Tags = api.Tags
+	if !preserveInputs || (fillMissingInputs && (state.Schema.IsNull() || state.Schema.IsUnknown())) {
+		if !api.Schema.IsNull() && !api.Schema.IsUnknown() {
+			state.Schema = api.Schema
 		}
 	}
 }
 
-func regexDebug(value any) string {
+func ParquetSchemaDebug(value any) string {
 	return fmt.Sprintf("%v", value)
 }

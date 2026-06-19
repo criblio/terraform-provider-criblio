@@ -154,13 +154,10 @@ components:
                     type: string
                     title: Private key
                     example: "dont-share-this-key"
-                    x-speakeasy-param-sensitive: true
-                    x-speakeasy-plan-modifiers: PreferState
                 passphrase:
                     type: string
                     title: Passphrase
                     example: "SecurityPassphrase"
-                    x-speakeasy-param-sensitive: true
                 ca:
                     type: string
                     title: CA certificate
@@ -173,7 +170,6 @@ components:
                     items:
                         type: string
                     example: ["list", "of", "configurations"]
-                    x-speakeasy-plan-modifiers: PreferState
         FeaturesEntry:
             type: object
             properties:
@@ -6256,7 +6252,6 @@ components:
                     type: number
                     example: 1024
                     default: 1
-                    x-speakeasy-terraform-ignore: true
                 tags:
                     type: string
                     example: logs,patterns
@@ -8576,7 +8571,6 @@ components:
                     description: Global variable name.
                     example: test_var
                 lib:
-                    x-speakeasy-param-suppress-computed-diff: true
                     type: string
                     title: Library
                     example: custom
@@ -8586,7 +8580,6 @@ components:
                     description: Brief description of this variable. Optional.
                     example: This is a test var.
                 type:
-                    x-speakeasy-param-suppress-computed-diff: true
                     type: string
                     title: Type
                     enum:
@@ -8602,7 +8595,6 @@ components:
                     description: Type of variable
                     example: number
                 value:
-                    x-speakeasy-param-suppress-computed-diff: true
                     type: string
                     title: Value
                     description: Value of variable
@@ -8616,7 +8608,6 @@ components:
                     type: array
                     title: Args
                     description: Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).
-                    x-speakeasy-param-suppress-computed-diff: true
                     items:
                         type: object
                         required:
@@ -49876,7 +49867,6 @@ paths:
                 - certificates
             summary: Get a list of Certificate objects
             description: Get a list of Certificate objects
-            x-speakeasy-entity-operation: Certificates#get
             responses:
                 '200':
                     description: a list of Certificate objects
@@ -49886,7 +49876,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -49917,7 +49906,6 @@ paths:
                 - certificates
             summary: Create Certificate
             description: Create Certificate
-            x-speakeasy-entity-operation: Certificate#create
             parameters:
                 - name: groupId
                   in: path
@@ -49944,7 +49932,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -49966,7 +49953,6 @@ paths:
                 - certificates
             summary: Get Certificate by ID
             description: Get Certificate by ID
-            x-speakeasy-entity-operation: Certificate#get
             parameters:
                 - name: id
                   in: path
@@ -49993,7 +49979,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -50014,7 +49999,6 @@ paths:
                 - certificates
             summary: Update Certificate
             description: Update Certificate
-            x-speakeasy-entity-operation: Certificate#update
             parameters:
                 - name: id
                   in: path
@@ -50048,7 +50032,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -50069,7 +50052,6 @@ paths:
                 - certificates
             summary: Delete Certificate
             description: Delete Certificate
-            x-speakeasy-entity-operation: Certificate#delete
             parameters:
                 - name: id
                   in: path
@@ -50097,7 +50079,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55429,7 +55410,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55445,7 +55425,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: Grok#create
             parameters:
                 - name: groupId
                   in: path
@@ -55475,7 +55454,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55492,7 +55470,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
     /m/{groupId}/lib/grok/{id}:
         get:
-            x-speakeasy-entity-operation: Grok#read
             operationId: getGrokFileById
             tags:
                 - grokfiles
@@ -55522,7 +55499,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55538,7 +55514,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: Grok#update
             operationId: updateGrokFileById
             tags:
                 - grokfiles
@@ -55575,7 +55550,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55591,7 +55565,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: Grok#delete
             operationId: deleteGrokFileById
             tags:
                 - grokfiles
@@ -55621,7 +55594,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55896,7 +55868,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55912,7 +55883,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: ParserLibEntry#create
             parameters:
                 - name: groupId
                   in: path
@@ -55942,7 +55912,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -55964,7 +55933,6 @@ paths:
                 - parsers
             summary: Get Parser by ID
             description: Get Parser by ID
-            x-speakeasy-entity-operation: ParserLibEntry#get
             parameters:
                 - name: id
                   in: path
@@ -55989,7 +55957,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56005,7 +55972,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: ParserLibEntry#update
             operationId: updateParserById
             tags:
                 - parsers
@@ -56042,7 +56008,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56063,7 +56028,6 @@ paths:
                 - parsers
             summary: Delete Parser
             description: Delete Parser
-            x-speakeasy-entity-operation: ParserLibEntry#delete
             parameters:
                 - name: id
                   in: path
@@ -56088,7 +56052,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56294,7 +56257,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56310,7 +56272,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: Regex#create
             parameters:
                 - name: groupId
                   in: path
@@ -56341,7 +56302,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56358,7 +56318,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
     /m/{groupId}/lib/regex/{id}:
         get:
-            x-speakeasy-entity-operation: Regex#read
             operationId: getRegexLibEntryById
             tags:
                 - regexes
@@ -56388,7 +56347,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56404,7 +56362,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: Regex#update
             operationId: updateRegexLibEntryById
             tags:
                 - regexes
@@ -56441,7 +56398,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -56457,7 +56413,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: Regex#delete
             operationId: deleteRegexLibEntryById
             tags:
                 - regexes
@@ -56487,7 +56442,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -58110,12 +58064,10 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
                                         type: array
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         items:
                                             $ref: '#/components/schemas/EventBreakerRuleset'
                             example:
@@ -58131,7 +58083,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: EventBreakerRuleset#create
             parameters:
                 - name: groupId
                   in: path
@@ -58161,12 +58112,10 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
                                         type: array
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         items:
                                             $ref: '#/components/schemas/EventBreakerRuleset'
                             example:
@@ -58183,7 +58132,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
     /m/{groupId}/lib/breakers/{id}:
         get:
-            x-speakeasy-entity-operation: EventBreakerRuleset#read
             operationId: getEventBreakerRulesetById
             tags:
                 - event_breaker_rules
@@ -58213,12 +58161,10 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
                                         type: array
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         items:
                                             $ref: '#/components/schemas/EventBreakerRuleset'
                             example:
@@ -58234,7 +58180,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: EventBreakerRuleset#update
             operationId: updateEventBreakerRulesetById
             tags:
                 - event_breaker_rules
@@ -58272,12 +58217,10 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
                                         type: array
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         items:
                                             $ref: '#/components/schemas/EventBreakerRuleset'
                             example:
@@ -58293,7 +58236,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: EventBreakerRuleset#delete
             operationId: deleteEventBreakerRulesetById
             tags:
                 - event_breaker_rules
@@ -58324,12 +58266,10 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
                                         type: array
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         items:
                                             $ref: '#/components/schemas/EventBreakerRuleset'
                             example:
@@ -58361,11 +58301,9 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/GlobalVar'
@@ -58393,7 +58331,6 @@ paths:
                     type: string
                   example: default
         post:
-            x-speakeasy-entity-operation: GlobalVar#create
             parameters:
                 - name: groupId
                   in: path
@@ -58424,11 +58361,9 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/GlobalVar'
@@ -58442,7 +58377,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
     /m/{groupId}/lib/vars/{id}:
         get:
-            x-speakeasy-entity-operation: GlobalVar#read
             operationId: getGlobalVariableById
             tags:
                 - global_variables
@@ -58473,11 +58407,9 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/GlobalVar'
@@ -58490,7 +58422,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: GlobalVar#update
             operationId: updateGlobalVariableById
             tags:
                 - global_variables
@@ -58527,11 +58458,9 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/GlobalVar'
@@ -58544,7 +58473,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: GlobalVar#delete
             operationId: deleteGlobalVariableById
             tags:
                 - global_variables
@@ -58574,11 +58502,9 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
-                                        x-speakeasy-param-suppress-computed-diff: true
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/GlobalVar'
@@ -60222,7 +60148,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -60245,7 +60170,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: ParquetSchema#create
             operationId: createSchema
             tags:
                 - parquetschemas
@@ -60267,7 +60191,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -60299,7 +60222,6 @@ paths:
                   example: Cribl
     /m/{groupId}/lib/parquet-schemas/{id}:
         get:
-            x-speakeasy-entity-operation: ParquetSchema#read
             operationId: getSchemaById
             tags:
                 - parquetschemas
@@ -60329,7 +60251,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -60352,7 +60273,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: ParquetSchema#update
             operationId: updateSchemaById
             tags:
                 - parquetschemas
@@ -60389,7 +60309,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -60412,7 +60331,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: ParquetSchema#delete
             operationId: deleteSchemaById
             tags:
                 - parquetschemas
@@ -60442,7 +60360,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -62670,7 +62587,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -62686,7 +62602,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         post:
-            x-speakeasy-entity-operation: Schema#create
             parameters:
                 - name: groupId
                   in: path
@@ -62716,7 +62631,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -62733,7 +62647,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
     /m/{groupId}/lib/schemas/{id}:
         get:
-            x-speakeasy-entity-operation: Schema#read
             operationId: getLibSchemasById
             tags:
                 - schemas
@@ -62763,7 +62676,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -62779,7 +62691,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         patch:
-            x-speakeasy-entity-operation: Schema#update
             operationId: updateLibSchemasById
             tags:
                 - schemas
@@ -62816,7 +62727,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -62832,7 +62742,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
         delete:
-            x-speakeasy-entity-operation: Schema#delete
             operationId: deleteLibSchemasById
             tags:
                 - schemas
@@ -62862,7 +62771,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -73161,7 +73069,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -73203,7 +73110,6 @@ paths:
             tags: []
             summary: Get a list of mapping rulesets for the specified product
             description: Get a list of mapping rulesets for the specified product
-            x-speakeasy-entity-operation: Mappings#get
             deprecated: false
             responses:
                 '200':
@@ -73214,7 +73120,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -73253,7 +73158,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -73281,7 +73185,6 @@ paths:
             tags: []
             summary: Get a specific mapping ruleset by ID for the specified product
             description: Get a specific mapping ruleset by ID for the specified product
-            x-speakeasy-entity-operation: MappingRuleset#get
             deprecated: false
             responses:
                 '200':
@@ -73292,7 +73195,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:
@@ -73320,7 +73222,6 @@ paths:
             tags: []
             summary: Update a specific mapping ruleset by ID for the specified product
             description: Update a specific mapping ruleset by ID for the specified product
-            x-speakeasy-entity-operation: MappingRuleset#create,update,delete
             deprecated: false
             responses:
                 '200':
@@ -73331,7 +73232,6 @@ paths:
                                 type: object
                                 properties:
                                     count:
-                                        x-speakeasy-ignore: true
                                         type: integer
                                         description: number of items present in the items array
                                     items:

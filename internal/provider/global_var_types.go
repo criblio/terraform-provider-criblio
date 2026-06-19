@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
+	"unicode"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -48,14 +50,14 @@ type GlobalVarDataSourceModel struct {
 }
 
 type GlobalVarAPIModel struct {
-	Args        []GlobalVarArgsAPIModel `json:"args,omitempty"`
-	Description *string                 `json:"description,omitempty"`
-	GroupID     *string                 `json:"groupId,omitempty"`
-	ID          *string                 `json:"id,omitempty"`
-	Lib         *string                 `json:"lib,omitempty"`
-	Tags        *string                 `json:"tags,omitempty"`
-	Type        *string                 `json:"type,omitempty"`
-	Value       *string                 `json:"value,omitempty"`
+	Args        any     `json:"args,omitempty"`
+	Description *string `json:"description,omitempty"`
+	GroupID     *string `json:"groupId,omitempty"`
+	ID          *string `json:"id,omitempty"`
+	Lib         *string `json:"lib,omitempty"`
+	Tags        *string `json:"tags,omitempty"`
+	Type        *string `json:"type,omitempty"`
+	Value       *string `json:"value,omitempty"`
 }
 
 type GlobalVarArgsModel struct {
@@ -75,46 +77,265 @@ func GlobalVarArgsAttrTypes() map[string]attr.Type {
 	}
 }
 
+func GlobalVarTerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := GlobalVarTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := GlobalVarTerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := GlobalVarTerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[GlobalVarTerraformNameToAPIName(key)] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
+func GlobalVarTerraformNameToAPIName(name string) string {
+	prefix := ""
+	if strings.HasPrefix(name, "__template_") {
+		prefix = "__template_"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	var output strings.Builder
+	upperNext := false
+	for _, char := range name {
+		if char == '_' {
+			upperNext = true
+			continue
+		}
+		if upperNext {
+			output.WriteRune(unicode.ToUpper(char))
+			upperNext = false
+			continue
+		}
+		output.WriteRune(char)
+	}
+	return prefix + output.String()
+}
+
+func GlobalVarAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if value == nil {
+		return GlobalVarTerraformNullValue(typ)
+	}
+	if typ.Equal(types.BoolType) {
+		typed, ok := value.(bool)
+		if !ok {
+			return nil, fmt.Errorf("expected bool, got %T", value)
+		}
+		return types.BoolValue(typed), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Int64Value(int64(typed)), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Float64Value(typed), nil
+	}
+	if typ.Equal(types.StringType) {
+		typed, ok := value.(string)
+		if !ok {
+			return nil, fmt.Errorf("expected string, got %T", value)
+		}
+		return types.StringValue(typed), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		input, ok := value.([]any)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		output := make([]attr.Value, 0, len(input))
+		for _, item := range input {
+			nested, err := GlobalVarAPIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, nested)
+		}
+		value, diags := types.ListValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.MapType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(input))
+		for key, item := range input {
+			nested, err := GlobalVarAPIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.MapValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.ObjectType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			apiKey := GlobalVarTerraformNameToAPIName(key)
+			item, ok := input[apiKey]
+			if !ok {
+				item, ok = input[key]
+			}
+			if !ok {
+				nested, err := GlobalVarTerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				output[key] = nested
+				continue
+			}
+			nested, err := GlobalVarAPIValueToTerraformValue(item, attrType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.ObjectValue(typed.AttrTypes, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
+func GlobalVarTerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.BoolType) {
+		return types.BoolNull(), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		return types.Int64Null(), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		return types.Float64Null(), nil
+	}
+	if typ.Equal(types.StringType) {
+		return types.StringNull(), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		return types.ListNull(typed.ElemType), nil
+	case types.MapType:
+		return types.MapNull(typed.ElemType), nil
+	case types.ObjectType:
+		return types.ObjectNull(typed.AttrTypes), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
 func (m GlobalVarModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Args.IsNull() && !m.Args.IsUnknown() {
-		var values []GlobalVarArgsModel
-		diags := m.Args.ElementsAs(context.Background(), &values, false)
-		if diags.HasError() {
-			return nil, fmt.Errorf("convert args to API value: %v", diags)
+		value, err := GlobalVarTerraformValueToJSON(m.Args)
+		if err != nil {
+			return nil, fmt.Errorf("convert args to API value: %v", err)
 		}
-		apiValues := make([]GlobalVarArgsAPIModel, 0, len(values))
-		for _, value := range values {
-			var item GlobalVarArgsAPIModel
-			if !value.Type.IsNull() && !value.Type.IsUnknown() {
-				itemValue := value.Type.ValueString()
-				item.Type = &itemValue
-			}
-			if !value.Name.IsNull() && !value.Name.IsUnknown() {
-				itemValue := value.Name.ValueString()
-				item.Name = &itemValue
-			}
-			apiValues = append(apiValues, item)
-		}
-		output["args"] = apiValues
+		output["args"] = value
 	}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		output["description"] = m.Description.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		output["id"] = m.ID.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
 	}
 	if !m.Lib.IsNull() && !m.Lib.IsUnknown() {
-		output["lib"] = m.Lib.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.Lib)
+		if err != nil {
+			return nil, fmt.Errorf("convert lib to API value: %v", err)
+		}
+		output["lib"] = value
 	}
 	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		output["tags"] = m.Tags.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
 	}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
-		output["type"] = m.Type.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.Type)
+		if err != nil {
+			return nil, fmt.Errorf("convert type to API value: %v", err)
+		}
+		output["type"] = value
 	}
 	if !m.Value.IsNull() && !m.Value.IsUnknown() {
-		output["value"] = m.Value.ValueString()
+		value, err := GlobalVarTerraformValueToJSON(m.Value)
+		if err != nil {
+			return nil, fmt.Errorf("convert value to API value: %v", err)
+		}
+		output["value"] = value
 	}
 	return json.Marshal(output)
 }
@@ -125,29 +346,11 @@ func (m *GlobalVarModel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if input.Args != nil {
-		values := make([]attr.Value, 0, len(input.Args))
-		for _, inputValue := range input.Args {
-			attrs := map[string]attr.Value{
-				"type": types.StringNull(),
-				"name": types.StringNull(),
-			}
-			if inputValue.Type != nil {
-				attrs["type"] = types.StringValue(*inputValue.Type)
-			}
-			if inputValue.Name != nil {
-				attrs["name"] = types.StringValue(*inputValue.Name)
-			}
-			value, diags := types.ObjectValue(GlobalVarArgsAttrTypes(), attrs)
-			if diags.HasError() {
-				return fmt.Errorf("convert args from API value: %v", diags)
-			}
-			values = append(values, value)
+		value, err := GlobalVarAPIValueToTerraformValue(input.Args, types.ListType{ElemType: types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert args from API value: %v", err)
 		}
-		value, diags := types.ListValue(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()}, values)
-		if diags.HasError() {
-			return fmt.Errorf("convert args from API value: %v", diags)
-		}
-		m.Args = value
+		m.Args = value.(types.List)
 	} else {
 		m.Args = types.ListNull(types.ObjectType{AttrTypes: GlobalVarArgsAttrTypes()})
 	}

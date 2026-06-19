@@ -16,47 +16,35 @@ import (
 var _ = context.Background
 var _ = jsontypes.NormalizedType{}
 
-type RegexModel struct {
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex       types.String `tfsdk:"regex" json:"regex,omitempty"`
-	SampleData  types.String `tfsdk:"sample_data" json:"sampleData,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
+type ParquetSchemaModel struct {
+	Description types.String         `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
+	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type RegexResourceModel struct {
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex       types.String `tfsdk:"regex" json:"regex,omitempty"`
-	SampleData  types.String `tfsdk:"sample_data" json:"sampleData,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
+type ParquetSchemaResourceModel struct {
+	Description types.String         `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
+	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type RegexDataSourceModel struct {
-	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
-	ID          types.String `tfsdk:"id" json:"id,omitempty"`
-	Lib         types.String `tfsdk:"lib" json:"lib,omitempty"`
-	Regex       types.String `tfsdk:"regex" json:"regex,omitempty"`
-	SampleData  types.String `tfsdk:"sample_data" json:"sampleData,omitempty"`
-	Tags        types.String `tfsdk:"tags" json:"tags,omitempty"`
+type ParquetSchemaDataSourceModel struct {
+	Description types.String         `tfsdk:"description" json:"description,omitempty"`
+	GroupID     types.String         `tfsdk:"group_id" json:"groupId,omitempty"`
+	ID          types.String         `tfsdk:"id" json:"id,omitempty"`
+	Schema      jsontypes.Normalized `tfsdk:"schema" json:"schema,omitempty"`
 }
 
-type RegexAPIModel struct {
+type ParquetSchemaAPIModel struct {
 	Description *string `json:"description,omitempty"`
 	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
-	Lib         *string `json:"lib,omitempty"`
-	Regex       *string `json:"regex,omitempty"`
-	SampleData  *string `json:"sampleData,omitempty"`
-	Tags        *string `json:"tags,omitempty"`
+	Schema      *string `json:"schema,omitempty"`
 }
 
-func RegexTerraformValueToJSON(value attr.Value) (any, error) {
+func ParquetSchemaTerraformValueToJSON(value attr.Value) (any, error) {
 	if value.IsNull() || value.IsUnknown() {
 		return nil, nil
 	}
@@ -72,7 +60,7 @@ func RegexTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.List:
 		output := make([]any, 0, len(typed.Elements()))
 		for _, element := range typed.Elements() {
-			value, err := RegexTerraformValueToJSON(element)
+			value, err := ParquetSchemaTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -82,7 +70,7 @@ func RegexTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Map:
 		output := make(map[string]any, len(typed.Elements()))
 		for key, element := range typed.Elements() {
-			value, err := RegexTerraformValueToJSON(element)
+			value, err := ParquetSchemaTerraformValueToJSON(element)
 			if err != nil {
 				return nil, err
 			}
@@ -95,14 +83,14 @@ func RegexTerraformValueToJSON(value attr.Value) (any, error) {
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
 		for key, attribute := range typed.Attributes() {
-			value, err := RegexTerraformValueToJSON(attribute)
+			value, err := ParquetSchemaTerraformValueToJSON(attribute)
 			if err != nil {
 				return nil, err
 			}
 			if value == nil {
 				continue
 			}
-			output[RegexTerraformNameToAPIName(key)] = value
+			output[ParquetSchemaTerraformNameToAPIName(key)] = value
 		}
 		return output, nil
 	case interface{ ValueString() string }:
@@ -112,7 +100,7 @@ func RegexTerraformValueToJSON(value attr.Value) (any, error) {
 	}
 }
 
-func RegexTerraformNameToAPIName(name string) string {
+func ParquetSchemaTerraformNameToAPIName(name string) string {
 	prefix := ""
 	if strings.HasPrefix(name, "__template_") {
 		prefix = "__template_"
@@ -135,9 +123,9 @@ func RegexTerraformNameToAPIName(name string) string {
 	return prefix + output.String()
 }
 
-func RegexAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+func ParquetSchemaAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
 	if value == nil {
-		return RegexTerraformNullValue(typ)
+		return ParquetSchemaTerraformNullValue(typ)
 	}
 	if typ.Equal(types.BoolType) {
 		typed, ok := value.(bool)
@@ -175,7 +163,7 @@ func RegexAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)
 		}
 		output := make([]attr.Value, 0, len(input))
 		for _, item := range input {
-			nested, err := RegexAPIValueToTerraformValue(item, typed.ElemType)
+			nested, err := ParquetSchemaAPIValueToTerraformValue(item, typed.ElemType)
 			if err != nil {
 				return nil, err
 			}
@@ -193,7 +181,7 @@ func RegexAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)
 		}
 		output := make(map[string]attr.Value, len(input))
 		for key, item := range input {
-			nested, err := RegexAPIValueToTerraformValue(item, typed.ElemType)
+			nested, err := ParquetSchemaAPIValueToTerraformValue(item, typed.ElemType)
 			if err != nil {
 				return nil, err
 			}
@@ -211,20 +199,20 @@ func RegexAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)
 		}
 		output := make(map[string]attr.Value, len(typed.AttrTypes))
 		for key, attrType := range typed.AttrTypes {
-			apiKey := RegexTerraformNameToAPIName(key)
+			apiKey := ParquetSchemaTerraformNameToAPIName(key)
 			item, ok := input[apiKey]
 			if !ok {
 				item, ok = input[key]
 			}
 			if !ok {
-				nested, err := RegexTerraformNullValue(attrType)
+				nested, err := ParquetSchemaTerraformNullValue(attrType)
 				if err != nil {
 					return nil, err
 				}
 				output[key] = nested
 				continue
 			}
-			nested, err := RegexAPIValueToTerraformValue(item, attrType)
+			nested, err := ParquetSchemaAPIValueToTerraformValue(item, attrType)
 			if err != nil {
 				return nil, err
 			}
@@ -240,7 +228,7 @@ func RegexAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)
 	}
 }
 
-func RegexTerraformNullValue(typ attr.Type) (attr.Value, error) {
+func ParquetSchemaTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.BoolType) {
 		return types.BoolNull(), nil
 	}
@@ -265,55 +253,34 @@ func RegexTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 }
 
-func (m RegexModel) MarshalJSON() ([]byte, error) {
+func (m ParquetSchemaModel) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 	if !m.Description.IsNull() && !m.Description.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.Description)
+		value, err := ParquetSchemaTerraformValueToJSON(m.Description)
 		if err != nil {
 			return nil, fmt.Errorf("convert description to API value: %v", err)
 		}
 		output["description"] = value
 	}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.ID)
+		value, err := ParquetSchemaTerraformValueToJSON(m.ID)
 		if err != nil {
 			return nil, fmt.Errorf("convert id to API value: %v", err)
 		}
 		output["id"] = value
 	}
-	if !m.Lib.IsNull() && !m.Lib.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.Lib)
+	if !m.Schema.IsNull() && !m.Schema.IsUnknown() {
+		value, err := ParquetSchemaTerraformValueToJSON(m.Schema)
 		if err != nil {
-			return nil, fmt.Errorf("convert lib to API value: %v", err)
+			return nil, fmt.Errorf("convert schema to API value: %v", err)
 		}
-		output["lib"] = value
-	}
-	if !m.Regex.IsNull() && !m.Regex.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.Regex)
-		if err != nil {
-			return nil, fmt.Errorf("convert regex to API value: %v", err)
-		}
-		output["regex"] = value
-	}
-	if !m.SampleData.IsNull() && !m.SampleData.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.SampleData)
-		if err != nil {
-			return nil, fmt.Errorf("convert sample_data to API value: %v", err)
-		}
-		output["sampleData"] = value
-	}
-	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
-		value, err := RegexTerraformValueToJSON(m.Tags)
-		if err != nil {
-			return nil, fmt.Errorf("convert tags to API value: %v", err)
-		}
-		output["tags"] = value
+		output["schema"] = value
 	}
 	return json.Marshal(output)
 }
 
-func (m *RegexModel) UnmarshalJSON(data []byte) error {
-	var input RegexAPIModel
+func (m *ParquetSchemaModel) UnmarshalJSON(data []byte) error {
+	var input ParquetSchemaAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
 	}
@@ -332,25 +299,10 @@ func (m *RegexModel) UnmarshalJSON(data []byte) error {
 	} else {
 		m.ID = types.StringNull()
 	}
-	if input.Lib != nil {
-		m.Lib = types.StringValue(*input.Lib)
+	if input.Schema != nil {
+		m.Schema = jsontypes.NewNormalizedValue(*input.Schema)
 	} else {
-		m.Lib = types.StringNull()
-	}
-	if input.Regex != nil {
-		m.Regex = types.StringValue(*input.Regex)
-	} else {
-		m.Regex = types.StringNull()
-	}
-	if input.SampleData != nil {
-		m.SampleData = types.StringValue(*input.SampleData)
-	} else {
-		m.SampleData = types.StringNull()
-	}
-	if input.Tags != nil {
-		m.Tags = types.StringValue(*input.Tags)
-	} else {
-		m.Tags = types.StringNull()
+		m.Schema = jsontypes.NewNormalizedNull()
 	}
 	return nil
 }

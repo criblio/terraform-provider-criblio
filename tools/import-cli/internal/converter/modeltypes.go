@@ -110,3 +110,20 @@ func ResourceModelTypes() map[string]reflect.Type {
 		"WorkspaceResourceModel":                  reflect.TypeOf((*provider.WorkspaceResourceModel)(nil)).Elem(),
 	}
 }
+
+// GeneratedModelTypes returns the generated API/state model type that owns JSON
+// unmarshalling for generated resources. ResourceModel structs intentionally
+// mirror these fields but do not have the generated UnmarshalJSON methods.
+func GeneratedModelTypes() map[string]reflect.Type {
+	return map[string]reflect.Type{
+		"CertificateResourceModel":         reflect.TypeOf((*provider.CertificateModel)(nil)).Elem(),
+		"EventBreakerRulesetResourceModel": reflect.TypeOf((*provider.EventBreakerRulesetModel)(nil)).Elem(),
+		"GlobalVarResourceModel":           reflect.TypeOf((*provider.GlobalVarModel)(nil)).Elem(),
+		"GrokResourceModel":                reflect.TypeOf((*provider.GrokModel)(nil)).Elem(),
+		"MappingRulesetResourceModel":      reflect.TypeOf((*provider.MappingRulesetModel)(nil)).Elem(),
+		"ParquetSchemaResourceModel":       reflect.TypeOf((*provider.ParquetSchemaModel)(nil)).Elem(),
+		"ParserLibEntryResourceModel":      reflect.TypeOf((*provider.ParserLibEntryModel)(nil)).Elem(),
+		"RegexResourceModel":               reflect.TypeOf((*provider.RegexModel)(nil)).Elem(),
+		"SchemaResourceModel":              reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
+	}
+}

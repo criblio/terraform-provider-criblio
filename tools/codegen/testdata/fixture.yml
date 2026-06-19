@@ -10,6 +10,9 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CertificateCreate"
+            examples:
+              CertificateCreateExample:
+                $ref: "#/components/examples/CertificateCreateExample"
       responses:
         "200":
           content:
@@ -104,7 +107,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Destination"
+  /mapping-rulesets/{id}:
+    patch:
+      operationId: updateMappingRuleset
+      x-terraform-resource: true
+      x-terraform-resource-name: mapping_ruleset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MappingRuleset"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MappingRuleset"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
 components:
+  examples:
+    CertificateCreateExample:
+      summary: Certificate from upstream
+      value:
+        id: upstream-cert
+        cert: upstream-cert-body
+        privKey: upstream-private-key
+        displayName: Upstream Certificate
+        args:
+          - type: number
+            name: precision
   schemas:
     CertificateCreate:
       type: object
@@ -222,3 +258,45 @@ components:
       properties:
         bucket:
           type: string
+    MappingRuleset:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        conf:
+          type: object
+          properties:
+            functions:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - final
+                  - conf
+                properties:
+                  id:
+                    type: string
+                  final:
+                    type: boolean
+                  description:
+                    type: string
+                  conf:
+                    type: object
+                    required:
+                      - add
+                    properties:
+                      add:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - name
+                            - value
+                          properties:
+                            name:
+                              type: string
+                            value:
+                              type: string

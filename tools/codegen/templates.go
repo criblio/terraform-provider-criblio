@@ -9,10 +9,10 @@ import (
 {{- if needsFmt . }}
 	"fmt"
 {{- end }}
+	"strings"
+	"unicode"
 
-{{ if needsAttr . }}
 	"github.com/hashicorp/terraform-plugin-framework/attr"
-{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -52,8 +52,7 @@ type {{ .StructName }}APIModel struct {
 	{{ .GoName }} {{ apiType . }} ` + "`json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 }
-{{ range .Fields }}
-{{- if nestedObjectList . }}
+{{ range nestedObjectFields . }}
 
 type {{ .NestedModelName }} struct {
 {{- range .Fields }}
@@ -70,73 +69,275 @@ type {{ .NestedAPIModelName }} struct {
 func {{ .NestedAttrTypes }}() map[string]attr.Type {
 	return map[string]attr.Type{
 {{- range .Fields }}
-		"{{ .TerraformName }}": types.StringType,
+		"{{ .TerraformName }}": {{ attrType . }},
 {{- end }}
 	}
 }
 {{- end }}
+
+func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	switch typed := value.(type) {
+	case types.Bool:
+		return typed.ValueBool(), nil
+	case types.Int64:
+		return typed.ValueInt64(), nil
+	case types.Float64:
+		return typed.ValueFloat64(), nil
+	case types.String:
+		return typed.ValueString(), nil
+	case types.List:
+		output := make([]any, 0, len(typed.Elements()))
+		for _, element := range typed.Elements() {
+			value, err := {{ .StructName }}TerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, value)
+		}
+		return output, nil
+	case types.Map:
+		output := make(map[string]any, len(typed.Elements()))
+		for key, element := range typed.Elements() {
+			value, err := {{ .StructName }}TerraformValueToJSON(element)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[key] = value
+		}
+		return output, nil
+	case types.Object:
+		output := make(map[string]any, len(typed.Attributes()))
+		for key, attribute := range typed.Attributes() {
+			value, err := {{ .StructName }}TerraformValueToJSON(attribute)
+			if err != nil {
+				return nil, err
+			}
+			if value == nil {
+				continue
+			}
+			output[{{ .StructName }}TerraformNameToAPIName(key)] = value
+		}
+		return output, nil
+	case interface{ ValueString() string }:
+		return typed.ValueString(), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform value %T", value)
+	}
+}
+
+{{- if eq .StructName "MappingRuleset" }}
+
+func mappingRulesetID(model MappingRulesetModel) string {
+	if model.ID.IsNull() || model.ID.IsUnknown() || model.ID.ValueString() == "" {
+		return "default"
+	}
+	return model.ID.ValueString()
+}
+
+func mappingRulesetConfWithDefaults(value any) any {
+	conf, ok := value.(map[string]any)
+	if !ok {
+		return value
+	}
+	functions, ok := conf["functions"].([]any)
+	if !ok {
+		return value
+	}
+	for index, item := range functions {
+		function, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		if id, ok := function["id"].(string); !ok || id == "" {
+			function["id"] = "eval"
+		}
+		if _, ok := function["final"]; !ok {
+			function["final"] = true
+		}
+		functions[index] = function
+	}
+	conf["functions"] = functions
+	return conf
+}
 {{- end }}
+
+func {{ .StructName }}TerraformNameToAPIName(name string) string {
+	prefix := ""
+	if strings.HasPrefix(name, "__template_") {
+		prefix = "__template_"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	var output strings.Builder
+	upperNext := false
+	for _, char := range name {
+		if char == '_' {
+			upperNext = true
+			continue
+		}
+		if upperNext {
+			output.WriteRune(unicode.ToUpper(char))
+			upperNext = false
+			continue
+		}
+		output.WriteRune(char)
+	}
+	return prefix + output.String()
+}
+
+func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error) {
+	if value == nil {
+		return {{ .StructName }}TerraformNullValue(typ)
+	}
+	if typ.Equal(types.BoolType) {
+		typed, ok := value.(bool)
+		if !ok {
+			return nil, fmt.Errorf("expected bool, got %T", value)
+		}
+		return types.BoolValue(typed), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Int64Value(int64(typed)), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		typed, ok := value.(float64)
+		if !ok {
+			return nil, fmt.Errorf("expected number, got %T", value)
+		}
+		return types.Float64Value(typed), nil
+	}
+	if typ.Equal(types.StringType) {
+		typed, ok := value.(string)
+		if !ok {
+			return nil, fmt.Errorf("expected string, got %T", value)
+		}
+		return types.StringValue(typed), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		input, ok := value.([]any)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		output := make([]attr.Value, 0, len(input))
+		for _, item := range input {
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output = append(output, nested)
+		}
+		value, diags := types.ListValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.MapType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(input))
+		for key, item := range input {
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.MapValue(typed.ElemType, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	case types.ObjectType:
+		input, ok := value.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		output := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			apiKey := {{ .StructName }}TerraformNameToAPIName(key)
+			item, ok := input[apiKey]
+			if !ok {
+				item, ok = input[key]
+			}
+			if !ok {
+				nested, err := {{ .StructName }}TerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				output[key] = nested
+				continue
+			}
+			nested, err := {{ .StructName }}APIValueToTerraformValue(item, attrType)
+			if err != nil {
+				return nil, err
+			}
+			output[key] = nested
+		}
+		value, diags := types.ObjectValue(typed.AttrTypes, output)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return value, nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
+
+func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
+	if typ.Equal(types.BoolType) {
+		return types.BoolNull(), nil
+	}
+	if typ.Equal(types.Int64Type) {
+		return types.Int64Null(), nil
+	}
+	if typ.Equal(types.Float64Type) {
+		return types.Float64Null(), nil
+	}
+	if typ.Equal(types.StringType) {
+		return types.StringNull(), nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		return types.ListNull(typed.ElemType), nil
+	case types.MapType:
+		return types.MapNull(typed.ElemType), nil
+	case types.ObjectType:
+		return types.ObjectNull(typed.AttrTypes), nil
+	default:
+		return nil, fmt.Errorf("unsupported Terraform type %T", typ)
+	}
+}
 
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
 {{- if and .RequestField (not .Computed) }}
-{{- if nestedObjectList . }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		var values []{{ .NestedModelName }}
-		diags := m.{{ .GoName }}.ElementsAs(context.Background(), &values, false)
-		if diags.HasError() {
-			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", diags)
+		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+		if err != nil {
+			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
-		apiValues := make([]{{ .NestedAPIModelName }}, 0, len(values))
-		for _, value := range values {
-			var item {{ .NestedAPIModelName }}
-{{- range .Fields }}
-			if !value.{{ .GoName }}.IsNull() && !value.{{ .GoName }}.IsUnknown() {
-				itemValue := value.{{ .GoName }}.ValueString()
-				item.{{ .GoName }} = &itemValue
-			}
+{{- if and (eq $.StructName "MappingRuleset") (eq .TerraformName "conf") }}
+		value = mappingRulesetConfWithDefaults(value)
 {{- end }}
-			apiValues = append(apiValues, item)
-		}
-		output["{{ .APIName }}"] = apiValues
-	}
-{{- else if eq .Type "array" }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		var values []string
-		diags := m.{{ .GoName }}.ElementsAs(context.Background(), &values, false)
-		if diags.HasError() {
-			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", diags)
-		}
-		output["{{ .APIName }}"] = values
-	}
-{{- else if eq .Type "object" }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		var values map[string]string
-		diags := m.{{ .GoName }}.ElementsAs(context.Background(), &values, false)
-		if diags.HasError() {
-			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", diags)
-		}
-		output["{{ .APIName }}"] = values
-	}
-{{- else if eq .Type "boolean" }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		output["{{ .APIName }}"] = m.{{ .GoName }}.ValueBool()
-	}
-{{- else if eq .Type "integer" }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		output["{{ .APIName }}"] = m.{{ .GoName }}.ValueInt64()
-	}
-{{- else if eq .Type "number" }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		output["{{ .APIName }}"] = m.{{ .GoName }}.ValueFloat64()
-	}
-{{- else }}
-	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
-		output["{{ .APIName }}"] = m.{{ .GoName }}.ValueString()
+		output["{{ .APIName }}"] = value
 	}
 {{- end }}
 {{- end }}
+{{- if eq .StructName "MappingRuleset" }}
+	output["id"] = mappingRulesetID(m)
 {{- end }}
 	return json.Marshal(output)
 }
@@ -149,31 +350,23 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- range .Fields }}
 {{- if nestedObjectList . }}
 	if input.{{ .GoName }} != nil {
-		values := make([]attr.Value, 0, len(input.{{ .GoName }}))
-		for _, inputValue := range input.{{ .GoName }} {
-			attrs := map[string]attr.Value{
-{{- range .Fields }}
-				"{{ .TerraformName }}": types.StringNull(),
-{{- end }}
-			}
-{{- range .Fields }}
-			if inputValue.{{ .GoName }} != nil {
-				attrs["{{ .TerraformName }}"] = types.StringValue(*inputValue.{{ .GoName }})
-			}
-{{- end }}
-			value, diags := types.ObjectValue({{ .NestedAttrTypes }}(), attrs)
-			if diags.HasError() {
-				return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
-			}
-			values = append(values, value)
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ListType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
 		}
-		value, diags := types.ListValue(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, values)
-		if diags.HasError() {
-			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
-		}
-		m.{{ .GoName }} = value
+		m.{{ .GoName }} = value.(types.List)
 	} else {
 		m.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	}
+{{- else if nestedObject . }}
+	if input.{{ .GoName }} != nil {
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.(types.Object)
+	} else {
+		m.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
 {{- else if eq .Type "array" }}
 	if input.{{ .GoName }} != nil {
@@ -257,7 +450,7 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 }
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
+	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
@@ -269,7 +462,25 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 }
 
 func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }}Model) error {
+{{- if eq .StructName "MappingRuleset" }}
+	type emptyMappingRulesetConf struct {
+		Functions []any ` + "`json:\"functions\"`" + `
+	}
+	type emptyMappingRuleset struct {
+		ID   string                  ` + "`json:\"id\"`" + `
+		Conf emptyMappingRulesetConf ` + "`json:\"conf\"`" + `
+	}
+	body := emptyMappingRuleset{
+		ID: "default",
+		Conf: emptyMappingRulesetConf{
+			Functions: []any{},
+		},
+	}
+	_, err := restclient.Patch[emptyMappingRuleset, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/default", model.Product.ValueString()), body)
+	return err
+{{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
+{{- end }}
 }
 `
 
@@ -345,88 +556,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-{{- if nestedObjectList . }}
-			"{{ .TerraformName }}": schema.ListNestedAttribute{
-				Required: {{ .Required }},
-				Optional: {{ .Optional }},
-				Computed: {{ .Computed }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- $calls := planModifierCalls . }}
-{{- if $calls }}
-				PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $calls }}
-					{{ . }},
-{{- end }}
-				},
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-				NestedObject: schema.NestedAttributeObject{
-{{- $objectCalls := nestedObjectPlanModifierCalls . }}
-{{- if $objectCalls }}
-					PlanModifiers: []planmodifier.Object{
-{{- range $objectCalls }}
-						{{ . }},
-{{- end }}
-					},
-{{- end }}
-					Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-						"{{ .TerraformName }}": {{ schemaAttribute . }}{
-							Required: {{ .Required }},
-							Optional: {{ .Optional }},
-							Computed: {{ .Computed }},
-{{- $nestedCalls := planModifierCalls . }}
-{{- if $nestedCalls }}
-							PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $nestedCalls }}
-								{{ . }},
-{{- end }}
-							},
-{{- end }}
-{{- if .Description }}
-							Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-						},
-{{- end }}
-					},
-				},
-			},
-{{- else }}
-			"{{ .TerraformName }}": {{ schemaAttribute . }}{
-				Required: {{ .Required }},
-				Optional: {{ .Optional }},
-				Computed: {{ .Computed }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .CustomType "jsontypes.NormalizedType{}" }}
-				CustomType: jsontypes.NormalizedType{},
-{{- end }}
-{{- $calls := planModifierCalls . }}
-{{- if $calls }}
-				PlanModifiers: []planmodifier.{{ planModifierType . }}{
-{{- range $calls }}
-					{{ . }},
-{{- end }}
-				},
-{{- end }}
-{{- if eq .Type "array" }}
-				ElementType: types.StringType,
-{{- end }}
-{{- if eq .Type "object" }}
-				ElementType: types.StringType,
-{{- end }}
-			},
-{{- end }}
-{{- end }}
+{{ schemaAttributes .Fields "\t\t\t" -}}
 		},
 	}
 }
@@ -525,8 +655,22 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		resp.Diagnostics.AddError("Missing required field", ` + "`The field {{ .TerraformName }} is required but was not found in the json encoded ID.`" + `)
 		return
 	}
+{{- end }}
+	var model {{ .StructName }}Model
+{{- range pathParamFields . }}
+	model.{{ .GoName }} = types.StringValue(data.{{ .GoName }})
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), data.{{ .GoName }})...)
 {{- end }}
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 {{- end }}
@@ -553,7 +697,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- range .Fields }}
 {{- if not .Computed }}
-	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())) {
+	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())){{- if nestedObjectList . }} || (!api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() && !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0){{- end }} {
 {{- end }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
@@ -594,6 +738,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- end }}
 {{- end }}
 {{- if not .Computed }}
+	}
+{{- end }}
+{{- if nestedObjectList . }}
+	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	} else if len(state.{{ .GoName }}.Elements()) == 0 {
+		state.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
 	}
 {{- end }}
 {{- end }}
@@ -696,7 +847,7 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 {{- if eq .Type "array" }}
 				ElementType: types.StringType,
 {{- end }}
-{{- if eq .Type "object" }}
+{{- if and (eq .Type "object") (not (nestedObject .)) }}
 				ElementType: types.StringType,
 {{- end }}
 			},
@@ -762,22 +913,9 @@ description: |-
 
 <!-- schema generated by tools/codegen -->
 ## Schema
-{{ $sections := schemaSections . }}
-{{ if $sections.Required }}
-### Required
 
-{{ joinDocFields $sections.Required }}
-{{ end }}
-{{ if $sections.Optional }}
-### Optional
+{{ docSchema . }}
 
-{{ joinDocFields $sections.Optional }}
-{{ end }}
-{{ if $sections.Computed }}
-### Read-Only
-
-{{ joinDocFields $sections.Computed }}
-{{ end }}
 ## Import
 
 Import is supported using the following syntax:
@@ -795,7 +933,9 @@ The ` + "[`terraform import` command](https://developer.hashicorp.com/terraform/
 ` + "```" + `
 `
 
-const testTemplate = `package tests
+const testTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
+
+package tests
 
 {{- if eq .Name "certificate" }}
 import (

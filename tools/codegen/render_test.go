@@ -30,6 +30,73 @@ func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(dir, "internal/provider/certificate_types.go")); err != nil {
 		t.Fatalf("types output missing: %v", err)
 	}
+	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/certificate_test.go")); err != nil {
+		t.Fatalf("acceptance test output missing: %v", err)
+	}
+	if hasSkipped(files, filepath.Join(dir, "tests/acceptance/certificate_test.go")) {
+		t.Fatalf("acceptance test output should not be skipped by the ignore fixture")
+	}
+}
+
+func TestRendererSkipsCustomAcceptanceTests(t *testing.T) {
+	resources := parseFixture(t)
+	dir := t.TempDir()
+	path := filepath.Join(dir, "tests/acceptance/certificate_test.go")
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		t.Fatalf("create acceptance test directory: %v", err)
+	}
+	content := []byte("package tests\n\nfunc TestCustomCertificate(t *testing.T) {}\n")
+	if err := os.WriteFile(path, content, 0644); err != nil {
+		t.Fatalf("write custom acceptance test: %v", err)
+	}
+
+	files, err := newRenderer(dir, ignoreSet{}).render([]parser.ResourceDef{resourceByName(t, resources, "certificate")})
+	if err != nil {
+		t.Fatalf("render returned error: %v", err)
+	}
+
+	if !hasSkipped(files, path) {
+		t.Fatalf("custom acceptance test output was not skipped")
+	}
+	got, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read custom acceptance test: %v", err)
+	}
+	if string(got) != string(content) {
+		t.Fatalf("custom acceptance test was overwritten")
+	}
+}
+
+func TestRendererOverwritesGeneratedAcceptanceTests(t *testing.T) {
+	resources := parseFixture(t)
+	dir := t.TempDir()
+	path := filepath.Join(dir, "tests/acceptance/certificate_test.go")
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		t.Fatalf("create acceptance test directory: %v", err)
+	}
+	content := []byte("// " + generatedHeader + "\n\npackage tests\n")
+	if err := os.WriteFile(path, content, 0644); err != nil {
+		t.Fatalf("write generated acceptance test: %v", err)
+	}
+
+	files, err := newRenderer(dir, ignoreSet{}).render([]parser.ResourceDef{resourceByName(t, resources, "certificate")})
+	if err != nil {
+		t.Fatalf("render returned error: %v", err)
+	}
+
+	if hasSkipped(files, path) {
+		t.Fatalf("generated acceptance test output should not be skipped")
+	}
+	got, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read generated acceptance test: %v", err)
+	}
+	if !strings.Contains(string(got), generatedHeader) {
+		t.Fatalf("generated acceptance test header missing")
+	}
+	if string(got) == string(content) {
+		t.Fatalf("generated acceptance test was not overwritten")
+	}
 }
 
 func TestRenderedSnippets(t *testing.T) {
@@ -38,6 +105,8 @@ func TestRenderedSnippets(t *testing.T) {
 	resourceContent := renderTemplate(t, "resource", certificate)
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, false)")
 	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, true, isCertificateImportState(&model))")
+	assertContains(t, resourceContent, "apiModel, err := r.api.Read(ctx, model)")
+	assertContains(t, resourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
 	assertContains(t, resourceContent, "if !preserveInputs || (fillMissingInputs && (state.Cert.IsNull() || state.Cert.IsUnknown()))")
 	assertContains(t, resourceContent, "api.DisplayName.IsNull()")
 	assertContains(t, resourceContent, "if !api.InUse.IsNull() && !api.InUse.IsUnknown()")
@@ -47,7 +116,9 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "state.InUse = types.ListValueMust(types.StringType, nil)")
-	assertNotContains(t, resourceContent, "state.Args = types.ListValueMust(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()}, nil)")
+	assertContains(t, resourceContent, "state.Args = types.ListNull(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()})")
+	assertContains(t, resourceContent, "state.Args = types.ListValueMust(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()}, nil)")
+	assertContains(t, resourceContent, "len(state.Args.Elements()) == 0")
 	assertContains(t, resourceContent, "clients, ok := req.ProviderData.(*ProviderClients)")
 	assertContains(t, resourceContent, "r.client = clients.RC")
 	assertContains(t, resourceContent, `json:"group_id"`)
@@ -60,10 +131,19 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, typesContent, "InUse types.List")
 	assertContains(t, typesContent, "InUse []types.String")
 	assertContains(t, typesContent, "func (m CertificateModel) MarshalJSON()")
+	assertContains(t, typesContent, "func CertificateTerraformNameToAPIName(name string) string")
+	assertContains(t, typesContent, "output[CertificateTerraformNameToAPIName(key)] = value")
+	assertContains(t, typesContent, "func CertificateAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error)")
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.InUse)")
 
 	dataSourceContent := renderTemplate(t, "data_source", certificate)
 	assertContains(t, dataSourceContent, "applyCertificateAPIToState(apiModel, &model, false, false)")
+
+	docContent := renderTemplate(t, "doc", certificate)
+	assertContains(t, docContent, `resource "criblio_certificate" "my_certificate"`)
+	assertContains(t, docContent, `display_name = "Upstream Certificate"`)
+	assertContains(t, docContent, `group_id = "default"`)
+	assertContains(t, docContent, `name = "precision"`)
 
 	destination := resourceByName(t, resources, "destination")
 	destinationTypes := renderTemplate(t, "types", destination)
@@ -75,6 +155,41 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil && (!preserveInputs || (fillMissingInputs && state.OutputAzureBlob == nil))")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
+
+	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
+	mappingRulesetResource := renderTemplate(t, "resource", mappingRuleset)
+	assertContains(t, mappingRulesetResource, `"conf": schema.SingleNestedAttribute{`)
+	assertContains(t, mappingRulesetResource, `"add": schema.ListNestedAttribute{`)
+	assertContains(t, mappingRulesetResource, `"name": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, `"value": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, `"id": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetResource, "Optional: true,")
+
+	mappingRulesetTypes := renderTemplate(t, "types", mappingRuleset)
+	assertContains(t, mappingRulesetTypes, "func mappingRulesetID(model MappingRulesetModel) string")
+	assertContains(t, mappingRulesetTypes, `return "default"`)
+	assertContains(t, mappingRulesetTypes, `function["id"] = "eval"`)
+	assertContains(t, mappingRulesetTypes, `function["final"] = true`)
+}
+
+func TestRestWriteCall(t *testing.T) {
+	tests := []struct {
+		method string
+		want   string
+	}{
+		{method: "POST", want: "Post"},
+		{method: "PATCH", want: "Patch"},
+		{method: "PUT", want: "Put"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.method, func(t *testing.T) {
+			got := restWriteCall(parser.OperationDef{Method: tt.method})
+			if got != tt.want {
+				t.Fatalf("restWriteCall(%q) = %q, want %q", tt.method, got, tt.want)
+			}
+		})
+	}
 }
 
 func parseFixture(t *testing.T) []parser.ResourceDef {

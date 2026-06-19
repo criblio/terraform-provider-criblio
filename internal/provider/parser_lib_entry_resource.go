@@ -21,26 +21,26 @@ import (
 var _ = jsontypes.NormalizedType{}
 var _ = types.String{}
 
-var _ resource.Resource = &RegexResource{}
-var _ resource.ResourceWithConfigure = &RegexResource{}
-var _ resource.ResourceWithImportState = &RegexResource{}
+var _ resource.Resource = &ParserLibEntryResource{}
+var _ resource.ResourceWithConfigure = &ParserLibEntryResource{}
+var _ resource.ResourceWithImportState = &ParserLibEntryResource{}
 
-type RegexResource struct {
+type ParserLibEntryResource struct {
 	client *restclient.Client
-	api    RegexAPI
+	api    ParserLibEntryAPI
 }
 
-func NewRegexResource() resource.Resource {
-	return &RegexResource{}
+func NewParserLibEntryResource() resource.Resource {
+	return &ParserLibEntryResource{}
 }
 
-func (r *RegexResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_regex"
+func (r *ParserLibEntryResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_parser_lib_entry"
 }
 
-func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ParserLibEntryResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Regex Resource",
+		MarkdownDescription: "ParserLibEntry Resource",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Required: false,
@@ -69,28 +69,29 @@ func (r *RegexResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Required: false,
 				Optional: true,
 				Computed: false,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+				},
 			},
-			"regex": schema.StringAttribute{
-				Required: true,
-				Optional: false,
-				Computed: false,
-			},
-			"sample_data": schema.StringAttribute{
+			"tags": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
 				Computed:    false,
-				Description: `Optionally, paste in sample data to match against this regex`,
+				Description: `Optionally, add tags that you can use for filtering`,
 			},
-			"tags": schema.StringAttribute{
-				Required: false,
-				Optional: true,
+			"type": schema.StringAttribute{
+				Required: true,
+				Optional: false,
 				Computed: false,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+				},
 			},
 		},
 	}
 }
 
-func (r *RegexResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *ParserLibEntryResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -103,11 +104,11 @@ func (r *RegexResource) Configure(_ context.Context, req resource.ConfigureReque
 		return
 	}
 	r.client = clients.RC
-	r.api = newRegexAPI(r.client)
+	r.api = newParserLibEntryAPI(r.client)
 }
 
-func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var model RegexModel
+func (r *ParserLibEntryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var model ParserLibEntryModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -117,12 +118,12 @@ func (r *RegexResource) Create(ctx context.Context, req resource.CreateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, false)
+	applyParserLibEntryAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var model RegexModel
+func (r *ParserLibEntryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var model ParserLibEntryModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -136,12 +137,12 @@ func (r *RegexResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, isRegexImportState(&model))
+	applyParserLibEntryAPIToState(apiModel, &model, true, isParserLibEntryImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var model RegexModel
+func (r *ParserLibEntryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var model ParserLibEntryModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -151,12 +152,12 @@ func (r *RegexResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, true, false)
+	applyParserLibEntryAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func (r *RegexResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var model RegexModel
+func (r *ParserLibEntryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var model ParserLibEntryModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -166,7 +167,7 @@ func (r *RegexResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 }
 
-func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ParserLibEntryResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
@@ -185,7 +186,7 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
-	var model RegexModel
+	var model ParserLibEntryModel
 	model.GroupID = types.StringValue(data.GroupID)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	model.ID = types.StringValue(data.ID)
@@ -198,21 +199,21 @@ func (r *RegexResource) ImportState(ctx context.Context, req resource.ImportStat
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRegexAPIToState(apiModel, &model, false, false)
+	applyParserLibEntryAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
-func isRegexImportState(state *RegexModel) bool {
+func isParserLibEntryImportState(state *ParserLibEntryModel) bool {
 	if state == nil {
 		return false
 	}
-	if state.Regex.IsNull() || state.Regex.IsUnknown() {
+	if state.Type.IsNull() || state.Type.IsUnknown() {
 		return true
 	}
 	return false
 }
 
-func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs bool, fillMissingInputs bool) {
+func applyParserLibEntryAPIToState(api *ParserLibEntryModel, state *ParserLibEntryModel, preserveInputs bool, fillMissingInputs bool) {
 	if api == nil || state == nil {
 		return
 	}
@@ -236,23 +237,18 @@ func applyRegexAPIToState(api *RegexModel, state *RegexModel, preserveInputs boo
 			state.Lib = api.Lib
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.Regex.IsNull() || state.Regex.IsUnknown())) {
-		if !api.Regex.IsNull() && !api.Regex.IsUnknown() {
-			state.Regex = api.Regex
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.SampleData.IsNull() || state.SampleData.IsUnknown())) {
-		if !api.SampleData.IsNull() && !api.SampleData.IsUnknown() {
-			state.SampleData = api.SampleData
-		}
-	}
 	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
 		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 			state.Tags = api.Tags
 		}
 	}
+	if !preserveInputs || (fillMissingInputs && (state.Type.IsNull() || state.Type.IsUnknown())) {
+		if !api.Type.IsNull() && !api.Type.IsUnknown() {
+			state.Type = api.Type
+		}
+	}
 }
 
-func regexDebug(value any) string {
+func ParserLibEntryDebug(value any) string {
 	return fmt.Sprintf("%v", value)
 }

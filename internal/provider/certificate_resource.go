@@ -225,12 +225,25 @@ func (r *CertificateResource) ImportState(ctx context.Context, req resource.Impo
 		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
 	if data.ID == "" {
 		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
 		return
 	}
+	var model CertificateModel
+	model.GroupID = types.StringValue(data.GroupID)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
+	model.ID = types.StringValue(data.ID)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyCertificateAPIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
 func isCertificateImportState(state *CertificateModel) bool {

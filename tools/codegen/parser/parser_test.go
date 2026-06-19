@@ -18,6 +18,12 @@ func TestParseCertificateResource(t *testing.T) {
 	if certificate.Read.Path != "/m/{groupId}/system/certificates/{id}" {
 		t.Fatalf("read path = %q", certificate.Read.Path)
 	}
+	if len(certificate.Create.Examples) != 1 {
+		t.Fatalf("create example count = %d", len(certificate.Create.Examples))
+	}
+	if certificate.Create.Examples[0].Name != "CertificateCreateExample" {
+		t.Fatalf("create example name = %q", certificate.Create.Examples[0].Name)
+	}
 
 	groupID := fieldByTFName(t, certificate.Fields, "group_id")
 	if !groupID.Required || !groupID.ForceNew || !groupID.PathParam {
@@ -93,6 +99,30 @@ func TestParseOneOfVariants(t *testing.T) {
 	accountKey := fieldByTFName(t, azure.Fields, "account_key")
 	if accountKey.ApplyStrategy != "stringFromAPIOrPrior" {
 		t.Fatalf("account_key strategy = %q", accountKey.ApplyStrategy)
+	}
+}
+
+func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
+	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
+	if err != nil {
+		t.Fatalf("ParseFile returned error: %v", err)
+	}
+
+	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
+	id := fieldByTFName(t, mappingRuleset.Fields, "id")
+	if id.Required || !id.Optional || !id.Computed {
+		t.Fatalf("mapping ruleset id flags = required:%v optional:%v computed:%v", id.Required, id.Optional, id.Computed)
+	}
+
+	conf := fieldByTFName(t, mappingRuleset.Fields, "conf")
+	functions := fieldByTFName(t, conf.Fields, "functions")
+	functionID := fieldByTFName(t, functions.Fields, "id")
+	if functionID.Required || !functionID.Optional || functionID.Computed {
+		t.Fatalf("mapping function id flags = required:%v optional:%v computed:%v", functionID.Required, functionID.Optional, functionID.Computed)
+	}
+	final := fieldByTFName(t, functions.Fields, "final")
+	if final.Required || !final.Optional || final.Computed {
+		t.Fatalf("mapping function final flags = required:%v optional:%v computed:%v", final.Required, final.Optional, final.Computed)
 	}
 }
 
