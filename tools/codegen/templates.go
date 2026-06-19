@@ -420,7 +420,25 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 }
 
 func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }}Model) error {
+{{- if eq .StructName "MappingRuleset" }}
+	type emptyMappingRulesetConf struct {
+		Functions []any ` + "`json:\"functions\"`" + `
+	}
+	type emptyMappingRuleset struct {
+		ID   string                  ` + "`json:\"id\"`" + `
+		Conf emptyMappingRulesetConf ` + "`json:\"conf\"`" + `
+	}
+	body := emptyMappingRuleset{
+		ID: "default",
+		Conf: emptyMappingRulesetConf{
+			Functions: []any{},
+		},
+	}
+	_, err := restclient.Patch[emptyMappingRuleset, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/default", model.Product.ValueString()), body)
+	return err
+{{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
+{{- end }}
 }
 `
 

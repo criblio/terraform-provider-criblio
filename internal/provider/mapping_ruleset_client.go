@@ -29,5 +29,19 @@ func (a MappingRulesetAPI) Update(ctx context.Context, model MappingRulesetModel
 }
 
 func (a MappingRulesetAPI) Delete(ctx context.Context, model MappingRulesetModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/%s", model.Product.ValueString(), model.ID.ValueString()))
+	type emptyMappingRulesetConf struct {
+		Functions []any `json:"functions"`
+	}
+	type emptyMappingRuleset struct {
+		ID   string                  `json:"id"`
+		Conf emptyMappingRulesetConf `json:"conf"`
+	}
+	body := emptyMappingRuleset{
+		ID: "default",
+		Conf: emptyMappingRulesetConf{
+			Functions: []any{},
+		},
+	}
+	_, err := restclient.Patch[emptyMappingRuleset, MappingRulesetModel](ctx, a.client, fmt.Sprintf("/admin/products/%s/mappings/default", model.Product.ValueString()), body)
+	return err
 }

@@ -3,6 +3,7 @@ package converter
 import (
 	"context"
 	"encoding/json"
+	"reflect"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
@@ -152,6 +153,35 @@ func TestObjectListValueNormalizesAPIKeysToTerraformNames(t *testing.T) {
 	timestamp := attrs["timestamp"].(types.Object)
 	assert.Contains(t, timestamp.Attributes(), "type")
 	assert.Contains(t, timestamp.Attributes(), "length")
+}
+
+func TestConvertGeneratedEventBreakerRulesetKeepsTypedEmptyRules(t *testing.T) {
+	e := registry.Entry{
+		TypeName:      "criblio_event_breaker_ruleset",
+		ModelTypeName: "EventBreakerRulesetResourceModel",
+		GetMethod:     "GetEventBreakerRulesetByID",
+	}
+	responseBody := struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":      "empty-rules",
+				"groupId": "default",
+				"rules":   []any{},
+			},
+		},
+	}
+
+	model, err := convertGeneratedModelFromResponseBody(e, reflect.TypeOf((*provider.EventBreakerRulesetResourceModel)(nil)).Elem(), responseBody)
+	require.NoError(t, err)
+
+	eventBreaker, ok := model.(*provider.EventBreakerRulesetResourceModel)
+	require.True(t, ok)
+	require.False(t, eventBreaker.Rules.IsNull())
+	require.False(t, eventBreaker.Rules.IsUnknown())
+	assert.Equal(t, types.ObjectType{AttrTypes: provider.EventBreakerRulesetRulesAttrTypes()}, eventBreaker.Rules.ElementType(context.Background()))
+	assert.Empty(t, eventBreaker.Rules.Elements())
 }
 
 // TestConvertFromResponseBody_destination verifies the correct RefreshFrom* method is invoked

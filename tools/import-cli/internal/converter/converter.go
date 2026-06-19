@@ -312,10 +312,37 @@ func convertGeneratedModelFromResponseBody(e registry.Entry, modelType reflect.T
 	}
 
 	modelVal := reflect.New(modelType)
+	if generatedType, ok := GeneratedModelTypes()[e.ModelTypeName]; ok {
+		generatedVal := reflect.New(generatedType)
+		if err := json.Unmarshal(itemJSON, generatedVal.Interface()); err == nil {
+			copyMatchingFields(modelVal.Elem(), generatedVal.Elem())
+			return modelVal.Interface(), nil
+		}
+	}
 	if err := populateGeneratedModel(modelVal.Elem(), values); err != nil {
 		return nil, fmt.Errorf("%s: populate generated model: %w", e.TypeName, err)
 	}
 	return modelVal.Interface(), nil
+}
+
+func copyMatchingFields(dst, src reflect.Value) {
+	for i := 0; i < dst.NumField(); i++ {
+		dstField := dst.Field(i)
+		if !dstField.CanSet() {
+			continue
+		}
+		srcField := src.FieldByName(dst.Type().Field(i).Name)
+		if !srcField.IsValid() {
+			continue
+		}
+		if srcField.Type().AssignableTo(dstField.Type()) {
+			dstField.Set(srcField)
+			continue
+		}
+		if srcField.Type().ConvertibleTo(dstField.Type()) {
+			dstField.Set(srcField.Convert(dstField.Type()))
+		}
+	}
 }
 
 func firstResponseItem(responseBody interface{}) (reflect.Value, error) {
