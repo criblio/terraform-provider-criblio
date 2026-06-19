@@ -120,10 +120,13 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"EventBreakerRulesetResourceModel": reflect.TypeOf((*provider.EventBreakerRulesetModel)(nil)).Elem(),
 		"GlobalVarResourceModel":           reflect.TypeOf((*provider.GlobalVarModel)(nil)).Elem(),
 		"GrokResourceModel":                reflect.TypeOf((*provider.GrokModel)(nil)).Elem(),
+		"HmacFunctionResourceModel":        reflect.TypeOf((*provider.HmacFunctionModel)(nil)).Elem(),
+		"KeyResourceModel":                 reflect.TypeOf((*provider.KeyModel)(nil)).Elem(),
 		"MappingRulesetResourceModel":      reflect.TypeOf((*provider.MappingRulesetModel)(nil)).Elem(),
 		"ParquetSchemaResourceModel":       reflect.TypeOf((*provider.ParquetSchemaModel)(nil)).Elem(),
 		"ParserLibEntryResourceModel":      reflect.TypeOf((*provider.ParserLibEntryModel)(nil)).Elem(),
 		"RegexResourceModel":               reflect.TypeOf((*provider.RegexModel)(nil)).Elem(),
 		"SchemaResourceModel":              reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
+		"SecretResourceModel":              reflect.TypeOf((*provider.SecretModel)(nil)).Elem(),
 	}
 }

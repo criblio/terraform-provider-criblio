@@ -350,7 +350,6 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewHmacFunctionDataSource,
 		NewInstanceSettingsDataSource,
 		NewKeyDataSource,
-		NewKeysDataSource,
 		NewLookupFileDataSource,
 		NewMappingRulesetDataSource,
 		NewMappingsDataSource,

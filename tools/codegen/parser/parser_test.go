@@ -126,6 +126,32 @@ func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	}
 }
 
+func TestParseKeyQueryID(t *testing.T) {
+	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
+	if err != nil {
+		t.Fatalf("ParseFile returned error: %v", err)
+	}
+
+	key := resourceByName(t, resources, "Key")
+	if key.TypeName != "criblio_key" {
+		t.Fatalf("key TypeName = %q", key.TypeName)
+	}
+	if len(key.Create.QueryParams) != 1 || key.Create.QueryParams[0].TerraformName != "id" {
+		t.Fatalf("key query params = %#v", key.Create.QueryParams)
+	}
+	id := fieldByTFName(t, key.Fields, "id")
+	if id.APIName != "keyId" || !id.Required || !id.ForceNew || !id.PathParam || !id.QueryParam || !id.SuppressDiff || !id.PreferState {
+		t.Fatalf("key id = api:%q required:%v forceNew:%v path:%v query:%v suppress:%v prefer:%v", id.APIName, id.Required, id.ForceNew, id.PathParam, id.QueryParam, id.SuppressDiff, id.PreferState)
+	}
+	keyID := fieldByTFName(t, key.Fields, "key_id")
+	if keyID.APIName != "terraformKeyId" || !keyID.Computed {
+		t.Fatalf("key_id = api:%q computed:%v", keyID.APIName, keyID.Computed)
+	}
+	if hasField(key.Fields, "plain_key") || hasField(key.Fields, "cipher_key") {
+		t.Fatalf("key material fields should be ignored")
+	}
+}
+
 func resourceByName(t *testing.T, resources []ResourceDef, name string) ResourceDef {
 	t.Helper()
 	for _, resource := range resources {

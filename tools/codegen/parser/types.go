@@ -24,6 +24,7 @@ type OperationDef struct {
 	RequestSchema  string
 	ResponseSchema string
 	PathParams     []FieldDef
+	QueryParams    []FieldDef
 	Examples       []ExampleDef
 }
 
@@ -57,6 +58,7 @@ type FieldDef struct {
 	ReadOnly           bool
 	WriteOnly          bool
 	PathParam          bool
+	QueryParam         bool
 	RequestField       bool
 	ApplyStrategy      string
 	Fields             []FieldDef

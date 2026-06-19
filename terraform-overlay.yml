@@ -239,6 +239,113 @@ actions:
             type: string
             title: Quote character
 
+  - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.get"
+    update:
+      x-terraform-read: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.patch"
+    update:
+      x-terraform-update: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.delete"
+    update:
+      x-terraform-delete: HmacFunction
+  - target: "$.components.schemas.HmacFunction.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/system/keys.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Key
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this key metadata entity instance.
+  - target: "$.paths./m/{groupId}/system/keys/{id}.get"
+    update:
+      x-terraform-read: Key
+  - target: "$.paths./m/{groupId}/system/keys/{id}.patch"
+    update:
+      x-terraform-update: Key
+  - target: "$.paths./m/{groupId}/system/keys/{id}.delete"
+    update:
+      x-terraform-delete: Key
+  - target: "$.components.schemas.KeyMetadataEntity.properties.keyId"
+    update:
+      x-terraform-name: id
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties"
+    update:
+      terraformKeyId:
+        type: string
+        description: API-assigned key ID returned by Cribl.
+        x-terraform-name: key_id
+        x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.created"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.group"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.plainKey"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.cipherKey"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/system/secrets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.get"
+    update:
+      x-terraform-read: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.patch"
+    update:
+      x-terraform-update: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.delete"
+    update:
+      x-terraform-delete: Secret
+  - target: "$.components.schemas.RestSecret.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RestSecret.properties.folderId"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RestSecret.properties.readOnly"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RestSecret.properties.value"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.apiKey"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.secretKey"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.password"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:
       x-terraform-resource: true

@@ -129,6 +129,99 @@ paths:
           required: true
           schema:
             type: string
+  /m/{groupId}/system/keys:
+    post:
+      operationId: createKeyMetadataEntity
+      x-terraform-resource: true
+      x-terraform-resource-name: Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KeyMetadataEntity"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadataEntity"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+  /m/{groupId}/system/keys/{id}:
+    get:
+      operationId: getKeyMetadataEntityById
+      x-terraform-read: Key
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadataEntity"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+    patch:
+      operationId: updateKeyMetadataEntityById
+      x-terraform-update: Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KeyMetadataEntity"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadataEntity"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+    delete:
+      operationId: deleteKeyMetadataEntityById
+      x-terraform-delete: Key
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyMetadataEntity"
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
 components:
   examples:
     CertificateCreateExample:
@@ -258,6 +351,29 @@ components:
       properties:
         bucket:
           type: string
+    KeyMetadataEntity:
+      type: object
+      required:
+        - keyId
+        - algorithm
+      properties:
+        keyId:
+          type: string
+          x-terraform-name: id
+          x-terraform-suppress-diff: explicit
+          x-terraform-prefer-state: true
+        terraformKeyId:
+          type: string
+          x-terraform-name: key_id
+          x-terraform-computed: true
+        algorithm:
+          type: string
+        plainKey:
+          type: string
+          x-terraform-ignore: true
+        cipherKey:
+          type: string
+          x-terraform-ignore: true
     MappingRuleset:
       type: object
       required:

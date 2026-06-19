@@ -149,6 +149,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		RequestSchema:  schemaRefName(requestSchema(operation)),
 		ResponseSchema: schemaRefName(responseSchema(operation)),
 		PathParams:     pathParams(operation),
+		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
 	}
 }
@@ -197,6 +198,7 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	fields = appendPathParams(fields, resource.Read.PathParams)
 	fields = appendPathParams(fields, resource.Update.PathParams)
 	fields = appendPathParams(fields, resource.Delete.PathParams)
+	fields = appendQueryParams(fields, resource.Create.QueryParams)
 	sort.SliceStable(fields, func(i, j int) bool {
 		return fields[i].TerraformName < fields[j].TerraformName
 	})
@@ -403,17 +405,28 @@ func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
 }
 
 func pathParams(operation *yaml.Node) []FieldDef {
+	return parametersByLocation(operation, "path")
+}
+
+func queryParams(operation *yaml.Node) []FieldDef {
+	return parametersByLocation(operation, "query")
+}
+
+func parametersByLocation(operation *yaml.Node, location string) []FieldDef {
 	parameters, ok := mappingValue(operation, "parameters")
 	if !ok || parameters.Kind != yaml.SequenceNode {
 		return nil
 	}
 	var params []FieldDef
 	for _, parameter := range parameters.Content {
-		if scalarValue(parameter, "in") != "path" {
+		if scalarValue(parameter, "in") != location {
+			continue
+		}
+		if location == "query" && !boolAnnotation(parameter, "required") {
 			continue
 		}
 		apiName := scalarValue(parameter, "name")
-		params = append(params, FieldDef{
+		field := FieldDef{
 			APIName:       apiName,
 			TerraformName: snake(apiName),
 			GoName:        exportName(apiName),
@@ -421,10 +434,39 @@ func pathParams(operation *yaml.Node) []FieldDef {
 			Description:   scalarValue(parameter, "description"),
 			Required:      true,
 			ForceNew:      true,
-			PathParam:     true,
-		})
+		}
+		if location == "path" {
+			field.PathParam = true
+		} else {
+			field.QueryParam = true
+		}
+		params = append(params, field)
 	}
 	return params
+}
+
+func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
+	existing := map[string]bool{}
+	for _, field := range fields {
+		existing[field.TerraformName] = true
+	}
+	for _, param := range params {
+		if existing[param.TerraformName] {
+			for index := range fields {
+				if fields[index].TerraformName == param.TerraformName {
+					fields[index].Required = true
+					fields[index].Optional = false
+					fields[index].Computed = false
+					fields[index].ForceNew = true
+					fields[index].QueryParam = true
+				}
+			}
+			continue
+		}
+		fields = append(fields, param)
+		existing[param.TerraformName] = true
+	}
+	return fields
 }
 
 func requestSchema(operation *yaml.Node) *yaml.Node {

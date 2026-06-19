@@ -143,15 +143,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_pack_destination" && idMap["pack"] != "" {
 		attrs["pack"] = hcl.Value{Kind: hcl.KindString, String: idMap["pack"]}
 	}
-	buildIDMap := idMap
-	if r.TypeName == "criblio_key" && idMap["id"] != "" {
-		buildIDMap = make(map[string]string, len(idMap)+1)
-		for k, v := range idMap {
-			buildIDMap[k] = v
-		}
-		buildIDMap["key_id"] = idMap["id"]
-	}
-	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)
+	importID, idErr := generator.BuildImportID(e.ImportIDFormat, idMap)
 	if idErr != nil {
 		return nil, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr))
 	}

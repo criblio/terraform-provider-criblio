@@ -170,6 +170,16 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetTypes, `return "default"`)
 	assertContains(t, mappingRulesetTypes, `function["id"] = "eval"`)
 	assertContains(t, mappingRulesetTypes, `function["final"] = true`)
+
+	key := resourceByName(t, resources, "Key")
+	keyClient := renderTemplate(t, "client", key)
+	assertContains(t, keyClient, `"net/url"`)
+	assertContains(t, keyClient, `fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(model.ID.ValueString()))`)
+	assertContains(t, keyClient, `restclient.Get[[]KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))`)
+	assertContains(t, keyClient, `id := keyAPIID(model)`)
+	assertContains(t, keyClient, `if item.ID.ValueString() == id`)
+	assertContains(t, keyClient, `The keys API does not support deleting key metadata`)
+	assertContains(t, keyClient, `func keyAPIID(model KeyModel) string`)
 }
 
 func TestRestWriteCall(t *testing.T) {

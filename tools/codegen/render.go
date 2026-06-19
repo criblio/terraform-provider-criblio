@@ -133,6 +133,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"nestedObjectFields":               nestedObjectFields,
 		"attrType":                         attrType,
 		"restWriteCall":                    restWriteCall,
+		"resourceHasQueryParams":           resourceHasQueryParams,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -153,6 +154,10 @@ func restWriteCall(op parser.OperationDef) string {
 	default:
 		return "Post"
 	}
+}
+
+func resourceHasQueryParams(resource parser.ResourceDef) bool {
+	return len(resource.Create.QueryParams) > 0 || len(resource.Read.QueryParams) > 0 || len(resource.Update.QueryParams) > 0 || len(resource.Delete.QueryParams) > 0
 }
 
 func joinDocFields(fields []parser.FieldDef) string {
@@ -740,6 +745,19 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 		fmt.Fprintf(output, "%s]\n", indent)
 		return
 	}
+	if field.Type == "array" {
+		values := exampleList(value)
+		if len(values) == 0 {
+			fmt.Fprintf(output, "%s%s = []\n", indent, field.TerraformName)
+			return
+		}
+		fmt.Fprintf(output, "%s%s = [\n", indent, field.TerraformName)
+		for _, item := range values {
+			fmt.Fprintf(output, "%s  %s,\n", indent, hclValue(item))
+		}
+		fmt.Fprintf(output, "%s]\n", indent)
+		return
+	}
 	fmt.Fprintf(output, "%s%s = %s\n", indent, field.TerraformName, hclValue(value))
 }
 
@@ -875,8 +893,12 @@ func pathExpr(op parser.OperationDef) string {
 	for _, param := range op.PathParams {
 		path = strings.ReplaceAll(path, "{"+param.APIName+"}", `%s`)
 	}
-	if len(op.PathParams) == 0 {
-		return fmt.Sprintf("%q", path)
+	if len(op.QueryParams) > 0 {
+		queryParts := make([]string, 0, len(op.QueryParams))
+		for _, param := range op.QueryParams {
+			queryParts = append(queryParts, param.APIName+"=%s")
+		}
+		path += "?" + strings.Join(queryParts, "&")
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
@@ -885,6 +907,12 @@ func pathExpr(op parser.OperationDef) string {
 			continue
 		}
 		args = append(args, "model."+param.GoName+".ValueString()")
+	}
+	for _, param := range op.QueryParams {
+		args = append(args, "url.QueryEscape(model."+param.GoName+".ValueString())")
+	}
+	if len(args) == 1 {
+		return fmt.Sprintf("%q", path)
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
 }
