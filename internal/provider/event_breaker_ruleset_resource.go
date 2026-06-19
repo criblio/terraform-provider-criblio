@@ -411,6 +411,9 @@ func applyEventBreakerRulesetAPIToState(api *EventBreakerRulesetModel, state *Ev
 			state.Rules = api.Rules
 		}
 	}
+	if !state.Rules.IsNull() && !state.Rules.IsUnknown() && len(state.Rules.Elements()) == 0 {
+		state.Rules = types.ListValueMust(types.ObjectType{AttrTypes: EventBreakerRulesetRulesAttrTypes()}, nil)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Tags.IsNull() || state.Tags.IsUnknown())) {
 		if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 			state.Tags = api.Tags

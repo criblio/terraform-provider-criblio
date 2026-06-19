@@ -740,6 +740,11 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- if not .Computed }}
 	}
 {{- end }}
+{{- if nestedObjectList . }}
+	if !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0 {
+		state.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+	}
+{{- end }}
 {{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
