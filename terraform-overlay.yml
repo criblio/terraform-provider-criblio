@@ -435,6 +435,59 @@ actions:
             - disableSNIRouting
         - $ref: "#/components/schemas/EmptyObject"
 
+  - target: "$.paths./m/{groupId}/system/subscriptions.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Subscription
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: new Id to be used for subscription to be created
+        - name: pipeline
+          in: query
+          required: true
+          schema:
+            type: string
+          description: pipeline to be used
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.get"
+    update:
+      x-terraform-read: Subscription
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.patch"
+    update:
+      x-terraform-update: Subscription
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.delete"
+    update:
+      x-terraform-delete: Subscription
+  - target: "$.components.schemas.Subscription.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/system/projects.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.get"
+    update:
+      x-terraform-read: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.patch"
+    update:
+      x-terraform-update: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.delete"
+    update:
+      x-terraform-delete: Project
+  - target: "$.components.schemas.ProjectConfig.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:
       x-terraform-resource: true

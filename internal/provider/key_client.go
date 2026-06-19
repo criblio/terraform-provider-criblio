@@ -39,8 +39,9 @@ func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
 }
 
 func (a KeyAPI) Update(ctx context.Context, model KeyModel) (*KeyModel, error) {
-	model.ID = types.StringValue(keyAPIID(model))
-	return restclient.Patch[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), keyAPIID(model)), model)
+	id := model.ID.ValueString()
+	model.ID = types.StringNull()
+	return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 }
 
 func (a KeyAPI) Delete(ctx context.Context, model KeyModel) error {

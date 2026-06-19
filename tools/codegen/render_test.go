@@ -180,7 +180,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, keyClient, `restclient.Get[[]KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))`)
 	assertContains(t, keyClient, `id := keyAPIID(model)`)
 	assertContains(t, keyClient, `if item.ID.ValueString() == id`)
-	assertContains(t, keyClient, `model.ID = types.StringValue(keyAPIID(model))`)
+	assertContains(t, keyClient, `return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)`)
 	assertContains(t, keyClient, `The keys API does not support deleting key metadata`)
 	assertContains(t, keyClient, `func keyAPIID(model KeyModel) string`)
 }

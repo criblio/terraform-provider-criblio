@@ -490,8 +490,9 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if eq .StructName "Key" }}
-	model.ID = types.StringValue(keyAPIID(model))
-	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), keyAPIID(model)), model)
+	id := model.ID.ValueString()
+	model.ID = types.StringNull()
+	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 {{- else }}
 	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
 {{- end }}

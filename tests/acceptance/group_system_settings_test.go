@@ -41,11 +41,12 @@ func TestGroupSystemSettings(t *testing.T) {
 				PlanOnly: true,
 			},
 			{
-				ResourceName:            resourceName,
-				ImportState:             true,
-				ImportStateId:           "my-hybrid-group",
-				ImportStateVerify:       true,
-				ImportStateVerifyIgnore: []string{"api.ssl.passphrase"},
+				ResourceName:                         resourceName,
+				ImportState:                          true,
+				ImportStateId:                        "my-hybrid-group",
+				ImportStateVerify:                    true,
+				ImportStateVerifyIdentifierAttribute: "group_id",
+				ImportStateVerifyIgnore:              []string{"api.ssl.passphrase"},
 			},
 		},
 	})
