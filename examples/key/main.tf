@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    criblio = {
-      source = "criblio/criblio"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
 resource "criblio_key" "my_key" {
   algorithm   = "aes-256-cbc"
   description = "My Key Metadata"
