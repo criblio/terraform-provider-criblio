@@ -346,6 +346,95 @@ actions:
       x-terraform-sensitive: true
       x-terraform-prefer-state: true
 
+  - target: "$.paths./m/{groupId}/lib/database-connections.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.get"
+    update:
+      x-terraform-read: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.patch"
+    update:
+      x-terraform-update: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.delete"
+    update:
+      x-terraform-delete: DatabaseConnection
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.connectionString"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.password"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.textSecret"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.credsSecrets"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+
+  - target: "$.paths./m/{groupId}/lib/appscope-configs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.get"
+    update:
+      x-terraform-read: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.patch"
+    update:
+      x-terraform-update: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.delete"
+    update:
+      x-terraform-delete: AppscopeConfig
+  - target: "$.components.schemas.AppscopeLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.MetricTypeAppscopeConfig.properties.watch"
+    update:
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+  - target: "$.components.schemas.WatchConfAppscopeConfig.properties.headers"
+    update:
+      type: array
+      items:
+        type: string
+
+  - target: "$.paths./m/{groupId}/system/settings/conf.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: GroupSystemSettings
+  - target: "$.paths./m/{groupId}/system/settings/conf.get"
+    update:
+      x-terraform-read: GroupSystemSettings
+  - target: "$.paths./m/{groupId}/system/settings/conf.patch"
+    update:
+      x-terraform-update: GroupSystemSettings
+  - target: "$.components.schemas.SslTypeSystemSettingsConfApi.properties.passphrase"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.SniSettings"
+    update:
+      oneOf:
+        - type: object
+          properties:
+            disableSNIRouting:
+              type: boolean
+              x-terraform-name: disable_sni_routing
+          required:
+            - disableSNIRouting
+        - $ref: "#/components/schemas/EmptyObject"
+
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:
       x-terraform-resource: true

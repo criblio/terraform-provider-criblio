@@ -286,6 +286,10 @@ func decodeResponse[T any](body []byte) (*T, error) {
 		return decodeEnvelope[T](envelope.Items)
 	}
 
+	if bytes.HasPrefix(bytes.TrimSpace(body), []byte("[")) {
+		return decodeEnvelope[T](body)
+	}
+
 	var output T
 	if err := json.Unmarshal(body, &output); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %v", err)

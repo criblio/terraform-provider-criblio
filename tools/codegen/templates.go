@@ -323,7 +323,7 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
-{{- if and .RequestField (not .Computed) (not (and (eq $.StructName "Key") (eq .TerraformName "id"))) }}
+{{- if and .RequestField (not .Computed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
 		if err != nil {
@@ -447,6 +447,9 @@ import (
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+{{- if eq .StructName "Key" }}
+	"github.com/hashicorp/terraform-plugin-framework/types"
+{{- end }}
 )
 
 type {{ .StructName }}API struct {
@@ -458,7 +461,13 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 }
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
+{{- if eq .StructName "Key" }}
+	id := model.ID.ValueString()
+	model.ID = types.StringNull()
+	return restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
+{{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
+{{- end }}
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
@@ -481,6 +490,7 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if eq .StructName "Key" }}
+	model.ID = types.StringValue(keyAPIID(model))
 	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), keyAPIID(model)), model)
 {{- else }}
 	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
@@ -508,6 +518,10 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 {{- if eq .StructName "Key" }}
 	// The keys API does not support deleting key metadata. Preserve the
 	// legacy provider behavior by allowing Terraform to remove only its state.
+	return nil
+{{- else if eq .StructName "GroupSystemSettings" }}
+	// Group system settings are singleton configuration. There is no delete
+	// endpoint; destroy removes Terraform state without resetting the group.
 	return nil
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
@@ -727,7 +741,7 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	resource.ImportStatePassthroughID(ctx, path.Root("{{ importPassthroughAttribute . }}"), req, resp)
 {{- end }}
 }
 

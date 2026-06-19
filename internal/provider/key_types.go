@@ -308,6 +308,13 @@ func (m KeyModel) MarshalJSON() ([]byte, error) {
 		}
 		output["expires"] = value
 	}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := KeyTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["keyId"] = value
+	}
 	if !m.IvSize.IsNull() && !m.IvSize.IsUnknown() {
 		value, err := KeyTerraformValueToJSON(m.IvSize)
 		if err != nil {

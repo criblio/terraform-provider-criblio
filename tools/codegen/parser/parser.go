@@ -325,12 +325,28 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 	if renamed, ok := stringAnnotation(property, "x-terraform-name"); ok && renamed != "" {
 		tfName = renamed
 	}
+	fieldType := schemaType(property)
+	if objectSchema, ok, err := objectSchemaForProperty(property, schemas); err != nil {
+		return FieldDef{}, err
+	} else if ok && objectSchema != nil {
+		fieldType = "object"
+	}
+	fieldElementType := elementType(property)
+	if fieldType == "array" {
+		if items, ok := mappingValue(property, "items"); ok {
+			if objectSchema, ok, err := objectSchemaForProperty(items, schemas); err != nil {
+				return FieldDef{}, err
+			} else if ok && objectSchema != nil {
+				fieldElementType = "object"
+			}
+		}
+	}
 	field := FieldDef{
 		APIName:       apiName,
 		TerraformName: snake(tfName),
 		GoName:        exportName(tfName),
-		Type:          schemaType(property),
-		ElementType:   elementType(property),
+		Type:          fieldType,
+		ElementType:   fieldElementType,
 		Description:   scalarValue(property, "description"),
 		CustomType:    scalarValue(property, "x-terraform-custom-type"),
 		ReadOnly:      boolAnnotation(property, "readOnly"),
@@ -348,23 +364,27 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 				return FieldDef{}, fmt.Errorf("array item schema %q not found", schemaName)
 			}
 		}
+		if resolved, ok, err := objectSchema(items, schemas); err != nil {
+			return FieldDef{}, err
+		} else if ok {
+			items = resolved
+		}
 		fields, _, err := parseSchemaFields(modelName+exportName(tfName), items, schemas, schemaPropertySet(items), schemaPropertySet(items))
 		if err != nil {
 			return FieldDef{}, err
 		}
 		field.Fields = fields
-		field.NestedModelName = modelName + exportName(tfName) + "Model"
-		field.NestedAPIModelName = modelName + exportName(tfName) + "APIModel"
-		field.NestedAttrTypes = modelName + exportName(tfName) + "AttrTypes"
+		nestedName := nestedModelPrefix(modelName, tfName)
+		field.NestedModelName = nestedName + "Model"
+		field.NestedAPIModelName = nestedName + "APIModel"
+		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
 	if field.Type == "object" {
 		objectSchema := property
-		if schemaName := schemaRefName(property); schemaName != "" {
-			var found bool
-			objectSchema, found = mappingValue(schemas, schemaName)
-			if !found {
-				return FieldDef{}, fmt.Errorf("object schema %q not found", schemaName)
-			}
+		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
+			return FieldDef{}, err
+		} else if ok {
+			objectSchema = resolved
 		}
 		if properties, ok := mappingValue(objectSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
 			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))
@@ -372,12 +392,112 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 				return FieldDef{}, err
 			}
 			field.Fields = fields
-			field.NestedModelName = modelName + exportName(tfName) + "Model"
-			field.NestedAPIModelName = modelName + exportName(tfName) + "APIModel"
-			field.NestedAttrTypes = modelName + exportName(tfName) + "AttrTypes"
+			nestedName := nestedModelPrefix(modelName, tfName)
+			field.NestedModelName = nestedName + "Model"
+			field.NestedAPIModelName = nestedName + "APIModel"
+			field.NestedAttrTypes = nestedName + "AttrTypes"
 		}
 	}
 	return field, nil
+}
+
+func nestedModelPrefix(modelName, fieldName string) string {
+	prefix := modelName + exportName(fieldName)
+	if prefix == modelName+"API" {
+		return modelName + "APIField"
+	}
+	return prefix
+}
+
+func objectSchemaForProperty(property, schemas *yaml.Node) (*yaml.Node, bool, error) {
+	if scalarValue(property, "type") == "array" {
+		return nil, false, nil
+	}
+	schema := property
+	if schemaName := schemaRefName(property); schemaName != "" {
+		var found bool
+		schema, found = mappingValue(schemas, schemaName)
+		if !found {
+			return nil, false, fmt.Errorf("object schema %q not found", schemaName)
+		}
+	}
+	return objectSchema(schema, schemas)
+}
+
+func objectSchema(schema, schemas *yaml.Node) (*yaml.Node, bool, error) {
+	if properties, ok := mappingValue(schema, "properties"); ok && properties.Kind == yaml.MappingNode {
+		return schema, true, nil
+	}
+
+	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
+		for _, item := range oneOf.Content {
+			itemSchema := item
+			if schemaName := schemaRefName(item); schemaName != "" {
+				var found bool
+				itemSchema, found = mappingValue(schemas, schemaName)
+				if !found {
+					return nil, false, fmt.Errorf("oneOf schema %q not found", schemaName)
+				}
+			}
+			resolved, ok, err := objectSchema(itemSchema, schemas)
+			if err != nil {
+				return nil, false, err
+			}
+			if ok {
+				return resolved, true, nil
+			}
+		}
+		return nil, false, nil
+	}
+
+	allOf, ok := mappingValue(schema, "allOf")
+	if !ok || allOf.Kind != yaml.SequenceNode {
+		return nil, false, nil
+	}
+
+	properties := &yaml.Node{Kind: yaml.MappingNode}
+	required := &yaml.Node{Kind: yaml.SequenceNode}
+	seenRequired := map[string]bool{}
+	for _, item := range allOf.Content {
+		itemSchema := item
+		if schemaName := schemaRefName(item); schemaName != "" {
+			var found bool
+			itemSchema, found = mappingValue(schemas, schemaName)
+			if !found {
+				return nil, false, fmt.Errorf("allOf schema %q not found", schemaName)
+			}
+		}
+		resolved, ok, err := objectSchema(itemSchema, schemas)
+		if err != nil {
+			return nil, false, err
+		}
+		if !ok {
+			continue
+		}
+		if itemProperties, ok := mappingValue(resolved, "properties"); ok && itemProperties.Kind == yaml.MappingNode {
+			properties.Content = append(properties.Content, itemProperties.Content...)
+		}
+		if itemRequired, ok := mappingValue(resolved, "required"); ok && itemRequired.Kind == yaml.SequenceNode {
+			for _, name := range itemRequired.Content {
+				if seenRequired[name.Value] {
+					continue
+				}
+				seenRequired[name.Value] = true
+				required.Content = append(required.Content, name)
+			}
+		}
+	}
+	if len(properties.Content) == 0 {
+		return nil, false, nil
+	}
+
+	merged := &yaml.Node{Kind: yaml.MappingNode}
+	merged.Content = append(merged.Content, &yaml.Node{Kind: yaml.ScalarNode, Value: "type"}, &yaml.Node{Kind: yaml.ScalarNode, Value: "object"})
+	merged.Content = append(merged.Content, &yaml.Node{Kind: yaml.ScalarNode, Value: "properties"}, properties)
+	if len(required.Content) > 0 {
+		merged.Content = append(merged.Content, &yaml.Node{Kind: yaml.ScalarNode, Value: "required"}, required)
+	}
+	return merged, true, nil
 }
 
 func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
@@ -619,14 +739,14 @@ func requiredSet(schema *yaml.Node) map[string]bool {
 }
 
 func schemaType(node *yaml.Node) string {
-	if ref := schemaRefName(node); ref != "" {
-		return exportName(ref)
-	}
 	typ := scalarValue(node, "type")
 	switch typ {
 	case "string", "boolean", "integer", "number", "array", "object":
 		return typ
 	default:
+		if ref, ok := mappingValue(node, "$ref"); ok && ref.Kind == yaml.ScalarNode {
+			return exportName(strings.TrimPrefix(ref.Value, "#/components/schemas/"))
+		}
 		return "string"
 	}
 }

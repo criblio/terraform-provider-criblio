@@ -113,6 +113,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"exampleUsage":                     exampleUsage,
 		"importBlock":                      importBlock,
 		"importCommand":                    importCommand,
+		"importPassthroughAttribute":       importPassthroughAttribute,
 		"docSchema":                        docSchema,
 		"joinDocFields":                    joinDocFields,
 		"needsFmt":                         needsFmt,
@@ -850,6 +851,14 @@ func importSentinelFields(resource parser.ResourceDef) []parser.FieldDef {
 
 func jsonImport(resource parser.ResourceDef) bool {
 	return len(pathParamFields(resource)) > 1
+}
+
+func importPassthroughAttribute(resource parser.ResourceDef) string {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fields[0].TerraformName
+	}
+	return "id"
 }
 
 func generatedExample(resource parser.ResourceDef) string {

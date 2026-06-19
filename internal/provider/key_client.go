@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type KeyAPI struct {
@@ -18,7 +19,9 @@ func newKeyAPI(client *restclient.Client) KeyAPI {
 }
 
 func (a KeyAPI) Create(ctx context.Context, model KeyModel) (*KeyModel, error) {
-	return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(model.ID.ValueString())), model)
+	id := model.ID.ValueString()
+	model.ID = types.StringNull()
+	return restclient.Post[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 }
 
 func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
@@ -36,6 +39,7 @@ func (a KeyAPI) Read(ctx context.Context, model KeyModel) (*KeyModel, error) {
 }
 
 func (a KeyAPI) Update(ctx context.Context, model KeyModel) (*KeyModel, error) {
+	model.ID = types.StringValue(keyAPIID(model))
 	return restclient.Patch[KeyModel, KeyModel](ctx, a.client, fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), keyAPIID(model)), model)
 }
 

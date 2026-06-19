@@ -152,6 +152,92 @@ func TestParseKeyQueryID(t *testing.T) {
 	}
 }
 
+func TestParseNestedRefsAndObjectOneOf(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.0.0
+info:
+  title: test
+  version: test
+paths:
+  /m/{groupId}/settings:
+    patch:
+      x-terraform-resource: true
+      x-terraform-resource-name: GroupSystemSettings
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Settings"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+components:
+  schemas:
+    Settings:
+      type: object
+      required: [api, backups]
+      properties:
+        api:
+          $ref: "#/components/schemas/API"
+        backups:
+          $ref: "#/components/schemas/Backups"
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Package"
+    API:
+      type: object
+      properties:
+        host:
+          type: string
+    Backups:
+      oneOf:
+        - type: object
+          properties:
+            directory:
+              type: string
+        - type: object
+          properties: {}
+    Package:
+      allOf:
+        - type: object
+          properties:
+            url:
+              type: string
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	settings := resourceByName(t, resources, "GroupSystemSettings")
+	api := fieldByTFName(t, settings.Fields, "api")
+	if api.Type != "object" || api.NestedModelName != "GroupSystemSettingsAPIFieldModel" {
+		t.Fatalf("api type/nested = %q/%q", api.Type, api.NestedModelName)
+	}
+	if fieldByTFName(t, api.Fields, "host").Type != "string" {
+		t.Fatalf("api.host should be string")
+	}
+
+	backups := fieldByTFName(t, settings.Fields, "backups")
+	if backups.Type != "object" || fieldByTFName(t, backups.Fields, "directory").Type != "string" {
+		t.Fatalf("backups should resolve oneOf object fields")
+	}
+
+	packages := fieldByTFName(t, settings.Fields, "packages")
+	if packages.Type != "array" || packages.ElementType != "object" || fieldByTFName(t, packages.Fields, "url").Type != "string" {
+		t.Fatalf("packages should resolve array item allOf object fields")
+	}
+}
+
 func resourceByName(t *testing.T, resources []ResourceDef, name string) ResourceDef {
 	t.Helper()
 	for _, resource := range resources {
