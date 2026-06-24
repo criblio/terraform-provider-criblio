@@ -1,3 +1,4 @@
 data "criblio_search_macro" "my_searchmacro" {
-  id = "macro-errors"
+  group_id = "default_search"
+  id       = "error_filter"
 }

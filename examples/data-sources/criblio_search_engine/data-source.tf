@@ -1,3 +1,4 @@
 data "criblio_search_engine" "my_searchengine" {
-  id = "local_ingest_primary"
+  group_id = "default_search"
+  id       = "local_ingest_primary"
 }
