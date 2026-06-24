@@ -44,6 +44,7 @@ func (d *WorkspacesDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Required:    true,
 				Description: `The <code>id</code> of the Organization that contains the Workspaces.`,
 			},
+
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{

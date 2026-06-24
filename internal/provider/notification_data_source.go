@@ -36,37 +36,76 @@ func (d *NotificationDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "Notification Data Source",
 		Attributes: map[string]schema.Attribute{
 			"condition": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The condition that triggers the Notification.`,
 			},
 			"conf": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Configuration for the condition that triggers the Notification. Supported fields vary depending on the condition.`,
+				Attributes: map[string]schema.Attribute{
+					"saved_query_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `ID of the saved query this notification is associated with.`,
+					},
+					"message": schema.StringAttribute{
+						Computed:    true,
+						Description: `Message template for the notification.`,
+					},
+					"trigger_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Type of trigger.`,
+					},
+					"trigger_comparator": schema.StringAttribute{
+						Computed:    true,
+						Description: `Comparison operator.`,
+					},
+					"trigger_count": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Threshold count for the trigger.`,
+					},
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Input or source ID for Stream notifications.`,
+					},
+					"time_window": schema.StringAttribute{
+						Computed:    true,
+						Description: `Time window for the metric.`,
+					},
+					"data_volume": schema.StringAttribute{
+						Computed:    true,
+						Description: `Data volume threshold.`,
+					},
+					"notify_on_resolution": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Notify when the condition returns to the resolved state.`,
+					},
+					"usage_threshold": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Persistent queue usage threshold.`,
+					},
+					"__worker_group": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional scope to a specific worker group.`,
+					},
+				},
 			},
 			"disabled": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If true, the Notification is disabled and the specified condition will not trigger it.`,
 			},
 			"group": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The worker group/fleet this notification belongs to`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the Notification.`,
 			},
 			"metadata": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Fields to add to events from this input`,
 				NestedObject: schema.NestedAttributeObject{
@@ -82,17 +121,14 @@ func (d *NotificationDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"mode": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Notification mode: direct or policy-based`,
 			},
 			"pack": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The pack this notification belongs to`,
 			},
 			"target_configs": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Override settings to apply for each referenced Notification target.`,
 				NestedObject: schema.NestedAttributeObject{
@@ -104,13 +140,11 @@ func (d *NotificationDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"targets": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `List of the IDs for the Notification targets to send the Notification to.`,
 				ElementType: types.StringType,
 			},
 			"template_target_pairs": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Pairs of templates and targets for notification routing`,
 				NestedObject: schema.NestedAttributeObject{

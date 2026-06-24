@@ -36,37 +36,29 @@ func (d *HmacFunctionDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "HmacFunction Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"header_expression": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"header_name": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"string_builders": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				ElementType: types.StringType,
 			},
 			"string_delim": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

@@ -112,48 +112,51 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":                        goType,
-		"schemaAttribute":               schemaAttribute,
-		"schemaTypeName":                schemaTypeName,
-		"schemaSections":                schemaSections,
-		"zeroValue":                     zeroValue,
-		"pathExpr":                      pathExpr,
-		"jsonName":                      jsonName,
-		"apiType":                       apiType,
-		"legacyGoType":                  legacyGoType,
-		"resourceType":                  resourceType,
-		"typeNameSuffix":                typeNameSuffix,
-		"exampleUsage":                  exampleUsage,
-		"importBlock":                   importBlock,
-		"importCommand":                 importCommand,
-		"importPassthroughAttribute":    importPassthroughAttribute,
-		"docSchema":                     docSchema,
-		"joinDocFields":                 joinDocFields,
-		"needsFmt":                      needsFmt,
-		"needsClientFmt":                needsClientFmt,
-		"needsAttr":                     needsAttr,
-		"needsNestedObject":             needsNestedObject,
-		"needsPlanModifier":             needsPlanModifier,
-		"needsFrameworkPlanModifier":    needsFrameworkPlanModifier,
-		"needsCustomPlanModifier":       needsCustomPlanModifier,
-		"planModifierType":              planModifierType,
-		"planModifierCalls":             planModifierCalls,
-		"nestedObjectPlanModifierCalls": nestedObjectPlanModifierCalls,
-		"schemaAttributes":              schemaAttributes,
-		"importSentinelFields":          importSentinelFields,
-		"pathParamFields":               pathParamFields,
-		"jsonImport":                    jsonImport,
-		"nestedObjectList":              nestedObjectList,
-		"nestedObject":                  nestedObject,
-		"nestedObjectFields":            nestedObjectFields,
-		"attrType":                      attrType,
-		"restWriteCall":                 restWriteCall,
-		"resourceHasQueryParams":        resourceHasQueryParams,
-		"listHasQueryParams":            listHasQueryParams,
-		"listConfigFields":              listConfigFields,
-		"listItemFields":                listItemFields,
-		"listTypeNameSuffix":            listTypeNameSuffix,
-		"listItemObjectValue":           listItemObjectValue,
+		"goType":                         goType,
+		"schemaAttribute":                schemaAttribute,
+		"schemaTypeName":                 schemaTypeName,
+		"schemaSections":                 schemaSections,
+		"zeroValue":                      zeroValue,
+		"pathExpr":                       pathExpr,
+		"jsonName":                       jsonName,
+		"apiType":                        apiType,
+		"legacyGoType":                   legacyGoType,
+		"resourceType":                   resourceType,
+		"typeNameSuffix":                 typeNameSuffix,
+		"exampleUsage":                   exampleUsage,
+		"importBlock":                    importBlock,
+		"importCommand":                  importCommand,
+		"importPassthroughAttribute":     importPassthroughAttribute,
+		"docSchema":                      docSchema,
+		"joinDocFields":                  joinDocFields,
+		"needsFmt":                       needsFmt,
+		"needsClientFmt":                 needsClientFmt,
+		"needsAttr":                      needsAttr,
+		"needsNestedObject":              needsNestedObject,
+		"needsPlanModifier":              needsPlanModifier,
+		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
+		"needsCustomPlanModifier":        needsCustomPlanModifier,
+		"planModifierType":               planModifierType,
+		"planModifierCalls":              planModifierCalls,
+		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
+		"schemaAttributes":               schemaAttributes,
+		"dataSourceAttributes":           dataSourceAttributes,
+		"listDataSourceConfigAttributes": listDataSourceConfigAttributes,
+		"listDataSourceItemAttributes":   listDataSourceItemAttributes,
+		"importSentinelFields":           importSentinelFields,
+		"pathParamFields":                pathParamFields,
+		"jsonImport":                     jsonImport,
+		"nestedObjectList":               nestedObjectList,
+		"nestedObject":                   nestedObject,
+		"nestedObjectFields":             nestedObjectFields,
+		"attrType":                       attrType,
+		"restWriteCall":                  restWriteCall,
+		"resourceHasQueryParams":         resourceHasQueryParams,
+		"listHasQueryParams":             listHasQueryParams,
+		"listConfigFields":               listConfigFields,
+		"listItemFields":                 listItemFields,
+		"listTypeNameSuffix":             listTypeNameSuffix,
+		"listItemObjectValue":            listItemObjectValue,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -416,6 +419,30 @@ func schemaAttributes(fields []parser.FieldDef, indent string) string {
 	return output.String()
 }
 
+func dataSourceAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, field.PathParam, !field.PathParam)
+	}
+	return output.String()
+}
+
+func listDataSourceConfigAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, true, false)
+	}
+	return output.String()
+}
+
+func listDataSourceItemAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, false, true)
+	}
+	return output.String()
+}
+
 func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent string) {
 	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
 	fmt.Fprintf(output, "%s\tRequired: %t,\n", indent, field.Required)
@@ -453,6 +480,39 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	} else if nestedObject(field) {
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if field.Type == "array" || field.Type == "object" {
+		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
+	}
+	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, indent string, required, computed bool) {
+	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
+	if required {
+		fmt.Fprintf(output, "%s\tRequired: true,\n", indent)
+	}
+	if computed {
+		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+	}
+	if field.Sensitive {
+		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
+	}
+	if field.Description != "" {
+		fmt.Fprintf(output, "%s\tDescription: `%s`,\n", indent, field.Description)
+	}
+	if field.CustomType == "jsontypes.NormalizedType{}" {
+		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
+	}
+	if nestedObjectList(field) {
+		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
+		fmt.Fprintf(output, "%s\t\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t\t"))
+		fmt.Fprintf(output, "%s\t\t},\n", indent)
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if nestedObject(field) {
+		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	} else if field.Type == "array" || field.Type == "object" {
 		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)

@@ -36,7 +36,6 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "SearchSource Data Source",
 		Attributes: map[string]schema.Attribute{
 			"auth_tokens": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Optional bearer or shared tokens accepted by this source.`,
 				NestedObject: schema.NestedAttributeObject{
@@ -57,42 +56,34 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"cribl_api": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Absolute path for Cribl HTTP API requests. Used when type is cribl_http.`,
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Optional description shown in configuration UIs.`,
 			},
 			"disabled": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `When true, the source does not accept new connections.`,
 			},
 			"elastic_api": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Absolute path for Elasticsearch bulk API requests. Used when type is elastic.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"host": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Bind address for the listener.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Source configuration id.`,
 			},
 			"metadata": schema.ListNestedAttribute{
-				Required: false,
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -106,27 +97,22 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"port": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `TCP port when the source type uses a single port field.`,
 			},
 			"prometheus_api": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Absolute path for Prometheus remote write requests. Used when type is prometheus_rw.`,
 			},
 			"splunk_hec_acks": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `When true, enable Splunk HEC acknowledgements. Used when type is splunk_hec.`,
 			},
 			"splunk_hec_api": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Absolute path for Splunk HTTP Event Collector (HEC) API requests. Required when type is splunk_hec.`,
 			},
 			"subscriptions": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `WEF subscriptions; required when type is wef.`,
 				NestedObject: schema.NestedAttributeObject{
@@ -154,6 +140,7 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						"targets": schema.ListAttribute{
 							Computed:    true,
 							Description: `DNS names of endpoints that forward these events.`,
+							ElementType: types.StringType,
 						},
 						"id": schema.StringAttribute{
 							Computed: true,
@@ -165,6 +152,16 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 						"queries": schema.ListNestedAttribute{
 							Computed:    true,
 							Description: `Path and XPath selector entries when using simple mode.`,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"path": schema.StringAttribute{
+										Computed: true,
+									},
+									"query_expression": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
 						},
 						"xml_query": schema.StringAttribute{
 							Computed:    true,
@@ -174,22 +171,36 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				},
 			},
 			"tcp_port": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `TCP listen port when the source type uses a dedicated TCP port.`,
 			},
 			"tls": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `TLS material and policy for this listener (shape varies by source type).`,
+				Attributes: map[string]schema.Attribute{
+					"cert_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Filesystem or cloud path to the certificate PEM.`,
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `When true, TLS is not terminated on this listener.`,
+					},
+					"min_version": schema.StringAttribute{
+						Computed:    true,
+						Description: `Minimum TLS protocol version.`,
+					},
+					"priv_key_path": schema.StringAttribute{
+						Computed:    true,
+						Description: `Filesystem or cloud path to the private key PEM.`,
+					},
+				},
 			},
 			"type": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Protocol discriminator selecting the ingest source protocol and listener shape.`,
 			},
 			"udp_port": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `UDP listen port when applicable.`,
 			},

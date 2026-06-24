@@ -36,33 +36,48 @@ func (d *SubscriptionDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "Subscription Data Source",
 		Attributes: map[string]schema.Attribute{
 			"consumer": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Consumers are now defined on projects instead of subscriptions.`,
+				Attributes: map[string]schema.Attribute{
+					"connections": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"output": schema.StringAttribute{
+									Computed: true,
+								},
+								"pipeline": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"disabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `It should be removed as a consumer is present or absent.`,
+					},
+					"type": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"disabled": schema.BoolAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"filter": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"pipeline": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

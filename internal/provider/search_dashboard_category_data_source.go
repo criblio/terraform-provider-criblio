@@ -36,27 +36,22 @@ func (d *SearchDashboardCategoryDataSource) Schema(_ context.Context, _ datasour
 		MarkdownDescription: "SearchDashboardCategory Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Brief description of the Dashboard Collection.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the Dashboard Collection.`,
 			},
 			"is_pack": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, the Collection represents a Pack that contains Dashboards rather than a user-created Collection.`,
 			},
 			"name": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Display name for the Dashboard Collection.`,
 			},

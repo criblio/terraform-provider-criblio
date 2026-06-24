@@ -36,7 +36,6 @@ func (d *GlobalVarDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 		MarkdownDescription: "GlobalVar Data Source",
 		Attributes: map[string]schema.Attribute{
 			"args": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Argument definitions for expression-type variables. Each item has type and name (e.g. for (val / 1073741824).toFixed(precision || 5)).`,
 				NestedObject: schema.NestedAttributeObject{
@@ -53,33 +52,26 @@ func (d *GlobalVarDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 				},
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Global variable name`,
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"type": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"value": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

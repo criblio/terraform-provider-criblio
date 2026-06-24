@@ -36,44 +36,36 @@ func (d *WorkspaceDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 		MarkdownDescription: "Workspace Data Source",
 		Attributes: map[string]schema.Attribute{
 			"alias": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `User-friendly alias for the workspace`,
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Detailed description of the workspace`,
 			},
 			"leader_fqdn": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Fully Qualified Domain Name of the workspace leader`,
 			},
 			"organization_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `The <code>id</code> of the Organization where you want to create the Workspace.`,
 			},
 			"region": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `AWS region where the workspace is deployed`,
 			},
 			"state": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Current state of the workspace`,
 			},
 			"tags": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Tags associated with the workspace`,
 				ElementType: types.StringType,
 			},
 			"workspace_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the workspace`,
 			},
 		},

@@ -165,6 +165,14 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetResource, `"id": schema.StringAttribute{`)
 	assertContains(t, mappingRulesetResource, "Optional: true,")
 
+	mappingRulesetDataSource := renderTemplate(t, "data_source", mappingRuleset)
+	assertContains(t, mappingRulesetDataSource, `"conf": schema.SingleNestedAttribute{`)
+	assertContains(t, mappingRulesetDataSource, `"labels": schema.ListAttribute{`)
+	assertContains(t, mappingRulesetDataSource, "ElementType: types.StringType,")
+	assertContains(t, mappingRulesetDataSource, `"add": schema.ListNestedAttribute{`)
+	assertContains(t, mappingRulesetDataSource, `"name": schema.StringAttribute{`)
+	assertContains(t, mappingRulesetDataSource, `"value": schema.StringAttribute{`)
+
 	mappingRulesetTypes := renderTemplate(t, "types", mappingRuleset)
 	assertContains(t, mappingRulesetTypes, "func mappingRulesetID(model MappingRulesetModel) string")
 	assertContains(t, mappingRulesetTypes, `return "default"`)

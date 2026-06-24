@@ -36,64 +36,52 @@ func (d *SecretDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 		MarkdownDescription: "Secret Data Source",
 		Attributes: map[string]schema.Attribute{
 			"api_key": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Sensitive:   true,
 				Description: `API key or access key. Required when <code>secretType</code> is <code>keypair</code>.`,
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Brief description of the secret.`,
 			},
 			"folder_id": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Folder ID for a shared global secret. Present only when the row originates from a global secret folder.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the secret.`,
 			},
 			"password": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Sensitive:   true,
 				Description: `Password. Required when <code>secretType</code> is <code>credentials</code>.`,
 			},
 			"read_only": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, the secret is read-only because it is defined in global scope.`,
 			},
 			"secret_key": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Sensitive:   true,
 				Description: `Secret key. Required when <code>secretType</code> is <code>keypair</code>.`,
 			},
 			"secret_type": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Tags for categorizing or organizing the secret.`,
 			},
 			"username": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Username. Required when <code>secretType</code> is <code>credentials</code>.`,
 			},
 			"value": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Sensitive:   true,
 				Description: `Secret value. Required when <code>secretType</code> is <code>text</code>.`,

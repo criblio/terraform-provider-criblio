@@ -36,76 +36,61 @@ func (d *SearchEngineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 		MarkdownDescription: "SearchEngine Data Source",
 		Attributes: map[string]schema.Attribute{
 			"active_workflow": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The provisioning workflow that is currently active for the lakehouse engine, if any.`,
 			},
 			"datasets": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The <code>id</code> values for Datasets that are linked to the lakehouse engine.`,
 				ElementType: types.StringType,
 			},
 			"deletion_started_at": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when deletion was initiated for the lakehouse engine (if applicable), in milliseconds.`,
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Brief description of the lakehouse engine.`,
 			},
 			"effective_status": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Operational status of the lakehouse engine, accounting for both the engine and its underlying Worker Group. If the engine is ready but the Worker Group is not, reflects the Worker Group status. If the engine is not ready, reflects the engine status regardless of the Worker Group status.`,
 			},
 			"engine_type": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Type of engine. For lakehouse engines, always <code>local</code>.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"has_main": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, the lakehouse engine currently owns the main Dataset.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"is_compute_deprovisioned": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, compute for the lakehouse engine has been deprovisioned after termination.`,
 			},
 			"is_storage_deprovisioned": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned up after termination.`,
 			},
 			"last_provisioned_ms": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.`,
 			},
 			"metrics_last_published_at": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.`,
 			},
 			"status": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"tier_size": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse engine. Configuring sizes <code>3xlarge</code>, <code>4xlarge</code>,<code>5xlarge</code>, and <code>6xlarge</code> requires the <code>cribl_operator</code> role.`,
 			},

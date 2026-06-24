@@ -36,23 +36,75 @@ func (d *MappingRulesetDataSource) Schema(_ context.Context, _ datasource.Schema
 		MarkdownDescription: "MappingRuleset Data Source",
 		Attributes: map[string]schema.Attribute{
 			"active": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, the Mapping Ruleset is active. Otherwise, <code>false</code>.`,
 			},
 			"conf": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Configuration for the Mapping Ruleset.`,
+				Attributes: map[string]schema.Attribute{
+					"functions": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `List of functions to pass data through.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Function type. Always <code>eval</code> for Mapping Rules.`,
+								},
+								"filter": schema.StringAttribute{
+									Computed:    true,
+									Description: `Boolean filter expression used to determine whether the Mapping Rule applies. Evaluated against the Worker or Edge Node context.`,
+								},
+								"disabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `If <code>true</code>, the function is disabled. Otherwise, <code>false</code>.`,
+								},
+								"final": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Always <code>true</code> to ensure that every Mapping Rule is final. Once a Mapping Rule matches (its <code>filter</code> evaluates to <code>true</code>), no further Mapping Rules are evaluated for the Worker or Edge Node. This prevents multiple group assignments.`,
+								},
+								"description": schema.StringAttribute{
+									Computed:    true,
+									Description: `Brief description of the function.`,
+								},
+								"conf": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Configuration for the Mapping Rule function.`,
+									Attributes: map[string]schema.Attribute{
+										"add": schema.ListNestedAttribute{
+											Computed:    true,
+											Description: `The group assignment action for the Mapping Rule.`,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"name": schema.StringAttribute{
+														Computed:    true,
+														Description: `Always <code>groupId</code> to specify the assignment type.`,
+													},
+													"value": schema.StringAttribute{
+														Computed:    true,
+														Description: `The <code>id</code> of the group to assign the Worker or Edge Node to if the Mapping Rule applies.`,
+													},
+												},
+											},
+										},
+									},
+								},
+								"group_id": schema.StringAttribute{
+									Computed:    true,
+									Description: `The Worker Group to map matching events to.`,
+								},
+							},
+						},
+					},
+				},
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the Mapping Ruleset.`,
 			},
 			"product": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `The name of the Cribl product that contains the Mapping Ruleset.`,
 			},
 		},

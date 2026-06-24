@@ -994,52 +994,7 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-{{- if nestedObjectList . }}
-			"{{ .TerraformName }}": schema.ListNestedAttribute{
-				Required: {{ .PathParam }},
-				Computed: {{ not .PathParam }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-						"{{ .TerraformName }}": {{ schemaAttribute . }}{
-							Computed: true,
-{{- if .Description }}
-							Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-						},
-{{- end }}
-					},
-				},
-			},
-{{- else }}
-			"{{ .TerraformName }}": {{ schemaAttribute . }}{
-				Required: {{ .PathParam }},
-				Computed: {{ not .PathParam }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .CustomType "jsontypes.NormalizedType{}" }}
-				CustomType: jsontypes.NormalizedType{},
-{{- end }}
-{{- if eq .Type "array" }}
-				ElementType: types.StringType,
-{{- end }}
-{{- if and (eq .Type "object") (not (nestedObject .)) }}
-				ElementType: types.StringType,
-{{- end }}
-			},
-{{- end }}
-{{- end }}
+{{ dataSourceAttributes .Fields "\t\t\t" }}
 		},
 	}
 }
@@ -1127,38 +1082,12 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "{{ .ListStructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
-{{- range listConfigFields . }}
-			"{{ .TerraformName }}": {{ schemaAttribute . }}{
-				Required: true,
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .Type "array" }}
-				ElementType: types.StringType,
-{{- end }}
-{{- if and (eq .Type "object") (not (nestedObject .)) }}
-				ElementType: types.StringType,
-{{- end }}
-			},
-{{- end }}
+{{ listDataSourceConfigAttributes (listConfigFields .) "\t\t\t" }}
 			"items": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-{{- range listItemFields . }}
-						"{{ .TerraformName }}": {{ schemaAttribute . }}{
-							Computed: true,
-{{- if .Description }}
-							Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .Type "array" }}
-							ElementType: types.StringType,
-{{- end }}
-{{- if and (eq .Type "object") (not (nestedObject .)) }}
-							ElementType: types.StringType,
-{{- end }}
-						},
-{{- end }}
+{{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
 					},
 				},
 			},

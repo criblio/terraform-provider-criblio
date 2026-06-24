@@ -36,98 +36,521 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 		MarkdownDescription: "SearchSavedQuery Data Source",
 		Attributes: map[string]schema.Attribute{
 			"chart_config": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Chart configuration for scheduled or Dashboard-backed runs.`,
+				Attributes: map[string]schema.Attribute{
+					"apply_threshold": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, apply color thresholds to the chart values.`,
+					},
+					"axis": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"x_axis": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for the X-axis.`,
+							},
+							"y_axis": schema.ListAttribute{
+								Computed:    true,
+								Description: `Field names for the Y-axis.`,
+								ElementType: types.StringType,
+							},
+							"y_axis_excluded": schema.ListAttribute{
+								Computed:    true,
+								Description: `Field names excluded from the Y-axis.`,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"color": schema.StringAttribute{
+						Computed:    true,
+						Description: `CSS color value for single-value counters.`,
+					},
+					"color_palette": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Index of the color palette to apply to the chart.`,
+					},
+					"color_palette_reversed": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, reverse the color palette order.`,
+					},
+					"color_thresholds": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"thresholds": schema.ListNestedAttribute{
+								Computed:    true,
+								Description: `Ordered list of threshold breakpoints with associated colors.`,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"color": schema.StringAttribute{
+											Computed:    true,
+											Description: `CSS color applied when the value meets or exceeds the <code>threshold</code>.`,
+										},
+										"threshold": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Numeric threshold value.`,
+										},
+									},
+								},
+							},
+						},
+					},
+					"custom_data": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"connect_nulls": schema.StringAttribute{
+								Computed:    true,
+								Description: `Strategy for connecting null data points.`,
+							},
+							"data_fields": schema.ListAttribute{
+								Computed:    true,
+								Description: `Specific data fields to include.`,
+								ElementType: types.StringType,
+							},
+							"is_point_color": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, apply color encoding to data points.`,
+							},
+							"limit_to_top_n": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Limit the display to the top N series by value.`,
+							},
+							"lines": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, render connecting lines between data points.`,
+							},
+							"name_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name used for data point labels.`,
+							},
+							"point_color_palette": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Index of the color palette used for point coloring.`,
+							},
+							"point_color_palette_reversed": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, reverse the point color palette order.`,
+							},
+							"point_scale": schema.StringAttribute{
+								Computed:    true,
+								Description: `Scale factor for scatter plot points.`,
+							},
+							"point_scale_data_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name whose values determine point size.`,
+							},
+							"series_count": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Maximum number of series to display.`,
+							},
+							"split_by": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name to split series by.`,
+							},
+							"stack": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, stack series on top of each other.`,
+							},
+							"summarize_others": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, aggregate remaining series into an 'Others' bucket.`,
+							},
+							"trellis": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, render each series in its own small-multiples panel.`,
+							},
+						},
+					},
+					"decimals": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Number of decimal places for numeric display.`,
+					},
+					"label": schema.StringAttribute{
+						Computed:    true,
+						Description: `Display label for single-value counters.`,
+					},
+					"legend": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"position": schema.StringAttribute{
+								Computed:    true,
+								Description: `Legend position.`,
+							},
+							"selected": schema.MapAttribute{
+								Computed:    true,
+								Description: `Map of series names to their visibility state in the legend.`,
+								ElementType: types.StringType,
+							},
+							"truncate": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, truncate long legend labels.`,
+							},
+						},
+					},
+					"map_details": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"latitude_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for latitude values.`,
+							},
+							"longitude_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for longitude values.`,
+							},
+							"map_source_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `Identifier of the map source.`,
+							},
+							"map_type": schema.StringAttribute{
+								Computed:    true,
+								Description: `Map projection type.`,
+							},
+							"name_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for region names on the map.`,
+							},
+							"point_scale": schema.StringAttribute{
+								Computed:    true,
+								Description: `Scale factor for map data points.`,
+							},
+							"value_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for the data value driving map coloring or sizing.`,
+							},
+						},
+					},
+					"on_click_action": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Action to perform when a user clicks on the chart.`,
+						Attributes: map[string]schema.Attribute{
+							"search": schema.StringAttribute{
+								Computed:    true,
+								Description: `Search query string to execute on click.`,
+							},
+							"selected_dashboard_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `The <code>id</code> of the target Dashboard for drilldown navigation.`,
+							},
+							"selected_input_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `The <code>id</code> of the Input element whose value is passed to the target Dashboard.`,
+							},
+							"selected_link_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `The <code>id</code> of the link element for external URL navigation.`,
+							},
+							"selected_timerange_input_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `The <code>id</code> of the time range Input element whose value is passed to the target Dashboard.`,
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Description: `Action type.`,
+							},
+						},
+					},
+					"prefix": schema.StringAttribute{
+						Computed:    true,
+						Description: `String prepended to the displayed value.`,
+					},
+					"separator": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, apply thousands separators to numeric values.`,
+					},
+					"series": schema.ListNestedAttribute{
+						Computed:    true,
+						Description: `Explicit series definitions with individual styling.`,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"area_style": schema.SingleNestedAttribute{
+									Computed:    true,
+									Description: `Area fill style options for area charts.`,
+									Attributes: map[string]schema.Attribute{
+										"color": schema.MapAttribute{
+											Computed:    true,
+											Description: `Fill color for the area.`,
+											ElementType: types.StringType,
+										},
+										"opacity": schema.Float64Attribute{
+											Computed:    true,
+											Description: `Opacity of the area fill, from 0 (transparent) to 1 (opaque).`,
+										},
+										"shadow_blur": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Blur radius of the shadow in pixels.`,
+										},
+										"shadow_color": schema.StringAttribute{
+											Computed:    true,
+											Description: `CSS color of the shadow.`,
+										},
+										"shadow_offset_x": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Horizontal offset of the shadow in pixels.`,
+										},
+										"shadow_offset_y": schema.Int64Attribute{
+											Computed:    true,
+											Description: `Vertical offset of the shadow in pixels.`,
+										},
+									},
+								},
+								"color": schema.StringAttribute{
+									Computed:    true,
+									Description: `CSS color value for the series.`,
+								},
+								"data": schema.StringAttribute{
+									Computed:    true,
+									Description: `Array of data points for the series.`,
+								},
+								"map": schema.StringAttribute{
+									Computed:    true,
+									Description: `Map identifier for geo-chart series.`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name of the data series, displayed in legends and tooltips.`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `Chart type override for the individual series.`,
+								},
+								"y_axis_field": schema.StringAttribute{
+									Computed:    true,
+									Description: `Field name from the data to use for the Y-axis values.`,
+								},
+							},
+						},
+					},
+					"series_info": schema.MapAttribute{
+						Computed:    true,
+						Description: `Map of series names to display overrides (name, color, type, area style).`,
+						ElementType: types.StringType,
+					},
+					"should_apply_user_chart_settings": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, apply user-level chart display preferences.`,
+					},
+					"style": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, apply custom styling to the chart.`,
+					},
+					"suffix": schema.StringAttribute{
+						Computed:    true,
+						Description: `String appended to the displayed value.`,
+					},
+					"type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Default chart type for all series.`,
+					},
+					"x_axis": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"data_field": schema.StringAttribute{
+								Computed:    true,
+								Description: `Field name for the X-axis data.`,
+							},
+							"format": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"format": schema.StringAttribute{
+										Computed:    true,
+										Description: `Numeric format token. Unknown tokens are rendered as-is.`,
+									},
+									"prefix": schema.StringAttribute{
+										Computed:    true,
+										Description: `String prepended to the formatted numeric value.`,
+									},
+									"suffix": schema.StringAttribute{
+										Computed:    true,
+										Description: `String appended to the formatted numeric value.`,
+									},
+								},
+							},
+							"inverse": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, reverse the axis direction.`,
+							},
+							"label_interval": schema.StringAttribute{
+								Computed:    true,
+								Description: `Interval strategy for axis label spacing.`,
+							},
+							"label_orientation": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Label rotation angle in degrees.`,
+							},
+							"name": schema.StringAttribute{
+								Computed:    true,
+								Description: `Display name for the axis.`,
+							},
+							"offset": schema.Int64Attribute{
+								Computed:    true,
+								Description: `Pixel offset of the axis from its default position.`,
+							},
+							"position": schema.StringAttribute{
+								Computed:    true,
+								Description: `Axis position.`,
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Description: `Axis type.`,
+							},
+						},
+					},
+					"y_axis": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"data_field": schema.ListAttribute{
+								Computed:    true,
+								Description: `Field names for the Y-axis data.`,
+								ElementType: types.StringType,
+							},
+							"format": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"format": schema.StringAttribute{
+										Computed:    true,
+										Description: `Numeric format token. Unknown tokens are rendered as-is.`,
+									},
+									"prefix": schema.StringAttribute{
+										Computed:    true,
+										Description: `String prepended to the formatted numeric value.`,
+									},
+									"suffix": schema.StringAttribute{
+										Computed:    true,
+										Description: `String appended to the formatted numeric value.`,
+									},
+								},
+							},
+							"interval": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Fixed interval between axis tick marks.`,
+							},
+							"max": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Maximum value for the axis range.`,
+							},
+							"min": schema.Float64Attribute{
+								Computed:    true,
+								Description: `Minimum value for the axis range.`,
+							},
+							"position": schema.StringAttribute{
+								Computed:    true,
+								Description: `Axis position.`,
+							},
+							"scale": schema.StringAttribute{
+								Computed:    true,
+								Description: `Scale type.`,
+							},
+							"split_line": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, show horizontal grid lines.`,
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Description: `Axis type.`,
+							},
+						},
+					},
+				},
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Brief description of the saved search.`,
 			},
 			"display_username": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Display name for the user who created the saved search.`,
 			},
 			"earliest": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Start of the search time range. Accepts a relative time string or an absolute timestamp.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the saved search.`,
 			},
 			"is_private": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `If <code>true</code>, job results are restricted to the owner.`,
 			},
 			"is_system": schema.BoolAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"latest": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `End of the search time range. Accepts a relative time string or an absolute timestamp.`,
 			},
 			"lib": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Library scope for the saved search. Indicates whether the definition is built-in or custom.`,
 			},
 			"name": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Display name for the saved search.`,
 			},
 			"query": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Query text for the saved search.`,
 			},
 			"resolved_dataset_ids": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Dataset identifiers that are resolved from the query for role-based access control (RBAC) and scheduling.`,
 				ElementType: types.StringType,
 			},
 			"sample_rate": schema.Float64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Sampling rate that is applied to events, between 0 and 1.`,
 			},
 			"schedule": schema.SingleNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Cron schedule and Notification settings for the saved search when it runs on a schedule.`,
+				Attributes: map[string]schema.Attribute{
+					"cron_schedule": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unix cron expression (5 fields) that defines when the scheduled queries run.`,
+					},
+					"enabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If <code>true</code>, the schedule is active and the Dashboard queries run automatically at the specified <code>cronSchedule</code>.`,
+					},
+					"keep_last_n": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Minimum number of past execution artifacts to retain. Older artifacts are purged periodically. Default is <code>2</code>.`,
+					},
+					"notifications": schema.SingleNestedAttribute{
+						Computed:    true,
+						Description: `Notification settings for scheduled query executions.`,
+						Attributes: map[string]schema.Attribute{
+							"disabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `If <code>true</code>, Notifications for the scheduled query are disabled. Default is <code>false</code> (Notifications enabled).`,
+							},
+						},
+					},
+					"tz": schema.StringAttribute{
+						Computed:    true,
+						Description: `IANA timezone identifier for the cron schedule.`,
+					},
+				},
 			},
 			"search_job_source": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Source context that created the job.`,
 			},
 			"table_config": schema.MapAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Table layout configuration.`,
 				ElementType: types.StringType,
 			},
 			"timezone": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `IANA timezone for scheduled execution.`,
 			},
 			"user": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Identifier for the user who created the saved search. Scheduled runs execute as the specified user.`,
 			},

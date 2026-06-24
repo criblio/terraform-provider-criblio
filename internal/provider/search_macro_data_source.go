@@ -36,42 +36,34 @@ func (d *SearchMacroDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 		MarkdownDescription: "SearchMacro Data Source",
 		Attributes: map[string]schema.Attribute{
 			"created": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) when the Macro was created (milliseconds).`,
 			},
 			"created_by": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Username of the user who created the Macro.`,
 			},
 			"description": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Brief description of the Macro.`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Unique identifier for the Macro.`,
 			},
 			"modified": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Timestamp (in Unix time) for when the Macro was last modified (milliseconds).`,
 			},
 			"replacement": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Query fragment that is substituted when the Macro is referenced in a search.`,
 			},
 			"tags": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Tag used to filter Macros.`,
 			},

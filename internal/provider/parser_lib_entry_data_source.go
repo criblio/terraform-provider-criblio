@@ -36,29 +36,23 @@ func (d *ParserLibEntryDataSource) Schema(_ context.Context, _ datasource.Schema
 		MarkdownDescription: "ParserLibEntry Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Optionally, add tags that you can use for filtering`,
 			},
 			"type": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

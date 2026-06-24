@@ -36,28 +36,668 @@ func (d *AppscopeConfigDataSource) Schema(_ context.Context, _ datasource.Schema
 		MarkdownDescription: "AppscopeConfig Data Source",
 		Attributes: map[string]schema.Attribute{
 			"config": schema.SingleNestedAttribute{
-				Required: false,
 				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"cribl": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"authtoken": schema.StringAttribute{
+								Computed: true,
+							},
+							"enable": schema.BoolAttribute{
+								Computed: true,
+							},
+							"transport": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"buffer": schema.StringAttribute{
+										Computed: true,
+									},
+									"host": schema.StringAttribute{
+										Computed: true,
+									},
+									"path": schema.StringAttribute{
+										Computed: true,
+									},
+									"port": schema.Float64Attribute{
+										Computed: true,
+									},
+									"tls": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cacertpath": schema.StringAttribute{
+												Computed: true,
+											},
+											"enable": schema.BoolAttribute{
+												Computed: true,
+											},
+											"validateserver": schema.BoolAttribute{
+												Computed: true,
+											},
+										},
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"use_scope_source_transport": schema.BoolAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"custom": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"ancestor": schema.StringAttribute{
+									Computed: true,
+								},
+								"arg": schema.StringAttribute{
+									Computed: true,
+								},
+								"config": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"cribl": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"authtoken": schema.StringAttribute{
+													Computed: true,
+												},
+												"enable": schema.BoolAttribute{
+													Computed: true,
+												},
+												"transport": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"buffer": schema.StringAttribute{
+															Computed: true,
+														},
+														"host": schema.StringAttribute{
+															Computed: true,
+														},
+														"path": schema.StringAttribute{
+															Computed: true,
+														},
+														"port": schema.Float64Attribute{
+															Computed: true,
+														},
+														"tls": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"cacertpath": schema.StringAttribute{
+																	Computed: true,
+																},
+																"enable": schema.BoolAttribute{
+																	Computed: true,
+																},
+																"validateserver": schema.BoolAttribute{
+																	Computed: true,
+																},
+															},
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"use_scope_source_transport": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"event": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"enable": schema.BoolAttribute{
+													Computed: true,
+												},
+												"format": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"enhancefs": schema.BoolAttribute{
+															Computed: true,
+														},
+														"maxeventpersec": schema.Float64Attribute{
+															Computed: true,
+														},
+													},
+												},
+												"transport": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"buffer": schema.StringAttribute{
+															Computed: true,
+														},
+														"host": schema.StringAttribute{
+															Computed: true,
+														},
+														"path": schema.StringAttribute{
+															Computed: true,
+														},
+														"port": schema.Float64Attribute{
+															Computed: true,
+														},
+														"tls": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"cacertpath": schema.StringAttribute{
+																	Computed: true,
+																},
+																"enable": schema.BoolAttribute{
+																	Computed: true,
+																},
+																"validateserver": schema.BoolAttribute{
+																	Computed: true,
+																},
+															},
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"type": schema.StringAttribute{
+													Computed: true,
+												},
+												"watch": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"allowbinary": schema.BoolAttribute{
+																Computed: true,
+															},
+															"enabled": schema.BoolAttribute{
+																Computed: true,
+															},
+															"field": schema.StringAttribute{
+																Computed: true,
+															},
+															"headers": schema.ListAttribute{
+																Computed:    true,
+																ElementType: types.StringType,
+															},
+															"name": schema.StringAttribute{
+																Computed: true,
+															},
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+															"value": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+											},
+										},
+										"libscope": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"commanddir": schema.StringAttribute{
+													Computed: true,
+												},
+												"configevent": schema.BoolAttribute{
+													Computed: true,
+												},
+												"log": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"level": schema.StringAttribute{
+															Computed: true,
+														},
+														"transport": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"buffer": schema.StringAttribute{
+																	Computed: true,
+																},
+																"host": schema.StringAttribute{
+																	Computed: true,
+																},
+																"path": schema.StringAttribute{
+																	Computed: true,
+																},
+																"port": schema.Float64Attribute{
+																	Computed: true,
+																},
+																"tls": schema.SingleNestedAttribute{
+																	Computed: true,
+																	Attributes: map[string]schema.Attribute{
+																		"cacertpath": schema.StringAttribute{
+																			Computed: true,
+																		},
+																		"enable": schema.BoolAttribute{
+																			Computed: true,
+																		},
+																		"validateserver": schema.BoolAttribute{
+																			Computed: true,
+																		},
+																	},
+																},
+																"type": schema.StringAttribute{
+																	Computed: true,
+																},
+															},
+														},
+													},
+												},
+												"summaryperiod": schema.Float64Attribute{
+													Computed: true,
+												},
+											},
+										},
+										"metric": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"enable": schema.BoolAttribute{
+													Computed: true,
+												},
+												"format": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"statsdmaxlen": schema.Float64Attribute{
+															Computed: true,
+														},
+														"statsdprefix": schema.StringAttribute{
+															Computed: true,
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+														"verbosity": schema.Float64Attribute{
+															Computed: true,
+														},
+													},
+												},
+												"transport": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"buffer": schema.StringAttribute{
+															Computed: true,
+														},
+														"host": schema.StringAttribute{
+															Computed: true,
+														},
+														"path": schema.StringAttribute{
+															Computed: true,
+														},
+														"port": schema.Float64Attribute{
+															Computed: true,
+														},
+														"tls": schema.SingleNestedAttribute{
+															Computed: true,
+															Attributes: map[string]schema.Attribute{
+																"cacertpath": schema.StringAttribute{
+																	Computed: true,
+																},
+																"enable": schema.BoolAttribute{
+																	Computed: true,
+																},
+																"validateserver": schema.BoolAttribute{
+																	Computed: true,
+																},
+															},
+														},
+														"type": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												"watch": schema.ListNestedAttribute{
+													Computed: true,
+													NestedObject: schema.NestedAttributeObject{
+														Attributes: map[string]schema.Attribute{
+															"type": schema.StringAttribute{
+																Computed: true,
+															},
+														},
+													},
+												},
+											},
+										},
+										"payload": schema.SingleNestedAttribute{
+											Computed: true,
+											Attributes: map[string]schema.Attribute{
+												"dir": schema.StringAttribute{
+													Computed: true,
+												},
+												"enable": schema.BoolAttribute{
+													Computed: true,
+												},
+											},
+										},
+										"protocol": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"binary": schema.BoolAttribute{
+														Computed: true,
+													},
+													"detect": schema.BoolAttribute{
+														Computed: true,
+													},
+													"len": schema.Float64Attribute{
+														Computed: true,
+													},
+													"name": schema.StringAttribute{
+														Computed: true,
+													},
+													"payload": schema.BoolAttribute{
+														Computed: true,
+													},
+													"regex": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+										},
+										"tags": schema.ListNestedAttribute{
+											Computed: true,
+											NestedObject: schema.NestedAttributeObject{
+												Attributes: map[string]schema.Attribute{
+													"key": schema.StringAttribute{
+														Computed: true,
+													},
+													"value": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+										},
+									},
+								},
+								"env": schema.StringAttribute{
+									Computed: true,
+								},
+								"hostname": schema.StringAttribute{
+									Computed: true,
+								},
+								"procname": schema.StringAttribute{
+									Computed: true,
+								},
+								"username": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"event": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enable": schema.BoolAttribute{
+								Computed: true,
+							},
+							"format": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"enhancefs": schema.BoolAttribute{
+										Computed: true,
+									},
+									"maxeventpersec": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"transport": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"buffer": schema.StringAttribute{
+										Computed: true,
+									},
+									"host": schema.StringAttribute{
+										Computed: true,
+									},
+									"path": schema.StringAttribute{
+										Computed: true,
+									},
+									"port": schema.Float64Attribute{
+										Computed: true,
+									},
+									"tls": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cacertpath": schema.StringAttribute{
+												Computed: true,
+											},
+											"enable": schema.BoolAttribute{
+												Computed: true,
+											},
+											"validateserver": schema.BoolAttribute{
+												Computed: true,
+											},
+										},
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"type": schema.StringAttribute{
+								Computed: true,
+							},
+							"watch": schema.ListNestedAttribute{
+								Computed: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"allowbinary": schema.BoolAttribute{
+											Computed: true,
+										},
+										"enabled": schema.BoolAttribute{
+											Computed: true,
+										},
+										"field": schema.StringAttribute{
+											Computed: true,
+										},
+										"headers": schema.ListAttribute{
+											Computed:    true,
+											ElementType: types.StringType,
+										},
+										"name": schema.StringAttribute{
+											Computed: true,
+										},
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+										"value": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+							},
+						},
+					},
+					"libscope": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"commanddir": schema.StringAttribute{
+								Computed: true,
+							},
+							"configevent": schema.BoolAttribute{
+								Computed: true,
+							},
+							"log": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"level": schema.StringAttribute{
+										Computed: true,
+									},
+									"transport": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"buffer": schema.StringAttribute{
+												Computed: true,
+											},
+											"host": schema.StringAttribute{
+												Computed: true,
+											},
+											"path": schema.StringAttribute{
+												Computed: true,
+											},
+											"port": schema.Float64Attribute{
+												Computed: true,
+											},
+											"tls": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"cacertpath": schema.StringAttribute{
+														Computed: true,
+													},
+													"enable": schema.BoolAttribute{
+														Computed: true,
+													},
+													"validateserver": schema.BoolAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"type": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
+								},
+							},
+							"summaryperiod": schema.Float64Attribute{
+								Computed: true,
+							},
+						},
+					},
+					"metric": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enable": schema.BoolAttribute{
+								Computed: true,
+							},
+							"format": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"statsdmaxlen": schema.Float64Attribute{
+										Computed: true,
+									},
+									"statsdprefix": schema.StringAttribute{
+										Computed: true,
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+									},
+									"verbosity": schema.Float64Attribute{
+										Computed: true,
+									},
+								},
+							},
+							"transport": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"buffer": schema.StringAttribute{
+										Computed: true,
+									},
+									"host": schema.StringAttribute{
+										Computed: true,
+									},
+									"path": schema.StringAttribute{
+										Computed: true,
+									},
+									"port": schema.Float64Attribute{
+										Computed: true,
+									},
+									"tls": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cacertpath": schema.StringAttribute{
+												Computed: true,
+											},
+											"enable": schema.BoolAttribute{
+												Computed: true,
+											},
+											"validateserver": schema.BoolAttribute{
+												Computed: true,
+											},
+										},
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"watch": schema.ListNestedAttribute{
+								Computed: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"type": schema.StringAttribute{
+											Computed: true,
+										},
+									},
+								},
+							},
+						},
+					},
+					"payload": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"dir": schema.StringAttribute{
+								Computed: true,
+							},
+							"enable": schema.BoolAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"protocol": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"binary": schema.BoolAttribute{
+									Computed: true,
+								},
+								"detect": schema.BoolAttribute{
+									Computed: true,
+								},
+								"len": schema.Float64Attribute{
+									Computed: true,
+								},
+								"name": schema.StringAttribute{
+									Computed: true,
+								},
+								"payload": schema.BoolAttribute{
+									Computed: true,
+								},
+								"regex": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+					"tags": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"key": schema.StringAttribute{
+									Computed: true,
+								},
+								"value": schema.StringAttribute{
+									Computed: true,
+								},
+							},
+						},
+					},
+				},
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

@@ -36,65 +36,51 @@ func (d *DatabaseConnectionDataSource) Schema(_ context.Context, _ datasource.Sc
 		MarkdownDescription: "DatabaseConnection Data Source",
 		Attributes: map[string]schema.Attribute{
 			"auth_type": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"config_obj": schema.StringAttribute{
-				Required:  false,
 				Computed:  true,
 				Sensitive: true,
 			},
 			"connection_string": schema.StringAttribute{
-				Required:  false,
 				Computed:  true,
 				Sensitive: true,
 			},
 			"connection_timeout": schema.Float64Attribute{
-				Required: false,
 				Computed: true,
 			},
 			"creds_secrets": schema.StringAttribute{
-				Required:  false,
 				Computed:  true,
 				Sensitive: true,
 			},
 			"database_type": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"password": schema.StringAttribute{
-				Required:  false,
 				Computed:  true,
 				Sensitive: true,
 			},
 			"request_timeout": schema.Float64Attribute{
-				Required: false,
 				Computed: true,
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"text_secret": schema.StringAttribute{
-				Required:  false,
 				Computed:  true,
 				Sensitive: true,
 			},
 			"user": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},
