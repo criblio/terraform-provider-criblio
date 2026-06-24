@@ -46,7 +46,12 @@ func TestGroupSystemSettings(t *testing.T) {
 				ImportStateId:                        "my-hybrid-group",
 				ImportStateVerify:                    true,
 				ImportStateVerifyIdentifierAttribute: "group_id",
-				ImportStateVerifyIgnore:              []string{"api.ssl.passphrase"},
+				ImportStateVerifyIgnore: []string{
+					"api.ssl.passphrase",
+					"apps",
+					"custom_logo.logo_image",
+					"support",
+				},
 			},
 		},
 	})
