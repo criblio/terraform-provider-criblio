@@ -179,6 +179,7 @@ func WriteModuleDirectoryWithFSAndGroup(fs FileSystem, baseDir string, items []R
 		return nil
 	}
 	EnsureUniqueNames(items)
+	ApplyPipelineFunctionProcessorReferences(items)
 	SortResourceItems(items)
 	var dir string
 	if groupID != "" {

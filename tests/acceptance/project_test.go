@@ -48,7 +48,6 @@ func TestProject(t *testing.T) {
 
 func projectConfig(description string) string {
 	return `resource "criblio_project" "my_project" {
-  consumers = {}
   description = "` + description + `"
   destinations = []
   group_id = "default"

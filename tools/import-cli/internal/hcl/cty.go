@@ -2,6 +2,7 @@
 package hcl
 
 import (
+	"encoding/base64"
 	"fmt"
 	"sort"
 
@@ -17,6 +18,12 @@ const VarRefPlaceholderSuffix = "__"
 // PlainVarRefPlaceholderPrefix/Suffix are replaced with var.<name> (no jsonencode) for plain string secrets (e.g. criblio_secret.value).
 const PlainVarRefPlaceholderPrefix = "__VAR_REF_PLAIN__"
 const PlainVarRefPlaceholderSuffix = "__"
+
+// RawExprPlaceholderPrefix/Suffix wrap base64url-encoded Terraform expressions
+// while hclwrite renders cty values. FileWithResources replaces the quoted
+// placeholder with the raw expression after rendering.
+const RawExprPlaceholderPrefix = "__HCL_EXPR__"
+const RawExprPlaceholderSuffix = "__"
 
 // ValueToCty converts a Value to cty.Value so it can be passed to hclwrite.Body.SetAttributeValue.
 // Nested maps and lists are converted recursively; null and structure are preserved.
@@ -44,6 +51,12 @@ func valueToCtyInner(v Value) (cty.Value, error) {
 			return cty.StringVal(PlainVarRefPlaceholderPrefix + v.VarName + PlainVarRefPlaceholderSuffix), nil
 		}
 		return cty.NullVal(cty.DynamicPseudoType), nil
+	case KindExpression:
+		if v.Expr == "" {
+			return cty.NullVal(cty.DynamicPseudoType), nil
+		}
+		encoded := base64.RawURLEncoding.EncodeToString([]byte(v.Expr))
+		return cty.StringVal(RawExprPlaceholderPrefix + encoded + RawExprPlaceholderSuffix), nil
 	case KindString:
 		return cty.StringVal(v.String), nil
 	case KindBool:

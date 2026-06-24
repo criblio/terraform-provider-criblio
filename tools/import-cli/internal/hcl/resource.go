@@ -3,12 +3,16 @@ package hcl
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
+	"regexp"
 	"sort"
 
 	hclv2 "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 )
+
+var rawExprPlaceholderRE = regexp.MustCompile(`"` + RawExprPlaceholderPrefix + `([A-Za-z0-9_-]+)` + RawExprPlaceholderSuffix + `"`)
 
 // ResourceBlockOptions configures resource block generation.
 type ResourceBlockOptions struct {
@@ -205,6 +209,22 @@ func FileWithResources(resources []ResourceInput, opts *ResourceBlockOptions) (*
 	for _, n := range names {
 		quoted := `"` + VarRefPlaceholderPrefix + n + VarRefPlaceholderSuffix + `"`
 		b = bytes.ReplaceAll(b, []byte(quoted), []byte("jsonencode(var."+n+")"))
+	}
+	var exprErr error
+	b = rawExprPlaceholderRE.ReplaceAllFunc(b, func(match []byte) []byte {
+		parts := rawExprPlaceholderRE.FindSubmatch(match)
+		if len(parts) != 2 {
+			return match
+		}
+		decoded, err := base64.RawURLEncoding.DecodeString(string(parts[1]))
+		if err != nil {
+			exprErr = fmt.Errorf("decode raw HCL expression placeholder: %w", err)
+			return match
+		}
+		return decoded
+	})
+	if exprErr != nil {
+		return nil, exprErr
 	}
 	// Fix escaped variable references in JSON strings: $${var.xxx} -> ${var.xxx}
 	// hclwrite escapes $ to $$ to prevent interpolation, but we want actual interpolation

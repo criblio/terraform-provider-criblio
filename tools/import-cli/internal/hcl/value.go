@@ -31,6 +31,9 @@ const (
 	// KindVariableRef is a plain variable reference (var.name) for string attributes like criblio_secret.value.
 	// Emitted as var.name in HCL; use for sensitive values that are plain strings, not JSON.
 	KindVariableRef
+	// KindExpression is a raw Terraform expression emitted without quotes.
+	// Use sparingly when literal cty values cannot represent required HCL references.
+	KindExpression
 )
 
 // Value represents an HCL-compatible value that preserves null vs empty
@@ -46,6 +49,7 @@ type Value struct {
 	// VarName: variable name when Kind == KindVariableRef (plain var.x, not jsonencode).
 	Sensitive string
 	VarName   string
+	Expr      string
 	// MaskedVarNames: variable names for sensitive fields that were masked within a JSON string.
 	// Used to generate tfvars for masked values while keeping the JSON structure intact.
 	MaskedVarNames []string

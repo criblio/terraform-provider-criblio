@@ -113,6 +113,69 @@ func TestWriteModuleDirectory_parseable_hcl(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestWriteModuleDirectory_rewrites_pipeline_processor_refs(t *testing.T) {
+	tmp := t.TempDir()
+	items := []ResourceItem{
+		{
+			TypeName: "criblio_pipeline",
+			Name:     "pipeline_xxx_A",
+			Attrs: map[string]hcl.Value{
+				"id": {Kind: hcl.KindString, String: "xxx_A"},
+				"conf": {
+					Kind: hcl.KindMap,
+					Map: map[string]hcl.Value{
+						"functions": {
+							Kind: hcl.KindList,
+							List: []hcl.Value{{
+								Kind: hcl.KindMap,
+								Map: map[string]hcl.Value{
+									"id":     {Kind: hcl.KindString, String: "chain"},
+									"filter": {Kind: hcl.KindString, String: "true"},
+									"conf":   {Kind: hcl.KindString, String: `{"processor":"xxx_B"}`},
+								},
+							}},
+						},
+					},
+				},
+			},
+			ImportID: `{"group_id":"default","id":"xxx_A"}`,
+		},
+		{
+			TypeName: "criblio_pipeline",
+			Name:     "pipeline_xxx_B",
+			Attrs: map[string]hcl.Value{
+				"id": {Kind: hcl.KindString, String: "xxx_B"},
+				"conf": {
+					Kind: hcl.KindMap,
+					Map: map[string]hcl.Value{
+						"functions": {
+							Kind: hcl.KindList,
+							List: []hcl.Value{{
+								Kind: hcl.KindMap,
+								Map: map[string]hcl.Value{
+									"id":   {Kind: hcl.KindString, String: "drop"},
+									"conf": {Kind: hcl.KindString, String: `{}`},
+								},
+							}},
+						},
+					},
+				},
+			},
+			ImportID: `{"group_id":"default","id":"xxx_B"}`,
+		},
+	}
+
+	err := WriteModuleDirectory(tmp, items, hcl.DefaultResourceBlockOptions())
+	require.NoError(t, err)
+	mainBytes, err := os.ReadFile(filepath.Join(tmp, "pipeline", "main.tf"))
+	require.NoError(t, err)
+	main := string(mainBytes)
+	assert.Contains(t, main, "jsonencode({ processor = criblio_pipeline.pipeline_xxx_B.id })")
+	assert.Contains(t, main, `conf = "{}"`)
+	assert.NotContains(t, main, hcl.RawExprPlaceholderPrefix)
+	assert.NoError(t, hcl.ParseHCL(mainBytes, "main.tf"))
+}
+
 func TestWriteAllModuleDirectories_groups_by_type(t *testing.T) {
 	tmp := t.TempDir()
 	items := []ResourceItem{

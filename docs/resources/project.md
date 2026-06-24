@@ -14,9 +14,6 @@ Project Resource
 
 ```terraform
 resource "criblio_project" "my_project" {
-  consumers = {
-    # ...
-  }
   description = "Default project configuration"
   destinations = [
     "Output:main",

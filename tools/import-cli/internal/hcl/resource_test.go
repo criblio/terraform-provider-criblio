@@ -117,6 +117,37 @@ func TestFileWithResources_multiple_blocks(t *testing.T) {
 	assert.Contains(t, string(bytes), `"two"`)
 }
 
+func TestFileWithResources_raw_expression_nested(t *testing.T) {
+	resources := []ResourceInput{{
+		TypeName: "criblio_pipeline",
+		Name:     "pipeline_a",
+		Attrs: map[string]Value{
+			"id": {Kind: KindString, String: "a"},
+			"conf": {
+				Kind: KindMap,
+				Map: map[string]Value{
+					"functions": {
+						Kind: KindList,
+						List: []Value{{
+							Kind: KindMap,
+							Map: map[string]Value{
+								"id":   {Kind: KindString, String: "chain"},
+								"conf": {Kind: KindExpression, Expr: "jsonencode({ processor = criblio_pipeline.pipeline_b.id })"},
+							},
+						}},
+					},
+				},
+			},
+		},
+	}}
+	f, err := FileWithResources(resources, nil)
+	require.NoError(t, err)
+	src := string(f.Bytes())
+	assert.Contains(t, src, "conf = jsonencode({ processor = criblio_pipeline.pipeline_b.id })")
+	assert.NotContains(t, src, RawExprPlaceholderPrefix)
+	assert.NoError(t, ParseHCL(f.Bytes(), "main.tf"))
+}
+
 func TestResourceBlock_from_converted_model(t *testing.T) {
 	model := &provider.SourceResourceModel{
 		GroupID: types.StringValue("default"),

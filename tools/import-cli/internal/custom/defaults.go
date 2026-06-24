@@ -233,6 +233,46 @@ func ApplyProjectDefaults(attrs map[string]hcl.Value) {
 	if v, ok := attrs["destinations"]; !ok || v.Kind == hcl.KindNull {
 		attrs["destinations"] = emptyList
 	}
+	if consumers, ok := attrs["consumers"]; ok && !projectConsumersHasConfig(consumers) {
+		delete(attrs, "consumers")
+	}
+}
+
+func projectConsumersHasConfig(value hcl.Value) bool {
+	switch value.Kind {
+	case hcl.KindNull:
+		return false
+	case hcl.KindString:
+		return value.String != ""
+	case hcl.KindBool:
+		return true
+	case hcl.KindNumber:
+		return true
+	case hcl.KindSensitive, hcl.KindVariableRef, hcl.KindExpression:
+		return true
+	case hcl.KindList:
+		if len(value.List) == 0 {
+			return false
+		}
+		for _, item := range value.List {
+			if projectConsumersHasConfig(item) {
+				return true
+			}
+		}
+		return false
+	case hcl.KindMap:
+		if len(value.Map) == 0 {
+			return false
+		}
+		for _, item := range value.Map {
+			if projectConsumersHasConfig(item) {
+				return true
+			}
+		}
+		return false
+	default:
+		return false
+	}
 }
 
 // ApplySubscriptionDefaults removes empty legacy consumer blocks. Terraform cannot
@@ -256,7 +296,7 @@ func subscriptionConsumerHasConfig(value hcl.Value) bool {
 		return true
 	case hcl.KindNumber:
 		return true
-	case hcl.KindSensitive, hcl.KindVariableRef:
+	case hcl.KindSensitive, hcl.KindVariableRef, hcl.KindExpression:
 		return true
 	case hcl.KindList:
 		if len(value.List) == 0 {
