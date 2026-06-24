@@ -133,5 +133,6 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"SchemaResourceModel":              reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
 		"SecretResourceModel":              reflect.TypeOf((*provider.SecretModel)(nil)).Elem(),
 		"SubscriptionResourceModel":        reflect.TypeOf((*provider.SubscriptionModel)(nil)).Elem(),
+		"WorkspaceResourceModel":           reflect.TypeOf((*provider.WorkspaceModel)(nil)).Elem(),
 	}
 }

@@ -96,6 +96,9 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	if resource.StructName != "GroupSystemSettings" && !resource.Action {
 		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
 	}
+	if resource.List.Path != "" {
+		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
+	}
 	return files
 }
 
@@ -142,6 +145,11 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"attrType":                      attrType,
 		"restWriteCall":                 restWriteCall,
 		"resourceHasQueryParams":        resourceHasQueryParams,
+		"listHasQueryParams":            listHasQueryParams,
+		"listConfigFields":              listConfigFields,
+		"listItemFields":                listItemFields,
+		"listTypeNameSuffix":            listTypeNameSuffix,
+		"listItemObjectValue":           listItemObjectValue,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -166,6 +174,10 @@ func restWriteCall(op parser.OperationDef) string {
 
 func resourceHasQueryParams(resource parser.ResourceDef) bool {
 	return len(resource.Create.QueryParams) > 0 || len(resource.Read.QueryParams) > 0 || len(resource.Update.QueryParams) > 0 || len(resource.Delete.QueryParams) > 0
+}
+
+func listHasQueryParams(resource parser.ResourceDef) bool {
+	return len(resource.List.QueryParams) > 0
 }
 
 func joinDocFields(fields []parser.FieldDef) string {
@@ -504,6 +516,10 @@ func typeNameSuffix(resource parser.ResourceDef) string {
 	return strings.TrimPrefix(resource.TypeName, "criblio_")
 }
 
+func listTypeNameSuffix(resource parser.ResourceDef) string {
+	return strings.TrimPrefix(resource.ListTypeName, "criblio_")
+}
+
 func needsFmt(resource parser.ResourceDef) bool {
 	return true
 }
@@ -582,6 +598,35 @@ func attrType(field parser.FieldDef) string {
 	default:
 		return "types.StringType"
 	}
+}
+
+func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, param := range append(resource.List.PathParams, resource.List.QueryParams...) {
+		fields = append(fields, param)
+	}
+	return fields
+}
+
+func listItemFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, field := range resource.Fields {
+		if field.QueryParam || field.APIName == "groupId" || field.APIName == "organizationId" {
+			continue
+		}
+		fields = append(fields, field)
+	}
+	return fields
+}
+
+func listItemObjectValue(resource parser.ResourceDef) string {
+	var output strings.Builder
+	fmt.Fprintf(&output, "types.ObjectValueMust(%sItemAttrTypes(), map[string]attr.Value{", resource.ListStructName)
+	for _, field := range listItemFields(resource) {
+		fmt.Fprintf(&output, "%q: item.%s, ", field.TerraformName, field.GoName)
+	}
+	output.WriteString("})")
+	return output.String()
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {

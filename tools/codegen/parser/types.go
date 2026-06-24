@@ -2,19 +2,24 @@ package parser
 
 // ResourceDef describes one Terraform resource discovered from OpenAPI annotations.
 type ResourceDef struct {
-	Name          string
-	FileStem      string
-	TypeName      string
-	StructName    string
-	SchemaName    string
-	Create        OperationDef
-	Read          OperationDef
-	Update        OperationDef
-	Delete        OperationDef
-	Fields        []FieldDef
-	OneOfVariants []OneOfVariantDef
-	Outputs       []OutputFile
-	Action        bool
+	Name           string
+	FileStem       string
+	TypeName       string
+	StructName     string
+	SchemaName     string
+	Create         OperationDef
+	Read           OperationDef
+	Update         OperationDef
+	Delete         OperationDef
+	List           OperationDef
+	ListName       string
+	ListFileStem   string
+	ListStructName string
+	ListTypeName   string
+	Fields         []FieldDef
+	OneOfVariants  []OneOfVariantDef
+	Outputs        []OutputFile
+	Action         bool
 }
 
 // OperationDef describes one annotated OpenAPI operation.
@@ -27,6 +32,7 @@ type OperationDef struct {
 	PathParams     []FieldDef
 	QueryParams    []FieldDef
 	Examples       []ExampleDef
+	ReadAfterWrite bool
 }
 
 // ExampleDef describes a request-body example attached to an OpenAPI operation.
@@ -62,6 +68,7 @@ type FieldDef struct {
 	PathParam          bool
 	QueryParam         bool
 	RequestField       bool
+	UpdateField        bool
 	ApplyStrategy      string
 	Fields             []FieldDef
 }

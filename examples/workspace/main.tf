@@ -4,7 +4,6 @@ resource "criblio_workspace" "my_workspace" {
   alias           = "Production Environment Test"
   description     = "My new workspace for production customer data processing test"
   organization_id = "beautiful-nguyen-y8y4azd"
-  region          = "us-west-2"
   tags = [
     "production",
     "customer-data",
