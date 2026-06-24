@@ -1015,6 +1015,9 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	} else if state.ResolvedDatasetIDs.IsNull() || state.ResolvedDatasetIDs.IsUnknown() {
 		state.ResolvedDatasetIDs = types.ListValueMust(types.StringType, nil)
 	}
+	if elementType := state.ResolvedDatasetIDs.ElementType(context.Background()); elementType == nil {
+		state.ResolvedDatasetIDs = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.SampleRate.IsNull() || state.SampleRate.IsUnknown())) {
 		if !api.SampleRate.IsNull() && !api.SampleRate.IsUnknown() {
 			state.SampleRate = api.SampleRate

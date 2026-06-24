@@ -278,6 +278,9 @@ func applySearchEngineAPIToState(api *SearchEngineModel, state *SearchEngineMode
 	} else if state.Datasets.IsNull() || state.Datasets.IsUnknown() {
 		state.Datasets = types.ListValueMust(types.StringType, nil)
 	}
+	if elementType := state.Datasets.ElementType(context.Background()); elementType == nil {
+		state.Datasets = types.ListNull(types.StringType)
+	}
 	if !api.DeletionStartedAt.IsNull() && !api.DeletionStartedAt.IsUnknown() {
 		state.DeletionStartedAt = api.DeletionStartedAt
 	} else if state.DeletionStartedAt.IsNull() || state.DeletionStartedAt.IsUnknown() {

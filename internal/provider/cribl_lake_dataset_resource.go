@@ -283,6 +283,9 @@ func applyCriblLakeDatasetAPIToState(api *CriblLakeDatasetModel, state *CriblLak
 	if state.AcceleratedFields.IsUnknown() {
 		state.AcceleratedFields = types.ListNull(types.StringType)
 	}
+	if elementType := state.AcceleratedFields.ElementType(context.Background()); elementType == nil {
+		state.AcceleratedFields = types.ListNull(types.StringType)
+	}
 	if !api.BucketName.IsNull() && !api.BucketName.IsUnknown() {
 		state.BucketName = api.BucketName
 	}

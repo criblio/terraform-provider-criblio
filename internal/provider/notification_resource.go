@@ -434,6 +434,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	if state.Targets.IsUnknown() {
 		state.Targets = types.ListNull(types.StringType)
 	}
+	if elementType := state.Targets.ElementType(context.Background()); elementType == nil {
+		state.Targets = types.ListNull(types.StringType)
+	}
 	if !api.TemplateTargetPairs.IsNull() && !api.TemplateTargetPairs.IsUnknown() {
 		state.TemplateTargetPairs = api.TemplateTargetPairs
 	} else if state.TemplateTargetPairs.IsNull() || state.TemplateTargetPairs.IsUnknown() {

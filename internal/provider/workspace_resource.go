@@ -258,6 +258,9 @@ func applyWorkspaceAPIToState(api *WorkspaceModel, state *WorkspaceModel, preser
 			state.Tags = api.Tags
 		}
 	}
+	if elementType := state.Tags.ElementType(context.Background()); elementType == nil {
+		state.Tags = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.WorkspaceID.IsNull() || state.WorkspaceID.IsUnknown())) {
 		if !api.WorkspaceID.IsNull() && !api.WorkspaceID.IsUnknown() {
 			state.WorkspaceID = api.WorkspaceID

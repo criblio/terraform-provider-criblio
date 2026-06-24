@@ -5,17 +5,16 @@ package exclusions
 // NoExportTypes are resource types never exported by the import CLI.
 // Merged with --exclude so these types are skipped in discovery and export.
 var NoExportTypes = []string{
-	"criblio_commit",                       // No list/get API in SDK; apply-only resource.
-	"criblio_deploy",                       // No list/get API in SDK; apply-only resource.
-	"criblio_group_system_settings",        // Cloud rejects api host/port updates on default group; config/state drift causes apply failures.
-	"criblio_key",                          // Skipped from import; keys are sensitive.
-	"criblio_lakehouse_dataset_connection", // Provider has no import state operation; do not generate.
-	"criblio_lookup_file",                  // Control Plane API may not return content; UI uses different endpoint (knowledge/lookups).
-	"criblio_mapping_ruleset",              // List API is on root CriblIo (GetAdminProductsMappingsByProduct), not a service; no standard discovery.
-	"criblio_notification",                 // Search-scoped API path mismatch in SDK; list returns 0.
-	"criblio_pack_lookups",                 // Same as lookup_file; content often missing from API response.
-	"criblio_search_usage_group",           // API returns null/empty for rules; required attr causes import/plan issues.
-	"criblio_workspace",                    // No list/get API in SDK; workspace is implicit from config.
+	"criblio_commit",                // No list/get API in SDK; apply-only resource.
+	"criblio_deploy",                // No list/get API in SDK; apply-only resource.
+	"criblio_group_system_settings", // Cloud rejects api host/port updates on default group; config/state drift causes apply failures.
+	"criblio_key",                   // Skipped from import; keys are sensitive.
+	"criblio_lookup_file",           // Control Plane API may not return content; UI uses different endpoint (knowledge/lookups).
+	"criblio_mapping_ruleset",       // List API is on root CriblIo (GetAdminProductsMappingsByProduct), not a service; no standard discovery.
+	"criblio_notification",          // Search-scoped API path mismatch in SDK; list returns 0.
+	"criblio_pack_lookups",          // Same as lookup_file; content often missing from API response.
+	"criblio_search_usage_group",    // API returns null/empty for rules; required attr causes import/plan issues.
+	"criblio_workspace",             // No list/get API in SDK; workspace is implicit from config.
 }
 
 // SkipExportIDs lists resource IDs to never export, by type.

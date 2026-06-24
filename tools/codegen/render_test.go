@@ -116,6 +116,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, resourceContent, "custom_listplanmodifier.SuppressDiff(custom_listplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)")
 	assertContains(t, resourceContent, "state.InUse = types.ListValueMust(types.StringType, nil)")
+	assertContains(t, resourceContent, "if elementType := state.InUse.ElementType(context.Background()); elementType == nil")
 	assertContains(t, resourceContent, "state.Args = types.ListNull(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()})")
 	assertContains(t, resourceContent, "state.Args = types.ListValueMust(types.ObjectType{AttrTypes: CertificateArgsAttrTypes()}, nil)")
 	assertContains(t, resourceContent, "len(state.Args.Elements()) == 0")
