@@ -347,6 +347,17 @@ func notificationTargetListKey(path string) string {
 	return ""
 }
 
+// criblLakeDatasetListKey builds the capture key for GET /products/lake/lakes/{lakeId}/datasets.
+func criblLakeDatasetListKey(path string) string {
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+	for i := 0; i+4 < len(parts); i++ {
+		if parts[i] == "products" && parts[i+1] == "lake" && parts[i+2] == "lakes" && parts[i+4] == "datasets" && i+5 == len(parts) {
+			return "cribl_lake_dataset_list:" + parts[i+3]
+		}
+	}
+	return ""
+}
+
 // packOutputGetKey builds the capture key for GET /m/{groupId}/p/{pack}/system/outputs/{id} (single pack output).
 // Returns "" if path is not a pack output get URL.
 func packOutputGetKey(path string) string {
@@ -417,6 +428,8 @@ func (t *SearchListTransport) RoundTrip(req *http.Request) (*http.Response, erro
 		} else if k := savedJobsListKey(path); k != "" {
 			key = k
 		} else if k := notificationTargetListKey(path); k != "" {
+			key = k
+		} else if k := criblLakeDatasetListKey(path); k != "" {
 			key = k
 		} else if strings.Contains(path, "/search/datasets/") {
 			// Capture GET .../search/datasets/{id} response so we can use full body when SDK unmarshal fails.
@@ -557,6 +570,38 @@ func ParseSavedJobsListBody(body []byte, groupID string) ([]map[string]string, e
 // and removes it. Used when the SDK fails to unmarshal bulletin_message items into NotificationTarget.
 func GetAndClearNotificationTargetListBody() []byte {
 	return GetAndClearSearchListBody("notification_targets_list")
+}
+
+// GetAndClearCriblLakeDatasetListBody returns the captured response body for
+// GET /products/lake/lakes/{lakeId}/datasets and removes it.
+func GetAndClearCriblLakeDatasetListBody(lakeID string) []byte {
+	return GetAndClearSearchListBody("cribl_lake_dataset_list:" + lakeID)
+}
+
+// ParseCriblLakeDatasetListBody parses a lake dataset list response and skips
+// datasets that the API marks as deleted, deleting, or otherwise tombstoned.
+func ParseCriblLakeDatasetListBody(body []byte, lakeID string) ([]map[string]string, error) {
+	if len(body) == 0 {
+		return nil, nil
+	}
+	var resp struct {
+		Items []json.RawMessage `json:"items,omitempty"`
+	}
+	if err := json.Unmarshal(body, &resp); err != nil {
+		return nil, err
+	}
+	out := make([]map[string]string, 0, len(resp.Items))
+	for _, raw := range resp.Items {
+		id, ok := idStringFromItemRaw(raw)
+		if !ok || DefaultCriblLakeDatasetIDs[id] || criblLakeDatasetMarkedForDeletion(raw) {
+			continue
+		}
+		if lakeID == "" {
+			lakeID = "default"
+		}
+		out = append(out, map[string]string{"id": id, "lake_id": lakeID})
+	}
+	return out, nil
 }
 
 // UnsupportedNotificationTargetTypes are notification target type values not in the SDK NotificationTarget union.
@@ -732,6 +777,59 @@ func itemIsCriblLakeDataset(raw json.RawMessage) bool {
 		return false
 	}
 	return it.Type == SearchDatasetTypeCriblLake
+}
+
+func criblLakeDatasetMarkedForDeletion(raw json.RawMessage) bool {
+	var item map[string]any
+	if err := json.Unmarshal(raw, &item); err != nil {
+		return false
+	}
+	for _, key := range []string{"markedForDeletion", "marked_for_deletion", "isDeleted", "is_deleted", "deleted"} {
+		if boolValue(item[key]) {
+			return true
+		}
+	}
+	for _, key := range []string{"deletionStartedAt", "deletion_started_at", "deletionStartedMs", "deletion_started_ms", "deletedAt", "deleted_at"} {
+		if nonZeroValue(item[key]) {
+			return true
+		}
+	}
+	for _, key := range []string{"status", "state", "deletionStatus", "deletion_status"} {
+		if deletionStatus(item[key]) {
+			return true
+		}
+	}
+	return false
+}
+
+func boolValue(value any) bool {
+	b, ok := value.(bool)
+	return ok && b
+}
+
+func nonZeroValue(value any) bool {
+	switch v := value.(type) {
+	case nil:
+		return false
+	case string:
+		s := strings.TrimSpace(v)
+		return s != "" && s != "0"
+	case float64:
+		return v != 0
+	case json.Number:
+		return v.String() != "" && v.String() != "0"
+	default:
+		return false
+	}
+}
+
+func deletionStatus(value any) bool {
+	s, ok := value.(string)
+	if !ok {
+		return false
+	}
+	s = strings.ToLower(strings.TrimSpace(s))
+	return strings.Contains(s, "delet") || strings.Contains(s, "terminat") || strings.Contains(s, "tombstone")
 }
 
 var itemCache map[string]map[string]json.RawMessage // path key -> id -> item JSON
