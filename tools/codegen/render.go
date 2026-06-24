@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"text/template"
@@ -83,14 +84,19 @@ func shouldSkipExistingOutput(path string, output parser.OutputFile) (bool, erro
 
 func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	prefix := "internal/provider/" + resource.FileStem
-	return []parser.OutputFile{
+	files := []parser.OutputFile{
 		{Path: prefix + "_types.go", Kind: "types"},
 		{Path: prefix + "_client.go", Kind: "client"},
 		{Path: prefix + "_resource.go", Kind: "resource"},
-		{Path: prefix + "_data_source.go", Kind: "data_source"},
 		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
-		{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"},
 	}
+	if !resource.Action {
+		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
+	}
+	if resource.StructName != "GroupSystemSettings" && !resource.Action {
+		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+	}
+	return files
 }
 
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
@@ -99,40 +105,43 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":                           goType,
-		"schemaAttribute":                  schemaAttribute,
-		"schemaTypeName":                   schemaTypeName,
-		"schemaSections":                   schemaSections,
-		"zeroValue":                        zeroValue,
-		"pathExpr":                         pathExpr,
-		"jsonName":                         jsonName,
-		"apiType":                          apiType,
-		"legacyGoType":                     legacyGoType,
-		"resourceType":                     resourceType,
-		"typeNameSuffix":                   typeNameSuffix,
-		"exampleUsage":                     exampleUsage,
-		"importBlock":                      importBlock,
-		"importCommand":                    importCommand,
-		"docSchema":                        docSchema,
-		"joinDocFields":                    joinDocFields,
-		"needsFmt":                         needsFmt,
-		"needsAttr":                        needsAttr,
-		"needsNestedObject":                needsNestedObject,
-		"needsPlanModifier":                needsPlanModifier,
-		"needsFrameworkStringPlanModifier": needsFrameworkStringPlanModifier,
-		"needsCustomPlanModifier":          needsCustomPlanModifier,
-		"planModifierType":                 planModifierType,
-		"planModifierCalls":                planModifierCalls,
-		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
-		"schemaAttributes":                 schemaAttributes,
-		"importSentinelFields":             importSentinelFields,
-		"pathParamFields":                  pathParamFields,
-		"jsonImport":                       jsonImport,
-		"nestedObjectList":                 nestedObjectList,
-		"nestedObject":                     nestedObject,
-		"nestedObjectFields":               nestedObjectFields,
-		"attrType":                         attrType,
-		"restWriteCall":                    restWriteCall,
+		"goType":                        goType,
+		"schemaAttribute":               schemaAttribute,
+		"schemaTypeName":                schemaTypeName,
+		"schemaSections":                schemaSections,
+		"zeroValue":                     zeroValue,
+		"pathExpr":                      pathExpr,
+		"jsonName":                      jsonName,
+		"apiType":                       apiType,
+		"legacyGoType":                  legacyGoType,
+		"resourceType":                  resourceType,
+		"typeNameSuffix":                typeNameSuffix,
+		"exampleUsage":                  exampleUsage,
+		"importBlock":                   importBlock,
+		"importCommand":                 importCommand,
+		"importPassthroughAttribute":    importPassthroughAttribute,
+		"docSchema":                     docSchema,
+		"joinDocFields":                 joinDocFields,
+		"needsFmt":                      needsFmt,
+		"needsClientFmt":                needsClientFmt,
+		"needsAttr":                     needsAttr,
+		"needsNestedObject":             needsNestedObject,
+		"needsPlanModifier":             needsPlanModifier,
+		"needsFrameworkPlanModifier":    needsFrameworkPlanModifier,
+		"needsCustomPlanModifier":       needsCustomPlanModifier,
+		"planModifierType":              planModifierType,
+		"planModifierCalls":             planModifierCalls,
+		"nestedObjectPlanModifierCalls": nestedObjectPlanModifierCalls,
+		"schemaAttributes":              schemaAttributes,
+		"importSentinelFields":          importSentinelFields,
+		"pathParamFields":               pathParamFields,
+		"jsonImport":                    jsonImport,
+		"nestedObjectList":              nestedObjectList,
+		"nestedObject":                  nestedObject,
+		"nestedObjectFields":            nestedObjectFields,
+		"attrType":                      attrType,
+		"restWriteCall":                 restWriteCall,
+		"resourceHasQueryParams":        resourceHasQueryParams,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -153,6 +162,10 @@ func restWriteCall(op parser.OperationDef) string {
 	default:
 		return "Post"
 	}
+}
+
+func resourceHasQueryParams(resource parser.ResourceDef) bool {
+	return len(resource.Create.QueryParams) > 0 || len(resource.Read.QueryParams) > 0 || len(resource.Update.QueryParams) > 0 || len(resource.Delete.QueryParams) > 0
 }
 
 func joinDocFields(fields []parser.FieldDef) string {
@@ -495,6 +508,18 @@ func needsFmt(resource parser.ResourceDef) bool {
 	return true
 }
 
+func needsClientFmt(resource parser.ResourceDef) bool {
+	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" {
+		return true
+	}
+	for _, op := range []parser.OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete} {
+		if len(op.PathParams) > 0 || len(op.QueryParams) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
 func needsAttr(resource parser.ResourceDef) bool {
 	for _, field := range resource.Fields {
 		if nestedObjectList(field) || nestedObject(field) {
@@ -576,13 +601,13 @@ func needsPlanModifier(resource parser.ResourceDef) bool {
 	return false
 }
 
-func needsFrameworkStringPlanModifier(resource parser.ResourceDef) bool {
+func needsFrameworkPlanModifier(resource parser.ResourceDef, kind string) bool {
 	for _, field := range resource.Fields {
-		if field.ForceNew {
+		if field.ForceNew && frameworkPlanModifierKind(field) == kind {
 			return true
 		}
 		for _, nested := range field.Fields {
-			if nested.ForceNew {
+			if nested.ForceNew && frameworkPlanModifierKind(nested) == kind {
 				return true
 			}
 		}
@@ -608,6 +633,9 @@ func needsCustomPlanModifier(resource parser.ResourceDef, kind string) bool {
 }
 
 func planModifierType(field parser.FieldDef) string {
+	if nestedObject(field) {
+		return "Object"
+	}
 	switch field.Type {
 	case "boolean":
 		return "Bool"
@@ -627,13 +655,33 @@ func planModifierType(field parser.FieldDef) string {
 func planModifierCalls(field parser.FieldDef) []string {
 	var calls []string
 	if field.ForceNew {
-		calls = append(calls, "stringplanmodifier.RequiresReplaceIfConfigured()")
+		calls = append(calls, fmt.Sprintf("%splanmodifier.RequiresReplaceIfConfigured()", frameworkPlanModifierKind(field)))
 	}
 	if field.SuppressDiff {
 		packageName := customPlanModifierPackage(field)
 		calls = append(calls, fmt.Sprintf("%s.SuppressDiff(%s.ExplicitSuppress)", packageName, packageName))
 	}
 	return calls
+}
+
+func frameworkPlanModifierKind(field parser.FieldDef) string {
+	if nestedObject(field) {
+		return "object"
+	}
+	switch field.Type {
+	case "boolean":
+		return "bool"
+	case "integer":
+		return "int64"
+	case "number":
+		return "float64"
+	case "array":
+		return "list"
+	case "object":
+		return "map"
+	default:
+		return "string"
+	}
 }
 
 func nestedObjectPlanModifierCalls(field parser.FieldDef) []string {
@@ -740,6 +788,19 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 		fmt.Fprintf(output, "%s]\n", indent)
 		return
 	}
+	if field.Type == "array" {
+		values := exampleList(value)
+		if len(values) == 0 {
+			fmt.Fprintf(output, "%s%s = []\n", indent, field.TerraformName)
+			return
+		}
+		fmt.Fprintf(output, "%s%s = [\n", indent, field.TerraformName)
+		for _, item := range values {
+			fmt.Fprintf(output, "%s  %s,\n", indent, hclValue(item))
+		}
+		fmt.Fprintf(output, "%s]\n", indent)
+		return
+	}
 	fmt.Fprintf(output, "%s%s = %s\n", indent, field.TerraformName, hclValue(value))
 }
 
@@ -834,6 +895,14 @@ func jsonImport(resource parser.ResourceDef) bool {
 	return len(pathParamFields(resource)) > 1
 }
 
+func importPassthroughAttribute(resource parser.ResourceDef) string {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fields[0].TerraformName
+	}
+	return "id"
+}
+
 func generatedExample(resource parser.ResourceDef) string {
 	var output strings.Builder
 	fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "example")
@@ -875,8 +944,12 @@ func pathExpr(op parser.OperationDef) string {
 	for _, param := range op.PathParams {
 		path = strings.ReplaceAll(path, "{"+param.APIName+"}", `%s`)
 	}
-	if len(op.PathParams) == 0 {
-		return fmt.Sprintf("%q", path)
+	if len(op.QueryParams) > 0 {
+		queryParts := make([]string, 0, len(op.QueryParams))
+		for _, param := range op.QueryParams {
+			queryParts = append(queryParts, param.APIName+"=%s")
+		}
+		path += "?" + strings.Join(queryParts, "&")
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
@@ -885,6 +958,12 @@ func pathExpr(op parser.OperationDef) string {
 			continue
 		}
 		args = append(args, "model."+param.GoName+".ValueString()")
+	}
+	for _, param := range op.QueryParams {
+		args = append(args, "url.QueryEscape(model."+param.GoName+".ValueString())")
+	}
+	if len(args) == 1 {
+		return fmt.Sprintf("%q", path)
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
 }

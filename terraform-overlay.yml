@@ -239,6 +239,271 @@ actions:
             type: string
             title: Quote character
 
+  - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.get"
+    update:
+      x-terraform-read: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.patch"
+    update:
+      x-terraform-update: HmacFunction
+  - target: "$.paths./m/{groupId}/lib/hmac-functions/{id}.delete"
+    update:
+      x-terraform-delete: HmacFunction
+  - target: "$.components.schemas.HmacFunction.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/system/keys.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Key
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this key metadata entity instance.
+  - target: "$.paths./m/{groupId}/system/keys/{id}.get"
+    update:
+      x-terraform-read: Key
+  - target: "$.paths./m/{groupId}/system/keys/{id}.patch"
+    update:
+      x-terraform-update: Key
+  - target: "$.paths./m/{groupId}/system/keys/{id}.delete"
+    update:
+      x-terraform-delete: Key
+  - target: "$.components.schemas.KeyMetadataEntity.properties.keyId"
+    update:
+      x-terraform-name: id
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.algorithm"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.keyclass"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.kms"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.ivSize"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties"
+    update:
+      terraformKeyId:
+        type: string
+        description: API-assigned key ID returned by Cribl.
+        x-terraform-name: key_id
+        x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.created"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.group"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.plainKey"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.KeyMetadataEntity.properties.cipherKey"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/system/secrets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.get"
+    update:
+      x-terraform-read: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.patch"
+    update:
+      x-terraform-update: Secret
+  - target: "$.paths./m/{groupId}/system/secrets/{id}.delete"
+    update:
+      x-terraform-delete: Secret
+  - target: "$.components.schemas.RestSecret.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RestSecret.properties.folderId"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RestSecret.properties.readOnly"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RestSecret.properties.value"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.apiKey"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.secretKey"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.RestSecret.properties.password"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+
+  - target: "$.paths./m/{groupId}/lib/database-connections.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.get"
+    update:
+      x-terraform-read: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.patch"
+    update:
+      x-terraform-update: DatabaseConnection
+  - target: "$.paths./m/{groupId}/lib/database-connections/{id}.delete"
+    update:
+      x-terraform-delete: DatabaseConnection
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.connectionString"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.configObj"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.password"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.textSecret"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.DatabaseConnectionConfig.properties.credsSecrets"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+
+  - target: "$.paths./m/{groupId}/lib/appscope-configs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.get"
+    update:
+      x-terraform-read: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.patch"
+    update:
+      x-terraform-update: AppscopeConfig
+  - target: "$.paths./m/{groupId}/lib/appscope-configs/{id}.delete"
+    update:
+      x-terraform-delete: AppscopeConfig
+  - target: "$.components.schemas.AppscopeLibEntry.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.MetricTypeAppscopeConfig.properties.watch"
+    update:
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+  - target: "$.components.schemas.WatchConfAppscopeConfig.properties.headers"
+    update:
+      type: array
+      items:
+        type: string
+
+  - target: "$.paths./m/{groupId}/system/settings/conf.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: GroupSystemSettings
+  - target: "$.paths./m/{groupId}/system/settings/conf.get"
+    update:
+      x-terraform-read: GroupSystemSettings
+  - target: "$.paths./m/{groupId}/system/settings/conf.patch"
+    update:
+      x-terraform-update: GroupSystemSettings
+  - target: "$.components.schemas.SslTypeSystemSettingsConfApi.properties.passphrase"
+    update:
+      x-terraform-sensitive: true
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.SniSettings"
+    update:
+      oneOf:
+        - type: object
+          properties:
+            disableSNIRouting:
+              type: boolean
+              x-terraform-name: disable_sni_routing
+          required:
+            - disableSNIRouting
+        - $ref: "#/components/schemas/EmptyObject"
+
+  - target: "$.paths./m/{groupId}/system/subscriptions.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Subscription
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: new Id to be used for subscription to be created
+        - name: pipeline
+          in: query
+          required: true
+          schema:
+            type: string
+          description: pipeline to be used
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.get"
+    update:
+      x-terraform-read: Subscription
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.patch"
+    update:
+      x-terraform-update: Subscription
+  - target: "$.paths./m/{groupId}/system/subscriptions/{id}.delete"
+    update:
+      x-terraform-delete: Subscription
+  - target: "$.components.schemas.Subscription.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/system/projects.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.get"
+    update:
+      x-terraform-read: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.patch"
+    update:
+      x-terraform-update: Project
+  - target: "$.paths./m/{groupId}/system/projects/{id}.delete"
+    update:
+      x-terraform-delete: Project
+  - target: "$.components.schemas.ProjectConfig.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:
       x-terraform-resource: true
@@ -264,3 +529,21 @@ actions:
               groupId:
                 type: string
                 description: The Worker Group to map matching events to.
+
+  - target: "$.paths./version/commit.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Commit
+      x-terraform-action: true
+
+  - target: "$.components.schemas.GitCommitBody.properties"
+    update:
+      group:
+        type: string
+        description: Worker Group to commit changes for.
+
+  - target: "$.paths./master/groups/{id}/deploy.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Deploy
+      x-terraform-action: true

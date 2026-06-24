@@ -48,6 +48,11 @@ func (v Value) ToHCLExpr() string {
 			return "var." + v.VarName
 		}
 		return "null"
+	case KindExpression:
+		if v.Expr != "" {
+			return v.Expr
+		}
+		return "null"
 	default:
 		return "null"
 	}

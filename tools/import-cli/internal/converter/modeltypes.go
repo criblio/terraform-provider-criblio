@@ -116,14 +116,22 @@ func ResourceModelTypes() map[string]reflect.Type {
 // mirror these fields but do not have the generated UnmarshalJSON methods.
 func GeneratedModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
+		"AppscopeConfigResourceModel":      reflect.TypeOf((*provider.AppscopeConfigModel)(nil)).Elem(),
 		"CertificateResourceModel":         reflect.TypeOf((*provider.CertificateModel)(nil)).Elem(),
+		"DatabaseConnectionResourceModel":  reflect.TypeOf((*provider.DatabaseConnectionModel)(nil)).Elem(),
 		"EventBreakerRulesetResourceModel": reflect.TypeOf((*provider.EventBreakerRulesetModel)(nil)).Elem(),
 		"GlobalVarResourceModel":           reflect.TypeOf((*provider.GlobalVarModel)(nil)).Elem(),
 		"GrokResourceModel":                reflect.TypeOf((*provider.GrokModel)(nil)).Elem(),
+		"GroupSystemSettingsResourceModel": reflect.TypeOf((*provider.GroupSystemSettingsModel)(nil)).Elem(),
+		"HmacFunctionResourceModel":        reflect.TypeOf((*provider.HmacFunctionModel)(nil)).Elem(),
+		"KeyResourceModel":                 reflect.TypeOf((*provider.KeyModel)(nil)).Elem(),
 		"MappingRulesetResourceModel":      reflect.TypeOf((*provider.MappingRulesetModel)(nil)).Elem(),
 		"ParquetSchemaResourceModel":       reflect.TypeOf((*provider.ParquetSchemaModel)(nil)).Elem(),
 		"ParserLibEntryResourceModel":      reflect.TypeOf((*provider.ParserLibEntryModel)(nil)).Elem(),
+		"ProjectResourceModel":             reflect.TypeOf((*provider.ProjectModel)(nil)).Elem(),
 		"RegexResourceModel":               reflect.TypeOf((*provider.RegexModel)(nil)).Elem(),
 		"SchemaResourceModel":              reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
+		"SecretResourceModel":              reflect.TypeOf((*provider.SecretModel)(nil)).Elem(),
+		"SubscriptionResourceModel":        reflect.TypeOf((*provider.SubscriptionModel)(nil)).Elem(),
 	}
 }

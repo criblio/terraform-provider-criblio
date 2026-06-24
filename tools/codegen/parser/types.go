@@ -14,6 +14,7 @@ type ResourceDef struct {
 	Fields        []FieldDef
 	OneOfVariants []OneOfVariantDef
 	Outputs       []OutputFile
+	Action        bool
 }
 
 // OperationDef describes one annotated OpenAPI operation.
@@ -24,6 +25,7 @@ type OperationDef struct {
 	RequestSchema  string
 	ResponseSchema string
 	PathParams     []FieldDef
+	QueryParams    []FieldDef
 	Examples       []ExampleDef
 }
 
@@ -48,6 +50,7 @@ type FieldDef struct {
 	Required           bool
 	Optional           bool
 	Computed           bool
+	OptionalComputed   bool
 	Sensitive          bool
 	PreferState        bool
 	SuppressDiff       bool
@@ -57,6 +60,7 @@ type FieldDef struct {
 	ReadOnly           bool
 	WriteOnly          bool
 	PathParam          bool
+	QueryParam         bool
 	RequestField       bool
 	ApplyStrategy      string
 	Fields             []FieldDef

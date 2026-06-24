@@ -21,3 +21,33 @@ func TestApplyAPIToStateTypesOmittedNestedObjectLists(t *testing.T) {
 		t.Fatalf("rules element type = %v", state.Rules.ElementType(context.Background()))
 	}
 }
+
+func TestApplyAPIToStateTypesOmittedNestedObjects(t *testing.T) {
+	api := &SubscriptionModel{
+		Consumer: types.ObjectNull(SubscriptionConsumerAttrTypes()),
+	}
+	state := &SubscriptionModel{}
+
+	applySubscriptionAPIToState(api, state, false, false)
+
+	want := types.ObjectType{AttrTypes: SubscriptionConsumerAttrTypes()}
+	if !reflect.DeepEqual(state.Consumer.Type(context.Background()), want) {
+		t.Fatalf("consumer type = %v", state.Consumer.Type(context.Background()))
+	}
+}
+
+func TestApplyAPIToStateTypesOmittedStringMaps(t *testing.T) {
+	api := &ProjectModel{
+		Consumers: types.MapNull(types.StringType),
+	}
+	state := &ProjectModel{}
+
+	applyProjectAPIToState(api, state, false, false)
+
+	if !state.Consumers.IsNull() {
+		t.Fatalf("consumers should remain null, got %#v", state.Consumers)
+	}
+	if got := state.Consumers.ElementType(context.Background()); got == nil || !got.Equal(types.StringType) {
+		t.Fatalf("consumers element type = %v, want %v", got, types.StringType)
+	}
+}

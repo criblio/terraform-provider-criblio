@@ -288,6 +288,9 @@ func applyMappingRulesetAPIToState(api *MappingRulesetModel, state *MappingRules
 			state.Conf = api.Conf
 		}
 	}
+	if len(state.Conf.AttributeTypes(context.Background())) == 0 {
+		state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())
+	}
 	if !api.ID.IsNull() && !api.ID.IsUnknown() {
 		state.ID = api.ID
 	}

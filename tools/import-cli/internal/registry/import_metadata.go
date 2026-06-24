@@ -116,7 +116,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_grok":                         {ImportIDFormat: "json:group_id,id"},
 	"criblio_group":                        {ImportIDFormat: "group_id", RefreshFromMethod: "RefreshFromOperationsCreateProductsGroupsByProductResponseBody"},
 	"criblio_group_system_settings":        {ListMethod: "GetSystemSettingsConf", ImportIDFormat: "group_id", ListUseGroupIDAsItemID: true},
-	"criblio_key":                          {SDKService: "Keys", ListMethod: "ListKeyMetadataEntity", GetMethod: "GetKeyMetadataEntityByID", ImportIDFormat: "json:group_id,id,key_id", ListItemIDMethod: "GetKeyID", RefreshFromMethod: "RefreshFromOperationsCreateKeyMetadataEntityResponseBody"},
+	"criblio_key":                          {SDKService: "Keys", ListMethod: "ListKeyMetadataEntity", GetMethod: "GetKeyMetadataEntityByID", ImportIDFormat: "json:group_id,id,key_id", ListItemIDMethod: "GetKeyID"},
 	"criblio_pack":                         {ImportIDFormat: "json:group_id,id,pack"},
 	"criblio_pack_source":                  {ListMethod: "GetSystemInputsByPack", GetMethod: "GetSystemInputsByPackAndID", ImportIDFormat: "json:group_id,id,pack"},
 	"criblio_pack_pipeline":                {ListMethod: "GetPipelinesByPack", GetMethod: "GetPipelinesByPackWithID", ImportIDFormat: "json:group_id,id,pack"},
