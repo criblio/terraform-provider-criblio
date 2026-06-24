@@ -105,6 +105,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource := ensureResource(resources, name)
 			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
+			resource.Action = boolAnnotation(operation, "x-terraform-action")
 		}
 
 		for _, annotation := range []struct {
@@ -209,7 +210,18 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 }
 
 func applyResourceCompatibility(resource *ResourceDef) {
-	if resource == nil || resource.StructName != "MappingRuleset" {
+	if resource == nil {
+		return
+	}
+	if resource.Action {
+		for index := range resource.Fields {
+			field := &resource.Fields[index]
+			if !field.Computed {
+				field.ForceNew = true
+			}
+		}
+	}
+	if resource.StructName != "MappingRuleset" {
 		return
 	}
 	for index := range resource.Fields {

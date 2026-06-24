@@ -221,6 +221,13 @@ func applyProjectAPIToState(api *ProjectModel, state *ProjectModel, preserveInpu
 			state.Consumers = api.Consumers
 		}
 	}
+	if state.Consumers.IsNull() || state.Consumers.IsUnknown() {
+		state.Consumers = types.MapNull(types.StringType)
+	} else if elementType := state.Consumers.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
+		if len(state.Consumers.Elements()) == 0 {
+			state.Consumers = types.MapNull(types.StringType)
+		}
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {
 			state.Description = api.Description

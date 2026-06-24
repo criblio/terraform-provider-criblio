@@ -35,3 +35,19 @@ func TestApplyAPIToStateTypesOmittedNestedObjects(t *testing.T) {
 		t.Fatalf("consumer type = %v", state.Consumer.Type(context.Background()))
 	}
 }
+
+func TestApplyAPIToStateTypesOmittedStringMaps(t *testing.T) {
+	api := &ProjectModel{
+		Consumers: types.MapNull(types.StringType),
+	}
+	state := &ProjectModel{}
+
+	applyProjectAPIToState(api, state, false, false)
+
+	if !state.Consumers.IsNull() {
+		t.Fatalf("consumers should remain null, got %#v", state.Consumers)
+	}
+	if got := state.Consumers.ElementType(context.Background()); got == nil || !got.Equal(types.StringType) {
+		t.Fatalf("consumers element type = %v, want %v", got, types.StringType)
+	}
+}

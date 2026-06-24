@@ -441,7 +441,9 @@ package provider
 
 import (
 	"context"
+{{- if needsClientFmt . }}
 	"fmt"
+{{- end }}
 {{- if resourceHasQueryParams . }}
 	"net/url"
 {{- end }}
@@ -461,7 +463,10 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 }
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if eq .StructName "Key" }}
+{{- if .Action }}
+	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr .Create }}, model)
+	return &model, err
+{{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
@@ -471,6 +476,9 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
+{{- if .Action }}
+	return &model, nil
+{{- else }}
 {{- if eq .StructName "Key" }}
 	id := keyAPIID(model)
 	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys", model.GroupID.ValueString()))
@@ -486,9 +494,13 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 {{- else }}
 	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr .Read }})
 {{- end }}
+{{- end }}
 }
 
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
+{{- if .Action }}
+	return &model, nil
+{{- else }}
 {{- if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	if apiID := keyAPIID(model); apiID != "" {
@@ -499,9 +511,13 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 {{- else }}
 	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
 {{- end }}
+{{- end }}
 }
 
 func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }}Model) error {
+{{- if .Action }}
+	return nil
+{{- else }}
 {{- if eq .StructName "MappingRuleset" }}
 	type emptyMappingRulesetConf struct {
 		Functions []any ` + "`json:\"functions\"`" + `
@@ -529,6 +545,7 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	return nil
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
+{{- end }}
 {{- end }}
 {{- end }}
 }
@@ -592,13 +609,33 @@ import (
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+{{- if not .Action }}
 	"github.com/hashicorp/terraform-plugin-framework/path"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 {{- if needsPlanModifier . }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 {{- end }}
-{{- if needsFrameworkStringPlanModifier . }}
+{{- if needsFrameworkPlanModifier . "bool" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "float64" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "int64" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "list" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "map" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "object" }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
+{{- end }}
+{{- if needsFrameworkPlanModifier . "string" }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -670,6 +707,9 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .Action }}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+{{- else }}
 	apiModel, err := r.api.Read(ctx, model)
 	if restclient.IsNotFound(err) {
 		resp.State.RemoveResource(ctx)
@@ -681,6 +721,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+{{- end }}
 }
 
 func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
@@ -689,6 +730,9 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .Action }}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+{{- else }}
 	apiModel, err := r.api.Update(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -696,9 +740,20 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 	}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+{{- end }}
 }
 
 func (r *{{ .StructName }}Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+{{- if .Action }}
+	var model {{ .StructName }}Model
+	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if err := r.api.Delete(ctx, model); err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+	}
+{{- else }}
 	var model {{ .StructName }}Model
 	resp.Diagnostics.Append(req.State.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
@@ -707,9 +762,13 @@ func (r *{{ .StructName }}Resource) Delete(ctx context.Context, req resource.Del
 	if err := r.api.Delete(ctx, model); err != nil && !restclient.IsNotFound(err) {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 	}
+{{- end }}
 }
 
 func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+{{- if .Action }}
+	resp.Diagnostics.AddError("Not Implemented", "No import state operation is available for action resource {{ typeNameSuffix . }}.")
+{{- else }}
 {{- if jsonImport . }}
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
@@ -759,6 +818,7 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
 	resource.ImportStatePassthroughID(ctx, path.Root("{{ importPassthroughAttribute . }}"), req, resp)
+{{- end }}
 {{- end }}
 }
 
@@ -835,6 +895,14 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- else if nestedObject . }}
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
 		state.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
+	}
+{{- else if eq .Type "object" }}
+	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = types.MapNull(types.StringType)
+	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
+		if len(state.{{ .GoName }}.Elements()) == 0 {
+			state.{{ .GoName }} = types.MapNull(types.StringType)
+		}
 	}
 {{- end }}
 {{- end }}
@@ -1008,6 +1076,9 @@ description: |-
 
 ## Import
 
+{{ if .Action -}}
+Import is not supported for this action resource.
+{{ else -}}
 Import is supported using the following syntax:
 
 In Terraform v1.5.0 and later, the ` + "[`import` block](https://developer.hashicorp.com/terraform/language/import)" + ` can be used with the ` + "`id`" + ` attribute, for example:
@@ -1021,6 +1092,7 @@ The ` + "[`terraform import` command](https://developer.hashicorp.com/terraform/
 ` + "```shell" + `
 {{ importCommand . }}
 ` + "```" + `
+{{ end -}}
 `
 
 const testTemplate = `// Code generated by tools/codegen. DO NOT EDIT.

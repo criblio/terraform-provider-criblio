@@ -529,3 +529,21 @@ actions:
               groupId:
                 type: string
                 description: The Worker Group to map matching events to.
+
+  - target: "$.paths./version/commit.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Commit
+      x-terraform-action: true
+
+  - target: "$.components.schemas.GitCommitBody.properties"
+    update:
+      group:
+        type: string
+        description: Worker Group to commit changes for.
+
+  - target: "$.paths./master/groups/{id}/deploy.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Deploy
+      x-terraform-action: true

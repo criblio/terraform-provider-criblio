@@ -14,6 +14,7 @@ type ResourceDef struct {
 	Fields        []FieldDef
 	OneOfVariants []OneOfVariantDef
 	Outputs       []OutputFile
+	Action        bool
 }
 
 // OperationDef describes one annotated OpenAPI operation.
