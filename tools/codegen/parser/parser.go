@@ -106,6 +106,7 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
+			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
 		}
 		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
 			resource := ensureResource(resources, name)

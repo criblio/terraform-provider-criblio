@@ -38,6 +38,9 @@ func TestMethods(t *testing.T) {
 			case "/api/v1/system/certificates":
 				assertJSONBody(t, r, "from-post")
 				writeJSON(t, w, testItem{ID: "cert-2", Name: "from-post"})
+			case "/api/v1/system/no-response":
+				assertJSONBody(t, r, "from-post-no-response")
+				writeJSON(t, w, map[string]any{"items": []testItem{}})
 			case "/api/v1/system/files":
 				mediaType, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 				if err != nil {
@@ -70,6 +73,11 @@ func TestMethods(t *testing.T) {
 				t.Errorf("unexpected POST path %q", r.URL.Path)
 			}
 		case http.MethodPatch:
+			if r.URL.Path == "/api/v1/system/no-response" {
+				assertJSONBody(t, r, "from-patch-no-response")
+				writeJSON(t, w, map[string]any{"items": []testItem{}})
+				return
+			}
 			if r.URL.Path != "/api/v1/system/certificates/cert-1" {
 				t.Errorf("PATCH path = %q", r.URL.Path)
 			}
@@ -113,12 +121,20 @@ func TestMethods(t *testing.T) {
 		t.Fatalf("Post ID = %q, expected cert-2", created.ID)
 	}
 
+	if err := PostNoResponse(context.Background(), client, "/system/no-response", testItem{Name: "from-post-no-response"}); err != nil {
+		t.Fatalf("PostNoResponse returned error: %v", err)
+	}
+
 	patched, err := Patch[testItem, testItem](context.Background(), client, "/system/certificates/cert-1", testItem{Name: "from-patch"})
 	if err != nil {
 		t.Fatalf("Patch returned error: %v", err)
 	}
 	if patched.Name != "from-patch" {
 		t.Fatalf("Patch name = %q, expected from-patch", patched.Name)
+	}
+
+	if err := PatchNoResponse(context.Background(), client, "/system/no-response", testItem{Name: "from-patch-no-response"}); err != nil {
+		t.Fatalf("PatchNoResponse returned error: %v", err)
 	}
 
 	put, err := Put[testItem, testItem](context.Background(), client, "/system/certificates/cert-1", testItem{Name: "from-put"})

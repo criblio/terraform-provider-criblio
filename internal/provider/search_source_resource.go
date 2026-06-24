@@ -432,6 +432,9 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	if !api.AuthTokens.IsNull() && !api.AuthTokens.IsUnknown() {
 		state.AuthTokens = api.AuthTokens
 	}
+	if state.AuthTokens.IsUnknown() {
+		state.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()})
+	}
 	if state.AuthTokens.IsNull() || state.AuthTokens.IsUnknown() {
 		state.AuthTokens = types.ListNull(types.ObjectType{AttrTypes: SearchSourceAuthTokensAttrTypes()})
 	} else if len(state.AuthTokens.Elements()) == 0 {
@@ -445,8 +448,14 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	if !api.Description.IsNull() && !api.Description.IsUnknown() {
 		state.Description = api.Description
 	}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
 	if !api.Disabled.IsNull() && !api.Disabled.IsUnknown() {
 		state.Disabled = api.Disabled
+	}
+	if state.Disabled.IsUnknown() {
+		state.Disabled = types.BoolNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ElasticAPI.IsNull() || state.ElasticAPI.IsUnknown())) {
 		if !api.ElasticAPI.IsNull() && !api.ElasticAPI.IsUnknown() {
@@ -481,6 +490,9 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	if !api.Port.IsNull() && !api.Port.IsUnknown() {
 		state.Port = api.Port
 	}
+	if state.Port.IsUnknown() {
+		state.Port = types.Int64Null()
+	}
 	if !preserveInputs || (fillMissingInputs && (state.PrometheusAPI.IsNull() || state.PrometheusAPI.IsUnknown())) {
 		if !api.PrometheusAPI.IsNull() && !api.PrometheusAPI.IsUnknown() {
 			state.PrometheusAPI = api.PrometheusAPI
@@ -513,6 +525,9 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	}
 	if !api.TLS.IsNull() && !api.TLS.IsUnknown() {
 		state.TLS = api.TLS
+	}
+	if state.TLS.IsUnknown() {
+		state.TLS = types.ObjectNull(SearchSourceTLSAttrTypes())
 	}
 	if len(state.TLS.AttributeTypes(context.Background())) == 0 {
 		state.TLS = types.ObjectNull(SearchSourceTLSAttrTypes())

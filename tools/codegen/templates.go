@@ -484,6 +484,9 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 {{- if .Action }}
 	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr .Create }}, model)
 	return &model, err
+{{- else if .NoRead }}
+	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr .Create }}, model)
+	return &model, err
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
@@ -494,7 +497,7 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if .Action }}
+{{- if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
 {{- if eq .StructName "Key" }}
@@ -518,6 +521,9 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	return &model, nil
+{{- else if .NoRead }}
+	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr .Update }}, model)
+	return &model, err
 {{- else }}
 {{- if eq .StructName "Key" }}
 	id := model.ID.ValueString()
@@ -736,7 +742,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-{{- if .Action }}
+{{- if or .Action .NoRead }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
 	apiModel, err := r.api.Read(ctx, model)
@@ -834,14 +840,21 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .NoRead }}
+	apply{{ .StructName }}APIToState(&model, &model, true, true)
+{{- else if eq .StructName "Key" }}
 	apiModel, err := r.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-{{- if eq .StructName "Key" }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, true)
 {{- else }}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
@@ -911,6 +924,11 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = api.{{ .GoName }}
 		}
 {{- end }}
+{{- end }}
+{{- if and .Computed .Optional }}
+	if state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = {{ nullValue . }}
+	}
 {{- end }}
 {{- if not .Computed }}
 	}

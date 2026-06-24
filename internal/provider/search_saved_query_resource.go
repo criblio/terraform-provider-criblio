@@ -807,7 +807,7 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 			"user": schema.StringAttribute{
 				Required:    false,
 				Optional:    true,
-				Computed:    false,
+				Computed:    true,
 				Description: `Identifier for the user who created the saved search. Scheduled runs execute as the specified user.`,
 			},
 		},
@@ -954,6 +954,9 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	if !api.Description.IsNull() && !api.Description.IsUnknown() {
 		state.Description = api.Description
 	}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
 	if !api.DisplayUsername.IsNull() && !api.DisplayUsername.IsUnknown() {
 		state.DisplayUsername = api.DisplayUsername
 	} else if state.DisplayUsername.IsNull() || state.DisplayUsername.IsUnknown() {
@@ -961,6 +964,9 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	}
 	if !api.Earliest.IsNull() && !api.Earliest.IsUnknown() {
 		state.Earliest = api.Earliest
+	}
+	if state.Earliest.IsUnknown() {
+		state.Earliest = types.StringNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
@@ -975,6 +981,9 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	if !api.IsPrivate.IsNull() && !api.IsPrivate.IsUnknown() {
 		state.IsPrivate = api.IsPrivate
 	}
+	if state.IsPrivate.IsUnknown() {
+		state.IsPrivate = types.BoolNull()
+	}
 	if !api.IsSystem.IsNull() && !api.IsSystem.IsUnknown() {
 		state.IsSystem = api.IsSystem
 	} else if state.IsSystem.IsNull() || state.IsSystem.IsUnknown() {
@@ -982,6 +991,9 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 	}
 	if !api.Latest.IsNull() && !api.Latest.IsUnknown() {
 		state.Latest = api.Latest
+	}
+	if state.Latest.IsUnknown() {
+		state.Latest = types.StringNull()
 	}
 	if !api.Lib.IsNull() && !api.Lib.IsUnknown() {
 		state.Lib = api.Lib
@@ -1038,10 +1050,11 @@ func applySearchSavedQueryAPIToState(api *SearchSavedQueryModel, state *SearchSa
 			state.Timezone = api.Timezone
 		}
 	}
-	if !preserveInputs || (fillMissingInputs && (state.User.IsNull() || state.User.IsUnknown())) {
-		if !api.User.IsNull() && !api.User.IsUnknown() {
-			state.User = api.User
-		}
+	if !api.User.IsNull() && !api.User.IsUnknown() {
+		state.User = api.User
+	}
+	if state.User.IsUnknown() {
+		state.User = types.StringNull()
 	}
 }
 

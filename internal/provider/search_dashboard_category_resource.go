@@ -212,6 +212,9 @@ func applySearchDashboardCategoryAPIToState(api *SearchDashboardCategoryModel, s
 	if !api.Description.IsNull() && !api.Description.IsUnknown() {
 		state.Description = api.Description
 	}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
@@ -224,6 +227,9 @@ func applySearchDashboardCategoryAPIToState(api *SearchDashboardCategoryModel, s
 	}
 	if !api.IsPack.IsNull() && !api.IsPack.IsUnknown() {
 		state.IsPack = api.IsPack
+	}
+	if state.IsPack.IsUnknown() {
+		state.IsPack = types.BoolNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Name.IsNull() || state.Name.IsUnknown())) {
 		if !api.Name.IsNull() && !api.Name.IsUnknown() {

@@ -294,6 +294,9 @@ func applyMappingRulesetAPIToState(api *MappingRulesetModel, state *MappingRules
 	if !api.ID.IsNull() && !api.ID.IsUnknown() {
 		state.ID = api.ID
 	}
+	if state.ID.IsUnknown() {
+		state.ID = types.StringNull()
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Product.IsNull() || state.Product.IsUnknown())) {
 		if !api.Product.IsNull() && !api.Product.IsUnknown() {
 			state.Product = api.Product

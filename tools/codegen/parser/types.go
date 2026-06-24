@@ -20,6 +20,7 @@ type ResourceDef struct {
 	OneOfVariants  []OneOfVariantDef
 	Outputs        []OutputFile
 	Action         bool
+	NoRead         bool
 }
 
 // OperationDef describes one annotated OpenAPI operation.

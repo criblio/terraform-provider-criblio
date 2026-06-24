@@ -93,7 +93,7 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	if shouldGenerateAcceptanceTest(resource) {
 		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
 	}
-	if resource.StructName != "GroupSystemSettings" && !resource.Action {
+	if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
 		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
 	}
 	if resource.List.Path != "" {
@@ -117,6 +117,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"schemaTypeName":                 schemaTypeName,
 		"schemaSections":                 schemaSections,
 		"zeroValue":                      zeroValue,
+		"nullValue":                      nullValue,
 		"pathExpr":                       pathExpr,
 		"jsonName":                       jsonName,
 		"apiType":                        apiType,
@@ -568,6 +569,31 @@ func zeroValue(field parser.FieldDef) string {
 	}
 }
 
+func nullValue(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "types.ListNull(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()})"
+	}
+	if nestedObject(field) {
+		return "types.ObjectNull(" + field.NestedAttrTypes + "())"
+	}
+	switch goType(field) {
+	case "types.Bool":
+		return "types.BoolNull()"
+	case "types.Int64":
+		return "types.Int64Null()"
+	case "types.Float64":
+		return "types.Float64Null()"
+	case "types.List":
+		return "types.ListNull(types.StringType)"
+	case "types.Map":
+		return "types.MapNull(types.StringType)"
+	case "jsontypes.Normalized":
+		return "jsontypes.NewNormalizedNull()"
+	default:
+		return "types.StringNull()"
+	}
+}
+
 func jsonName(field parser.FieldDef) string {
 	return field.APIName + ",omitempty"
 }
@@ -1008,9 +1034,24 @@ func importCommand(resource parser.ResourceDef) string {
 	path := filepath.Join("examples", "resources", resourceType(resource), "import.sh")
 	content, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Sprintf("terraform import %s.my_%s '{\"group_id\": \"default\", \"id\": \"cert-001\"}'", resourceType(resource), resourceType(resource))
+		return generatedImportCommand(resource)
 	}
 	return strings.TrimSpace(string(content))
+}
+
+func generatedImportCommand(resource parser.ResourceDef) string {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
+	}
+	if len(fields) == 0 {
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), "example")
+	}
+	parts := make([]string, 0, len(fields))
+	for _, field := range fields {
+		parts = append(parts, fmt.Sprintf("%q: %q", field.TerraformName, exampleValue(resource, field)))
+	}
+	return fmt.Sprintf("terraform import %s.my_%s '{%s}'", resourceType(resource), resourceType(resource), strings.Join(parts, ", "))
 }
 
 func pathParamFields(resource parser.ResourceDef) []parser.FieldDef {
@@ -1059,13 +1100,30 @@ func generatedExample(resource parser.ResourceDef) string {
 }
 
 func generatedImportBlock(resource parser.ResourceDef) string {
-	return fmt.Sprintf(`import {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fmt.Sprintf(`import {
+  to = %s.my_%s
+  id = %q
+}`, resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
+	}
+	if len(fields) == 0 {
+		return fmt.Sprintf(`import {
+  to = %s.my_%s
+  id = "example"
+}`, resourceType(resource), resourceType(resource))
+	}
+	var output strings.Builder
+	fmt.Fprintf(&output, `import {
   to = %s.my_%s
   id = jsonencode({
-    group_id = "default"
-    id       = "cert-001"
-  })
-}`, resourceType(resource), resourceType(resource))
+`, resourceType(resource), resourceType(resource))
+	for _, field := range fields {
+		fmt.Fprintf(&output, "    %s = %q\n", field.TerraformName, exampleValue(resource, field))
+	}
+	output.WriteString(`  })
+}`)
+	return output.String()
 }
 
 func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
@@ -1080,6 +1138,15 @@ func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	}
 	if field.TerraformName == "id" {
 		return "example"
+	}
+	if field.TerraformName == "lake_id" {
+		return "default"
+	}
+	if field.TerraformName == "lakehouse_id" {
+		return "lakehouse-01"
+	}
+	if field.TerraformName == "lake_dataset_id" {
+		return "web-logs"
 	}
 	return "example"
 }

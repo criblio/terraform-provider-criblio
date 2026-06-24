@@ -240,6 +240,9 @@ func applySearchMacroAPIToState(api *SearchMacroModel, state *SearchMacroModel, 
 	if !api.Description.IsNull() && !api.Description.IsUnknown() {
 		state.Description = api.Description
 	}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
@@ -262,6 +265,9 @@ func applySearchMacroAPIToState(api *SearchMacroModel, state *SearchMacroModel, 
 	}
 	if !api.Tags.IsNull() && !api.Tags.IsUnknown() {
 		state.Tags = api.Tags
+	}
+	if state.Tags.IsUnknown() {
+		state.Tags = types.StringNull()
 	}
 }
 

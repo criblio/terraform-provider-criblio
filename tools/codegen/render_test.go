@@ -196,8 +196,34 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, keyResource, `"algorithm": schema.StringAttribute{`)
 	assertContains(t, keyResource, "Optional: true,")
 	assertContains(t, keyResource, "Computed: true,")
+	assertContains(t, keyResource, "state.Algorithm = types.StringNull()")
 	keyTypes := renderTemplate(t, "types", key)
 	assertContains(t, keyTypes, `output["algorithm"] = value`)
+
+	noRead := parser.ResourceDef{
+		StructName: "LakehouseDatasetConnection",
+		NoRead:     true,
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
+			PathParams: []parser.FieldDef{
+				{APIName: "lakehouse_id", GoName: "LakehouseID"},
+				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
+			},
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections",
+			PathParams: []parser.FieldDef{
+				{APIName: "lakehouse_id", GoName: "LakehouseID"},
+				{APIName: "lake_dataset_id", GoName: "LakeDatasetID"},
+			},
+		},
+	}
+	noReadClient := renderTemplate(t, "client", noRead)
+	assertContains(t, noReadClient, "restclient.PostNoResponse(ctx, a.client")
+	assertContains(t, noReadClient, "restclient.PatchNoResponse(ctx, a.client")
+	assertNotContains(t, noReadClient, "response envelope")
 
 	mappingRulesetResource = renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
@@ -247,6 +273,28 @@ func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
 	assertContains(t, got, `tags = "errors,prod"`)
 	assertContains(t, got, `group_id = "default_search"`)
 	assertNotContains(t, got, `id = "all_events"`)
+}
+
+func TestGeneratedImportUsesPathParams(t *testing.T) {
+	resource := parser.ResourceDef{
+		FileStem: "lakehouse_dataset_connection",
+		TypeName: "criblio_lakehouse_dataset_connection",
+		Fields: []parser.FieldDef{
+			{TerraformName: "lakehouse_id", PathParam: true},
+			{TerraformName: "lake_dataset_id", PathParam: true},
+		},
+	}
+
+	block := generatedImportBlock(resource)
+	assertContains(t, block, `lakehouse_id = "lakehouse-01"`)
+	assertContains(t, block, `lake_dataset_id = "web-logs"`)
+	assertNotContains(t, block, `group_id`)
+	assertNotContains(t, block, `cert-001`)
+
+	command := generatedImportCommand(resource)
+	assertContains(t, command, `"lakehouse_id": "lakehouse-01"`)
+	assertContains(t, command, `"lake_dataset_id": "web-logs"`)
+	assertNotContains(t, command, `cert-001`)
 }
 
 func TestRestWriteCall(t *testing.T) {

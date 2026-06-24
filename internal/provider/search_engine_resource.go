@@ -286,6 +286,9 @@ func applySearchEngineAPIToState(api *SearchEngineModel, state *SearchEngineMode
 	if !api.Description.IsNull() && !api.Description.IsUnknown() {
 		state.Description = api.Description
 	}
+	if state.Description.IsUnknown() {
+		state.Description = types.StringNull()
+	}
 	if !api.EffectiveStatus.IsNull() && !api.EffectiveStatus.IsUnknown() {
 		state.EffectiveStatus = api.EffectiveStatus
 	} else if state.EffectiveStatus.IsNull() || state.EffectiveStatus.IsUnknown() {

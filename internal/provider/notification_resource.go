@@ -368,14 +368,23 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	if !api.Conf.IsNull() && !api.Conf.IsUnknown() {
 		state.Conf = api.Conf
 	}
+	if state.Conf.IsUnknown() {
+		state.Conf = types.ObjectNull(NotificationConfAttrTypes())
+	}
 	if len(state.Conf.AttributeTypes(context.Background())) == 0 {
 		state.Conf = types.ObjectNull(NotificationConfAttrTypes())
 	}
 	if !api.Disabled.IsNull() && !api.Disabled.IsUnknown() {
 		state.Disabled = api.Disabled
 	}
+	if state.Disabled.IsUnknown() {
+		state.Disabled = types.BoolNull()
+	}
 	if !api.Group.IsNull() && !api.Group.IsUnknown() {
 		state.Group = api.Group
+	}
+	if state.Group.IsUnknown() {
+		state.Group = types.StringNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
@@ -389,6 +398,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	}
 	if !api.Metadata.IsNull() && !api.Metadata.IsUnknown() {
 		state.Metadata = api.Metadata
+	}
+	if state.Metadata.IsUnknown() {
+		state.Metadata = types.ListNull(types.ObjectType{AttrTypes: NotificationMetadataAttrTypes()})
 	}
 	if state.Metadata.IsNull() || state.Metadata.IsUnknown() {
 		state.Metadata = types.ListNull(types.ObjectType{AttrTypes: NotificationMetadataAttrTypes()})
@@ -408,6 +420,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	if !api.TargetConfigs.IsNull() && !api.TargetConfigs.IsUnknown() {
 		state.TargetConfigs = api.TargetConfigs
 	}
+	if state.TargetConfigs.IsUnknown() {
+		state.TargetConfigs = types.ListNull(types.ObjectType{AttrTypes: NotificationTargetConfigsAttrTypes()})
+	}
 	if state.TargetConfigs.IsNull() || state.TargetConfigs.IsUnknown() {
 		state.TargetConfigs = types.ListNull(types.ObjectType{AttrTypes: NotificationTargetConfigsAttrTypes()})
 	} else if len(state.TargetConfigs.Elements()) == 0 {
@@ -415,6 +430,9 @@ func applyNotificationAPIToState(api *NotificationModel, state *NotificationMode
 	}
 	if !api.Targets.IsNull() && !api.Targets.IsUnknown() {
 		state.Targets = api.Targets
+	}
+	if state.Targets.IsUnknown() {
+		state.Targets = types.ListNull(types.StringType)
 	}
 	if !api.TemplateTargetPairs.IsNull() && !api.TemplateTargetPairs.IsUnknown() {
 		state.TemplateTargetPairs = api.TemplateTargetPairs

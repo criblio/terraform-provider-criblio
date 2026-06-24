@@ -103,6 +103,12 @@ func Post[Req, Resp any](ctx context.Context, c *Client, path string, body Req) 
 	return decodeResponse[Resp](responseBody)
 }
 
+// PostNoResponse sends a POST request with a JSON body and ignores the response body.
+func PostNoResponse[Req any](ctx context.Context, c *Client, path string, body Req) error {
+	_, err := doJSON(ctx, c, http.MethodPost, path, body)
+	return err
+}
+
 // Patch sends a PATCH request with a JSON body and decodes the response.
 func Patch[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
 	responseBody, err := doJSON(ctx, c, http.MethodPatch, path, body)
@@ -112,6 +118,12 @@ func Patch[Req, Resp any](ctx context.Context, c *Client, path string, body Req)
 	return decodeResponse[Resp](responseBody)
 }
 
+// PatchNoResponse sends a PATCH request with a JSON body and ignores the response body.
+func PatchNoResponse[Req any](ctx context.Context, c *Client, path string, body Req) error {
+	_, err := doJSON(ctx, c, http.MethodPatch, path, body)
+	return err
+}
+
 // Put sends a PUT request with a JSON body and decodes the response.
 func Put[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (*Resp, error) {
 	responseBody, err := doJSON(ctx, c, http.MethodPut, path, body)
@@ -119,6 +131,12 @@ func Put[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (
 		return nil, err
 	}
 	return decodeResponse[Resp](responseBody)
+}
+
+// PutNoResponse sends a PUT request with a JSON body and ignores the response body.
+func PutNoResponse[Req any](ctx context.Context, c *Client, path string, body Req) error {
+	_, err := doJSON(ctx, c, http.MethodPut, path, body)
+	return err
 }
 
 // Delete sends a DELETE request.

@@ -320,7 +320,7 @@ func applyOverlayFile(spec *yaml.Node, overlayPath string) error {
 	}
 
 	for index, action := range actions.Content {
-		target, update, err := parseAction(action)
+		target, update, replace, err := parseAction(action)
 		if err != nil {
 			return fmt.Errorf("overlay action %d: %v", index, err)
 		}
@@ -328,26 +328,37 @@ func applyOverlayFile(spec *yaml.Node, overlayPath string) error {
 		if err != nil {
 			return fmt.Errorf("overlay action %d target %q: %v", index, target, err)
 		}
+		if replace {
+			*targetNode = *cloneNode(update)
+			continue
+		}
 		mergeMapping(targetNode, update)
 	}
 
 	return nil
 }
 
-func parseAction(action *yaml.Node) (string, *yaml.Node, error) {
+func parseAction(action *yaml.Node) (string, *yaml.Node, bool, error) {
 	if action.Kind != yaml.MappingNode {
-		return "", nil, fmt.Errorf("action must be a mapping")
+		return "", nil, false, fmt.Errorf("action must be a mapping")
 	}
 
 	targetNode, ok := mappingValue(action, "target")
 	if !ok || targetNode.Kind != yaml.ScalarNode {
-		return "", nil, fmt.Errorf("target scalar is required")
+		return "", nil, false, fmt.Errorf("target scalar is required")
 	}
 	updateNode, ok := mappingValue(action, "update")
-	if !ok || updateNode.Kind != yaml.MappingNode {
-		return "", nil, fmt.Errorf("update mapping is required")
+	if ok {
+		if updateNode.Kind != yaml.MappingNode {
+			return "", nil, false, fmt.Errorf("update mapping is required")
+		}
+		return targetNode.Value, updateNode, false, nil
 	}
-	return targetNode.Value, updateNode, nil
+	replaceNode, ok := mappingValue(action, "replace")
+	if !ok || replaceNode.Kind != yaml.MappingNode {
+		return "", nil, false, fmt.Errorf("update or replace mapping is required")
+	}
+	return targetNode.Value, replaceNode, true, nil
 }
 
 func lookupTarget(root *yaml.Node, target string) (*yaml.Node, error) {
