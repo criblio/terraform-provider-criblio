@@ -90,7 +90,7 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 		{Path: prefix + "_resource.go", Kind: "resource"},
 		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
 	}
-	if !resource.Action {
+	if shouldGenerateAcceptanceTest(resource) {
 		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
 	}
 	if resource.StructName != "GroupSystemSettings" && !resource.Action {
@@ -100,6 +100,10 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
 	}
 	return files
+}
+
+func shouldGenerateAcceptanceTest(resource parser.ResourceDef) bool {
+	return !resource.Action && !strings.HasPrefix(resource.Create.Path, "/v1/organizations/")
 }
 
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
@@ -768,21 +772,56 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func upstreamExampleUsage(resource parser.ResourceDef) (string, bool) {
+	example, ok := bestRequestExample(resource)
+	if !ok {
+		return "", false
+	}
+	values := exampleObject(example.Value)
+	if len(values) == 0 {
+		return "", false
+	}
+	var output strings.Builder
+	fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "my_"+resource.FileStem)
+	writeExampleFields(&output, resource, resource.Fields, values, 1)
+	output.WriteString("}")
+	return output.String(), true
+}
+
+func bestRequestExample(resource parser.ResourceDef) (parser.ExampleDef, bool) {
+	var best parser.ExampleDef
+	bestScore := -1
 	for _, example := range resource.Create.Examples {
 		values := exampleObject(example.Value)
 		if len(values) == 0 {
 			continue
 		}
-		var output strings.Builder
-		fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "my_"+resource.FileStem)
-		writeExampleFields(&output, resource.Fields, values, 1)
-		output.WriteString("}")
-		return output.String(), true
+		score := exampleFieldScore(resource.Fields, values)
+		if score > bestScore {
+			best = example
+			bestScore = score
+		}
 	}
-	return "", false
+	return best, bestScore >= 0
 }
 
-func writeExampleFields(output *strings.Builder, fields []parser.FieldDef, values map[string]any, indentLevel int) {
+func exampleFieldScore(fields []parser.FieldDef, values map[string]any) int {
+	score := 0
+	for _, field := range fields {
+		if field.Computed && !field.Optional {
+			continue
+		}
+		if _, ok := values[field.APIName]; ok {
+			score++
+			continue
+		}
+		if _, ok := values[field.TerraformName]; ok {
+			score++
+		}
+	}
+	return score
+}
+
+func writeExampleFields(output *strings.Builder, resource parser.ResourceDef, fields []parser.FieldDef, values map[string]any, indentLevel int) {
 	for _, field := range fields {
 		if field.Computed && !field.Optional {
 			continue
@@ -792,16 +831,16 @@ func writeExampleFields(output *strings.Builder, fields []parser.FieldDef, value
 			value, ok = values[field.TerraformName]
 		}
 		if !ok && field.PathParam {
-			value, ok = exampleValue(field), true
+			value, ok = exampleValue(resource, field), true
 		}
 		if !ok {
 			continue
 		}
-		writeExampleField(output, field, value, indentLevel)
+		writeExampleField(output, resource, field, value, indentLevel)
 	}
 }
 
-func writeExampleField(output *strings.Builder, field parser.FieldDef, value any, indentLevel int) {
+func writeExampleField(output *strings.Builder, resource parser.ResourceDef, field parser.FieldDef, value any, indentLevel int) {
 	indent := strings.Repeat("  ", indentLevel)
 	if nestedObject(field) {
 		values := exampleObject(value)
@@ -809,7 +848,7 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 			return
 		}
 		fmt.Fprintf(output, "%s%s = {\n", indent, field.TerraformName)
-		writeExampleFields(output, field.Fields, values, indentLevel+1)
+		writeExampleFields(output, resource, field.Fields, values, indentLevel+1)
 		fmt.Fprintf(output, "%s}\n", indent)
 		return
 	}
@@ -825,7 +864,7 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 				continue
 			}
 			fmt.Fprintf(output, "%s  {\n", indent)
-			writeExampleFields(output, field.Fields, itemValues, indentLevel+2)
+			writeExampleFields(output, resource, field.Fields, itemValues, indentLevel+2)
 			fmt.Fprintf(output, "%s  }\n", indent)
 		}
 		fmt.Fprintf(output, "%s]\n", indent)
@@ -953,7 +992,7 @@ func generatedExample(resource parser.ResourceDef) string {
 		if field.Computed && !field.Optional {
 			continue
 		}
-		fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, exampleValue(field))
+		fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, exampleValue(resource, field))
 	}
 	output.WriteString("}")
 	return output.String()
@@ -969,11 +1008,14 @@ func generatedImportBlock(resource parser.ResourceDef) string {
 }`, resourceType(resource), resourceType(resource))
 }
 
-func exampleValue(field parser.FieldDef) string {
+func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	if field.PathParam && field.TerraformName == "product" {
 		return "stream"
 	}
 	if field.PathParam && field.TerraformName == "group_id" {
+		if strings.HasPrefix(resource.TypeName, "criblio_search_") {
+			return "default_search"
+		}
 		return "default"
 	}
 	if field.TerraformName == "id" {

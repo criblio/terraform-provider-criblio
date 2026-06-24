@@ -12,6 +12,9 @@ e2e-test:
 acceptance-test:
 	go test -v -timeout 20m ./tests/acceptance -parallel 1
 
+audit-acceptance-testdata:
+	@scripts/audit-acceptance-testdata.sh
+
 test-cleanup:
 	@cd tests/e2e; rm -rf local-plugins .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 

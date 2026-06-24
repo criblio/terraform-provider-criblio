@@ -1,12 +1,14 @@
 resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
   description = "test"
+  group_id    = "default_search"
   id          = "test_dashboard_category"
-  is_pack     = true
+  is_pack     = false
   name        = "test_dashboard_category"
 }
 
 resource "criblio_search_dashboard_category" "my_searchdashboardcategory_not_pack" {
   description = "test"
+  group_id    = "default_search"
   id          = "test_dashboard_category_not_pack"
   is_pack     = false
   name        = "test_dashboard_category_not_pack"

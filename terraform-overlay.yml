@@ -530,6 +530,117 @@ actions:
                 type: string
                 description: The Worker Group to map matching events to.
 
+  - target: "$.paths./m/{groupId}/search/dashboard-categories.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.get"
+    update:
+      x-terraform-read: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.patch"
+    update:
+      x-terraform-update: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.delete"
+    update:
+      x-terraform-delete: SearchDashboardCategory
+  - target: "$.components.schemas.DashboardCategory.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DashboardCategory.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DashboardCategory.properties.isPack"
+    update:
+      x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/local_search/engines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.get"
+    update:
+      x-terraform-read: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.patch"
+    update:
+      x-terraform-update: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.delete"
+    update:
+      x-terraform-delete: SearchEngine
+  - target: "$.components.schemas.LocalSearchEngine.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LocalSearchEngine.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.activeWorkflow"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.datasets"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.deletionStartedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.effectiveStatus"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.engineType"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.hasMain"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.isComputeDeprovisioned"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.isStorageDeprovisioned"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.lastProvisionedMs"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.metricsLastPublishedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.status"
+    update:
+      x-terraform-computed: true
+
+  - target: "$.paths./m/{groupId}/search/macros.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.get"
+    update:
+      x-terraform-read: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.patch"
+    update:
+      x-terraform-update: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.delete"
+    update:
+      x-terraform-delete: SearchMacro
+  - target: "$.components.schemas.SearchMacro.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.SearchMacro.properties.created"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.createdBy"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.modified"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.tags"
+    update:
+      x-terraform-optional-computed: true
+
   - target: "$.paths./version/commit.post"
     update:
       x-terraform-resource: true

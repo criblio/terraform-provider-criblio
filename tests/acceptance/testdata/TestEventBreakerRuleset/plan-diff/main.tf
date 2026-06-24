@@ -1,1 +1,0 @@
-../../../../../examples/event-breaker-ruleset/main.tf

@@ -1,9 +1,7 @@
 resource "criblio_search_macro" "my_searchmacro" {
-  created     = 0.82
-  created_by  = "...my_created_by..."
-  description = "...my_description..."
-  id          = "macro-errors"
-  modified    = 8.62
-  replacement = "...my_replacement..."
-  tags        = "...my_tags..."
+  description = "Filters to high-severity events."
+  group_id    = "default_search"
+  id          = "error_filter"
+  replacement = "severity >= \"Error\""
+  tags        = "errors,prod"
 }

@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -12,20 +11,59 @@ func TestSearchEngine(t *testing.T) {
 	if os.Getenv("DEPLOYMENT") == "onprem" {
 		t.Skip("Skipping resource for On-Prem deployments as it is not supported")
 	}
-	t.Run("plan-diff", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			ProtoV6ProviderFactories:  providerFactory,
-			PreventPostDestroyRefresh: true,
-			Steps: []resource.TestStep{
-				{
-					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "id", "my_search_tf_engine"),
-						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "description", "My Search Engine TF"),
-						resource.TestCheckResourceAttr("criblio_search_engine.my_searchengine", "tier_size", "small"),
-					),
+
+	resourceName := "criblio_search_engine.my_searchengine"
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: searchEngineConfig("phase2 search engine"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
+					resource.TestCheckResourceAttr(resourceName, "id", "phase2_search_engine"),
+					resource.TestCheckResourceAttr(resourceName, "description", "phase2 search engine"),
+					resource.TestCheckResourceAttr(resourceName, "tier_size", "small"),
+				),
+			},
+			{
+				Config: searchEngineConfig("phase2 search engine updated"),
+				Check:  resource.TestCheckResourceAttr(resourceName, "description", "phase2 search engine updated"),
+			},
+			{
+				Config:   searchEngineConfig("phase2 search engine updated"),
+				PlanOnly: true,
+			},
+			{
+				ResourceName:      resourceName,
+				ImportState:       true,
+				ImportStateId:     `{"group_id":"default_search","id":"phase2_search_engine"}`,
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"active_workflow",
+					"datasets",
+					"deletion_started_at",
+					"effective_status",
+					"engine_type",
+					"has_main",
+					"is_compute_deprovisioned",
+					"is_storage_deprovisioned",
+					"last_provisioned_ms",
+					"metrics_last_published_at",
+					"status",
 				},
 			},
-		})
+		},
 	})
+}
+
+func searchEngineConfig(description string) string {
+	return `resource "criblio_search_engine" "my_searchengine" {
+  description = "` + description + `"
+  group_id    = "default_search"
+  id          = "phase2_search_engine"
+  tier_size   = "small"
+}
+`
 }
