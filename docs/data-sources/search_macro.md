@@ -14,7 +14,8 @@ SearchMacro DataSource
 
 ```terraform
 data "criblio_search_macro" "my_searchmacro" {
-  id = "macro-errors"
+  group_id = "default_search"
+  id       = "error_filter"
 }
 ```
 
@@ -23,13 +24,14 @@ data "criblio_search_macro" "my_searchmacro" {
 
 ### Required
 
-- `id` (String) Unique ID to GET
+- `group_id` (String) Worker group ID.
+- `id` (String) Unique identifier for the Macro.
 
 ### Read-Only
 
-- `created` (Number)
-- `created_by` (String)
-- `description` (String)
-- `modified` (Number)
-- `replacement` (String)
-- `tags` (String)
+- `created` (Integer) Timestamp (in Unix time) when the Macro was created (milliseconds).
+- `created_by` (String) Username of the user who created the Macro.
+- `description` (String) Brief description of the Macro.
+- `modified` (Integer) Timestamp (in Unix time) for when the Macro was last modified (milliseconds).
+- `replacement` (String) Query fragment that is substituted when the Macro is referenced in a search.
+- `tags` (String) Tag used to filter Macros.

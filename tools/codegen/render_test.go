@@ -195,6 +195,52 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
 }
 
+func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "searchmacro",
+		FileStem: "search_macro",
+		TypeName: "criblio_search_macro",
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "minimal",
+					Value: map[string]any{
+						"id":          "all_events",
+						"replacement": "true",
+					},
+				},
+				{
+					Name: "full",
+					Value: map[string]any{
+						"id":          "error_filter",
+						"description": "Filters to high-severity events.",
+						"replacement": `severity >= "Error"`,
+						"tags":        "errors,prod",
+					},
+				},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{APIName: "description", TerraformName: "description", Type: "string", Optional: true},
+			{APIName: "groupId", TerraformName: "group_id", Type: "string", Required: true, PathParam: true},
+			{APIName: "id", TerraformName: "id", Type: "string", Required: true},
+			{APIName: "replacement", TerraformName: "replacement", Type: "string", Required: true},
+			{APIName: "tags", TerraformName: "tags", Type: "string", Optional: true},
+		},
+	}
+
+	got, ok := upstreamExampleUsage(resource)
+	if !ok {
+		t.Fatalf("upstreamExampleUsage returned no example")
+	}
+	assertContains(t, got, `id = "error_filter"`)
+	assertContains(t, got, `description = "Filters to high-severity events."`)
+	assertContains(t, got, `replacement = "severity >= \"Error\""`)
+	assertContains(t, got, `tags = "errors,prod"`)
+	assertContains(t, got, `group_id = "default_search"`)
+	assertNotContains(t, got, `id = "all_events"`)
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

@@ -14,7 +14,8 @@ SearchDashboardCategory DataSource
 
 ```terraform
 data "criblio_search_dashboard_category" "my_searchdashboardcategory" {
-  id = "observability"
+  group_id = "default_search"
+  id       = "observability"
 }
 ```
 
@@ -23,10 +24,11 @@ data "criblio_search_dashboard_category" "my_searchdashboardcategory" {
 
 ### Required
 
-- `id` (String) Unique ID to GET
+- `group_id` (String) Worker group ID.
+- `id` (String) Unique identifier for the Dashboard Collection.
 
 ### Read-Only
 
-- `description` (String)
-- `is_pack` (Boolean)
-- `name` (String)
+- `description` (String) Brief description of the Dashboard Collection.
+- `is_pack` (Boolean) If <code>true</code>, the Collection represents a Pack that contains Dashboards rather than a user-created Collection.
+- `name` (String) Display name for the Dashboard Collection.

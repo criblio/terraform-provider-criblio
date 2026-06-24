@@ -18,6 +18,20 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_search_dataset_provider": {"id", "description", "provider_id", "type"},
 	"criblio_search_dataset_ruleset":  {"items"}, // Computed mirror of API; config is `rules` only (matches provider schema).
 	"criblio_search_datatype_ruleset": {"items"}, // Computed mirror of API; config is `rules` only (same as provider schema intent).
+	"criblio_search_engine": {
+		"active_workflow",
+		"datasets",
+		"deletion_started_at",
+		"effective_status",
+		"engine_type",
+		"has_main",
+		"is_compute_deprovisioned",
+		"is_storage_deprovisioned",
+		"last_provisioned_ms",
+		"metrics_last_published_at",
+		"status",
+	},
+	"criblio_search_macro": {"created", "created_by", "modified"},
 }
 
 // flattenItemsToAttrsTypes are resource types whose API returns payload in a list (Items) and schema
