@@ -21,7 +21,7 @@ func TestSubscription(t *testing.T) {
 			{
 				Config: subscriptionConfig("test subscription", true, "test"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "id", "phase2_lifecycle_subscription"),
+					resource.TestCheckResourceAttr(resourceName, "id", "test_lifecycle_subscription"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test subscription"),
 					resource.TestCheckResourceAttr(resourceName, "disabled", "true"),
 					resource.TestCheckResourceAttr(resourceName, "filter", "test"),
@@ -44,7 +44,7 @@ func TestSubscription(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default","id":"phase2_lifecycle_subscription"}`,
+				ImportStateId:     `{"group_id":"default","id":"test_lifecycle_subscription"}`,
 				ImportStateVerify: true,
 			},
 		},
@@ -61,7 +61,7 @@ func subscriptionConfig(description string, disabled bool, filter string) string
   disabled    = ` + disabledValue + `
   filter      = "` + filter + `"
   group_id    = "default"
-  id          = "phase2_lifecycle_subscription"
+  id          = "test_lifecycle_subscription"
   pipeline    = "passthru"
 }
 `

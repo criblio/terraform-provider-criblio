@@ -2,6 +2,7 @@ package tests
 
 import (
 	"os"
+	"strconv"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -19,31 +20,31 @@ func TestSearchSavedQuery(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: searchSavedQueryConfig("phase2 saved query", "dataset=\"cribl_internal_logs\" | limit 10"),
+					Config: searchSavedQueryConfig("test saved query", "dataset=\"cribl_internal_logs\" | limit 10"),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
-						resource.TestCheckResourceAttr(resourceName, "id", "phase2_search_saved_query"),
-						resource.TestCheckResourceAttr(resourceName, "name", "phase2 saved query"),
-						resource.TestCheckResourceAttr(resourceName, "description", "phase2 saved query"),
+						resource.TestCheckResourceAttr(resourceName, "id", "test_search_saved_query"),
+						resource.TestCheckResourceAttr(resourceName, "name", "test saved query"),
+						resource.TestCheckResourceAttr(resourceName, "description", "test saved query"),
 						resource.TestCheckResourceAttr(resourceName, "is_private", "true"),
 					),
 				},
 				{
-					Config: searchSavedQueryConfig("phase2 saved query updated", "dataset=\"cribl_internal_logs\" | limit 20"),
+					Config: searchSavedQueryConfig("test saved query updated", "dataset=\"cribl_internal_logs\" | limit 20"),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr(resourceName, "name", "phase2 saved query updated"),
-						resource.TestCheckResourceAttr(resourceName, "description", "phase2 saved query updated"),
+						resource.TestCheckResourceAttr(resourceName, "name", "test saved query updated"),
+						resource.TestCheckResourceAttr(resourceName, "description", "test saved query updated"),
 						resource.TestCheckResourceAttr(resourceName, "query", "dataset=\"cribl_internal_logs\" | limit 20"),
 					),
 				},
 				{
-					Config:   searchSavedQueryConfig("phase2 saved query updated", "dataset=\"cribl_internal_logs\" | limit 20"),
+					Config:   searchSavedQueryConfig("test saved query updated", "dataset=\"cribl_internal_logs\" | limit 20"),
 					PlanOnly: true,
 				},
 				{
 					ResourceName:      resourceName,
 					ImportState:       true,
-					ImportStateId:     `{"group_id":"default_search","id":"phase2_search_saved_query"}`,
+					ImportStateId:     `{"group_id":"default_search","id":"test_search_saved_query"}`,
 					ImportStateVerify: true,
 				},
 			},
@@ -53,16 +54,14 @@ func TestSearchSavedQuery(t *testing.T) {
 
 func searchSavedQueryConfig(description, query string) string {
 	return `resource "criblio_search_saved_query" "my_searchsavedquery" {
-  description = "` + description + `"
+  description = ` + strconv.Quote(description) + `
   earliest    = "-1h"
   group_id    = "default_search"
-  id          = "phase2_search_saved_query"
+  id          = "test_search_saved_query"
   is_private  = true
   latest      = "now"
-  name        = "` + description + `"
-  query       = <<-EOT
-` + query + `
-EOT
+  name        = ` + strconv.Quote(description) + `
+  query       = ` + strconv.Quote(query) + `
 }
 `
 }

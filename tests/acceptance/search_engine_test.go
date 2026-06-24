@@ -19,26 +19,26 @@ func TestSearchEngine(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: searchEngineConfig("phase2 search engine"),
+				Config: searchEngineConfig("test search engine"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
-					resource.TestCheckResourceAttr(resourceName, "id", "phase2_search_engine"),
-					resource.TestCheckResourceAttr(resourceName, "description", "phase2 search engine"),
+					resource.TestCheckResourceAttr(resourceName, "id", "test_search_engine"),
+					resource.TestCheckResourceAttr(resourceName, "description", "test search engine"),
 					resource.TestCheckResourceAttr(resourceName, "tier_size", "small"),
 				),
 			},
 			{
-				Config: searchEngineConfig("phase2 search engine updated"),
-				Check:  resource.TestCheckResourceAttr(resourceName, "description", "phase2 search engine updated"),
+				Config: searchEngineConfig("test search engine updated"),
+				Check:  resource.TestCheckResourceAttr(resourceName, "description", "test search engine updated"),
 			},
 			{
-				Config:   searchEngineConfig("phase2 search engine updated"),
+				Config:   searchEngineConfig("test search engine updated"),
 				PlanOnly: true,
 			},
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"phase2_search_engine"}`,
+				ImportStateId:     `{"group_id":"default_search","id":"test_search_engine"}`,
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"active_workflow",
@@ -62,7 +62,7 @@ func searchEngineConfig(description string) string {
 	return `resource "criblio_search_engine" "my_searchengine" {
   description = "` + description + `"
   group_id    = "default_search"
-  id          = "phase2_search_engine"
+  id          = "test_search_engine"
   tier_size   = "small"
 }
 `

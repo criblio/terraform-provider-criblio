@@ -20,29 +20,29 @@ func TestSearchSource(t *testing.T) {
 			PreventPostDestroyRefresh: true,
 			Steps: []resource.TestStep{
 				{
-					Config: searchSourceConfig("phase2 search source", 31170),
+					Config: searchSourceConfig("test search source", 31170),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
-						resource.TestCheckResourceAttr(resourceName, "id", "phase2_search_source"),
+						resource.TestCheckResourceAttr(resourceName, "id", "test_search_source"),
 						resource.TestCheckResourceAttr(resourceName, "type", "cribl_http"),
-						resource.TestCheckResourceAttr(resourceName, "description", "phase2 search source"),
+						resource.TestCheckResourceAttr(resourceName, "description", "test search source"),
 						resource.TestCheckResourceAttr(resourceName, "disabled", "false"),
 					),
 				},
 				{
-					Config: searchSourceConfig("phase2 search source updated", 31170),
+					Config: searchSourceConfig("test search source updated", 31170),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr(resourceName, "description", "phase2 search source updated"),
+						resource.TestCheckResourceAttr(resourceName, "description", "test search source updated"),
 					),
 				},
 				{
-					Config:   searchSourceConfig("phase2 search source updated", 31170),
+					Config:   searchSourceConfig("test search source updated", 31170),
 					PlanOnly: true,
 				},
 				{
 					ResourceName:      resourceName,
 					ImportState:       true,
-					ImportStateId:     `{"group_id":"default_search","id":"phase2_search_source"}`,
+					ImportStateId:     `{"group_id":"default_search","id":"test_search_source"}`,
 					ImportStateVerify: true,
 				},
 			},
@@ -57,7 +57,7 @@ func searchSourceConfig(description string, port int) string {
   disabled    = false
   group_id    = "default_search"
   host        = "0.0.0.0"
-  id          = "phase2_search_source"
+  id          = "test_search_source"
   port        = ` + fmt.Sprint(port) + `
   type        = "cribl_http"
 

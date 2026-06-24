@@ -19,27 +19,27 @@ func TestSearchDashboardCategory(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: searchDashboardCategoryConfig("phase2 search dashboard category"),
+				Config: searchDashboardCategoryConfig("test search dashboard category"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
-					resource.TestCheckResourceAttr(resourceName, "id", "phase2_search_dashboard_category"),
-					resource.TestCheckResourceAttr(resourceName, "name", "phase2_search_dashboard_category"),
-					resource.TestCheckResourceAttr(resourceName, "description", "phase2 search dashboard category"),
+					resource.TestCheckResourceAttr(resourceName, "id", "test_search_dashboard_category"),
+					resource.TestCheckResourceAttr(resourceName, "name", "test_search_dashboard_category"),
+					resource.TestCheckResourceAttr(resourceName, "description", "test search dashboard category"),
 					resource.TestCheckResourceAttr(resourceName, "is_pack", "false"),
 				),
 			},
 			{
-				Config: searchDashboardCategoryConfig("phase2 search dashboard category updated"),
-				Check:  resource.TestCheckResourceAttr(resourceName, "description", "phase2 search dashboard category updated"),
+				Config: searchDashboardCategoryConfig("test search dashboard category updated"),
+				Check:  resource.TestCheckResourceAttr(resourceName, "description", "test search dashboard category updated"),
 			},
 			{
-				Config:   searchDashboardCategoryConfig("phase2 search dashboard category updated"),
+				Config:   searchDashboardCategoryConfig("test search dashboard category updated"),
 				PlanOnly: true,
 			},
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"phase2_search_dashboard_category"}`,
+				ImportStateId:     `{"group_id":"default_search","id":"test_search_dashboard_category"}`,
 				ImportStateVerify: true,
 			},
 		},
@@ -50,9 +50,9 @@ func searchDashboardCategoryConfig(description string) string {
 	return `resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
   description = "` + description + `"
   group_id    = "default_search"
-  id          = "phase2_search_dashboard_category"
+  id          = "test_search_dashboard_category"
   is_pack     = false
-  name        = "phase2_search_dashboard_category"
+  name        = "test_search_dashboard_category"
 }
 `
 }
