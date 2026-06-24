@@ -14,7 +14,13 @@ Commit Resource
 
 ```terraform
 resource "criblio_commit" "my_commit" {
-  message = "Updated pipeline configuration for syslog parsing"
+  effective = true
+  files = [
+    "groups/default/local/cribl/pipelines/http_input/conf.yml",
+    "groups/default/local/cribl/routes.yml",
+  ]
+  group = "default"
+  message = "Update Route and Pipeline for HTTP Sources"
 }
 ```
 

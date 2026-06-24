@@ -144,12 +144,12 @@ func TestNewFromResources_derivedMetadata(t *testing.T) {
 	assert.Equal(t, "GetPipelineByID", e.GetMethod)
 	assert.Equal(t, "json:group_id,id", e.ImportIDFormat)
 
-	// Notification: id-only import
+	// Notification: generated REST resource, JSON group_id+id
 	e, ok = reg.ByTypeName("criblio_notification")
 	require.True(t, ok)
 	assert.Equal(t, "ListNotification", e.ListMethod)
 	assert.Equal(t, "GetNotificationByID", e.GetMethod)
-	assert.Equal(t, "id", e.ImportIDFormat)
+	assert.Equal(t, "json:group_id,id", e.ImportIDFormat)
 
 	// Lookup file: group_id-only import
 	e, ok = reg.ByTypeName("criblio_lookup_file")

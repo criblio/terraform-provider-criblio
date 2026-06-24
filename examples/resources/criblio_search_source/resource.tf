@@ -10,6 +10,7 @@ resource "criblio_search_source" "my_searchsource" {
   description     = "...my_description..."
   disabled        = false
   elastic_api     = "/elastic/_bulk"
+  group_id        = "default_search"
   host            = "...my_host..."
   id              = "...my_id..."
   port            = 8088

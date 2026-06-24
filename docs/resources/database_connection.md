@@ -15,13 +15,15 @@ DatabaseConnection Resource
 ```terraform
 resource "criblio_database_connection" "my_database_connection" {
   auth_type = "connectionString"
-  connection_string = "mysql://admin:password123@mysql.example.com:3306/production?ssl=true"
-  connection_timeout = 10000
-  database_type = "mysql"
-  description = "Production MySQL database for customer data"
+  connection_string = "oracle.example.com:1521/ORCL"
+  connection_timeout = 15000
+  database_type = "oracle"
+  description = "Oracle ERP database"
   group_id = "default"
-  id = "mysql-prod-db"
-  tags = "production,mysql,customer-data"
+  id = "oracle-erp"
+  password = "Oracle_Pass456!"
+  tags = "erp,oracle,finance"
+  user = "erp_user"
 }
 ```
 

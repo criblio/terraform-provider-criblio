@@ -14,29 +14,15 @@ MappingRuleset Resource
 
 ```terraform
 resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
+  active = true
   conf = {
     functions = [
-      {
-        id = "eval"
-        filter = "(conn_ip.startsWith(\"10.10.42.\") && cpus > 6) || env.CRIBL_HOME.match(\"DMZ\")"
-        disabled = false
-        final = true
-        description = "Map high-performance nodes in specific network or DMZ"
-        conf = {
-          add = [
-            {
-              name = "groupId"
-              value = "'high_perf_fleet'"
-            }
-          ]
-        }
-      }
       {
         id = "eval"
         filter = "!cribl.group"
         disabled = false
         final = true
-        description = "Default mapping"
+        description = "Default Mappings"
         conf = {
           add = [
             {
@@ -48,7 +34,7 @@ resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
       }
     ]
   }
-  id = "complex-mapping"
+  id = "default"
   product = "stream"
 }
 ```

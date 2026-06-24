@@ -14,6 +14,7 @@ resource "criblio_notification" "my_notification" {
     worker_group         = "...my_worker_group..."
   }
   disabled = false
+  group_id = "default"
   group    = "myNotificationGroup"
   id       = "myUniqueNotificationId"
   metadata = [

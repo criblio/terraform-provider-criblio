@@ -14,9 +14,10 @@ SearchEngine Resource
 
 ```terraform
 resource "criblio_search_engine" "my_search_engine" {
+  description = "Dedicated engine for analytics workloads"
   group_id = "default_search"
-  id = "local_ingest_min"
-  tier_size = "xsmall"
+  id = "local_ingest_analytics"
+  tier_size = "medium"
 }
 ```
 

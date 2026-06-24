@@ -1,6 +1,7 @@
 resource "criblio_search_saved_query" "my_searchsavedquery" {
   description = "test saved query"
   earliest    = "-1h"
+  group_id    = "default_search"
   id          = "test_saved"
   is_private  = true
   latest      = "now"

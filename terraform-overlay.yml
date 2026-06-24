@@ -641,11 +641,317 @@ actions:
     update:
       x-terraform-optional-computed: true
 
+  - target: "$.paths./m/{groupId}/search/saved.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.get"
+    update:
+      x-terraform-read: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.patch"
+    update:
+      x-terraform-update: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.delete"
+    update:
+      x-terraform-delete: SearchSavedQuery
+  - target: "$.components.schemas.SavedQuery.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.SavedQuery.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.earliest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.latest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.isPrivate"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.displayUsername"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.isSystem"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.lib"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.resolvedDatasetIds"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.searchJobSource"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.tableConfig"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.notifications.properties.items"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.resumeMissed"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.resumeOnBoot"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/search/local_search/sources.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.get"
+    update:
+      x-terraform-read: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.patch"
+    update:
+      x-terraform-update: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.delete"
+    update:
+      x-terraform-delete: SearchSource
+  - target: "$.components.schemas.LocalSearchSource.properties"
+    update:
+      splunkHecAPI:
+        type: string
+        description: Absolute path for Splunk HTTP Event Collector (HEC) API requests. Required when type is splunk_hec.
+        pattern: ^/|^$
+      splunkHecAcks:
+        type: boolean
+        description: When true, enable Splunk HEC acknowledgements. Used when type is splunk_hec.
+      criblAPI:
+        type: string
+        description: Absolute path for Cribl HTTP API requests. Used when type is cribl_http.
+        pattern: ^/|^$
+      elasticAPI:
+        type: string
+        description: Absolute path for Elasticsearch bulk API requests. Used when type is elastic.
+        pattern: ^/|^$
+      prometheusAPI:
+        type: string
+        description: Absolute path for Prometheus remote write requests. Used when type is prometheus_rw.
+        pattern: ^/
+      tcpPort:
+        type: integer
+        minimum: 0
+        maximum: 65535
+        description: TCP listen port when the source type uses a dedicated TCP port.
+      udpPort:
+        type: integer
+        minimum: 0
+        maximum: 65535
+        description: UDP listen port when applicable.
+      subscriptions:
+        type: array
+        description: WEF subscriptions; required when type is wef.
+        items:
+          $ref: "#/components/schemas/LocalSearchSourceWefSubscriptionItem"
+  - target: "$.components.schemas"
+    update:
+      LocalSearchSourceWefSubscriptionItem:
+        type: object
+        description: WEF subscription entry for Local Search when type is wef.
+        required:
+          - subscriptionName
+          - contentFormat
+          - heartbeatInterval
+          - batchTimeout
+          - targets
+        properties:
+          subscriptionName:
+            type: string
+            description: Subscription name exposed to Windows clients.
+          version:
+            type: string
+            description: Version UUID for this subscription.
+          contentFormat:
+            type: string
+            enum:
+              - Raw
+              - RenderedText
+            description: Content format for delivered events.
+            x-speakeasy-unknown-values: allow
+          heartbeatInterval:
+            type: number
+            minimum: 1
+            description: Maximum seconds between endpoint check-ins before marking unavailable.
+          batchTimeout:
+            type: number
+            minimum: 0
+            description: Seconds to collect events before sending to Cribl.
+          readExistingEvents:
+            type: boolean
+            x-terraform-ignore: true
+          sendBookmarks:
+            type: boolean
+            x-terraform-ignore: true
+          compress:
+            type: boolean
+            x-terraform-ignore: true
+          targets:
+            type: array
+            description: DNS names of endpoints that forward these events.
+            items:
+              type: string
+              minLength: 1
+          locale:
+            type: string
+            x-terraform-ignore: true
+          metadata:
+            type: array
+            x-terraform-ignore: true
+            items:
+              type: object
+              additionalProperties: true
+          id:
+            type: string
+          querySelector:
+            type: string
+            description: Query builder mode; simple with queries, or xml with xmlQuery.
+            enum:
+              - simple
+              - xml
+            x-speakeasy-unknown-values: allow
+          queries:
+            type: array
+            description: Path and XPath selector entries when using simple mode.
+            items:
+              type: object
+              required:
+                - path
+                - queryExpression
+              properties:
+                path:
+                  type: string
+                queryExpression:
+                  type: string
+          xmlQuery:
+            type: string
+            description: XPath query when using xml mode.
+  - target: "$.components.schemas.LocalSearchSource.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LocalSearchSource.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.authTokens"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.port"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.tls"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.status"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/notifications.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.get"
+    update:
+      x-terraform-read: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.patch"
+    update:
+      x-terraform-update: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.delete"
+    update:
+      x-terraform-delete: Notification
+  - target: "$.components.examples.CreateNotificationExamplesHighVolumeSource.value"
+    update:
+      group: default
+  - target: "$.components.examples.CreateNotificationExamplesUnhealthyDestination.value"
+    update:
+      group: default
+  - target: "$.components.examples.UpdateNotificationExamplesUpdateHighVolumeSource.value"
+    update:
+      group: default
+  - target: "$.components.schemas.Notification.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Notification.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.targets"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.targetConfigs"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.conf"
+    update:
+      x-terraform-optional-computed: true
+      properties:
+        savedQueryId:
+          type: string
+          description: ID of the saved query this notification is associated with.
+        message:
+          type: string
+          description: Message template for the notification.
+        triggerType:
+          type: string
+          description: Type of trigger.
+        triggerComparator:
+          type: string
+          description: Comparison operator.
+        triggerCount:
+          type: number
+          description: Threshold count for the trigger.
+        name:
+          type: string
+          description: Input or source ID for Stream notifications.
+        timeWindow:
+          type: string
+          description: Time window for the metric.
+        dataVolume:
+          type: string
+          description: Data volume threshold.
+        notifyOnResolution:
+          type: boolean
+          description: Notify when the condition returns to the resolved state.
+        usageThreshold:
+          type: number
+          description: Persistent queue usage threshold.
+        __workerGroup:
+          type: string
+          description: Optional scope to a specific worker group.
+  - target: "$.components.schemas.Notification.properties.metadata"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.group"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.pack"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.Notification.properties.mode"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.Notification.properties.templateTargetPairs"
+    update:
+      x-terraform-computed: true
+
   - target: "$.paths./version/commit.post"
     update:
       x-terraform-resource: true
       x-terraform-resource-name: Commit
       x-terraform-action: true
+
+  - target: "$.components.examples.VersionCommitExamplesCommitAll.value"
+    update:
+      group: default
+  - target: "$.components.examples.VersionCommitExamplesCommitSpecificFiles.value"
+    update:
+      group: default
 
   - target: "$.components.schemas.GitCommitBody.properties"
     update:

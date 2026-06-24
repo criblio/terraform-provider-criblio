@@ -2,6 +2,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
   name        = "test"
   description = "test"
   is_private  = true
+  group_id    = "default_search"
   id          = "test_saved_query"
   query       = "cribl dataset=\"cribl_internal_logs\" source=*searches.log message=\"search finished\" | summarize count(), elapsedMS=sum(stats.elapsedMs), eventsFound=sum(stats.eventsFound) by user=stats.user"
   schedule = {
@@ -11,7 +12,6 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
     keep_last_n   = 2
     notifications = {
       disabled = false
-      items    = []
     }
   }
 }
@@ -20,6 +20,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
   name        = "test_with_notifications"
   description = "test with notifications"
   is_private  = true
+  group_id    = "default_search"
   id          = "test_saved_query_with_notifications_2"
   query       = "cribl dataset=\"cribl_internal_logs\" source=*searches.log message=\"search finished\" | summarize count(), elapsedMS=sum(stats.elapsedMs), eventsFound=sum(stats.eventsFound) by user=stats.user"
   earliest    = "-2h"
@@ -40,6 +41,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
 
 resource "criblio_notification" "my_notification" {
   id        = "test_notification"
+  group_id  = "default_search"
   condition = "search"
   conf = {
     trigger_type       = "resultsCount"
@@ -57,10 +59,6 @@ resource "criblio_notification" "my_notification" {
   target_configs = [
     {
       id = criblio_notification_target.my_notificationtarget.id
-      conf = {
-        include_results = true
-        attachment_type = "inline"
-      }
     }
   ]
 }

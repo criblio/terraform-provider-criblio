@@ -6,6 +6,7 @@ locals {
 resource "criblio_search_source" "cribl_http" {
   description = "Cribl HTTP ingest (example)"
   disabled    = false
+  group_id    = "default_search"
   host        = "0.0.0.0"
   id          = "example_in_cribl_http"
   port        = local.p + 0
@@ -13,8 +14,7 @@ resource "criblio_search_source" "cribl_http" {
 
   cribl_api = "/cribl/_bulk"
   tls = {
-    disabled    = false
-    min_version = "TLSv1.3"
+    disabled = true
   }
 }
 

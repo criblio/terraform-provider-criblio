@@ -14,12 +14,18 @@ GlobalVar Resource
 
 ```terraform
 resource "criblio_global_var" "my_global_var" {
-  description = "Global Variable for application environment name"
+  args = [
+    {
+      type = "number"
+      name = "rate"
+    }
+  ]
+  description = "Global Variable that computes a dynamic threshold based on the specified args"
   group_id = "default"
-  id = "app_environment"
+  id = "dynamic_threshold"
   lib = "custom"
-  type = "string"
-  value = "production"
+  type = "expression"
+  value = "rate * 1.5"
 }
 ```
 

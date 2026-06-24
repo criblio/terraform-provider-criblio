@@ -32,6 +32,15 @@ var readOnlyAttrsByType = map[string][]string{
 		"status",
 	},
 	"criblio_search_macro": {"created", "created_by", "modified"},
+	"criblio_search_saved_query": {
+		"display_username",
+		"is_system",
+		"lib",
+		"resolved_dataset_ids",
+		"search_job_source",
+		"table_config",
+	},
+	"criblio_notification": {"mode", "pack", "template_target_pairs"},
 }
 
 // flattenItemsToAttrsTypes are resource types whose API returns payload in a list (Items) and schema
