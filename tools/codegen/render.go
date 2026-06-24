@@ -602,9 +602,7 @@ func attrType(field parser.FieldDef) string {
 
 func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
-	for _, param := range append(resource.List.PathParams, resource.List.QueryParams...) {
-		fields = append(fields, param)
-	}
+	fields = append(fields, append(resource.List.PathParams, resource.List.QueryParams...)...)
 	return fields
 }
 
