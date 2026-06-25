@@ -246,6 +246,118 @@ components:
 	}
 }
 
+func TestParseSearchDatasetCompatibility(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /m/default_search/search/datasets:
+    post:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDataset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenericDataset"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericDataset"
+  /m/default_search/search/datasets/{id}:
+    get:
+      x-terraform-read: SearchDataset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericDataset"
+components:
+  schemas:
+    GenericDataset:
+      type: object
+      required:
+        - id
+        - provider
+        - type
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+          x-terraform-name: provider_id
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/ApiHttpDataset"
+    ApiHttpDataset:
+      x-terraform-name: apihttp_dataset
+      allOf:
+        - $ref: "#/components/schemas/GenericDatasetBase"
+        - type: object
+          required:
+            - enabledEndpoints
+          properties:
+            type:
+              type: string
+              const: api_http
+            enabledEndpoints:
+              type: array
+              items:
+                type: string
+    GenericDatasetBase:
+      type: object
+      required:
+        - id
+        - provider
+        - type
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+          x-terraform-name: provider_id
+        type:
+          type: string
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	searchDataset := resourceByName(t, resources, "SearchDataset")
+	id := fieldByTFName(t, searchDataset.Fields, "id")
+	if id.Required || id.Optional || !id.Computed || !id.PathParam {
+		t.Fatalf("search dataset id flags = required:%v optional:%v computed:%v path:%v", id.Required, id.Optional, id.Computed, id.PathParam)
+	}
+	providerID := fieldByTFName(t, searchDataset.Fields, "provider_id")
+	if providerID.Required || providerID.Optional || !providerID.Computed {
+		t.Fatalf("search dataset provider_id flags = required:%v optional:%v computed:%v", providerID.Required, providerID.Optional, providerID.Computed)
+	}
+	variant := variantByName(t, searchDataset.OneOfVariants, "ApiHttpDataset")
+	if variant.TerraformName != "apihttp_dataset" {
+		t.Fatalf("variant TerraformName = %q", variant.TerraformName)
+	}
+	if variant.DiscriminatorValue != "api_http" {
+		t.Fatalf("variant DiscriminatorValue = %q", variant.DiscriminatorValue)
+	}
+	enabledEndpoints := fieldByTFName(t, variant.Fields, "enabled_endpoints")
+	if enabledEndpoints.Required || !enabledEndpoints.Optional || !enabledEndpoints.Computed {
+		t.Fatalf("variant enabled_endpoints flags = required:%v optional:%v computed:%v", enabledEndpoints.Required, enabledEndpoints.Optional, enabledEndpoints.Computed)
+	}
+}
+
 func TestParseKeyQueryID(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

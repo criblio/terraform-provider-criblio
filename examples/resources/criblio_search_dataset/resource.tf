@@ -1,18 +1,19 @@
 resource "criblio_search_dataset" "my_searchdataset" {
-  cribl_search_dataset = {
-    additional_properties = "{ \"see\": \"documentation\" }"
-    description           = "This is a generic dataset"
-    id                    = "myGenericDatasetId"
+  s3_dataset = {
+    auto_detect_region = false
+    bucket             = "example-search-logs"
+    description        = "S3 search dataset"
+    filter             = "true"
+    id                 = "example_s3_dataset"
     metadata = {
-      created             = "2025-10-06T12:00:00Z"
-      enable_acceleration = true
-      modified            = "2025-10-06T12:34:56Z"
-      tags = [
-        "prod",
-        "pii",
-      ]
+      enable_acceleration = false
     }
-    provider_id = "myProviderId"
-    type        = "cribl_lake"
+    path        = "logs/*.log"
+    provider_id = "S3"
+    region      = "us-east-1"
+    storage_classes = [
+      "STANDARD",
+    ]
+    type = "s3"
   }
 }

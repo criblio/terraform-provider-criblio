@@ -127,7 +127,7 @@ type RoutesRoutesAPIModel struct {
 
 func RoutesRoutesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"clones":                   types.ListType{ElemType: types.StringType},
+		"clones":                   types.ListType{ElemType: types.MapType{ElemType: types.StringType}},
 		"context":                  types.StringType,
 		"description":              types.StringType,
 		"disabled":                 types.BoolType,

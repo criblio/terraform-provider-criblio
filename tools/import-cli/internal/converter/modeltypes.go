@@ -141,6 +141,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"SchemaResourceModel":                     reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
 		"SearchDashboardResourceModel":            reflect.TypeOf((*provider.SearchDashboardModel)(nil)).Elem(),
 		"SearchDashboardCategoryResourceModel":    reflect.TypeOf((*provider.SearchDashboardCategoryModel)(nil)).Elem(),
+		"SearchDatasetResourceModel":              reflect.TypeOf((*provider.SearchDatasetModel)(nil)).Elem(),
 		"SearchEngineResourceModel":               reflect.TypeOf((*provider.SearchEngineModel)(nil)).Elem(),
 		"SearchMacroResourceModel":                reflect.TypeOf((*provider.SearchMacroModel)(nil)).Elem(),
 		"SearchSavedQueryResourceModel":           reflect.TypeOf((*provider.SearchSavedQueryModel)(nil)).Elem(),

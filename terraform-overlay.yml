@@ -169,6 +169,7 @@ actions:
     update:
       default: []
       x-terraform-optional-computed: true
+      x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
   - target: "$.components.schemas.RouteConf.properties.filter"
     update:
       default: "true"
@@ -197,6 +198,7 @@ actions:
     update:
       default: []
       x-terraform-optional-computed: true
+      x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
   - target: "$.components.schemas.RouteComment.properties.groupId"
     update:
       x-terraform-computed: true
@@ -1697,6 +1699,181 @@ actions:
                 type: string
               description: Tags associated with the dataset.
               x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/datasets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.get"
+    update:
+      x-terraform-read: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.patch"
+    update:
+      x-terraform-update: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.delete"
+    update:
+      x-terraform-delete: SearchDataset
+  - target: "$.components.schemas.Dataset"
+    update:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the Dataset.
+        description:
+          type: string
+          description: Brief description of the Dataset.
+        provider:
+          type: string
+          description: Identifier for the Dataset Provider that the Dataset uses.
+          x-terraform-name: provider_id
+        type:
+          type: string
+          description: Dataset provider type.
+  - target: "$.components.schemas.DatasetMetadata.properties.earliest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.enableAcceleration"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.fieldList"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.scanMode"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.latestRunInfo"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetAmazonSecurityLake"
+    update:
+      x-terraform-name: aws_security_lake_dataset
+  - target: "$.components.schemas.DatasetApiAws"
+    update:
+      x-terraform-name: api_aws_dataset
+  - target: "$.components.schemas.DatasetApiAzure"
+    update:
+      x-terraform-name: api_azure_dataset
+  - target: "$.components.schemas.DatasetApiAzureDataExplorer"
+    update:
+      x-terraform-name: api_azure_data_explorer_dataset
+  - target: "$.components.schemas.DatasetApiElasticsearch"
+    update:
+      x-terraform-name: api_elastic_search_dataset
+  - target: "$.components.schemas.DatasetApiGcp"
+    update:
+      x-terraform-name: api_gcp_dataset
+  - target: "$.components.schemas.DatasetApiGoogleWorkspace"
+    update:
+      x-terraform-name: api_google_workspace_dataset
+  - target: "$.components.schemas.DatasetApiHttp"
+    update:
+      x-terraform-name: apihttp_dataset
+  - target: "$.components.schemas.DatasetApiMsgraph"
+    update:
+      x-terraform-name: api_ms_graph_dataset
+  - target: "$.components.schemas.DatasetApiOkta"
+    update:
+      x-terraform-name: api_okta_dataset
+  - target: "$.components.schemas.DatasetApiOpensearch"
+    update:
+      x-terraform-name: api_open_search_dataset
+  - target: "$.components.schemas.DatasetApiTailscale"
+    update:
+      x-terraform-name: api_tailscale_dataset
+  - target: "$.components.schemas.DatasetApiZoom"
+    update:
+      x-terraform-name: api_zoom_dataset
+  - target: "$.components.schemas.DatasetAzureBlob"
+    update:
+      x-terraform-name: azure_blob_dataset
+  - target: "$.components.schemas.DatasetClickhouse"
+    update:
+      x-terraform-name: click_house_dataset
+  - target: "$.components.schemas.DatasetCriblEdge"
+    update:
+      x-terraform-name: edge_dataset
+  - target: "$.components.schemas.DatasetCriblLake"
+    update:
+      x-terraform-name: cribl_lake_dataset
+  - target: "$.components.schemas.DatasetCriblLeader"
+    update:
+      x-terraform-name: cribl_leader_dataset
+  - target: "$.components.schemas.DatasetCriblLocal"
+    update:
+      x-terraform-name: cribl_local_dataset
+  - target: "$.components.schemas.DatasetCriblMeta"
+    update:
+      x-terraform-name: meta_dataset
+  - target: "$.components.schemas.DatasetCriblSearch"
+    update:
+      x-terraform-name: cribl_search_dataset
+  - target: "$.components.schemas.DatasetGcs"
+    update:
+      x-terraform-name: gcs_dataset
+  - target: "$.components.schemas.DatasetPrometheus"
+    update:
+      x-terraform-name: prometheus_dataset
+  - target: "$.components.schemas.DatasetS3"
+    update:
+      x-terraform-name: s3_dataset
+  - target: "$.components.schemas.DatasetS3.properties"
+    update:
+      autoDetectRegion:
+        type: boolean
+        description: Whether to automatically detect the region.
+        x-terraform-optional-computed: true
+      bucket:
+        type: string
+        description: S3 bucket name.
+        x-terraform-optional-computed: true
+      extraPaths:
+        type: array
+        description: Additional bucket paths that are included in this Dataset.
+        x-terraform-optional-computed: true
+        items:
+          type: object
+          properties:
+            autoDetectRegion:
+              type: boolean
+              description: Whether to automatically detect the region.
+              x-terraform-optional-computed: true
+            bucket:
+              type: string
+              description: S3 bucket name.
+              x-terraform-optional-computed: true
+            filter:
+              type: string
+              description: Filter expression evaluated against each object path under the bucket.
+              x-terraform-optional-computed: true
+            path:
+              type: string
+              description: Templated path under which to look for data.
+              x-terraform-optional-computed: true
+            region:
+              type: string
+              description: AWS region where the bucket is located.
+              x-terraform-optional-computed: true
+      path:
+        type: string
+        description: Templated path under which to look for data.
+        x-terraform-optional-computed: true
+      region:
+        type: string
+        description: AWS region where the bucket is located.
+        x-terraform-optional-computed: true
+      skipEventTimeFilter:
+        type: boolean
+        description: Whether to skip event time filtering.
+        x-terraform-optional-computed: true
+      storageClasses:
+        type: array
+        description: Storage classes to include in the search.
+        x-terraform-optional-computed: true
+        items:
+          type: string
+  - target: "$.components.schemas.DatasetSnowflake"
+    update:
+      x-terraform-name: snowflake_dataset
   - target: "$.paths./m/{groupId}/search/macros.post"
     update:
       x-terraform-resource: true

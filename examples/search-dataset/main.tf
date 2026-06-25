@@ -15,12 +15,7 @@ resource "criblio_search_dataset" "my_s3_dataset" {
     filter = "test"
     id     = "S3"
     metadata = {
-      created             = "2021-10-01T19:20:31.326Z"
       enable_acceleration = false
-      modified            = "2021-02-10T22:10:18.036Z"
-      tags = [
-        "test"
-      ]
     }
     path        = "logs/*.log"
     provider_id = "S3"
@@ -38,12 +33,7 @@ resource "criblio_search_dataset" "my_cribl_lake_dataset" {
     description = "test"
     id          = "test_cribl_lake_dataset"
     metadata = {
-      created             = "2021-09-10T09:02:49.190Z"
       enable_acceleration = false
-      modified            = "2021-08-05T01:30:06.408Z"
-      tags = [
-        "test"
-      ]
     }
     provider_id = "cribl_lake"
     type        = "cribl_lake"

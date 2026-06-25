@@ -96,7 +96,7 @@ func (d *RoutesDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 						"clones": schema.ListAttribute{
 							Computed:    true,
 							Description: `Array of clone configurations, each with a key-value pair to set or overwrite in cloned events. Original events continue to the next Route.`,
-							ElementType: types.StringType,
+							ElementType: types.MapType{ElemType: types.StringType},
 						},
 						"context": schema.StringAttribute{
 							Computed:    true,

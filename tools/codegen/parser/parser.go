@@ -265,6 +265,11 @@ func applyResourceCompatibility(resource *ResourceDef) {
 	if resource.StructName == "Collector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
+	if resource.StructName == "SearchDataset" {
+		makeSearchDatasetHoistedFieldsComputed(resource.Fields)
+		renameSearchDatasetProviderFields(resource.OneOfVariants)
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+	}
 	if resource.StructName != "MappingRuleset" {
 		return
 	}
@@ -281,10 +286,45 @@ func applyResourceCompatibility(resource *ResourceDef) {
 	}
 }
 
+func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		switch field.TerraformName {
+		case "id", "description", "provider_id", "type":
+			field.Required = false
+			field.Optional = false
+			field.Computed = true
+		}
+	}
+}
+
+func renameSearchDatasetProviderFields(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		renameProviderField(variants[variantIndex].Fields)
+	}
+}
+
+func renameProviderField(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		if field.APIName == "provider" {
+			field.TerraformName = "provider_id"
+			field.GoName = "ProviderID"
+		}
+		renameProviderField(field.Fields)
+	}
+}
+
 func makeCollectorVariantsOptionalComputed(variants []OneOfVariantDef) {
 	for variantIndex := range variants {
 		makeFieldsOptionalComputed(variants[variantIndex].Fields)
 		addCollectorPlanModifierHooks(variants[variantIndex].Fields)
+	}
+}
+
+func makeFieldsOptionalComputedFromValues(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		makeFieldsOptionalComputed(variants[variantIndex].Fields)
 	}
 }
 
@@ -417,9 +457,13 @@ func parseOneOfVariants(oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
 		if err != nil {
 			return nil, err
 		}
+		tfName := schemaName
+		if renamed, ok := stringAnnotation(variantSchema, "x-terraform-name"); ok && renamed != "" {
+			tfName = renamed
+		}
 		variants = append(variants, OneOfVariantDef{
 			APIName:            schemaName,
-			TerraformName:      snake(schemaName),
+			TerraformName:      snake(tfName),
 			GoName:             exportName(schemaName),
 			ModelName:          exportName(schemaName) + "Model",
 			SchemaName:         schemaName,
@@ -605,6 +649,9 @@ func ignoredAnnotation(property *yaml.Node) bool {
 }
 
 func enumValues(property *yaml.Node) []string {
+	if value := scalarValue(property, "const"); value != "" {
+		return []string{value}
+	}
 	enum, ok := mappingValue(property, "enum")
 	if !ok || enum.Kind != yaml.SequenceNode {
 		return nil
