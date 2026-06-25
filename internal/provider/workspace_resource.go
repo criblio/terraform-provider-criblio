@@ -161,7 +161,7 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyWorkspaceAPIToState(apiModel, &model, true, false)
+	applyWorkspaceAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

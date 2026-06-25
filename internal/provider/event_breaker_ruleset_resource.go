@@ -324,7 +324,7 @@ func (r *EventBreakerRulesetResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyEventBreakerRulesetAPIToState(apiModel, &model, true, false)
+	applyEventBreakerRulesetAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

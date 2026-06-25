@@ -25,7 +25,14 @@ func (a EventBreakerRulesetAPI) Read(ctx context.Context, model EventBreakerRule
 }
 
 func (a EventBreakerRulesetAPI) Update(ctx context.Context, model EventBreakerRulesetModel) (*EventBreakerRulesetModel, error) {
-	return restclient.Patch[EventBreakerRulesetModel, EventBreakerRulesetModel](ctx, a.client, fmt.Sprintf("/m/%s/lib/breakers/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	body, err := model.updateBody()
+	if err != nil {
+		return nil, err
+	}
+	if _, err := restclient.Patch[map[string]any, any](ctx, a.client, fmt.Sprintf("/m/%s/lib/breakers/%s", model.GroupID.ValueString(), model.ID.ValueString()), body); err != nil {
+		return nil, err
+	}
+	return a.Read(ctx, model)
 }
 
 func (a EventBreakerRulesetAPI) Delete(ctx context.Context, model EventBreakerRulesetModel) error {

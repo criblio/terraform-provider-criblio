@@ -201,6 +201,7 @@ actions:
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.patch"
     update:
       x-terraform-update: EventBreakerRuleset
+      x-terraform-read-after-write: true
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.delete"
     update:
       x-terraform-delete: EventBreakerRuleset
