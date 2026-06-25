@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -26,6 +27,13 @@ func isJSONNullNormalized(nv jsontypes.Normalized) bool {
 
 func searchDashboardConfigMapUseStateWhenNullOnly() planmodifier.Map {
 	return searchDashboardConfigMapPlanModifier{}
+}
+
+func searchDashboardConfigMapPlanModifiers() []planmodifier.Map {
+	return []planmodifier.Map{
+		mapplanmodifier.UseStateForUnknown(),
+		searchDashboardConfigMapUseStateWhenNullOnly(),
+	}
 }
 
 func (searchDashboardConfigMapPlanModifier) Description(_ context.Context) string {

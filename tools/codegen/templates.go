@@ -86,6 +86,18 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+{{- if hasJSONNormalized . }}
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
+{{- end }}
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -112,6 +124,11 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		}
 		return output, nil
 	case types.Object:
+{{- if eq .StructName "SearchDashboard" }}
+		if value, ok, err := SearchDashboardFlattenWrapperObject(typed); ok || err != nil {
+			return value, err
+		}
+{{- end }}
 		output := make(map[string]any, len(typed.Attributes()))
 {{- if hasObjectAsJSON . }}
 		attributeTypes := typed.AttributeTypes(context.Background())
@@ -163,6 +180,116 @@ func {{ .StructName }}ObjectJSONFromTerraformValue(value attr.Value) (any, error
 	}
 	return output, nil
 }
+{{- end }}
+
+{{- if eq .StructName "SearchDashboard" }}
+func SearchDashboardFlattenWrapperObject(value types.Object) (any, bool, error) {
+	attributes := value.Attributes()
+	activeKey := ""
+	var activeValue attr.Value
+	for key, attribute := range attributes {
+		if attribute.IsNull() || attribute.IsUnknown() {
+			continue
+		}
+		if !SearchDashboardWrapperKey(key) {
+			return nil, false, nil
+		}
+		if activeKey != "" {
+			return nil, false, nil
+		}
+		activeKey = key
+		activeValue = attribute
+	}
+	if activeKey == "" {
+		return nil, false, nil
+	}
+	flattened, err := SearchDashboardTerraformValueToJSON(activeValue)
+	return flattened, true, err
+}
+
+func SearchDashboardWrapperKey(key string) bool {
+	switch key {
+	case "dashboard_element_visualization", "dashboard_element_input", "dashboard_element",
+		"search_query_saved", "search_query_inline", "search_query_values", "search_query_metric",
+		"str", "number":
+		return true
+	default:
+		return false
+	}
+}
+
+func SearchDashboardAPIValueToWrapperObject(value any, typ types.ObjectType) (attr.Value, bool, error) {
+	attrTypes := typ.AttrTypes
+	key, ok := SearchDashboardWrapperObjectKey(value, attrTypes)
+	if !ok {
+		return nil, false, nil
+	}
+	output := make(map[string]attr.Value, len(attrTypes))
+	for name, attrType := range attrTypes {
+		if name != key {
+			empty, err := SearchDashboardTerraformNullValue(attrType)
+			if err != nil {
+				return nil, true, err
+			}
+			output[name] = empty
+			continue
+		}
+		wrapped, err := SearchDashboardAPIValueToTerraformValue(value, attrType)
+		if err != nil {
+			return nil, true, err
+		}
+		output[name] = wrapped
+	}
+	result, diags := types.ObjectValue(attrTypes, output)
+	if diags.HasError() {
+		return nil, true, fmt.Errorf("%v", diags)
+	}
+	return result, true, nil
+}
+
+func SearchDashboardWrapperObjectKey(value any, attrTypes map[string]attr.Type) (string, bool) {
+	if _, ok := attrTypes["dashboard_element_visualization"]; ok {
+		item, _ := value.(map[string]any)
+		typ, _ := item["type"].(string)
+		variant, _ := item["variant"].(string)
+		switch {
+		case strings.HasPrefix(typ, "input."):
+			return "dashboard_element_input", true
+		case strings.HasPrefix(typ, "markdown.") || variant == "markdown":
+			return "dashboard_element", true
+		default:
+			return "dashboard_element_visualization", true
+		}
+	}
+	if _, ok := attrTypes["search_query_inline"]; ok {
+		item, _ := value.(map[string]any)
+		typ, _ := item["type"].(string)
+		switch typ {
+		case "saved":
+			return "search_query_saved", true
+		case "inline":
+			return "search_query_inline", true
+		case "values":
+			return "search_query_values", true
+		case "metric":
+			return "search_query_metric", true
+		default:
+			return "", false
+		}
+	}
+	if _, ok := attrTypes["str"]; ok {
+		switch value.(type) {
+		case string:
+			return "str", true
+		case float64:
+			return "number", true
+		default:
+			return "", false
+		}
+	}
+	return "", false
+}
+
 {{- end }}
 
 {{- if eq .StructName "MappingRuleset" }}
@@ -256,7 +383,7 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		}
 		return types.StringValue(typed), nil
 	}
-{{- if hasObjectAsJSON . }}
+{{- if hasJSONNormalized . }}
 	if typ.Equal(jsontypes.NormalizedType{}) {
 		if typed, ok := value.(string); ok {
 			return jsontypes.NewNormalizedValue(typed), nil
@@ -306,6 +433,11 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		}
 		return value, nil
 	case types.ObjectType:
+{{- if eq .StructName "SearchDashboard" }}
+		if value, ok, err := SearchDashboardAPIValueToWrapperObject(value, typed); ok || err != nil {
+			return value, err
+		}
+{{- end }}
 		input, ok := value.(map[string]any)
 		if !ok {
 			return nil, fmt.Errorf("expected object, got %T", value)
@@ -354,7 +486,7 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
 	}
-{{- if hasObjectAsJSON . }}
+{{- if hasJSONNormalized . }}
 	if typ.Equal(jsontypes.NormalizedType{}) {
 		return jsontypes.NewNormalizedNull(), nil
 	}
@@ -371,10 +503,10 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 }
 
-{{ if eq .StructName "Pipeline" }}
-func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error) {
+{{ if or (eq .StructName "Pipeline") (eq .StructName "SearchDashboard") }}
+func {{ .StructName }}ValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error) {
 	if value.IsUnknown() {
-		return PipelineTerraformNullValue(typ)
+		return {{ .StructName }}TerraformNullValue(typ)
 	}
 	if value.IsNull() {
 		return value, nil
@@ -387,7 +519,7 @@ func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, e
 		}
 		elements := make([]attr.Value, 0, len(list.Elements()))
 		for _, element := range list.Elements() {
-			normalized, err := PipelineValueWithKnownNulls(element, typed.ElemType)
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(element, typed.ElemType)
 			if err != nil {
 				return nil, err
 			}
@@ -405,7 +537,7 @@ func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, e
 		}
 		elements := make(map[string]attr.Value, len(valueMap.Elements()))
 		for key, element := range valueMap.Elements() {
-			normalized, err := PipelineValueWithKnownNulls(element, typed.ElemType)
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(element, typed.ElemType)
 			if err != nil {
 				return nil, err
 			}
@@ -425,14 +557,14 @@ func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, e
 		for key, attrType := range typed.AttrTypes {
 			attribute, ok := object.Attributes()[key]
 			if !ok || attribute.IsUnknown() {
-				normalized, err := PipelineTerraformNullValue(attrType)
+				normalized, err := {{ .StructName }}TerraformNullValue(attrType)
 				if err != nil {
 					return nil, err
 				}
 				attributes[key] = normalized
 				continue
 			}
-			normalized, err := PipelineValueWithKnownNulls(attribute, attrType)
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(attribute, attrType)
 			if err != nil {
 				return nil, err
 			}
@@ -572,13 +704,21 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	}
 {{- else if eq .Type "object" }}
 	if input.{{ .GoName }} != nil {
+{{- if .ElementCustomType }}
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.MapType{ElemType: {{ listElementAttrType . }}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.(types.Map)
+{{- else }}
 		value, diags := types.MapValueFrom(context.Background(), types.StringType, input.{{ .GoName }})
 		if diags.HasError() {
 			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
 		}
 		m.{{ .GoName }} = value
+{{- end }}
 	} else {
-		m.{{ .GoName }} = types.MapNull(types.StringType)
+		m.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 	}
 {{- else if eq .Type "boolean" }}
 	if input.{{ .GoName }} != nil {
@@ -901,6 +1041,9 @@ import (
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+{{- if needsResourceAttr . }}
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+{{- end }}
 {{- if not .Action }}
 	"github.com/hashicorp/terraform-plugin-framework/path"
 {{- end }}
@@ -1273,10 +1416,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- else if eq .Type "object" }}
 	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
-		state.{{ .GoName }} = types.MapNull(types.StringType)
-	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
+		state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
+	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal({{ listElementAttrType . }}) {
 		if len(state.{{ .GoName }}.Elements()) == 0 {
-			state.{{ .GoName }} = types.MapNull(types.StringType)
+			state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 		}
 	}
 {{- end }}
@@ -1285,6 +1428,22 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if !state.Conf.IsNull() {
 		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()}); err == nil {
 			state.Conf = normalized.(types.Object)
+		}
+	}
+{{- else if eq .StructName "SearchDashboard" }}
+	if !state.Elements.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Elements, types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsAttrTypes()}}); err == nil {
+			state.Elements = normalized.(types.List)
+		}
+	}
+	if !state.Groups.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Groups, types.MapType{ElemType: types.ObjectType{AttrTypes: SearchDashboardGroupsAttrTypes()}}); err == nil {
+			state.Groups = normalized.(types.Map)
+		}
+	}
+	if !state.Schedule.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Schedule, types.ObjectType{AttrTypes: SearchDashboardScheduleAttrTypes()}); err == nil {
+			state.Schedule = normalized.(types.Object)
 		}
 	}
 {{- end }}
@@ -2031,6 +2190,93 @@ func pipelineConfig(id, description string) string {
   }
 }
 ` + "`" + `, id, description)
+}
+{{- else if eq .StructName "SearchDashboard" }}
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestSearchDashboard(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is not supported")
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	dashboardID := "test_search_dashboard_" + suffix
+	resourceName := "criblio_search_dashboard.my_searchdashboard"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: searchDashboardConfig(t, dashboardID, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "id", dashboardID),
+						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard created"),
+						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard created"),
+						resource.TestCheckResourceAttr(resourceName, "elements.#", "8"),
+						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.type", "counter.single"),
+						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.search.search_query_inline.query", "dataset=\"$vt_dummy\" event<42 | count"),
+					),
+				},
+				{
+					Config: searchDashboardConfig(t, dashboardID, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard updated"),
+						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard updated"),
+					),
+				},
+				{
+					Config:   searchDashboardConfig(t, dashboardID, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     dashboardID,
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+func searchDashboardConfig(t *testing.T, id, description string) string {
+	t.Helper()
+
+	path := filepath.Join("..", "..", "examples", "search-dashboard", "main.tf")
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read search dashboard example: %v", err)
+	}
+
+	config := string(content)
+	if idx := strings.Index(config, "\nresource \"criblio_search_dashboard\" \"search_dashboard_default_search_"); idx >= 0 {
+		config = config[:idx]
+	}
+
+	replacements := map[string]string{
+		` + "`" + `id          = "sample_test_dashboard"` + "`" + `:                    fmt.Sprintf("id          = %q", id),
+		` + "`" + `name        = "Sample Test Dashboard"` + "`" + `:                   fmt.Sprintf("name        = %q", "Test Search Dashboard "+description),
+		` + "`" + `description = "A sample dashboard with several panels"` + "`" + `: fmt.Sprintf("description = %q", "Test Search Dashboard "+description),
+	}
+	for old, replacement := range replacements {
+		if !strings.Contains(config, old) {
+			t.Fatalf("search dashboard example is missing %q", old)
+		}
+		config = strings.Replace(config, old, replacement, 1)
+	}
+
+	return config
 }
 {{- else }}
 import "testing"

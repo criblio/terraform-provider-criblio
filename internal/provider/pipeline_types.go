@@ -135,6 +135,16 @@ func PipelineTerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:

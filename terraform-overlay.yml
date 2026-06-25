@@ -773,6 +773,416 @@ actions:
     update:
       x-terraform-optional-computed: true
 
+  - target: "$.paths./m/{groupId}/search/dashboards.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/SearchDashboard"
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.get"
+    update:
+      x-terraform-read: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.patch"
+    update:
+      x-terraform-update: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/SearchDashboard"
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.delete"
+    update:
+      x-terraform-delete: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards.get"
+    update:
+      x-terraform-list: SearchDashboard
+      x-terraform-list-name: SearchDashboards
+  - target: "$.components.schemas.SearchDashboard"
+    replace:
+      type: object
+      properties:
+        autoApplyDebounceMs:
+          type: integer
+          x-terraform-ignore: true
+        autoApplyMode:
+          type: string
+          x-terraform-ignore: true
+        autoApplyUrlSync:
+          type: string
+          x-terraform-ignore: true
+        cacheTTLSeconds:
+          type: number
+          description: Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
+          x-terraform-name: cache_ttl_seconds
+          x-terraform-optional-computed: true
+        category:
+          type: string
+          x-terraform-optional-computed: true
+        created:
+          type: integer
+          x-terraform-ignore: true
+        createdBy:
+          type: string
+          x-terraform-ignore: true
+        description:
+          type: string
+          description: Description of the dashboard. Optional.
+          x-terraform-optional-computed: true
+        displayCreatedBy:
+          type: string
+          x-terraform-ignore: true
+        displayModifiedBy:
+          type: string
+          x-terraform-ignore: true
+        elements:
+          $ref: "#/components/schemas/DashboardElements"
+        groups:
+          $ref: "#/components/schemas/DashboardGroups"
+          x-terraform-optional-computed: true
+        id:
+          type: string
+          x-terraform-force-new: true
+          x-terraform-suppress-diff: explicit
+        modified:
+          type: integer
+          x-terraform-ignore: true
+        modifiedBy:
+          type: string
+          x-terraform-ignore: true
+        name:
+          type: string
+        packId:
+          type: string
+          x-terraform-ignore: true
+        refreshRate:
+          type: number
+          description: Auto-refresh rate in milliseconds. Optional.
+          x-terraform-optional-computed: true
+        resolvedDatasetIds:
+          type: array
+          items:
+            type: string
+          x-terraform-ignore: true
+        schedule:
+          $ref: "#/components/schemas/SearchDashboardSchedule"
+          description: Schedule for the dashboard. Optional.
+          x-terraform-optional-computed: true
+      required:
+        - elements
+        - id
+        - name
+  - target: "$.components.schemas.DashboardElements"
+    replace:
+      type: array
+      items:
+        $ref: "#/components/schemas/DashboardElement"
+  - target: "$.components.schemas.DashboardElement"
+    replace:
+      type: object
+      properties:
+        dashboard_element_visualization:
+          $ref: "#/components/schemas/DashboardElementVisualization"
+          x-terraform-optional-computed: true
+        dashboard_element_input:
+          $ref: "#/components/schemas/DashboardElementInput"
+          x-terraform-optional-computed: true
+        dashboard_element:
+          $ref: "#/components/schemas/DashboardElementMarkdown"
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.SearchQuery"
+    replace:
+      type: object
+      properties:
+        search_query_saved:
+          $ref: "#/components/schemas/SearchQuerySaved"
+          x-terraform-optional-computed: true
+        search_query_inline:
+          $ref: "#/components/schemas/SearchQueryInline"
+          x-terraform-optional-computed: true
+        search_query_values:
+          $ref: "#/components/schemas/SearchQueryValues"
+          x-terraform-optional-computed: true
+        search_query_metric:
+          $ref: "#/components/schemas/SearchQueryMetric"
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.DashboardGroups"
+    replace:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/DashboardGroup"
+  - target: "$.components.schemas.DashboardLayout"
+    replace:
+      type: object
+      properties:
+        h:
+          type: number
+        w:
+          type: number
+        x:
+          type: number
+        y:
+          type: number
+      required:
+        - h
+        - w
+        - x
+        - y
+  - target: "$.components.schemas.PanelQueryDefinition"
+    replace:
+      type: object
+      properties:
+        alias:
+          type: string
+          x-terraform-optional-computed: true
+        localId:
+          type: string
+          x-terraform-optional-computed: true
+        query:
+          type: string
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas"
+    update:
+      DashboardElementVisualization:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Chart and visualization config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/SearchQuery"
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+          titleAction:
+            $ref: "#/components/schemas/TitleAction"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardElementInput:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Input element config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          inputId:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/SearchQuery"
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardElementMarkdown:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Markdown element config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/PanelQueryDefinition"
+            x-terraform-optional-computed: true
+          titleAction:
+            $ref: "#/components/schemas/TitleAction"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+          variant:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQuerySaved:
+        type: object
+        properties:
+          query:
+            type: string
+            x-terraform-optional-computed: true
+          queryId:
+            type: string
+            x-terraform-optional-computed: true
+          runMode:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQueryInline:
+        type: object
+        properties:
+          earliest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          latest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          parentSearchId:
+            type: string
+            x-terraform-optional-computed: true
+          query:
+            type: string
+            x-terraform-optional-computed: true
+          sampleRate:
+            type: number
+            x-terraform-optional-computed: true
+          timezone:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQueryValues:
+        type: object
+        properties:
+          type:
+            type: string
+            x-terraform-optional-computed: true
+          values:
+            type: array
+            items:
+              type: string
+            x-terraform-optional-computed: true
+      SearchQueryMetric:
+        type: object
+        properties:
+          earliest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          latest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          queries:
+            type: array
+            items:
+              $ref: "#/components/schemas/PanelQueryDefinition"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchDashboardRelativeTime:
+        type: object
+        properties:
+          str:
+            type: string
+            x-terraform-optional-computed: true
+          number:
+            type: number
+            x-terraform-optional-computed: true
+      SearchDashboardSchedule:
+        type: object
+        properties:
+          cronSchedule:
+            type: string
+          enabled:
+            type: boolean
+          keepLastN:
+            type: number
+          notifications:
+            type: object
+            properties:
+              disabled:
+                type: boolean
+                x-terraform-optional-computed: true
+              items:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+            x-terraform-optional-computed: true
+          tz:
+            type: string
+        required:
+          - cronSchedule
+          - enabled
+          - keepLastN
+          - notifications
+          - tz
+      DashboardGroup:
+        type: object
+        properties:
+          action:
+            $ref: "#/components/schemas/DashboardGroupAction"
+            x-terraform-optional-computed: true
+          collapsed:
+            type: boolean
+            x-terraform-optional-computed: true
+          inputId:
+            type: string
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardGroupAction:
+        type: object
+        properties:
+          label:
+            type: string
+            x-terraform-optional-computed: true
+          params:
+            type: object
+            additionalProperties:
+              type: string
+            x-terraform-optional-computed: true
+          target:
+            type: string
+            x-terraform-optional-computed: true
+      SavedQueryScheduleNotifications:
+        type: object
+        properties:
+          disabled:
+            type: boolean
+            x-terraform-optional-computed: true
+
   - target: "$.paths./m/{groupId}/search/local_search/engines.post"
     update:
       x-terraform-resource: true

@@ -396,6 +396,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewRoutesDataSource,
 		NewSchemaDataSource,
 		NewSearchDashboardDataSource,
+		NewSearchDashboardsDataSource,
 		NewSearchDashboardCategoryDataSource,
 		NewSearchDatasetDataSource,
 		NewSearchDatasetProviderDataSource,

@@ -55,6 +55,16 @@ func SchemaTerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -155,6 +165,16 @@ func SchemaAPIValueToTerraformValue(value any, typ attr.Type) (attr.Value, error
 		}
 		return types.StringValue(typed), nil
 	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		if typed, ok := value.(string); ok {
+			return jsontypes.NewNormalizedValue(typed), nil
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+		return jsontypes.NewNormalizedValue(string(raw)), nil
+	}
 	switch typed := typ.(type) {
 	case types.ListType:
 		input, ok := value.([]any)
@@ -240,6 +260,9 @@ func SchemaTerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
+	}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		return jsontypes.NewNormalizedNull(), nil
 	}
 	switch typed := typ.(type) {
 	case types.ListType:

@@ -5,3 +5,4 @@ tests/acceptance/cribl_lake_house_test.go
 tests/acceptance/lakehouse_dataset_connection_test.go
 internal/provider/collector_planmodifiers.go
 internal/provider/pipeline_planmodifiers.go
+internal/provider/searchdashboard_config_planmodifier.go

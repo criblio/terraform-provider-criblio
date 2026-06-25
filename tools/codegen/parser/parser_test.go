@@ -448,7 +448,7 @@ components:
 
 	packages := fieldByTFName(t, settings.Fields, "packages")
 	if packages.Type != "array" || packages.ElementType != "object" || fieldByTFName(t, packages.Fields, "url").Type != "string" {
-		t.Fatalf("packages should resolve array item allOf object fields")
+		t.Fatalf("packages should resolve array item allOf object fields, got type=%q elem=%q fields=%#v", packages.Type, packages.ElementType, packages.Fields)
 	}
 }
 

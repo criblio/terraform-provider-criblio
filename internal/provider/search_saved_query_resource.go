@@ -425,11 +425,12 @@ func (r *SearchSavedQueryResource) Schema(_ context.Context, _ resource.SchemaRe
 									Computed:    false,
 									Description: `CSS color value for the series.`,
 								},
-								"data": schema.StringAttribute{
+								"data": schema.ListAttribute{
 									Required:    false,
 									Optional:    true,
 									Computed:    false,
 									Description: `Array of data points for the series.`,
+									ElementType: types.StringType,
 								},
 								"map": schema.StringAttribute{
 									Required:    false,

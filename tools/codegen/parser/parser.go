@@ -451,15 +451,23 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 	if renamed, ok := stringAnnotation(property, "x-terraform-name"); ok && renamed != "" {
 		tfName = renamed
 	}
-	fieldType := schemaType(property)
+	schemaForType := property
+	if schemaName := directSchemaRefName(property); schemaName != "" {
+		resolved, found := mappingValue(schemas, schemaName)
+		if !found {
+			return FieldDef{}, fmt.Errorf("field schema %q not found", schemaName)
+		}
+		schemaForType = resolved
+	}
+	fieldType := schemaType(schemaForType)
 	if objectSchema, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 		return FieldDef{}, err
 	} else if ok && objectSchema != nil {
 		fieldType = "object"
 	}
-	fieldElementType := elementType(property)
+	fieldElementType := elementType(schemaForType)
 	if fieldType == "array" {
-		if items, ok := mappingValue(property, "items"); ok {
+		if items, ok := mappingValue(schemaForType, "items"); ok {
 			if objectSchema, ok, err := objectSchemaForProperty(items, schemas); err != nil {
 				return FieldDef{}, err
 			} else if ok && objectSchema != nil {
@@ -468,13 +476,17 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		}
 	}
 	field := FieldDef{
-		APIName:          apiName,
-		TerraformName:    snake(tfName),
-		GoName:           exportName(tfName),
-		Type:             fieldType,
-		ElementType:      fieldElementType,
-		Description:      scalarValue(property, "description"),
-		CustomType:       scalarValue(property, "x-terraform-custom-type"),
+		APIName:       apiName,
+		TerraformName: snake(tfName),
+		GoName:        exportName(tfName),
+		Type:          fieldType,
+		ElementType:   fieldElementType,
+		Description:   scalarValue(property, "description"),
+		CustomType:    scalarValue(property, "x-terraform-custom-type"),
+		ElementCustomType: scalarValue(
+			property,
+			"x-terraform-element-custom-type",
+		),
 		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
 		ObjectAsJSON:     boolAnnotation(property, "x-terraform-object-as-json"),
 		NotNull:          boolAnnotation(property, "x-terraform-not-null"),
@@ -488,7 +500,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		Enum:      enumValues(property),
 	}
 	if field.Type == "array" && field.ElementType == "object" {
-		items, ok := mappingValue(property, "items")
+		items, ok := mappingValue(schemaForType, "items")
 		if !ok {
 			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
 		}
@@ -515,7 +527,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
 	if field.Type == "object" && !field.ObjectAsJSON {
-		objectSchema := property
+		objectSchema := schemaForType
 		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 			return FieldDef{}, err
 		} else if ok {
@@ -922,11 +934,21 @@ func schemaRefName(node *yaml.Node) string {
 	if node == nil {
 		return ""
 	}
-	if ref, ok := mappingValue(node, "$ref"); ok {
-		return strings.TrimPrefix(ref.Value, "#/components/schemas/")
+	if name := directSchemaRefName(node); name != "" {
+		return name
 	}
 	if items, ok := mappingValue(node, "items"); ok {
 		return schemaRefName(items)
+	}
+	return ""
+}
+
+func directSchemaRefName(node *yaml.Node) string {
+	if node == nil {
+		return ""
+	}
+	if ref, ok := mappingValue(node, "$ref"); ok {
+		return strings.TrimPrefix(ref.Value, "#/components/schemas/")
 	}
 	return ""
 }

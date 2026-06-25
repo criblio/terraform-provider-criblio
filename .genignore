@@ -35,7 +35,6 @@ internal/provider/searchdataset_resource.go
 internal/provider/searchdatasetprovider_data_source_sdk.go
 internal/provider/searchdatasetprovider_resource_sdk.go
 internal/provider/searchdashboard_resource.go
-internal/provider/searchdashboard_resource_mirror.go
 internal/provider/searchdashboard_resource_sdk.go
 internal/provider/searchdashboard_data_source.go
 internal/provider/searchdashboard_data_source_sdk.go

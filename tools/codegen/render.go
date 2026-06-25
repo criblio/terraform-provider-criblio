@@ -134,8 +134,10 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"needsFmt":                       needsFmt,
 		"needsClientFmt":                 needsClientFmt,
 		"needsAttr":                      needsAttr,
+		"needsResourceAttr":              needsResourceAttr,
 		"needsNestedObject":              needsNestedObject,
 		"needsPlanModifier":              needsPlanModifier,
+		"hasJSONNormalized":              hasJSONNormalized,
 		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
 		"needsCustomPlanModifier":        needsCustomPlanModifier,
 		"needsValidator":                 needsValidator,
@@ -462,6 +464,9 @@ func apiType(field parser.FieldDef) string {
 			return "[]string"
 		}
 	case "object":
+		if field.ElementCustomType != "" {
+			return "map[string]any"
+		}
 		return "map[string]string"
 	default:
 		return "*string"
@@ -730,7 +735,7 @@ func zeroValue(field parser.FieldDef) string {
 	case "types.List":
 		return "types.ListValueMust(" + listElementAttrType(field) + ", nil)"
 	case "types.Map":
-		return "types.MapValueMust(types.StringType, nil)"
+		return "types.MapValueMust(" + listElementAttrType(field) + ", nil)"
 	case "jsontypes.Normalized":
 		return `jsontypes.NewNormalizedValue("")`
 	default:
@@ -758,7 +763,7 @@ func nullValue(field parser.FieldDef) string {
 	case "types.List":
 		return "types.ListNull(" + listElementAttrType(field) + ")"
 	case "types.Map":
-		return "types.MapNull(types.StringType)"
+		return "types.MapNull(" + listElementAttrType(field) + ")"
 	case "jsontypes.Normalized":
 		return "jsontypes.NewNormalizedNull()"
 	default:
@@ -810,6 +815,15 @@ func needsAttr(resource parser.ResourceDef) bool {
 func needsNestedObject(resource parser.ResourceDef) bool {
 	for _, field := range resource.Fields {
 		if nestedObject(field) {
+			return true
+		}
+	}
+	return false
+}
+
+func needsResourceAttr(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.Computed && !field.Optional && nestedObject(field) {
 			return true
 		}
 	}
@@ -872,6 +886,15 @@ func hasObjectAsJSON(resource parser.ResourceDef) bool {
 	return false
 }
 
+func hasJSONNormalized(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if objectAsJSON(field) || field.CustomType == "jsontypes.NormalizedType{}" || field.ElementCustomType == "jsontypes.NormalizedType{}" {
+			return true
+		}
+	}
+	return false
+}
+
 func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	var walk func([]parser.FieldDef)
@@ -913,13 +936,16 @@ func attrType(field parser.FieldDef) string {
 	case "array":
 		return "types.ListType{ElemType: " + listElementAttrType(field) + "}"
 	case "object":
-		return "types.MapType{ElemType: types.StringType}"
+		return "types.MapType{ElemType: " + listElementAttrType(field) + "}"
 	default:
 		return "types.StringType"
 	}
 }
 
 func listElementAttrType(field parser.FieldDef) string {
+	if field.ElementCustomType != "" {
+		return field.ElementCustomType
+	}
 	switch field.ElementType {
 	case "integer":
 		return "types.Int64Type"
@@ -1097,6 +1123,9 @@ func nestedObjectPlanModifierCalls(field parser.FieldDef) []string {
 }
 
 func customPlanModifierKind(field parser.FieldDef) string {
+	if nestedObject(field) {
+		return "object"
+	}
 	switch field.Type {
 	case "boolean":
 		return "bool"

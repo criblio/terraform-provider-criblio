@@ -64,6 +64,7 @@ type FieldDef struct {
 	ForceNew           bool
 	Ignored            bool
 	CustomType         string
+	ElementCustomType  string
 	ReadOnly           bool
 	WriteOnly          bool
 	PathParam          bool
