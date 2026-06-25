@@ -831,11 +831,34 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	resp.Diagnostics.AddError("Not Implemented", "No import state operation is available for action resource {{ typeNameSuffix . }}.")
 {{- else }}
 {{- if jsonImport . }}
+{{- if eq .StructName "Notification" }}
+	trimmedID := bytes.TrimSpace([]byte(req.ID))
+	if len(trimmedID) == 0 {
+		resp.Diagnostics.AddError("Invalid ID", "The import ID must not be empty.")
+		return
+	}
+	if trimmedID[0] != '{' {
+		var model {{ .StructName }}Model
+		model.ID = types.StringValue(req.ID)
+		apiModel, err := r.api.Read(ctx, model)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			return
+		}
+		apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+		return
+	}
+{{- end }}
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
 {{- range pathParamFields . }}
 		{{ .GoName }} string ` + "`json:\"{{ .TerraformName }}\"`" + `
+{{- end }}
+{{- if eq .StructName "Notification" }}
+		Group string ` + "`json:\"group\"`" + `
+		GroupID string ` + "`json:\"group_id\"`" + `
 {{- end }}
 {{- if eq .StructName "Key" }}
 		KeyID string ` + "`json:\"key_id\"`" + `
@@ -855,6 +878,16 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 {{- range pathParamFields . }}
 	model.{{ .GoName }} = types.StringValue(data.{{ .GoName }})
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), data.{{ .GoName }})...)
+{{- end }}
+{{- if eq .StructName "Notification" }}
+	if data.Group == "" {
+		data.Group = data.GroupID
+	}
+	if data.Group == "" {
+		data.Group = "default"
+	}
+	model.Group = types.StringValue(data.Group)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), data.Group)...)
 {{- end }}
 {{- if eq .StructName "Key" }}
 	if data.KeyID == "" {

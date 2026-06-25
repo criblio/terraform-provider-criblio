@@ -146,14 +146,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_pack_destination" && idMap["pack"] != "" {
 		attrs["pack"] = hcl.Value{Kind: hcl.KindString, String: idMap["pack"]}
 	}
-	buildIDMap := idMap
-	if r.TypeName == "criblio_key" && idMap["id"] != "" {
-		buildIDMap = make(map[string]string, len(idMap)+1)
-		for k, v := range idMap {
-			buildIDMap[k] = v
-		}
-		buildIDMap["key_id"] = idMap["id"]
-	}
+	buildIDMap := importIDMapForType(r.TypeName, idMap)
 	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)
 	if idErr != nil {
 		return nil, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr))
@@ -269,14 +262,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		out.DefaultsSkipped++
 		return nil
 	}
-	buildIDMap := idMap
-	if typeName == "criblio_key" && idMap["id"] != "" {
-		buildIDMap = make(map[string]string, len(idMap)+1)
-		for k, v := range idMap {
-			buildIDMap[k] = v
-		}
-		buildIDMap["key_id"] = idMap["id"]
-	}
+	buildIDMap := importIDMapForType(typeName, idMap)
 	importID, idErr := generator.BuildImportID(e.ImportIDFormat, buildIDMap)
 	if idErr != nil {
 		return fmt.Errorf("import ID: %w", idErr)
@@ -309,4 +295,26 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	out.Items = append(out.Items, it)
 	return nil
+}
+
+func importIDMapForType(typeName string, idMap map[string]string) map[string]string {
+	if typeName == "criblio_key" && idMap["id"] != "" {
+		out := copyStringMap(idMap, 1)
+		out["key_id"] = idMap["id"]
+		return out
+	}
+	if typeName == "criblio_notification" && idMap["group"] == "" && idMap["group_id"] != "" {
+		out := copyStringMap(idMap, 1)
+		out["group"] = idMap["group_id"]
+		return out
+	}
+	return idMap
+}
+
+func copyStringMap(in map[string]string, extra int) map[string]string {
+	out := make(map[string]string, len(in)+extra)
+	for k, v := range in {
+		out[k] = v
+	}
+	return out
 }

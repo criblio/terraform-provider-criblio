@@ -1080,6 +1080,9 @@ func importSentinelFields(resource parser.ResourceDef) []parser.FieldDef {
 }
 
 func jsonImport(resource parser.ResourceDef) bool {
+	if resource.StructName == "Notification" {
+		return true
+	}
 	return len(pathParamFields(resource)) > 1
 }
 

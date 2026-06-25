@@ -2,7 +2,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -300,7 +302,59 @@ func (r *NotificationResource) Delete(ctx context.Context, req resource.DeleteRe
 }
 
 func (r *NotificationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	trimmedID := bytes.TrimSpace([]byte(req.ID))
+	if len(trimmedID) == 0 {
+		resp.Diagnostics.AddError("Invalid ID", "The import ID must not be empty.")
+		return
+	}
+	if trimmedID[0] != '{' {
+		var model NotificationModel
+		model.ID = types.StringValue(req.ID)
+		apiModel, err := r.api.Read(ctx, model)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			return
+		}
+		applyNotificationAPIToState(apiModel, &model, false, false)
+		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+		return
+	}
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		ID      string `json:"id"`
+		Group   string `json:"group"`
+		GroupID string `json:"group_id"`
+	}
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the required path parameters: `+err.Error())
+		return
+	}
+	if data.ID == "" {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
+		return
+	}
+	var model NotificationModel
+	model.ID = types.StringValue(data.ID)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	if data.Group == "" {
+		data.Group = data.GroupID
+	}
+	if data.Group == "" {
+		data.Group = "default"
+	}
+	model.Group = types.StringValue(data.Group)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), data.Group)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyNotificationAPIToState(apiModel, &model, false, false)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
 func isNotificationImportState(state *NotificationModel) bool {

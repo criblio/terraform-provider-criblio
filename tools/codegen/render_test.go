@@ -355,7 +355,7 @@ func TestNotificationResourcePathUsesCompatibleGroupFallback(t *testing.T) {
 		},
 		Fields: []parser.FieldDef{
 			{APIName: "group", TerraformName: "group", GoName: "Group", Type: "string", Optional: true, Computed: true},
-			{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", Required: true},
+			{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", Required: true, PathParam: true},
 		},
 	}
 
@@ -370,6 +370,17 @@ func TestNotificationResourcePathUsesCompatibleGroupFallback(t *testing.T) {
 	assertNotContains(t, got, `model.GroupID.ValueString()`)
 	assertContains(t, got, `func notificationGroupID(model NotificationModel) string`)
 	assertContains(t, got, `return "default"`)
+
+	resourceContent, err := executeTemplate("resource", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got = string(resourceContent)
+
+	assertContains(t, got, `Group string `+"`json:\"group\"`")
+	assertContains(t, got, `GroupID string `+"`json:\"group_id\"`")
+	assertContains(t, got, `model.Group = types.StringValue(data.Group)`)
+	assertNotContains(t, got, `resource.ImportStatePassthroughID`)
 }
 
 func TestRestWriteCall(t *testing.T) {

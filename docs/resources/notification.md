@@ -101,12 +101,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_notification.my_criblio_notification
-  id = "notif-001"
+  id = jsonencode({
+    group = "default"
+    id    = "notif-001"
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_notification.my_criblio_notification notif-001
+terraform import criblio_notification.my_criblio_notification '{"group":"default","id":"notif-001"}'
 ```
