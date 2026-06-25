@@ -77,6 +77,7 @@ type FieldDef struct {
 	ObjectAsJSON       bool
 	NotNull            bool
 	ValidJSON          bool
+	PipelineFunctionID bool
 }
 
 // OneOfVariantDef describes one flattened oneOf variant model.

@@ -831,7 +831,7 @@ func needsStringValidator(resource parser.ResourceDef) bool {
 
 func needsCustomStringValidator(resource parser.ResourceDef) bool {
 	for _, field := range resourceFields(resource) {
-		if field.NotNull && stringValidatorField(field) {
+		if (field.NotNull || field.PipelineFunctionID) && stringValidatorField(field) {
 			return true
 		}
 	}
@@ -1058,6 +1058,9 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 	}
 	if field.ValidJSON {
 		calls = append(calls, "custom_validators.IsValidJSON()")
+	}
+	if field.PipelineFunctionID {
+		calls = append(calls, "custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client)")
 	}
 	return calls
 }

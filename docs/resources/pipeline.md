@@ -53,11 +53,11 @@ Optional:
 Optional:
 
 - `filter` (String) Filter that selects data to be fed through this Function. Default: "true"
-- `id` (String) Function ID.
+- `id` (String) Cribl pipeline function type ID (e.g. eval, serde, publish_metrics). Not Null
 - `description` (String) Simple description of this step
 - `disabled` (Boolean) If true, data will not be pushed through this function
 - `final` (Boolean) If enabled, stops the results of this Function from being passed to the downstream Functions
-- `conf` (String) Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).
+- `conf` (String) Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.). Not Null
 - `group_id` (String) Group ID
 
 <a id="nestedatt--conf--groups"></a>
@@ -65,7 +65,7 @@ Optional:
 
 Optional:
 
-- `name` (String) Group name
+- `name` (String) Group name Not Null
 - `description` (String) Short description of this group
 - `disabled` (Boolean) Whether this group is disabled
 

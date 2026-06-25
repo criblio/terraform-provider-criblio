@@ -479,9 +479,13 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		ObjectAsJSON:     boolAnnotation(property, "x-terraform-object-as-json"),
 		NotNull:          boolAnnotation(property, "x-terraform-not-null"),
 		ValidJSON:        boolAnnotation(property, "x-terraform-valid-json"),
-		ReadOnly:         boolAnnotation(property, "readOnly"),
-		WriteOnly:        boolAnnotation(property, "writeOnly"),
-		Enum:             enumValues(property),
+		PipelineFunctionID: boolAnnotation(
+			property,
+			"x-terraform-pipeline-function-id-validator",
+		),
+		ReadOnly:  boolAnnotation(property, "readOnly"),
+		WriteOnly: boolAnnotation(property, "writeOnly"),
+		Enum:      enumValues(property),
 	}
 	if field.Type == "array" && field.ElementType == "object" {
 		items, ok := mappingValue(property, "items")

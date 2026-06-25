@@ -118,9 +118,10 @@ actions:
           x-terraform-suppress-diff: explicit
         id:
           title: ID
-          description: Function ID.
+          description: Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).
           type: string
           x-terraform-not-null: true
+          x-terraform-pipeline-function-id-validator: true
           x-terraform-optional-computed: true
           x-terraform-suppress-diff: explicit
         description:

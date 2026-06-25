@@ -79,7 +79,7 @@ func (d *PipelinesDataSource) Schema(_ context.Context, _ datasource.SchemaReque
 											},
 											"id": schema.StringAttribute{
 												Computed:    true,
-												Description: `Function ID.`,
+												Description: `Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).`,
 											},
 											"description": schema.StringAttribute{
 												Computed:    true,

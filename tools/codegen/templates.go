@@ -1217,6 +1217,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = {{ zeroValue . }}
 		}
 	{{- end }}
+{{- else if nestedObjectMap . }}
+		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
+			state.{{ .GoName }} = api.{{ .GoName }}
+		}{{- if and .Computed (not .Optional) }} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+			state.{{ .GoName }} = {{ zeroValue . }}
+		}
+	{{- end }}
 {{- else if eq .Type "object" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}
@@ -1253,6 +1260,12 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 {{- else if eq .Type "array" }}
 	if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
 		state.{{ .GoName }} = {{ nullValue . }}
+	}
+{{- else if nestedObjectMap . }}
+	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	} else if len(state.{{ .GoName }}.Elements()) == 0 {
+		state.{{ .GoName }} = types.MapValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
 	}
 {{- else if nestedObject . }}
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {

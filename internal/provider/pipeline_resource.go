@@ -14,12 +14,15 @@ import (
 	custom_objectplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"
+	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -114,9 +117,13 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 									Required:    false,
 									Optional:    true,
 									Computed:    true,
-									Description: `Function ID.`,
+									Description: `Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).`,
 									PlanModifiers: []planmodifier.String{
 										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+									},
+									Validators: []validator.String{
+										custom_stringvalidators.NotNull(),
+										custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client),
 									},
 								},
 								"description": schema.StringAttribute{
@@ -153,6 +160,10 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 									Description:   `Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).`,
 									CustomType:    jsontypes.NormalizedType{},
 									PlanModifiers: pipelineConfPlanModifiers(),
+									Validators: []validator.String{
+										custom_stringvalidators.NotNull(),
+										custom_validators.IsValidJSON(),
+									},
 								},
 								"group_id": schema.StringAttribute{
 									Required:    false,
@@ -185,6 +196,9 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 									Description: `Group name`,
 									PlanModifiers: []planmodifier.String{
 										custom_stringplanmodifier.SuppressDiff(custom_stringplanmodifier.ExplicitSuppress),
+									},
+									Validators: []validator.String{
+										custom_stringvalidators.NotNull(),
 									},
 								},
 								"description": schema.StringAttribute{
