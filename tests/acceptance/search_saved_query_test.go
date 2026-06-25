@@ -22,7 +22,6 @@ func TestSearchSavedQuery(t *testing.T) {
 				{
 					Config: searchSavedQueryConfig("test saved query", "dataset=\"cribl_internal_logs\" | limit 10"),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_search_saved_query"),
 						resource.TestCheckResourceAttr(resourceName, "name", "test saved query"),
 						resource.TestCheckResourceAttr(resourceName, "description", "test saved query"),
@@ -44,7 +43,7 @@ func TestSearchSavedQuery(t *testing.T) {
 				{
 					ResourceName:      resourceName,
 					ImportState:       true,
-					ImportStateId:     `{"group_id":"default_search","id":"test_search_saved_query"}`,
+					ImportStateId:     "test_search_saved_query",
 					ImportStateVerify: true,
 				},
 			},
@@ -56,7 +55,6 @@ func searchSavedQueryConfig(description, query string) string {
 	return `resource "criblio_search_saved_query" "my_searchsavedquery" {
   description = ` + strconv.Quote(description) + `
   earliest    = "-1h"
-  group_id    = "default_search"
   id          = "test_search_saved_query"
   is_private  = true
   latest      = "now"

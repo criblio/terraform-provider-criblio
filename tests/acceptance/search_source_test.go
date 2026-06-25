@@ -22,7 +22,6 @@ func TestSearchSource(t *testing.T) {
 				{
 					Config: searchSourceConfig("test search source", 31170),
 					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_search_source"),
 						resource.TestCheckResourceAttr(resourceName, "type", "cribl_http"),
 						resource.TestCheckResourceAttr(resourceName, "description", "test search source"),
@@ -42,7 +41,7 @@ func TestSearchSource(t *testing.T) {
 				{
 					ResourceName:      resourceName,
 					ImportState:       true,
-					ImportStateId:     `{"group_id":"default_search","id":"test_search_source"}`,
+					ImportStateId:     "test_search_source",
 					ImportStateVerify: true,
 				},
 			},
@@ -55,7 +54,6 @@ func searchSourceConfig(description string, port int) string {
   cribl_api   = "/cribl/_bulk"
   description = "` + description + `"
   disabled    = false
-  group_id    = "default_search"
   host        = "0.0.0.0"
   id          = "test_search_source"
   port        = ` + fmt.Sprint(port) + `

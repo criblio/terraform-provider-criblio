@@ -241,6 +241,16 @@ func applyResourceCompatibility(resource *ResourceDef) {
 			}
 		}
 	}
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+	}
 	if resource.StructName != "MappingRuleset" {
 		return
 	}

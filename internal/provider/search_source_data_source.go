@@ -71,10 +71,6 @@ func (d *SearchSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Computed:    true,
 				Description: `Absolute path for Elasticsearch bulk API requests. Used when type is elastic.`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"host": schema.StringAttribute{
 				Computed:    true,
 				Description: `Bind address for the listener.`,

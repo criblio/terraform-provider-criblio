@@ -2,9 +2,7 @@
 package provider
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -78,15 +76,6 @@ func (r *SearchEngineResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    false,
 				Computed:    true,
 				Description: `Type of engine. For lakehouse engines, always <code>local</code>.`,
-			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
-				Description: `Worker group ID.`,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
 			},
 			"has_main": schema.BoolAttribute{
 				Required:    false,
@@ -219,39 +208,7 @@ func (r *SearchEngineResource) Delete(ctx context.Context, req resource.DeleteRe
 }
 
 func (r *SearchEngineResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
-	dec.DisallowUnknownFields()
-	var data struct {
-		GroupID string `json:"group_id"`
-		ID      string `json:"id"`
-	}
-	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the required path parameters: `+err.Error())
-		return
-	}
-	if data.GroupID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
-		return
-	}
-	if data.ID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
-		return
-	}
-	var model SearchEngineModel
-	model.GroupID = types.StringValue(data.GroupID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
-	model.ID = types.StringValue(data.ID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	apiModel, err := r.api.Read(ctx, model)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		return
-	}
-	applySearchEngineAPIToState(apiModel, &model, false, false)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
 func isSearchEngineImportState(state *SearchEngineModel) bool {
@@ -301,11 +258,6 @@ func applySearchEngineAPIToState(api *SearchEngineModel, state *SearchEngineMode
 		state.EngineType = api.EngineType
 	} else if state.EngineType.IsNull() || state.EngineType.IsUnknown() {
 		state.EngineType = types.StringValue("")
-	}
-	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
-		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
-			state.GroupID = api.GroupID
-		}
 	}
 	if !api.HasMain.IsNull() && !api.HasMain.IsUnknown() {
 		state.HasMain = api.HasMain

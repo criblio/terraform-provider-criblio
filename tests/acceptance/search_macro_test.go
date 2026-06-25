@@ -21,7 +21,6 @@ func TestSearchMacro(t *testing.T) {
 			{
 				Config: searchMacroConfig("test search macro", "source=*"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 					resource.TestCheckResourceAttr(resourceName, "id", "test_search_macro"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test search macro"),
 					resource.TestCheckResourceAttr(resourceName, "replacement", "source=*"),
@@ -42,7 +41,7 @@ func TestSearchMacro(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"test_search_macro"}`,
+				ImportStateId:     "test_search_macro",
 				ImportStateVerify: true,
 			},
 		},
@@ -52,7 +51,6 @@ func TestSearchMacro(t *testing.T) {
 func searchMacroConfig(description, replacement string) string {
 	return `resource "criblio_search_macro" "my_searchmacro" {
   description = "` + description + `"
-  group_id    = "default_search"
   id          = "test_search_macro"
   replacement = "` + replacement + `"
   tags        = "test"

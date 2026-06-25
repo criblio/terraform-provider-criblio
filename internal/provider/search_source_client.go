@@ -17,17 +17,17 @@ func newSearchSourceAPI(client *restclient.Client) SearchSourceAPI {
 }
 
 func (a SearchSourceAPI) Create(ctx context.Context, model SearchSourceModel) (*SearchSourceModel, error) {
-	return restclient.Post[SearchSourceModel, SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources", model.GroupID.ValueString()), model)
+	return restclient.Post[SearchSourceModel, SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources", "default_search"), model)
 }
 
 func (a SearchSourceAPI) Read(ctx context.Context, model SearchSourceModel) (*SearchSourceModel, error) {
-	return restclient.Get[SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", "default_search", model.ID.ValueString()))
 }
 
 func (a SearchSourceAPI) Update(ctx context.Context, model SearchSourceModel) (*SearchSourceModel, error) {
-	return restclient.Patch[SearchSourceModel, SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[SearchSourceModel, SearchSourceModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", "default_search", model.ID.ValueString()), model)
 }
 
 func (a SearchSourceAPI) Delete(ctx context.Context, model SearchSourceModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/sources/%s", "default_search", model.ID.ValueString()))
 }

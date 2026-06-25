@@ -16,7 +16,6 @@ SearchSavedQuery Resource
 resource "criblio_search_saved_query" "my_search_saved_query" {
   description = "Saved search for recent Windows security channel errors."
   earliest = "-24h"
-  group_id = "default_search"
   id = "saved_winlog_errors"
   is_private = true
   latest = "now"
@@ -30,7 +29,6 @@ resource "criblio_search_saved_query" "my_search_saved_query" {
 
 ### Required
 
-- `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the saved search.
 - `name` (String) Display name for the saved search.
 - `query` (String) Query text for the saved search.
@@ -275,15 +273,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_saved_query.my_criblio_search_saved_query
-  id = jsonencode({
-    group_id = "default_search"
-    id       = "sq-errors"
-  })
+  id = "sq-errors"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_saved_query.my_criblio_search_saved_query '{"group_id":"default_search","id":"sq-errors"}'
+terraform import criblio_search_saved_query.my_criblio_search_saved_query sq-errors
 ```

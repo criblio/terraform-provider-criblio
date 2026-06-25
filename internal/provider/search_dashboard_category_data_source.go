@@ -39,10 +39,6 @@ func (d *SearchDashboardCategoryDataSource) Schema(_ context.Context, _ datasour
 				Computed:    true,
 				Description: `Brief description of the Dashboard Collection.`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the Dashboard Collection.`,

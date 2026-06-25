@@ -22,7 +22,6 @@ type SearchSourceModel struct {
 	Description   types.String `tfsdk:"description" json:"description,omitempty"`
 	Disabled      types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	ElasticAPI    types.String `tfsdk:"elastic_api" json:"elasticAPI,omitempty"`
-	GroupID       types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	Host          types.String `tfsdk:"host" json:"host,omitempty"`
 	ID            types.String `tfsdk:"id" json:"id,omitempty"`
 	Metadata      types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
@@ -43,7 +42,6 @@ type SearchSourceResourceModel struct {
 	Description   types.String `tfsdk:"description" json:"description,omitempty"`
 	Disabled      types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	ElasticAPI    types.String `tfsdk:"elastic_api" json:"elasticAPI,omitempty"`
-	GroupID       types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	Host          types.String `tfsdk:"host" json:"host,omitempty"`
 	ID            types.String `tfsdk:"id" json:"id,omitempty"`
 	Metadata      types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
@@ -64,7 +62,6 @@ type SearchSourceDataSourceModel struct {
 	Description   types.String `tfsdk:"description" json:"description,omitempty"`
 	Disabled      types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	ElasticAPI    types.String `tfsdk:"elastic_api" json:"elasticAPI,omitempty"`
-	GroupID       types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	Host          types.String `tfsdk:"host" json:"host,omitempty"`
 	ID            types.String `tfsdk:"id" json:"id,omitempty"`
 	Metadata      types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
@@ -85,7 +82,6 @@ type SearchSourceAPIModel struct {
 	Description   *string `json:"description,omitempty"`
 	Disabled      *bool   `json:"disabled,omitempty"`
 	ElasticAPI    *string `json:"elasticAPI,omitempty"`
-	GroupID       *string `json:"groupId,omitempty"`
 	Host          *string `json:"host,omitempty"`
 	ID            *string `json:"id,omitempty"`
 	Metadata      any     `json:"metadata,omitempty"`
@@ -584,11 +580,6 @@ func (m *SearchSourceModel) UnmarshalJSON(data []byte) error {
 		m.ElasticAPI = types.StringValue(*input.ElasticAPI)
 	} else {
 		m.ElasticAPI = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.Host != nil {
 		m.Host = types.StringValue(*input.Host)

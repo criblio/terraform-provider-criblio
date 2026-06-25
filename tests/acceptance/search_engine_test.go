@@ -21,7 +21,6 @@ func TestSearchEngine(t *testing.T) {
 			{
 				Config: searchEngineConfig("test search engine"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 					resource.TestCheckResourceAttr(resourceName, "id", "test_search_engine"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test search engine"),
 					resource.TestCheckResourceAttr(resourceName, "tier_size", "small"),
@@ -38,7 +37,7 @@ func TestSearchEngine(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"test_search_engine"}`,
+				ImportStateId:     "test_search_engine",
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"active_workflow",
@@ -61,7 +60,6 @@ func TestSearchEngine(t *testing.T) {
 func searchEngineConfig(description string) string {
 	return `resource "criblio_search_engine" "my_searchengine" {
   description = "` + description + `"
-  group_id    = "default_search"
   id          = "test_search_engine"
   tier_size   = "small"
 }

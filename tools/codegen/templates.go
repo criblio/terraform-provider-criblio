@@ -482,17 +482,17 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
-	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr .Create }}, model)
+	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
 {{- else if .NoRead }}
-	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr .Create }}, model)
+	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
 {{- else }}
-	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
+	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
 }
 
@@ -513,7 +513,7 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
 {{- else }}
-	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr .Read }})
+	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Read }})
 {{- end }}
 {{- end }}
 }
@@ -522,7 +522,7 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 {{- if .Action }}
 	return &model, nil
 {{- else if .NoRead }}
-	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr .Update }}, model)
+	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr . .Update }}, model)
 	return &model, err
 {{- else }}
 {{- if eq .StructName "Key" }}
@@ -538,12 +538,12 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 	if err != nil {
 		return nil, err
 	}
-	if _, err := restclient.{{ restWriteCall .Update }}[map[string]any, any](ctx, a.client, {{ pathExpr .Update }}, body); err != nil {
+	if _, err := restclient.{{ restWriteCall .Update }}[map[string]any, any](ctx, a.client, {{ pathExpr . .Update }}, body); err != nil {
 		return nil, err
 	}
 	return a.Read(ctx, model)
 {{- else }}
-	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
+	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Update }}, model)
 {{- end }}
 {{- end }}
 {{- end }}
@@ -579,7 +579,7 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	// endpoint; destroy removes Terraform state without resetting the group.
 	return nil
 {{- else }}
-	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
+	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
 {{- end }}
 {{- end }}
 {{- end }}
@@ -1138,7 +1138,7 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, d.client, {{ pathExpr .List }})
+	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, d.client, {{ pathExpr . .List }})
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

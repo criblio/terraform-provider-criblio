@@ -2,9 +2,7 @@
 package provider
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -93,15 +91,6 @@ func (r *SearchSourceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:    true,
 				Computed:    false,
 				Description: `Absolute path for Elasticsearch bulk API requests. Used when type is elastic.`,
-			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
-				Description: `Worker group ID.`,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
 			},
 			"host": schema.StringAttribute{
 				Required:    true,
@@ -377,39 +366,7 @@ func (r *SearchSourceResource) Delete(ctx context.Context, req resource.DeleteRe
 }
 
 func (r *SearchSourceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
-	dec.DisallowUnknownFields()
-	var data struct {
-		GroupID string `json:"group_id"`
-		ID      string `json:"id"`
-	}
-	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the required path parameters: `+err.Error())
-		return
-	}
-	if data.GroupID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
-		return
-	}
-	if data.ID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
-		return
-	}
-	var model SearchSourceModel
-	model.GroupID = types.StringValue(data.GroupID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
-	model.ID = types.StringValue(data.ID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	apiModel, err := r.api.Read(ctx, model)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		return
-	}
-	applySearchSourceAPIToState(apiModel, &model, false, false)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
 func isSearchSourceImportState(state *SearchSourceModel) bool {
@@ -460,11 +417,6 @@ func applySearchSourceAPIToState(api *SearchSourceModel, state *SearchSourceMode
 	if !preserveInputs || (fillMissingInputs && (state.ElasticAPI.IsNull() || state.ElasticAPI.IsUnknown())) {
 		if !api.ElasticAPI.IsNull() && !api.ElasticAPI.IsUnknown() {
 			state.ElasticAPI = api.ElasticAPI
-		}
-	}
-	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
-		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
-			state.GroupID = api.GroupID
 		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Host.IsNull() || state.Host.IsUnknown())) {

@@ -47,10 +47,6 @@ func (d *SearchMacroDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 				Computed:    true,
 				Description: `Brief description of the Macro.`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the Macro.`,

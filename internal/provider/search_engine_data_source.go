@@ -60,10 +60,6 @@ func (d *SearchEngineDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Computed:    true,
 				Description: `Type of engine. For lakehouse engines, always <code>local</code>.`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"has_main": schema.BoolAttribute{
 				Computed:    true,
 				Description: `If <code>true</code>, the lakehouse engine currently owns the main Dataset.`,

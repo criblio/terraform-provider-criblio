@@ -692,7 +692,12 @@ func attrType(field parser.FieldDef) string {
 
 func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
-	fields = append(fields, append(resource.List.PathParams, resource.List.QueryParams...)...)
+	for _, field := range append(resource.List.PathParams, resource.List.QueryParams...) {
+		if fixedPathParamValue(resource, field) != "" {
+			continue
+		}
+		fields = append(fields, field)
+	}
 	return fields
 }
 
@@ -1151,7 +1156,7 @@ func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	return "example"
 }
 
-func pathExpr(op parser.OperationDef) string {
+func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 	path := op.Path
 	for _, param := range op.PathParams {
 		path = strings.ReplaceAll(path, "{"+param.APIName+"}", `%s`)
@@ -1165,6 +1170,10 @@ func pathExpr(op parser.OperationDef) string {
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
+		if fixed := fixedPathParamValue(resource, param); fixed != "" {
+			args = append(args, fmt.Sprintf("%q", fixed))
+			continue
+		}
 		if op.Path == "/admin/products/{product}/mappings/{id}" && param.TerraformName == "id" {
 			args = append(args, "mappingRulesetID(model)")
 			continue
@@ -1178,4 +1187,11 @@ func pathExpr(op parser.OperationDef) string {
 		return fmt.Sprintf("%q", path)
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
+}
+
+func fixedPathParamValue(resource parser.ResourceDef, param parser.FieldDef) string {
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
+		return "default_search"
+	}
+	return ""
 }

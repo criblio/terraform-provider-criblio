@@ -21,7 +21,6 @@ type SearchSavedQueryModel struct {
 	Description        types.String  `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String  `tfsdk:"display_username" json:"displayUsername,omitempty"`
 	Earliest           types.String  `tfsdk:"earliest" json:"earliest,omitempty"`
-	GroupID            types.String  `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                 types.String  `tfsdk:"id" json:"id,omitempty"`
 	IsPrivate          types.Bool    `tfsdk:"is_private" json:"isPrivate,omitempty"`
 	IsSystem           types.Bool    `tfsdk:"is_system" json:"isSystem,omitempty"`
@@ -43,7 +42,6 @@ type SearchSavedQueryResourceModel struct {
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
 	Earliest           types.String   `tfsdk:"earliest" json:"earliest,omitempty"`
-	GroupID            types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                 types.String   `tfsdk:"id" json:"id,omitempty"`
 	IsPrivate          types.Bool     `tfsdk:"is_private" json:"isPrivate,omitempty"`
 	IsSystem           types.Bool     `tfsdk:"is_system" json:"isSystem,omitempty"`
@@ -65,7 +63,6 @@ type SearchSavedQueryDataSourceModel struct {
 	Description        types.String   `tfsdk:"description" json:"description,omitempty"`
 	DisplayUsername    types.String   `tfsdk:"display_username" json:"displayUsername,omitempty"`
 	Earliest           types.String   `tfsdk:"earliest" json:"earliest,omitempty"`
-	GroupID            types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                 types.String   `tfsdk:"id" json:"id,omitempty"`
 	IsPrivate          types.Bool     `tfsdk:"is_private" json:"isPrivate,omitempty"`
 	IsSystem           types.Bool     `tfsdk:"is_system" json:"isSystem,omitempty"`
@@ -87,7 +84,6 @@ type SearchSavedQueryAPIModel struct {
 	Description        *string           `json:"description,omitempty"`
 	DisplayUsername    *string           `json:"displayUsername,omitempty"`
 	Earliest           *string           `json:"earliest,omitempty"`
-	GroupID            *string           `json:"groupId,omitempty"`
 	ID                 *string           `json:"id,omitempty"`
 	IsPrivate          *bool             `json:"isPrivate,omitempty"`
 	IsSystem           *bool             `json:"isSystem,omitempty"`
@@ -912,11 +908,6 @@ func (m *SearchSavedQueryModel) UnmarshalJSON(data []byte) error {
 		m.Earliest = types.StringValue(*input.Earliest)
 	} else {
 		m.Earliest = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.ID != nil {
 		m.ID = types.StringValue(*input.ID)

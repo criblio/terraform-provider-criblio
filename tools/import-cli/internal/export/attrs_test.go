@@ -32,7 +32,6 @@ func TestHclOptionsForType_searchMacroSkipsComputedOnlyAttrs(t *testing.T) {
 		Created:     types.Int64Value(1771983246699),
 		CreatedBy:   types.StringValue("user@example.com"),
 		Description: types.StringValue("Filters to high-severity events."),
-		GroupID:     types.StringValue("default_search"),
 		ID:          types.StringValue("test_macro_2"),
 		Modified:    types.Int64Value(1771983246699),
 		Replacement: types.StringValue(`severity >= "Error"`),
@@ -45,7 +44,7 @@ func TestHclOptionsForType_searchMacroSkipsComputedOnlyAttrs(t *testing.T) {
 	assert.NotContains(t, attrs, "created")
 	assert.NotContains(t, attrs, "created_by")
 	assert.NotContains(t, attrs, "modified")
-	assert.Equal(t, "default_search", attrs["group_id"].String)
+	assert.NotContains(t, attrs, "group_id")
 	assert.Equal(t, "test_macro_2", attrs["id"].String)
 	assert.Equal(t, `severity >= "Error"`, attrs["replacement"].String)
 }
@@ -61,7 +60,6 @@ func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 		Description:            types.StringValue("Search engine"),
 		EffectiveStatus:        types.StringValue("ready"),
 		EngineType:             types.StringValue("local"),
-		GroupID:                types.StringValue("default_search"),
 		HasMain:                types.BoolValue(true),
 		ID:                     types.StringValue("local_ingest_primary"),
 		IsComputeDeprovisioned: types.BoolValue(false),
@@ -87,10 +85,10 @@ func TestHclOptionsForType_searchEngineSkipsComputedOnlyAttrs(t *testing.T) {
 		"last_provisioned_ms",
 		"metrics_last_published_at",
 		"status",
+		"group_id",
 	} {
 		assert.NotContains(t, attrs, name)
 	}
-	assert.Equal(t, "default_search", attrs["group_id"].String)
 	assert.Equal(t, "local_ingest_primary", attrs["id"].String)
 	assert.Equal(t, "Search engine", attrs["description"].String)
 	assert.Equal(t, "small", attrs["tier_size"].String)

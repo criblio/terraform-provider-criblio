@@ -15,7 +15,6 @@ SearchMacro Resource
 ```terraform
 resource "criblio_search_macro" "my_search_macro" {
   description = "Filters to high-severity events."
-  group_id = "default_search"
   id = "error_filter"
   replacement = "severity >= \"Error\""
   tags = "errors,prod"
@@ -27,7 +26,6 @@ resource "criblio_search_macro" "my_search_macro" {
 
 ### Required
 
-- `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the Macro.
 - `replacement` (String) Query fragment that is substituted when the Macro is referenced in a search.
 
@@ -51,15 +49,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_macro.my_criblio_search_macro
-  id = jsonencode({
-    group_id = "default_search"
-    id       = "error_filter"
-  })
+  id = "error_filter"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_macro.my_criblio_search_macro '{"group_id":"default_search","id":"error_filter"}'
+terraform import criblio_search_macro.my_criblio_search_macro error_filter
 ```

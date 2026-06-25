@@ -15,7 +15,6 @@ SearchSource Resource
 ```terraform
 resource "criblio_search_source" "my_search_source" {
   description = "Primary Cribl HTTP ingest for the Worker Group"
-  group_id = "default_search"
   host = "0.0.0.0"
   id = "in_cribl_http_primary"
   port = 10200
@@ -32,7 +31,6 @@ resource "criblio_search_source" "my_search_source" {
 
 ### Required
 
-- `group_id` (String) Worker group ID.
 - `host` (String) Bind address for the listener.
 - `id` (String) Source configuration id.
 - `type` (String) Protocol discriminator selecting the ingest source protocol and listener shape.
@@ -123,15 +121,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_source.my_criblio_search_source
-  id = jsonencode({
-    group_id = "default_search"
-    id       = "in_cribl_http_primary"
-  })
+  id = "in_cribl_http_primary"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_source.my_criblio_search_source '{"group_id":"default_search","id":"in_cribl_http_primary"}'
+terraform import criblio_search_source.my_criblio_search_source in_cribl_http_primary
 ```

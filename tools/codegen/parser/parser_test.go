@@ -126,6 +126,29 @@ func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	}
 }
 
+func TestSearchResourcesHideGroupIDForBackwardCompatibility(t *testing.T) {
+	resource := &ResourceDef{
+		TypeName: "criblio_search_saved_query",
+		Fields: []FieldDef{
+			{
+				APIName:       "groupId",
+				TerraformName: "group_id",
+				GoName:        "GroupID",
+				Type:          "string",
+				Required:      true,
+				ForceNew:      true,
+				PathParam:     true,
+			},
+		},
+	}
+
+	applyResourceCompatibility(resource)
+
+	if hasField(resource.Fields, "group_id") {
+		t.Fatalf("search group_id should be hidden from Terraform schema")
+	}
+}
+
 func TestParseKeyQueryID(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

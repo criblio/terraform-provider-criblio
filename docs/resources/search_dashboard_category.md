@@ -15,7 +15,6 @@ SearchDashboardCategory Resource
 ```terraform
 resource "criblio_search_dashboard_category" "my_search_dashboard_category" {
   description = "Dashboards for infrastructure monitoring and health checks."
-  group_id = "default_search"
   id = "infrastructure"
   name = "Infrastructure"
 }
@@ -26,7 +25,6 @@ resource "criblio_search_dashboard_category" "my_search_dashboard_category" {
 
 ### Required
 
-- `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the Dashboard Collection.
 - `name` (String) Display name for the Dashboard Collection.
 
@@ -44,15 +42,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_dashboard_category.my_criblio_search_dashboard_category
-  id = jsonencode({
-    group_id = "default_search"
-    id       = "observability"
-  })
+  id = "observability"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_dashboard_category.my_criblio_search_dashboard_category '{"group_id":"default_search","id":"observability"}'
+terraform import criblio_search_dashboard_category.my_criblio_search_dashboard_category observability
 ```

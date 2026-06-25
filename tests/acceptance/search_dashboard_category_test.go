@@ -21,7 +21,6 @@ func TestSearchDashboardCategory(t *testing.T) {
 			{
 				Config: searchDashboardCategoryConfig("test search dashboard category"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 					resource.TestCheckResourceAttr(resourceName, "id", "test_search_dashboard_category"),
 					resource.TestCheckResourceAttr(resourceName, "name", "test_search_dashboard_category"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test search dashboard category"),
@@ -39,7 +38,7 @@ func TestSearchDashboardCategory(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"test_search_dashboard_category"}`,
+				ImportStateId:     "test_search_dashboard_category",
 				ImportStateVerify: true,
 			},
 		},
@@ -49,7 +48,6 @@ func TestSearchDashboardCategory(t *testing.T) {
 func searchDashboardCategoryConfig(description string) string {
 	return `resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
   description = "` + description + `"
-  group_id    = "default_search"
   id          = "test_search_dashboard_category"
   is_pack     = false
   name        = "test_search_dashboard_category"

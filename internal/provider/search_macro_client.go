@@ -17,17 +17,17 @@ func newSearchMacroAPI(client *restclient.Client) SearchMacroAPI {
 }
 
 func (a SearchMacroAPI) Create(ctx context.Context, model SearchMacroModel) (*SearchMacroModel, error) {
-	return restclient.Post[SearchMacroModel, SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros", model.GroupID.ValueString()), model)
+	return restclient.Post[SearchMacroModel, SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros", "default_search"), model)
 }
 
 func (a SearchMacroAPI) Read(ctx context.Context, model SearchMacroModel) (*SearchMacroModel, error) {
-	return restclient.Get[SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", "default_search", model.ID.ValueString()))
 }
 
 func (a SearchMacroAPI) Update(ctx context.Context, model SearchMacroModel) (*SearchMacroModel, error) {
-	return restclient.Patch[SearchMacroModel, SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[SearchMacroModel, SearchMacroModel](ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", "default_search", model.ID.ValueString()), model)
 }
 
 func (a SearchMacroAPI) Delete(ctx context.Context, model SearchMacroModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/macros/%s", "default_search", model.ID.ValueString()))
 }

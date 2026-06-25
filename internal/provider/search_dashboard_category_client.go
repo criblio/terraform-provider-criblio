@@ -17,17 +17,17 @@ func newSearchDashboardCategoryAPI(client *restclient.Client) SearchDashboardCat
 }
 
 func (a SearchDashboardCategoryAPI) Create(ctx context.Context, model SearchDashboardCategoryModel) (*SearchDashboardCategoryModel, error) {
-	return restclient.Post[SearchDashboardCategoryModel, SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories", model.GroupID.ValueString()), model)
+	return restclient.Post[SearchDashboardCategoryModel, SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories", "default_search"), model)
 }
 
 func (a SearchDashboardCategoryAPI) Read(ctx context.Context, model SearchDashboardCategoryModel) (*SearchDashboardCategoryModel, error) {
-	return restclient.Get[SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", "default_search", model.ID.ValueString()))
 }
 
 func (a SearchDashboardCategoryAPI) Update(ctx context.Context, model SearchDashboardCategoryModel) (*SearchDashboardCategoryModel, error) {
-	return restclient.Patch[SearchDashboardCategoryModel, SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[SearchDashboardCategoryModel, SearchDashboardCategoryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", "default_search", model.ID.ValueString()), model)
 }
 
 func (a SearchDashboardCategoryAPI) Delete(ctx context.Context, model SearchDashboardCategoryModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/dashboard-categories/%s", "default_search", model.ID.ValueString()))
 }

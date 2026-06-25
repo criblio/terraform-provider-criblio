@@ -17,17 +17,17 @@ func newSearchSavedQueryAPI(client *restclient.Client) SearchSavedQueryAPI {
 }
 
 func (a SearchSavedQueryAPI) Create(ctx context.Context, model SearchSavedQueryModel) (*SearchSavedQueryModel, error) {
-	return restclient.Post[SearchSavedQueryModel, SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved", model.GroupID.ValueString()), model)
+	return restclient.Post[SearchSavedQueryModel, SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved", "default_search"), model)
 }
 
 func (a SearchSavedQueryAPI) Read(ctx context.Context, model SearchSavedQueryModel) (*SearchSavedQueryModel, error) {
-	return restclient.Get[SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", "default_search", model.ID.ValueString()))
 }
 
 func (a SearchSavedQueryAPI) Update(ctx context.Context, model SearchSavedQueryModel) (*SearchSavedQueryModel, error) {
-	return restclient.Patch[SearchSavedQueryModel, SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[SearchSavedQueryModel, SearchSavedQueryModel](ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", "default_search", model.ID.ValueString()), model)
 }
 
 func (a SearchSavedQueryAPI) Delete(ctx context.Context, model SearchSavedQueryModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/saved/%s", "default_search", model.ID.ValueString()))
 }

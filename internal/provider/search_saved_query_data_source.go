@@ -465,10 +465,6 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 				Computed:    true,
 				Description: `Start of the search time range. Accepts a relative time string or an absolute timestamp.`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the saved search.`,

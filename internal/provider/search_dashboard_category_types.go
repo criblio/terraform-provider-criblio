@@ -18,7 +18,6 @@ var _ = jsontypes.NormalizedType{}
 
 type SearchDashboardCategoryModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	IsPack      types.Bool   `tfsdk:"is_pack" json:"isPack,omitempty"`
 	Name        types.String `tfsdk:"name" json:"name,omitempty"`
@@ -26,7 +25,6 @@ type SearchDashboardCategoryModel struct {
 
 type SearchDashboardCategoryResourceModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	IsPack      types.Bool   `tfsdk:"is_pack" json:"isPack,omitempty"`
 	Name        types.String `tfsdk:"name" json:"name,omitempty"`
@@ -34,7 +32,6 @@ type SearchDashboardCategoryResourceModel struct {
 
 type SearchDashboardCategoryDataSourceModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	IsPack      types.Bool   `tfsdk:"is_pack" json:"isPack,omitempty"`
 	Name        types.String `tfsdk:"name" json:"name,omitempty"`
@@ -42,7 +39,6 @@ type SearchDashboardCategoryDataSourceModel struct {
 
 type SearchDashboardCategoryAPIModel struct {
 	Description *string `json:"description,omitempty"`
-	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
 	IsPack      *bool   `json:"isPack,omitempty"`
 	Name        *string `json:"name,omitempty"`
@@ -299,11 +295,6 @@ func (m *SearchDashboardCategoryModel) UnmarshalJSON(data []byte) error {
 		m.Description = types.StringValue(*input.Description)
 	} else {
 		m.Description = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.ID != nil {
 		m.ID = types.StringValue(*input.ID)

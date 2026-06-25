@@ -2,9 +2,7 @@
 package provider
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
@@ -59,15 +57,6 @@ func (r *SearchMacroResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional:    true,
 				Computed:    true,
 				Description: `Brief description of the Macro.`,
-			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Optional:    false,
-				Computed:    false,
-				Description: `Worker group ID.`,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
@@ -178,39 +167,7 @@ func (r *SearchMacroResource) Delete(ctx context.Context, req resource.DeleteReq
 }
 
 func (r *SearchMacroResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
-	dec.DisallowUnknownFields()
-	var data struct {
-		GroupID string `json:"group_id"`
-		ID      string `json:"id"`
-	}
-	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the required path parameters: `+err.Error())
-		return
-	}
-	if data.GroupID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field group_id is required but was not found in the json encoded ID.`)
-		return
-	}
-	if data.ID == "" {
-		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
-		return
-	}
-	var model SearchMacroModel
-	model.GroupID = types.StringValue(data.GroupID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), data.GroupID)...)
-	model.ID = types.StringValue(data.ID)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	apiModel, err := r.api.Read(ctx, model)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		return
-	}
-	applySearchMacroAPIToState(apiModel, &model, false, false)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
 func isSearchMacroImportState(state *SearchMacroModel) bool {
@@ -242,11 +199,6 @@ func applySearchMacroAPIToState(api *SearchMacroModel, state *SearchMacroModel, 
 	}
 	if state.Description.IsUnknown() {
 		state.Description = types.StringNull()
-	}
-	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
-		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
-			state.GroupID = api.GroupID
-		}
 	}
 	if !preserveInputs || (fillMissingInputs && (state.ID.IsNull() || state.ID.IsUnknown())) {
 		if !api.ID.IsNull() && !api.ID.IsUnknown() {

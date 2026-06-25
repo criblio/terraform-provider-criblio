@@ -298,6 +298,42 @@ func TestGeneratedImportUsesPathParams(t *testing.T) {
 	assertNotContains(t, command, `cert-001`)
 }
 
+func TestSearchResourcePathUsesInternalDefaultSearchGroup(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "search_saved_query",
+		FileStem:   "search_saved_query",
+		TypeName:   "criblio_search_saved_query",
+		StructName: "SearchSavedQuery",
+		Create: parser.OperationDef{
+			Path: "/m/{groupId}/search/saved",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", Type: "string", PathParam: true},
+			},
+		},
+		Read: parser.OperationDef{
+			Path: "/m/{groupId}/search/saved/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", Type: "string", PathParam: true},
+				{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", PathParam: true},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", Required: true},
+		},
+	}
+
+	content, err := executeTemplate("client", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got := string(content)
+
+	assertNotContains(t, got, `"group_id": schema.StringAttribute{`)
+	assertNotContains(t, got, `model.GroupID.ValueString()`)
+	assertContains(t, got, `fmt.Sprintf("/m/%s/search/saved", "default_search")`)
+	assertContains(t, got, `fmt.Sprintf("/m/%s/search/saved/%s", "default_search", model.ID.ValueString())`)
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

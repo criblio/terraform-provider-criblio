@@ -23,7 +23,6 @@ type SearchEngineModel struct {
 	Description            types.String `tfsdk:"description" json:"description,omitempty"`
 	EffectiveStatus        types.String `tfsdk:"effective_status" json:"effectiveStatus,omitempty"`
 	EngineType             types.String `tfsdk:"engine_type" json:"engineType,omitempty"`
-	GroupID                types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	HasMain                types.Bool   `tfsdk:"has_main" json:"hasMain,omitempty"`
 	ID                     types.String `tfsdk:"id" json:"id,omitempty"`
 	IsComputeDeprovisioned types.Bool   `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
@@ -41,7 +40,6 @@ type SearchEngineResourceModel struct {
 	Description            types.String   `tfsdk:"description" json:"description,omitempty"`
 	EffectiveStatus        types.String   `tfsdk:"effective_status" json:"effectiveStatus,omitempty"`
 	EngineType             types.String   `tfsdk:"engine_type" json:"engineType,omitempty"`
-	GroupID                types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	HasMain                types.Bool     `tfsdk:"has_main" json:"hasMain,omitempty"`
 	ID                     types.String   `tfsdk:"id" json:"id,omitempty"`
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
@@ -59,7 +57,6 @@ type SearchEngineDataSourceModel struct {
 	Description            types.String   `tfsdk:"description" json:"description,omitempty"`
 	EffectiveStatus        types.String   `tfsdk:"effective_status" json:"effectiveStatus,omitempty"`
 	EngineType             types.String   `tfsdk:"engine_type" json:"engineType,omitempty"`
-	GroupID                types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	HasMain                types.Bool     `tfsdk:"has_main" json:"hasMain,omitempty"`
 	ID                     types.String   `tfsdk:"id" json:"id,omitempty"`
 	IsComputeDeprovisioned types.Bool     `tfsdk:"is_compute_deprovisioned" json:"isComputeDeprovisioned,omitempty"`
@@ -77,7 +74,6 @@ type SearchEngineAPIModel struct {
 	Description            *string  `json:"description,omitempty"`
 	EffectiveStatus        *string  `json:"effectiveStatus,omitempty"`
 	EngineType             *string  `json:"engineType,omitempty"`
-	GroupID                *string  `json:"groupId,omitempty"`
 	HasMain                *bool    `json:"hasMain,omitempty"`
 	ID                     *string  `json:"id,omitempty"`
 	IsComputeDeprovisioned *bool    `json:"isComputeDeprovisioned,omitempty"`
@@ -361,11 +357,6 @@ func (m *SearchEngineModel) UnmarshalJSON(data []byte) error {
 		m.EngineType = types.StringValue(*input.EngineType)
 	} else {
 		m.EngineType = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.HasMain != nil {
 		m.HasMain = types.BoolValue(*input.HasMain)

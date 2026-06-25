@@ -15,7 +15,6 @@ SearchEngine Resource
 ```terraform
 resource "criblio_search_engine" "my_search_engine" {
   description = "Dedicated engine for analytics workloads"
-  group_id = "default_search"
   id = "local_ingest_analytics"
   tier_size = "medium"
 }
@@ -26,7 +25,6 @@ resource "criblio_search_engine" "my_search_engine" {
 
 ### Required
 
-- `group_id` (String) Worker group ID.
 - `id` (String)
 - `tier_size` (String) Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse engine. Configuring sizes <code>3xlarge</code>, <code>4xlarge</code>,<code>5xlarge</code>, and <code>6xlarge</code> requires the <code>cribl_operator</code> role.
 
@@ -57,15 +55,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_search_engine.my_criblio_search_engine
-  id = jsonencode({
-    group_id = "default_search"
-    id       = "local_ingest_primary"
-  })
+  id = "local_ingest_primary"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_search_engine.my_criblio_search_engine '{"group_id":"default_search","id":"local_ingest_primary"}'
+terraform import criblio_search_engine.my_criblio_search_engine local_ingest_primary
 ```

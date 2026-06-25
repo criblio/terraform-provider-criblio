@@ -17,17 +17,17 @@ func newSearchEngineAPI(client *restclient.Client) SearchEngineAPI {
 }
 
 func (a SearchEngineAPI) Create(ctx context.Context, model SearchEngineModel) (*SearchEngineModel, error) {
-	return restclient.Post[SearchEngineModel, SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines", model.GroupID.ValueString()), model)
+	return restclient.Post[SearchEngineModel, SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines", "default_search"), model)
 }
 
 func (a SearchEngineAPI) Read(ctx context.Context, model SearchEngineModel) (*SearchEngineModel, error) {
-	return restclient.Get[SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", "default_search", model.ID.ValueString()))
 }
 
 func (a SearchEngineAPI) Update(ctx context.Context, model SearchEngineModel) (*SearchEngineModel, error) {
-	return restclient.Patch[SearchEngineModel, SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[SearchEngineModel, SearchEngineModel](ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", "default_search", model.ID.ValueString()), model)
 }
 
 func (a SearchEngineAPI) Delete(ctx context.Context, model SearchEngineModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/search/local_search/engines/%s", "default_search", model.ID.ValueString()))
 }

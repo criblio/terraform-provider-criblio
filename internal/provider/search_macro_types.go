@@ -20,7 +20,6 @@ type SearchMacroModel struct {
 	Created     types.Int64  `tfsdk:"created" json:"created,omitempty"`
 	CreatedBy   types.String `tfsdk:"created_by" json:"createdBy,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Modified    types.Int64  `tfsdk:"modified" json:"modified,omitempty"`
 	Replacement types.String `tfsdk:"replacement" json:"replacement,omitempty"`
@@ -31,7 +30,6 @@ type SearchMacroResourceModel struct {
 	Created     types.Int64  `tfsdk:"created" json:"created,omitempty"`
 	CreatedBy   types.String `tfsdk:"created_by" json:"createdBy,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Modified    types.Int64  `tfsdk:"modified" json:"modified,omitempty"`
 	Replacement types.String `tfsdk:"replacement" json:"replacement,omitempty"`
@@ -42,7 +40,6 @@ type SearchMacroDataSourceModel struct {
 	Created     types.Int64  `tfsdk:"created" json:"created,omitempty"`
 	CreatedBy   types.String `tfsdk:"created_by" json:"createdBy,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
-	GroupID     types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Modified    types.Int64  `tfsdk:"modified" json:"modified,omitempty"`
 	Replacement types.String `tfsdk:"replacement" json:"replacement,omitempty"`
@@ -53,7 +50,6 @@ type SearchMacroAPIModel struct {
 	Created     *int64  `json:"created,omitempty"`
 	CreatedBy   *string `json:"createdBy,omitempty"`
 	Description *string `json:"description,omitempty"`
-	GroupID     *string `json:"groupId,omitempty"`
 	ID          *string `json:"id,omitempty"`
 	Modified    *int64  `json:"modified,omitempty"`
 	Replacement *string `json:"replacement,omitempty"`
@@ -321,11 +317,6 @@ func (m *SearchMacroModel) UnmarshalJSON(data []byte) error {
 		m.Description = types.StringValue(*input.Description)
 	} else {
 		m.Description = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.ID != nil {
 		m.ID = types.StringValue(*input.ID)
