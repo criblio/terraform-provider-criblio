@@ -194,6 +194,7 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: EventBreakerRuleset
+      x-terraform-read-after-write: true
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.get"
     update:
       x-terraform-read: EventBreakerRuleset

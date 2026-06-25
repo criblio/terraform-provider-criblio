@@ -741,7 +741,16 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if .Create.ReadAfterWrite }}
+	apiModel, err = r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
