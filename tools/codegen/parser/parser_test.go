@@ -149,6 +149,30 @@ func TestSearchResourcesHideGroupIDForBackwardCompatibility(t *testing.T) {
 	}
 }
 
+func TestNotificationHidesGroupIDForBackwardCompatibility(t *testing.T) {
+	resource := &ResourceDef{
+		StructName: "Notification",
+		TypeName:   "criblio_notification",
+		Fields: []FieldDef{
+			{
+				APIName:       "groupId",
+				TerraformName: "group_id",
+				GoName:        "GroupID",
+				Type:          "string",
+				Required:      true,
+				ForceNew:      true,
+				PathParam:     true,
+			},
+		},
+	}
+
+	applyResourceCompatibility(resource)
+
+	if hasField(resource.Fields, "group_id") {
+		t.Fatalf("notification group_id should be hidden from Terraform schema")
+	}
+}
+
 func TestParseKeyQueryID(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {

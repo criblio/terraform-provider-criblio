@@ -17,17 +17,24 @@ func newNotificationAPI(client *restclient.Client) NotificationAPI {
 }
 
 func (a NotificationAPI) Create(ctx context.Context, model NotificationModel) (*NotificationModel, error) {
-	return restclient.Post[NotificationModel, NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications", model.GroupID.ValueString()), model)
+	return restclient.Post[NotificationModel, NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications", notificationGroupID(model)), model)
 }
 
 func (a NotificationAPI) Read(ctx context.Context, model NotificationModel) (*NotificationModel, error) {
-	return restclient.Get[NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Get[NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", notificationGroupID(model), model.ID.ValueString()))
 }
 
 func (a NotificationAPI) Update(ctx context.Context, model NotificationModel) (*NotificationModel, error) {
-	return restclient.Patch[NotificationModel, NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", model.GroupID.ValueString(), model.ID.ValueString()), model)
+	return restclient.Patch[NotificationModel, NotificationModel](ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", notificationGroupID(model), model.ID.ValueString()), model)
 }
 
 func (a NotificationAPI) Delete(ctx context.Context, model NotificationModel) error {
-	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", model.GroupID.ValueString(), model.ID.ValueString()))
+	return restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/notifications/%s", notificationGroupID(model), model.ID.ValueString()))
+}
+
+func notificationGroupID(model NotificationModel) string {
+	if !model.Group.IsNull() && !model.Group.IsUnknown() && model.Group.ValueString() != "" {
+		return model.Group.ValueString()
+	}
+	return "default"
 }

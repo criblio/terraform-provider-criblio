@@ -23,7 +23,6 @@ resource "criblio_notification_target" "alerts" {
 # Stream / source condition: high data volume (matches UI advanced settings)
 resource "criblio_notification" "source_high_volume" {
   id        = "test_source_volume_notification"
-  group_id  = "default"
   group     = "default"
   condition = "high-volume"
   conf = {

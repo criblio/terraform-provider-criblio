@@ -217,27 +217,39 @@ actions:
       x-terraform-suppress-diff: explicit
       items:
         properties:
+          fields:
+            x-terraform-optional-computed: true
+          parserEnabled:
+            x-terraform-optional-computed: true
+          shouldUseDataRaw:
+            x-terraform-optional-computed: true
           delimiter:
             type: string
             title: Field delimiter
+            x-terraform-optional-computed: true
           delimiterRegex:
             type: string
             title: Field delimiter regex
+            x-terraform-optional-computed: true
           escapeChar:
             type: string
             title: Escape character
+            x-terraform-optional-computed: true
           eventBreakerRegex:
             type: string
             title: Event breaker regex
           fieldsLineRegex:
             type: string
             title: Fields line regex
+            x-terraform-optional-computed: true
           headerLineRegex:
             type: string
             title: Header line regex
+            x-terraform-optional-computed: true
           quoteChar:
             type: string
             title: Quote character
+            x-terraform-optional-computed: true
 
   - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
     update:

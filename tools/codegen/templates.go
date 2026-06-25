@@ -584,6 +584,15 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 {{- end }}
 {{- end }}
 }
+{{- if eq .StructName "Notification" }}
+
+func notificationGroupID(model NotificationModel) string {
+	if !model.Group.IsNull() && !model.Group.IsUnknown() && model.Group.ValueString() != "" {
+		return model.Group.ValueString()
+	}
+	return "default"
+}
+{{- end }}
 {{- if eq .StructName "Key" }}
 
 func keyAPIID(model KeyModel) string {

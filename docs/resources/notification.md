@@ -22,7 +22,6 @@ resource "criblio_notification" "my_notification" {
     notify_on_resolution = true
   }
   group = "default"
-  group_id = "default"
   id = "high-volume-http-src"
   targets = [
     "system_notifications",
@@ -36,7 +35,6 @@ resource "criblio_notification" "my_notification" {
 ### Required
 
 - `condition` (String) The condition that triggers the Notification.
-- `group_id` (String) Worker group ID.
 - `id` (String) Unique identifier for the Notification.
 
 ### Optional
@@ -103,15 +101,12 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = criblio_notification.my_criblio_notification
-  id = jsonencode({
-    group_id = "default"
-    id       = "notif-001"
-  })
+  id = "notif-001"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import criblio_notification.my_criblio_notification '{"group_id":"default","id":"notif-001"}'
+terraform import criblio_notification.my_criblio_notification notif-001
 ```

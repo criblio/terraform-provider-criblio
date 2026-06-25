@@ -334,6 +334,44 @@ func TestSearchResourcePathUsesInternalDefaultSearchGroup(t *testing.T) {
 	assertContains(t, got, `fmt.Sprintf("/m/%s/search/saved/%s", "default_search", model.ID.ValueString())`)
 }
 
+func TestNotificationResourcePathUsesCompatibleGroupFallback(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "notification",
+		FileStem:   "notification",
+		TypeName:   "criblio_notification",
+		StructName: "Notification",
+		Create: parser.OperationDef{
+			Path: "/m/{groupId}/notifications",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", Type: "string", PathParam: true},
+			},
+		},
+		Read: parser.OperationDef{
+			Path: "/m/{groupId}/notifications/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", Type: "string", PathParam: true},
+				{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", PathParam: true},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{APIName: "group", TerraformName: "group", GoName: "Group", Type: "string", Optional: true, Computed: true},
+			{APIName: "id", TerraformName: "id", GoName: "ID", Type: "string", Required: true},
+		},
+	}
+
+	content, err := executeTemplate("client", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got := string(content)
+
+	assertContains(t, got, `fmt.Sprintf("/m/%s/notifications", notificationGroupID(model))`)
+	assertContains(t, got, `fmt.Sprintf("/m/%s/notifications/%s", notificationGroupID(model), model.ID.ValueString())`)
+	assertNotContains(t, got, `model.GroupID.ValueString()`)
+	assertContains(t, got, `func notificationGroupID(model NotificationModel) string`)
+	assertContains(t, got, `return "default"`)
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

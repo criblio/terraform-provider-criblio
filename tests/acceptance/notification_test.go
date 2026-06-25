@@ -21,11 +21,10 @@ func TestNotification(t *testing.T) {
 			{
 				Config: notificationConfig(false, "60s"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
 					resource.TestCheckResourceAttr(resourceName, "id", "test_notification"),
 					resource.TestCheckResourceAttr(resourceName, "condition", "high-volume"),
 					resource.TestCheckResourceAttr(resourceName, "disabled", "false"),
-					resource.TestCheckResourceAttr(resourceName, "group", "default_search"),
+					resource.TestCheckResourceAttr(resourceName, "group", "default"),
 					resource.TestCheckResourceAttr(resourceName, "conf.time_window", "60s"),
 				),
 			},
@@ -43,7 +42,7 @@ func TestNotification(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"test_notification"}`,
+				ImportStateId:     "test_notification",
 				ImportStateVerify: true,
 			},
 		},
@@ -59,8 +58,7 @@ func notificationConfig(disabled bool, timeWindow string) string {
 	return `resource "criblio_notification" "my_notification" {
   condition = "high-volume"
   disabled  = ` + disabledValue + `
-  group     = "default_search"
-  group_id  = "default_search"
+  group     = "default"
   id        = "test_notification"
 
   conf = {

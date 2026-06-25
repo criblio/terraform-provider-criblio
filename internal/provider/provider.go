@@ -115,13 +115,16 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 	}
 
 	serverUrlParams := make(map[string]string)
+	explicitServerUrlParams := make(map[string]bool)
 
 	if data.WorkspaceID.ValueString() != "" {
 		serverUrlParams["workspaceId"] = data.WorkspaceID.ValueString()
+		explicitServerUrlParams["workspaceId"] = true
 	}
 
 	if _, ok := serverUrlParams["workspaceId"]; !ok && os.Getenv("CRIBL_WORKSPACE_ID") != "" {
 		serverUrlParams["workspaceId"] = os.Getenv("CRIBL_WORKSPACE_ID")
+		explicitServerUrlParams["workspaceId"] = true
 	}
 
 	if _, ok := serverUrlParams["workspaceId"]; !ok {
@@ -130,10 +133,12 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if data.OrganizationID.ValueString() != "" {
 		serverUrlParams["organizationId"] = data.OrganizationID.ValueString()
+		explicitServerUrlParams["organizationId"] = true
 	}
 
 	if _, ok := serverUrlParams["organizationId"]; !ok && os.Getenv("CRIBL_ORGANIZATION_ID") != "" {
 		serverUrlParams["organizationId"] = os.Getenv("CRIBL_ORGANIZATION_ID")
+		explicitServerUrlParams["organizationId"] = true
 	}
 
 	if _, ok := serverUrlParams["organizationId"]; !ok {
@@ -142,10 +147,12 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if data.CloudDomain.ValueString() != "" {
 		serverUrlParams["cloudDomain"] = data.CloudDomain.ValueString()
+		explicitServerUrlParams["cloudDomain"] = true
 	}
 
 	if _, ok := serverUrlParams["cloudDomain"]; !ok && os.Getenv("CRIBL_CLOUD_DOMAIN") != "" {
 		serverUrlParams["cloudDomain"] = os.Getenv("CRIBL_CLOUD_DOMAIN")
+		explicitServerUrlParams["cloudDomain"] = true
 	}
 
 	if _, ok := serverUrlParams["cloudDomain"]; !ok {
@@ -156,6 +163,15 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if !data.BearerAuth.IsUnknown() {
 		security.BearerAuth = data.BearerAuth.ValueStringPointer()
+	}
+	if explicitServerUrlParams["organizationId"] {
+		security.OrganizationID = stringPointer(serverUrlParams["organizationId"])
+	}
+	if explicitServerUrlParams["workspaceId"] {
+		security.WorkspaceID = stringPointer(serverUrlParams["workspaceId"])
+	}
+	if explicitServerUrlParams["cloudDomain"] {
+		security.CloudDomain = stringPointer(serverUrlParams["cloudDomain"])
 	}
 
 	clientOauth := &shared.SchemeClientOauth{}
@@ -198,7 +214,7 @@ func (p *CriblioProvider) Configure(ctx context.Context, req provider.ConfigureR
 		sdk.WithClient(httpClient),
 	}
 
-	restCredentials := providerRestCredentials(clientOauth, serverUrlParams)
+	restCredentials := providerRestCredentials(clientOauth, serverUrlParams, explicitServerUrlParams)
 
 	clients := &ProviderClients{
 		Legacy: sdk.New(opts...),
@@ -223,7 +239,7 @@ func providerRestBaseURL(serverURL string, credentials *auth.CriblConfig) string
 	return auth.ConstructBaseURL(auth.ConstructBaseURLInput{BaseURL: serverURL}, credentials)
 }
 
-func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[string]string) *auth.CriblConfig {
+func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[string]string, explicitParams map[string]bool) *auth.CriblConfig {
 	credentials := &auth.CriblConfig{}
 	if loaded, err := auth.GetCredentials(); err == nil && loaded != nil {
 		credentials = loaded
@@ -236,9 +252,9 @@ func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[s
 		credentials.ClientSecret = clientOauth.ClientSecret
 	}
 
-	credentials.OrganizationID = providerRestParam(params["organizationId"], credentials.OrganizationID, "ian")
-	credentials.Workspace = providerRestParam(params["workspaceId"], credentials.Workspace, "main")
-	credentials.CloudDomain = providerRestParam(params["cloudDomain"], credentials.CloudDomain, "cribl.cloud")
+	credentials.OrganizationID = providerRestParam(params["organizationId"], explicitParams["organizationId"], credentials.OrganizationID, "ian")
+	credentials.Workspace = providerRestParam(params["workspaceId"], explicitParams["workspaceId"], credentials.Workspace, "main")
+	credentials.CloudDomain = providerRestParam(params["cloudDomain"], explicitParams["cloudDomain"], credentials.CloudDomain, "cribl.cloud")
 
 	if value := os.Getenv("CRIBL_ONPREM_SERVER_URL"); value != "" {
 		credentials.OnpremServerURL = value
@@ -253,15 +269,21 @@ func providerRestCredentials(clientOauth *shared.SchemeClientOauth, params map[s
 	return credentials
 }
 
-func providerRestParam(providerValue, credentialValue, defaultValue string) string {
+func providerRestParam(providerValue string, providerSet bool, credentialValue, defaultValue string) string {
 	switch {
-	case providerValue == "":
+	case providerSet:
+		return providerValue
+	case credentialValue != "":
 		return credentialValue
-	case providerValue != defaultValue || credentialValue == "":
+	case providerValue != "":
 		return providerValue
 	default:
-		return credentialValue
+		return defaultValue
 	}
+}
+
+func stringPointer(value string) *string {
+	return &value
 }
 
 func (p *CriblioProvider) Functions(_ context.Context) []func() function.Function {

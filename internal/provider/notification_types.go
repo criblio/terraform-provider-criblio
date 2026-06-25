@@ -21,7 +21,6 @@ type NotificationModel struct {
 	Conf                types.Object `tfsdk:"conf" json:"conf,omitempty"`
 	Disabled            types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
 	Group               types.String `tfsdk:"group" json:"group,omitempty"`
-	GroupID             types.String `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                  types.String `tfsdk:"id" json:"id,omitempty"`
 	Metadata            types.List   `tfsdk:"metadata" json:"metadata,omitempty"`
 	Mode                types.String `tfsdk:"mode" json:"mode,omitempty"`
@@ -36,7 +35,6 @@ type NotificationResourceModel struct {
 	Conf                types.Object   `tfsdk:"conf" json:"conf,omitempty"`
 	Disabled            types.Bool     `tfsdk:"disabled" json:"disabled,omitempty"`
 	Group               types.String   `tfsdk:"group" json:"group,omitempty"`
-	GroupID             types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                  types.String   `tfsdk:"id" json:"id,omitempty"`
 	Metadata            types.List     `tfsdk:"metadata" json:"metadata,omitempty"`
 	Mode                types.String   `tfsdk:"mode" json:"mode,omitempty"`
@@ -51,7 +49,6 @@ type NotificationDataSourceModel struct {
 	Conf                types.Object   `tfsdk:"conf" json:"conf,omitempty"`
 	Disabled            types.Bool     `tfsdk:"disabled" json:"disabled,omitempty"`
 	Group               types.String   `tfsdk:"group" json:"group,omitempty"`
-	GroupID             types.String   `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                  types.String   `tfsdk:"id" json:"id,omitempty"`
 	Metadata            types.List     `tfsdk:"metadata" json:"metadata,omitempty"`
 	Mode                types.String   `tfsdk:"mode" json:"mode,omitempty"`
@@ -66,7 +63,6 @@ type NotificationAPIModel struct {
 	Conf                any      `json:"conf,omitempty"`
 	Disabled            *bool    `json:"disabled,omitempty"`
 	Group               *string  `json:"group,omitempty"`
-	GroupID             *string  `json:"groupId,omitempty"`
 	ID                  *string  `json:"id,omitempty"`
 	Metadata            any      `json:"metadata,omitempty"`
 	Mode                *string  `json:"mode,omitempty"`
@@ -466,11 +462,6 @@ func (m *NotificationModel) UnmarshalJSON(data []byte) error {
 		m.Group = types.StringValue(*input.Group)
 	} else {
 		m.Group = types.StringNull()
-	}
-	if input.GroupID != nil {
-		m.GroupID = types.StringValue(*input.GroupID)
-	} else {
-		m.GroupID = types.StringNull()
 	}
 	if input.ID != nil {
 		m.ID = types.StringValue(*input.ID)

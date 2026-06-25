@@ -251,6 +251,16 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	if resource.StructName == "Notification" {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+	}
 	if resource.StructName != "MappingRuleset" {
 		return
 	}

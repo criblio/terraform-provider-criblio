@@ -1170,8 +1170,8 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
-		if fixed := fixedPathParamValue(resource, param); fixed != "" {
-			args = append(args, fmt.Sprintf("%q", fixed))
+		if expr := pathParamExpr(resource, op, param); expr != "" {
+			args = append(args, expr)
 			continue
 		}
 		if op.Path == "/admin/products/{product}/mappings/{id}" && param.TerraformName == "id" {
@@ -1187,6 +1187,19 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 		return fmt.Sprintf("%q", path)
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
+}
+
+func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param parser.FieldDef) string {
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
+		return `"default_search"`
+	}
+	if resource.StructName == "Notification" && param.TerraformName == "group_id" {
+		if resource.List.OperationID != "" && op.OperationID == resource.List.OperationID {
+			return ""
+		}
+		return "notificationGroupID(model)"
+	}
+	return ""
 }
 
 func fixedPathParamValue(resource parser.ResourceDef, param parser.FieldDef) string {

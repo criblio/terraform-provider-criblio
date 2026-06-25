@@ -126,7 +126,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_routes":                       {ListMethod: "GetRoutesByGroupID", GetMethod: "GetRoutesByGroupID", ImportIDFormat: "group_id", ListUseGroupIDAsItemID: true},
 	"criblio_parser_lib_entry":             {SDKService: "Parsers", ListMethod: "ListParser", GetMethod: "GetParserByID", ImportIDFormat: "json:group_id,id", RefreshFromMethod: "RefreshFromOperationsGetParserByIDResponseBody"},
 	"criblio_search_dashboard":             {GetMethod: "GetSearchDashboardByID", ImportIDFormat: "id"},
-	"criblio_notification":                 {ImportIDFormat: "json:group_id,id"},
+	"criblio_notification":                 {ImportIDFormat: "id"},
 	"criblio_notification_target":          {ImportIDFormat: "id"},
 	"criblio_lookup_file":                  {SDKService: "Lookups", ListMethod: "ListLookupFile", GetMethod: "GetLookupFileByID", ImportIDFormat: "json:group_id,id", ListUseGroupIDAsItemID: false},
 	"criblio_search_dashboard_category":    {ListMethod: "ListDashboardCategory", ImportIDFormat: "id"},

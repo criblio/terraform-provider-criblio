@@ -97,10 +97,6 @@ func (d *NotificationDataSource) Schema(_ context.Context, _ datasource.SchemaRe
 				Computed:    true,
 				Description: `The worker group/fleet this notification belongs to`,
 			},
-			"group_id": schema.StringAttribute{
-				Required:    true,
-				Description: `Worker group ID.`,
-			},
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `Unique identifier for the Notification.`,
