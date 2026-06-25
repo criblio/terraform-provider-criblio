@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"sort"
 	"strconv"
 	"strings"
 	"text/template"
@@ -137,8 +138,13 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"needsPlanModifier":              needsPlanModifier,
 		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
 		"needsCustomPlanModifier":        needsCustomPlanModifier,
+		"needsValidator":                 needsValidator,
+		"needsStringValidator":           needsStringValidator,
+		"needsCustomStringValidator":     needsCustomStringValidator,
+		"needsCustomJSONValidator":       needsCustomJSONValidator,
 		"planModifierType":               planModifierType,
 		"planModifierCalls":              planModifierCalls,
+		"stringValidatorCalls":           stringValidatorCalls,
 		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
 		"schemaAttributes":               schemaAttributes,
 		"oneOfSchemaAttributes":          oneOfSchemaAttributes,
@@ -150,7 +156,10 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"pathParamFields":                pathParamFields,
 		"jsonImport":                     jsonImport,
 		"nestedObjectList":               nestedObjectList,
+		"nestedObjectMap":                nestedObjectMap,
 		"nestedObject":                   nestedObject,
+		"objectAsJSON":                   objectAsJSON,
+		"hasObjectAsJSON":                hasObjectAsJSON,
 		"nestedObjectFields":             nestedObjectFields,
 		"attrType":                       attrType,
 		"restWriteCall":                  restWriteCall,
@@ -258,10 +267,10 @@ func writeDocAttributeSections(output *strings.Builder, prefix string, fields []
 				output.WriteString(", Sensitive")
 			}
 			output.WriteString(")")
-			if field.Description != "" {
-				output.WriteString(" " + field.Description)
+			if description := docDescription(field); description != "" {
+				output.WriteString(" " + description)
 			}
-			if nestedObjectList(field) || nestedObject(field) {
+			if nestedObjectList(field) || nestedObjectMap(field) || nestedObject(field) {
 				fmt.Fprintf(output, " (see [below for nested schema](#nestedatt--%s))", docAnchor(joinPath(prefix, field.TerraformName)))
 			}
 			output.WriteString("\n")
@@ -270,9 +279,20 @@ func writeDocAttributeSections(output *strings.Builder, prefix string, fields []
 	}
 }
 
+func docDescription(field parser.FieldDef) string {
+	description := field.Description
+	if field.NotNull && !strings.Contains(strings.ToLower(description), "not null") {
+		if description == "" {
+			return "Not Null"
+		}
+		return description + " Not Null"
+	}
+	return description
+}
+
 func writeNestedDocSections(output *strings.Builder, prefix string, fields []parser.FieldDef) {
 	for _, field := range fields {
-		if !nestedObjectList(field) && !nestedObject(field) {
+		if !nestedObjectList(field) && !nestedObjectMap(field) && !nestedObject(field) {
 			continue
 		}
 		path := joinPath(prefix, field.TerraformName)
@@ -299,8 +319,14 @@ func fieldDocSections(fields []parser.FieldDef, topLevel bool) schemaDocSections
 }
 
 func docTypeName(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "String"
+	}
 	if nestedObjectList(field) {
 		return "Attributes List"
+	}
+	if nestedObjectMap(field) {
+		return "Attributes Map"
 	}
 	if nestedObject(field) {
 		return "Attributes"
@@ -344,6 +370,9 @@ func goType(field parser.FieldDef) string {
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.Normalized"
 	}
+	if nestedObjectMap(field) {
+		return "types.Map"
+	}
 	if nestedObject(field) {
 		return "types.Object"
 	}
@@ -366,6 +395,9 @@ func goType(field parser.FieldDef) string {
 func legacyGoType(field parser.FieldDef) string {
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		return "jsontypes.Normalized"
+	}
+	if nestedObjectMap(field) {
+		return "types.Map"
 	}
 	if nestedObject(field) {
 		return "types.Object"
@@ -399,7 +431,13 @@ func legacyGoType(field parser.FieldDef) string {
 }
 
 func apiType(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "any"
+	}
 	if nestedObjectList(field) {
+		return "any"
+	}
+	if nestedObjectMap(field) {
 		return "any"
 	}
 	if nestedObject(field) {
@@ -431,8 +469,14 @@ func apiType(field parser.FieldDef) string {
 }
 
 func schemaAttribute(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "schema.StringAttribute"
+	}
 	if nestedObjectList(field) {
 		return "schema.ListNestedAttribute"
+	}
+	if nestedObjectMap(field) {
+		return "schema.MapNestedAttribute"
 	}
 	if nestedObject(field) {
 		return "schema.SingleNestedAttribute"
@@ -524,7 +568,27 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		}
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	}
+	if calls := stringValidatorCalls(field); len(calls) > 0 {
+		fmt.Fprintf(output, "%s\tValidators: []validator.String{\n", indent)
+		for _, call := range calls {
+			fmt.Fprintf(output, "%s\t\t%s,\n", indent, call)
+		}
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	}
 	if nestedObjectList(field) {
+		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
+		if calls := nestedObjectPlanModifierCalls(field); len(calls) > 0 {
+			fmt.Fprintf(output, "%s\t\tPlanModifiers: []planmodifier.Object{\n", indent)
+			for _, call := range calls {
+				fmt.Fprintf(output, "%s\t\t\t%s,\n", indent, call)
+			}
+			fmt.Fprintf(output, "%s\t\t},\n", indent)
+		}
+		fmt.Fprintf(output, "%s\t\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t\t"))
+		fmt.Fprintf(output, "%s\t\t},\n", indent)
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if nestedObjectMap(field) {
 		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
 		if calls := nestedObjectPlanModifierCalls(field); len(calls) > 0 {
 			fmt.Fprintf(output, "%s\t\tPlanModifiers: []planmodifier.Object{\n", indent)
@@ -541,7 +605,7 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || field.Type == "object" {
+	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field)) {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
@@ -592,19 +656,31 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t\t"))
 		fmt.Fprintf(output, "%s\t\t},\n", indent)
 		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if nestedObjectMap(field) {
+		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
+		fmt.Fprintf(output, "%s\t\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t\t"))
+		fmt.Fprintf(output, "%s\t\t},\n", indent)
+		fmt.Fprintf(output, "%s\t},\n", indent)
 	} else if nestedObject(field) {
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
-	} else if field.Type == "array" || field.Type == "object" {
+	} else if field.Type == "array" || (field.Type == "object" && !objectAsJSON(field)) {
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
 }
 
 func schemaTypeName(field parser.FieldDef) string {
+	if objectAsJSON(field) {
+		return "String"
+	}
 	if nestedObjectList(field) {
 		return "List of Object"
+	}
+	if nestedObjectMap(field) {
+		return "Map of Object"
 	}
 	if nestedObject(field) {
 		return "Object"
@@ -638,6 +714,9 @@ func zeroValue(field parser.FieldDef) string {
 	if nestedObjectList(field) {
 		return "types.ListValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
 	}
+	if nestedObjectMap(field) {
+		return "types.MapValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
+	}
 	if nestedObject(field) {
 		return "types.ObjectValueMust(" + field.NestedAttrTypes + "(), map[string]attr.Value{})"
 	}
@@ -662,6 +741,9 @@ func zeroValue(field parser.FieldDef) string {
 func nullValue(field parser.FieldDef) string {
 	if nestedObjectList(field) {
 		return "types.ListNull(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()})"
+	}
+	if nestedObjectMap(field) {
+		return "types.MapNull(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()})"
 	}
 	if nestedObject(field) {
 		return "types.ObjectNull(" + field.NestedAttrTypes + "())"
@@ -718,14 +800,11 @@ func needsClientFmt(resource parser.ResourceDef) bool {
 
 func needsAttr(resource parser.ResourceDef) bool {
 	for _, field := range resource.Fields {
-		if nestedObjectList(field) || nestedObject(field) {
+		if nestedObjectList(field) || nestedObjectMap(field) || nestedObject(field) {
 			return true
 		}
 	}
-	if len(resource.OneOfVariants) > 0 {
-		return true
-	}
-	return false
+	return len(resource.OneOfVariants) > 0
 }
 
 func needsNestedObject(resource parser.ResourceDef) bool {
@@ -737,12 +816,60 @@ func needsNestedObject(resource parser.ResourceDef) bool {
 	return false
 }
 
+func needsValidator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if len(stringValidatorCalls(field)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func needsStringValidator(resource parser.ResourceDef) bool {
+	return needsValidator(resource)
+}
+
+func needsCustomStringValidator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.NotNull && stringValidatorField(field) {
+			return true
+		}
+	}
+	return false
+}
+
+func needsCustomJSONValidator(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.ValidJSON && stringValidatorField(field) {
+			return true
+		}
+	}
+	return false
+}
+
 func nestedObjectList(field parser.FieldDef) bool {
 	return field.Type == "array" && field.ElementType == "object" && len(field.Fields) > 0
 }
 
+func nestedObjectMap(field parser.FieldDef) bool {
+	return field.Type == "object" && field.ElementType == "object" && len(field.Fields) > 0
+}
+
 func nestedObject(field parser.FieldDef) bool {
-	return field.Type == "object" && len(field.Fields) > 0
+	return field.Type == "object" && field.ElementType != "object" && len(field.Fields) > 0
+}
+
+func objectAsJSON(field parser.FieldDef) bool {
+	return field.Type == "object" && field.CustomType == "jsontypes.NormalizedType{}" && field.ObjectAsJSON
+}
+
+func hasObjectAsJSON(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if objectAsJSON(field) {
+			return true
+		}
+	}
+	return false
 }
 
 func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
@@ -750,7 +877,7 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 	var walk func([]parser.FieldDef)
 	walk = func(items []parser.FieldDef) {
 		for _, item := range items {
-			if nestedObjectList(item) || nestedObject(item) {
+			if nestedObjectList(item) || nestedObjectMap(item) || nestedObject(item) {
 				fields = append(fields, item)
 				walk(item.Fields)
 			}
@@ -764,8 +891,14 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 }
 
 func attrType(field parser.FieldDef) string {
+	if field.CustomType == "jsontypes.NormalizedType{}" {
+		return "jsontypes.NormalizedType{}"
+	}
 	if nestedObjectList(field) {
 		return "types.ListType{ElemType: types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}}"
+	}
+	if nestedObjectMap(field) {
+		return "types.MapType{ElemType: types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}}"
 	}
 	if nestedObject(field) {
 		return "types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}"
@@ -832,93 +965,52 @@ func listItemObjectValue(resource parser.ResourceDef) string {
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {
-	for _, field := range resource.Fields {
+	for _, field := range resourceFields(resource) {
 		if len(planModifierCalls(field)) > 0 {
 			return true
 		}
-		for _, nested := range field.Fields {
-			if len(planModifierCalls(nested)) > 0 {
-				return true
-			}
-		}
 		if len(nestedObjectPlanModifierCalls(field)) > 0 {
 			return true
-		}
-	}
-	for _, variant := range resource.OneOfVariants {
-		for _, field := range variant.Fields {
-			if len(planModifierCalls(field)) > 0 {
-				return true
-			}
-			for _, nested := range field.Fields {
-				if len(planModifierCalls(nested)) > 0 {
-					return true
-				}
-			}
-			if len(nestedObjectPlanModifierCalls(field)) > 0 {
-				return true
-			}
 		}
 	}
 	return false
 }
 
 func needsFrameworkPlanModifier(resource parser.ResourceDef, kind string) bool {
-	for _, field := range resource.Fields {
+	for _, field := range resourceFields(resource) {
 		if field.ForceNew && frameworkPlanModifierKind(field) == kind {
 			return true
-		}
-		for _, nested := range field.Fields {
-			if nested.ForceNew && frameworkPlanModifierKind(nested) == kind {
-				return true
-			}
-		}
-	}
-	for _, variant := range resource.OneOfVariants {
-		for _, field := range variant.Fields {
-			if field.ForceNew && frameworkPlanModifierKind(field) == kind {
-				return true
-			}
-			for _, nested := range field.Fields {
-				if nested.ForceNew && frameworkPlanModifierKind(nested) == kind {
-					return true
-				}
-			}
 		}
 	}
 	return false
 }
 
 func needsCustomPlanModifier(resource parser.ResourceDef, kind string) bool {
-	for _, field := range resource.Fields {
-		if field.SuppressDiff && customPlanModifierKind(field) == kind {
+	for _, field := range resourceFields(resource) {
+		if field.PlanModifierHook == "" && field.SuppressDiff && customPlanModifierKind(field) == kind {
 			return true
 		}
-		if nestedObjectList(field) && field.SuppressDiff && kind == "object" {
+		if field.PlanModifierHook == "" && (nestedObjectList(field) || nestedObjectMap(field)) && field.SuppressDiff && kind == "object" {
 			return true
-		}
-		for _, nested := range field.Fields {
-			if nested.SuppressDiff && customPlanModifierKind(nested) == kind {
-				return true
-			}
-		}
-	}
-	for _, variant := range resource.OneOfVariants {
-		for _, field := range variant.Fields {
-			if field.SuppressDiff && customPlanModifierKind(field) == kind {
-				return true
-			}
-			if nestedObjectList(field) && field.SuppressDiff && kind == "object" {
-				return true
-			}
-			for _, nested := range field.Fields {
-				if nested.SuppressDiff && customPlanModifierKind(nested) == kind {
-					return true
-				}
-			}
 		}
 	}
 	return false
+}
+
+func resourceFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	var walk func([]parser.FieldDef)
+	walk = func(items []parser.FieldDef) {
+		for _, item := range items {
+			fields = append(fields, item)
+			walk(item.Fields)
+		}
+	}
+	walk(resource.Fields)
+	for _, variant := range resource.OneOfVariants {
+		walk(variant.Fields)
+	}
+	return fields
 }
 
 func planModifierType(field parser.FieldDef) string {
@@ -942,6 +1034,9 @@ func planModifierType(field parser.FieldDef) string {
 }
 
 func planModifierCalls(field parser.FieldDef) []string {
+	if field.PlanModifierHook != "" {
+		return nil
+	}
 	var calls []string
 	if field.ForceNew {
 		calls = append(calls, fmt.Sprintf("%splanmodifier.RequiresReplaceIfConfigured()", frameworkPlanModifierKind(field)))
@@ -951,6 +1046,24 @@ func planModifierCalls(field parser.FieldDef) []string {
 		calls = append(calls, fmt.Sprintf("%s.SuppressDiff(%s.ExplicitSuppress)", packageName, packageName))
 	}
 	return calls
+}
+
+func stringValidatorCalls(field parser.FieldDef) []string {
+	if !stringValidatorField(field) {
+		return nil
+	}
+	var calls []string
+	if field.NotNull {
+		calls = append(calls, "custom_stringvalidators.NotNull()")
+	}
+	if field.ValidJSON {
+		calls = append(calls, "custom_validators.IsValidJSON()")
+	}
+	return calls
+}
+
+func stringValidatorField(field parser.FieldDef) bool {
+	return field.Type == "string" || objectAsJSON(field)
 }
 
 func frameworkPlanModifierKind(field parser.FieldDef) string {
@@ -974,7 +1087,7 @@ func frameworkPlanModifierKind(field parser.FieldDef) string {
 }
 
 func nestedObjectPlanModifierCalls(field parser.FieldDef) []string {
-	if !nestedObjectList(field) || !field.SuppressDiff {
+	if (!nestedObjectList(field) && !nestedObjectMap(field)) || !field.SuppressDiff {
 		return nil
 	}
 	return []string{"custom_objectplanmodifier.SuppressDiff(custom_objectplanmodifier.ExplicitSuppress)"}
@@ -1087,6 +1200,10 @@ func writeExampleFields(output *strings.Builder, resource parser.ResourceDef, fi
 
 func writeExampleField(output *strings.Builder, resource parser.ResourceDef, field parser.FieldDef, value any, indentLevel int) {
 	indent := strings.Repeat("  ", indentLevel)
+	if objectAsJSON(field) {
+		fmt.Fprintf(output, "%s%s = %s\n", indent, field.TerraformName, hclJSONValue(value))
+		return
+	}
 	if nestedObject(field) {
 		values := exampleObject(value)
 		if len(values) == 0 {
@@ -1115,6 +1232,28 @@ func writeExampleField(output *strings.Builder, resource parser.ResourceDef, fie
 		fmt.Fprintf(output, "%s]\n", indent)
 		return
 	}
+	if nestedObjectMap(field) {
+		values := exampleObject(value)
+		if len(values) == 0 {
+			if isEmptyMapString(value) {
+				fmt.Fprintf(output, "%s%s = {}\n", indent, field.TerraformName)
+			}
+			return
+		}
+		fmt.Fprintf(output, "%s%s = {\n", indent, field.TerraformName)
+		keys := sortedKeys(values)
+		for _, key := range keys {
+			itemValues := exampleObject(values[key])
+			if len(itemValues) == 0 {
+				continue
+			}
+			fmt.Fprintf(output, "%s  %s = {\n", indent, hclMapKey(key))
+			writeExampleFields(output, resource, field.Fields, itemValues, indentLevel+2)
+			fmt.Fprintf(output, "%s  }\n", indent)
+		}
+		fmt.Fprintf(output, "%s}\n", indent)
+		return
+	}
 	if field.Type == "array" {
 		values := exampleList(value)
 		if len(values) == 0 {
@@ -1129,6 +1268,11 @@ func writeExampleField(output *strings.Builder, resource parser.ResourceDef, fie
 		return
 	}
 	fmt.Fprintf(output, "%s%s = %s\n", indent, field.TerraformName, hclValue(value))
+}
+
+func isEmptyMapString(value any) bool {
+	typed, ok := value.(string)
+	return ok && (typed == "map[]" || typed == "{}")
 }
 
 func exampleObject(value any) map[string]any {
@@ -1175,9 +1319,68 @@ func hclValue(value any) string {
 		return strconv.FormatFloat(typed, 'f', -1, 64)
 	case nil:
 		return "null"
+	case map[string]any:
+		return hclObjectValue(typed)
+	case []any:
+		values := make([]string, 0, len(typed))
+		for _, item := range typed {
+			values = append(values, hclValue(item))
+		}
+		return "[" + strings.Join(values, ", ") + "]"
 	default:
 		return strconv.Quote(fmt.Sprint(typed))
 	}
+}
+
+func hclJSONValue(value any) string {
+	if _, ok := value.(string); ok {
+		return hclValue(value)
+	}
+	return "jsonencode(" + hclValue(value) + ")"
+}
+
+func hclObjectValue(values map[string]any) string {
+	if len(values) == 0 {
+		return "{}"
+	}
+	parts := make([]string, 0, len(values))
+	for _, key := range sortedKeys(values) {
+		parts = append(parts, fmt.Sprintf("%s = %s", hclMapKey(key), hclValue(values[key])))
+	}
+	return "{" + strings.Join(parts, ", ") + "}"
+}
+
+func hclMapKey(key string) string {
+	if isHCLIdentifier(key) {
+		return key
+	}
+	return strconv.Quote(key)
+}
+
+func isHCLIdentifier(value string) bool {
+	if value == "" {
+		return false
+	}
+	for index, char := range value {
+		switch {
+		case char >= 'a' && char <= 'z':
+		case char >= 'A' && char <= 'Z':
+		case char == '_':
+		case index > 0 && char >= '0' && char <= '9':
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+func sortedKeys(values map[string]any) []string {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 func importBlock(resource parser.ResourceDef) string {

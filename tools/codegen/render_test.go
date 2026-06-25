@@ -443,6 +443,85 @@ func TestPrimitiveArrayFieldsPreserveElementTypes(t *testing.T) {
 	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.Names)")
 }
 
+func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "pipeline",
+		FileStem:   "pipeline",
+		TypeName:   "criblio_pipeline",
+		StructName: "Pipeline",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "functions",
+				TerraformName: "functions",
+				GoName:        "Functions",
+				Type:          "array",
+				ElementType:   "object",
+				Fields: []parser.FieldDef{
+					{
+						APIName:          "conf",
+						TerraformName:    "conf",
+						GoName:           "Conf",
+						Type:             "object",
+						CustomType:       "jsontypes.NormalizedType{}",
+						ObjectAsJSON:     true,
+						PlanModifierHook: "pipelineConfPlanModifiers",
+						NotNull:          true,
+						ValidJSON:        true,
+						Description:      "Function configuration as JSON.",
+					},
+					{
+						APIName:       "id",
+						TerraformName: "id",
+						GoName:        "ID",
+						Type:          "string",
+						NotNull:       true,
+						Description:   "Function ID.",
+					},
+				},
+				NestedAttrTypes: "PipelineFunctionsAttrTypes",
+			},
+			{
+				APIName:       "groups",
+				TerraformName: "groups",
+				GoName:        "Groups",
+				Type:          "object",
+				ElementType:   "object",
+				Fields: []parser.FieldDef{
+					{APIName: "name", TerraformName: "name", GoName: "Name", Type: "string", NotNull: true, Description: "Group name"},
+				},
+				NestedAttrTypes: "PipelineGroupsAttrTypes",
+			},
+		},
+	}
+
+	resourceContent := renderTemplate(t, "resource", resource)
+	assertContains(t, resourceContent, `"conf": schema.StringAttribute{`)
+	assertContains(t, resourceContent, `CustomType: jsontypes.NormalizedType{},`)
+	assertContains(t, resourceContent, `PlanModifiers: pipelineConfPlanModifiers(),`)
+	assertContains(t, resourceContent, `Validators: []validator.String{`)
+	assertContains(t, resourceContent, `custom_stringvalidators.NotNull(),`)
+	assertContains(t, resourceContent, `custom_validators.IsValidJSON(),`)
+	assertContains(t, resourceContent, `"groups": schema.MapNestedAttribute{`)
+	assertContains(t, resourceContent, `PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()})`)
+	assertNotContains(t, resourceContent, `ElementType:   types.StringType,`)
+
+	docsContent := renderTemplate(t, "doc", resource)
+	assertContains(t, docsContent, "`conf` (String)")
+	assertContains(t, docsContent, "`id` (String) Function ID. Not Null")
+	assertContains(t, docsContent, "`groups` (Attributes Map)")
+	assertContains(t, docsContent, "`name` (String) Group name Not Null")
+
+	typesContent := renderTemplate(t, "types", resource)
+	assertContains(t, typesContent, `Conf jsontypes.Normalized`)
+	assertContains(t, typesContent, `Conf any `+"`json:\"conf,omitempty\"`")
+	assertContains(t, typesContent, `types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()}}`)
+	assertContains(t, typesContent, `value, err = PipelineObjectJSONFromTerraformValue(attribute)`)
+	assertContains(t, typesContent, `if typ.Equal(jsontypes.NormalizedType{}) {`)
+	assertContains(t, typesContent, `return jsontypes.NewNormalizedValue(string(raw)), nil`)
+	assertContains(t, typesContent, `func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error)`)
+	assertContains(t, typesContent, `types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()}}`)
+}
+
 func TestRestWriteCall(t *testing.T) {
 	tests := []struct {
 		method string

@@ -273,6 +273,9 @@ func convertFromResponseBody(ctx context.Context, e registry.Entry, modelType re
 	}
 	method := modelVal.MethodByName(refreshMethodName)
 	if !method.IsValid() {
+		if _, ok := GeneratedModelTypes()[e.ModelTypeName]; ok {
+			return convertGeneratedModelFromResponseBody(e, modelType, responseBody)
+		}
 		converted, err := convertGeneratedModelFromResponseBody(e, modelType, responseBody)
 		if err == nil {
 			return converted, nil

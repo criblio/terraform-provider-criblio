@@ -85,6 +85,124 @@ actions:
     update:
       x-terraform-ignore: true
 
+  - target: "$.paths./m/{groupId}/pipelines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines.get"
+    update:
+      x-terraform-list: Pipeline
+      x-terraform-list-name: Pipelines
+  - target: "$.paths./m/{groupId}/pipelines/{id}.get"
+    update:
+      x-terraform-read: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines/{id}.patch"
+    update:
+      x-terraform-update: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines/{id}.delete"
+    update:
+      x-terraform-delete: Pipeline
+  - target: "$.components.schemas.PipelineFunctionConf"
+    replace:
+      type: object
+      required:
+        - id
+        - conf
+      additionalProperties: false
+      properties:
+        filter:
+          title: Filter
+          description: 'Filter that selects data to be fed through this Function. Default: "true"'
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        id:
+          title: ID
+          description: Function ID.
+          type: string
+          x-terraform-not-null: true
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        description:
+          title: Description
+          description: Simple description of this step
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        disabled:
+          title: Disabled
+          description: If true, data will not be pushed through this function
+          type: boolean
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        final:
+          title: Final
+          description: If enabled, stops the results of this Function from being passed to the downstream Functions
+          type: boolean
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        conf:
+          type: object
+          title: Function-specific configs
+          description: Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).
+          additionalProperties: true
+          x-terraform-object-as-json: true
+          x-terraform-custom-type: jsontypes.NormalizedType{}
+          x-terraform-not-null: true
+          x-terraform-valid-json: true
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+          x-terraform-plan-modifier-hook: pipelineConfPlanModifiers
+        groupId:
+          title: Group ID
+          description: Group ID
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.asyncFuncTimeout"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.description"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.functions"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.description"
+    update:
+      description: Short description of this group
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.disabled"
+    update:
+      description: Whether this group is disabled
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.name"
+    update:
+      description: Group name
+      x-terraform-not-null: true
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.output"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.streamtags"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./m/{groupId}/lib/vars.post"
     update:
       x-terraform-resource: true

@@ -390,6 +390,7 @@ func (p *CriblioProvider) DataSources(ctx context.Context) []func() datasource.D
 		NewParquetSchemaDataSource,
 		NewParserLibEntryDataSource,
 		NewPipelineDataSource,
+		NewPipelinesDataSource,
 		NewProjectDataSource,
 		NewRegexDataSource,
 		NewRoutesDataSource,

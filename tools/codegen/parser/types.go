@@ -74,6 +74,9 @@ type FieldDef struct {
 	PlanModifierHook   string
 	Enum               []string
 	Fields             []FieldDef
+	ObjectAsJSON       bool
+	NotNull            bool
+	ValidJSON          bool
 }
 
 // OneOfVariantDef describes one flattened oneOf variant model.

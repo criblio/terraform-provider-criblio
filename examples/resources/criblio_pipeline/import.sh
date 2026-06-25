@@ -1,1 +1,1 @@
-terraform import criblio_pipeline.my_criblio_pipeline '{"group_id": "Cribl", "id": "main"}'
+terraform import criblio_pipeline.my_criblio_pipeline '{"group_id": "default", "id": "main"}'

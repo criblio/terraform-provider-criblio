@@ -35,9 +35,32 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Project Data Source",
 		Attributes: map[string]schema.Attribute{
-			"consumers": schema.MapAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
+			"consumers": schema.MapNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"connections": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"output": schema.StringAttribute{
+										Computed: true,
+									},
+									"pipeline": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+						},
+						"disabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `It should be removed as a consumer is present or absent.`,
+						},
+						"type": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 			"description": schema.StringAttribute{
 				Computed: true,

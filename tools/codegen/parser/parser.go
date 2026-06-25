@@ -385,9 +385,7 @@ func parseOneOfVariants(oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
 		if schemaName == "" {
 			continue
 		}
-		variantSchema := variantRef
-		var ok bool
-		variantSchema, ok = mappingValue(schemas, schemaName)
+		variantSchema, ok := mappingValue(schemas, schemaName)
 		if !ok {
 			return nil, fmt.Errorf("oneOf schema %q not found", schemaName)
 		}
@@ -478,6 +476,9 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		Description:      scalarValue(property, "description"),
 		CustomType:       scalarValue(property, "x-terraform-custom-type"),
 		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
+		ObjectAsJSON:     boolAnnotation(property, "x-terraform-object-as-json"),
+		NotNull:          boolAnnotation(property, "x-terraform-not-null"),
+		ValidJSON:        boolAnnotation(property, "x-terraform-valid-json"),
 		ReadOnly:         boolAnnotation(property, "readOnly"),
 		WriteOnly:        boolAnnotation(property, "writeOnly"),
 		Enum:             enumValues(property),
@@ -509,12 +510,33 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAPIModelName = nestedName + "APIModel"
 		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
-	if field.Type == "object" {
+	if field.Type == "object" && !field.ObjectAsJSON {
 		objectSchema := property
 		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 			return FieldDef{}, err
 		} else if ok {
 			objectSchema = resolved
+		}
+		if additional, ok := mappingValue(objectSchema, "additionalProperties"); ok && additional.Kind == yaml.MappingNode {
+			mapSchema := additional
+			if resolved, ok, err := objectSchemaForProperty(additional, schemas); err != nil {
+				return FieldDef{}, err
+			} else if ok {
+				mapSchema = resolved
+			}
+			if properties, ok := mappingValue(mapSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
+				fields, _, err := parseSchemaFields(modelName+exportName(tfName), mapSchema, schemas, schemaPropertySet(mapSchema), schemaPropertySet(mapSchema), schemaPropertySet(mapSchema))
+				if err != nil {
+					return FieldDef{}, err
+				}
+				field.ElementType = "object"
+				field.Fields = fields
+				nestedName := nestedModelPrefix(modelName, tfName)
+				field.NestedModelName = nestedName + "Model"
+				field.NestedAPIModelName = nestedName + "APIModel"
+				field.NestedAttrTypes = nestedName + "AttrTypes"
+				return field, nil
+			}
 		}
 		if properties, ok := mappingValue(objectSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
 			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))

@@ -113,8 +113,21 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return output, nil
 	case types.Object:
 		output := make(map[string]any, len(typed.Attributes()))
+{{- if hasObjectAsJSON . }}
+		attributeTypes := typed.AttributeTypes(context.Background())
+{{- end }}
 		for key, attribute := range typed.Attributes() {
+{{- if hasObjectAsJSON . }}
+			var value any
+			var err error
+			if attributeType, ok := attributeTypes[key]; ok && attributeType.Equal(jsontypes.NormalizedType{}) {
+				value, err = {{ .StructName }}ObjectJSONFromTerraformValue(attribute)
+			} else {
+				value, err = {{ .StructName }}TerraformValueToJSON(attribute)
+			}
+{{- else }}
 			value, err := {{ .StructName }}TerraformValueToJSON(attribute)
+{{- end }}
 			if err != nil {
 				return nil, err
 			}
@@ -130,6 +143,27 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
 	}
 }
+
+{{- if hasObjectAsJSON . }}
+func {{ .StructName }}ObjectJSONFromTerraformValue(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	typed, ok := value.(interface{ ValueString() string })
+	if !ok {
+		return nil, fmt.Errorf("expected normalized JSON string, got %T", value)
+	}
+	raw := typed.ValueString()
+	if raw == "" {
+		return map[string]any{}, nil
+	}
+	var output any
+	if err := json.Unmarshal([]byte(raw), &output); err != nil {
+		return nil, err
+	}
+	return output, nil
+}
+{{- end }}
 
 {{- if eq .StructName "MappingRuleset" }}
 
@@ -222,6 +256,18 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		}
 		return types.StringValue(typed), nil
 	}
+{{- if hasObjectAsJSON . }}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		if typed, ok := value.(string); ok {
+			return jsontypes.NewNormalizedValue(typed), nil
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+		return jsontypes.NewNormalizedValue(string(raw)), nil
+	}
+{{- end }}
 	switch typed := typ.(type) {
 	case types.ListType:
 		input, ok := value.([]any)
@@ -308,6 +354,11 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
 	}
+{{- if hasObjectAsJSON . }}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		return jsontypes.NewNormalizedNull(), nil
+	}
+{{- end }}
 	switch typed := typ.(type) {
 	case types.ListType:
 		return types.ListNull(typed.ElemType), nil
@@ -320,12 +371,94 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 }
 
+{{ if eq .StructName "Pipeline" }}
+func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error) {
+	if value.IsUnknown() {
+		return PipelineTerraformNullValue(typ)
+	}
+	if value.IsNull() {
+		return value, nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		list, ok := value.(types.List)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		elements := make([]attr.Value, 0, len(list.Elements()))
+		for _, element := range list.Elements() {
+			normalized, err := PipelineValueWithKnownNulls(element, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			elements = append(elements, normalized)
+		}
+		output, diags := types.ListValue(typed.ElemType, elements)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	case types.MapType:
+		valueMap, ok := value.(types.Map)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		elements := make(map[string]attr.Value, len(valueMap.Elements()))
+		for key, element := range valueMap.Elements() {
+			normalized, err := PipelineValueWithKnownNulls(element, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			elements[key] = normalized
+		}
+		output, diags := types.MapValue(typed.ElemType, elements)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	case types.ObjectType:
+		object, ok := value.(types.Object)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		attributes := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			attribute, ok := object.Attributes()[key]
+			if !ok || attribute.IsUnknown() {
+				normalized, err := PipelineTerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				attributes[key] = normalized
+				continue
+			}
+			normalized, err := PipelineValueWithKnownNulls(attribute, attrType)
+			if err != nil {
+				return nil, err
+			}
+			attributes[key] = normalized
+		}
+		output, diags := types.ObjectValue(typed.AttrTypes, attributes)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	default:
+		return value, nil
+	}
+}
+
+{{ end }}
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
 {{- if and .RequestField (or (not .Computed) .OptionalComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
@@ -359,7 +492,11 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 {{- range .Fields }}
 {{- if and .UpdateField (or (not .Computed) .OptionalComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
@@ -383,7 +520,17 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		return err
 	}
 {{- range .Fields }}
-{{- if nestedObjectList . }}
+{{- if objectAsJSON . }}
+	if input.{{ .GoName }} != nil {
+		raw, err := json.Marshal(input.{{ .GoName }})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = jsontypes.NewNormalizedValue(string(raw))
+	} else {
+		m.{{ .GoName }} = jsontypes.NewNormalizedNull()
+	}
+{{- else if nestedObjectList . }}
 	if input.{{ .GoName }} != nil {
 		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ListType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
 		if err != nil {
@@ -392,6 +539,16 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		m.{{ .GoName }} = value.(types.List)
 	} else {
 		m.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	}
+{{- else if nestedObjectMap . }}
+	if input.{{ .GoName }} != nil {
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.MapType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.(types.Map)
+	} else {
+		m.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
 	}
 {{- else if nestedObject . }}
 	if input.{{ .GoName }} != nil {
@@ -486,7 +643,11 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 {{- range .Fields }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
@@ -499,11 +660,19 @@ func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
 func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
 {{- range .Fields }}
 	if item, ok := input["{{ .APIName }}"]; ok {
+{{- if objectAsJSON . }}
+		raw, err := json.Marshal(item)
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = jsontypes.NewNormalizedValue(string(raw))
+{{- else }}
 		value, err := {{ $.StructName }}APIValueToTerraformValue(item, {{ attrType . }})
 		if err != nil {
 			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
 		}
 		m.{{ .GoName }} = value.({{ goType . }})
+{{- end }}
 	} else {
 		m.{{ .GoName }} = {{ nullValue . }}
 	}
@@ -725,6 +894,12 @@ import (
 {{- if needsCustomPlanModifier . "string" }}
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 {{- end }}
+{{- if needsCustomJSONValidator . }}
+	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"
+{{- end }}
+{{- if needsCustomStringValidator . }}
+	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 {{- if not .Action }}
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -754,6 +929,9 @@ import (
 {{- end }}
 {{- if needsFrameworkPlanModifier . "string" }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+{{- end }}
+{{- if needsValidator . }}
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -1089,6 +1267,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 	}
 {{- end }}
+{{- end }}
+{{- if eq .StructName "Pipeline" }}
+	if !state.Conf.IsNull() {
+		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()}); err == nil {
+			state.Conf = normalized.(types.Object)
+		}
+	}
 {{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
@@ -1749,6 +1934,90 @@ func collectorConfig(t *testing.T, suffix string) string {
 	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
 	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
 	return config
+}
+{{- else if eq .StructName "Pipeline" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestPipeline(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	resourceName := "criblio_pipeline.my_pipeline"
+	pipelineID := "pipeline-" + suffix
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: pipelineConfig(pipelineID, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "id", pipelineID),
+						resource.TestCheckResourceAttr(resourceName, "conf.description", "created"),
+						resource.TestCheckResourceAttr(resourceName, "conf.output", "default"),
+						resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
+						resource.TestCheckResourceAttr(resourceName, "conf.functions.0.id", "code"),
+					),
+				},
+				{
+					Config: pipelineConfig(pipelineID, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "conf.description", "updated"),
+					),
+				},
+				{
+					Config:   pipelineConfig(pipelineID, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           fmt.Sprintf(` + "`" + `{"group_id":"default","id":%q}` + "`" + `, pipelineID),
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: []string{"conf.functions.0.conf"},
+				},
+			},
+		})
+	})
+}
+
+func pipelineConfig(id, description string) string {
+	return fmt.Sprintf(` + "`" + `resource "criblio_pipeline" "my_pipeline" {
+  group_id = "default"
+  id       = %[1]q
+  conf = {
+    async_func_timeout = 60
+    description        = %[2]q
+    output             = "default"
+    streamtags         = []
+    functions = [
+      {
+        id       = "code"
+        filter   = "true"
+        disabled = false
+        final    = true
+        conf = jsonencode({
+          code = <<-EOC
+            __e.pipeline_test = true
+          EOC
+        })
+      }
+    ]
+  }
+}
+` + "`" + `, id, description)
 }
 {{- else }}
 import "testing"
