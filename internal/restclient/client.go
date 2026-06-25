@@ -91,7 +91,7 @@ func Get[T any](ctx context.Context, c *Client, path string) (*T, error) {
 	if err != nil {
 		return nil, err
 	}
-	return decodeResponse[T](body)
+	return decodeResponse[T](path, body)
 }
 
 // Post sends a POST request with a JSON body and decodes the response.
@@ -100,7 +100,7 @@ func Post[Req, Resp any](ctx context.Context, c *Client, path string, body Req) 
 	if err != nil {
 		return nil, err
 	}
-	return decodeResponse[Resp](responseBody)
+	return decodeResponse[Resp](path, responseBody)
 }
 
 // PostNoResponse sends a POST request with a JSON body and ignores the response body.
@@ -115,7 +115,7 @@ func Patch[Req, Resp any](ctx context.Context, c *Client, path string, body Req)
 	if err != nil {
 		return nil, err
 	}
-	return decodeResponse[Resp](responseBody)
+	return decodeResponse[Resp](path, responseBody)
 }
 
 // PatchNoResponse sends a PATCH request with a JSON body and ignores the response body.
@@ -130,7 +130,7 @@ func Put[Req, Resp any](ctx context.Context, c *Client, path string, body Req) (
 	if err != nil {
 		return nil, err
 	}
-	return decodeResponse[Resp](responseBody)
+	return decodeResponse[Resp](path, responseBody)
 }
 
 // PutNoResponse sends a PUT request with a JSON body and ignores the response body.
@@ -292,7 +292,7 @@ func responseError(path string, statusCode int, body []byte) error {
 	}
 }
 
-func decodeResponse[T any](body []byte) (*T, error) {
+func decodeResponse[T any](path string, body []byte) (*T, error) {
 	if len(bytes.TrimSpace(body)) == 0 {
 		return nil, nil
 	}
@@ -301,11 +301,11 @@ func decodeResponse[T any](body []byte) (*T, error) {
 		Items json.RawMessage `json:"items"`
 	}
 	if err := json.Unmarshal(body, &envelope); err == nil && len(envelope.Items) > 0 && string(envelope.Items) != "null" {
-		return decodeEnvelope[T](envelope.Items)
+		return decodeEnvelope[T](path, envelope.Items)
 	}
 
 	if bytes.HasPrefix(bytes.TrimSpace(body), []byte("[")) {
-		return decodeEnvelope[T](body)
+		return decodeEnvelope[T](path, body)
 	}
 
 	var output T
@@ -315,7 +315,7 @@ func decodeResponse[T any](body []byte) (*T, error) {
 	return &output, nil
 }
 
-func decodeEnvelope[T any](items json.RawMessage) (*T, error) {
+func decodeEnvelope[T any](path string, items json.RawMessage) (*T, error) {
 	var output T
 	outputValue := reflect.ValueOf(&output).Elem()
 	if outputValue.Kind() == reflect.Slice {
@@ -332,7 +332,7 @@ func decodeEnvelope[T any](items json.RawMessage) (*T, error) {
 
 	itemsSlice := itemsValue.Elem()
 	if itemsSlice.Len() == 0 {
-		return nil, fmt.Errorf("response envelope contained no items")
+		return nil, &NotFoundError{Path: path, Body: `{"items":[]}`}
 	}
 
 	outputValue.Set(itemsSlice.Index(0))

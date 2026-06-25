@@ -193,6 +193,39 @@ func TestDecodeEnvelopeSingleAndSlice(t *testing.T) {
 	}
 }
 
+func TestDecodeEnvelopeEmptySingleIsNotFound(t *testing.T) {
+	t.Setenv("CRIBL_BEARER_TOKEN", "")
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(t, w, map[string]any{
+			"count": 0,
+			"items": []testItem{},
+		})
+	}))
+	defer server.Close()
+
+	client := New(Config{
+		BaseURL:     server.URL,
+		BearerToken: "test-token",
+	})
+
+	_, err := Get[testItem](context.Background(), client, "/system/certificates/missing")
+	if err == nil {
+		t.Fatal("Get empty envelope returned nil error")
+	}
+	if !IsNotFound(err) {
+		t.Fatalf("IsNotFound = false, expected true for empty single-resource envelope: %v", err)
+	}
+
+	list, err := Get[[]testItem](context.Background(), client, "/system/certificates")
+	if err != nil {
+		t.Fatalf("Get empty list returned error: %v", err)
+	}
+	if len(*list) != 0 {
+		t.Fatalf("empty list length = %d, expected 0", len(*list))
+	}
+}
+
 func TestDecodePlainJSONAndNoContent(t *testing.T) {
 	t.Setenv("CRIBL_BEARER_TOKEN", "")
 
