@@ -120,6 +120,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 	return map[string]reflect.Type{
 		"AppscopeConfigResourceModel":             reflect.TypeOf((*provider.AppscopeConfigModel)(nil)).Elem(),
 		"CertificateResourceModel":                reflect.TypeOf((*provider.CertificateModel)(nil)).Elem(),
+		"CollectorResourceModel":                  reflect.TypeOf((*provider.CollectorModel)(nil)).Elem(),
 		"CriblLakeDatasetResourceModel":           reflect.TypeOf((*provider.CriblLakeDatasetModel)(nil)).Elem(),
 		"CriblLakeHouseResourceModel":             reflect.TypeOf((*provider.CriblLakeHouseModel)(nil)).Elem(),
 		"DatabaseConnectionResourceModel":         reflect.TypeOf((*provider.DatabaseConnectionModel)(nil)).Elem(),

@@ -241,6 +241,53 @@ components:
 	assertNotContains(t, merged, "  /:")
 }
 
+func TestRunImportsSchemasFromOverlay(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "upstream-openapi.yml")
+	overlay := filepath.Join(dir, "terraform-overlay.yml")
+	source := filepath.Join(dir, "reference-openapi.yml")
+	output := filepath.Join(dir, "merged-spec.yml")
+	cloudOnlyOutput := filepath.Join(dir, "cloud_only_paths.go")
+
+	writeFile(t, input, `openapi: 3.1.0
+paths: {}
+components:
+  schemas:
+    Existing:
+      type: object
+`)
+	writeFile(t, source, `openapi: 3.1.0
+paths: {}
+components:
+  schemas:
+    Parent:
+      type: object
+      properties:
+        child:
+          $ref: "#/components/schemas/Child"
+    Child:
+      type: object
+      properties:
+        name:
+          type: string
+`)
+	writeFile(t, overlay, `schema_imports:
+  - source: `+source+`
+    schemas:
+      - Parent
+actions: []
+`)
+
+	if err := run(input, overlay, output, cloudOnlyOutput); err != nil {
+		t.Fatalf("run returned error: %v", err)
+	}
+
+	merged := readFile(t, output)
+	assertContains(t, merged, "Parent:")
+	assertContains(t, merged, "Child:")
+	assertContains(t, merged, `$ref: "#/components/schemas/Child"`)
+}
+
 func writeFile(t *testing.T, filename, content string) {
 	t.Helper()
 

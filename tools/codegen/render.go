@@ -141,7 +141,9 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"planModifierCalls":              planModifierCalls,
 		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
 		"schemaAttributes":               schemaAttributes,
+		"oneOfSchemaAttributes":          oneOfSchemaAttributes,
 		"dataSourceAttributes":           dataSourceAttributes,
+		"oneOfDataSourceAttributes":      oneOfDataSourceAttributes,
 		"listDataSourceConfigAttributes": listDataSourceConfigAttributes,
 		"listDataSourceItemAttributes":   listDataSourceItemAttributes,
 		"importSentinelFields":           importSentinelFields,
@@ -158,6 +160,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"listItemFields":                 listItemFields,
 		"listTypeNameSuffix":             listTypeNameSuffix,
 		"listItemObjectValue":            listItemObjectValue,
+		"listElementAttrType":            listElementAttrType,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -207,8 +210,28 @@ func joinDocFields(fields []parser.FieldDef) string {
 func docSchema(resource parser.ResourceDef) string {
 	var output strings.Builder
 	writeDocAttributeSections(&output, "", resource.Fields, true)
+	writeOneOfDocSections(&output, resource.OneOfVariants)
 	writeNestedDocSections(&output, "", resource.Fields)
+	for _, variant := range resource.OneOfVariants {
+		writeNestedDocSections(&output, variant.TerraformName, variant.Fields)
+	}
 	return strings.TrimSpace(output.String())
+}
+
+func writeOneOfDocSections(output *strings.Builder, variants []parser.OneOfVariantDef) {
+	if len(variants) == 0 {
+		return
+	}
+	output.WriteString("### Optional\n\n")
+	for _, variant := range variants {
+		fmt.Fprintf(output, "- `%s` (Attributes) (see [below for nested schema](#nestedatt--%s))\n", variant.TerraformName, docAnchor(variant.TerraformName))
+	}
+	output.WriteString("\n")
+	for _, variant := range variants {
+		fmt.Fprintf(output, "<a id=\"nestedatt--%s\"></a>\n", docAnchor(variant.TerraformName))
+		fmt.Fprintf(output, "### Nested Schema for `%s`\n\n", variant.TerraformName)
+		writeDocAttributeSections(output, variant.TerraformName, variant.Fields, false)
+	}
 }
 
 func writeDocAttributeSections(output *strings.Builder, prefix string, fields []parser.FieldDef, topLevel bool) {
@@ -358,7 +381,16 @@ func legacyGoType(field parser.FieldDef) string {
 		if nestedObjectList(field) {
 			return "types.List"
 		}
-		return "[]types.String"
+		switch field.ElementType {
+		case "integer":
+			return "[]types.Int64"
+		case "number":
+			return "[]types.Float64"
+		case "boolean":
+			return "[]types.Bool"
+		default:
+			return "[]types.String"
+		}
 	case "object":
 		return "types.Map"
 	default:
@@ -381,7 +413,16 @@ func apiType(field parser.FieldDef) string {
 	case "number":
 		return "*float64"
 	case "array":
-		return "[]string"
+		switch field.ElementType {
+		case "integer":
+			return "[]int64"
+		case "number":
+			return "[]float64"
+		case "boolean":
+			return "[]bool"
+		default:
+			return "[]string"
+		}
 	case "object":
 		return "map[string]string"
 	default:
@@ -420,10 +461,26 @@ func schemaAttributes(fields []parser.FieldDef, indent string) string {
 	return output.String()
 }
 
+func oneOfSchemaAttributes(variants []parser.OneOfVariantDef, indent string) string {
+	var output strings.Builder
+	for _, variant := range variants {
+		writeOneOfSchemaAttribute(&output, variant, indent, true)
+	}
+	return output.String()
+}
+
 func dataSourceAttributes(fields []parser.FieldDef, indent string) string {
 	var output strings.Builder
 	for _, field := range fields {
 		writeDataSourceAttribute(&output, field, indent, field.PathParam, !field.PathParam)
+	}
+	return output.String()
+}
+
+func oneOfDataSourceAttributes(variants []parser.OneOfVariantDef, indent string) string {
+	var output strings.Builder
+	for _, variant := range variants {
+		writeOneOfDataSourceAttribute(&output, variant, indent)
 	}
 	return output.String()
 }
@@ -458,7 +515,9 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
 	}
-	if calls := planModifierCalls(field); len(calls) > 0 {
+	if field.PlanModifierHook != "" {
+		fmt.Fprintf(output, "%s\tPlanModifiers: %s(),\n", indent, field.PlanModifierHook)
+	} else if calls := planModifierCalls(field); len(calls) > 0 {
 		fmt.Fprintf(output, "%s\tPlanModifiers: []planmodifier.%s{\n", indent, planModifierType(field))
 		for _, call := range calls {
 			fmt.Fprintf(output, "%s\t\t%s,\n", indent, call)
@@ -483,8 +542,30 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	} else if field.Type == "array" || field.Type == "object" {
-		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
+		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
+	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func writeOneOfSchemaAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string, optional bool) {
+	fmt.Fprintf(output, "%s%q: schema.SingleNestedAttribute{\n", indent, variant.TerraformName)
+	if optional {
+		fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
+	} else {
+		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+	}
+	fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
+	output.WriteString(schemaAttributes(variant.Fields, indent+"\t\t"))
+	fmt.Fprintf(output, "%s\t},\n", indent)
+	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func writeOneOfDataSourceAttribute(output *strings.Builder, variant parser.OneOfVariantDef, indent string) {
+	fmt.Fprintf(output, "%s%q: schema.SingleNestedAttribute{\n", indent, variant.TerraformName)
+	fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+	fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
+	output.WriteString(listDataSourceItemAttributes(variant.Fields, indent+"\t\t"))
+	fmt.Fprintf(output, "%s\t},\n", indent)
 	fmt.Fprintf(output, "%s},\n", indent)
 }
 
@@ -516,7 +597,7 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	} else if field.Type == "array" || field.Type == "object" {
-		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
+		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
 }
@@ -536,7 +617,16 @@ func schemaTypeName(field parser.FieldDef) string {
 	case "number":
 		return "Number"
 	case "array":
-		return "List of String"
+		switch field.ElementType {
+		case "integer":
+			return "List of Integer"
+		case "number":
+			return "List of Number"
+		case "boolean":
+			return "List of Boolean"
+		default:
+			return "List of String"
+		}
 	case "object":
 		return "Map of String"
 	default:
@@ -559,7 +649,7 @@ func zeroValue(field parser.FieldDef) string {
 	case "types.Float64":
 		return "types.Float64Value(0)"
 	case "types.List":
-		return "types.ListValueMust(types.StringType, nil)"
+		return "types.ListValueMust(" + listElementAttrType(field) + ", nil)"
 	case "types.Map":
 		return "types.MapValueMust(types.StringType, nil)"
 	case "jsontypes.Normalized":
@@ -584,7 +674,7 @@ func nullValue(field parser.FieldDef) string {
 	case "types.Float64":
 		return "types.Float64Null()"
 	case "types.List":
-		return "types.ListNull(types.StringType)"
+		return "types.ListNull(" + listElementAttrType(field) + ")"
 	case "types.Map":
 		return "types.MapNull(types.StringType)"
 	case "jsontypes.Normalized":
@@ -632,6 +722,9 @@ func needsAttr(resource parser.ResourceDef) bool {
 			return true
 		}
 	}
+	if len(resource.OneOfVariants) > 0 {
+		return true
+	}
 	return false
 }
 
@@ -664,6 +757,9 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 		}
 	}
 	walk(resource.Fields)
+	for _, variant := range resource.OneOfVariants {
+		walk(variant.Fields)
+	}
 	return fields
 }
 
@@ -682,9 +778,22 @@ func attrType(field parser.FieldDef) string {
 	case "number":
 		return "types.Float64Type"
 	case "array":
-		return "types.ListType{ElemType: types.StringType}"
+		return "types.ListType{ElemType: " + listElementAttrType(field) + "}"
 	case "object":
 		return "types.MapType{ElemType: types.StringType}"
+	default:
+		return "types.StringType"
+	}
+}
+
+func listElementAttrType(field parser.FieldDef) string {
+	switch field.ElementType {
+	case "integer":
+		return "types.Int64Type"
+	case "number":
+		return "types.Float64Type"
+	case "boolean":
+		return "types.BoolType"
 	default:
 		return "types.StringType"
 	}
@@ -736,6 +845,21 @@ func needsPlanModifier(resource parser.ResourceDef) bool {
 			return true
 		}
 	}
+	for _, variant := range resource.OneOfVariants {
+		for _, field := range variant.Fields {
+			if len(planModifierCalls(field)) > 0 {
+				return true
+			}
+			for _, nested := range field.Fields {
+				if len(planModifierCalls(nested)) > 0 {
+					return true
+				}
+			}
+			if len(nestedObjectPlanModifierCalls(field)) > 0 {
+				return true
+			}
+		}
+	}
 	return false
 }
 
@@ -747,6 +871,18 @@ func needsFrameworkPlanModifier(resource parser.ResourceDef, kind string) bool {
 		for _, nested := range field.Fields {
 			if nested.ForceNew && frameworkPlanModifierKind(nested) == kind {
 				return true
+			}
+		}
+	}
+	for _, variant := range resource.OneOfVariants {
+		for _, field := range variant.Fields {
+			if field.ForceNew && frameworkPlanModifierKind(field) == kind {
+				return true
+			}
+			for _, nested := range field.Fields {
+				if nested.ForceNew && frameworkPlanModifierKind(nested) == kind {
+					return true
+				}
 			}
 		}
 	}
@@ -764,6 +900,21 @@ func needsCustomPlanModifier(resource parser.ResourceDef, kind string) bool {
 		for _, nested := range field.Fields {
 			if nested.SuppressDiff && customPlanModifierKind(nested) == kind {
 				return true
+			}
+		}
+	}
+	for _, variant := range resource.OneOfVariants {
+		for _, field := range variant.Fields {
+			if field.SuppressDiff && customPlanModifierKind(field) == kind {
+				return true
+			}
+			if nestedObjectList(field) && field.SuppressDiff && kind == "object" {
+				return true
+			}
+			for _, nested := range field.Fields {
+				if nested.SuppressDiff && customPlanModifierKind(nested) == kind {
+					return true
+				}
 			}
 		}
 	}
@@ -863,6 +1014,9 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func upstreamExampleUsage(resource parser.ResourceDef) (string, bool) {
+	if len(resource.OneOfVariants) > 0 {
+		return "", false
+	}
 	example, ok := bestRequestExample(resource)
 	if !ok {
 		return "", false

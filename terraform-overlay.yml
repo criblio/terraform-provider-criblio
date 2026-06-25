@@ -1,4 +1,90 @@
+schema_imports:
+  - source: openapi.yml
+    schemas:
+      - InputCollector
+
 actions:
+  - target: "$.paths./m/{groupId}/lib/jobs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Collector
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this collector instance.
+  - target: "$.paths./m/{groupId}/lib/jobs.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs.post.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs.get"
+    update:
+      x-terraform-list: Collector
+      x-terraform-list-name: Collectors
+  - target: "$.paths./m/{groupId}/lib/jobs.get.responses.200.content.application/json.schema"
+    update:
+      type: array
+      items:
+        $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.get"
+    update:
+      x-terraform-read: Collector
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.get.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch"
+    update:
+      x-terraform-update: Collector
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.delete"
+    update:
+      x-terraform-delete: Collector
+  - target: "$.components.schemas.InputCollector"
+    update:
+      properties:
+        environment:
+          type: string
+          title: Environment
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorEnvironmentPlanModifiers
+        ignoreGroupJobsLimit:
+          type: boolean
+          title: Ignore group jobs limit
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorIgnoreGroupJobsLimitPlanModifiers
+        resumeOnBoot:
+          type: boolean
+          title: Resume on boot
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorResumeOnBootPlanModifiers
+        ttl:
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorTTLPlanModifiers
+        workerAffinity:
+          type: boolean
+          title: Worker affinity
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorWorkerAffinityPlanModifiers
+  - target: "$.components.schemas.InputCollectorBase.properties.type"
+    update:
+      x-terraform-ignore: true
+
   - target: "$.paths./m/{groupId}/lib/vars.post"
     update:
       x-terraform-resource: true

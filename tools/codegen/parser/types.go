@@ -71,17 +71,20 @@ type FieldDef struct {
 	RequestField       bool
 	UpdateField        bool
 	ApplyStrategy      string
+	PlanModifierHook   string
+	Enum               []string
 	Fields             []FieldDef
 }
 
 // OneOfVariantDef describes one flattened oneOf variant model.
 type OneOfVariantDef struct {
-	APIName       string
-	TerraformName string
-	GoName        string
-	ModelName     string
-	SchemaName    string
-	Fields        []FieldDef
+	APIName            string
+	TerraformName      string
+	GoName             string
+	ModelName          string
+	SchemaName         string
+	DiscriminatorValue string
+	Fields             []FieldDef
 }
 
 // OutputFile describes a generated file decision.

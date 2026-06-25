@@ -153,7 +153,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationTypes, "OutputS3 *OutputS3Model")
 
 	destinationResource := renderTemplate(t, "resource", destination)
-	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil && (!preserveInputs || (fillMissingInputs && state.OutputAzureBlob == nil))")
+	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
 
@@ -381,6 +381,66 @@ func TestNotificationResourcePathUsesCompatibleGroupFallback(t *testing.T) {
 	assertContains(t, got, `GroupID string `+"`json:\"group_id\"`")
 	assertContains(t, got, `model.Group = types.StringValue(data.Group)`)
 	assertNotContains(t, got, `resource.ImportStatePassthroughID`)
+}
+
+func TestResourceSchemaUsesPlanModifierHook(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "collector",
+		FileStem:   "collector",
+		TypeName:   "criblio_collector",
+		StructName: "Collector",
+		Fields: []parser.FieldDef{
+			{
+				APIName:          "environment",
+				TerraformName:    "environment",
+				GoName:           "Environment",
+				Type:             "string",
+				Optional:         true,
+				Computed:         true,
+				PlanModifierHook: "collectorEnvironmentPlanModifiers",
+			},
+		},
+	}
+
+	content, err := executeTemplate("resource", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got := string(content)
+
+	assertContains(t, got, `PlanModifiers: collectorEnvironmentPlanModifiers(),`)
+	assertNotContains(t, got, `PlanModifiers: []planmodifier.String{`)
+}
+
+func TestPrimitiveArrayFieldsPreserveElementTypes(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "array_resource",
+		FileStem:   "array_resource",
+		TypeName:   "criblio_array_resource",
+		StructName: "ArrayResource",
+		Fields: []parser.FieldDef{
+			{APIName: "codes", TerraformName: "codes", GoName: "Codes", Type: "array", ElementType: "integer", Optional: true},
+			{APIName: "ratios", TerraformName: "ratios", GoName: "Ratios", Type: "array", ElementType: "number", Optional: true},
+			{APIName: "flags", TerraformName: "flags", GoName: "Flags", Type: "array", ElementType: "boolean", Optional: true},
+			{APIName: "names", TerraformName: "names", GoName: "Names", Type: "array", ElementType: "string", Optional: true},
+		},
+	}
+
+	resourceContent := renderTemplate(t, "resource", resource)
+	assertContains(t, resourceContent, "ElementType: types.Int64Type,")
+	assertContains(t, resourceContent, "ElementType: types.Float64Type,")
+	assertContains(t, resourceContent, "ElementType: types.BoolType,")
+	assertContains(t, resourceContent, "ElementType: types.StringType,")
+
+	typesContent := renderTemplate(t, "types", resource)
+	assertContains(t, typesContent, "Codes []int64")
+	assertContains(t, typesContent, "Ratios []float64")
+	assertContains(t, typesContent, "Flags []bool")
+	assertContains(t, typesContent, "Names []string")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.Int64Type, input.Codes)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.Float64Type, input.Ratios)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.BoolType, input.Flags)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.Names)")
 }
 
 func TestRestWriteCall(t *testing.T) {

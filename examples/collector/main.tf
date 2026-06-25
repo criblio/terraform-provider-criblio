@@ -1,3 +1,18 @@
+terraform {
+  required_providers {
+    criblio = {
+      source  = "criblio/criblio"
+      version = ">= 0.1.0"
+    }
+  }
+}
+
+provider "criblio" {
+  organization_id = "beautiful-nguyen-y8y4azd"
+  workspace_id    = "main"
+  cloud_domain    = "cribl-playground.cloud"
+}
+
 resource "criblio_collector" "splunk_access_log_collector" {
   group_id = "default"
   id       = "splunk-demo-collector"
