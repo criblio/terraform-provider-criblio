@@ -179,6 +179,10 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetTypes, `return "default"`)
 	assertContains(t, mappingRulesetTypes, `function["id"] = "eval"`)
 	assertContains(t, mappingRulesetTypes, `function["final"] = true`)
+	assertContains(t, mappingRulesetTypes, `add["name"] = "groupId"`)
+	mappingRulesetDoc := renderTemplate(t, "doc", mappingRuleset)
+	assertContains(t, mappingRulesetDoc, "- `final` (Boolean)")
+	assertContains(t, mappingRulesetDoc, "- `name` (String)")
 
 	key := resourceByName(t, resources, "Key")
 	keyClient := renderTemplate(t, "client", key)
@@ -200,6 +204,24 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, keyResource, "state.Algorithm = types.StringNull()")
 	keyTypes := renderTemplate(t, "types", key)
 	assertContains(t, keyTypes, `output["algorithm"] = value`)
+
+	jsonString := parser.ResourceDef{
+		StructName: "Schema",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "schema",
+				TerraformName: "schema",
+				GoName:        "Schema",
+				Type:          "string",
+				CustomType:    "jsontypes.NormalizedType{}",
+				RequestField:  true,
+			},
+		},
+	}
+	jsonStringTypes := renderTemplate(t, "types", jsonString)
+	assertContains(t, jsonStringTypes, `value := m.Schema.ValueString()`)
+	assertContains(t, jsonStringTypes, `output["schema"] = value`)
+	assertNotContains(t, jsonStringTypes, `convert schema to API value`)
 
 	noRead := parser.ResourceDef{
 		StructName: "LakehouseDatasetConnection",
@@ -228,6 +250,103 @@ func TestRenderedSnippets(t *testing.T) {
 
 	mappingRulesetResource = renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
+
+	fixedIdentity := parser.ResourceDef{
+		StructName: "Routes",
+		TypeName:   "criblio_routes",
+		Create: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Delete: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+			ResetBody: map[string]any{
+				"id": "default",
+				"routes": []any{
+					map[string]any{
+						"name":     "Default",
+						"filter":   "true",
+						"pipeline": "main",
+						"final":    true,
+						"disabled": false,
+					},
+				},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "id",
+				TerraformName: "id",
+				GoName:        "ID",
+				Type:          "string",
+				Optional:      true,
+				Computed:      true,
+				ForceNew:      true,
+				PathParam:     true,
+				FixedValue:    "default",
+			},
+		},
+	}
+	fixedResource := renderTemplate(t, "resource", fixedIdentity)
+	assertContains(t, fixedResource, `"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"`)
+	assertContains(t, fixedResource, `"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"`)
+	assertContains(t, fixedResource, `Default: stringdefault.StaticString("default")`)
+	assertContains(t, fixedResource, `stringvalidator.OneOf("default")`)
+	assertContains(t, fixedResource, `state.ID = types.StringValue("default")`)
+	fixedClient := renderTemplate(t, "client", fixedIdentity)
+	assertContains(t, fixedClient, `body := map[string]any{"id": "default", "routes": []any{map[string]any{"disabled": false, "filter": "true", "final": true, "name": "Default", "pipeline": "main"}}}`)
+	assertContains(t, fixedClient, `restclient.Patch[map[string]any, RoutesModel]`)
+	fixedDataSource := renderTemplate(t, "data_source", fixedIdentity)
+	assertContains(t, fixedDataSource, `Optional: true`)
+	assertContains(t, fixedDataSource, `Computed: true`)
+	assertContains(t, fixedDataSource, `model.ID = types.StringValue("default")`)
+	assertNotContains(t, fixedDataSource, `Required: true`)
+
+	fixedAPIField := parser.ResourceDef{
+		Name:     "searchengine",
+		FileStem: "search_engine",
+		TypeName: "criblio_search_engine",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "engineType",
+				TerraformName: "engine_type",
+				Type:          "string",
+				Optional:      true,
+				Computed:      true,
+				FixedValue:    "local",
+			},
+			{APIName: "id", TerraformName: "id", Type: "string", Required: true},
+			{APIName: "tierSize", TerraformName: "tier_size", Type: "string", Required: true},
+		},
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "minimal",
+					Value: map[string]any{
+						"engineType": "local",
+						"id":         "engine-01",
+						"tierSize":   "small",
+					},
+				},
+			},
+		},
+	}
+	assertNotContains(t, docSchema(fixedAPIField), "engine_type")
+	fixedAPIFieldExample, ok := upstreamExampleUsage(fixedAPIField)
+	if !ok {
+		t.Fatalf("upstreamExampleUsage returned no example")
+	}
+	assertNotContains(t, fixedAPIFieldExample, "engine_type")
+	assertContains(t, fixedAPIFieldExample, `id = "engine-01"`)
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {

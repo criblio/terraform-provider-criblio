@@ -45,8 +45,8 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_pack" {
 		delete(attrs, "exports")
 	}
-	// criblio_routes and criblio_pack_routes: inject additional_properties from model into each route.
-	// HCL skips it by default (readOnlyAttrs); API returns it, causing drift. Align both resources.
+	// criblio_pack_routes: inject additional_properties from the legacy model into each route.
+	// HCL skips it by default (readOnlyAttrs); API returns it, causing drift.
 	injectRoutesAdditionalProperties := func(routes []ptypes.RoutesRoute, routesVal hcl.Value) hcl.Value {
 		if routesVal.Kind != hcl.KindList || len(routes) > len(routesVal.List) {
 			return routesVal
@@ -78,11 +78,8 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		}
 		return routesVal
 	}
-	if r.TypeName == "criblio_routes" {
-		if pm, ok := model.(*provider.RoutesResourceModel); ok && attrs["routes"].Kind != hcl.KindNull {
-			routesVal := injectRoutesAdditionalProperties(pm.Routes, attrs["routes"])
-			attrs["routes"] = normalizeRouteDescriptions(routesVal)
-		}
+	if r.TypeName == "criblio_routes" && attrs["routes"].Kind != hcl.KindNull {
+		attrs["routes"] = normalizeRouteDescriptions(attrs["routes"])
 	}
 	if r.TypeName == "criblio_pack_routes" {
 		// items is skipped (Computed); populate routes from model.Items[0] since flatten had no items to merge.

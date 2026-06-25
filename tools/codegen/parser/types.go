@@ -34,6 +34,7 @@ type OperationDef struct {
 	QueryParams    []FieldDef
 	Examples       []ExampleDef
 	ReadAfterWrite bool
+	ResetBody      any
 }
 
 // ExampleDef describes a request-body example attached to an OpenAPI operation.
@@ -73,6 +74,7 @@ type FieldDef struct {
 	UpdateField        bool
 	ApplyStrategy      string
 	PlanModifierHook   string
+	FixedValue         string
 	Enum               []string
 	Fields             []FieldDef
 	ObjectAsJSON       bool

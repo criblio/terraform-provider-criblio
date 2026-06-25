@@ -102,6 +102,113 @@ actions:
   - target: "$.paths./m/{groupId}/pipelines/{id}.delete"
     update:
       x-terraform-delete: Pipeline
+
+  - target: "$.paths./m/{groupId}/routes/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Routes
+      x-terraform-update: Routes
+      x-terraform-delete: Routes
+      x-terraform-read-after-write: true
+      x-terraform-delete-reset-body:
+        id: default
+        routes:
+          - name: Default
+            filter: "true"
+            pipeline: main
+            final: true
+            disabled: false
+  - target: "$.paths./m/{groupId}/routes/{id}.get"
+    update:
+      x-terraform-read: Routes
+  - target: "$.components.schemas.RoutesInput.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Routes.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConfInput.properties.id"
+    update:
+      x-terraform-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConf.properties.id"
+    update:
+      x-terraform-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConfInput.properties.filter"
+    update:
+      default: "true"
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.final"
+    update:
+      default: true
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.disabled"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.enableOutputExpression"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.description"
+    update:
+      default: ""
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.output"
+    update:
+      default: default
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.clones"
+    update:
+      default: []
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.filter"
+    update:
+      default: "true"
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.final"
+    update:
+      default: true
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.disabled"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.enableOutputExpression"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.description"
+    update:
+      default: ""
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.output"
+    update:
+      default: default
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.clones"
+    update:
+      default: []
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteComment.properties.groupId"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RouteComment.properties.id"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RouteComment.properties.index"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.AdditionalPropertiesTypeRoutesGroups.properties.index"
+    update:
+      x-terraform-computed: true
   - target: "$.components.schemas.PipelineFunctionConf"
     replace:
       type: object

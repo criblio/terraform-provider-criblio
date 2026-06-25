@@ -321,6 +321,24 @@ func mappingRulesetConfWithDefaults(value any) any {
 		if _, ok := function["final"]; !ok {
 			function["final"] = true
 		}
+		confValue, ok := function["conf"].(map[string]any)
+		if ok {
+			addItems, ok := confValue["add"].([]any)
+			if ok {
+				for addIndex, addItem := range addItems {
+					add, ok := addItem.(map[string]any)
+					if !ok {
+						continue
+					}
+					if name, ok := add["name"].(string); !ok || name == "" {
+						add["name"] = "groupId"
+					}
+					addItems[addIndex] = add
+				}
+				confValue["add"] = addItems
+				function["conf"] = confValue
+			}
+		}
 		functions[index] = function
 	}
 	conf["functions"] = functions
@@ -588,12 +606,16 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 {{- if objectAsJSON . }}
 		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else if normalizedString . }}
+		value := m.{{ .GoName }}.ValueString()
 {{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
 {{- end }}
+{{- if not (normalizedString .) }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
+{{- end }}
 {{- if and (eq $.StructName "MappingRuleset") (eq .TerraformName "conf") }}
 		value = mappingRulesetConfWithDefaults(value)
 {{- end }}
@@ -626,12 +648,16 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
 {{- if objectAsJSON . }}
 		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else if normalizedString . }}
+		value := m.{{ .GoName }}.ValueString()
 {{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
 {{- end }}
+{{- if not (normalizedString .) }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
+{{- end }}
 		output["{{ .APIName }}"] = value
 	}
 {{- end }}
@@ -960,6 +986,10 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	// Group system settings are singleton configuration. There is no delete
 	// endpoint; destroy removes Terraform state without resetting the group.
 	return nil
+{{- else if .Delete.ResetBody }}
+	body := {{ goValueLiteral .Delete.ResetBody }}
+	_, err := restclient.{{ restWriteCall .Delete }}[map[string]any, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Delete }}, body)
+	return err
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
 {{- end }}
@@ -1041,6 +1071,9 @@ import (
 	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 {{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+{{- if needsStringValidator . }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+{{- end }}
 {{- if needsResourceAttr . }}
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 {{- end }}
@@ -1072,6 +1105,9 @@ import (
 {{- end }}
 {{- if needsFrameworkPlanModifier . "string" }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+{{- end }}
+{{- if needsStringDefault . }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 {{- end }}
 {{- if needsValidator . }}
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -1245,6 +1281,33 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		return
 	}
 {{- end }}
+{{- with singletonLegacyImportField . }}
+	trimmedID := bytes.TrimSpace([]byte(req.ID))
+	if len(trimmedID) == 0 {
+		resp.Diagnostics.AddError("Invalid ID", "The import ID must not be empty.")
+		return
+	}
+	if trimmedID[0] != '{' {
+		var model {{ $.StructName }}Model
+{{- range pathParamFields $ }}
+{{- if .FixedValue }}
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), {{ printf "%q" .FixedValue }})...)
+{{- else }}
+		model.{{ .GoName }} = types.StringValue(req.ID)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), req.ID)...)
+{{- end }}
+{{- end }}
+		apiModel, err := r.api.Read(ctx, model)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			return
+		}
+		apply{{ $.StructName }}APIToState(apiModel, &model, false, false)
+		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+		return
+	}
+{{- end }}
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
@@ -1390,6 +1453,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if state.{{ .GoName }}.IsUnknown() {
 		state.{{ .GoName }} = {{ nullValue . }}
 	}
+{{- end }}
+{{- if and .FixedValue (eq .Type "string") }}
+	state.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
 {{- end }}
 {{- if not .Computed }}
 	}
@@ -1542,6 +1608,13 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- range .Fields }}
+{{- if and .FixedValue (eq .Type "string") }}
+	if model.{{ .GoName }}.IsNull() || model.{{ .GoName }}.IsUnknown() || model.{{ .GoName }}.ValueString() == "" {
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+	}
+{{- end }}
+{{- end }}
 	apiModel, err := d.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -2244,10 +2317,19 @@ func TestSearchDashboard(t *testing.T) {
 					ImportState:       true,
 					ImportStateId:     dashboardID,
 					ImportStateVerify: true,
+					ImportStateVerifyIgnore: searchDashboardImportStateVerifyIgnore(),
 				},
 			},
 		})
 	})
+}
+
+func searchDashboardImportStateVerifyIgnore() []string {
+	ignore := make([]string, 0, 8)
+	for i := range 8 {
+		ignore = append(ignore, fmt.Sprintf("elements.%d.dashboard_element_visualization.config.json", i))
+	}
+	return ignore
 }
 
 func searchDashboardConfig(t *testing.T, id, description string) string {
@@ -2277,6 +2359,72 @@ func searchDashboardConfig(t *testing.T, id, description string) string {
 	}
 
 	return config
+}
+{{- else if eq .StructName "Routes" }}
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestRoutes(t *testing.T) {
+	resourceName := "criblio_routes.my_routes"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: routesConfig("my_route_1", "my_route_2"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "routes.#", "2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.0.name", "my_route_1"),
+						resource.TestCheckResourceAttr(resourceName, "routes.0.pipeline", "main"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.pipeline", "main"),
+					),
+				},
+				{
+					Config: routesConfig("my_route_2", "my_route_1"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "routes.0.name", "my_route_2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_1"),
+					),
+				},
+				{
+					Config:   routesConfig("my_route_2", "my_route_1"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     "default",
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+func routesConfig(first, second string) string {
+	return ` + "`" + `resource "criblio_routes" "my_routes" {
+  group_id = "default"
+
+  routes = [
+    {
+      name     = "` + "`" + ` + first + ` + "`" + `"
+      pipeline = "main"
+    },
+    {
+      name     = "` + "`" + ` + second + ` + "`" + `"
+      pipeline = "main"
+    }
+  ]
+}
+` + "`" + `
 }
 {{- else }}
 import "testing"

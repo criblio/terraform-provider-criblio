@@ -116,6 +116,9 @@ func (d *SearchEngineDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	if model.EngineType.IsNull() || model.EngineType.IsUnknown() || model.EngineType.ValueString() == "" {
+		model.EngineType = types.StringValue("local")
+	}
 	apiModel, err := d.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())

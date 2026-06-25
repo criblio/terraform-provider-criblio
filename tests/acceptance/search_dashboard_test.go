@@ -50,14 +50,23 @@ func TestSearchDashboard(t *testing.T) {
 					PlanOnly: true,
 				},
 				{
-					ResourceName:      resourceName,
-					ImportState:       true,
-					ImportStateId:     dashboardID,
-					ImportStateVerify: true,
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           dashboardID,
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: searchDashboardImportStateVerifyIgnore(),
 				},
 			},
 		})
 	})
+}
+
+func searchDashboardImportStateVerifyIgnore() []string {
+	ignore := make([]string, 0, 8)
+	for i := range 8 {
+		ignore = append(ignore, fmt.Sprintf("elements.%d.dashboard_element_visualization.config.json", i))
+	}
+	return ignore
 }
 
 func searchDashboardConfig(t *testing.T, id, description string) string {

@@ -137,6 +137,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"PipelineResourceModel":                   reflect.TypeOf((*provider.PipelineModel)(nil)).Elem(),
 		"ProjectResourceModel":                    reflect.TypeOf((*provider.ProjectModel)(nil)).Elem(),
 		"RegexResourceModel":                      reflect.TypeOf((*provider.RegexModel)(nil)).Elem(),
+		"RoutesResourceModel":                     reflect.TypeOf((*provider.RoutesModel)(nil)).Elem(),
 		"SchemaResourceModel":                     reflect.TypeOf((*provider.SchemaModel)(nil)).Elem(),
 		"SearchDashboardResourceModel":            reflect.TypeOf((*provider.SearchDashboardModel)(nil)).Elem(),
 		"SearchDashboardCategoryResourceModel":    reflect.TypeOf((*provider.SearchDashboardCategoryModel)(nil)).Elem(),

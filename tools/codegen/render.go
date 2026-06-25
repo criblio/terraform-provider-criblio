@@ -129,6 +129,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"importBlock":                    importBlock,
 		"importCommand":                  importCommand,
 		"importPassthroughAttribute":     importPassthroughAttribute,
+		"singletonLegacyImportField":     singletonLegacyImportField,
 		"docSchema":                      docSchema,
 		"joinDocFields":                  joinDocFields,
 		"needsFmt":                       needsFmt,
@@ -139,6 +140,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"needsPlanModifier":              needsPlanModifier,
 		"hasJSONNormalized":              hasJSONNormalized,
 		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
+		"needsStringDefault":             needsStringDefault,
 		"needsCustomPlanModifier":        needsCustomPlanModifier,
 		"needsValidator":                 needsValidator,
 		"needsStringValidator":           needsStringValidator,
@@ -161,6 +163,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"nestedObjectMap":                nestedObjectMap,
 		"nestedObject":                   nestedObject,
 		"objectAsJSON":                   objectAsJSON,
+		"normalizedString":               normalizedString,
 		"hasObjectAsJSON":                hasObjectAsJSON,
 		"nestedObjectFields":             nestedObjectFields,
 		"attrType":                       attrType,
@@ -172,6 +175,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"listTypeNameSuffix":             listTypeNameSuffix,
 		"listItemObjectValue":            listItemObjectValue,
 		"listElementAttrType":            listElementAttrType,
+		"goValueLiteral":                 goValueLiteral,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -308,6 +312,9 @@ func writeNestedDocSections(output *strings.Builder, prefix string, fields []par
 func fieldDocSections(fields []parser.FieldDef, topLevel bool) schemaDocSections {
 	var sections schemaDocSections
 	for _, field := range fields {
+		if hideFixedValueField(field) {
+			continue
+		}
 		switch {
 		case field.Required:
 			sections.Required = append(sections.Required, field)
@@ -356,6 +363,9 @@ type schemaDocSections struct {
 func schemaSections(resource parser.ResourceDef) schemaDocSections {
 	var sections schemaDocSections
 	for _, field := range resource.Fields {
+		if hideFixedValueField(field) {
+			continue
+		}
 		switch {
 		case field.Required:
 			sections.Required = append(sections.Required, field)
@@ -555,6 +565,9 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	fmt.Fprintf(output, "%s\tRequired: %t,\n", indent, field.Required)
 	fmt.Fprintf(output, "%s\tOptional: %t,\n", indent, field.Optional)
 	fmt.Fprintf(output, "%s\tComputed: %t,\n", indent, field.Computed)
+	if field.FixedValue != "" && field.Type == "string" {
+		fmt.Fprintf(output, "%s\tDefault: stringdefault.StaticString(%q),\n", indent, field.FixedValue)
+	}
 	if field.Sensitive {
 		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
 	}
@@ -640,10 +653,13 @@ func writeOneOfDataSourceAttribute(output *strings.Builder, variant parser.OneOf
 
 func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, indent string, required, computed bool) {
 	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
-	if required {
+	fixedString := field.FixedValue != "" && field.Type == "string"
+	if required && fixedString {
+		fmt.Fprintf(output, "%s\tOptional: true,\n", indent)
+		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+	} else if required {
 		fmt.Fprintf(output, "%s\tRequired: true,\n", indent)
-	}
-	if computed {
+	} else if computed {
 		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
 	}
 	if field.Sensitive {
@@ -840,7 +856,12 @@ func needsValidator(resource parser.ResourceDef) bool {
 }
 
 func needsStringValidator(resource parser.ResourceDef) bool {
-	return needsValidator(resource)
+	for _, field := range resourceFields(resource) {
+		if field.FixedValue != "" && field.Type == "string" {
+			return true
+		}
+	}
+	return false
 }
 
 func needsCustomStringValidator(resource parser.ResourceDef) bool {
@@ -861,6 +882,15 @@ func needsCustomJSONValidator(resource parser.ResourceDef) bool {
 	return false
 }
 
+func needsStringDefault(resource parser.ResourceDef) bool {
+	for _, field := range resourceFields(resource) {
+		if field.FixedValue != "" && field.Type == "string" {
+			return true
+		}
+	}
+	return false
+}
+
 func nestedObjectList(field parser.FieldDef) bool {
 	return field.Type == "array" && field.ElementType == "object" && len(field.Fields) > 0
 }
@@ -875,6 +905,10 @@ func nestedObject(field parser.FieldDef) bool {
 
 func objectAsJSON(field parser.FieldDef) bool {
 	return field.Type == "object" && field.CustomType == "jsontypes.NormalizedType{}" && field.ObjectAsJSON
+}
+
+func normalizedString(field parser.FieldDef) bool {
+	return field.Type == "string" && field.CustomType == "jsontypes.NormalizedType{}"
 }
 
 func hasObjectAsJSON(resource parser.ResourceDef) bool {
@@ -1079,6 +1113,9 @@ func stringValidatorCalls(field parser.FieldDef) []string {
 		return nil
 	}
 	var calls []string
+	if field.FixedValue != "" && field.Type == "string" {
+		calls = append(calls, fmt.Sprintf("stringvalidator.OneOf(%q)", field.FixedValue))
+	}
 	if field.NotNull {
 		calls = append(calls, "custom_stringvalidators.NotNull()")
 	}
@@ -1197,7 +1234,7 @@ func bestRequestExample(resource parser.ResourceDef) (parser.ExampleDef, bool) {
 func exampleFieldScore(fields []parser.FieldDef, values map[string]any) int {
 	score := 0
 	for _, field := range fields {
-		if field.Computed && !field.Optional {
+		if (field.Computed && !field.Optional) || hideFixedValueField(field) {
 			continue
 		}
 		if _, ok := values[field.APIName]; ok {
@@ -1213,7 +1250,7 @@ func exampleFieldScore(fields []parser.FieldDef, values map[string]any) int {
 
 func writeExampleFields(output *strings.Builder, resource parser.ResourceDef, fields []parser.FieldDef, values map[string]any, indentLevel int) {
 	for _, field := range fields {
-		if field.Computed && !field.Optional {
+		if (field.Computed && !field.Optional) || hideFixedValueField(field) {
 			continue
 		}
 		value, ok := values[field.APIName]
@@ -1334,6 +1371,10 @@ func exampleList(value any) []any {
 	}
 }
 
+func hideFixedValueField(field parser.FieldDef) bool {
+	return field.FixedValue != "" && !field.PathParam && !field.ForceNew
+}
+
 func hclValue(value any) string {
 	switch typed := value.(type) {
 	case string:
@@ -1435,6 +1476,9 @@ func importCommand(resource parser.ResourceDef) string {
 
 func generatedImportCommand(resource parser.ResourceDef) string {
 	fields := pathParamFields(resource)
+	if legacy := singletonLegacyImportField(resource); legacy != nil {
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), exampleValue(resource, *legacy))
+	}
 	if len(fields) == 1 {
 		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
 	}
@@ -1475,6 +1519,27 @@ func jsonImport(resource parser.ResourceDef) bool {
 	return len(pathParamFields(resource)) > 1
 }
 
+func singletonLegacyImportField(resource parser.ResourceDef) *parser.FieldDef {
+	if !jsonImport(resource) {
+		return nil
+	}
+	if resource.StructName == "Notification" {
+		return nil
+	}
+	var legacy *parser.FieldDef
+	for _, field := range pathParamFields(resource) {
+		if field.FixedValue != "" {
+			continue
+		}
+		if legacy != nil {
+			return nil
+		}
+		copy := field
+		legacy = &copy
+	}
+	return legacy
+}
+
 func importPassthroughAttribute(resource parser.ResourceDef) string {
 	fields := pathParamFields(resource)
 	if len(fields) == 1 {
@@ -1498,6 +1563,12 @@ func generatedExample(resource parser.ResourceDef) string {
 
 func generatedImportBlock(resource parser.ResourceDef) string {
 	fields := pathParamFields(resource)
+	if legacy := singletonLegacyImportField(resource); legacy != nil {
+		return fmt.Sprintf(`import {
+  to = %s.my_%s
+  id = %q
+}`, resourceType(resource), resourceType(resource), exampleValue(resource, *legacy))
+	}
 	if len(fields) == 1 {
 		return fmt.Sprintf(`import {
   to = %s.my_%s
@@ -1524,6 +1595,9 @@ func generatedImportBlock(resource parser.ResourceDef) string {
 }
 
 func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
+	if field.FixedValue != "" {
+		return field.FixedValue
+	}
 	if field.PathParam && field.TerraformName == "product" {
 		return "stream"
 	}
@@ -1546,6 +1620,48 @@ func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 		return "web-logs"
 	}
 	return "example"
+}
+
+func goValueLiteral(value any) string {
+	switch typed := value.(type) {
+	case nil:
+		return "nil"
+	case map[string]any:
+		if len(typed) == 0 {
+			return "map[string]any{}"
+		}
+		keys := make([]string, 0, len(typed))
+		for key := range typed {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		parts := make([]string, 0, len(keys))
+		for _, key := range keys {
+			parts = append(parts, fmt.Sprintf("%q: %s", key, goValueLiteral(typed[key])))
+		}
+		return "map[string]any{" + strings.Join(parts, ", ") + "}"
+	case []any:
+		parts := make([]string, 0, len(typed))
+		for _, item := range typed {
+			parts = append(parts, goValueLiteral(item))
+		}
+		return "[]any{" + strings.Join(parts, ", ") + "}"
+	case string:
+		return fmt.Sprintf("%q", typed)
+	case bool:
+		if typed {
+			return "true"
+		}
+		return "false"
+	case int:
+		return strconv.Itoa(typed)
+	case int64:
+		return strconv.FormatInt(typed, 10)
+	case float64:
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	default:
+		return fmt.Sprintf("%#v", typed)
+	}
 }
 
 func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {

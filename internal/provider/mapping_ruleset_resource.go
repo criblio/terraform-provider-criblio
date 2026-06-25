@@ -105,8 +105,8 @@ func (r *MappingRulesetResource) Schema(_ context.Context, _ resource.SchemaRequ
 											NestedObject: schema.NestedAttributeObject{
 												Attributes: map[string]schema.Attribute{
 													"name": schema.StringAttribute{
-														Required:    true,
-														Optional:    false,
+														Required:    false,
+														Optional:    true,
 														Computed:    false,
 														Description: `Always <code>groupId</code> to specify the assignment type.`,
 													},

@@ -166,6 +166,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
 		ReadAfterWrite: boolAnnotation(operation, "x-terraform-read-after-write"),
+		ResetBody:      resetBody(operation),
 	}
 }
 
@@ -321,9 +322,32 @@ func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
 					functionField.Required = false
 					functionField.Optional = true
 					functionField.Computed = false
+					functionField.FixedValue = ""
+				}
+				if functionField.TerraformName == "conf" {
+					makeMappingRulesetAddNameOptional(functionField)
 				}
 			}
 			return
+		}
+	}
+}
+
+func makeMappingRulesetAddNameOptional(field *FieldDef) {
+	for index := range field.Fields {
+		nested := &field.Fields[index]
+		if nested.TerraformName != "add" {
+			continue
+		}
+		for nestedIndex := range nested.Fields {
+			addField := &nested.Fields[nestedIndex]
+			if addField.TerraformName != "name" {
+				continue
+			}
+			addField.Required = false
+			addField.Optional = true
+			addField.Computed = false
+			addField.FixedValue = ""
 		}
 	}
 }
@@ -439,6 +463,12 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 	if boolAnnotation(property, "x-terraform-force-new") {
 		field.ForceNew = true
 	}
+	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
+		field.FixedValue = fixedValue
+		field.Required = false
+		field.Optional = true
+		field.Computed = true
+	}
 	if field.PreferState && field.Sensitive {
 		field.ApplyStrategy = "stringFromAPIOrPrior"
 	} else if field.PreferState {
@@ -488,6 +518,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			"x-terraform-element-custom-type",
 		),
 		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
+		FixedValue:       fixedValueAnnotation(property),
 		ObjectAsJSON:     boolAnnotation(property, "x-terraform-object-as-json"),
 		NotNull:          boolAnnotation(property, "x-terraform-not-null"),
 		ValidJSON:        boolAnnotation(property, "x-terraform-valid-json"),
@@ -724,9 +755,15 @@ func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					fields[index].Required = true
-					fields[index].Optional = false
-					fields[index].Computed = false
+					if fields[index].FixedValue == "" {
+						fields[index].Required = true
+						fields[index].Optional = false
+						fields[index].Computed = false
+					} else {
+						fields[index].Required = false
+						fields[index].Optional = true
+						fields[index].Computed = true
+					}
 					fields[index].ForceNew = true
 					fields[index].PathParam = true
 				}
@@ -770,6 +807,14 @@ func parametersByLocation(operation *yaml.Node, location string) []FieldDef {
 			Required:      true,
 			ForceNew:      true,
 		}
+		if schema, ok := mappingValue(parameter, "schema"); ok {
+			if fixedValue := fixedValueAnnotation(schema); fixedValue != "" {
+				field.FixedValue = fixedValue
+				field.Required = false
+				field.Optional = true
+				field.Computed = true
+			}
+		}
 		if location == "path" {
 			field.PathParam = true
 		} else {
@@ -789,9 +834,15 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					fields[index].Required = true
-					fields[index].Optional = false
-					fields[index].Computed = false
+					if fields[index].FixedValue == "" {
+						fields[index].Required = true
+						fields[index].Optional = false
+						fields[index].Computed = false
+					} else {
+						fields[index].Required = false
+						fields[index].Optional = true
+						fields[index].Computed = true
+					}
 					fields[index].ForceNew = true
 					fields[index].QueryParam = true
 				}
@@ -811,6 +862,18 @@ func requestSchema(operation *yaml.Node) *yaml.Node {
 	}
 	schema, _ := mappingValue(mediaType, "schema")
 	return schema
+}
+
+func resetBody(operation *yaml.Node) any {
+	node, ok := mappingValue(operation, "x-terraform-delete-reset-body")
+	if !ok {
+		return nil
+	}
+	var output any
+	if err := node.Decode(&output); err != nil {
+		return nil
+	}
+	return output
 }
 
 func requestExamples(operation, examples *yaml.Node) []ExampleDef {
@@ -1065,6 +1128,13 @@ func stringAnnotation(node *yaml.Node, key string) (string, bool) {
 		return "", false
 	}
 	return value.Value, true
+}
+
+func fixedValueAnnotation(node *yaml.Node) string {
+	if value := scalarValue(node, "x-terraform-fixed-value"); value != "" {
+		return value
+	}
+	return scalarValue(node, "const")
 }
 
 func snake(value string) string {

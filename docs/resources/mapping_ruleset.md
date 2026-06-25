@@ -87,8 +87,11 @@ Required:
 
 Required:
 
-- `name` (String) Always <code>groupId</code> to specify the assignment type.
 - `value` (String) The <code>id</code> of the group to assign the Worker or Edge Node to if the Mapping Rule applies.
+
+Optional:
+
+- `name` (String) Always <code>groupId</code> to specify the assignment type.
 
 ## Import
 

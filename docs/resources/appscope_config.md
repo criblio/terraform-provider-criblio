@@ -396,7 +396,6 @@ Required:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--custom--config--event--transport))
-- `type` (String)
 - `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--custom--config--event--watch))
 
 <a id="nestedatt--config--custom--config--event--format"></a>
@@ -567,7 +566,6 @@ Required:
 - `enable` (Boolean)
 - `format` (Attributes) (see [below for nested schema](#nestedatt--config--event--format))
 - `transport` (Attributes) (see [below for nested schema](#nestedatt--config--event--transport))
-- `type` (String)
 - `watch` (Attributes List) (see [below for nested schema](#nestedatt--config--event--watch))
 
 <a id="nestedatt--config--event--format"></a>

@@ -293,10 +293,7 @@ func (m SchemaModel) MarshalJSON() ([]byte, error) {
 		output["id"] = value
 	}
 	if !m.Schema.IsNull() && !m.Schema.IsUnknown() {
-		value, err := SchemaTerraformValueToJSON(m.Schema)
-		if err != nil {
-			return nil, fmt.Errorf("convert schema to API value: %v", err)
-		}
+		value := m.Schema.ValueString()
 		output["schema"] = value
 	}
 	return json.Marshal(output)

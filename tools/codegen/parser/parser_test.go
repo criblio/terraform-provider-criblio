@@ -124,6 +124,18 @@ func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	if final.Required || !final.Optional || final.Computed {
 		t.Fatalf("mapping function final flags = required:%v optional:%v computed:%v", final.Required, final.Optional, final.Computed)
 	}
+	if final.FixedValue != "" {
+		t.Fatalf("mapping function final fixed value = %q", final.FixedValue)
+	}
+	functionConf := fieldByTFName(t, functions.Fields, "conf")
+	add := fieldByTFName(t, functionConf.Fields, "add")
+	name := fieldByTFName(t, add.Fields, "name")
+	if name.Required || !name.Optional || name.Computed {
+		t.Fatalf("mapping add name flags = required:%v optional:%v computed:%v", name.Required, name.Optional, name.Computed)
+	}
+	if name.FixedValue != "" {
+		t.Fatalf("mapping add name fixed value = %q", name.FixedValue)
+	}
 }
 
 func TestSearchResourcesHideGroupIDForBackwardCompatibility(t *testing.T) {
@@ -170,6 +182,67 @@ func TestNotificationHidesGroupIDForBackwardCompatibility(t *testing.T) {
 
 	if hasField(resource.Fields, "group_id") {
 		t.Fatalf("notification group_id should be hidden from Terraform schema")
+	}
+}
+
+func TestParseFixedSingletonIdentity(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /m/{groupId}/routes/{id}:
+    patch:
+      x-terraform-resource: true
+      x-terraform-resource-name: Routes
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Routes"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Routes"
+components:
+  schemas:
+    Routes:
+      type: object
+      required:
+        - id
+        - routes
+      properties:
+        id:
+          type: string
+          const: default
+          x-terraform-fixed-value: default
+        routes:
+          type: array
+          items:
+            type: string
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	routes := resourceByName(t, resources, "Routes")
+	id := fieldByTFName(t, routes.Fields, "id")
+	if id.FixedValue != "default" {
+		t.Fatalf("id fixed value = %q", id.FixedValue)
+	}
+	if id.Required || !id.Optional || !id.Computed || !id.PathParam || !id.ForceNew {
+		t.Fatalf("id flags = required:%v optional:%v computed:%v path:%v force:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.ForceNew)
 	}
 }
 
