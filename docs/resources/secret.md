@@ -14,11 +14,12 @@ Secret Resource
 
 ```terraform
 resource "criblio_secret" "my_secret" {
-  description = "API key for external service"
+  description = "Database credentials"
   group_id = "default"
-  id = "my-api-key"
-  secret_type = "text"
-  value = "supersecretvalue123"
+  id = "db-credentials"
+  password = "db_password"
+  secret_type = "credentials"
+  username = "db_user"
 }
 ```
 

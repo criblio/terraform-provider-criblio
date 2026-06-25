@@ -14,7 +14,8 @@ SearchEngine DataSource
 
 ```terraform
 data "criblio_search_engine" "my_searchengine" {
-  id = "local_ingest_primary"
+  group_id = "default_search"
+  id       = "local_ingest_primary"
 }
 ```
 
@@ -23,9 +24,21 @@ data "criblio_search_engine" "my_searchengine" {
 
 ### Required
 
+- `group_id` (String) Worker group ID.
 - `id` (String) The <code>id</code> of the Local Search engine to get.
 
 ### Read-Only
 
+- `active_workflow` (String) The provisioning workflow that is currently active for the lakehouse engine, if any.
+- `datasets` (List of String) The <code>id</code> values for Datasets that are linked to the lakehouse engine.
+- `deletion_started_at` (Integer) Timestamp (in Unix time) when deletion was initiated for the lakehouse engine (if applicable), in milliseconds.
 - `description` (String) Brief description of the lakehouse engine.
+- `effective_status` (String) Operational status of the lakehouse engine, accounting for both the engine and its underlying Worker Group.
+- `engine_type` (String) Type of engine. For lakehouse engines, always <code>local</code>.
+- `has_main` (Boolean) If <code>true</code>, the lakehouse engine currently owns the main Dataset.
+- `is_compute_deprovisioned` (Boolean) If <code>true</code>, compute for the lakehouse engine has been deprovisioned after termination.
+- `is_storage_deprovisioned` (Boolean) If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned up after termination.
+- `last_provisioned_ms` (Integer) Timestamp (in Unix time) when the lakehouse engine was last provisioned or updated, in milliseconds.
+- `metrics_last_published_at` (Integer) Timestamp (in Unix time) when the lakehouse engine metrics were last published, in milliseconds.
+- `status` (String)
 - `tier_size` (String) Storage and compute [tier size](https://docs.cribl.io/search/engine-setup/#sizes-list) for the lakehouse engine. Configuring sizes <code>3xlarge</code>, <code>4xlarge</code>,<code>5xlarge</code>, and <code>6xlarge</code> requires the <code>cribl_operator</code> role.

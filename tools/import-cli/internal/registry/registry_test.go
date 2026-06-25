@@ -144,12 +144,12 @@ func TestNewFromResources_derivedMetadata(t *testing.T) {
 	assert.Equal(t, "GetPipelineByID", e.GetMethod)
 	assert.Equal(t, "json:group_id,id", e.ImportIDFormat)
 
-	// Notification: id-only import
+	// Notification: generated REST resource, JSON group+id using the legacy group field.
 	e, ok = reg.ByTypeName("criblio_notification")
 	require.True(t, ok)
 	assert.Equal(t, "ListNotification", e.ListMethod)
 	assert.Equal(t, "GetNotificationByID", e.GetMethod)
-	assert.Equal(t, "id", e.ImportIDFormat)
+	assert.Equal(t, "json:group,id", e.ImportIDFormat)
 
 	// Lookup file: group_id-only import
 	e, ok = reg.ByTypeName("criblio_lookup_file")
@@ -157,6 +157,14 @@ func TestNewFromResources_derivedMetadata(t *testing.T) {
 	assert.Equal(t, "ListLookupFile", e.ListMethod)
 	assert.Equal(t, "GetLookupFileByID", e.GetMethod)
 	assert.Equal(t, "json:group_id,id", e.ImportIDFormat)
+
+	// Generated Search resources hide group_id and import by plain ID; the
+	// provider client always uses default_search internally.
+	e, ok = reg.ByTypeName("criblio_search_saved_query")
+	require.True(t, ok)
+	assert.Equal(t, "ListSavedQuery", e.ListMethod)
+	assert.Equal(t, "GetSavedQueryByID", e.GetMethod)
+	assert.Equal(t, "id", e.ImportIDFormat)
 }
 
 // TestImportMetadata_inSyncWithProvider ensures every resource type in the
@@ -234,8 +242,9 @@ func TestImportIDFormat_buildsValidImportID(t *testing.T) {
 	}{
 		{"criblio_source", map[string]string{"group_id": "default", "id": "input-1"}, []string{"group_id", "id", "default", "input-1"}},
 		{"criblio_pipeline", map[string]string{"group_id": "default", "id": "pipeline-1"}, []string{"group_id", "id", "default", "pipeline-1"}},
-		{"criblio_notification", map[string]string{"id": "notif-1"}, []string{"notif-1"}},
+		{"criblio_notification", map[string]string{"group": "default_search", "id": "notif-1"}, []string{"group", "id", "default_search", "notif-1"}},
 		{"criblio_lookup_file", map[string]string{"group_id": "default", "id": "model_relative_entropy_top_domains.csv"}, []string{"group_id", "id", "default", "model_relative_entropy_top_domains.csv"}},
+		{"criblio_search_saved_query", map[string]string{"id": "sq-errors"}, []string{"sq-errors"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.typeName, func(t *testing.T) {

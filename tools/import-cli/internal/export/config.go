@@ -5,6 +5,7 @@ package export
 // For oneOf resources, the OneOf.ReadOnlyAttr is added at runtime so this only needs extra entries when not using OneOf.
 var readOnlyAttrsByType = map[string][]string{
 	"criblio_certificate":             {"in_use", "passphrase"},                     // in_use is Computed; passphrase is write-only/sensitive
+	"criblio_cribl_lake_house":        {"status"},                                   // status is Computed-only and cannot be configured
 	"criblio_destination":             {"environment", "pipeline", "type"},          // root attrs are Computed-only (hoisted from active output_*); configure inside output_* only
 	"criblio_global_var":              {"items"},                                    // provider marks items as Computed only; config comes from GetByID and we flatten Items[0]
 	"criblio_grok":                    {"size", "tags"},                             // size/tags are API-owned and Computed-only
@@ -18,6 +19,29 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_search_dataset_provider": {"id", "description", "provider_id", "type"},
 	"criblio_search_dataset_ruleset":  {"items"}, // Computed mirror of API; config is `rules` only (matches provider schema).
 	"criblio_search_datatype_ruleset": {"items"}, // Computed mirror of API; config is `rules` only (same as provider schema intent).
+	"criblio_search_engine": {
+		"active_workflow",
+		"datasets",
+		"deletion_started_at",
+		"effective_status",
+		"engine_type",
+		"has_main",
+		"is_compute_deprovisioned",
+		"is_storage_deprovisioned",
+		"last_provisioned_ms",
+		"metrics_last_published_at",
+		"status",
+	},
+	"criblio_search_macro": {"created", "created_by", "modified"},
+	"criblio_search_saved_query": {
+		"display_username",
+		"is_system",
+		"lib",
+		"resolved_dataset_ids",
+		"search_job_source",
+		"table_config",
+	},
+	"criblio_notification": {"mode", "pack", "template_target_pairs"},
 }
 
 // flattenItemsToAttrsTypes are resource types whose API returns payload in a list (Items) and schema

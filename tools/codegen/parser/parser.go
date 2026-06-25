@@ -106,6 +106,19 @@ func collectOperations(resources map[string]*ResourceDef, schemas, examples *yam
 			resource.Create = operationDef(method, path, operation, examples)
 			resource.SchemaName = resource.Create.RequestSchema
 			resource.Action = boolAnnotation(operation, "x-terraform-action")
+			resource.NoRead = boolAnnotation(operation, "x-terraform-no-read")
+		}
+		if name, ok := stringAnnotation(operation, "x-terraform-list"); ok && name != "" {
+			resource := ensureResource(resources, name)
+			resource.List = operationDef(method, path, operation, examples)
+			listName, ok := stringAnnotation(operation, "x-terraform-list-name")
+			if !ok || listName == "" {
+				listName = name + "s"
+			}
+			resource.ListName = listName
+			resource.ListFileStem = snake(listName)
+			resource.ListStructName = exportName(listName)
+			resource.ListTypeName = "criblio_" + snake(listName)
 		}
 
 		for _, annotation := range []struct {
@@ -152,6 +165,7 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		PathParams:     pathParams(operation),
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
+		ReadAfterWrite: boolAnnotation(operation, "x-terraform-read-after-write"),
 	}
 }
 
@@ -162,6 +176,12 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 	}
 
 	postFields := schemaPropertySet(schema)
+	updateFields := map[string]bool{}
+	if resource.Update.RequestSchema != "" {
+		if updateSchema, ok := mappingValue(schemas, resource.Update.RequestSchema); ok {
+			updateFields = schemaPropertySet(updateSchema)
+		}
+	}
 	getFields := map[string]bool{}
 	if resource.Read.ResponseSchema != "" {
 		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
@@ -169,13 +189,13 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 		}
 	}
 
-	fields, variants, err := parseSchemaFields(resource.StructName, schema, schemas, postFields, getFields)
+	fields, variants, err := parseSchemaFields(resource.StructName, schema, schemas, postFields, updateFields, getFields)
 	if err != nil {
 		return err
 	}
 	if resource.Read.ResponseSchema != "" && resource.Read.ResponseSchema != resource.SchemaName {
 		if readSchema, ok := mappingValue(schemas, resource.Read.ResponseSchema); ok {
-			readFields, readVariants, err := parseSchemaFields(resource.StructName, readSchema, schemas, postFields, getFields)
+			readFields, readVariants, err := parseSchemaFields(resource.StructName, readSchema, schemas, postFields, updateFields, getFields)
 			if err != nil {
 				return err
 			}
@@ -221,6 +241,26 @@ func applyResourceCompatibility(resource *ResourceDef) {
 			}
 		}
 	}
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+	}
+	if resource.StructName == "Notification" {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+	}
 	if resource.StructName != "MappingRuleset" {
 		return
 	}
@@ -254,7 +294,7 @@ func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
 	}
 }
 
-func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {
+func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, updateFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {
 	required := requiredSet(schema)
 	properties, ok := mappingValue(schema, "properties")
 	if !ok || properties.Kind != yaml.MappingNode {
@@ -277,7 +317,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 				if !ok {
 					return nil, nil, fmt.Errorf("oneOf schema %q not found", schemaName)
 				}
-				variantFields, _, err := parseSchemaFields(schemaName, variantSchema, schemas, schemaPropertySet(variantSchema), schemaPropertySet(variantSchema))
+				variantFields, _, err := parseSchemaFields(schemaName, variantSchema, schemas, schemaPropertySet(variantSchema), schemaPropertySet(variantSchema), schemaPropertySet(variantSchema))
 				if err != nil {
 					return nil, nil, err
 				}
@@ -298,6 +338,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 			return nil, nil, err
 		}
 		field.RequestField = postFields[apiName]
+		field.UpdateField = updateFields[apiName]
 		field.Required = required[apiName]
 		field.Optional = !field.Required
 		if boolAnnotation(property, "readOnly") || boolAnnotation(property, "x-terraform-computed") || (getFields[apiName] && !postFields[apiName]) {
@@ -387,7 +428,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		} else if ok {
 			items = resolved
 		}
-		fields, _, err := parseSchemaFields(modelName+exportName(tfName), items, schemas, schemaPropertySet(items), schemaPropertySet(items))
+		fields, _, err := parseSchemaFields(modelName+exportName(tfName), items, schemas, schemaPropertySet(items), schemaPropertySet(items), schemaPropertySet(items))
 		if err != nil {
 			return FieldDef{}, err
 		}
@@ -405,7 +446,7 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			objectSchema = resolved
 		}
 		if properties, ok := mappingValue(objectSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
-			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))
+			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))
 			if err != nil {
 				return FieldDef{}, err
 			}
@@ -703,7 +744,21 @@ func responseSchema(operation *yaml.Node) *yaml.Node {
 	if !ok || responses.Kind != yaml.MappingNode {
 		return nil
 	}
-	response, ok := mappingValue(responses, "200")
+	for _, status := range []string{"200", "201", "202"} {
+		if schema := responseJSONSchema(responses, status); schema != nil {
+			return schema
+		}
+	}
+	for index := 0; index < len(responses.Content); index += 2 {
+		if schema := responseJSONSchema(responses, responses.Content[index].Value); schema != nil {
+			return schema
+		}
+	}
+	return nil
+}
+
+func responseJSONSchema(responses *yaml.Node, status string) *yaml.Node {
+	response, ok := mappingValue(responses, status)
 	if !ok {
 		return nil
 	}

@@ -22,7 +22,7 @@ cloud_domain = cribl-playground.cloud
 		"organizationId": "ian",
 		"workspaceId":    "main",
 		"cloudDomain":    "cribl.cloud",
-	})
+	}, map[string]bool{})
 
 	if credentials.ClientID != "profile-client" {
 		t.Fatalf("ClientID = %q, want profile-client", credentials.ClientID)
@@ -57,6 +57,10 @@ cloud_domain = cribl-playground.cloud
 		"organizationId": "provider-org",
 		"workspaceId":    "provider-workspace",
 		"cloudDomain":    "provider.cloud",
+	}, map[string]bool{
+		"organizationId": true,
+		"workspaceId":    true,
+		"cloudDomain":    true,
 	})
 
 	if credentials.ClientID != "provider-client" {
@@ -73,6 +77,34 @@ cloud_domain = cribl-playground.cloud
 	}
 	if credentials.CloudDomain != "provider.cloud" {
 		t.Fatalf("CloudDomain = %q, want provider.cloud", credentials.CloudDomain)
+	}
+}
+
+func TestProviderRestCredentialsExplicitDefaultDomainOverridesProfile(t *testing.T) {
+	writeCredentialsFile(t, `[default]
+client_id = profile-client
+client_secret = profile-secret
+organization_id = profile-org
+workspace = profile-workspace
+cloud_domain = cribl-playground.cloud
+`)
+
+	credentials := providerRestCredentials(&shared.SchemeClientOauth{}, map[string]string{
+		"organizationId": "ian",
+		"workspaceId":    "main",
+		"cloudDomain":    "cribl.cloud",
+	}, map[string]bool{
+		"cloudDomain": true,
+	})
+
+	if credentials.OrganizationID != "profile-org" {
+		t.Fatalf("OrganizationID = %q, want profile-org", credentials.OrganizationID)
+	}
+	if credentials.Workspace != "profile-workspace" {
+		t.Fatalf("Workspace = %q, want profile-workspace", credentials.Workspace)
+	}
+	if credentials.CloudDomain != "cribl.cloud" {
+		t.Fatalf("CloudDomain = %q, want cribl.cloud", credentials.CloudDomain)
 	}
 }
 

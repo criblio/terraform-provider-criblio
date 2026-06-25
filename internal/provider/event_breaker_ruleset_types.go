@@ -422,6 +422,52 @@ func (m EventBreakerRulesetModel) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(output)
 }
+func (m EventBreakerRulesetModel) updateBody() (map[string]any, error) {
+	output := map[string]any{}
+	if !m.Description.IsNull() && !m.Description.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.Description)
+		if err != nil {
+			return nil, fmt.Errorf("convert description to API value: %v", err)
+		}
+		output["description"] = value
+	}
+	if !m.ID.IsNull() && !m.ID.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.ID)
+		if err != nil {
+			return nil, fmt.Errorf("convert id to API value: %v", err)
+		}
+		output["id"] = value
+	}
+	if !m.Lib.IsNull() && !m.Lib.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.Lib)
+		if err != nil {
+			return nil, fmt.Errorf("convert lib to API value: %v", err)
+		}
+		output["lib"] = value
+	}
+	if !m.MinRawLength.IsNull() && !m.MinRawLength.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.MinRawLength)
+		if err != nil {
+			return nil, fmt.Errorf("convert min_raw_length to API value: %v", err)
+		}
+		output["minRawLength"] = value
+	}
+	if !m.Rules.IsNull() && !m.Rules.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.Rules)
+		if err != nil {
+			return nil, fmt.Errorf("convert rules to API value: %v", err)
+		}
+		output["rules"] = value
+	}
+	if !m.Tags.IsNull() && !m.Tags.IsUnknown() {
+		value, err := EventBreakerRulesetTerraformValueToJSON(m.Tags)
+		if err != nil {
+			return nil, fmt.Errorf("convert tags to API value: %v", err)
+		}
+		output["tags"] = value
+	}
+	return output, nil
+}
 
 func (m *EventBreakerRulesetModel) UnmarshalJSON(data []byte) error {
 	var input EventBreakerRulesetAPIModel

@@ -308,6 +308,9 @@ func applyCertificateAPIToState(api *CertificateModel, state *CertificateModel, 
 	} else if state.InUse.IsNull() || state.InUse.IsUnknown() {
 		state.InUse = types.ListValueMust(types.StringType, nil)
 	}
+	if elementType := state.InUse.ElementType(context.Background()); elementType == nil {
+		state.InUse = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Passphrase.IsNull() || state.Passphrase.IsUnknown())) {
 		if !api.Passphrase.IsNull() && !api.Passphrase.IsUnknown() {
 			state.Passphrase = stringFromAPIOrPrior(api.Passphrase.ValueString(), state.Passphrase)

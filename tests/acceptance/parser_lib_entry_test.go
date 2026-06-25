@@ -22,7 +22,7 @@ func TestParserLibEntry(t *testing.T) {
 				Config: parserLibEntryConfig("Parser for delimited logs", "delim"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "group_id", "default_search"),
-					resource.TestCheckResourceAttr(resourceName, "id", "test_parser_lib_entry_phase2"),
+					resource.TestCheckResourceAttr(resourceName, "id", "test_parser_lib_entry"),
 					resource.TestCheckResourceAttr(resourceName, "description", "Parser for delimited logs"),
 					resource.TestCheckResourceAttr(resourceName, "type", "delim"),
 				),
@@ -38,7 +38,7 @@ func TestParserLibEntry(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default_search","id":"test_parser_lib_entry_phase2"}`,
+				ImportStateId:     `{"group_id":"default_search","id":"test_parser_lib_entry"}`,
 				ImportStateVerify: true,
 			},
 		},
@@ -49,9 +49,9 @@ func parserLibEntryConfig(description, parserType string) string {
 	return `resource "criblio_parser_lib_entry" "my_parser" {
   description = "` + description + `"
   group_id    = "default_search"
-  id          = "test_parser_lib_entry_phase2"
+  id          = "test_parser_lib_entry"
   lib         = "custom"
-  tags        = "phase2"
+  tags        = "test"
   type        = "` + parserType + `"
 }
 `

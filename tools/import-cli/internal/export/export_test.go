@@ -383,6 +383,22 @@ func TestGroupIDFromIDMap(t *testing.T) {
 	})
 }
 
+func TestImportIDMapForType(t *testing.T) {
+	t.Run("notification uses legacy group field for import ID", func(t *testing.T) {
+		idMap := map[string]string{"group_id": "default_search", "id": "notif-1"}
+		got := importIDMapForType("criblio_notification", idMap)
+		assert.Equal(t, "default_search", got["group"])
+		assert.Equal(t, "default_search", got["group_id"])
+		assert.Equal(t, "", idMap["group"])
+	})
+	t.Run("key maps id to key_id", func(t *testing.T) {
+		idMap := map[string]string{"group_id": "default", "id": "key-1"}
+		got := importIDMapForType("criblio_key", idMap)
+		assert.Equal(t, "key-1", got["key_id"])
+		assert.Equal(t, "", idMap["key_id"])
+	})
+}
+
 func TestSkipExportForGroupFilter(t *testing.T) {
 	t.Run("no filter never skips", func(t *testing.T) {
 		assert.False(t, skipExportForGroupFilter("criblio_search_dataset", map[string]string{"id": "x"}, nil, []string{"stream-leaders"}))

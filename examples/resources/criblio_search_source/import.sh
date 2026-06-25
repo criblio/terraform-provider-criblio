@@ -1,1 +1,1 @@
-terraform import criblio_search_source.my_criblio_search_source "..."
+terraform import criblio_search_source.my_criblio_search_source in_cribl_http_primary

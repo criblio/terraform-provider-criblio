@@ -194,12 +194,14 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: EventBreakerRuleset
+      x-terraform-read-after-write: true
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.get"
     update:
       x-terraform-read: EventBreakerRuleset
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.patch"
     update:
       x-terraform-update: EventBreakerRuleset
+      x-terraform-read-after-write: true
   - target: "$.paths./m/{groupId}/lib/breakers/{id}.delete"
     update:
       x-terraform-delete: EventBreakerRuleset
@@ -217,27 +219,39 @@ actions:
       x-terraform-suppress-diff: explicit
       items:
         properties:
+          fields:
+            x-terraform-optional-computed: true
+          parserEnabled:
+            x-terraform-optional-computed: true
+          shouldUseDataRaw:
+            x-terraform-optional-computed: true
           delimiter:
             type: string
             title: Field delimiter
+            x-terraform-optional-computed: true
           delimiterRegex:
             type: string
             title: Field delimiter regex
+            x-terraform-optional-computed: true
           escapeChar:
             type: string
             title: Escape character
+            x-terraform-optional-computed: true
           eventBreakerRegex:
             type: string
             title: Event breaker regex
           fieldsLineRegex:
             type: string
             title: Fields line regex
+            x-terraform-optional-computed: true
           headerLineRegex:
             type: string
             title: Header line regex
+            x-terraform-optional-computed: true
           quoteChar:
             type: string
             title: Quote character
+            x-terraform-optional-computed: true
 
   - target: "$.paths./m/{groupId}/lib/hmac-functions.post"
     update:
@@ -530,11 +544,784 @@ actions:
                 type: string
                 description: The Worker Group to map matching events to.
 
+  - target: "$.paths./m/{groupId}/search/dashboard-categories.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.get"
+    update:
+      x-terraform-read: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.patch"
+    update:
+      x-terraform-update: SearchDashboardCategory
+  - target: "$.paths./m/{groupId}/search/dashboard-categories/{id}.delete"
+    update:
+      x-terraform-delete: SearchDashboardCategory
+  - target: "$.components.schemas.DashboardCategory.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DashboardCategory.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DashboardCategory.properties.isPack"
+    update:
+      x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/local_search/engines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.get"
+    update:
+      x-terraform-read: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.patch"
+    update:
+      x-terraform-update: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.delete"
+    update:
+      x-terraform-delete: SearchEngine
+  - target: "$.components.schemas.LocalSearchEngine.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LocalSearchEngine.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.activeWorkflow"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.datasets"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.deletionStartedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.effectiveStatus"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.engineType"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.hasMain"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.isComputeDeprovisioned"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.isStorageDeprovisioned"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.lastProvisionedMs"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.metricsLastPublishedAt"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.LocalSearchEngine.properties.status"
+    update:
+      x-terraform-computed: true
+
+  - target: "$.components.schemas"
+    update:
+      CriblLakeHouse:
+        type: object
+        required:
+          - id
+          - tierSize
+        properties:
+          id:
+            type: string
+            description: Unique identifier for the lakehouse
+            x-terraform-force-new: true
+            x-terraform-suppress-diff: explicit
+          description:
+            type: string
+            description: Description of the lakehouse
+            x-terraform-optional-computed: true
+          status:
+            type: string
+            description: Status of the lakehouse
+            x-terraform-computed: true
+          tierSize:
+            type: string
+            description: Size of the lakehouse tier
+            default: small
+            enum:
+              - small
+              - medium
+              - large
+              - xlarge
+              - 2xlarge
+              - 3xlarge
+              - 6xlarge
+            x-terraform-optional-computed: true
+        x-terraform-examples:
+          - id: test_lakehouse
+            description: Test Lakehouse
+            tierSize: medium
+      CountedCriblLakeHouse:
+        type: object
+        properties:
+          count:
+            type: integer
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/CriblLakeHouse"
+      LakehouseDatasetConnection:
+        type: object
+        properties: {}
+  - target: "$.paths"
+    update:
+      /products/lake/lakes/default/lakehouses:
+        post:
+          operationId: createDefaultLakeLakehouse
+          x-terraform-resource: true
+          x-terraform-resource-name: CriblLakeHouse
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CriblLakeHouse"
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedCriblLakeHouse"
+        get:
+          operationId: listDefaultLakeLakehouses
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedCriblLakeHouse"
+      /products/lake/lakes/default/lakehouses/{id}:
+        get:
+          operationId: getDefaultLakeLakehouseById
+          x-terraform-read: CriblLakeHouse
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse to retrieve
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedCriblLakeHouse"
+        patch:
+          operationId: updateDefaultLakeLakehouseById
+          x-terraform-update: CriblLakeHouse
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse to update
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CriblLakeHouse"
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedCriblLakeHouse"
+        delete:
+          operationId: deleteDefaultLakeLakehouseById
+          x-terraform-delete: CriblLakeHouse
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse to delete
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CountedCriblLakeHouse"
+      /products/lake/lakes/default/lakehouses/{lakehouse_id}/datasets/{lake_dataset_id}/connections:
+        post:
+          operationId: createLakehouseDatasetConnections
+          x-terraform-resource: true
+          x-terraform-resource-name: LakehouseDatasetConnection
+          x-terraform-no-read: true
+          parameters:
+            - name: lakehouse_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse
+            - name: lake_dataset_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the dataset within the lakehouse
+          requestBody:
+            required: false
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LakehouseDatasetConnection"
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/LakehouseDatasetConnection"
+        patch:
+          operationId: updateLakehouseDatasetConnections
+          x-terraform-update: LakehouseDatasetConnection
+          parameters:
+            - name: lakehouse_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse
+            - name: lake_dataset_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the dataset within the lakehouse
+          requestBody:
+            required: false
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LakehouseDatasetConnection"
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/LakehouseDatasetConnection"
+        delete:
+          operationId: deleteLakehouseDatasetConnections
+          x-terraform-delete: LakehouseDatasetConnection
+          parameters:
+            - name: lakehouse_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the lakehouse
+            - name: lake_dataset_id
+              in: path
+              required: true
+              schema:
+                type: string
+              description: The ID of the dataset within the lakehouse
+          responses:
+            "200":
+              content:
+                application/json:
+                  schema:
+                    type: object
+  - target: "$.paths./products/lake/lakes/{lakeId}/datasets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: CriblLakeDataset
+  - target: "$.paths./products/lake/lakes/{lakeId}/datasets/{id}.get"
+    update:
+      x-terraform-read: CriblLakeDataset
+  - target: "$.paths./products/lake/lakes/{lakeId}/datasets/{id}.patch"
+    update:
+      x-terraform-update: CriblLakeDataset
+  - target: "$.paths./products/lake/lakes/{lakeId}/datasets/{id}.delete"
+    update:
+      x-terraform-delete: CriblLakeDataset
+  - target: "$.components.examples.LakeDatasetCreateExamplesJsonDataset.value"
+    replace:
+      id: web_access_logs
+      description: Web server access logs
+      bucketName: lake-tfprovider-beautiful-nguyen-y8y4azd
+      format: json
+      retentionPeriodInDays: 90
+      acceleratedFields:
+        - host
+        - status
+  - target: "$.components.schemas.CriblLakeDataset"
+    replace:
+      type: object
+      required:
+        - id
+      properties:
+        acceleratedFields:
+          type: array
+          items:
+            type: string
+          description: Accelerated fields for the Dataset.
+          x-terraform-optional-computed: true
+        bucketName:
+          type: string
+          description: Name of the legacy Cribl Lake bucket that backs the Dataset.
+          x-terraform-optional-computed: true
+        description:
+          type: string
+          description: Brief description of the Dataset.
+          x-terraform-optional-computed: true
+        format:
+          $ref: "#/components/schemas/FormatOptionsCriblLakeDataset"
+          x-terraform-optional-computed: true
+        id:
+          type: string
+          description: Unique identifier for the Dataset.
+          x-terraform-force-new: true
+          x-terraform-suppress-diff: explicit
+        retentionPeriodInDays:
+          type: integer
+          description: Dataset retention period, in days.
+          x-terraform-optional-computed: true
+        searchConfig:
+          $ref: "#/components/schemas/LakeDatasetSearchConfig"
+          description: Search configuration for the Dataset.
+          x-terraform-optional-computed: true
+        storageClass:
+          $ref: "#/components/schemas/StorageClassOptionsCriblLakeDataset"
+          x-terraform-optional-computed: true
+        storageLocationId:
+          type: string
+          description: Identifier for the Storage Location that backs the Dataset.
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.CriblLakeDatasetUpdate"
+    replace:
+      type: object
+      properties:
+        acceleratedFields:
+          type: array
+          items:
+            type: string
+          description: Accelerated fields for the Dataset.
+          x-terraform-optional-computed: true
+        bucketName:
+          type: string
+          description: Name of the legacy Cribl Lake bucket that backs the Dataset.
+          x-terraform-optional-computed: true
+        description:
+          type: string
+          description: Brief description of the Dataset.
+          x-terraform-optional-computed: true
+        format:
+          $ref: "#/components/schemas/FormatOptionsCriblLakeDataset"
+          x-terraform-optional-computed: true
+        id:
+          type: string
+          description: Dataset identifier.
+          x-terraform-force-new: true
+          x-terraform-suppress-diff: explicit
+        retentionPeriodInDays:
+          type: integer
+          description: Dataset retention period, in days.
+          x-terraform-optional-computed: true
+        searchConfig:
+          $ref: "#/components/schemas/LakeDatasetSearchConfig"
+          description: Search configuration for the Dataset.
+          x-terraform-optional-computed: true
+        storageClass:
+          $ref: "#/components/schemas/StorageClassOptionsCriblLakeDataset"
+          x-terraform-optional-computed: true
+        storageLocationId:
+          type: string
+          description: Identifier for the Storage Location that backs the Dataset.
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.LakeDatasetSearchConfig"
+    replace:
+      type: object
+      properties:
+        datatypes:
+          type: array
+          items:
+            type: string
+          description: Datatype identifiers assigned to the Dataset.
+          x-terraform-optional-computed: true
+        metadata:
+          type: object
+          description: Key-value metadata for the Dataset search configuration.
+          x-terraform-optional-computed: true
+          properties:
+            created:
+              type: string
+              description: Creation timestamp.
+              x-terraform-optional-computed: true
+            enableAcceleration:
+              type: boolean
+              description: Whether acceleration is enabled for this dataset.
+              x-terraform-optional-computed: true
+            modified:
+              type: string
+              description: Last modification timestamp.
+              x-terraform-optional-computed: true
+            tags:
+              type: array
+              items:
+                type: string
+              description: Tags associated with the dataset.
+              x-terraform-optional-computed: true
+  - target: "$.paths./m/{groupId}/search/macros.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.get"
+    update:
+      x-terraform-read: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.patch"
+    update:
+      x-terraform-update: SearchMacro
+  - target: "$.paths./m/{groupId}/search/macros/{id}.delete"
+    update:
+      x-terraform-delete: SearchMacro
+  - target: "$.components.schemas.SearchMacro.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.SearchMacro.properties.created"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.createdBy"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.modified"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SearchMacro.properties.tags"
+    update:
+      x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/saved.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.get"
+    update:
+      x-terraform-read: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.patch"
+    update:
+      x-terraform-update: SearchSavedQuery
+  - target: "$.paths./m/{groupId}/search/saved/{id}.delete"
+    update:
+      x-terraform-delete: SearchSavedQuery
+  - target: "$.components.schemas.SavedQuery.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.SavedQuery.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.earliest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.latest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.isPrivate"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.displayUsername"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.isSystem"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.lib"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.resolvedDatasetIds"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.searchJobSource"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.tableConfig"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.SavedQuery.properties.user"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.notifications.properties.items"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.resumeMissed"
+    update:
+      x-terraform-ignore: true
+  - target: "$.components.schemas.SavedQuerySchedule.properties.resumeOnBoot"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/search/local_search/sources.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.get"
+    update:
+      x-terraform-read: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.patch"
+    update:
+      x-terraform-update: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.delete"
+    update:
+      x-terraform-delete: SearchSource
+  - target: "$.components.schemas.LocalSearchSource.properties"
+    update:
+      splunkHecAPI:
+        type: string
+        description: Absolute path for Splunk HTTP Event Collector (HEC) API requests. Required when type is splunk_hec.
+        pattern: ^/|^$
+      splunkHecAcks:
+        type: boolean
+        description: When true, enable Splunk HEC acknowledgements. Used when type is splunk_hec.
+      criblAPI:
+        type: string
+        description: Absolute path for Cribl HTTP API requests. Used when type is cribl_http.
+        pattern: ^/|^$
+      elasticAPI:
+        type: string
+        description: Absolute path for Elasticsearch bulk API requests. Used when type is elastic.
+        pattern: ^/|^$
+      prometheusAPI:
+        type: string
+        description: Absolute path for Prometheus remote write requests. Used when type is prometheus_rw.
+        pattern: ^/
+      tcpPort:
+        type: integer
+        minimum: 0
+        maximum: 65535
+        description: TCP listen port when the source type uses a dedicated TCP port.
+      udpPort:
+        type: integer
+        minimum: 0
+        maximum: 65535
+        description: UDP listen port when applicable.
+      subscriptions:
+        type: array
+        description: WEF subscriptions; required when type is wef.
+        items:
+          $ref: "#/components/schemas/LocalSearchSourceWefSubscriptionItem"
+  - target: "$.components.schemas"
+    update:
+      LocalSearchSourceWefSubscriptionItem:
+        type: object
+        description: WEF subscription entry for Local Search when type is wef.
+        required:
+          - subscriptionName
+          - contentFormat
+          - heartbeatInterval
+          - batchTimeout
+          - targets
+        properties:
+          subscriptionName:
+            type: string
+            description: Subscription name exposed to Windows clients.
+          version:
+            type: string
+            description: Version UUID for this subscription.
+          contentFormat:
+            type: string
+            enum:
+              - Raw
+              - RenderedText
+            description: Content format for delivered events.
+            x-speakeasy-unknown-values: allow
+          heartbeatInterval:
+            type: number
+            minimum: 1
+            description: Maximum seconds between endpoint check-ins before marking unavailable.
+          batchTimeout:
+            type: number
+            minimum: 0
+            description: Seconds to collect events before sending to Cribl.
+          readExistingEvents:
+            type: boolean
+            x-terraform-ignore: true
+          sendBookmarks:
+            type: boolean
+            x-terraform-ignore: true
+          compress:
+            type: boolean
+            x-terraform-ignore: true
+          targets:
+            type: array
+            description: DNS names of endpoints that forward these events.
+            items:
+              type: string
+              minLength: 1
+          locale:
+            type: string
+            x-terraform-ignore: true
+          metadata:
+            type: array
+            x-terraform-ignore: true
+            items:
+              type: object
+              additionalProperties: true
+          id:
+            type: string
+          querySelector:
+            type: string
+            description: Query builder mode; simple with queries, or xml with xmlQuery.
+            enum:
+              - simple
+              - xml
+            x-speakeasy-unknown-values: allow
+          queries:
+            type: array
+            description: Path and XPath selector entries when using simple mode.
+            items:
+              type: object
+              required:
+                - path
+                - queryExpression
+              properties:
+                path:
+                  type: string
+                queryExpression:
+                  type: string
+          xmlQuery:
+            type: string
+            description: XPath query when using xml mode.
+  - target: "$.components.schemas.LocalSearchSource.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LocalSearchSource.properties.description"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.authTokens"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.port"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.tls"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.LocalSearchSource.properties.status"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/notifications.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.get"
+    update:
+      x-terraform-read: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.patch"
+    update:
+      x-terraform-update: Notification
+  - target: "$.paths./m/{groupId}/notifications/{id}.delete"
+    update:
+      x-terraform-delete: Notification
+  - target: "$.components.examples.CreateNotificationExamplesHighVolumeSource.value"
+    update:
+      group: default
+  - target: "$.components.examples.CreateNotificationExamplesUnhealthyDestination.value"
+    update:
+      group: default
+  - target: "$.components.examples.UpdateNotificationExamplesUpdateHighVolumeSource.value"
+    update:
+      group: default
+  - target: "$.components.schemas.Notification.properties.id"
+    update:
+      x-terraform-force-new: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Notification.properties.disabled"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.targets"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.targetConfigs"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.conf"
+    update:
+      x-terraform-optional-computed: true
+      properties:
+        savedQueryId:
+          type: string
+          description: ID of the saved query this notification is associated with.
+        message:
+          type: string
+          description: Message template for the notification.
+        triggerType:
+          type: string
+          description: Type of trigger.
+        triggerComparator:
+          type: string
+          description: Comparison operator.
+        triggerCount:
+          type: number
+          description: Threshold count for the trigger.
+        name:
+          type: string
+          description: Input or source ID for Stream notifications.
+        timeWindow:
+          type: string
+          description: Time window for the metric.
+        dataVolume:
+          type: string
+          description: Data volume threshold.
+        notifyOnResolution:
+          type: boolean
+          description: Notify when the condition returns to the resolved state.
+        usageThreshold:
+          type: number
+          description: Persistent queue usage threshold.
+        __workerGroup:
+          type: string
+          description: Optional scope to a specific worker group.
+  - target: "$.components.schemas.Notification.properties.metadata"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.group"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.Notification.properties.pack"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.Notification.properties.mode"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.Notification.properties.templateTargetPairs"
+    update:
+      x-terraform-computed: true
+
   - target: "$.paths./version/commit.post"
     update:
       x-terraform-resource: true
       x-terraform-resource-name: Commit
       x-terraform-action: true
+
+  - target: "$.components.examples.VersionCommitExamplesCommitAll.value"
+    update:
+      group: default
+  - target: "$.components.examples.VersionCommitExamplesCommitSpecificFiles.value"
+    update:
+      group: default
 
   - target: "$.components.schemas.GitCommitBody.properties"
     update:

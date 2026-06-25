@@ -36,30 +36,24 @@ func (d *ProjectDataSource) Schema(_ context.Context, _ datasource.SchemaRequest
 		MarkdownDescription: "Project Data Source",
 		Attributes: map[string]schema.Attribute{
 			"consumers": schema.MapAttribute{
-				Required:    false,
 				Computed:    true,
 				ElementType: types.StringType,
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"destinations": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				ElementType: types.StringType,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"subscriptions": schema.ListAttribute{
-				Required:    false,
 				Computed:    true,
 				ElementType: types.StringType,
 			},

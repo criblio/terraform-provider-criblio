@@ -36,29 +36,23 @@ func (d *EventBreakerRulesetDataSource) Schema(_ context.Context, _ datasource.S
 		MarkdownDescription: "EventBreakerRuleset Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"lib": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"min_raw_length": schema.Float64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `The  minimum number of characters in _raw to determine which rule to use`,
 			},
 			"rules": schema.ListNestedAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `A list of rules that will be applied, in order, to the input data stream`,
 				NestedObject: schema.NestedAttributeObject{
@@ -80,6 +74,17 @@ func (d *EventBreakerRulesetDataSource) Schema(_ context.Context, _ datasource.S
 						"timestamp": schema.SingleNestedAttribute{
 							Computed:    true,
 							Description: `Auto, manual format (strptime), or current time`,
+							Attributes: map[string]schema.Attribute{
+								"type": schema.StringAttribute{
+									Computed: true,
+								},
+								"length": schema.Float64Attribute{
+									Computed: true,
+								},
+								"format": schema.StringAttribute{
+									Computed: true,
+								},
+							},
 						},
 						"timestamp_timezone": schema.StringAttribute{
 							Computed:    true,
@@ -100,6 +105,17 @@ func (d *EventBreakerRulesetDataSource) Schema(_ context.Context, _ datasource.S
 						"fields": schema.ListNestedAttribute{
 							Computed:    true,
 							Description: `Key-value pairs to be added to each event`,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"name": schema.StringAttribute{
+										Computed: true,
+									},
+									"value": schema.StringAttribute{
+										Computed:    true,
+										Description: `The JavaScript expression used to compute the field's value (can be constant)`,
+									},
+								},
+							},
 						},
 						"disabled": schema.BoolAttribute{
 							Computed:    true,
@@ -141,7 +157,6 @@ func (d *EventBreakerRulesetDataSource) Schema(_ context.Context, _ datasource.S
 				},
 			},
 			"tags": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 		},

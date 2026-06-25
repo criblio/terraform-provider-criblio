@@ -1,7 +1,7 @@
 resource "criblio_search_dashboard_category" "my_searchdashboardcategory" {
   description = "test"
   id          = "test_dashboard_category"
-  is_pack     = true
+  is_pack     = false
   name        = "test_dashboard_category"
 }
 

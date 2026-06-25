@@ -1,0 +1,37 @@
+actions:
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Workspace
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces.get"
+    update:
+      x-terraform-list: Workspace
+      x-terraform-list-name: Workspaces
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces/{workspaceId}.get"
+    update:
+      x-terraform-read: Workspace
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces/{workspaceId}.patch"
+    update:
+      x-terraform-update: Workspace
+      x-terraform-read-after-write: true
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces/{workspaceId}.delete"
+    update:
+      x-terraform-delete: Workspace
+  - target: "$.components.schemas.WorkspaceSchema.properties.workspaceId"
+    update:
+      x-terraform-name: workspace_id
+      x-terraform-force-new: true
+  - target: "$.components.schemas.WorkspaceCreateRequestDTO.properties.workspaceId"
+    update:
+      x-terraform-name: workspace_id
+      x-terraform-force-new: true
+  - target: "$.components.schemas.WorkspaceSchema.properties.leaderFQDN"
+    update:
+      x-terraform-name: leader_fqdn
+      x-terraform-computed: true
+  - target: "$.components.schemas.WorkspaceSchema.properties.region"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.WorkspaceSchema.properties.state"
+    update:
+      x-terraform-computed: true

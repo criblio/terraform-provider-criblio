@@ -13,8 +13,7 @@ resource "criblio_search_source" "cribl_http" {
 
   cribl_api = "/cribl/_bulk"
   tls = {
-    disabled    = false
-    min_version = "TLSv1.3"
+    disabled = true
   }
 }
 

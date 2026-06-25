@@ -144,6 +144,50 @@ func TestParseIniConfigLoadFailure(t *testing.T) {
 	}
 }
 
+func TestGetCredentialsEnvOverridesProfileFields(t *testing.T) {
+	clearCredentialEnv(t)
+	home := setTestHome(t)
+	t.Setenv("CRIBL_ORGANIZATION_ID", "env-org")
+	t.Setenv("CRIBL_WORKSPACE_ID", "env-workspace")
+	t.Setenv("CRIBL_CLOUD_DOMAIN", "cribl.cloud")
+
+	creds := `[default]
+		  client_id = profile-client
+		  client_secret = profile-secret
+		  organization_id = profile-org
+		  workspace = profile-workspace
+		  cloud_domain = cribl-playground.cloud`
+
+	path := filepath.Join(home, ".cribl")
+	if err := os.Mkdir(path, 0777); err != nil {
+		t.Errorf("Could not write temporary config directory: %s", err)
+	}
+	if err := os.WriteFile(filepath.Join(path, "credentials"), []byte(creds), 0644); err != nil {
+		t.Errorf("Could not write temporary config file: %s", err)
+	}
+
+	cfg, err := GetCredentials()
+	if err != nil {
+		t.Fatalf("GetCredentials threw an error in operation: %s", err)
+	}
+
+	if cfg.ClientID != "profile-client" {
+		t.Errorf("ClientID = %q, want profile-client", cfg.ClientID)
+	}
+	if cfg.ClientSecret != "profile-secret" {
+		t.Errorf("ClientSecret = %q, want profile-secret", cfg.ClientSecret)
+	}
+	if cfg.OrganizationID != "env-org" {
+		t.Errorf("OrganizationID = %q, want env-org", cfg.OrganizationID)
+	}
+	if cfg.Workspace != "env-workspace" {
+		t.Errorf("Workspace = %q, want env-workspace", cfg.Workspace)
+	}
+	if cfg.CloudDomain != "cribl.cloud" {
+		t.Errorf("CloudDomain = %q, want cribl.cloud", cfg.CloudDomain)
+	}
+}
+
 func TestGetCredentialsJSONFile(t *testing.T) {
 	clearCredentialEnv(t)
 	home := setTestHome(t)

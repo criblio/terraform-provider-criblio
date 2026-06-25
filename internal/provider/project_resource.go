@@ -238,6 +238,9 @@ func applyProjectAPIToState(api *ProjectModel, state *ProjectModel, preserveInpu
 			state.Destinations = api.Destinations
 		}
 	}
+	if elementType := state.Destinations.ElementType(context.Background()); elementType == nil {
+		state.Destinations = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
@@ -252,6 +255,9 @@ func applyProjectAPIToState(api *ProjectModel, state *ProjectModel, preserveInpu
 		if !api.Subscriptions.IsNull() && !api.Subscriptions.IsUnknown() {
 			state.Subscriptions = api.Subscriptions
 		}
+	}
+	if elementType := state.Subscriptions.ElementType(context.Background()); elementType == nil {
+		state.Subscriptions = types.ListNull(types.StringType)
 	}
 }
 

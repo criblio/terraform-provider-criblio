@@ -265,6 +265,9 @@ func applyHmacFunctionAPIToState(api *HmacFunctionModel, state *HmacFunctionMode
 			state.StringBuilders = api.StringBuilders
 		}
 	}
+	if elementType := state.StringBuilders.ElementType(context.Background()); elementType == nil {
+		state.StringBuilders = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.StringDelim.IsNull() || state.StringDelim.IsUnknown())) {
 		if !api.StringDelim.IsNull() && !api.StringDelim.IsUnknown() {
 			state.StringDelim = api.StringDelim

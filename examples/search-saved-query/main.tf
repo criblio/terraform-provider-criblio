@@ -11,7 +11,6 @@ resource "criblio_search_saved_query" "my_searchsavedquery" {
     keep_last_n   = 2
     notifications = {
       disabled = false
-      items    = []
     }
   }
 }
@@ -40,6 +39,7 @@ resource "criblio_search_saved_query" "my_searchsavedquery_with_notifications" {
 
 resource "criblio_notification" "my_notification" {
   id        = "test_notification"
+  group_id  = "default_search"
   condition = "search"
   conf = {
     trigger_type       = "resultsCount"
@@ -57,10 +57,6 @@ resource "criblio_notification" "my_notification" {
   target_configs = [
     {
       id = criblio_notification_target.my_notificationtarget.id
-      conf = {
-        include_results = true
-        attachment_type = "inline"
-      }
     }
   ]
 }

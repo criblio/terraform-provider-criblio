@@ -1,1 +1,0 @@
-../../../../../examples/subscription/main.tf

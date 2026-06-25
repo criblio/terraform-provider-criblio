@@ -250,6 +250,9 @@ func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fil
 	if !api.Algorithm.IsNull() && !api.Algorithm.IsUnknown() {
 		state.Algorithm = api.Algorithm
 	}
+	if state.Algorithm.IsUnknown() {
+		state.Algorithm = types.StringNull()
+	}
 	if !api.Created.IsNull() && !api.Created.IsUnknown() {
 		state.Created = api.Created
 	} else if state.Created.IsNull() || state.Created.IsUnknown() {
@@ -283,6 +286,9 @@ func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fil
 	if !api.IvSize.IsNull() && !api.IvSize.IsUnknown() {
 		state.IvSize = api.IvSize
 	}
+	if state.IvSize.IsUnknown() {
+		state.IvSize = types.Int64Null()
+	}
 	if !api.KeyID.IsNull() && !api.KeyID.IsUnknown() {
 		state.KeyID = api.KeyID
 	} else if state.KeyID.IsNull() || state.KeyID.IsUnknown() {
@@ -291,8 +297,14 @@ func applyKeyAPIToState(api *KeyModel, state *KeyModel, preserveInputs bool, fil
 	if !api.Keyclass.IsNull() && !api.Keyclass.IsUnknown() {
 		state.Keyclass = api.Keyclass
 	}
+	if state.Keyclass.IsUnknown() {
+		state.Keyclass = types.Float64Null()
+	}
 	if !api.Kms.IsNull() && !api.Kms.IsUnknown() {
 		state.Kms = api.Kms
+	}
+	if state.Kms.IsUnknown() {
+		state.Kms = types.StringNull()
 	}
 	if !preserveInputs || (fillMissingInputs && (state.UseIV.IsNull() || state.UseIV.IsUnknown())) {
 		if !api.UseIV.IsNull() && !api.UseIV.IsUnknown() {

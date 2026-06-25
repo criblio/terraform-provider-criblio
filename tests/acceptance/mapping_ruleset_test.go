@@ -22,23 +22,23 @@ func TestMappingRuleset(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: mappingRulesetConfig(product, final, "phase2 mapping", "true", id),
+				Config: mappingRulesetConfig(product, final, "test mapping", "true", id),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "product", product),
 					resource.TestCheckResourceAttr(resourceName, "id", id),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
-					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.description", "phase2 mapping"),
+					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.description", "test mapping"),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.final", final),
 				),
 			},
 			{
-				Config: mappingRulesetConfig(product, final, "phase2 mapping updated", "!cribl.group", id),
+				Config: mappingRulesetConfig(product, final, "test mapping updated", "!cribl.group", id),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.description", "phase2 mapping updated"),
+					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.description", "test mapping updated"),
 					resource.TestCheckResourceAttr(resourceName, "conf.functions.0.filter", "!cribl.group"),
 				),
 			},
-			{Config: mappingRulesetConfig(product, final, "phase2 mapping updated", "!cribl.group", id), PlanOnly: true},
+			{Config: mappingRulesetConfig(product, final, "test mapping updated", "!cribl.group", id), PlanOnly: true},
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,

@@ -166,6 +166,9 @@ func applyCommitAPIToState(api *CommitModel, state *CommitModel, preserveInputs 
 			state.Files = api.Files
 		}
 	}
+	if elementType := state.Files.ElementType(context.Background()); elementType == nil {
+		state.Files = types.ListNull(types.StringType)
+	}
 	if !preserveInputs || (fillMissingInputs && (state.Group.IsNull() || state.Group.IsUnknown())) {
 		if !api.Group.IsNull() && !api.Group.IsUnknown() {
 			state.Group = api.Group

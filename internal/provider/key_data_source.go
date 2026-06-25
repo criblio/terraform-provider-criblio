@@ -36,55 +36,43 @@ func (d *KeyDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 		MarkdownDescription: "Key Data Source",
 		Attributes: map[string]schema.Attribute{
 			"algorithm": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"created": schema.Float64Attribute{
-				Required: false,
 				Computed: true,
 			},
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"expires": schema.Float64Attribute{
-				Required: false,
 				Computed: true,
 			},
 			"group": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Name of the Worker Group/Fleet that created this key`,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"iv_size": schema.Int64Attribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Length of the initialization vector, in bytes`,
 			},
 			"key_id": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `API-assigned key ID returned by Cribl.`,
 			},
 			"keyclass": schema.Float64Attribute{
-				Required: false,
 				Computed: true,
 			},
 			"kms": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"use_iv": schema.BoolAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `Seed encryption with a [nonce](https://en.wikipedia.org/wiki/Cryptographic_nonce) to make the key more random and unique. Must be enabled with the aes-256-gcm algorithm.`,
 			},

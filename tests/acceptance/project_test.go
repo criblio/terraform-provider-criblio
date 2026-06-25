@@ -21,7 +21,7 @@ func TestProject(t *testing.T) {
 			{
 				Config: projectConfig("test project"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "id", "phase2_lifecycle_project"),
+					resource.TestCheckResourceAttr(resourceName, "id", "test_lifecycle_project"),
 					resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 					resource.TestCheckResourceAttr(resourceName, "description", "test project"),
 					resource.TestCheckResourceAttr(resourceName, "destinations.#", "0"),
@@ -39,7 +39,7 @@ func TestProject(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     `{"group_id":"default","id":"phase2_lifecycle_project"}`,
+				ImportStateId:     `{"group_id":"default","id":"test_lifecycle_project"}`,
 				ImportStateVerify: true,
 			},
 		},
@@ -51,7 +51,7 @@ func projectConfig(description string) string {
   description = "` + description + `"
   destinations = []
   group_id = "default"
-  id = "phase2_lifecycle_project"
+  id = "test_lifecycle_project"
   subscriptions = []
 }
 `

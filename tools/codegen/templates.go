@@ -342,6 +342,24 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	return json.Marshal(output)
 }
 
+{{- if .Update.ReadAfterWrite }}
+func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
+	output := map[string]any{}
+{{- range .Fields }}
+{{- if and .UpdateField (or (not .Computed) .OptionalComputed) }}
+	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+		if err != nil {
+			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
+		}
+		output["{{ .APIName }}"] = value
+	}
+{{- end }}
+{{- end }}
+	return output, nil
+}
+{{- end }}
+
 func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	var input {{ .StructName }}APIModel
 	if err := json.Unmarshal(data, &input); err != nil {
@@ -464,19 +482,22 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
-	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr .Create }}, model)
+	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr . .Create }}, model)
+	return &model, err
+{{- else if .NoRead }}
+	err := restclient.{{ restWriteCall .Create }}NoResponse(ctx, a.client, {{ pathExpr . .Create }}, model)
 	return &model, err
 {{- else if eq .StructName "Key" }}
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
 {{- else }}
-	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Create }}, model)
+	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
 }
 
 func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
-{{- if .Action }}
+{{- if or .Action .NoRead }}
 	return &model, nil
 {{- else }}
 {{- if eq .StructName "Key" }}
@@ -492,7 +513,7 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
 {{- else }}
-	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr .Read }})
+	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Read }})
 {{- end }}
 {{- end }}
 }
@@ -500,6 +521,9 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	return &model, nil
+{{- else if .NoRead }}
+	err := restclient.{{ restWriteCall .Update }}NoResponse(ctx, a.client, {{ pathExpr . .Update }}, model)
+	return &model, err
 {{- else }}
 {{- if eq .StructName "Key" }}
 	id := model.ID.ValueString()
@@ -509,7 +533,18 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
 {{- else }}
-	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr .Update }}, model)
+{{- if .Update.ReadAfterWrite }}
+	body, err := model.updateBody()
+	if err != nil {
+		return nil, err
+	}
+	if _, err := restclient.{{ restWriteCall .Update }}[map[string]any, any](ctx, a.client, {{ pathExpr . .Update }}, body); err != nil {
+		return nil, err
+	}
+	return a.Read(ctx, model)
+{{- else }}
+	return restclient.Patch[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Update }}, model)
+{{- end }}
 {{- end }}
 {{- end }}
 }
@@ -544,11 +579,20 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	// endpoint; destroy removes Terraform state without resetting the group.
 	return nil
 {{- else }}
-	return restclient.Delete(ctx, a.client, {{ pathExpr .Delete }})
+	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
 {{- end }}
 {{- end }}
 {{- end }}
 }
+{{- if eq .StructName "Notification" }}
+
+func notificationGroupID(model NotificationModel) string {
+	if !model.Group.IsNull() && !model.Group.IsUnknown() && model.Group.ValueString() != "" {
+		return model.Group.ValueString()
+	}
+	return "default"
+}
+{{- end }}
 {{- if eq .StructName "Key" }}
 
 func keyAPIID(model KeyModel) string {
@@ -692,12 +736,25 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .Create.ReadAfterWrite }}
+	_, err := r.api.Create(ctx, model)
+{{- else }}
 	apiModel, err := r.api.Create(ctx, model)
+{{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if .Create.ReadAfterWrite }}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -707,7 +764,7 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-{{- if .Action }}
+{{- if or .Action .NoRead }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
 	apiModel, err := r.api.Read(ctx, model)
@@ -738,7 +795,11 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if .Update.ReadAfterWrite }}
+	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
 }
@@ -770,11 +831,34 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	resp.Diagnostics.AddError("Not Implemented", "No import state operation is available for action resource {{ typeNameSuffix . }}.")
 {{- else }}
 {{- if jsonImport . }}
+{{- if eq .StructName "Notification" }}
+	trimmedID := bytes.TrimSpace([]byte(req.ID))
+	if len(trimmedID) == 0 {
+		resp.Diagnostics.AddError("Invalid ID", "The import ID must not be empty.")
+		return
+	}
+	if trimmedID[0] != '{' {
+		var model {{ .StructName }}Model
+		model.ID = types.StringValue(req.ID)
+		apiModel, err := r.api.Read(ctx, model)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			return
+		}
+		apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+		return
+	}
+{{- end }}
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
 {{- range pathParamFields . }}
 		{{ .GoName }} string ` + "`json:\"{{ .TerraformName }}\"`" + `
+{{- end }}
+{{- if eq .StructName "Notification" }}
+		Group string ` + "`json:\"group\"`" + `
+		GroupID string ` + "`json:\"group_id\"`" + `
 {{- end }}
 {{- if eq .StructName "Key" }}
 		KeyID string ` + "`json:\"key_id\"`" + `
@@ -795,6 +879,16 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	model.{{ .GoName }} = types.StringValue(data.{{ .GoName }})
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), data.{{ .GoName }})...)
 {{- end }}
+{{- if eq .StructName "Notification" }}
+	if data.Group == "" {
+		data.Group = data.GroupID
+	}
+	if data.Group == "" {
+		data.Group = "default"
+	}
+	model.Group = types.StringValue(data.Group)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), data.Group)...)
+{{- end }}
 {{- if eq .StructName "Key" }}
 	if data.KeyID == "" {
 		data.KeyID = data.ID
@@ -805,14 +899,21 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .NoRead }}
+	apply{{ .StructName }}APIToState(&model, &model, true, true)
+{{- else if eq .StructName "Key" }}
 	apiModel, err := r.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-{{- if eq .StructName "Key" }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, true)
 {{- else }}
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
@@ -883,6 +984,11 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- end }}
 {{- end }}
+{{- if and .Computed .Optional }}
+	if state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = {{ nullValue . }}
+	}
+{{- end }}
 {{- if not .Computed }}
 	}
 {{- end }}
@@ -891,6 +997,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		state.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
 	} else if len(state.{{ .GoName }}.Elements()) == 0 {
 		state.{{ .GoName }} = types.ListValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+	}
+{{- else if eq .Type "array" }}
+	if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
+		state.{{ .GoName }} = {{ nullValue . }}
 	}
 {{- else if nestedObject . }}
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
@@ -965,52 +1075,7 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-{{- if nestedObjectList . }}
-			"{{ .TerraformName }}": schema.ListNestedAttribute{
-				Required: {{ .PathParam }},
-				Computed: {{ not .PathParam }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-{{- range .Fields }}
-						"{{ .TerraformName }}": {{ schemaAttribute . }}{
-							Computed: true,
-{{- if .Description }}
-							Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-						},
-{{- end }}
-					},
-				},
-			},
-{{- else }}
-			"{{ .TerraformName }}": {{ schemaAttribute . }}{
-				Required: {{ .PathParam }},
-				Computed: {{ not .PathParam }},
-{{- if .Sensitive }}
-				Sensitive: true,
-{{- end }}
-{{- if .Description }}
-				Description: ` + "`{{ .Description }}`" + `,
-{{- end }}
-{{- if eq .CustomType "jsontypes.NormalizedType{}" }}
-				CustomType: jsontypes.NormalizedType{},
-{{- end }}
-{{- if eq .Type "array" }}
-				ElementType: types.StringType,
-{{- end }}
-{{- if and (eq .Type "object") (not (nestedObject .)) }}
-				ElementType: types.StringType,
-{{- end }}
-			},
-{{- end }}
-{{- end }}
+{{ dataSourceAttributes .Fields "\t\t\t" }}
 		},
 	}
 }
@@ -1048,6 +1113,112 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 
 func {{ .Name }}DataSourceDebug(value any) string {
 	return fmt.Sprintf("%v", value)
+}
+`
+
+const listDataSourceTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
+package provider
+
+import (
+	"context"
+	"fmt"
+{{- if listHasQueryParams . }}
+	"net/url"
+{{- end }}
+
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+var _ = jsontypes.NormalizedType{}
+var _ = types.String{}
+
+var _ datasource.DataSource = &{{ .ListStructName }}DataSource{}
+var _ datasource.DataSourceWithConfigure = &{{ .ListStructName }}DataSource{}
+
+type {{ .ListStructName }}DataSource struct {
+	client *restclient.Client
+}
+
+type {{ .ListStructName }}DataSourceModel struct {
+{{- range listConfigFields . }}
+	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\"`" + `
+{{- end }}
+	Items types.List ` + "`tfsdk:\"items\"`" + `
+}
+
+func New{{ .ListStructName }}DataSource() datasource.DataSource {
+	return &{{ .ListStructName }}DataSource{}
+}
+
+func (d *{{ .ListStructName }}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_{{ listTypeNameSuffix . }}"
+}
+
+func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		MarkdownDescription: "{{ .ListStructName }} Data Source",
+		Attributes: map[string]schema.Attribute{
+{{ listDataSourceConfigAttributes (listConfigFields .) "\t\t\t" }}
+			"items": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+{{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
+					},
+				},
+			},
+		},
+	}
+}
+
+func (d *{{ .ListStructName }}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	clients, ok := req.ProviderData.(*ProviderClients)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected DataSource Configure Type",
+			fmt.Sprintf("Expected *ProviderClients, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+	d.client = clients.RC
+}
+
+func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var model {{ .ListStructName }}DataSourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	items, err := restclient.Get[[]{{ .StructName }}Model](ctx, d.client, {{ pathExpr . .List }})
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	values := []attr.Value{}
+	if items != nil {
+		values = make([]attr.Value, 0, len(*items))
+		for _, item := range *items {
+			values = append(values, {{ listItemObjectValue . }})
+		}
+	}
+	model.Items = types.ListValueMust(types.ObjectType{AttrTypes: {{ .ListStructName }}ItemAttrTypes()}, values)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+}
+
+func {{ .ListStructName }}ItemAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range listItemFields . }}
+		"{{ .TerraformName }}": {{ attrType . }},
+{{- end }}
+	}
 }
 `
 
@@ -1444,10 +1615,11 @@ func TestAcc{{ .StructName }}Scaffold(t *testing.T) {
 `
 
 var templateBodies = map[string]string{
-	"types":       typesTemplate,
-	"client":      clientTemplate,
-	"resource":    resourceTemplate,
-	"data_source": dataSourceTemplate,
-	"doc":         docTemplate,
-	"test":        testTemplate,
+	"types":            typesTemplate,
+	"client":           clientTemplate,
+	"resource":         resourceTemplate,
+	"data_source":      dataSourceTemplate,
+	"list_data_source": listDataSourceTemplate,
+	"doc":              docTemplate,
+	"test":             testTemplate,
 }

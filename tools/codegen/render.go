@@ -90,13 +90,20 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 		{Path: prefix + "_resource.go", Kind: "resource"},
 		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
 	}
-	if !resource.Action {
+	if shouldGenerateAcceptanceTest(resource) {
 		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
 	}
-	if resource.StructName != "GroupSystemSettings" && !resource.Action {
+	if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
 		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
 	}
+	if resource.List.Path != "" {
+		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
+	}
 	return files
+}
+
+func shouldGenerateAcceptanceTest(resource parser.ResourceDef) bool {
+	return !resource.Action && !strings.HasPrefix(resource.Create.Path, "/v1/organizations/")
 }
 
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
@@ -105,43 +112,52 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":                        goType,
-		"schemaAttribute":               schemaAttribute,
-		"schemaTypeName":                schemaTypeName,
-		"schemaSections":                schemaSections,
-		"zeroValue":                     zeroValue,
-		"pathExpr":                      pathExpr,
-		"jsonName":                      jsonName,
-		"apiType":                       apiType,
-		"legacyGoType":                  legacyGoType,
-		"resourceType":                  resourceType,
-		"typeNameSuffix":                typeNameSuffix,
-		"exampleUsage":                  exampleUsage,
-		"importBlock":                   importBlock,
-		"importCommand":                 importCommand,
-		"importPassthroughAttribute":    importPassthroughAttribute,
-		"docSchema":                     docSchema,
-		"joinDocFields":                 joinDocFields,
-		"needsFmt":                      needsFmt,
-		"needsClientFmt":                needsClientFmt,
-		"needsAttr":                     needsAttr,
-		"needsNestedObject":             needsNestedObject,
-		"needsPlanModifier":             needsPlanModifier,
-		"needsFrameworkPlanModifier":    needsFrameworkPlanModifier,
-		"needsCustomPlanModifier":       needsCustomPlanModifier,
-		"planModifierType":              planModifierType,
-		"planModifierCalls":             planModifierCalls,
-		"nestedObjectPlanModifierCalls": nestedObjectPlanModifierCalls,
-		"schemaAttributes":              schemaAttributes,
-		"importSentinelFields":          importSentinelFields,
-		"pathParamFields":               pathParamFields,
-		"jsonImport":                    jsonImport,
-		"nestedObjectList":              nestedObjectList,
-		"nestedObject":                  nestedObject,
-		"nestedObjectFields":            nestedObjectFields,
-		"attrType":                      attrType,
-		"restWriteCall":                 restWriteCall,
-		"resourceHasQueryParams":        resourceHasQueryParams,
+		"goType":                         goType,
+		"schemaAttribute":                schemaAttribute,
+		"schemaTypeName":                 schemaTypeName,
+		"schemaSections":                 schemaSections,
+		"zeroValue":                      zeroValue,
+		"nullValue":                      nullValue,
+		"pathExpr":                       pathExpr,
+		"jsonName":                       jsonName,
+		"apiType":                        apiType,
+		"legacyGoType":                   legacyGoType,
+		"resourceType":                   resourceType,
+		"typeNameSuffix":                 typeNameSuffix,
+		"exampleUsage":                   exampleUsage,
+		"importBlock":                    importBlock,
+		"importCommand":                  importCommand,
+		"importPassthroughAttribute":     importPassthroughAttribute,
+		"docSchema":                      docSchema,
+		"joinDocFields":                  joinDocFields,
+		"needsFmt":                       needsFmt,
+		"needsClientFmt":                 needsClientFmt,
+		"needsAttr":                      needsAttr,
+		"needsNestedObject":              needsNestedObject,
+		"needsPlanModifier":              needsPlanModifier,
+		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
+		"needsCustomPlanModifier":        needsCustomPlanModifier,
+		"planModifierType":               planModifierType,
+		"planModifierCalls":              planModifierCalls,
+		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
+		"schemaAttributes":               schemaAttributes,
+		"dataSourceAttributes":           dataSourceAttributes,
+		"listDataSourceConfigAttributes": listDataSourceConfigAttributes,
+		"listDataSourceItemAttributes":   listDataSourceItemAttributes,
+		"importSentinelFields":           importSentinelFields,
+		"pathParamFields":                pathParamFields,
+		"jsonImport":                     jsonImport,
+		"nestedObjectList":               nestedObjectList,
+		"nestedObject":                   nestedObject,
+		"nestedObjectFields":             nestedObjectFields,
+		"attrType":                       attrType,
+		"restWriteCall":                  restWriteCall,
+		"resourceHasQueryParams":         resourceHasQueryParams,
+		"listHasQueryParams":             listHasQueryParams,
+		"listConfigFields":               listConfigFields,
+		"listItemFields":                 listItemFields,
+		"listTypeNameSuffix":             listTypeNameSuffix,
+		"listItemObjectValue":            listItemObjectValue,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -166,6 +182,10 @@ func restWriteCall(op parser.OperationDef) string {
 
 func resourceHasQueryParams(resource parser.ResourceDef) bool {
 	return len(resource.Create.QueryParams) > 0 || len(resource.Read.QueryParams) > 0 || len(resource.Update.QueryParams) > 0 || len(resource.Delete.QueryParams) > 0
+}
+
+func listHasQueryParams(resource parser.ResourceDef) bool {
+	return len(resource.List.QueryParams) > 0
 }
 
 func joinDocFields(fields []parser.FieldDef) string {
@@ -400,6 +420,30 @@ func schemaAttributes(fields []parser.FieldDef, indent string) string {
 	return output.String()
 }
 
+func dataSourceAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, field.PathParam, !field.PathParam)
+	}
+	return output.String()
+}
+
+func listDataSourceConfigAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, true, false)
+	}
+	return output.String()
+}
+
+func listDataSourceItemAttributes(fields []parser.FieldDef, indent string) string {
+	var output strings.Builder
+	for _, field := range fields {
+		writeDataSourceAttribute(&output, field, indent, false, true)
+	}
+	return output.String()
+}
+
 func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent string) {
 	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
 	fmt.Fprintf(output, "%s\tRequired: %t,\n", indent, field.Required)
@@ -437,6 +481,39 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 	} else if nestedObject(field) {
 		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
 		output.WriteString(schemaAttributes(field.Fields, indent+"\t\t"))
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if field.Type == "array" || field.Type == "object" {
+		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
+	}
+	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, indent string, required, computed bool) {
+	fmt.Fprintf(output, "%s%q: %s{\n", indent, field.TerraformName, schemaAttribute(field))
+	if required {
+		fmt.Fprintf(output, "%s\tRequired: true,\n", indent)
+	}
+	if computed {
+		fmt.Fprintf(output, "%s\tComputed: true,\n", indent)
+	}
+	if field.Sensitive {
+		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
+	}
+	if field.Description != "" {
+		fmt.Fprintf(output, "%s\tDescription: `%s`,\n", indent, field.Description)
+	}
+	if field.CustomType == "jsontypes.NormalizedType{}" {
+		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
+	}
+	if nestedObjectList(field) {
+		fmt.Fprintf(output, "%s\tNestedObject: schema.NestedAttributeObject{\n", indent)
+		fmt.Fprintf(output, "%s\t\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t\t"))
+		fmt.Fprintf(output, "%s\t\t},\n", indent)
+		fmt.Fprintf(output, "%s\t},\n", indent)
+	} else if nestedObject(field) {
+		fmt.Fprintf(output, "%s\tAttributes: map[string]schema.Attribute{\n", indent)
+		output.WriteString(listDataSourceItemAttributes(field.Fields, indent+"\t\t"))
 		fmt.Fprintf(output, "%s\t},\n", indent)
 	} else if field.Type == "array" || field.Type == "object" {
 		fmt.Fprintf(output, "%s\tElementType: types.StringType,\n", indent)
@@ -492,6 +569,31 @@ func zeroValue(field parser.FieldDef) string {
 	}
 }
 
+func nullValue(field parser.FieldDef) string {
+	if nestedObjectList(field) {
+		return "types.ListNull(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()})"
+	}
+	if nestedObject(field) {
+		return "types.ObjectNull(" + field.NestedAttrTypes + "())"
+	}
+	switch goType(field) {
+	case "types.Bool":
+		return "types.BoolNull()"
+	case "types.Int64":
+		return "types.Int64Null()"
+	case "types.Float64":
+		return "types.Float64Null()"
+	case "types.List":
+		return "types.ListNull(types.StringType)"
+	case "types.Map":
+		return "types.MapNull(types.StringType)"
+	case "jsontypes.Normalized":
+		return "jsontypes.NewNormalizedNull()"
+	default:
+		return "types.StringNull()"
+	}
+}
+
 func jsonName(field parser.FieldDef) string {
 	return field.APIName + ",omitempty"
 }
@@ -502,6 +604,10 @@ func resourceType(resource parser.ResourceDef) string {
 
 func typeNameSuffix(resource parser.ResourceDef) string {
 	return strings.TrimPrefix(resource.TypeName, "criblio_")
+}
+
+func listTypeNameSuffix(resource parser.ResourceDef) string {
+	return strings.TrimPrefix(resource.ListTypeName, "criblio_")
 }
 
 func needsFmt(resource parser.ResourceDef) bool {
@@ -582,6 +688,38 @@ func attrType(field parser.FieldDef) string {
 	default:
 		return "types.StringType"
 	}
+}
+
+func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, field := range append(resource.List.PathParams, resource.List.QueryParams...) {
+		if fixedPathParamValue(resource, field) != "" {
+			continue
+		}
+		fields = append(fields, field)
+	}
+	return fields
+}
+
+func listItemFields(resource parser.ResourceDef) []parser.FieldDef {
+	var fields []parser.FieldDef
+	for _, field := range resource.Fields {
+		if field.QueryParam || field.APIName == "groupId" || field.APIName == "organizationId" {
+			continue
+		}
+		fields = append(fields, field)
+	}
+	return fields
+}
+
+func listItemObjectValue(resource parser.ResourceDef) string {
+	var output strings.Builder
+	fmt.Fprintf(&output, "types.ObjectValueMust(%sItemAttrTypes(), map[string]attr.Value{", resource.ListStructName)
+	for _, field := range listItemFields(resource) {
+		fmt.Fprintf(&output, "%q: item.%s, ", field.TerraformName, field.GoName)
+	}
+	output.WriteString("})")
+	return output.String()
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {
@@ -725,21 +863,56 @@ func exampleUsage(resource parser.ResourceDef) string {
 }
 
 func upstreamExampleUsage(resource parser.ResourceDef) (string, bool) {
+	example, ok := bestRequestExample(resource)
+	if !ok {
+		return "", false
+	}
+	values := exampleObject(example.Value)
+	if len(values) == 0 {
+		return "", false
+	}
+	var output strings.Builder
+	fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "my_"+resource.FileStem)
+	writeExampleFields(&output, resource, resource.Fields, values, 1)
+	output.WriteString("}")
+	return output.String(), true
+}
+
+func bestRequestExample(resource parser.ResourceDef) (parser.ExampleDef, bool) {
+	var best parser.ExampleDef
+	bestScore := -1
 	for _, example := range resource.Create.Examples {
 		values := exampleObject(example.Value)
 		if len(values) == 0 {
 			continue
 		}
-		var output strings.Builder
-		fmt.Fprintf(&output, "resource %q %q {\n", resourceType(resource), "my_"+resource.FileStem)
-		writeExampleFields(&output, resource.Fields, values, 1)
-		output.WriteString("}")
-		return output.String(), true
+		score := exampleFieldScore(resource.Fields, values)
+		if score > bestScore {
+			best = example
+			bestScore = score
+		}
 	}
-	return "", false
+	return best, bestScore >= 0
 }
 
-func writeExampleFields(output *strings.Builder, fields []parser.FieldDef, values map[string]any, indentLevel int) {
+func exampleFieldScore(fields []parser.FieldDef, values map[string]any) int {
+	score := 0
+	for _, field := range fields {
+		if field.Computed && !field.Optional {
+			continue
+		}
+		if _, ok := values[field.APIName]; ok {
+			score++
+			continue
+		}
+		if _, ok := values[field.TerraformName]; ok {
+			score++
+		}
+	}
+	return score
+}
+
+func writeExampleFields(output *strings.Builder, resource parser.ResourceDef, fields []parser.FieldDef, values map[string]any, indentLevel int) {
 	for _, field := range fields {
 		if field.Computed && !field.Optional {
 			continue
@@ -749,16 +922,16 @@ func writeExampleFields(output *strings.Builder, fields []parser.FieldDef, value
 			value, ok = values[field.TerraformName]
 		}
 		if !ok && field.PathParam {
-			value, ok = exampleValue(field), true
+			value, ok = exampleValue(resource, field), true
 		}
 		if !ok {
 			continue
 		}
-		writeExampleField(output, field, value, indentLevel)
+		writeExampleField(output, resource, field, value, indentLevel)
 	}
 }
 
-func writeExampleField(output *strings.Builder, field parser.FieldDef, value any, indentLevel int) {
+func writeExampleField(output *strings.Builder, resource parser.ResourceDef, field parser.FieldDef, value any, indentLevel int) {
 	indent := strings.Repeat("  ", indentLevel)
 	if nestedObject(field) {
 		values := exampleObject(value)
@@ -766,7 +939,7 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 			return
 		}
 		fmt.Fprintf(output, "%s%s = {\n", indent, field.TerraformName)
-		writeExampleFields(output, field.Fields, values, indentLevel+1)
+		writeExampleFields(output, resource, field.Fields, values, indentLevel+1)
 		fmt.Fprintf(output, "%s}\n", indent)
 		return
 	}
@@ -782,7 +955,7 @@ func writeExampleField(output *strings.Builder, field parser.FieldDef, value any
 				continue
 			}
 			fmt.Fprintf(output, "%s  {\n", indent)
-			writeExampleFields(output, field.Fields, itemValues, indentLevel+2)
+			writeExampleFields(output, resource, field.Fields, itemValues, indentLevel+2)
 			fmt.Fprintf(output, "%s  }\n", indent)
 		}
 		fmt.Fprintf(output, "%s]\n", indent)
@@ -866,9 +1039,24 @@ func importCommand(resource parser.ResourceDef) string {
 	path := filepath.Join("examples", "resources", resourceType(resource), "import.sh")
 	content, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Sprintf("terraform import %s.my_%s '{\"group_id\": \"default\", \"id\": \"cert-001\"}'", resourceType(resource), resourceType(resource))
+		return generatedImportCommand(resource)
 	}
 	return strings.TrimSpace(string(content))
+}
+
+func generatedImportCommand(resource parser.ResourceDef) string {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
+	}
+	if len(fields) == 0 {
+		return fmt.Sprintf("terraform import %s.my_%s %q", resourceType(resource), resourceType(resource), "example")
+	}
+	parts := make([]string, 0, len(fields))
+	for _, field := range fields {
+		parts = append(parts, fmt.Sprintf("%q: %q", field.TerraformName, exampleValue(resource, field)))
+	}
+	return fmt.Sprintf("terraform import %s.my_%s '{%s}'", resourceType(resource), resourceType(resource), strings.Join(parts, ", "))
 }
 
 func pathParamFields(resource parser.ResourceDef) []parser.FieldDef {
@@ -892,6 +1080,9 @@ func importSentinelFields(resource parser.ResourceDef) []parser.FieldDef {
 }
 
 func jsonImport(resource parser.ResourceDef) bool {
+	if resource.StructName == "Notification" {
+		return true
+	}
 	return len(pathParamFields(resource)) > 1
 }
 
@@ -910,36 +1101,65 @@ func generatedExample(resource parser.ResourceDef) string {
 		if field.Computed && !field.Optional {
 			continue
 		}
-		fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, exampleValue(field))
+		fmt.Fprintf(&output, "  %s = %q\n", field.TerraformName, exampleValue(resource, field))
 	}
 	output.WriteString("}")
 	return output.String()
 }
 
 func generatedImportBlock(resource parser.ResourceDef) string {
-	return fmt.Sprintf(`import {
+	fields := pathParamFields(resource)
+	if len(fields) == 1 {
+		return fmt.Sprintf(`import {
+  to = %s.my_%s
+  id = %q
+}`, resourceType(resource), resourceType(resource), exampleValue(resource, fields[0]))
+	}
+	if len(fields) == 0 {
+		return fmt.Sprintf(`import {
+  to = %s.my_%s
+  id = "example"
+}`, resourceType(resource), resourceType(resource))
+	}
+	var output strings.Builder
+	fmt.Fprintf(&output, `import {
   to = %s.my_%s
   id = jsonencode({
-    group_id = "default"
-    id       = "cert-001"
-  })
-}`, resourceType(resource), resourceType(resource))
+`, resourceType(resource), resourceType(resource))
+	for _, field := range fields {
+		fmt.Fprintf(&output, "    %s = %q\n", field.TerraformName, exampleValue(resource, field))
+	}
+	output.WriteString(`  })
+}`)
+	return output.String()
 }
 
-func exampleValue(field parser.FieldDef) string {
+func exampleValue(resource parser.ResourceDef, field parser.FieldDef) string {
 	if field.PathParam && field.TerraformName == "product" {
 		return "stream"
 	}
 	if field.PathParam && field.TerraformName == "group_id" {
+		if strings.HasPrefix(resource.TypeName, "criblio_search_") {
+			return "default_search"
+		}
 		return "default"
 	}
 	if field.TerraformName == "id" {
 		return "example"
 	}
+	if field.TerraformName == "lake_id" {
+		return "default"
+	}
+	if field.TerraformName == "lakehouse_id" {
+		return "lakehouse-01"
+	}
+	if field.TerraformName == "lake_dataset_id" {
+		return "web-logs"
+	}
 	return "example"
 }
 
-func pathExpr(op parser.OperationDef) string {
+func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 	path := op.Path
 	for _, param := range op.PathParams {
 		path = strings.ReplaceAll(path, "{"+param.APIName+"}", `%s`)
@@ -953,6 +1173,10 @@ func pathExpr(op parser.OperationDef) string {
 	}
 	args := []string{fmt.Sprintf("%q", path)}
 	for _, param := range op.PathParams {
+		if expr := pathParamExpr(resource, op, param); expr != "" {
+			args = append(args, expr)
+			continue
+		}
 		if op.Path == "/admin/products/{product}/mappings/{id}" && param.TerraformName == "id" {
 			args = append(args, "mappingRulesetID(model)")
 			continue
@@ -966,4 +1190,24 @@ func pathExpr(op parser.OperationDef) string {
 		return fmt.Sprintf("%q", path)
 	}
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
+}
+
+func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param parser.FieldDef) string {
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
+		return `"default_search"`
+	}
+	if resource.StructName == "Notification" && param.TerraformName == "group_id" {
+		if resource.List.OperationID != "" && op.OperationID == resource.List.OperationID {
+			return ""
+		}
+		return "notificationGroupID(model)"
+	}
+	return ""
+}
+
+func fixedPathParamValue(resource parser.ResourceDef, param parser.FieldDef) string {
+	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
+		return "default_search"
+	}
+	return ""
 }

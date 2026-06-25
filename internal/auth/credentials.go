@@ -147,9 +147,49 @@ func GetCredentials() (*CriblConfig, error) {
 	}
 	switch format {
 	case "json":
-		return parseJSONConfig(file)
+		config, err := parseJSONConfig(file)
+		if err != nil {
+			return nil, err
+		}
+		applyEnvOverrides(config)
+		return config, nil
 	case "ini":
-		return parseIniConfig(file)
+		config, err := parseIniConfig(file)
+		if err != nil {
+			return nil, err
+		}
+		applyEnvOverrides(config)
+		return config, nil
 	}
 	return nil, nil
+}
+
+func applyEnvOverrides(config *CriblConfig) {
+	if config == nil {
+		return
+	}
+	if value := os.Getenv("CRIBL_CLIENT_ID"); value != "" {
+		config.ClientID = value
+	}
+	if value := os.Getenv("CRIBL_CLIENT_SECRET"); value != "" {
+		config.ClientSecret = value
+	}
+	if value := os.Getenv("CRIBL_ORGANIZATION_ID"); value != "" {
+		config.OrganizationID = value
+	}
+	if value := os.Getenv("CRIBL_WORKSPACE_ID"); value != "" {
+		config.Workspace = value
+	}
+	if value := os.Getenv("CRIBL_CLOUD_DOMAIN"); value != "" {
+		config.CloudDomain = value
+	}
+	if value := os.Getenv("CRIBL_ONPREM_SERVER_URL"); value != "" {
+		config.OnpremServerURL = value
+	}
+	if value := os.Getenv("CRIBL_ONPREM_USERNAME"); value != "" {
+		config.OnpremUsername = value
+	}
+	if value := os.Getenv("CRIBL_ONPREM_PASSWORD"); value != "" {
+		config.OnpremPassword = value
+	}
 }

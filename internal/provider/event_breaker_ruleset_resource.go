@@ -170,7 +170,7 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 						"fields": schema.ListNestedAttribute{
 							Required:    false,
 							Optional:    true,
-							Computed:    false,
+							Computed:    true,
 							Description: `Key-value pairs to be added to each event`,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -197,12 +197,12 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 						"parser_enabled": schema.BoolAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"should_use_data_raw": schema.BoolAttribute{
 							Required:    false,
 							Optional:    true,
-							Computed:    false,
+							Computed:    true,
 							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.`,
 						},
 						"__template_timestamp_timezone": schema.StringAttribute{
@@ -214,17 +214,17 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 						"delimiter": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"delimiter_regex": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"escape_char": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"event_breaker_regex": schema.StringAttribute{
 							Required: false,
@@ -234,17 +234,17 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 						"fields_line_regex": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"header_line_regex": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 						"quote_char": schema.StringAttribute{
 							Required: false,
 							Optional: true,
-							Computed: false,
+							Computed: true,
 						},
 					},
 				},
@@ -280,12 +280,17 @@ func (r *EventBreakerRulesetResource) Create(ctx context.Context, req resource.C
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Create(ctx, model)
+	_, err := r.api.Create(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyEventBreakerRulesetAPIToState(apiModel, &model, true, false)
+	apiModel, err := r.api.Read(ctx, model)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		return
+	}
+	applyEventBreakerRulesetAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -319,7 +324,7 @@ func (r *EventBreakerRulesetResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyEventBreakerRulesetAPIToState(apiModel, &model, true, false)
+	applyEventBreakerRulesetAPIToState(apiModel, &model, false, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -16,6 +16,8 @@ import (
 const (
 	defaultInput                = "upstream-openapi.yml"
 	defaultOverlay              = "terraform-overlay.yml"
+	defaultMgmtInput            = "openapi-mgmt.yml"
+	defaultMgmtOverlay          = "terraform-mgmt-overlay.yml"
 	defaultOutput               = "merged-spec.yml"
 	defaultCloudOnlyPathsOutput = "internal/auth/cloud_only_paths.go"
 	groupPrefix                 = "/m/{groupId}"
@@ -35,17 +37,44 @@ var httpMethods = map[string]bool{
 func main() {
 	input := flag.String("input", defaultInput, "upstream OpenAPI YAML file")
 	overlay := flag.String("overlay", defaultOverlay, "Terraform overlay YAML file")
+	mgmtInput := flag.String("mgmt-input", defaultMgmtInput, "management OpenAPI YAML file")
+	mgmtOverlay := flag.String("mgmt-overlay", defaultMgmtOverlay, "management Terraform overlay YAML file")
 	output := flag.String("output", defaultOutput, "merged OpenAPI YAML file")
 	flag.Parse()
 
-	if err := run(*input, *overlay, *output, defaultCloudOnlyPathsOutput); err != nil {
+	if err := runWithConfig(mergeConfig{
+		InputPath:                *input,
+		OverlayPath:              *overlay,
+		MgmtInputPath:            *mgmtInput,
+		MgmtOverlayPath:          *mgmtOverlay,
+		OutputPath:               *output,
+		CloudOnlyPathsOutputPath: defaultCloudOnlyPathsOutput,
+	}); err != nil {
 		fmt.Fprintf(os.Stderr, "merge spec: %v\n", err)
 		os.Exit(1)
 	}
 }
 
+type mergeConfig struct {
+	InputPath                string
+	OverlayPath              string
+	MgmtInputPath            string
+	MgmtOverlayPath          string
+	OutputPath               string
+	CloudOnlyPathsOutputPath string
+}
+
 func run(inputPath, overlayPath, outputPath, cloudOnlyPathsOutputPath string) error {
-	spec, err := readYAML(inputPath)
+	return runWithConfig(mergeConfig{
+		InputPath:                inputPath,
+		OverlayPath:              overlayPath,
+		OutputPath:               outputPath,
+		CloudOnlyPathsOutputPath: cloudOnlyPathsOutputPath,
+	})
+}
+
+func runWithConfig(config mergeConfig) error {
+	spec, err := readYAML(config.InputPath)
 	if err != nil {
 		return fmt.Errorf("read input spec: %v", err)
 	}
@@ -57,10 +86,13 @@ func run(inputPath, overlayPath, outputPath, cloudOnlyPathsOutputPath string) er
 	if err := prefixGroupScopedPaths(spec); err != nil {
 		return err
 	}
-	if err := applyOverlayFile(spec, overlayPath); err != nil {
+	if err := applyOverlayFile(spec, config.OverlayPath); err != nil {
 		return err
 	}
 	if err := unwrapCountedResponses(spec); err != nil {
+		return err
+	}
+	if err := mergeManagementSpec(spec, config.MgmtInputPath, config.MgmtOverlayPath); err != nil {
 		return err
 	}
 
@@ -74,13 +106,135 @@ func run(inputPath, overlayPath, outputPath, cloudOnlyPathsOutputPath string) er
 		return fmt.Errorf("close YAML encoder: %v", err)
 	}
 
-	if err := os.WriteFile(outputPath, output.Bytes(), 0644); err != nil {
+	if err := os.WriteFile(config.OutputPath, output.Bytes(), 0644); err != nil {
 		return fmt.Errorf("write output spec: %v", err)
 	}
-	if err := writeCloudOnlyPaths(cloudOnlyPathsOutputPath, cloudOnlyPaths); err != nil {
+	if err := writeCloudOnlyPaths(config.CloudOnlyPathsOutputPath, cloudOnlyPaths); err != nil {
 		return err
 	}
 	return nil
+}
+
+func mergeManagementSpec(spec *yaml.Node, mgmtInputPath, mgmtOverlayPath string) error {
+	if mgmtInputPath == "" {
+		return nil
+	}
+	if _, err := os.Stat(mgmtInputPath); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return fmt.Errorf("stat management spec: %v", err)
+	}
+	if _, err := os.Stat(mgmtOverlayPath); err != nil {
+		return fmt.Errorf("stat management overlay: %v", err)
+	}
+
+	mgmtSpec, err := readYAML(mgmtInputPath)
+	if err != nil {
+		return fmt.Errorf("read management spec: %v", err)
+	}
+	if err := applyOverlayFile(mgmtSpec, mgmtOverlayPath); err != nil {
+		return fmt.Errorf("apply management overlay: %v", err)
+	}
+	if err := unwrapCountedResponses(mgmtSpec); err != nil {
+		return fmt.Errorf("unwrap management responses: %v", err)
+	}
+	if err := mergeAnnotatedPaths(spec, mgmtSpec); err != nil {
+		return err
+	}
+	return mergeComponentSchemas(spec, mgmtSpec)
+}
+
+func mergeAnnotatedPaths(target, source *yaml.Node) error {
+	targetPaths, ok := mappingValue(documentMapping(target), "paths")
+	if !ok || targetPaths.Kind != yaml.MappingNode {
+		return fmt.Errorf("target spec paths mapping not found")
+	}
+	sourcePaths, ok := mappingValue(documentMapping(source), "paths")
+	if !ok || sourcePaths.Kind != yaml.MappingNode {
+		return fmt.Errorf("management spec paths mapping not found")
+	}
+
+	for index := 0; index < len(sourcePaths.Content); index += 2 {
+		pathKey := sourcePaths.Content[index]
+		pathItem := sourcePaths.Content[index+1]
+		if !pathHasTerraformAnnotation(pathItem) {
+			continue
+		}
+		if _, exists := mappingValue(targetPaths, pathKey.Value); exists {
+			return fmt.Errorf("management path %q already exists in target spec", pathKey.Value)
+		}
+		targetPaths.Content = append(targetPaths.Content, cloneNode(pathKey), cloneNode(pathItem))
+	}
+	return nil
+}
+
+func pathHasTerraformAnnotation(pathItem *yaml.Node) bool {
+	if pathItem.Kind != yaml.MappingNode {
+		return false
+	}
+	for index := 0; index < len(pathItem.Content); index += 2 {
+		method := pathItem.Content[index].Value
+		if !httpMethods[method] {
+			continue
+		}
+		if operationHasTerraformAnnotation(pathItem.Content[index+1]) {
+			return true
+		}
+	}
+	return false
+}
+
+func operationHasTerraformAnnotation(operation *yaml.Node) bool {
+	for _, key := range []string{
+		"x-terraform-resource",
+		"x-terraform-read",
+		"x-terraform-update",
+		"x-terraform-delete",
+		"x-terraform-list",
+	} {
+		if _, ok := mappingValue(operation, key); ok {
+			return true
+		}
+	}
+	return false
+}
+
+func mergeComponentSchemas(target, source *yaml.Node) error {
+	targetSchemas, ok := lookupComponentsSchemas(documentMapping(target))
+	if !ok {
+		return fmt.Errorf("target components schemas mapping not found")
+	}
+	sourceSchemas, ok := lookupComponentsSchemas(documentMapping(source))
+	if !ok {
+		return fmt.Errorf("management components schemas mapping not found")
+	}
+
+	for index := 0; index < len(sourceSchemas.Content); index += 2 {
+		name := sourceSchemas.Content[index]
+		schema := sourceSchemas.Content[index+1]
+		if existing, exists := mappingValue(targetSchemas, name.Value); exists {
+			if !nodesEqual(existing, schema) {
+				return fmt.Errorf("management schema %q already exists with different content", name.Value)
+			}
+			continue
+		}
+		targetSchemas.Content = append(targetSchemas.Content, cloneNode(name), cloneNode(schema))
+	}
+	return nil
+}
+
+func nodesEqual(a, b *yaml.Node) bool {
+	var left bytes.Buffer
+	leftEncoder := yaml.NewEncoder(&left)
+	_ = leftEncoder.Encode(a)
+	_ = leftEncoder.Close()
+
+	var right bytes.Buffer
+	rightEncoder := yaml.NewEncoder(&right)
+	_ = rightEncoder.Encode(b)
+	_ = rightEncoder.Close()
+	return bytes.Equal(left.Bytes(), right.Bytes())
 }
 
 func collectCloudOnlyPaths(spec *yaml.Node) ([]string, error) {
@@ -166,7 +320,7 @@ func applyOverlayFile(spec *yaml.Node, overlayPath string) error {
 	}
 
 	for index, action := range actions.Content {
-		target, update, err := parseAction(action)
+		target, update, replace, err := parseAction(action)
 		if err != nil {
 			return fmt.Errorf("overlay action %d: %v", index, err)
 		}
@@ -174,26 +328,37 @@ func applyOverlayFile(spec *yaml.Node, overlayPath string) error {
 		if err != nil {
 			return fmt.Errorf("overlay action %d target %q: %v", index, target, err)
 		}
+		if replace {
+			*targetNode = *cloneNode(update)
+			continue
+		}
 		mergeMapping(targetNode, update)
 	}
 
 	return nil
 }
 
-func parseAction(action *yaml.Node) (string, *yaml.Node, error) {
+func parseAction(action *yaml.Node) (string, *yaml.Node, bool, error) {
 	if action.Kind != yaml.MappingNode {
-		return "", nil, fmt.Errorf("action must be a mapping")
+		return "", nil, false, fmt.Errorf("action must be a mapping")
 	}
 
 	targetNode, ok := mappingValue(action, "target")
 	if !ok || targetNode.Kind != yaml.ScalarNode {
-		return "", nil, fmt.Errorf("target scalar is required")
+		return "", nil, false, fmt.Errorf("target scalar is required")
 	}
 	updateNode, ok := mappingValue(action, "update")
-	if !ok || updateNode.Kind != yaml.MappingNode {
-		return "", nil, fmt.Errorf("update mapping is required")
+	if ok {
+		if updateNode.Kind != yaml.MappingNode {
+			return "", nil, false, fmt.Errorf("update mapping is required")
+		}
+		return targetNode.Value, updateNode, false, nil
 	}
-	return targetNode.Value, updateNode, nil
+	replaceNode, ok := mappingValue(action, "replace")
+	if !ok || replaceNode.Kind != yaml.MappingNode {
+		return "", nil, false, fmt.Errorf("update or replace mapping is required")
+	}
+	return targetNode.Value, replaceNode, true, nil
 }
 
 func lookupTarget(root *yaml.Node, target string) (*yaml.Node, error) {

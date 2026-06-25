@@ -1,1 +1,0 @@
-../../../../../examples/grok/main.tf

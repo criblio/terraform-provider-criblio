@@ -126,6 +126,53 @@ func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	}
 }
 
+func TestSearchResourcesHideGroupIDForBackwardCompatibility(t *testing.T) {
+	resource := &ResourceDef{
+		TypeName: "criblio_search_saved_query",
+		Fields: []FieldDef{
+			{
+				APIName:       "groupId",
+				TerraformName: "group_id",
+				GoName:        "GroupID",
+				Type:          "string",
+				Required:      true,
+				ForceNew:      true,
+				PathParam:     true,
+			},
+		},
+	}
+
+	applyResourceCompatibility(resource)
+
+	if hasField(resource.Fields, "group_id") {
+		t.Fatalf("search group_id should be hidden from Terraform schema")
+	}
+}
+
+func TestNotificationHidesGroupIDForBackwardCompatibility(t *testing.T) {
+	resource := &ResourceDef{
+		StructName: "Notification",
+		TypeName:   "criblio_notification",
+		Fields: []FieldDef{
+			{
+				APIName:       "groupId",
+				TerraformName: "group_id",
+				GoName:        "GroupID",
+				Type:          "string",
+				Required:      true,
+				ForceNew:      true,
+				PathParam:     true,
+			},
+		},
+	}
+
+	applyResourceCompatibility(resource)
+
+	if hasField(resource.Fields, "group_id") {
+		t.Fatalf("notification group_id should be hidden from Terraform schema")
+	}
+}
+
 func TestParseKeyQueryID(t *testing.T) {
 	resources, err := ParseFile(filepath.Join("..", "testdata", "fixture.yml"))
 	if err != nil {
@@ -153,6 +200,169 @@ func TestParseKeyQueryID(t *testing.T) {
 	}
 	if hasField(key.Fields, "plain_key") || hasField(key.Fields, "cipher_key") {
 		t.Fatalf("key material fields should be ignored")
+	}
+}
+
+func TestParseManagementWorkspace(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /v1/organizations/{organizationId}/workspaces:
+    post:
+      x-terraform-resource: true
+      x-terraform-resource-name: Workspace
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspaceCreateRequestDTO"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSchema"
+    get:
+      x-terraform-list: Workspace
+      x-terraform-list-name: Workspaces
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspacesListResponseDTO"
+  /v1/organizations/{organizationId}/workspaces/{workspaceId}:
+    get:
+      x-terraform-read: Workspace
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceSchema"
+    patch:
+      x-terraform-update: Workspace
+      x-terraform-read-after-write: true
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspacePatchRequestDTO"
+      responses:
+        "204":
+          description: no body
+components:
+  schemas:
+    WorkspaceCreateRequestDTO:
+      type: object
+      required: [workspaceId]
+      properties:
+        workspaceId:
+          type: string
+          x-terraform-name: workspace_id
+        alias:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    WorkspacePatchRequestDTO:
+      type: object
+      properties:
+        alias:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    WorkspaceSchema:
+      type: object
+      required: [workspaceId, region, state]
+      properties:
+        workspaceId:
+          type: string
+          x-terraform-name: workspace_id
+        alias:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        region:
+          type: string
+        state:
+          type: string
+    WorkspacesListResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkspaceSchema"
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	workspace := resourceByName(t, resources, "Workspace")
+	if workspace.Create.ResponseSchema != "WorkspaceSchema" {
+		t.Fatalf("create response schema = %q", workspace.Create.ResponseSchema)
+	}
+	if !workspace.Update.ReadAfterWrite {
+		t.Fatalf("workspace update should read after write")
+	}
+	if workspace.ListName != "Workspaces" || workspace.ListFileStem != "workspaces" || workspace.ListStructName != "Workspaces" {
+		t.Fatalf("list metadata = %q/%q/%q", workspace.ListName, workspace.ListFileStem, workspace.ListStructName)
+	}
+	if len(workspace.List.PathParams) != 1 || workspace.List.PathParams[0].TerraformName != "organization_id" {
+		t.Fatalf("list path params = %#v", workspace.List.PathParams)
+	}
+
+	workspaceID := fieldByTFName(t, workspace.Fields, "workspace_id")
+	if !workspaceID.Required || !workspaceID.PathParam {
+		t.Fatalf("workspace_id required/path = %v/%v", workspaceID.Required, workspaceID.PathParam)
+	}
+	alias := fieldByTFName(t, workspace.Fields, "alias")
+	if !alias.RequestField || !alias.UpdateField {
+		t.Fatalf("alias request/update = %v/%v", alias.RequestField, alias.UpdateField)
+	}
+	region := fieldByTFName(t, workspace.Fields, "region")
+	if !region.Computed || region.RequestField || region.UpdateField {
+		t.Fatalf("region computed/request/update = %v/%v/%v", region.Computed, region.RequestField, region.UpdateField)
 	}
 }
 

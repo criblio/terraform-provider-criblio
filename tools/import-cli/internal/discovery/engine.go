@@ -94,6 +94,15 @@ func unionUnmarshalIdentifiersFromCapture(e registry.Entry, groupID string) ([]m
 	}
 }
 
+func criblLakeDatasetIdentifiersFromCapture(lakeID string) ([]map[string]string, int, bool, error) {
+	body := custom.GetAndClearCriblLakeDatasetListBody(lakeID)
+	if len(body) == 0 {
+		return nil, 0, false, nil
+	}
+	ids, err := custom.ParseCriblLakeDatasetListBody(body, lakeID)
+	return ids, len(ids), true, err
+}
+
 // isSDKUnionUnmarshalError reports whether err is the SDK failing to unmarshal a response
 // into a oneOf union type. When true, discovery may fall back to parsing captured raw bodies.
 func isSDKUnionUnmarshalError(err error) bool {
@@ -617,6 +626,9 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 		scope := groupIDs[0]
 		if e.TypeName == "criblio_cribl_lake_dataset" {
 			scope = "default"
+			if ids, _, found, parseErr := criblLakeDatasetIdentifiersFromCapture(scope); found && parseErr == nil {
+				return ids, nil
+			}
 		}
 		ids, idErr := identifiersFromItems(items, scope, e)
 		if idErr != nil {
@@ -1189,6 +1201,9 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 			}
 			if listErr != nil {
 				return 0, nil, listErr
+			}
+			if _, count, found, parseErr := criblLakeDatasetIdentifiersFromCapture("default"); found && parseErr == nil {
+				return count, nil, nil
 			}
 			ids, idErr := identifiersFromItems(items, groupIDs[0], e)
 			if idErr != nil {

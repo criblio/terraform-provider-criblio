@@ -36,20 +36,16 @@ func (d *SchemaDataSource) Schema(_ context.Context, _ datasource.SchemaRequest,
 		MarkdownDescription: "Schema Data Source",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Required: false,
 				Computed: true,
 			},
 			"group_id": schema.StringAttribute{
 				Required:    true,
-				Computed:    false,
 				Description: `Worker group ID.`,
 			},
 			"id": schema.StringAttribute{
 				Required: true,
-				Computed: false,
 			},
 			"schema": schema.StringAttribute{
-				Required:    false,
 				Computed:    true,
 				Description: `JSON schema matching standards of draft version 2019-09`,
 				CustomType:  jsontypes.NormalizedType{},

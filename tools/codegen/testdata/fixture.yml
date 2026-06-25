@@ -405,6 +405,10 @@ components:
                     required:
                       - add
                     properties:
+                      labels:
+                        type: array
+                        items:
+                          type: string
                       add:
                         type: array
                         items:

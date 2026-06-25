@@ -154,6 +154,93 @@ components:
 	assertNotContains(t, cloudOnlyPaths, `"/system/certificates": true`)
 }
 
+func TestRunMergesManagementAnnotatedPaths(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "upstream-openapi.yml")
+	overlay := filepath.Join(dir, "terraform-overlay.yml")
+	mgmtInput := filepath.Join(dir, "openapi-mgmt.yml")
+	mgmtOverlay := filepath.Join(dir, "terraform-mgmt-overlay.yml")
+	output := filepath.Join(dir, "merged-spec.yml")
+	cloudOnlyOutput := filepath.Join(dir, "cloud_only_paths.go")
+
+	writeFile(t, input, `openapi: 3.1.0
+paths:
+  /system/certificates:
+    get:
+      responses:
+        "200":
+          description: ok
+components:
+  schemas:
+    Certificate:
+      type: object
+      properties:
+        id:
+          type: string
+`)
+	writeFile(t, overlay, `actions: []
+`)
+	writeFile(t, mgmtInput, `openapi: 3.1.0
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          description: health
+  /v1/organizations/{organizationId}/workspaces:
+    get:
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspacesListResponseDTO"
+components:
+  schemas:
+    WorkspaceSchema:
+      type: object
+      properties:
+        workspaceId:
+          type: string
+    WorkspacesListResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WorkspaceSchema"
+`)
+	writeFile(t, mgmtOverlay, `actions:
+  - target: "$.paths./v1/organizations/{organizationId}/workspaces.get"
+    update:
+      x-terraform-list: Workspace
+      x-terraform-list-name: Workspaces
+`)
+
+	if err := runWithConfig(mergeConfig{
+		InputPath:                input,
+		OverlayPath:              overlay,
+		MgmtInputPath:            mgmtInput,
+		MgmtOverlayPath:          mgmtOverlay,
+		OutputPath:               output,
+		CloudOnlyPathsOutputPath: cloudOnlyOutput,
+	}); err != nil {
+		t.Fatalf("runWithConfig returned error: %v", err)
+	}
+
+	merged := readFile(t, output)
+	assertContains(t, merged, "/v1/organizations/{organizationId}/workspaces:")
+	assertContains(t, merged, "x-terraform-list-name: Workspaces")
+	assertContains(t, merged, "WorkspaceSchema:")
+	assertNotContains(t, merged, "  /:")
+}
+
 func writeFile(t *testing.T, filename, content string) {
 	t.Helper()
 
