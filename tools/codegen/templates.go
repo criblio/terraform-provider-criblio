@@ -736,13 +736,17 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if .Create.ReadAfterWrite }}
+	_, err := r.api.Create(ctx, model)
+{{- else }}
 	apiModel, err := r.api.Create(ctx, model)
+{{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
-	apiModel, err = r.api.Read(ctx, model)
+	apiModel, err := r.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return

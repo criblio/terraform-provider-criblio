@@ -280,12 +280,12 @@ func (r *EventBreakerRulesetResource) Create(ctx context.Context, req resource.C
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	apiModel, err := r.api.Create(ctx, model)
+	_, err := r.api.Create(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	apiModel, err = r.api.Read(ctx, model)
+	apiModel, err := r.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
