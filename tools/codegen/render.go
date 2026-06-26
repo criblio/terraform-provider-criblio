@@ -175,6 +175,7 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"listTypeNameSuffix":             listTypeNameSuffix,
 		"listItemObjectValue":            listItemObjectValue,
 		"listElementAttrType":            listElementAttrType,
+		"emptyJSONValue":                 emptyJSONValue,
 		"goValueLiteral":                 goValueLiteral,
 	}).Parse(body)
 	if err != nil {
@@ -992,6 +993,16 @@ func listElementAttrType(field parser.FieldDef) string {
 	}
 }
 
+func emptyJSONValue(field parser.FieldDef) string {
+	if field.Type == "array" {
+		return "[]any{}"
+	}
+	if field.Type == "object" {
+		return "map[string]any{}"
+	}
+	return "nil"
+}
+
 func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range append(resource.List.PathParams, resource.List.QueryParams...) {
@@ -1038,7 +1049,7 @@ func needsPlanModifier(resource parser.ResourceDef) bool {
 
 func needsFrameworkPlanModifier(resource parser.ResourceDef, kind string) bool {
 	for _, field := range resourceFields(resource) {
-		if field.ForceNew && frameworkPlanModifierKind(field) == kind {
+		if (field.ForceNew || field.UseStateForUnknown) && frameworkPlanModifierKind(field) == kind {
 			return true
 		}
 	}
@@ -1100,6 +1111,9 @@ func planModifierCalls(field parser.FieldDef) []string {
 	var calls []string
 	if field.ForceNew {
 		calls = append(calls, fmt.Sprintf("%splanmodifier.RequiresReplaceIfConfigured()", frameworkPlanModifierKind(field)))
+	}
+	if field.UseStateForUnknown {
+		calls = append(calls, fmt.Sprintf("%splanmodifier.UseStateForUnknown()", frameworkPlanModifierKind(field)))
 	}
 	if field.SuppressDiff {
 		packageName := customPlanModifierPackage(field)

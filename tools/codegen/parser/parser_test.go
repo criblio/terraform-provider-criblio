@@ -338,12 +338,12 @@ components:
 
 	searchDataset := resourceByName(t, resources, "SearchDataset")
 	id := fieldByTFName(t, searchDataset.Fields, "id")
-	if id.Required || id.Optional || !id.Computed || !id.PathParam {
-		t.Fatalf("search dataset id flags = required:%v optional:%v computed:%v path:%v", id.Required, id.Optional, id.Computed, id.PathParam)
+	if id.Required || id.Optional || !id.Computed || !id.PathParam || !id.UseStateForUnknown {
+		t.Fatalf("search dataset id flags = required:%v optional:%v computed:%v path:%v use_state:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.UseStateForUnknown)
 	}
 	providerID := fieldByTFName(t, searchDataset.Fields, "provider_id")
-	if providerID.Required || providerID.Optional || !providerID.Computed {
-		t.Fatalf("search dataset provider_id flags = required:%v optional:%v computed:%v", providerID.Required, providerID.Optional, providerID.Computed)
+	if providerID.Required || providerID.Optional || !providerID.Computed || !providerID.UseStateForUnknown {
+		t.Fatalf("search dataset provider_id flags = required:%v optional:%v computed:%v use_state:%v", providerID.Required, providerID.Optional, providerID.Computed, providerID.UseStateForUnknown)
 	}
 	variant := variantByName(t, searchDataset.OneOfVariants, "ApiHttpDataset")
 	if variant.TerraformName != "apihttp_dataset" {

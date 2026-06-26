@@ -43,3 +43,31 @@ func TestRoutesModelUnmarshalClonesObject(t *testing.T) {
 		t.Fatalf("clone element type = %T", clones.Elements()[0])
 	}
 }
+
+func TestRoutesModelUpdateBodyEmitsEmptyGroupsAndComments(t *testing.T) {
+	model := RoutesModel{
+		Comments: types.ListNull(types.ObjectType{AttrTypes: RoutesCommentsAttrTypes()}),
+		Groups:   types.MapNull(types.ObjectType{AttrTypes: RoutesGroupsAttrTypes()}),
+		Routes:   types.ListNull(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}),
+	}
+
+	body, err := model.updateBody()
+	if err != nil {
+		t.Fatalf("updateBody returned error: %v", err)
+	}
+
+	comments, ok := body["comments"].([]any)
+	if !ok {
+		t.Fatalf("comments type = %T", body["comments"])
+	}
+	if len(comments) != 0 {
+		t.Fatalf("comments = %#v", comments)
+	}
+	groups, ok := body["groups"].(map[string]any)
+	if !ok {
+		t.Fatalf("groups type = %T", body["groups"])
+	}
+	if len(groups) != 0 {
+		t.Fatalf("groups = %#v", groups)
+	}
+}

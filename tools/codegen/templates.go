@@ -621,6 +621,13 @@ func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 {{- end }}
 		output["{{ .APIName }}"] = value
 	}
+{{- if .EmitEmpty }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+	}
+{{- end }}
+{{- else if .EmitEmpty }}
+	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
 {{- end }}
 {{- end }}
 {{- range .OneOfVariants }}
@@ -660,6 +667,13 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 {{- end }}
 		output["{{ .APIName }}"] = value
 	}
+{{- if .EmitEmpty }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+	}
+{{- end }}
+{{- else if .EmitEmpty }}
+	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
 {{- end }}
 {{- end }}
 	return output, nil

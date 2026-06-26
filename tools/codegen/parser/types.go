@@ -74,6 +74,8 @@ type FieldDef struct {
 	UpdateField        bool
 	ApplyStrategy      string
 	PlanModifierHook   string
+	UseStateForUnknown bool
+	EmitEmpty          bool
 	FixedValue         string
 	Enum               []string
 	Fields             []FieldDef

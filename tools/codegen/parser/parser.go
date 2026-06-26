@@ -294,6 +294,7 @@ func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
 			field.Required = false
 			field.Optional = false
 			field.Computed = true
+			field.UseStateForUnknown = true
 		}
 	}
 }
@@ -562,10 +563,15 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 			"x-terraform-element-custom-type",
 		),
 		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
-		FixedValue:       fixedValueAnnotation(property),
-		ObjectAsJSON:     boolAnnotation(property, "x-terraform-object-as-json"),
-		NotNull:          boolAnnotation(property, "x-terraform-not-null"),
-		ValidJSON:        boolAnnotation(property, "x-terraform-valid-json"),
+		UseStateForUnknown: boolAnnotation(
+			property,
+			"x-terraform-use-state-for-unknown",
+		),
+		EmitEmpty:    boolAnnotation(property, "x-terraform-emit-empty"),
+		FixedValue:   fixedValueAnnotation(property),
+		ObjectAsJSON: boolAnnotation(property, "x-terraform-object-as-json"),
+		NotNull:      boolAnnotation(property, "x-terraform-not-null"),
+		ValidJSON:    boolAnnotation(property, "x-terraform-valid-json"),
 		PipelineFunctionID: boolAnnotation(
 			property,
 			"x-terraform-pipeline-function-id-validator",

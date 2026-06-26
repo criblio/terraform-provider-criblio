@@ -47,6 +47,9 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional:    false,
 				Computed:    true,
 				Description: `Brief description of the Dataset.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Required:    false,
@@ -55,6 +58,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Description: `Unique identifier for the Dataset.`,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"provider_id": schema.StringAttribute{
@@ -62,12 +66,18 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Optional:    false,
 				Computed:    true,
 				Description: `Identifier for the Dataset Provider that the Dataset uses.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"type": schema.StringAttribute{
 				Required:    false,
 				Optional:    false,
 				Computed:    true,
 				Description: `Dataset provider type.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"aws_security_lake_dataset": schema.SingleNestedAttribute{
 				Optional: true,

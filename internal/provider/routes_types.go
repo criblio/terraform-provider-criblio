@@ -362,12 +362,18 @@ func (m RoutesModel) MarshalJSON() ([]byte, error) {
 		}
 		output["comments"] = value
 	}
+	if _, ok := output["comments"]; !ok {
+		output["comments"] = []any{}
+	}
 	if !m.Groups.IsNull() && !m.Groups.IsUnknown() {
 		value, err := RoutesTerraformValueToJSON(m.Groups)
 		if err != nil {
 			return nil, fmt.Errorf("convert groups to API value: %v", err)
 		}
 		output["groups"] = value
+	}
+	if _, ok := output["groups"]; !ok {
+		output["groups"] = map[string]any{}
 	}
 	if !m.Routes.IsNull() && !m.Routes.IsUnknown() {
 		value, err := RoutesTerraformValueToJSON(m.Routes)
@@ -387,12 +393,18 @@ func (m RoutesModel) updateBody() (map[string]any, error) {
 		}
 		output["comments"] = value
 	}
+	if _, ok := output["comments"]; !ok {
+		output["comments"] = []any{}
+	}
 	if !m.Groups.IsNull() && !m.Groups.IsUnknown() {
 		value, err := RoutesTerraformValueToJSON(m.Groups)
 		if err != nil {
 			return nil, fmt.Errorf("convert groups to API value: %v", err)
 		}
 		output["groups"] = value
+	}
+	if _, ok := output["groups"]; !ok {
+		output["groups"] = map[string]any{}
 	}
 	if !m.Routes.IsNull() && !m.Routes.IsUnknown() {
 		value, err := RoutesTerraformValueToJSON(m.Routes)
