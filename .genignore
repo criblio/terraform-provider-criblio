@@ -21,7 +21,5 @@ internal/provider/reflect/struct.go
 internal/provider/reflect/into.go
 internal/provider/utils.go
 internal/provider/notificationtarget_resource.go
-internal/provider/custombanner_resource_sdk.go
-internal/provider/custombanner_resource.go
 internal/provider/mappings_data_source.go
 internal/provider/mappings_data_source_sdk.go

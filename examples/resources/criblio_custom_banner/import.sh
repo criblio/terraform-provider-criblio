@@ -1,0 +1,1 @@
+terraform import criblio_custom_banner.my_custombanner custom-banner

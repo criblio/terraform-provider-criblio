@@ -12,5 +12,9 @@ internal/provider/searchdatatyperuleset_delete.go
 tests/acceptance/lookup_file_test.go
 tests/acceptance/pack_lookups_test.go
 tests/acceptance/pack_test.go
+tests/acceptance/custom_banner_test.go
+internal/provider/custombanner_create.go
+internal/provider/custombanner_data_source.go
+internal/provider/custombanner_resource.go
 internal/provider/pack_id_resolve.go
 internal/provider/pack_resource.go
