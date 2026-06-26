@@ -440,7 +440,7 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	savedDesc, savedDisplay, savedVersion := data.Description, data.DisplayName, data.Version
+	savedAuthor, savedDesc, savedDisplay, savedVersion := data.Author, data.Description, data.DisplayName, data.Version
 	if err := r.refreshPackState(ctx, data); err != nil {
 		if restclient.IsNotFound(err) {
 			resp.State.RemoveResource(ctx)
@@ -448,6 +448,9 @@ func (r *PackResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		}
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
+	}
+	if !savedAuthor.IsNull() && !savedAuthor.IsUnknown() {
+		data.Author = savedAuthor
 	}
 	if !savedDesc.IsNull() && !savedDesc.IsUnknown() {
 		data.Description = savedDesc
@@ -862,7 +865,12 @@ func packTagsAPIFromTF(tags *tfTypes.PackRequestBodyTags) *packTagsAPI {
 }
 
 func tagsAPIMap(tags *tfTypes.PackRequestBodyTags) map[string]any {
-	out := map[string]any{}
+	out := map[string]any{
+		"dataType":   []string{},
+		"domain":     []string{},
+		"streamtags": []string{},
+		"technology": []string{},
+	}
 	if tags == nil {
 		return out
 	}
@@ -991,6 +999,9 @@ func preservePackMetadataFromConfig(ctx context.Context, data *PackResourceModel
 	}
 	if !planData.Description.IsNull() && !planData.Description.IsUnknown() {
 		data.Description = planData.Description
+	}
+	if !planData.Author.IsNull() && !planData.Author.IsUnknown() {
+		data.Author = planData.Author
 	}
 	if !planData.DisplayName.IsNull() && !planData.DisplayName.IsUnknown() {
 		data.DisplayName = planData.DisplayName
