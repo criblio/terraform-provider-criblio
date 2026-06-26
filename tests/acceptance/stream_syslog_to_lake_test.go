@@ -11,6 +11,10 @@ import (
 
 func TestStreamSyslogToLake(t *testing.T) {
 	onPrem := os.Getenv("DEPLOYMENT") == "onprem"
+	if !onPrem {
+		t.Skip("Skipping cloud Stream syslog-to-lake example: destroy can race source output reference cleanup")
+	}
+
 	configVariables := config.Variables{
 		"onprem": config.BoolVariable(onPrem),
 	}
