@@ -18,23 +18,21 @@ resource "criblio_group" "my_group" {
     provider = "aws"
     region   = "us-east-1"
   }
-  description           = "Production Edge configuration group"
+  description           = "Production stream worker group"
   estimated_ingest_rate = 1024
-  id                    = "config-group-prod-edge"
-  inherits              = "base-config"
+  id                    = "config-group-prod-stream"
   is_fleet              = false
-  max_worker_age        = "1h"
-  name                  = "Prod Edge"
-  on_prem               = true
+  name                  = "config-group-prod-stream"
+  on_prem               = false
   product               = "stream"
-  provisioned           = true
+  provisioned           = false
   streamtags = [
     "prod",
-    "edge",
+    "stream",
   ]
   tags                 = "environment=prod,team=platform"
-  type                 = "search"
-  worker_remote_access = true
+  type                 = "stream"
+  worker_remote_access = false
 }
 ```
 

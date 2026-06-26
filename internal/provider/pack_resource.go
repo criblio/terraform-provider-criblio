@@ -874,10 +874,10 @@ func tagsAPIMap(tags *tfTypes.PackRequestBodyTags) map[string]any {
 	if tags == nil {
 		return out
 	}
-	out["dataType"] = stringSliceFromValues(tags.DataType)
-	out["domain"] = stringSliceFromValues(tags.Domain)
-	out["streamtags"] = stringSliceFromValues(tags.Streamtags)
-	out["technology"] = stringSliceFromValues(tags.Technology)
+	out["dataType"] = nonNilStringSliceFromValues(tags.DataType)
+	out["domain"] = nonNilStringSliceFromValues(tags.Domain)
+	out["streamtags"] = nonNilStringSliceFromValues(tags.Streamtags)
+	out["technology"] = nonNilStringSliceFromValues(tags.Technology)
 	return out
 }
 
@@ -898,6 +898,14 @@ func stringSliceFromValues(values []types.String) []string {
 		if !value.IsNull() && !value.IsUnknown() {
 			out = append(out, value.ValueString())
 		}
+	}
+	return out
+}
+
+func nonNilStringSliceFromValues(values []types.String) []string {
+	out := stringSliceFromValues(values)
+	if out == nil {
+		return []string{}
 	}
 	return out
 }

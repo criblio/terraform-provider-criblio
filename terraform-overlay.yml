@@ -1251,6 +1251,7 @@ actions:
       x-terraform-resource: true
       x-terraform-resource-name: PackPipeline
       x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
   - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.get"
     update:
       x-terraform-read: PackPipeline
@@ -1258,6 +1259,7 @@ actions:
     update:
       x-terraform-update: PackPipeline
       x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
   - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.delete"
     update:
       x-terraform-delete: PackPipeline

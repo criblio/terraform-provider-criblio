@@ -114,7 +114,7 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_cribl_lake_house":             {ListMethod: "ListDefaultLakeLakehouses", ImportIDFormat: "id"},
 	"criblio_global_var":                   {ImportIDFormat: "json:group_id,id"},
 	"criblio_grok":                         {ImportIDFormat: "json:group_id,id"},
-	"criblio_group":                        {ImportIDFormat: "group_id", RefreshFromMethod: "RefreshFromOperationsCreateProductsGroupsByProductResponseBody"},
+	"criblio_group":                        {ImportIDFormat: "group_id"},
 	"criblio_group_system_settings":        {ListMethod: "GetSystemSettingsConf", ImportIDFormat: "group_id", ListUseGroupIDAsItemID: true},
 	"criblio_key":                          {SDKService: "Keys", ListMethod: "ListKeyMetadataEntity", GetMethod: "GetKeyMetadataEntityByID", ImportIDFormat: "json:group_id,id,key_id", ListItemIDMethod: "GetKeyID"},
 	"criblio_pack":                         {ImportIDFormat: "json:group_id,id"},

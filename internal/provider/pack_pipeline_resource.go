@@ -287,7 +287,7 @@ func (r *PackPipelineResource) Create(ctx context.Context, req resource.CreateRe
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackPipelineAPIToState(apiModel, &model, false, false)
+	applyPackPipelineAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -321,7 +321,7 @@ func (r *PackPipelineResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyPackPipelineAPIToState(apiModel, &model, false, false)
+	applyPackPipelineAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
