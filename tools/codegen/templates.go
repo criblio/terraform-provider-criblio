@@ -884,12 +884,15 @@ import (
 {{- if needsClientFmt . }}
 	"fmt"
 {{- end }}
-{{- if resourceHasQueryParams . }}
+{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") }}
 	"net/url"
+{{- end }}
+{{- if eq .StructName "LookupFile" }}
+	"strings"
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-{{- if eq .StructName "Key" }}
+{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 {{- end }}
 )
@@ -902,6 +905,28 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 	return {{ .StructName }}API{client: client}
 }
 
+{{- if eq .StructName "SearchDataset" }}
+func searchDatasetID(model SearchDatasetModel) string {
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		return model.ID.ValueString()
+	}
+{{- range .OneOfVariants }}
+	{{- $variant := . }}
+	if model.{{ .GoName }} != nil {
+	{{- range .Fields }}
+		{{- if eq .TerraformName "id" }}
+		if !model.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !model.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() && model.{{ $variant.GoName }}.{{ .GoName }}.ValueString() != "" {
+			return model.{{ $variant.GoName }}.{{ .GoName }}.ValueString()
+		}
+		{{- end }}
+	{{- end }}
+	}
+{{- end }}
+	return ""
+}
+
+{{- end }}
+
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr . .Create }}, model)
@@ -913,6 +938,13 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
+{{- else if eq .StructName "LookupFile" }}
+	id := model.ID.ValueString()
+	if err := uploadLookupFileContent(ctx, a.client, model, id); err != nil {
+		return nil, err
+	}
+	apiModel, err := restclient.Post[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups", model.GroupID.ValueString()), model)
+	return normalizeLookupFileAPIModel(apiModel, id), err
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
@@ -934,6 +966,20 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 		}
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
+{{- else if eq .StructName "LookupFile" }}
+	configuredID := model.ID.ValueString()
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		apiModel, err := restclient.Get[LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
+		if err == nil {
+			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
 {{- else }}
 	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Read }})
 {{- end }}
@@ -954,6 +1000,27 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 	}
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
+{{- else if eq .StructName "LookupFile" }}
+	configuredID := model.ID.ValueString()
+	if err := uploadLookupFileContent(ctx, a.client, model, configuredID); err != nil {
+		return nil, err
+	}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		requestModel := model
+		if id != configuredID {
+			requestModel.ID = types.StringValue(id)
+		}
+		apiModel, err := restclient.Patch[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id), requestModel)
+		if err == nil {
+			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
 {{- else }}
 {{- if .Update.ReadAfterWrite }}
 	body, err := model.updateBody()
@@ -996,6 +1063,19 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	// The keys API does not support deleting key metadata. Preserve the
 	// legacy provider behavior by allowing Terraform to remove only its state.
 	return nil
+{{- else if eq .StructName "LookupFile" }}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(model.ID.ValueString()) {
+		err := restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
+		if err == nil {
+			return nil
+		}
+		if !restclient.IsNotFound(err) {
+			return err
+		}
+		lastErr = err
+	}
+	return lastErr
 {{- else if eq .StructName "GroupSystemSettings" }}
 	// Group system settings are singleton configuration. There is no delete
 	// endpoint; destroy removes Terraform state without resetting the group.
@@ -1036,6 +1116,49 @@ func normalizeKeyAPIModel(model *KeyModel, terraformID string) *KeyModel {
 	}
 	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
 		model.KeyID = model.ID
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
+}
+{{- end }}
+{{- if eq .StructName "LookupFile" }}
+
+func lookupFileAPIIDs(id string) []string {
+	if id == "" || lookupFileIDHasKnownExtension(id) {
+		return []string{id}
+	}
+	return []string{id, id + ".csv"}
+}
+
+func lookupFileIDHasKnownExtension(id string) bool {
+	lower := strings.ToLower(id)
+	return strings.HasSuffix(lower, ".csv") ||
+		strings.HasSuffix(lower, ".gz") ||
+		strings.HasSuffix(lower, ".csv.gz") ||
+		strings.HasSuffix(lower, ".mmdb")
+}
+
+func lookupFileUploadFilename(id string) string {
+	if lookupFileIDHasKnownExtension(id) {
+		return id
+	}
+	return id + ".csv"
+}
+
+func uploadLookupFileContent(ctx context.Context, client *restclient.Client, model LookupFileModel, id string) error {
+	if model.Content.IsNull() || model.Content.IsUnknown() {
+		return nil
+	}
+	filename := lookupFileUploadFilename(id)
+	path := fmt.Sprintf("/m/%s/system/lookups?filename=%s", model.GroupID.ValueString(), url.QueryEscape(filename))
+	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func normalizeLookupFileAPIModel(model *LookupFileModel, terraformID string) *LookupFileModel {
+	if model == nil {
+		return nil
 	}
 	if terraformID != "" {
 		model.ID = types.StringValue(terraformID)
@@ -1536,6 +1659,10 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.Schedule = normalized.(types.Object)
 		}
 	}
+{{- else if eq .StructName "Routes" }}
+	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
 {{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
@@ -1565,6 +1692,54 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 func {{ .Name }}Debug(value any) string {
 	return fmt.Sprintf("%v", value)
 }
+
+{{- if eq .StructName "Routes" }}
+func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) types.List {
+	elements := stateRoutes.Elements()
+	apiElements := apiRoutes.Elements()
+	for index := range elements {
+		if index >= len(apiElements) {
+			break
+		}
+		stateObject, ok := elements[index].(types.Object)
+		if !ok || stateObject.IsNull() || stateObject.IsUnknown() {
+			continue
+		}
+		apiObject, ok := apiElements[index].(types.Object)
+		if !ok || apiObject.IsNull() || apiObject.IsUnknown() {
+			continue
+		}
+		attributes := stateObject.Attributes()
+		apiAttributes := apiObject.Attributes()
+		changed := false
+		for name, stateAttribute := range attributes {
+			if !stateAttribute.IsUnknown() {
+				continue
+			}
+			apiAttribute, ok := apiAttributes[name]
+			if !ok || apiAttribute.IsUnknown() {
+				continue
+			}
+			attributes[name] = apiAttribute
+			changed = true
+		}
+		if !changed {
+			continue
+		}
+		merged, diags := types.ObjectValue(stateObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = merged
+	}
+	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateRoutes
+	}
+	return value
+}
+
+{{- end }}
 `
 
 const dataSourceTemplate = `// Code generated by tools/codegen. DO NOT EDIT.

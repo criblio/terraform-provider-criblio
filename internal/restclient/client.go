@@ -139,6 +139,12 @@ func PutNoResponse[Req any](ctx context.Context, c *Client, path string, body Re
 	return err
 }
 
+// PutRawNoResponse sends a PUT request with the provided content type and raw body.
+func PutRawNoResponse(ctx context.Context, c *Client, path, contentType string, body []byte) error {
+	_, err := do(ctx, c, http.MethodPut, path, contentType, body)
+	return err
+}
+
 // Delete sends a DELETE request.
 func Delete(ctx context.Context, c *Client, path string) error {
 	_, err := do(ctx, c, http.MethodDelete, path, "", nil)

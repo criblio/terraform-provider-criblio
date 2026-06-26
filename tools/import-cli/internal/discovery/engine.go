@@ -45,7 +45,7 @@ func filterSearchDashboardIDs(typeName string, ids []map[string]string) []map[st
 }
 
 func skipGroupScopedSingleton(typeName, groupID string) bool {
-	return typeName == "criblio_routes" && groupID == "default_search"
+	return typeName == "criblio_routes" && (groupID == "default_search" || groupID == "search")
 }
 
 // searchListIdentifiersFromCapture returns identifiers (and count) from the captured

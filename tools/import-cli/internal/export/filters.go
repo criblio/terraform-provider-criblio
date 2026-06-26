@@ -84,7 +84,7 @@ func skipResourceByID(typeName string, idMap map[string]string) bool {
 	// Stream routes are one singleton per worker group. default_search has Search UI
 	// resources, but exporting criblio_routes there produces an invalid PATCH payload
 	// for the stream routes endpoint.
-	if typeName == "criblio_routes" && idMap["group_id"] == "default_search" {
+	if typeName == "criblio_routes" && (idMap["group_id"] == "default_search" || idMap["group_id"] == "search") {
 		return true
 	}
 	// criblio_pack: pack id is in "id"

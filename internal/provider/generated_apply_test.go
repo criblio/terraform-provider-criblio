@@ -36,9 +36,9 @@ func TestApplyAPIToStateTypesOmittedNestedObjects(t *testing.T) {
 	}
 }
 
-func TestApplyAPIToStateTypesOmittedStringMaps(t *testing.T) {
+func TestApplyAPIToStateTypesOmittedObjectMaps(t *testing.T) {
 	api := &ProjectModel{
-		Consumers: types.MapNull(types.StringType),
+		Consumers: types.MapNull(types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()}),
 	}
 	state := &ProjectModel{}
 
@@ -47,7 +47,8 @@ func TestApplyAPIToStateTypesOmittedStringMaps(t *testing.T) {
 	if !state.Consumers.IsNull() {
 		t.Fatalf("consumers should remain null, got %#v", state.Consumers)
 	}
-	if got := state.Consumers.ElementType(context.Background()); got == nil || !got.Equal(types.StringType) {
-		t.Fatalf("consumers element type = %v, want %v", got, types.StringType)
+	want := types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()}
+	if got := state.Consumers.ElementType(context.Background()); got == nil || !got.Equal(want) {
+		t.Fatalf("consumers element type = %v, want %v", got, want)
 	}
 }

@@ -147,6 +147,7 @@ func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 
 func TestSkipGroupScopedSingleton(t *testing.T) {
 	assert.True(t, skipGroupScopedSingleton("criblio_routes", "default_search"))
+	assert.True(t, skipGroupScopedSingleton("criblio_routes", "search"))
 	assert.False(t, skipGroupScopedSingleton("criblio_routes", "default"))
 	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
 }

@@ -8,3 +8,4 @@ internal/provider/pipeline_planmodifiers.go
 internal/provider/searchdashboard_config_planmodifier.go
 internal/provider/searchdatasetruleset_delete.go
 internal/provider/searchdatatyperuleset_delete.go
+tests/acceptance/lookup_file_test.go

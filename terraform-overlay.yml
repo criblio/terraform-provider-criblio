@@ -2175,6 +2175,47 @@ actions:
     update:
       x-terraform-ignore: true
 
+  - target: "$.paths./m/{groupId}/system/lookups.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.get"
+    update:
+      x-terraform-read: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.patch"
+    update:
+      x-terraform-update: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.delete"
+    update:
+      x-terraform-delete: LookupFile
+  - target: "$.components.examples.CreateLookupFileExamplesCSVLookup.value"
+    update:
+      content: "ip,reputation\n10.0.0.1,internal"
+      mode: memory
+      tags: geo,reference
+  - target: "$.components.schemas.LookupFile.properties"
+    update:
+      content:
+        type: string
+        description: File content.
+        x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.id"
+    update:
+      x-terraform-prefer-state: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LookupFile.properties.description"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.tags"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.version"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.size"
+    update:
+      x-terraform-ignore: true
+
   - target: "$.paths./m/{groupId}/notifications.post"
     update:
       x-terraform-resource: true

@@ -131,6 +131,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"HmacFunctionResourceModel":               reflect.TypeOf((*provider.HmacFunctionModel)(nil)).Elem(),
 		"KeyResourceModel":                        reflect.TypeOf((*provider.KeyModel)(nil)).Elem(),
 		"LakehouseDatasetConnectionResourceModel": reflect.TypeOf((*provider.LakehouseDatasetConnectionModel)(nil)).Elem(),
+		"LookupFileResourceModel":                 reflect.TypeOf((*provider.LookupFileModel)(nil)).Elem(),
 		"MappingRulesetResourceModel":             reflect.TypeOf((*provider.MappingRulesetModel)(nil)).Elem(),
 		"ParquetSchemaResourceModel":              reflect.TypeOf((*provider.ParquetSchemaModel)(nil)).Elem(),
 		"ParserLibEntryResourceModel":             reflect.TypeOf((*provider.ParserLibEntryModel)(nil)).Elem(),

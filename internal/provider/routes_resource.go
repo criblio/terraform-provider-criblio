@@ -425,8 +425,55 @@ func applyRoutesAPIToState(api *RoutesModel, state *RoutesModel, preserveInputs 
 	} else if len(state.Routes.Elements()) == 0 {
 		state.Routes = types.ListValueMust(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}, nil)
 	}
+	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
 }
 
 func RoutesDebug(value any) string {
 	return fmt.Sprintf("%v", value)
+}
+func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) types.List {
+	elements := stateRoutes.Elements()
+	apiElements := apiRoutes.Elements()
+	for index := range elements {
+		if index >= len(apiElements) {
+			break
+		}
+		stateObject, ok := elements[index].(types.Object)
+		if !ok || stateObject.IsNull() || stateObject.IsUnknown() {
+			continue
+		}
+		apiObject, ok := apiElements[index].(types.Object)
+		if !ok || apiObject.IsNull() || apiObject.IsUnknown() {
+			continue
+		}
+		attributes := stateObject.Attributes()
+		apiAttributes := apiObject.Attributes()
+		changed := false
+		for name, stateAttribute := range attributes {
+			if !stateAttribute.IsUnknown() {
+				continue
+			}
+			apiAttribute, ok := apiAttributes[name]
+			if !ok || apiAttribute.IsUnknown() {
+				continue
+			}
+			attributes[name] = apiAttribute
+			changed = true
+		}
+		if !changed {
+			continue
+		}
+		merged, diags := types.ObjectValue(stateObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = merged
+	}
+	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateRoutes
+	}
+	return value
 }

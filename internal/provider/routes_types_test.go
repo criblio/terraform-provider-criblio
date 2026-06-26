@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -96,5 +97,64 @@ func TestApplyRoutesAPIToStatePreservesNullInputsAfterWrite(t *testing.T) {
 	}
 	if !state.Routes.IsNull() {
 		t.Fatalf("routes = %#v, want null", state.Routes)
+	}
+}
+
+func TestApplyRoutesAPIToStateFillsUnknownRouteAttributesAfterWrite(t *testing.T) {
+	routeTypes := RoutesRoutesAttrTypes()
+	stateRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"clones":                   types.ListUnknown(types.MapType{ElemType: types.StringType}),
+		"context":                  types.StringNull(),
+		"description":              types.StringUnknown(),
+		"disabled":                 types.BoolUnknown(),
+		"enable_output_expression": types.BoolUnknown(),
+		"filter":                   types.StringValue("true"),
+		"group_id":                 types.StringValue("default"),
+		"name":                     types.StringValue("with pack"),
+		"output":                   types.StringNull(),
+		"output_expression":        types.StringNull(),
+		"pipeline":                 types.StringValue("main"),
+		"target_context":           types.StringNull(),
+		"final":                    types.BoolValue(true),
+		"id":                       types.StringUnknown(),
+	})
+	apiRoute := types.ObjectValueMust(routeTypes, map[string]attr.Value{
+		"clones":                   types.ListValueMust(types.MapType{ElemType: types.StringType}, nil),
+		"context":                  types.StringNull(),
+		"description":              types.StringValue(""),
+		"disabled":                 types.BoolValue(false),
+		"enable_output_expression": types.BoolValue(false),
+		"filter":                   types.StringValue("true"),
+		"group_id":                 types.StringValue("default"),
+		"name":                     types.StringValue("with pack"),
+		"output":                   types.StringNull(),
+		"output_expression":        types.StringNull(),
+		"pipeline":                 types.StringValue("main"),
+		"target_context":           types.StringNull(),
+		"final":                    types.BoolValue(true),
+		"id":                       types.StringValue("route-generated"),
+	})
+	api := RoutesModel{
+		ID:     types.StringValue("default"),
+		Routes: types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{apiRoute}),
+	}
+	state := RoutesModel{
+		ID:     types.StringValue("default"),
+		Routes: types.ListValueMust(types.ObjectType{AttrTypes: routeTypes}, []attr.Value{stateRoute}),
+	}
+
+	applyRoutesAPIToState(&api, &state, true, false)
+
+	route, ok := state.Routes.Elements()[0].(types.Object)
+	if !ok {
+		t.Fatalf("route element type = %T", state.Routes.Elements()[0])
+	}
+	for _, name := range []string{"clones", "description", "disabled", "enable_output_expression", "id"} {
+		if route.Attributes()[name].IsUnknown() {
+			t.Fatalf("%s is still unknown", name)
+		}
+	}
+	if got := route.Attributes()["output"]; !got.IsNull() {
+		t.Fatalf("output = %#v, want null", got)
 	}
 }

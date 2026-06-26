@@ -740,7 +740,7 @@ func zeroValue(field parser.FieldDef) string {
 		return "types.MapValueMust(types.ObjectType{AttrTypes: " + field.NestedAttrTypes + "()}, nil)"
 	}
 	if nestedObject(field) {
-		return "types.ObjectValueMust(" + field.NestedAttrTypes + "(), map[string]attr.Value{})"
+		return "types.ObjectNull(" + field.NestedAttrTypes + "())"
 	}
 	switch goType(field) {
 	case "types.Bool":
@@ -809,7 +809,7 @@ func needsFmt(resource parser.ResourceDef) bool {
 }
 
 func needsClientFmt(resource parser.ResourceDef) bool {
-	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" {
+	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" {
 		return true
 	}
 	for _, op := range []parser.OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete} {
@@ -838,12 +838,7 @@ func needsNestedObject(resource parser.ResourceDef) bool {
 	return false
 }
 
-func needsResourceAttr(resource parser.ResourceDef) bool {
-	for _, field := range resourceFields(resource) {
-		if field.Computed && !field.Optional && nestedObject(field) {
-			return true
-		}
-	}
+func needsResourceAttr(_ parser.ResourceDef) bool {
 	return false
 }
 
@@ -1714,6 +1709,9 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param parser.FieldDef) string {
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return `"default_search"`
+	}
+	if resource.StructName == "SearchDataset" && param.TerraformName == "id" {
+		return "searchDatasetID(model)"
 	}
 	if resource.StructName == "Notification" && param.TerraformName == "group_id" {
 		if resource.List.OperationID != "" && op.OperationID == resource.List.OperationID {
