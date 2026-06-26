@@ -88,7 +88,7 @@ resource "criblio_source" "syslog_source" {
     udp_port               = 20005
     udp_socket_rx_buf_size = 262144
   }
-  depends_on = [criblio_destination.cribl_lake]
+  depends_on = [terraform_data.cribl_lake_ready]
 }
 
 # Cribl Lake Destination Configuration
@@ -105,6 +105,20 @@ resource "criblio_destination" "cribl_lake" {
     type        = "cribl_lake"
     description = "Cribl Lake destination for syslog data"
     dest_path   = "default_logs"
+  }
+}
+
+resource "terraform_data" "cribl_lake_ready" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
+  input      = criblio_destination.cribl_lake[0].id
+  depends_on = [criblio_destination.cribl_lake]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 10"
   }
 }
 
