@@ -13,28 +13,13 @@ PackLookups Resource
 ## Example Usage
 
 ```terraform
-terraform {
-  required_providers {
-    criblio = {
-      source  = "criblio/criblio"
-      version = ">= 0.1.0"
-    }
-  }
-}
-
-provider "criblio" {
-  organization_id = "beautiful-nguyen-y8y4azd"
-  workspace_id    = "main"
-  cloud_domain    = "cribl-playground.cloud"
-}
-
 resource "criblio_pack" "lookups_pack" {
   id           = "pack-with-lookups"
   group_id     = "default"
   description  = "Pack with lookups"
   disabled     = true
   display_name = "Pack from source"
-  source       = "file:/opt/cribl_data/failover/groups/default/default/hellotests"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
   version      = "1.0.0"
 }
 

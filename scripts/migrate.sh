@@ -119,8 +119,11 @@ classify_resource() {
 extract_contract() {
   local resource="$1"
   if [[ -d tools/behavioral-extractor ]]; then
-    go run ./tools/behavioral-extractor --resource "$resource" --dry-run
-    return 0
+    local output
+    if output="$(go run ./tools/behavioral-extractor --resource "$resource" --dry-run 2>&1)"; then
+      printf '%s\n' "$output"
+      return 0
+    fi
   fi
   local path
   path="$(contract_path "$resource" 2>/dev/null || true)"
@@ -298,7 +301,7 @@ migrate_bucket_c() {
   echo "Checkpoint 2: synthesized diff"
   if [[ -d tools/agentic-codegen ]]; then
     if is_true "$DRY_RUN"; then
-      go run ./tools/agentic-codegen --resource "$resource" --dry-run
+      echo "DRY_RUN=true: would run agentic-codegen for ${resource}"
     else
       go run ./tools/agentic-codegen --resource "$resource"
     fi

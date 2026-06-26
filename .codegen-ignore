@@ -11,3 +11,6 @@ internal/provider/searchdatasetruleset_delete.go
 internal/provider/searchdatatyperuleset_delete.go
 tests/acceptance/lookup_file_test.go
 tests/acceptance/pack_lookups_test.go
+tests/acceptance/pack_test.go
+internal/provider/pack_id_resolve.go
+internal/provider/pack_resource.go
