@@ -314,6 +314,90 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, fixedDataSource, `model.ID = types.StringValue("default")`)
 	assertNotContains(t, fixedDataSource, `Required: true`)
 
+	packPipeline := parser.ResourceDef{
+		StructName: "PackPipeline",
+		TypeName:   "criblio_pack_pipeline",
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/m/{groupId}/p/{pack}/pipelines",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			},
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/p/{pack}/pipelines/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Update: parser.OperationDef{
+			Method:         "PATCH",
+			Path:           "/m/{groupId}/p/{pack}/pipelines/{id}",
+			ReadAfterWrite: true,
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+	}
+	packPipelineClient := renderTemplate(t, "client", packPipeline)
+	assertContains(t, packPipelineClient, `"errors"`)
+	assertContains(t, packPipelineClient, `if packPipelineAlreadyExists(err) {`)
+	assertContains(t, packPipelineClient, `return a.Update(ctx, model)`)
+	assertContains(t, packPipelineClient, `func packPipelineAlreadyExists(err error) bool`)
+
+	packLookups := parser.ResourceDef{
+		StructName: "PackLookups",
+		TypeName:   "criblio_pack_lookups",
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			},
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Delete: parser.OperationDef{
+			Method: "DELETE",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+	}
+	packLookupsClient := renderTemplate(t, "client", packLookups)
+	assertContains(t, packLookupsClient, `"net/url"`)
+	assertContains(t, packLookupsClient, `if err := uploadPackLookupFileContent(ctx, a.client, model, id); err != nil`)
+	assertContains(t, packLookupsClient, `for _, id := range lookupFileAPIIDs(configuredID)`)
+	assertContains(t, packLookupsClient, `return normalizePackLookupsAPIModel(apiModel, configuredID), nil`)
+	assertContains(t, packLookupsClient, `func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client, model PackLookupsModel, id string) error`)
+	assertContains(t, packLookupsClient, `url.QueryEscape(filename)`)
+
 	fixedAPIField := parser.ResourceDef{
 		Name:     "searchengine",
 		FileStem: "search_engine",
@@ -427,6 +511,64 @@ func TestUpstreamExampleUsageEscapesTerraformInterpolation(t *testing.T) {
 	}
 	assertContains(t, got, "dest_path = \"`logs/$${C.Time.strftime(_time, '%Y/%m/%d')}`\"")
 	assertNotContains(t, got, "dest_path = \"`logs/${C.Time.strftime")
+}
+
+func TestPathExprOrdersParamsByPathTemplate(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "PackBreakers",
+		TypeName:   "criblio_pack_breakers",
+	}
+	op := parser.OperationDef{
+		Path: "/m/{groupId}/p/{pack}/lib/breakers/{id}",
+		PathParams: []parser.FieldDef{
+			{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			{APIName: "id", TerraformName: "id", GoName: "ID"},
+			{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+		},
+	}
+
+	got := pathExpr(resource, op)
+	assertContains(t, got, `fmt.Sprintf("/m/%s/p/%s/lib/breakers/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), model.ID.ValueString())`)
+}
+
+func TestExampleUsageUsesCuratedSourceExample(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "source",
+		FileStem: "source",
+		TypeName: "criblio_source",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "InputHttp"},
+		},
+	}
+
+	got := exampleUsage(resource)
+	assertContains(t, got, `resource "criblio_source" "my_http_source"`)
+	assertContains(t, got, `resource "criblio_source" "my_source"`)
+	assertNotContains(t, got, `input_appscope = {`)
+}
+
+func TestExampleUsagePrefersCuratedPackExample(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "packroutes",
+		FileStem: "pack_routes",
+		TypeName: "criblio_pack_routes",
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "upstream",
+					Value: map[string]any{
+						"groupId": "Cribl",
+						"pack":    "observability-pack",
+					},
+				},
+			},
+		},
+	}
+
+	got := exampleUsage(resource)
+	assertContains(t, got, `resource "criblio_pack" "routes_pack"`)
+	assertContains(t, got, `group_id = "default"`)
+	assertNotContains(t, got, `group_id = "Cribl"`)
 }
 
 func TestGeneratedImportUsesPathParams(t *testing.T) {

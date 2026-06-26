@@ -944,8 +944,10 @@ func nestedObjectFields(resource parser.ResourceDef) []parser.FieldDef {
 		}
 	}
 	walk(resource.Fields)
-	for _, variant := range resource.OneOfVariants {
-		walk(variant.Fields)
+	if resource.StructName != "PackDestination" && resource.StructName != "PackSource" {
+		for _, variant := range resource.OneOfVariants {
+			walk(variant.Fields)
+		}
 	}
 	return fields
 }
@@ -1200,15 +1202,48 @@ func customPlanModifierPackage(field parser.FieldDef) string {
 }
 
 func exampleUsage(resource parser.ResourceDef) string {
+	if content, ok := curatedExampleUsage(resource); ok {
+		return content
+	}
 	if content, ok := upstreamExampleUsage(resource); ok {
 		return content
 	}
 	path := filepath.Join("examples", "resources", resourceType(resource), "resource.tf")
-	content, err := os.ReadFile(path)
+	content, err := readRepoFile(path)
 	if err != nil {
 		return generatedExample(resource)
 	}
 	return strings.TrimSpace(string(content))
+}
+
+func curatedExampleUsage(resource parser.ResourceDef) (string, bool) {
+	exampleDirs := map[string]string{
+		"criblio_pack_breakers":    "pack-with-breakers",
+		"criblio_pack_destination": "pack-with-destination",
+		"criblio_pack_lookups":     "pack-with-lookups",
+		"criblio_pack_pipeline":    "pack-with-pipeline",
+		"criblio_pack_routes":      "pack-with-routes",
+		"criblio_pack_source":      "pack-with-source",
+		"criblio_pack_vars":        "pack-with-vars",
+		"criblio_source":           "source",
+	}
+	dir, ok := exampleDirs[resource.TypeName]
+	if !ok {
+		return "", false
+	}
+	content, err := readRepoFile(filepath.Join("examples", dir, "main.tf"))
+	if err != nil {
+		return "", false
+	}
+	return strings.TrimSpace(string(content)), true
+}
+
+func readRepoFile(path string) ([]byte, error) {
+	content, err := os.ReadFile(path)
+	if err == nil {
+		return content, nil
+	}
+	return os.ReadFile(filepath.Join("..", "..", path))
 }
 
 func upstreamExampleUsage(resource parser.ResourceDef) (string, bool) {
@@ -1697,7 +1732,7 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 		path += "?" + strings.Join(queryParts, "&")
 	}
 	args := []string{fmt.Sprintf("%q", path)}
-	for _, param := range op.PathParams {
+	for _, param := range orderedPathParams(op.Path, op.PathParams) {
 		if expr := pathParamExpr(resource, op, param); expr != "" {
 			args = append(args, expr)
 			continue
@@ -1717,6 +1752,36 @@ func pathExpr(resource parser.ResourceDef, op parser.OperationDef) string {
 	return "fmt.Sprintf(" + strings.Join(args, ", ") + ")"
 }
 
+func orderedPathParams(path string, params []parser.FieldDef) []parser.FieldDef {
+	byName := make(map[string]parser.FieldDef, len(params))
+	for _, param := range params {
+		byName[param.APIName] = param
+	}
+	ordered := make([]parser.FieldDef, 0, len(params))
+	seen := make(map[string]bool, len(params))
+	for start := strings.Index(path, "{"); start >= 0; start = strings.Index(path, "{") {
+		path = path[start+1:]
+		end := strings.Index(path, "}")
+		if end < 0 {
+			break
+		}
+		name := path[:end]
+		path = path[end+1:]
+		param, ok := byName[name]
+		if !ok || seen[name] {
+			continue
+		}
+		ordered = append(ordered, param)
+		seen[name] = true
+	}
+	for _, param := range params {
+		if !seen[param.APIName] {
+			ordered = append(ordered, param)
+		}
+	}
+	return ordered
+}
+
 func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param parser.FieldDef) string {
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return `"default_search"`
@@ -1729,6 +1794,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 			return ""
 		}
 		return "notificationGroupID(model)"
+	}
+	if param.TerraformName == "pack" {
+		return "resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())"
 	}
 	return ""
 }

@@ -267,11 +267,12 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
-	if resource.StructName == "Destination" {
+	if resource.StructName == "Destination" || resource.StructName == "PackDestination" {
 		keepRoot := map[string]bool{
 			"environment": true,
 			"group_id":    true,
 			"id":          true,
+			"pack":        true,
 			"pipeline":    true,
 			"type":        true,
 		}
@@ -293,10 +294,11 @@ func applyResourceCompatibility(resource *ResourceDef) {
 			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
 		}
 	}
-	if resource.StructName == "Source" {
+	if resource.StructName == "Source" || resource.StructName == "PackSource" {
 		keepRoot := map[string]bool{
 			"group_id": true,
 			"id":       true,
+			"pack":     true,
 		}
 		fields := resource.Fields[:0]
 		for _, field := range resource.Fields {

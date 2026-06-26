@@ -3,9 +3,11 @@ package stringvalidators
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 
+	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -187,7 +189,14 @@ func (v *criblPipelineFunctionIDRestValidator) resolveClient() *restclient.Clien
 	if v.client != nil && *v.client != nil {
 		return *v.client
 	}
-	return nil
+	credentials, err := auth.GetCredentials()
+	if err != nil {
+		return nil
+	}
+	return restclient.New(restclient.Config{
+		Credentials: credentials,
+		BearerToken: os.Getenv("CRIBL_BEARER_TOKEN"),
+	})
 }
 
 type criblFunction struct {

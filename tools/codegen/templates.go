@@ -812,6 +812,7 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- end }}
 	return nil
 }
+{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource")) }}
 {{ range .OneOfVariants }}
 type {{ .ModelName }} struct {
 {{- range .Fields }}
@@ -860,6 +861,7 @@ func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
 	return nil
 }
 {{ end }}
+{{- end }}
 {{- if .OneOfVariants }}
 
 func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
@@ -881,18 +883,21 @@ package provider
 
 import (
 	"context"
+{{- if eq .StructName "PackPipeline" }}
+	"errors"
+{{- end }}
 {{- if needsClientFmt . }}
 	"fmt"
 {{- end }}
-{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") }}
+{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"net/url"
 {{- end }}
-{{- if eq .StructName "LookupFile" }}
+{{- if or (eq .StructName "LookupFile") (eq .StructName "PackPipeline") }}
 	"strings"
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") }}
+{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 {{- end }}
 )
@@ -945,6 +950,22 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 	}
 	apiModel, err := restclient.Post[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups", model.GroupID.ValueString()), model)
 	return normalizeLookupFileAPIModel(apiModel, id), err
+{{- else if eq .StructName "PackLookups" }}
+	id := model.ID.ValueString()
+	if err := uploadPackLookupFileContent(ctx, a.client, model, id); err != nil {
+		return nil, err
+	}
+	apiModel, err := restclient.Post[PackLookupsModel, PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())), model)
+	return normalizePackLookupsAPIModel(apiModel, id), err
+{{- else if eq .StructName "PackPipeline" }}
+	apiModel, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
+	if err != nil {
+		if packPipelineAlreadyExists(err) {
+			return a.Update(ctx, model)
+		}
+		return nil, err
+	}
+	return apiModel, nil
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
@@ -973,6 +994,20 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 		apiModel, err := restclient.Get[LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
 		if err == nil {
 			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
+{{- else if eq .StructName "PackLookups" }}
+	configuredID := model.ID.ValueString()
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		if err == nil {
+			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
 			return nil, err
@@ -1014,6 +1049,27 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 		apiModel, err := restclient.Patch[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id), requestModel)
 		if err == nil {
 			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
+{{- else if eq .StructName "PackLookups" }}
+	configuredID := model.ID.ValueString()
+	if err := uploadPackLookupFileContent(ctx, a.client, model, configuredID); err != nil {
+		return nil, err
+	}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		requestModel := model
+		if id != configuredID {
+			requestModel.ID = types.StringValue(id)
+		}
+		apiModel, err := restclient.Patch[PackLookupsModel, PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id), requestModel)
+		if err == nil {
+			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
 		}
 		if !restclient.IsNotFound(err) {
 			return nil, err
@@ -1076,6 +1132,19 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 		lastErr = err
 	}
 	return lastErr
+{{- else if eq .StructName "PackLookups" }}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(model.ID.ValueString()) {
+		err := restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		if err == nil {
+			return nil
+		}
+		if !restclient.IsNotFound(err) {
+			return err
+		}
+		lastErr = err
+	}
+	return lastErr
 {{- else if eq .StructName "GroupSystemSettings" }}
 	// Group system settings are singleton configuration. There is no delete
 	// endpoint; destroy removes Terraform state without resetting the group.
@@ -1086,6 +1155,8 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	return err
 {{- else if .Delete.DeleteHook }}
 	return {{ .Delete.DeleteHook }}(ctx, a.client, model)
+{{- else if not .Delete.Path }}
+	return nil
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
 {{- end }}
@@ -1164,6 +1235,38 @@ func normalizeLookupFileAPIModel(model *LookupFileModel, terraformID string) *Lo
 		model.ID = types.StringValue(terraformID)
 	}
 	return model
+}
+{{- end }}
+{{- if eq .StructName "PackLookups" }}
+
+func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client, model PackLookupsModel, id string) error {
+	if model.Content.IsNull() || model.Content.IsUnknown() {
+		return nil
+	}
+	filename := lookupFileUploadFilename(id)
+	path := fmt.Sprintf("/m/%s/p/%s/system/lookups?filename=%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, client, model.GroupID.ValueString(), model.Pack.ValueString()), url.QueryEscape(filename))
+	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func normalizePackLookupsAPIModel(model *PackLookupsModel, terraformID string) *PackLookupsModel {
+	if model == nil {
+		return nil
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
+}
+{{- end }}
+{{- if eq .StructName "PackPipeline" }}
+
+func packPipelineAlreadyExists(err error) bool {
+	var httpErr *restclient.HTTPError
+	if !errors.As(err, &httpErr) {
+		return false
+	}
+	return strings.Contains(httpErr.Body, "pipeline already exists") ||
+		strings.Contains(httpErr.Body, "already exists")
 }
 {{- end }}
 `
@@ -1310,12 +1413,18 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- if eq .StructName "Source" }}
 	requestModel := sourceRequestModelWithHoistedIdentity(model)
 	_, err := r.api.Create(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+	_, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	_, err := r.api.Create(ctx, model)
 {{- end }}
 {{- else }}
 {{- if eq .StructName "Source" }}
 	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
@@ -1341,6 +1450,8 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- end }}
 {{- if eq .StructName "Source" }}
 	normalizeSourceRootInputEmptyLists(&model)
+{{- else if eq .StructName "PackSource" }}
+	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -1365,11 +1476,16 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	}
 {{- if eq .StructName "Source" }}
 	priorPlainAuth := snapshotSourcePlainAuthTokensPriorRead(&model)
+{{- else if eq .StructName "PackSource" }}
+	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
 {{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
 {{- if eq .StructName "Source" }}
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
 	normalizeSourceRootInputEmptyLists(&model)
+{{- else if eq .StructName "PackSource" }}
+	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -1386,6 +1502,9 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- else }}
 {{- if eq .StructName "Source" }}
 	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
 	apiModel, err := r.api.Update(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Update(ctx, model)
@@ -1405,6 +1524,8 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- end }}
 {{- if eq .StructName "Source" }}
 	normalizeSourceRootInputEmptyLists(&model)
+{{- else if eq .StructName "PackSource" }}
+	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -1550,6 +1671,8 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
 {{- if eq .StructName "Source" }}
 	normalizeSourceRootInputEmptyLists(&model)
+{{- else if eq .StructName "PackSource" }}
+	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
@@ -1668,9 +1791,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	}
 {{- end }}
 {{- end }}
-{{- if eq .StructName "Pipeline" }}
+{{- if or (eq .StructName "Pipeline") (eq .StructName "PackPipeline") }}
 	if !state.Conf.IsNull() {
-		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()}); err == nil {
+		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: {{ .StructName }}ConfAttrTypes()}); err == nil {
 			state.Conf = normalized.(types.Object)
 		}
 	}
@@ -1690,7 +1813,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.Schedule = normalized.(types.Object)
 		}
 	}
-{{- else if eq .StructName "Routes" }}
+{{- else if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
 	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
 		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
 	}
@@ -1703,7 +1826,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- range .Fields }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
-{{- if eq $.StructName "Source" }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
 {{- end }}
@@ -1713,13 +1836,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 		}
-{{- if eq $.StructName "Source" }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		}
 {{- end }}
 {{- end }}
 {{- else }}
-{{- if eq $.StructName "Source" }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
 {{- end }}
@@ -1729,7 +1852,7 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 		}
-{{- if eq $.StructName "Source" }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
 {{- if not .Computed }}
 		}
 {{- end }}

@@ -1,32 +1,20 @@
 resource "criblio_pack_routes" "my_packroutes" {
-  comments = [
-    {
-      additional_properties = "{ \"see\": \"documentation\" }"
-      comment               = "...my_comment..."
-    }
-  ]
-  group_id = "Cribl"
-  groups = {
-    key = {
-      description = "...my_description..."
-      disabled    = true
-      name        = "...my_name..."
-    }
-  }
-  id   = "default"
-  pack = "observability-pack"
+  group_id = "default"
+  pack     = criblio_pack.routes_pack.id
   routes = [
     {
-      additional_properties    = "{ \"see\": \"documentation\" }"
-      description              = "Route application errors to Splunk output"
-      disabled                 = false
-      enable_output_expression = false
-      filter                   = "level == 'error'"
-      final                    = true
-      name                     = "Errors to Splunk"
-      output                   = "{ \"see\": \"documentation\" }"
-      output_expression        = "{ \"see\": \"documentation\" }"
-      pipeline                 = "main"
+      name     = "my_name"
+      pipeline = "main"
     }
   ]
+}
+
+resource "criblio_pack" "routes_pack" {
+  id           = "pack-with-routes"
+  group_id     = "default"
+  description  = "Pack from source"
+  disabled     = true
+  display_name = "Pack from source"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
 }

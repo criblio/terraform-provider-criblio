@@ -828,6 +828,488 @@ actions:
     update:
       x-terraform-delete: Source
 
+  - target: "$.paths"
+    update:
+      /m/{groupId}/p/{pack}/lib/breakers:
+        get:
+          operationId: getBreakersByPack
+          responses:
+            "200":
+              description: Event breaker rulesets within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        post:
+          operationId: createBreakersByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EventBreakerRuleset"
+          responses:
+            "200":
+              description: Created event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/lib/breakers/{id}:
+        get:
+          operationId: getBreakersByPackAndId
+          responses:
+            "200":
+              description: Event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: updateBreakersByPackAndId
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EventBreakerRuleset"
+          responses:
+            "200":
+              description: Updated event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        delete:
+          operationId: deleteBreakersByPackAndId
+          responses:
+            "200":
+              description: Deleted event breaker ruleset within a Pack.
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/system/lookups:
+        get:
+          operationId: getSystemLookupsByPack
+          responses:
+            "200":
+              description: Lookup files within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        post:
+          operationId: createSystemLookupsByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LookupFile"
+          responses:
+            "200":
+              description: Created lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/system/lookups/{id}:
+        get:
+          operationId: getSystemLookupsByPackAndId
+          responses:
+            "200":
+              description: Lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: createSystemLookupsByPackAndId
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LookupFile"
+          responses:
+            "200":
+              description: Updated lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        delete:
+          operationId: deleteSystemLookupsByPackAndId
+          responses:
+            "200":
+              description: Deleted lookup file within a Pack.
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/routes/default:
+        get:
+          operationId: getRoutesByPack
+          responses:
+            "200":
+              description: Routes within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Routes"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: createRoutesByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Routes"
+          responses:
+            "200":
+              description: Updated routes within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Routes"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackBreakers
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.get"
+    update:
+      x-terraform-read: PackBreakers
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.patch"
+    update:
+      x-terraform-update: PackBreakers
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.delete"
+    update:
+      x-terraform-delete: PackBreakers
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.get"
+    update:
+      x-terraform-read: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.patch"
+    update:
+      x-terraform-update: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.delete"
+    update:
+      x-terraform-delete: PackDestination
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackLookups
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.get"
+    update:
+      x-terraform-read: PackLookups
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.patch"
+    update:
+      x-terraform-update: PackLookups
+      responses:
+        "200":
+          description: LookupFile object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LookupFile"
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.delete"
+    update:
+      x-terraform-delete: PackLookups
+
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackPipeline
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.get"
+    update:
+      x-terraform-read: PackPipeline
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.patch"
+    update:
+      x-terraform-update: PackPipeline
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.delete"
+    update:
+      x-terraform-delete: PackPipeline
+
+  - target: "$.paths./m/{groupId}/p/{pack}/routes/default.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackRoutes
+      x-terraform-update: PackRoutes
+      x-terraform-delete: PackRoutes
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+      x-terraform-delete-reset-body:
+        id: default
+        routes:
+          - name: Default
+            filter: "true"
+            pipeline: main
+            final: true
+            disabled: false
+  - target: "$.paths./m/{groupId}/p/{pack}/routes/default.get"
+    update:
+      x-terraform-read: PackRoutes
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.get"
+    update:
+      x-terraform-read: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.patch"
+    update:
+      x-terraform-update: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.delete"
+    update:
+      x-terraform-delete: PackSource
+
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.get"
+    update:
+      x-terraform-read: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.patch"
+    update:
+      x-terraform-update: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.delete"
+    update:
+      x-terraform-delete: PackVars
+
   - target: "$.paths./m/{groupId}/system/subscriptions.post"
     update:
       x-terraform-resource: true

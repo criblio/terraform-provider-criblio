@@ -1,42 +1,175 @@
 resource "criblio_pack_breakers" "my_packbreakers" {
-  description    = "Break HTTP access logs into events"
-  group_id       = "myExistingGroupId"
-  id             = "access-logs-v1"
+  description    = "test"
+  group_id       = "default"
+  id             = "test_packbreakers"
   lib            = "custom"
-  min_raw_length = 512
-  pack           = "myExistingPackId"
+  min_raw_length = 256
+  pack           = criblio_pack.breakers_pack.id
   rules = [
     {
-      condition           = "/GET|POST|PUT|DELETE/.test(_raw)"
-      delimiter           = ","
-      delimiter_regex     = "/\\t/"
+      condition           = "PASS_THROUGH_SOURCE_TYPE"
       disabled            = false
-      escape_char         = "\\"
-      event_breaker_regex = "/\\n(?=\\S)/"
-      fields = [
-        {
-          name  = "source"
-          value = "\"nginx_access\""
-        }
-      ]
+      fields              = []
+      max_event_bytes     = 51200
+      name                = "test"
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+      timestamp = {
+        length = 150
+        type   = "auto"
+      }
+      timestamp_anchor_regex = "/^/"
+      timestamp_earliest     = "-420weeks"
+      timestamp_latest       = "+1week"
+      timestamp_timezone     = "local"
+      type                   = "regex"
+    },
+    {
+      condition              = "true"
+      type                   = "csv"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone = "utc"
+      max_event_bytes    = 1024000
+      disabled           = false
+      delimiter          = ","
+      quote_char         = "\""
+      escape_char        = "\""
+      name               = "csv"
+    },
+    {
+      name                   = "header"
+      condition              = "true"
+      type                   = "header"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      delimiter_regex     = "/\\t/"
       fields_line_regex   = "/^#[Ff]ields[:]?\\s+(.*)/"
       header_line_regex   = "/^#/"
-      max_event_bytes     = 65536
-      name                = "nginx-access"
-      parser_enabled      = false
-      quote_char          = "\""
-      should_use_data_raw = false
+      null_field_val      = "-"
+      clean_fields        = true
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+    },
+    {
+      name                   = "json_array"
+      condition              = "true"
+      type                   = "json_array"
+      timestamp_anchor_regex = "/^/"
       timestamp = {
-        format = "%d/%b/%Y:%H:%M:%S %z"
+        type   = "auto"
         length = 150
-        type   = "format"
       }
-      timestamp_anchor_regex = "/\\d{2}\\/[A-Za-z]{3}\\/\\d{4}:\\d{2}:\\d{2}:\\d{2}/"
-      timestamp_earliest     = "-90days"
-      timestamp_latest       = "+1day"
-      timestamp_timezone     = "UTC"
-      type                   = "regex"
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      json_extract_all    = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+    },
+    {
+      name                   = "json"
+      condition              = "true"
+      type                   = "json"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+    },
+    {
+      name                   = "timestamp"
+      condition              = "true"
+      type                   = "timestamp"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+    },
+    {
+      name                   = "aws_cloudtrail"
+      condition              = "true"
+      type                   = "aws_cloudtrail"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
+    },
+    {
+      name                   = "aws_vpcflow"
+      condition              = "true"
+      type                   = "aws_vpcflow"
+      timestamp_anchor_regex = "/^/"
+      timestamp = {
+        type   = "auto"
+        length = 150
+      }
+      timestamp_timezone  = "local"
+      timestamp_earliest  = "-420weeks"
+      timestamp_latest    = "+1week"
+      max_event_bytes     = 51200
+      disabled            = false
+      parser_enabled      = false
+      should_use_data_raw = false
+      event_breaker_regex = "/[\\n\\r]+(?!\\s)/"
     }
   ]
-  tags = "nginx,access,prod"
+  tags = "test"
+}
+
+resource "criblio_pack" "breakers_pack" {
+  id           = "pack-breakers"
+  group_id     = "default"
+  description  = "Pack breakers"
+  disabled     = true
+  display_name = "Pack breakers"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
+}
+
+# Output the pack details to see the read-only attributes
+output "pack_breakers_details" {
+  value = criblio_pack_breakers.my_packbreakers
 }

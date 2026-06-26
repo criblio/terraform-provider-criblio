@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 )
@@ -19,6 +20,26 @@ func resolvePackIDForAPI(ctx context.Context, client *sdk.CriblIo, groupID, conf
 		return strings.ToLower(configPackID)
 	}
 	for _, item := range listRes.Object.Items {
+		if strings.EqualFold(item.ID, configPackID) {
+			return item.ID
+		}
+	}
+	return strings.ToLower(configPackID)
+}
+
+type packIDListResponse struct {
+	ID string `json:"id"`
+}
+
+func resolvePackIDForRestAPI(ctx context.Context, client *restclient.Client, groupID, configPackID string) string {
+	if client == nil {
+		return strings.ToLower(configPackID)
+	}
+	items, err := restclient.Get[[]packIDListResponse](ctx, client, "/m/"+groupID+"/packs")
+	if err != nil || items == nil {
+		return strings.ToLower(configPackID)
+	}
+	for _, item := range *items {
 		if strings.EqualFold(item.ID, configPackID) {
 			return item.ID
 		}

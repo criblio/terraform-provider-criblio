@@ -74,6 +74,60 @@ func restoreSourcePlainAuthTokensIfAPIShrank(r *SourceModel, prior priorSourcePl
 	}
 }
 
+func snapshotPackSourcePlainAuthTokensPriorRead(r *PackSourceModel) priorSourcePlainAuthTokens {
+	var prior priorSourcePlainAuthTokens
+	if r.InputHttp != nil {
+		prior.http = cloneSourceStringValues(sourceStringListValues(r.InputHttp.AuthTokens))
+	}
+	if r.InputHttpRaw != nil {
+		prior.httpRaw = cloneSourceStringValues(sourceStringListValues(r.InputHttpRaw.AuthTokens))
+	}
+	if r.InputFirehose != nil {
+		prior.firehose = cloneSourceStringValues(sourceStringListValues(r.InputFirehose.AuthTokens))
+	}
+	if r.InputElastic != nil {
+		prior.elastic = cloneSourceStringValues(sourceStringListValues(r.InputElastic.AuthTokens))
+	}
+	if r.InputCriblLakeHttp != nil {
+		prior.criblLakeHTTP = cloneSourceStringValues(sourceStringListValues(r.InputCriblLakeHttp.AuthTokens))
+	}
+	if r.InputWizWebhook != nil {
+		prior.wizWebhook = cloneSourceStringValues(sourceStringListValues(r.InputWizWebhook.AuthTokens))
+	}
+	return prior
+}
+
+func restorePackSourcePlainAuthTokensIfAPIShrank(r *PackSourceModel, prior priorSourcePlainAuthTokens) {
+	restore := func(dst *types.List, prev []types.String) {
+		if dst == nil || prev == nil {
+			return
+		}
+		// Preserve legacy behavior: restore only when len(prior) > len(api_returned).
+		if len(prev) > len(sourceStringListValues(*dst)) {
+			*dst = sourceStringListFromValues(prev)
+		}
+	}
+
+	if r.InputHttp != nil {
+		restore(&r.InputHttp.AuthTokens, prior.http)
+	}
+	if r.InputHttpRaw != nil {
+		restore(&r.InputHttpRaw.AuthTokens, prior.httpRaw)
+	}
+	if r.InputFirehose != nil {
+		restore(&r.InputFirehose.AuthTokens, prior.firehose)
+	}
+	if r.InputElastic != nil {
+		restore(&r.InputElastic.AuthTokens, prior.elastic)
+	}
+	if r.InputCriblLakeHttp != nil {
+		restore(&r.InputCriblLakeHttp.AuthTokens, prior.criblLakeHTTP)
+	}
+	if r.InputWizWebhook != nil {
+		restore(&r.InputWizWebhook.AuthTokens, prior.wizWebhook)
+	}
+}
+
 func sourceStringListValues(list types.List) []types.String {
 	if list.IsNull() || list.IsUnknown() {
 		return nil
@@ -108,11 +162,24 @@ func cloneSourceStringValues(values []types.String) []types.String {
 }
 
 func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
-	if model.ID.IsNull() || model.ID.IsUnknown() {
-		return model
-	}
+	return sourceLikeRequestModelWithHoistedIdentity(model)
+}
+
+func packSourceRequestModelWithHoistedIdentity(model PackSourceModel) PackSourceModel {
+	return sourceLikeRequestModelWithHoistedIdentity(model)
+}
+
+func sourceLikeRequestModelWithHoistedIdentity[T any](model T) T {
 	request := model
 	rv := reflect.ValueOf(&request).Elem()
+	idField := rv.FieldByName("ID")
+	if !idField.IsValid() || idField.Type() != reflect.TypeOf(types.String{}) {
+		return request
+	}
+	modelID := idField.Interface().(types.String)
+	if modelID.IsNull() || modelID.IsUnknown() {
+		return request
+	}
 	for i := 0; i < rv.NumField(); i++ {
 		fieldInfo := rv.Type().Field(i)
 		if !isSourceInputField(fieldInfo.Name) {
@@ -132,7 +199,7 @@ func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
 		}
 		id := idField.Interface().(types.String)
 		if id.IsNull() || id.IsUnknown() {
-			idField.Set(reflect.ValueOf(model.ID))
+			idField.Set(reflect.ValueOf(modelID))
 		}
 		return request
 	}
@@ -142,6 +209,14 @@ func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
 // normalizeSourceRootInputEmptyLists converts empty API list values on active source
 // blocks back to null so omitted optional list fields do not drift after refresh.
 func normalizeSourceRootInputEmptyLists(r *SourceModel) {
+	normalizeSourceLikeRootInputEmptyLists(r)
+}
+
+func normalizePackSourceRootInputEmptyLists(r *PackSourceModel) {
+	normalizeSourceLikeRootInputEmptyLists(r)
+}
+
+func normalizeSourceLikeRootInputEmptyLists[T any](r *T) {
 	if r == nil {
 		return
 	}

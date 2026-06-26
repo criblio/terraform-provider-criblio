@@ -1,9 +1,20 @@
+resource "criblio_pack" "lookups_pack" {
+  id           = "pack-with-lookups"
+  group_id     = "default"
+  description  = "Pack with lookups"
+  disabled     = true
+  display_name = "Pack from source"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
+}
+
+
 resource "criblio_pack_lookups" "my_packlookups" {
-  content     = "US,United States\nCA,Canada"
-  description = "Country code to name lookup"
-  group_id    = "myExistingGroupId"
-  id          = "countries.csv"
+  content     = "column1, column2, column3, column4"
+  description = "my_description"
+  group_id    = "default"
+  id          = "my_id"
   mode        = "memory"
-  pack        = "myExistingPackId"
-  tags        = "geo,reference"
+  tags        = "my_tags"
+  pack        = criblio_pack.lookups_pack.id
 }
