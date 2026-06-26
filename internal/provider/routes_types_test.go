@@ -71,3 +71,30 @@ func TestRoutesModelUpdateBodyEmitsEmptyGroupsAndComments(t *testing.T) {
 		t.Fatalf("groups = %#v", groups)
 	}
 }
+
+func TestApplyRoutesAPIToStatePreservesNullInputsAfterWrite(t *testing.T) {
+	api := RoutesModel{
+		Comments: types.ListValueMust(types.ObjectType{AttrTypes: RoutesCommentsAttrTypes()}, nil),
+		Groups:   types.MapValueMust(types.ObjectType{AttrTypes: RoutesGroupsAttrTypes()}, nil),
+		ID:       types.StringValue("default"),
+		Routes:   types.ListValueMust(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}, nil),
+	}
+	state := RoutesModel{
+		Comments: types.ListNull(types.ObjectType{AttrTypes: RoutesCommentsAttrTypes()}),
+		Groups:   types.MapNull(types.ObjectType{AttrTypes: RoutesGroupsAttrTypes()}),
+		ID:       types.StringValue("default"),
+		Routes:   types.ListNull(types.ObjectType{AttrTypes: RoutesRoutesAttrTypes()}),
+	}
+
+	applyRoutesAPIToState(&api, &state, true, false)
+
+	if !state.Comments.IsNull() {
+		t.Fatalf("comments = %#v, want null", state.Comments)
+	}
+	if !state.Groups.IsNull() {
+		t.Fatalf("groups = %#v, want null", state.Groups)
+	}
+	if !state.Routes.IsNull() {
+		t.Fatalf("routes = %#v, want null", state.Routes)
+	}
+}

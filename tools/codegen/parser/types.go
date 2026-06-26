@@ -25,16 +25,18 @@ type ResourceDef struct {
 
 // OperationDef describes one annotated OpenAPI operation.
 type OperationDef struct {
-	Method         string
-	Path           string
-	OperationID    string
-	RequestSchema  string
-	ResponseSchema string
-	PathParams     []FieldDef
-	QueryParams    []FieldDef
-	Examples       []ExampleDef
-	ReadAfterWrite bool
-	ResetBody      any
+	Method                   string
+	Path                     string
+	OperationID              string
+	RequestSchema            string
+	ResponseSchema           string
+	PathParams               []FieldDef
+	QueryParams              []FieldDef
+	Examples                 []ExampleDef
+	ReadAfterWrite           bool
+	PreserveInputsAfterWrite bool
+	ResetBody                any
+	DeleteHook               string
 }
 
 // ExampleDef describes a request-body example attached to an OpenAPI operation.

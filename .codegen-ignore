@@ -6,3 +6,5 @@ tests/acceptance/lakehouse_dataset_connection_test.go
 internal/provider/collector_planmodifiers.go
 internal/provider/pipeline_planmodifiers.go
 internal/provider/searchdashboard_config_planmodifier.go
+internal/provider/searchdatasetruleset_delete.go
+internal/provider/searchdatatyperuleset_delete.go

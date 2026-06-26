@@ -1004,6 +1004,8 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	body := {{ goValueLiteral .Delete.ResetBody }}
 	_, err := restclient.{{ restWriteCall .Delete }}[map[string]any, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Delete }}, body)
 	return err
+{{- else if .Delete.DeleteHook }}
+	return {{ .Delete.DeleteHook }}(ctx, a.client, model)
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
 {{- end }}
@@ -1196,7 +1198,11 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if .Create.PreserveInputsAfterWrite }}
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
@@ -1241,7 +1247,11 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 {{- if .Update.ReadAfterWrite }}
+{{- if .Update.PreserveInputsAfterWrite }}
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}

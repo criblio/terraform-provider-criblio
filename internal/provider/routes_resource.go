@@ -264,7 +264,7 @@ func (r *RoutesResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRoutesAPIToState(apiModel, &model, false, false)
+	applyRoutesAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -298,7 +298,7 @@ func (r *RoutesResource) Update(ctx context.Context, req resource.UpdateRequest,
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
-	applyRoutesAPIToState(apiModel, &model, false, false)
+	applyRoutesAPIToState(apiModel, &model, true, false)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -127,6 +127,9 @@ func TestRenderedSnippets(t *testing.T) {
 	assertNotContains(t, resourceContent, "speakeasy_")
 	assertNotContains(t, resourceContent, "internal/sdk")
 
+	clientContent := renderTemplate(t, "client", certificate)
+	assertContains(t, clientContent, "return deleteCertificateSoft(ctx, a.client, model)")
+
 	typesContent := renderTemplate(t, "types", certificate)
 	assertContains(t, typesContent, "Conf jsontypes.Normalized")
 	assertContains(t, typesContent, "InUse types.List")

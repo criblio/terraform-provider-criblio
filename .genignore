@@ -18,17 +18,9 @@ internal/provider/packvars_data_source_sdk.go
 internal/provider/packlookups_resource_sdk.go
 internal/provider/packlookups_data_source_sdk.go
 internal/provider/packroutes_data_source_sdk.go
-internal/provider/pipeline_data_source.go
-internal/provider/pipeline_data_source_sdk.go
 internal/provider/types/pipeline_function_conf.go
 internal/sdk/models/shared/pipelinefunctionconf.go
 internal/sdk/models/shared/genericdataset.go
-internal/provider/searchdatasetruleset_resource.go
-internal/provider/searchdatasetruleset_resource_sdk.go
-internal/provider/searchdatasetruleset_delete.go
-internal/provider/searchdatatyperuleset_resource.go
-internal/provider/searchdatatyperuleset_resource_sdk.go
-internal/provider/searchdatatyperuleset_delete.go
 internal/provider/searchdatasetprovider_data_source_sdk.go
 internal/provider/searchdatasetprovider_resource_sdk.go
 internal/provider/searchdashboard_resource.go

@@ -74,6 +74,7 @@ paths:
     delete:
       operationId: deleteCertificateByID
       x-terraform-delete: certificate
+      x-terraform-delete-hook: deleteCertificateSoft
       responses:
         "200":
           content:

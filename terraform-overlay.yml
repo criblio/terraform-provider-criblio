@@ -110,6 +110,7 @@ actions:
       x-terraform-update: Routes
       x-terraform-delete: Routes
       x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
       x-terraform-delete-reset-body:
         id: default
         routes:
@@ -1886,6 +1887,47 @@ actions:
   - target: "$.components.schemas.DatasetSnowflake"
     update:
       x-terraform-name: snowflake_dataset
+
+  - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatasetRuleset
+      x-terraform-update: SearchDatasetRuleset
+      x-terraform-delete: SearchDatasetRuleset
+      x-terraform-delete-hook: deleteSearchDatasetRuleset
+  - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets/{id}.get"
+    update:
+      x-terraform-read: SearchDatasetRuleset
+  - target: "$.components.schemas.DatasetRuleset.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatasetRuleset.properties.rules"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatatypeRuleset
+      x-terraform-update: SearchDatatypeRuleset
+      x-terraform-delete: SearchDatatypeRuleset
+      x-terraform-delete-hook: deleteSearchDatatypeRuleset
+  - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets/{id}.get"
+    update:
+      x-terraform-read: SearchDatatypeRuleset
+  - target: "$.components.schemas.DatatypeRuleset.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatatypeRuleset.properties.rules"
+    update:
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./m/{groupId}/search/macros.post"
     update:
       x-terraform-resource: true

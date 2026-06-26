@@ -18,6 +18,9 @@ func TestParseCertificateResource(t *testing.T) {
 	if certificate.Read.Path != "/m/{groupId}/system/certificates/{id}" {
 		t.Fatalf("read path = %q", certificate.Read.Path)
 	}
+	if certificate.Delete.DeleteHook != "deleteCertificateSoft" {
+		t.Fatalf("delete hook = %q", certificate.Delete.DeleteHook)
+	}
 	if len(certificate.Create.Examples) != 1 {
 		t.Fatalf("create example count = %d", len(certificate.Create.Examples))
 	}
@@ -193,6 +196,8 @@ paths:
     patch:
       x-terraform-resource: true
       x-terraform-resource-name: Routes
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
       parameters:
         - name: groupId
           in: path
@@ -243,6 +248,9 @@ components:
 	}
 	if id.Required || !id.Optional || !id.Computed || !id.PathParam || !id.ForceNew {
 		t.Fatalf("id flags = required:%v optional:%v computed:%v path:%v force:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.ForceNew)
+	}
+	if !routes.Create.PreserveInputsAfterWrite {
+		t.Fatalf("routes preserve inputs after write = false")
 	}
 }
 
@@ -338,11 +346,11 @@ components:
 
 	searchDataset := resourceByName(t, resources, "SearchDataset")
 	id := fieldByTFName(t, searchDataset.Fields, "id")
-	if id.Required || id.Optional || !id.Computed || !id.PathParam || !id.UseStateForUnknown {
+	if id.Required || id.Optional || !id.Computed || !id.PathParam || id.UseStateForUnknown {
 		t.Fatalf("search dataset id flags = required:%v optional:%v computed:%v path:%v use_state:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.UseStateForUnknown)
 	}
 	providerID := fieldByTFName(t, searchDataset.Fields, "provider_id")
-	if providerID.Required || providerID.Optional || !providerID.Computed || !providerID.UseStateForUnknown {
+	if providerID.Required || providerID.Optional || !providerID.Computed || providerID.UseStateForUnknown {
 		t.Fatalf("search dataset provider_id flags = required:%v optional:%v computed:%v use_state:%v", providerID.Required, providerID.Optional, providerID.Computed, providerID.UseStateForUnknown)
 	}
 	variant := variantByName(t, searchDataset.OneOfVariants, "ApiHttpDataset")

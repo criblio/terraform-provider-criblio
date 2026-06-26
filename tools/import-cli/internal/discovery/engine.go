@@ -44,6 +44,10 @@ func filterSearchDashboardIDs(typeName string, ids []map[string]string) []map[st
 	return filtered
 }
 
+func skipGroupScopedSingleton(typeName, groupID string) bool {
+	return typeName == "criblio_routes" && groupID == "default_search"
+}
+
 // searchListIdentifiersFromCapture returns identifiers (and count) from the captured
 // list response body when the SDK failed to unmarshal (e.g. cribl_lake, union drift, strict JSON).
 func searchListIdentifiersFromCapture(e registry.Entry) ([]map[string]string, int, error) {
@@ -638,6 +642,9 @@ func ListItemIdentifiers(ctx context.Context, client *sdk.CriblIo, e registry.En
 	}
 	var out []map[string]string
 	for _, gid := range groupIDs {
+		if skipGroupScopedSingleton(e.TypeName, gid) {
+			continue
+		}
 		args := buildListArgs(ctx, method, e, gid)
 		if len(args) >= 2 && requestRequiresPack(args[1]) {
 			// Pack-scoped: list via listPackScopedIdentifiers (called once above with first group).
@@ -1226,6 +1233,9 @@ func listOne(ctx context.Context, client *sdk.CriblIo, e registry.Entry, groupID
 	// Request has GroupID: call once per group and sum counts; record per-group.
 	perGroup = make(map[string]int)
 	for _, gid := range groupIDs {
+		if skipGroupScopedSingleton(e.TypeName, gid) {
+			continue
+		}
 		args := buildListArgs(ctx, method, e, gid)
 		if len(args) >= 2 && requestRequiresPack(args[1]) {
 			return total, perGroup, nil

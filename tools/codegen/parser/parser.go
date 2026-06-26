@@ -166,7 +166,12 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
 		ReadAfterWrite: boolAnnotation(operation, "x-terraform-read-after-write"),
-		ResetBody:      resetBody(operation),
+		PreserveInputsAfterWrite: boolAnnotation(
+			operation,
+			"x-terraform-preserve-inputs-after-write",
+		),
+		ResetBody:  resetBody(operation),
+		DeleteHook: scalarValue(operation, "x-terraform-delete-hook"),
 	}
 }
 
@@ -294,7 +299,6 @@ func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
 			field.Required = false
 			field.Optional = false
 			field.Computed = true
-			field.UseStateForUnknown = true
 		}
 	}
 }
