@@ -3,7 +3,6 @@ package tests
 import (
 	"os"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -11,7 +10,7 @@ import (
 
 func TestStreamSyslogToLake(t *testing.T) {
 	if os.Getenv("DEPLOYMENT") == "onprem" {
-		time.Sleep(1 * time.Second)
+		t.Skip("Skipping Stream syslog-to-lake example on on-prem deployments: the fixture creates cloud-only resources with count = 0")
 	}
 	t.Run("plan-diff", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{

@@ -54,6 +54,7 @@ func TestEdgeSubFleet(t *testing.T) {
 					ImportStateId:     groupID,
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
+						"is_fleet",
 						"worker_remote_access",
 					},
 				},

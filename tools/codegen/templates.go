@@ -1448,11 +1448,6 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
-{{- if eq .StructName "Source" }}
-	normalizeSourceRootInputEmptyLists(&model)
-{{- else if eq .StructName "PackSource" }}
-	normalizePackSourceRootInputEmptyLists(&model)
-{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -1482,10 +1477,8 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
 {{- if eq .StructName "Source" }}
 	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
-	normalizeSourceRootInputEmptyLists(&model)
 {{- else if eq .StructName "PackSource" }}
 	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
-	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -1521,11 +1514,6 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
-{{- end }}
-{{- if eq .StructName "Source" }}
-	normalizeSourceRootInputEmptyLists(&model)
-{{- else if eq .StructName "PackSource" }}
-	normalizePackSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}

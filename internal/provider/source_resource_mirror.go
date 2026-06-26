@@ -206,8 +206,9 @@ func sourceLikeRequestModelWithHoistedIdentity[T any](model T) T {
 	return request
 }
 
-// normalizeSourceRootInputEmptyLists converts empty API list values on active source
-// blocks back to null so omitted optional list fields do not drift after refresh.
+// normalizeSourceRootInputEmptyLists converts empty API list values on imported
+// active source blocks back to null so omitted optional list fields do not drift.
+// Normal create/read/update paths preserve configured [] values for compatibility.
 func normalizeSourceRootInputEmptyLists(r *SourceModel) {
 	normalizeSourceLikeRootInputEmptyLists(r)
 }

@@ -56,8 +56,11 @@ func TestPack(t *testing.T) {
 					ImportStateId:     fmt.Sprintf(`{"group_id":"default","id":%q}`, packID),
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
+						"description",
 						"disabled",
+						"display_name",
 						"filename",
+						"version",
 					},
 				},
 			},

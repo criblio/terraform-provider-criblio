@@ -54,6 +54,7 @@ func TestEdgeFleet(t *testing.T) {
 					ImportStateId:     groupID,
 					ImportStateVerify: true,
 					ImportStateVerifyIgnore: []string{
+						"on_prem",
 						"worker_remote_access",
 					},
 				},

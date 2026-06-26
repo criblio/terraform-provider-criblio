@@ -24984,7 +24984,6 @@ func (r *PackSourceResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 	applyPackSourceAPIToState(apiModel, &model, true, false)
-	normalizePackSourceRootInputEmptyLists(&model)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -25006,7 +25005,6 @@ func (r *PackSourceResource) Read(ctx context.Context, req resource.ReadRequest,
 	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
 	applyPackSourceAPIToState(apiModel, &model, true, isPackSourceImportState(&model))
 	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
-	normalizePackSourceRootInputEmptyLists(&model)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 
@@ -25023,7 +25021,6 @@ func (r *PackSourceResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 	applyPackSourceAPIToState(apiModel, &model, true, false)
-	normalizePackSourceRootInputEmptyLists(&model)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

@@ -74,3 +74,31 @@ func TestPreserveLegacyEdgeOnPremLeavesStreamAPIValue(t *testing.T) {
 		t.Fatal("expected stream refresh to keep API onPrem=true")
 	}
 }
+
+func TestPreserveLegacyEdgeIsFleetKeepsPriorFalse(t *testing.T) {
+	model := &GroupResourceModel{
+		IsFleet: types.BoolValue(true),
+		Product: types.StringValue("edge"),
+		Type:    types.StringValue("edge"),
+	}
+
+	preserveLegacyEdgeIsFleet(types.BoolValue(false), model)
+
+	if model.IsFleet.ValueBool() {
+		t.Fatal("expected refresh to preserve legacy is_fleet=false for edge subfleet")
+	}
+}
+
+func TestPreserveLegacyEdgeIsFleetLeavesStreamAPIValue(t *testing.T) {
+	model := &GroupResourceModel{
+		IsFleet: types.BoolValue(true),
+		Product: types.StringValue("stream"),
+		Type:    types.StringValue("stream"),
+	}
+
+	preserveLegacyEdgeIsFleet(types.BoolValue(false), model)
+
+	if !model.IsFleet.ValueBool() {
+		t.Fatal("expected stream refresh to keep API isFleet=true")
+	}
+}

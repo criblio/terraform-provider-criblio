@@ -349,6 +349,7 @@ func (r *GroupResource) refreshGroupState(ctx context.Context, data *GroupResour
 	}
 	product := data.Product
 	onPrem := data.OnPrem
+	isFleet := data.IsFleet
 	data.applyGroupAPIModel(apiModel)
 	if data.Product.IsNull() || data.Product.IsUnknown() {
 		data.Product = product
@@ -357,6 +358,7 @@ func (r *GroupResource) refreshGroupState(ctx context.Context, data *GroupResour
 		data.Product = productFromGroupState(data)
 	}
 	preserveLegacyEdgeOnPrem(onPrem, data)
+	preserveLegacyEdgeIsFleet(isFleet, data)
 	return nil
 }
 
@@ -476,6 +478,15 @@ func preserveLegacyEdgeOnPrem(prior types.Bool, data *GroupResourceModel) {
 	}
 	if data.Product.ValueString() == "edge" || (!data.Type.IsNull() && !data.Type.IsUnknown() && data.Type.ValueString() == "edge") {
 		data.OnPrem = prior
+	}
+}
+
+func preserveLegacyEdgeIsFleet(prior types.Bool, data *GroupResourceModel) {
+	if data == nil || prior.IsNull() || prior.IsUnknown() || prior.ValueBool() {
+		return
+	}
+	if data.Product.ValueString() == "edge" || (!data.Type.IsNull() && !data.Type.IsUnknown() && data.Type.ValueString() == "edge") {
+		data.IsFleet = prior
 	}
 }
 
