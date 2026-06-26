@@ -267,6 +267,32 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	if resource.StructName == "Destination" {
+		keepRoot := map[string]bool{
+			"environment": true,
+			"group_id":    true,
+			"id":          true,
+			"pipeline":    true,
+			"type":        true,
+		}
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if !keepRoot[field.TerraformName] {
+				continue
+			}
+			if field.TerraformName == "environment" || field.TerraformName == "pipeline" || field.TerraformName == "type" {
+				field.Required = false
+				field.Optional = false
+				field.Computed = true
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+		for index := range resource.OneOfVariants {
+			makeFieldsOptionalComputed(resource.OneOfVariants[index].Fields)
+			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+		}
+	}
 	if resource.StructName == "Collector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
@@ -288,6 +314,39 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		if field.TerraformName == "conf" {
 			makeMappingRulesetFunctionDefaultsOptional(field)
 		}
+	}
+}
+
+func markDestinationSensitiveFields(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		if destinationSensitiveField(*field) {
+			field.Sensitive = true
+			field.PreferState = true
+			field.ApplyStrategy = "stringFromAPIOrPrior"
+		}
+		if len(field.Fields) > 0 {
+			markDestinationSensitiveFields(field.Fields)
+		}
+	}
+}
+
+func destinationSensitiveField(field FieldDef) bool {
+	if field.Type != "string" || strings.HasPrefix(field.TerraformName, "__template_") {
+		return false
+	}
+	name := field.TerraformName
+	switch {
+	case name == "password", strings.HasSuffix(name, "_password"):
+		return true
+	case name == "token", name == "auth_token", name == "api_key":
+		return true
+	case name == "secret", name == "client_secret", name == "aws_secret_key", name == "account_key":
+		return true
+	case strings.Contains(name, "private_key") || strings.Contains(name, "passphrase"):
+		return true
+	default:
+		return false
 	}
 }
 
@@ -416,7 +475,7 @@ func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields,
 		for index := 0; index < len(properties.Content); index += 2 {
 			apiName := properties.Content[index].Value
 			property := properties.Content[index+1]
-			if ignoredAnnotation(property) {
+			if ignoredAPIProperty(apiName, property) {
 				continue
 			}
 
@@ -500,16 +559,16 @@ func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, reque
 		field.PreferState = true
 		field.ApplyStrategy = "stringFromAPIOrPrior"
 	}
-	if boolAnnotation(property, "x-terraform-sensitive") {
+	if boolAnnotation(property, "x-terraform-sensitive") || boolAnnotation(property, "x-speakeasy-param-sensitive") {
 		field.Sensitive = true
 	}
-	if boolAnnotation(property, "x-terraform-prefer-state") || scalarValue(property, "x-speakeasy-plan-modifiers") == "PreferState" {
+	if boolAnnotation(property, "x-terraform-prefer-state") || boolAnnotation(property, "x-speakeasy-param-suppress-computed-diff") || scalarValue(property, "x-speakeasy-plan-modifiers") == "PreferState" {
 		field.PreferState = true
 	}
 	if suppressDiffAnnotation(property) {
 		field.SuppressDiff = true
 	}
-	if boolAnnotation(property, "x-terraform-force-new") {
+	if boolAnnotation(property, "x-terraform-force-new") || boolAnnotation(property, "x-speakeasy-param-force-new") {
 		field.ForceNew = true
 	}
 	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
@@ -652,6 +711,10 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		}
 	}
 	return field, nil
+}
+
+func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
+	return strings.HasPrefix(apiName, "__template_") || ignoredAnnotation(property)
 }
 
 func ignoredAnnotation(property *yaml.Node) bool {
@@ -1057,6 +1120,17 @@ func schemaRefName(node *yaml.Node) string {
 	if name := directSchemaRefName(node); name != "" {
 		return name
 	}
+	for _, key := range []string{"allOf", "oneOf"} {
+		items, ok := mappingValue(node, key)
+		if !ok || items.Kind != yaml.SequenceNode {
+			continue
+		}
+		for _, item := range items.Content {
+			if name := schemaRefName(item); name != "" {
+				return name
+			}
+		}
+	}
 	if items, ok := mappingValue(node, "items"); ok {
 		return schemaRefName(items)
 	}
@@ -1167,6 +1241,9 @@ func boolAnnotation(node *yaml.Node, key string) bool {
 }
 
 func suppressDiffAnnotation(node *yaml.Node) bool {
+	if boolAnnotation(node, "x-speakeasy-param-suppress-computed-diff") {
+		return true
+	}
 	value, ok := mappingValue(node, "x-terraform-suppress-diff")
 	if !ok || value.Kind != yaml.ScalarNode {
 		return false

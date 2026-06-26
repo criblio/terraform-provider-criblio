@@ -222,12 +222,6 @@ func (r *PipelineResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 							},
 						},
 					},
-					"__template_streamtags": schema.StringAttribute{
-						Required:    false,
-						Optional:    true,
-						Computed:    false,
-						Description: `Binds 'streamtags' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamtags' at runtime.`,
-					},
 				},
 			},
 			"group_id": schema.StringAttribute{

@@ -41,34 +41,31 @@ type PipelineAPIModel struct {
 }
 
 type PipelineConfModel struct {
-	AsyncFuncTimeout   types.Int64  `tfsdk:"async_func_timeout" json:"asyncFuncTimeout,omitempty"`
-	Output             types.String `tfsdk:"output" json:"output,omitempty"`
-	Description        types.String `tfsdk:"description" json:"description,omitempty"`
-	Streamtags         types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
-	Functions          types.List   `tfsdk:"functions" json:"functions,omitempty"`
-	Groups             types.Map    `tfsdk:"groups" json:"groups,omitempty"`
-	TemplateStreamtags types.String `tfsdk:"__template_streamtags" json:"__template_streamtags,omitempty"`
+	AsyncFuncTimeout types.Int64  `tfsdk:"async_func_timeout" json:"asyncFuncTimeout,omitempty"`
+	Output           types.String `tfsdk:"output" json:"output,omitempty"`
+	Description      types.String `tfsdk:"description" json:"description,omitempty"`
+	Streamtags       types.List   `tfsdk:"streamtags" json:"streamtags,omitempty"`
+	Functions        types.List   `tfsdk:"functions" json:"functions,omitempty"`
+	Groups           types.Map    `tfsdk:"groups" json:"groups,omitempty"`
 }
 
 type PipelineConfAPIModel struct {
-	AsyncFuncTimeout   *int64   `json:"asyncFuncTimeout,omitempty"`
-	Output             *string  `json:"output,omitempty"`
-	Description        *string  `json:"description,omitempty"`
-	Streamtags         []string `json:"streamtags,omitempty"`
-	Functions          any      `json:"functions,omitempty"`
-	Groups             any      `json:"groups,omitempty"`
-	TemplateStreamtags *string  `json:"__template_streamtags,omitempty"`
+	AsyncFuncTimeout *int64   `json:"asyncFuncTimeout,omitempty"`
+	Output           *string  `json:"output,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	Streamtags       []string `json:"streamtags,omitempty"`
+	Functions        any      `json:"functions,omitempty"`
+	Groups           any      `json:"groups,omitempty"`
 }
 
 func PipelineConfAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"async_func_timeout":    types.Int64Type,
-		"output":                types.StringType,
-		"description":           types.StringType,
-		"streamtags":            types.ListType{ElemType: types.StringType},
-		"functions":             types.ListType{ElemType: types.ObjectType{AttrTypes: PipelineConfFunctionsAttrTypes()}},
-		"groups":                types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineConfGroupsAttrTypes()}},
-		"__template_streamtags": types.StringType,
+		"async_func_timeout": types.Int64Type,
+		"output":             types.StringType,
+		"description":        types.StringType,
+		"streamtags":         types.ListType{ElemType: types.StringType},
+		"functions":          types.ListType{ElemType: types.ObjectType{AttrTypes: PipelineConfFunctionsAttrTypes()}},
+		"groups":             types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineConfGroupsAttrTypes()}},
 	}
 }
 

@@ -110,10 +110,6 @@ func (d *PipelineDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 							},
 						},
 					},
-					"__template_streamtags": schema.StringAttribute{
-						Computed:    true,
-						Description: `Binds 'streamtags' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamtags' at runtime.`,
-					},
 				},
 			},
 			"group_id": schema.StringAttribute{

@@ -446,13 +446,12 @@ func TestModelToValue_complex_nested(t *testing.T) {
 
 func emptyPipelineConf() types.Object {
 	return types.ObjectValueMust(provider.PipelineConfAttrTypes(), map[string]attr.Value{
-		"async_func_timeout":    types.Int64Null(),
-		"output":                types.StringNull(),
-		"description":           types.StringNull(),
-		"streamtags":            types.ListNull(types.StringType),
-		"functions":             types.ListNull(types.ObjectType{AttrTypes: provider.PipelineConfFunctionsAttrTypes()}),
-		"groups":                types.MapNull(types.ObjectType{AttrTypes: provider.PipelineConfGroupsAttrTypes()}),
-		"__template_streamtags": types.StringNull(),
+		"async_func_timeout": types.Int64Null(),
+		"output":             types.StringNull(),
+		"description":        types.StringNull(),
+		"streamtags":         types.ListNull(types.StringType),
+		"functions":          types.ListNull(types.ObjectType{AttrTypes: provider.PipelineConfFunctionsAttrTypes()}),
+		"groups":             types.MapNull(types.ObjectType{AttrTypes: provider.PipelineConfGroupsAttrTypes()}),
 	})
 }
 

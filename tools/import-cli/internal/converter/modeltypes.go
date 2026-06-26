@@ -124,6 +124,7 @@ func GeneratedModelTypes() map[string]reflect.Type {
 		"CriblLakeDatasetResourceModel":           reflect.TypeOf((*provider.CriblLakeDatasetModel)(nil)).Elem(),
 		"CriblLakeHouseResourceModel":             reflect.TypeOf((*provider.CriblLakeHouseModel)(nil)).Elem(),
 		"DatabaseConnectionResourceModel":         reflect.TypeOf((*provider.DatabaseConnectionModel)(nil)).Elem(),
+		"DestinationResourceModel":                reflect.TypeOf((*provider.DestinationModel)(nil)).Elem(),
 		"EventBreakerRulesetResourceModel":        reflect.TypeOf((*provider.EventBreakerRulesetModel)(nil)).Elem(),
 		"GlobalVarResourceModel":                  reflect.TypeOf((*provider.GlobalVarModel)(nil)).Elem(),
 		"GrokResourceModel":                       reflect.TypeOf((*provider.GrokModel)(nil)).Elem(),

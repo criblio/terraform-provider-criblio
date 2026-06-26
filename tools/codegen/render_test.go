@@ -398,6 +398,37 @@ func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
 	assertNotContains(t, got, `id = "all_events"`)
 }
 
+func TestUpstreamExampleUsageEscapesTerraformInterpolation(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "destination",
+		FileStem: "destination",
+		TypeName: "criblio_destination",
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "s3",
+					Value: map[string]any{
+						"id":       "out-s3-main",
+						"destPath": "`logs/${C.Time.strftime(_time, '%Y/%m/%d')}`",
+					},
+				},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{APIName: "groupId", TerraformName: "group_id", Type: "string", Required: true, PathParam: true},
+			{APIName: "id", TerraformName: "id", Type: "string", Required: true},
+			{APIName: "destPath", TerraformName: "dest_path", Type: "string", Optional: true},
+		},
+	}
+
+	got, ok := upstreamExampleUsage(resource)
+	if !ok {
+		t.Fatalf("upstreamExampleUsage returned no example")
+	}
+	assertContains(t, got, "dest_path = \"`logs/$${C.Time.strftime(_time, '%Y/%m/%d')}`\"")
+	assertNotContains(t, got, "dest_path = \"`logs/${C.Time.strftime")
+}
+
 func TestGeneratedImportUsesPathParams(t *testing.T) {
 	resource := parser.ResourceDef{
 		FileStem: "lakehouse_dataset_connection",

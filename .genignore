@@ -32,7 +32,6 @@ internal/provider/types/dashboard_element_input.go
 internal/provider/types/dashboard_element_visualization.go
 internal/provider/group_resource.go
 internal/provider/collector_resource.go
-internal/provider/destination_resource.go
 internal/provider/source_resource.go
 internal/provider/source_resource_mirror.go
 internal/sdk/models/shared/security.go

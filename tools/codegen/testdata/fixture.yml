@@ -340,6 +340,8 @@ components:
           type: string
           x-terraform-sensitive: true
           x-terraform-prefer-state: true
+        __template_accountKey:
+          type: string
         container:
           type: string
     OutputElastic:

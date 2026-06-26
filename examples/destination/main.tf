@@ -283,13 +283,6 @@ resource "criblio_destination" "grafana_cloud" {
     loki_url                          = "https://foo.com"
     reject_unauthorized               = true
     response_honor_retry_after_header = true
-    status = {
-      error = {
-        message = "There is an issue with the underlying destinations. Check cribl.log for more info."
-      }
-      health    = "Red"
-      timestamp = 1768418309923
-    }
     timeout_retry_settings = {
       timeout_retry = false
     }

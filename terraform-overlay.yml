@@ -792,6 +792,24 @@ actions:
             - disableSNIRouting
         - $ref: "#/components/schemas/EmptyObject"
 
+  - target: "$.paths./m/{groupId}/system/outputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Destination
+  - target: "$.paths./m/{groupId}/system/outputs.get"
+    update:
+      x-terraform-list: Destination
+      x-terraform-list-name: Destinations
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.get"
+    update:
+      x-terraform-read: Destination
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.patch"
+    update:
+      x-terraform-update: Destination
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.delete"
+    update:
+      x-terraform-delete: Destination
+
   - target: "$.paths./m/{groupId}/system/subscriptions.post"
     update:
       x-terraform-resource: true

@@ -573,7 +573,7 @@ func writeSchemaAttribute(output *strings.Builder, field parser.FieldDef, indent
 		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
 	}
 	if field.Description != "" {
-		fmt.Fprintf(output, "%s\tDescription: `%s`,\n", indent, field.Description)
+		fmt.Fprintf(output, "%s\tDescription: %s,\n", indent, goStringLiteral(field.Description))
 	}
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
@@ -667,7 +667,7 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		fmt.Fprintf(output, "%s\tSensitive: true,\n", indent)
 	}
 	if field.Description != "" {
-		fmt.Fprintf(output, "%s\tDescription: `%s`,\n", indent, field.Description)
+		fmt.Fprintf(output, "%s\tDescription: %s,\n", indent, goStringLiteral(field.Description))
 	}
 	if field.CustomType == "jsontypes.NormalizedType{}" {
 		fmt.Fprintf(output, "%s\tCustomType: jsontypes.NormalizedType{},\n", indent)
@@ -692,6 +692,13 @@ func writeDataSourceAttribute(output *strings.Builder, field parser.FieldDef, in
 		fmt.Fprintf(output, "%s\tElementType: %s,\n", indent, listElementAttrType(field))
 	}
 	fmt.Fprintf(output, "%s},\n", indent)
+}
+
+func goStringLiteral(value string) string {
+	if strings.Contains(value, "`") {
+		return fmt.Sprintf("%q", value)
+	}
+	return "`" + value + "`"
 }
 
 func schemaTypeName(field parser.FieldDef) string {
@@ -1387,7 +1394,7 @@ func hideFixedValueField(field parser.FieldDef) bool {
 func hclValue(value any) string {
 	switch typed := value.(type) {
 	case string:
-		return strconv.Quote(typed)
+		return hclStringValue(typed)
 	case bool:
 		if typed {
 			return "true"
@@ -1410,8 +1417,12 @@ func hclValue(value any) string {
 		}
 		return "[" + strings.Join(values, ", ") + "]"
 	default:
-		return strconv.Quote(fmt.Sprint(typed))
+		return hclStringValue(fmt.Sprint(typed))
 	}
+}
+
+func hclStringValue(value string) string {
+	return strconv.Quote(strings.ReplaceAll(value, "${", "$${"))
 }
 
 func hclJSONValue(value any) string {

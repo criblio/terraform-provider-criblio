@@ -103,6 +103,9 @@ func TestParseOneOfVariants(t *testing.T) {
 	if accountKey.ApplyStrategy != "stringFromAPIOrPrior" {
 		t.Fatalf("account_key strategy = %q", accountKey.ApplyStrategy)
 	}
+	if hasField(azure.Fields, "__template_account_key") {
+		t.Fatalf("__template_* fields should not be generated")
+	}
 }
 
 func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {

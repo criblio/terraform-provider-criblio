@@ -45,7 +45,6 @@ Optional:
 - `streamtags` (List of String) Tags for filtering and grouping in @{product}
 - `functions` (Attributes List) List of Functions to pass data through (see [below for nested schema](#nestedatt--conf--functions))
 - `groups` (Attributes Map) (see [below for nested schema](#nestedatt--conf--groups))
-- `__template_streamtags` (String) Binds 'streamtags' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'streamtags' at runtime.
 
 <a id="nestedatt--conf--functions"></a>
 ### Nested Schema for `conf.functions`
