@@ -59,6 +59,10 @@ func (r *SourceResource) Schema(_ context.Context, _ resource.SchemaRequest, res
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
+			"items": schema.DynamicAttribute{
+				Computed:    true,
+				Description: `Legacy computed mirror of the API oneOf source payload. Configure type-specific input_* blocks instead.`,
+			},
 			"input_collection": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -25074,6 +25078,7 @@ func applySourceAPIToState(api *SourceModel, state *SourceModel, preserveInputs 
 	if api == nil || state == nil {
 		return
 	}
+	syncSourceLegacyItems(api, state)
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID

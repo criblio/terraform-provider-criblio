@@ -306,6 +306,12 @@ func fieldToValue(field reflect.Value, path string, sensitive bool, opts *Option
 		}
 		return Value{Kind: KindMap, Map: m}, nil
 	}
+	if v, ok := field.Interface().(types.Dynamic); ok {
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return attrToValue(v.UnderlyingValue(), path, sensitive, opts)
+	}
 
 	// jsontypes.Normalized
 	if v, ok := field.Interface().(jsontypes.Normalized); ok {
@@ -456,6 +462,11 @@ func attrToValue(av attr.Value, path string, sensitive bool, opts *Options) (Val
 			m[k] = ev
 		}
 		return Value{Kind: KindMap, Map: m}, nil
+	case types.Dynamic:
+		if v.IsNull() || v.IsUnknown() {
+			return Value{Kind: KindNull}, nil
+		}
+		return attrToValue(v.UnderlyingValue(), path, sensitive, opts)
 	default:
 		return Value{}, fmt.Errorf("unsupported attr type %T", av)
 	}

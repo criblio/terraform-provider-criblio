@@ -252,6 +252,19 @@ func TestHCLOptionsForType_certificateKeepsConfigurableCA(t *testing.T) {
 	assert.False(t, opts.SkipAttributes["ca"])
 }
 
+func TestHCLOptionsForType_lookupFilesSkipComputedFields(t *testing.T) {
+	for _, typeName := range []string{"criblio_lookup_file", "criblio_pack_lookups"} {
+		t.Run(typeName, func(t *testing.T) {
+			opts := hclOptionsForType(typeName, registry.Entry{})
+			require.NotNil(t, opts)
+
+			assert.True(t, opts.SkipAttributes["pending_task"])
+			assert.True(t, opts.SkipAttributes["version"])
+			assert.False(t, opts.SkipAttributes["content"])
+		})
+	}
+}
+
 func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip by exclusions.SkipExportIDs", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_notification_target", map[string]string{"id": "system_email"}))

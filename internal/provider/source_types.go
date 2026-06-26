@@ -19,6 +19,7 @@ var _ = jsontypes.NormalizedType{}
 type SourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -92,6 +93,7 @@ type SourceModel struct {
 type SourceResourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -165,6 +167,7 @@ type SourceResourceModel struct {
 type SourceDataSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -11891,6 +11894,7 @@ func (m *SourceModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	setSourceLegacyItemsFromRaw(m, raw)
 	var input SourceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err

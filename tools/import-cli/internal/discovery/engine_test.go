@@ -175,6 +175,29 @@ func TestIdentifiersFromItems_skipsLibCribl(t *testing.T) {
 	assert.Equal(t, "default", ids[0]["group_id"])
 }
 
+func TestGetIDFromItem_handlesWrappedMapAndStructFields(t *testing.T) {
+	items := []any{
+		map[string]any{"id": "from-map"},
+		idFieldOnly{ID: "from-field"},
+		keyIDFieldOnly{KeyID: "from-key-field"},
+		map[string]any{"name": "from-map-name"},
+		nameMethodOnly{Name: "from-method-name"},
+	}
+
+	assert.Equal(t, "from-map", getIDFromItem(reflect.ValueOf(items).Index(0), ""))
+	assert.Equal(t, "from-field", getIDFromItem(reflect.ValueOf(items).Index(1), ""))
+	assert.Equal(t, "from-key-field", getIDFromItem(reflect.ValueOf(items).Index(2), ""))
+	assert.Equal(t, "from-map-name", getIDFromItem(reflect.ValueOf(items).Index(3), ""))
+	assert.Equal(t, "from-method-name", getIDFromItem(reflect.ValueOf(items).Index(4), ""))
+}
+
+func TestGetIDFromItem_handlesUnionGetNameFallback(t *testing.T) {
+	name := "from-name"
+	item := nameOnlyUnion{NameOnly: &nameOnly{Name: &name}}
+
+	assert.Equal(t, "from-name", getIDFromItem(reflect.ValueOf(item), ""))
+}
+
 // TestRegistryListMethodsExistOnSDK ensures every registry entry that has SDKService and
 // ListMethod set refers to a real service field and method on sdk.CriblIo. This catches
 // typos or SDK renames at test time instead of at discovery runtime (reflection would
@@ -265,3 +288,34 @@ func errFromString(s string) error {
 type errString struct{ s string }
 
 func (e *errString) Error() string { return e.s }
+
+type idFieldOnly struct {
+	ID string
+}
+
+type keyIDFieldOnly struct {
+	KeyID string
+}
+
+type nameMethodOnly struct {
+	Name string
+}
+
+func (n nameMethodOnly) GetName() string {
+	return n.Name
+}
+
+type nameOnly struct {
+	Name *string
+}
+
+func (n *nameOnly) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+type nameOnlyUnion struct {
+	NameOnly *nameOnly
+}

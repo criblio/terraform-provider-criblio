@@ -24,6 +24,9 @@ type {{ .StructName }}Model struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
+{{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
@@ -33,6 +36,9 @@ type {{ .StructName }}ResourceModel struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
+{{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
 {{- end }}
@@ -41,6 +47,9 @@ type {{ .StructName }}ResourceModel struct {
 type {{ .StructName }}DataSourceModel struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ legacyGoType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
+{{- end }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	Items types.Dynamic ` + "`tfsdk:\"items\" json:\"-\"`" + `
 {{- end }}
 {{- range .OneOfVariants }}
 	{{ .GoName }} *{{ .ModelName }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ .APIName }},omitempty\"`" + `
@@ -686,6 +695,9 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	set{{ .StructName }}LegacyItemsFromRaw(m, raw)
+{{- end }}
 {{- end }}
 	var input {{ .StructName }}APIModel
 	if err := json.Unmarshal(data, &input); err != nil {
@@ -1382,6 +1394,12 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			"items": schema.DynamicAttribute{
+				Computed: true,
+				Description: "Legacy computed mirror of the API oneOf source payload. Configure type-specific input_* blocks instead.",
+			},
+{{- end }}
 {{ oneOfSchemaAttributes .OneOfVariants "\t\t\t" -}}
 		},
 	}
@@ -1689,6 +1707,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if api == nil || state == nil {
 		return
 	}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+	sync{{ .StructName }}LegacyItems(api, state)
+{{- end }}
 {{- range .Fields }}
 {{- if not .Computed }}
 	if !preserveInputs || (fillMissingInputs && (state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown())){{- if nestedObjectList . }} || (!api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() && !state.{{ .GoName }}.IsNull() && !state.{{ .GoName }}.IsUnknown() && len(state.{{ .GoName }}.Elements()) == 0){{- end }} {
@@ -1942,6 +1963,12 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{ dataSourceAttributes .Fields "\t\t\t" }}
+{{- if or (eq .StructName "Source") (eq .StructName "PackSource") }}
+			"items": schema.DynamicAttribute{
+				Computed: true,
+				Description: "Legacy computed mirror of the API oneOf source payload. Use type-specific input_* blocks for new references.",
+			},
+{{- end }}
 {{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t" }}
 		},
 	}

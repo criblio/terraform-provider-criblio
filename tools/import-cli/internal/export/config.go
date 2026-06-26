@@ -10,8 +10,10 @@ var readOnlyAttrsByType = map[string][]string{
 	"criblio_global_var":              {"items"},                                    // provider marks items as Computed only; config comes from GetByID and we flatten Items[0]
 	"criblio_grok":                    {"size", "tags"},                             // size/tags are API-owned and Computed-only
 	"criblio_group_system_settings":   {"items"},                                    // provider marks items as read-only; configurable attrs are top-level (api, backups, etc.)
+	"criblio_lookup_file":             {"pending_task", "version"},                  // pending_task/version are Computed only
 	"criblio_pack_vars":               {"items"},                                    // items is Computed; config comes from flattenFirstItemToAttrs (description, lib, tags, type, value)
 	"criblio_pack_breakers":           {"items"},                                    // items is read-only (Computed); id, group_id, pack are configurable
+	"criblio_pack_lookups":            {"pending_task", "version"},                  // pending_task/version are Computed only
 	"criblio_pack_pipeline":           {"items"},                                    // GET returns Routes (items); conf filled from lib pipeline or minimal default
 	"criblio_routes":                  {"id", "additional_properties"},              // id read-only; additional_properties in route items is optional/empty, omit from HCL
 	"criblio_pack_routes":             {"id", "additional_properties", "items"},     // items is Computed; routes come from items[0], same as criblio_routes

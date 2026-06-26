@@ -20,6 +20,7 @@ type PackSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -94,6 +95,7 @@ type PackSourceResourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -168,6 +170,7 @@ type PackSourceDataSourceModel struct {
 	GroupID                   types.String                    `tfsdk:"group_id" json:"groupId,omitempty"`
 	ID                        types.String                    `tfsdk:"id" json:"id,omitempty"`
 	Pack                      types.String                    `tfsdk:"pack" json:"pack,omitempty"`
+	Items                     types.Dynamic                   `tfsdk:"items" json:"-"`
 	InputCollection           *InputCollectionModel           `tfsdk:"input_collection" json:"InputCollection,omitempty"`
 	InputKafka                *InputKafkaModel                `tfsdk:"input_kafka" json:"InputKafka,omitempty"`
 	InputMsk                  *InputMskModel                  `tfsdk:"input_msk" json:"InputMsk,omitempty"`
@@ -1075,6 +1078,7 @@ func (m *PackSourceModel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return err
 	}
+	setPackSourceLegacyItemsFromRaw(m, raw)
 	var input PackSourceAPIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err

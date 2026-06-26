@@ -1040,64 +1040,67 @@ func getTypeFromItem(item reflect.Value) string {
 
 // getIDFromItem returns the ID from a list item (struct or map). itemIDMethod if non-empty is tried first (e.g. "GetKeyID").
 func getIDFromItem(item reflect.Value, itemIDMethod string) string {
-	if item.Kind() == reflect.Ptr && !item.IsNil() {
+	for item.IsValid() && (item.Kind() == reflect.Interface || item.Kind() == reflect.Ptr) && !item.IsNil() {
 		item = item.Elem()
 	}
+	if !item.IsValid() {
+		return ""
+	}
 	if item.Kind() == reflect.Map {
-		for _, key := range []string{"id", "Id"} {
+		for _, key := range []string{"id", "ID", "Id", "keyId", "keyID", "key_id", "name", "Name"} {
 			k := item.MapIndex(reflect.ValueOf(key))
 			if !k.IsValid() {
 				continue
 			}
-			if k.Kind() == reflect.Interface {
-				k = reflect.ValueOf(k.Interface())
-			}
-			for k.Kind() == reflect.Ptr && k.IsValid() && !k.IsNil() {
-				k = k.Elem()
-			}
-			if k.Kind() == reflect.String {
-				return k.String()
+			if s := stringFromReflectValue(k); s != "" {
+				return s
 			}
 		}
 		return ""
 	}
 	// Struct: try custom method first, then GetID
 	if itemIDMethod != "" {
-		m := item.Addr().MethodByName(itemIDMethod)
+		m := methodByName(item, itemIDMethod)
 		if m.IsValid() {
 			outs := m.Call(nil)
 			if len(outs) > 0 {
-				v := outs[0]
-				if v.Kind() == reflect.Ptr && !v.IsNil() {
-					v = v.Elem()
-				}
-				if v.Kind() == reflect.String {
-					return v.String()
+				if s := stringFromReflectValue(outs[0]); s != "" {
+					return s
 				}
 			}
 		}
 	}
-	getID := item.Addr().MethodByName("GetID")
+	getID := methodByName(item, "GetID")
 	if getID.IsValid() {
 		outs := getID.Call(nil)
 		if len(outs) > 0 {
-			v := outs[0]
-			if v.Kind() == reflect.Ptr && !v.IsNil() {
-				v = v.Elem()
+			if s := stringFromReflectValue(outs[0]); s != "" {
+				return s
 			}
-			if v.Kind() == reflect.String {
-				return v.String()
+		}
+	}
+	getName := methodByName(item, "GetName")
+	if getName.IsValid() {
+		outs := getName.Call(nil)
+		if len(outs) > 0 {
+			if s := stringFromReflectValue(outs[0]); s != "" {
+				return s
 			}
+		}
+	}
+	for _, name := range []string{"ID", "Id", "KeyID", "KeyId", "Name"} {
+		if s := stringFromStructField(item, name); s != "" {
+			return s
 		}
 	}
 	// Union-type structs (e.g. GenericDataset, GenericProvider) have no GetID on the wrapper; get ID from the non-nil inner field.
 	return getIDFromUnionStruct(item)
 }
 
-// getIDFromUnionStruct returns the ID from a union-style struct whose fields are pointers to concrete types with GetID.
+// getIDFromUnionStruct returns the ID from a union-style struct whose fields are pointers to concrete types.
 // Used for ListDataset/ListDatasetProvider items (GenericDataset, GenericProvider).
 func getIDFromUnionStruct(item reflect.Value) string {
-	if item.Kind() == reflect.Ptr && !item.IsNil() {
+	for item.IsValid() && (item.Kind() == reflect.Interface || item.Kind() == reflect.Ptr) && !item.IsNil() {
 		item = item.Elem()
 	}
 	if item.Kind() != reflect.Struct {
@@ -1112,21 +1115,72 @@ func getIDFromUnionStruct(item reflect.Value) string {
 		if inner.Kind() != reflect.Struct {
 			continue
 		}
-		getID := inner.Addr().MethodByName("GetID")
-		if !getID.IsValid() {
-			continue
+		for _, methodName := range []string{"GetID", "GetName"} {
+			m := methodByName(inner, methodName)
+			if !m.IsValid() {
+				continue
+			}
+			outs := m.Call(nil)
+			if len(outs) == 0 {
+				continue
+			}
+			if s := stringFromReflectValue(outs[0]); s != "" {
+				return s
+			}
 		}
-		outs := getID.Call(nil)
-		if len(outs) == 0 {
-			continue
+		for _, name := range []string{"ID", "Id", "KeyID", "KeyId", "Name"} {
+			if s := stringFromStructField(inner, name); s != "" {
+				return s
+			}
 		}
-		v := outs[0]
-		if v.Kind() == reflect.Ptr && !v.IsNil() {
-			v = v.Elem()
+	}
+	return ""
+}
+
+func stringFromStructField(item reflect.Value, name string) string {
+	if !item.IsValid() || item.Kind() != reflect.Struct {
+		return ""
+	}
+	f := item.FieldByName(name)
+	if !f.IsValid() {
+		return ""
+	}
+	return stringFromReflectValue(f)
+}
+
+func methodByName(v reflect.Value, name string) reflect.Value {
+	if !v.IsValid() {
+		return reflect.Value{}
+	}
+	if m := v.MethodByName(name); m.IsValid() {
+		return m
+	}
+	if v.CanAddr() {
+		return v.Addr().MethodByName(name)
+	}
+	if v.Kind() == reflect.Struct {
+		copy := reflect.New(v.Type())
+		copy.Elem().Set(v)
+		return copy.MethodByName(name)
+	}
+	return reflect.Value{}
+}
+
+func stringFromReflectValue(v reflect.Value) string {
+	for v.IsValid() && (v.Kind() == reflect.Interface || v.Kind() == reflect.Ptr) {
+		if v.IsNil() {
+			return ""
 		}
-		if v.Kind() == reflect.String && v.String() != "" {
-			return v.String()
-		}
+		v = v.Elem()
+	}
+	if !v.IsValid() {
+		return ""
+	}
+	if v.Kind() == reflect.String {
+		return v.String()
+	}
+	if v.CanConvert(reflect.TypeOf("")) {
+		return v.Convert(reflect.TypeOf("")).String()
 	}
 	return ""
 }

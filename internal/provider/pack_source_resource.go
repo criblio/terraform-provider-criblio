@@ -68,6 +68,10 @@ func (r *PackSourceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
+			"items": schema.DynamicAttribute{
+				Computed:    true,
+				Description: `Legacy computed mirror of the API oneOf source payload. Configure type-specific input_* blocks instead.`,
+			},
 			"input_collection": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
@@ -25090,6 +25094,7 @@ func applyPackSourceAPIToState(api *PackSourceModel, state *PackSourceModel, pre
 	if api == nil || state == nil {
 		return
 	}
+	syncPackSourceLegacyItems(api, state)
 	if !preserveInputs || (fillMissingInputs && (state.GroupID.IsNull() || state.GroupID.IsUnknown())) {
 		if !api.GroupID.IsNull() && !api.GroupID.IsUnknown() {
 			state.GroupID = api.GroupID
