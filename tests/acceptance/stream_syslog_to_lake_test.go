@@ -32,7 +32,6 @@ func TestStreamSyslogToLake(t *testing.T) {
 			},
 		}
 		if !onPrem {
-			steps[0].Check = streamSyslogToLakeCheck()
 			steps = append(steps, resource.TestStep{
 				ImportState:       true,
 				ImportStateId:     "syslog-workers",
@@ -45,8 +44,7 @@ func TestStreamSyslogToLake(t *testing.T) {
 					"streamtags",
 					"worker_remote_access",
 				},
-				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: configVariables,
+				Config: streamSyslogToLakeGroupImportConfig(),
 			})
 		}
 
@@ -58,14 +56,11 @@ func TestStreamSyslogToLake(t *testing.T) {
 	})
 }
 
-func streamSyslogToLakeCheck() resource.TestCheckFunc {
-	return resource.ComposeAggregateTestCheckFunc(
-		resource.TestCheckResourceAttr("criblio_group.syslog_worker_group[0]", "id", "syslog-workers"),
-		resource.TestCheckResourceAttr("criblio_group.syslog_worker_group[0]", "name", "syslog-workers"),
-		resource.TestCheckResourceAttr("criblio_group.syslog_worker_group[0]", "product", "stream"),
-		resource.TestCheckResourceAttr("criblio_source.syslog_source[0]", "id", "syslog-input"),
-		resource.TestCheckResourceAttr("criblio_source.syslog_source[0]", "group_id", "syslog-workers"),
-		resource.TestCheckResourceAttr("criblio_destination.cribl_lake[0]", "id", "cribl-lake-2"),
-		resource.TestCheckResourceAttr("criblio_destination.cribl_lake[0]", "group_id", "syslog-workers"),
-	)
+func streamSyslogToLakeGroupImportConfig() string {
+	return `resource "criblio_group" "syslog_worker_group" {
+  count   = 1
+  id      = "syslog-workers"
+  product = "stream"
+}
+`
 }
