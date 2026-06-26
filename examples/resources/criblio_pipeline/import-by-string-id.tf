@@ -1,7 +1,7 @@
 import {
   to = criblio_pipeline.my_criblio_pipeline
   id = jsonencode({
-    group_id = "Cribl"
+    group_id = "default"
     id       = "main"
   })
 }

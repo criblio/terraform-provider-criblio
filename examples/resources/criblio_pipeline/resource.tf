@@ -4,9 +4,7 @@ resource "criblio_pipeline" "my_pipeline" {
     description        = "Main pipeline for app logs"
     functions = [
       {
-        conf = {
-          key = jsonencode("value")
-        }
+        conf        = jsonencode({})
         description = "Parse and enrich fields"
         disabled    = false
         filter      = "_source == \"app\""
@@ -28,6 +26,6 @@ resource "criblio_pipeline" "my_pipeline" {
       "app",
     ]
   }
-  group_id = "Cribl"
+  group_id = "default"
   id       = "main"
 }

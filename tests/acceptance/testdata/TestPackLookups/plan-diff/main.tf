@@ -1,1 +1,0 @@
-../../../../../examples/pack-with-lookups/main.tf

@@ -16,7 +16,7 @@ HmacFunction Resource
 resource "criblio_hmac_function" "my_hmac_function" {
   description = "HMAC Function that generates a SHA256 signature for webhook request authentication"
   group_id = "default"
-  header_expression = "`sha256=${C.Crypto.createHmac('sha256', secretKey).update(hashString).digest('hex')}`"
+  header_expression = "`sha256=$${C.Crypto.createHmac('sha256', secretKey).update(hashString).digest('hex')}`"
   header_name = "X-Signature"
   id = "sha256-webhook-hmac"
   lib = "custom"

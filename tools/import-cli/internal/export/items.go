@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
@@ -45,25 +43,6 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 	if r.TypeName == "criblio_pack" {
 		delete(attrs, "exports")
 	}
-	// criblio_routes and criblio_pack_routes: inject additional_properties from model into each route.
-	// HCL skips it by default (readOnlyAttrs); API returns it, causing drift. Align both resources.
-	injectRoutesAdditionalProperties := func(routes []ptypes.RoutesRoute, routesVal hcl.Value) hcl.Value {
-		if routesVal.Kind != hcl.KindList || len(routes) > len(routesVal.List) {
-			return routesVal
-		}
-		for i := range routes {
-			if i < len(routesVal.List) {
-				route := routes[i]
-				if !route.AdditionalProperties.IsNull() && !route.AdditionalProperties.IsUnknown() {
-					apStr := route.AdditionalProperties.ValueString()
-					if apStr != "" && routesVal.List[i].Kind == hcl.KindMap && routesVal.List[i].Map != nil {
-						routesVal.List[i].Map["additional_properties"] = hcl.Value{Kind: hcl.KindString, String: apStr}
-					}
-				}
-			}
-		}
-		return routesVal
-	}
 	// normalizeRouteDescriptions sets description to null when empty string so config matches provider state (null vs "" drift).
 	normalizeRouteDescriptions := func(routesVal hcl.Value) hcl.Value {
 		if routesVal.Kind != hcl.KindList {
@@ -78,24 +57,8 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		}
 		return routesVal
 	}
-	if r.TypeName == "criblio_routes" {
-		if pm, ok := model.(*provider.RoutesResourceModel); ok && attrs["routes"].Kind != hcl.KindNull {
-			routesVal := injectRoutesAdditionalProperties(pm.Routes, attrs["routes"])
-			attrs["routes"] = normalizeRouteDescriptions(routesVal)
-		}
-	}
-	if r.TypeName == "criblio_pack_routes" {
-		// items is skipped (Computed); populate routes from model.Items[0] since flatten had no items to merge.
-		if pm, ok := model.(*provider.PackRoutesResourceModel); ok && len(pm.Items) > 0 {
-			routesWrap := struct {
-				Routes []ptypes.RoutesRoute `tfsdk:"routes"`
-			}{Routes: pm.Items[0].Routes}
-			routesAttrs, err := hcl.ModelToValue(&routesWrap, opts)
-			if err == nil && routesAttrs["routes"].Kind != hcl.KindNull {
-				routesVal := injectRoutesAdditionalProperties(pm.Items[0].Routes, routesAttrs["routes"])
-				attrs["routes"] = normalizeRouteDescriptions(routesVal)
-			}
-		}
+	if (r.TypeName == "criblio_routes" || r.TypeName == "criblio_pack_routes") && attrs["routes"].Kind != hcl.KindNull {
+		attrs["routes"] = normalizeRouteDescriptions(attrs["routes"])
 	}
 	if r.TypeName == "criblio_appscope_config" {
 		custom.ApplyAppscopeConfigDefaults(attrs)

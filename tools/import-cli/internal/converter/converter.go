@@ -10,8 +10,6 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
@@ -71,21 +69,10 @@ func Convert(ctx context.Context, client *sdk.CriblIo, e registry.Entry, request
 		}
 	}
 	if err == nil && respBody != nil {
-		convModelType := modelType
-		// criblio_pack_destination: PackDestinationResourceModel has no RefreshFrom for GetOutputByID; use DestinationResourceModel (same response shape).
-		if e.TypeName == "criblio_pack_destination" {
-			if destType, ok := modelTypes["DestinationResourceModel"]; ok {
-				convModelType = destType
-			}
-		}
-		converted, convErr := convertFromResponseBody(ctx, e, convModelType, respBody)
+		converted, convErr := convertFromResponseBody(ctx, e, modelType, respBody)
 		if convErr == nil {
 			if injErr := InjectRequiredIdentifiers(converted, requestParams); injErr != nil {
 				return nil, fmt.Errorf("%s: inject identifiers: %w", e.TypeName, injErr)
-			}
-			// Pack pipeline GET returns Routes (items) only; try to fill conf from lib pipeline or set minimal conf.
-			if e.TypeName == "criblio_pack_pipeline" {
-				fillPackPipelineConf(ctx, client, converted, requestParams)
 			}
 			return converted, nil
 		}
@@ -174,62 +161,6 @@ func Convert(ctx context.Context, client *sdk.CriblIo, e registry.Entry, request
 	return converted, nil
 }
 
-// fillPackPipelineConf fills the pack pipeline model's Conf. GetPipelinesByPackWithID returns the
-// pipeline definition for pack pipelines. We need Pack, GroupID, and ID to fetch the correct content.
-func fillPackPipelineConf(ctx context.Context, client *sdk.CriblIo, converted interface{}, requestParams map[string]string) {
-	pm, ok := converted.(*provider.PackPipelineResourceModel)
-	if !ok || client == nil || client.Routes == nil {
-		return
-	}
-	groupID := requestParams["GroupID"]
-	id := requestParams["ID"]
-	pack := requestParams["Pack"]
-	if groupID == "" {
-		groupID = "default"
-	}
-	if id == "" || pack == "" {
-		ensureMinimalPackPipelineConf(pm)
-		return
-	}
-	resp, err := client.Routes.GetPipelinesByPackWithID(ctx, operations.GetPipelinesByPackWithIDRequest{
-		GroupID: groupID,
-		Pack:    pack,
-		ID:      id,
-	})
-	if err != nil || resp == nil || resp.Object == nil {
-		ensureMinimalPackPipelineConf(pm)
-		return
-	}
-	items := resp.Object.GetItems()
-	if len(items) != 1 {
-		ensureMinimalPackPipelineConf(pm)
-		return
-	}
-	diags := pm.RefreshFromSharedPipeline(ctx, &items[0])
-	if diags != nil && diags.HasError() {
-		ensureMinimalPackPipelineConf(pm)
-		return
-	}
-}
-
-// ensureMinimalPackPipelineConf sets a minimal conf (empty functions, default output) so exported
-// HCL has a valid required conf block when the API did not return pipeline definition.
-func ensureMinimalPackPipelineConf(pm *provider.PackPipelineResourceModel) {
-	if pm == nil {
-		return
-	}
-	// Check if conf is effectively empty (no functions).
-	if len(pm.Conf.Functions) == 0 {
-		if pm.Conf.Output.ValueString() == "" {
-			pm.Conf.Output = types.StringValue("default")
-		}
-		// Ensure non-nil slice for HCL
-		if pm.Conf.Functions == nil {
-			pm.Conf.Functions = []tfTypes.PipelineFunctionConf{}
-		}
-	}
-}
-
 // fillPackLookupsContent fetches the pack lookup file (GET /m/{groupID}/p/{pack}/system/lookups/{id},
 // ConvertFromResponseBody instantiates the resource model and calls its RefreshFrom* method
 // with the given response body. Used when the response body is already available (e.g. tests or
@@ -273,6 +204,9 @@ func convertFromResponseBody(ctx context.Context, e registry.Entry, modelType re
 	}
 	method := modelVal.MethodByName(refreshMethodName)
 	if !method.IsValid() {
+		if _, ok := GeneratedModelTypes()[e.ModelTypeName]; ok {
+			return convertGeneratedModelFromResponseBody(e, modelType, responseBody)
+		}
 		converted, err := convertGeneratedModelFromResponseBody(e, modelType, responseBody)
 		if err == nil {
 			return converted, nil

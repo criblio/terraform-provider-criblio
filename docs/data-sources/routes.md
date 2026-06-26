@@ -3,12 +3,12 @@
 page_title: "criblio_routes Data Source - terraform-provider-criblio"
 subcategory: ""
 description: |-
-  Routes DataSource
+  Routes Data Source
 ---
 
 # criblio_routes (Data Source)
 
-Routes DataSource
+Routes Data Source
 
 ## Example Usage
 
@@ -23,22 +23,27 @@ data "criblio_routes" "my_routes" {
 
 ### Required
 
-- `group_id` (String) group Id
+- `group_id` (String) Worker group ID.
+
+### Optional
+
+- `id` (String) Unique identifier for the Routing table. The supported value is <code>default</code>.
 
 ### Read-Only
 
-- `comments` (Attributes List) Comments (see [below for nested schema](#nestedatt--comments))
-- `groups` (Attributes Map) (see [below for nested schema](#nestedatt--groups))
-- `id` (String) Routes ID
-- `routes` (Attributes List) Pipeline routing rules (see [below for nested schema](#nestedatt--routes))
+- `comments` (Attributes List) Array of user-provided comments that describe or annotate Routes. (see [below for nested schema](#nestedatt--comments))
+- `groups` (Attributes Map) Information about the Route Groups that the Route is associated with. (see [below for nested schema](#nestedatt--groups))
+- `routes` (Attributes List) Array of Route configurations that define how events are processed and routed. (see [below for nested schema](#nestedatt--routes))
 
 <a id="nestedatt--comments"></a>
 ### Nested Schema for `comments`
 
 Read-Only:
 
-- `additional_properties` (String) Parsed as JSON.
-- `comment` (String) Optional, short description of this Route's purpose
+- `comment` (String) Brief description of the Route.
+- `group_id` (String) Unique identifier for the Route Group that the Route is associated with.
+- `id` (String) Unique identifier for the comment.
+- `index` (Integer) Relative position of the comment among all comments for the Route.
 
 
 <a id="nestedatt--groups"></a>
@@ -46,9 +51,9 @@ Read-Only:
 
 Read-Only:
 
-- `description` (String) Short description of this group
-- `disabled` (Boolean) Whether this group is disabled
-- `name` (String)
+- `description` (String) Brief description of the Route Group.
+- `index` (Integer) Relative position of the Route Group among all Route Groups. Routes are evaluated in ascending order according to the index value of their Route Group.
+- `name` (String) Name of the Route Group.
 
 
 <a id="nestedatt--routes"></a>
@@ -56,14 +61,17 @@ Read-Only:
 
 Read-Only:
 
-- `additional_properties` (String) Parsed as JSON.
-- `description` (String)
-- `disabled` (Boolean) Disable this routing rule
-- `enable_output_expression` (Boolean) Enable to use a JavaScript expression that evaluates to the name of the Description below
-- `filter` (String) JavaScript expression to select data to route
-- `final` (Boolean) Flag to control whether the event gets consumed by this Route (Final), or cloned into it
-- `id` (String)
-- `name` (String)
-- `output` (String) Parsed as JSON.
-- `output_expression` (String) Parsed as JSON.
-- `pipeline` (String) Pipeline to send the matching data to
+- `clones` (List of String) Array of clone configurations, each with a key-value pair to set or overwrite in cloned events. Original events continue to the next Route.
+- `context` (String) Context for the Route: <code>group</code> (Worker Group or Edge Fleet) or <code>pack</code>.
+- `description` (String) Brief description of the Route.
+- `disabled` (Boolean) If <code>true</code>, disable the Route. Otherwise, <code>false</code>.
+- `enable_output_expression` (Boolean) If <code>true</code>, use the <code>outputExpression</code> for dynamic Destination selection. Otherwise, <code>false</code>.
+- `filter` (String) JavaScript expression to select events for routing.
+- `group_id` (String) Unique identifier for the Route Group that the Route is associated with.
+- `name` (String) Name of the Route.
+- `output` (String) Destination that the Route sends matching events to after the Pipeline processes the events.
+- `output_expression` (String) JavaScript expression to evaluate for dynamic Destination selection. Evaluation occurs when the Route is constructed, not for each event.
+- `pipeline` (String) Pipeline that the Route sends matching events to.
+- `target_context` (String) Target context for subsequent event processing after applying the Route: <code>group</code> (Worker Group or Edge Fleet) or <code>pack</code>.
+- `final` (Boolean) If <code>true</code> (default), the Route processes matched events and sends them to the specified Pipeline. Matched events do not continue to the next Route, but non-matched events do continue to the next Route. If <code>false</code>, the Route processes matched events and sends them to the specified Pipeline, and all events (matched and non-matched) continue to the next Route. Must be <code>false</code> to clone events.
+- `id` (String) Unique identifier for the Route. If omitted, the server generates a deterministic identifier.

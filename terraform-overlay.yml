@@ -1,4 +1,331 @@
+schema_imports:
+  - source: openapi.yml
+    schemas:
+      - InputCollector
+
 actions:
+  - target: "$.paths./m/{groupId}/lib/jobs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Collector
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Worker group ID.
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this collector instance.
+  - target: "$.paths./m/{groupId}/lib/jobs.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs.post.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs.get"
+    update:
+      x-terraform-list: Collector
+      x-terraform-list-name: Collectors
+  - target: "$.paths./m/{groupId}/lib/jobs.get.responses.200.content.application/json.schema"
+    update:
+      type: array
+      items:
+        $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.get"
+    update:
+      x-terraform-read: Collector
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.get.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch"
+    update:
+      x-terraform-update: Collector
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.patch.responses.200.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/InputCollector"
+  - target: "$.paths./m/{groupId}/lib/jobs/{id}.delete"
+    update:
+      x-terraform-delete: Collector
+  - target: "$.components.schemas.InputCollector"
+    update:
+      properties:
+        environment:
+          type: string
+          title: Environment
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorEnvironmentPlanModifiers
+        ignoreGroupJobsLimit:
+          type: boolean
+          title: Ignore group jobs limit
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorIgnoreGroupJobsLimitPlanModifiers
+        resumeOnBoot:
+          type: boolean
+          title: Resume on boot
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorResumeOnBootPlanModifiers
+        ttl:
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorTTLPlanModifiers
+        workerAffinity:
+          type: boolean
+          title: Worker affinity
+          x-terraform-optional-computed: true
+          x-terraform-plan-modifier-hook: collectorWorkerAffinityPlanModifiers
+  - target: "$.components.schemas.InputCollectorBase.properties.type"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/pipelines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines.get"
+    update:
+      x-terraform-list: Pipeline
+      x-terraform-list-name: Pipelines
+  - target: "$.paths./m/{groupId}/pipelines/{id}.get"
+    update:
+      x-terraform-read: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines/{id}.patch"
+    update:
+      x-terraform-update: Pipeline
+  - target: "$.paths./m/{groupId}/pipelines/{id}.delete"
+    update:
+      x-terraform-delete: Pipeline
+
+  - target: "$.paths./m/{groupId}/routes/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Routes
+      x-terraform-update: Routes
+      x-terraform-delete: Routes
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+      x-terraform-delete-reset-body:
+        id: default
+        routes:
+          - name: Default
+            filter: "true"
+            pipeline: main
+            final: true
+            disabled: false
+  - target: "$.paths./m/{groupId}/routes/{id}.get"
+    update:
+      x-terraform-read: Routes
+  - target: "$.components.schemas.RoutesInput.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RoutesInput.properties.comments"
+    update:
+      x-terraform-emit-empty: true
+  - target: "$.components.schemas.RoutesInput.properties.groups"
+    update:
+      x-terraform-emit-empty: true
+  - target: "$.components.schemas.Routes.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Routes.properties.comments"
+    update:
+      x-terraform-emit-empty: true
+  - target: "$.components.schemas.Routes.properties.groups"
+    update:
+      x-terraform-emit-empty: true
+  - target: "$.components.schemas.RouteConfInput.properties.id"
+    update:
+      x-terraform-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConf.properties.id"
+    update:
+      x-terraform-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.RouteConfInput.properties.filter"
+    update:
+      default: "true"
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.final"
+    update:
+      default: true
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.disabled"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.enableOutputExpression"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.description"
+    update:
+      default: ""
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.output"
+    update:
+      default: default
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConfInput.properties.clones"
+    update:
+      default: []
+      x-terraform-optional-computed: true
+      x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
+  - target: "$.components.schemas.RouteConf.properties.filter"
+    update:
+      default: "true"
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.final"
+    update:
+      default: true
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.disabled"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.enableOutputExpression"
+    update:
+      default: false
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.description"
+    update:
+      default: ""
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.output"
+    update:
+      default: default
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.RouteConf.properties.clones"
+    update:
+      default: []
+      x-terraform-optional-computed: true
+      x-terraform-element-custom-type: "types.MapType{ElemType: types.StringType}"
+  - target: "$.components.schemas.RouteComment.properties.groupId"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RouteComment.properties.id"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.RouteComment.properties.index"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.AdditionalPropertiesTypeRoutesGroups.properties.index"
+    update:
+      x-terraform-computed: true
+  - target: "$.components.schemas.PipelineFunctionConf"
+    replace:
+      type: object
+      required:
+        - id
+        - conf
+      additionalProperties: false
+      properties:
+        filter:
+          title: Filter
+          description: 'Filter that selects data to be fed through this Function. Default: "true"'
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        id:
+          title: ID
+          description: Cribl pipeline function type ID (e.g. eval, serde, publish_metrics).
+          type: string
+          x-terraform-not-null: true
+          x-terraform-pipeline-function-id-validator: true
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        description:
+          title: Description
+          description: Simple description of this step
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        disabled:
+          title: Disabled
+          description: If true, data will not be pushed through this function
+          type: boolean
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        final:
+          title: Final
+          description: If enabled, stops the results of this Function from being passed to the downstream Functions
+          type: boolean
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+        conf:
+          type: object
+          title: Function-specific configs
+          description: Function configuration as JSON. In HCL use jsonencode({ ... }); the exact object schema depends on the function type in the Cribl API (eval, serde, code, drop, etc.).
+          additionalProperties: true
+          x-terraform-object-as-json: true
+          x-terraform-custom-type: jsontypes.NormalizedType{}
+          x-terraform-not-null: true
+          x-terraform-valid-json: true
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+          x-terraform-plan-modifier-hook: pipelineConfPlanModifiers
+        groupId:
+          title: Group ID
+          description: Group ID
+          type: string
+          x-terraform-optional-computed: true
+          x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.id"
+    update:
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.asyncFuncTimeout"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.description"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.functions"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.description"
+    update:
+      description: Short description of this group
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.disabled"
+    update:
+      description: Whether this group is disabled
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.groups.additionalProperties.properties.name"
+    update:
+      description: Group name
+      x-terraform-not-null: true
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.output"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.Pipeline.properties.conf.properties.streamtags"
+    update:
+      x-terraform-optional-computed: true
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./m/{groupId}/lib/vars.post"
     update:
       x-terraform-resource: true
@@ -465,6 +792,526 @@ actions:
             - disableSNIRouting
         - $ref: "#/components/schemas/EmptyObject"
 
+  - target: "$.paths./m/{groupId}/system/outputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Destination
+  - target: "$.paths./m/{groupId}/system/outputs.get"
+    update:
+      x-terraform-list: Destination
+      x-terraform-list-name: Destinations
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.get"
+    update:
+      x-terraform-read: Destination
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.patch"
+    update:
+      x-terraform-update: Destination
+  - target: "$.paths./m/{groupId}/system/outputs/{id}.delete"
+    update:
+      x-terraform-delete: Destination
+
+  - target: "$.paths./m/{groupId}/system/inputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Source
+  - target: "$.paths./m/{groupId}/system/inputs.get"
+    update:
+      x-terraform-list: Source
+      x-terraform-list-name: Sources
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.get"
+    update:
+      x-terraform-read: Source
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.patch"
+    update:
+      x-terraform-update: Source
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.delete"
+    update:
+      x-terraform-delete: Source
+
+  - target: "$.paths"
+    update:
+      /m/{groupId}/p/{pack}/lib/breakers:
+        get:
+          operationId: getBreakersByPack
+          responses:
+            "200":
+              description: Event breaker rulesets within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        post:
+          operationId: createBreakersByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EventBreakerRuleset"
+          responses:
+            "200":
+              description: Created event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/lib/breakers/{id}:
+        get:
+          operationId: getBreakersByPackAndId
+          responses:
+            "200":
+              description: Event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: updateBreakersByPackAndId
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EventBreakerRuleset"
+          responses:
+            "200":
+              description: Updated event breaker ruleset within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/EventBreakerRuleset"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        delete:
+          operationId: deleteBreakersByPackAndId
+          responses:
+            "200":
+              description: Deleted event breaker ruleset within a Pack.
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/system/lookups:
+        get:
+          operationId: getSystemLookupsByPack
+          responses:
+            "200":
+              description: Lookup files within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        post:
+          operationId: createSystemLookupsByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LookupFile"
+          responses:
+            "200":
+              description: Created lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/system/lookups/{id}:
+        get:
+          operationId: getSystemLookupsByPackAndId
+          responses:
+            "200":
+              description: Lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: createSystemLookupsByPackAndId
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LookupFile"
+          responses:
+            "200":
+              description: Updated lookup file within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/LookupFile"
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        delete:
+          operationId: deleteSystemLookupsByPackAndId
+          responses:
+            "200":
+              description: Deleted lookup file within a Pack.
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+      /m/{groupId}/p/{pack}/routes/default:
+        get:
+          operationId: getRoutesByPack
+          responses:
+            "200":
+              description: Routes within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Routes"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+        patch:
+          operationId: createRoutesByPack
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Routes"
+          responses:
+            "200":
+              description: Updated routes within a Pack.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Routes"
+          parameters:
+            - name: pack
+              in: path
+              required: true
+              schema:
+                type: string
+              x-terraform-force-new: true
+            - name: groupId
+              in: path
+              required: true
+              schema:
+                type: string
+
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackBreakers
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.get"
+    update:
+      x-terraform-read: PackBreakers
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.patch"
+    update:
+      x-terraform-update: PackBreakers
+      x-terraform-read-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/breakers/{id}.delete"
+    update:
+      x-terraform-delete: PackBreakers
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.get"
+    update:
+      x-terraform-read: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.patch"
+    update:
+      x-terraform-update: PackDestination
+  - target: "$.paths./m/{groupId}/p/{pack}/system/outputs/{id}.delete"
+    update:
+      x-terraform-delete: PackDestination
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackLookups
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.get"
+    update:
+      x-terraform-read: PackLookups
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.patch"
+    update:
+      x-terraform-update: PackLookups
+      responses:
+        "200":
+          description: LookupFile object within a Pack
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LookupFile"
+  - target: "$.paths./m/{groupId}/p/{pack}/system/lookups/{id}.delete"
+    update:
+      x-terraform-delete: PackLookups
+
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackPipeline
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.get"
+    update:
+      x-terraform-read: PackPipeline
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.patch"
+    update:
+      x-terraform-update: PackPipeline
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+  - target: "$.paths./m/{groupId}/p/{pack}/pipelines/{id}.delete"
+    update:
+      x-terraform-delete: PackPipeline
+
+  - target: "$.paths./m/{groupId}/p/{pack}/routes/default.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackRoutes
+      x-terraform-update: PackRoutes
+      x-terraform-delete: PackRoutes
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+      x-terraform-delete-reset-body:
+        id: default
+        routes:
+          - name: Default
+            filter: "true"
+            pipeline: main
+            final: true
+            disabled: false
+  - target: "$.paths./m/{groupId}/p/{pack}/routes/default.get"
+    update:
+      x-terraform-read: PackRoutes
+
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.get"
+    update:
+      x-terraform-read: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.patch"
+    update:
+      x-terraform-update: PackSource
+  - target: "$.paths./m/{groupId}/p/{pack}/system/inputs/{id}.delete"
+    update:
+      x-terraform-delete: PackSource
+
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.get"
+    update:
+      x-terraform-read: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.patch"
+    update:
+      x-terraform-update: PackVars
+  - target: "$.paths./m/{groupId}/p/{pack}/lib/vars/{id}.delete"
+    update:
+      x-terraform-delete: PackVars
+
   - target: "$.paths./m/{groupId}/system/subscriptions.post"
     update:
       x-terraform-resource: true
@@ -567,6 +1414,416 @@ actions:
   - target: "$.components.schemas.DashboardCategory.properties.isPack"
     update:
       x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/dashboards.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/SearchDashboard"
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.get"
+    update:
+      x-terraform-read: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.patch"
+    update:
+      x-terraform-update: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/SearchDashboard"
+  - target: "$.paths./m/{groupId}/search/dashboards/{id}.delete"
+    update:
+      x-terraform-delete: SearchDashboard
+  - target: "$.paths./m/{groupId}/search/dashboards.get"
+    update:
+      x-terraform-list: SearchDashboard
+      x-terraform-list-name: SearchDashboards
+  - target: "$.components.schemas.SearchDashboard"
+    replace:
+      type: object
+      properties:
+        autoApplyDebounceMs:
+          type: integer
+          x-terraform-ignore: true
+        autoApplyMode:
+          type: string
+          x-terraform-ignore: true
+        autoApplyUrlSync:
+          type: string
+          x-terraform-ignore: true
+        cacheTTLSeconds:
+          type: number
+          description: Time to live (TTL) for the dashboard; reset after each use. Leave empty to never expire.
+          x-terraform-name: cache_ttl_seconds
+          x-terraform-optional-computed: true
+        category:
+          type: string
+          x-terraform-optional-computed: true
+        created:
+          type: integer
+          x-terraform-ignore: true
+        createdBy:
+          type: string
+          x-terraform-ignore: true
+        description:
+          type: string
+          description: Description of the dashboard. Optional.
+          x-terraform-optional-computed: true
+        displayCreatedBy:
+          type: string
+          x-terraform-ignore: true
+        displayModifiedBy:
+          type: string
+          x-terraform-ignore: true
+        elements:
+          $ref: "#/components/schemas/DashboardElements"
+        groups:
+          $ref: "#/components/schemas/DashboardGroups"
+          x-terraform-optional-computed: true
+        id:
+          type: string
+          x-terraform-force-new: true
+          x-terraform-suppress-diff: explicit
+        modified:
+          type: integer
+          x-terraform-ignore: true
+        modifiedBy:
+          type: string
+          x-terraform-ignore: true
+        name:
+          type: string
+        packId:
+          type: string
+          x-terraform-ignore: true
+        refreshRate:
+          type: number
+          description: Auto-refresh rate in milliseconds. Optional.
+          x-terraform-optional-computed: true
+        resolvedDatasetIds:
+          type: array
+          items:
+            type: string
+          x-terraform-ignore: true
+        schedule:
+          $ref: "#/components/schemas/SearchDashboardSchedule"
+          description: Schedule for the dashboard. Optional.
+          x-terraform-optional-computed: true
+      required:
+        - elements
+        - id
+        - name
+  - target: "$.components.schemas.DashboardElements"
+    replace:
+      type: array
+      items:
+        $ref: "#/components/schemas/DashboardElement"
+  - target: "$.components.schemas.DashboardElement"
+    replace:
+      type: object
+      properties:
+        dashboard_element_visualization:
+          $ref: "#/components/schemas/DashboardElementVisualization"
+          x-terraform-optional-computed: true
+        dashboard_element_input:
+          $ref: "#/components/schemas/DashboardElementInput"
+          x-terraform-optional-computed: true
+        dashboard_element:
+          $ref: "#/components/schemas/DashboardElementMarkdown"
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.SearchQuery"
+    replace:
+      type: object
+      properties:
+        search_query_saved:
+          $ref: "#/components/schemas/SearchQuerySaved"
+          x-terraform-optional-computed: true
+        search_query_inline:
+          $ref: "#/components/schemas/SearchQueryInline"
+          x-terraform-optional-computed: true
+        search_query_values:
+          $ref: "#/components/schemas/SearchQueryValues"
+          x-terraform-optional-computed: true
+        search_query_metric:
+          $ref: "#/components/schemas/SearchQueryMetric"
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas.DashboardGroups"
+    replace:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/DashboardGroup"
+  - target: "$.components.schemas.DashboardLayout"
+    replace:
+      type: object
+      properties:
+        h:
+          type: number
+        w:
+          type: number
+        x:
+          type: number
+        y:
+          type: number
+      required:
+        - h
+        - w
+        - x
+        - y
+  - target: "$.components.schemas.PanelQueryDefinition"
+    replace:
+      type: object
+      properties:
+        alias:
+          type: string
+          x-terraform-optional-computed: true
+        localId:
+          type: string
+          x-terraform-optional-computed: true
+        query:
+          type: string
+          x-terraform-optional-computed: true
+  - target: "$.components.schemas"
+    update:
+      DashboardElementVisualization:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Chart and visualization config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/SearchQuery"
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+          titleAction:
+            $ref: "#/components/schemas/TitleAction"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardElementInput:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Input element config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          inputId:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/SearchQuery"
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardElementMarkdown:
+        type: object
+        properties:
+          config:
+            type: object
+            additionalProperties: true
+            description: Markdown element config, encoded as JSON string values.
+            x-terraform-element-custom-type: jsontypes.NormalizedType{}
+            x-terraform-optional-computed: true
+            x-terraform-plan-modifier-hook: searchDashboardConfigMapPlanModifiers
+          hidePanel:
+            type: boolean
+            x-terraform-optional-computed: true
+          horizontalChart:
+            type: boolean
+            x-terraform-optional-computed: true
+          id:
+            type: string
+            x-terraform-optional-computed: true
+          layout:
+            $ref: "#/components/schemas/DashboardLayout"
+            x-terraform-optional-computed: true
+          search:
+            $ref: "#/components/schemas/PanelQueryDefinition"
+            x-terraform-optional-computed: true
+          titleAction:
+            $ref: "#/components/schemas/TitleAction"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+          variant:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQuerySaved:
+        type: object
+        properties:
+          query:
+            type: string
+            x-terraform-optional-computed: true
+          queryId:
+            type: string
+            x-terraform-optional-computed: true
+          runMode:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQueryInline:
+        type: object
+        properties:
+          earliest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          latest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          parentSearchId:
+            type: string
+            x-terraform-optional-computed: true
+          query:
+            type: string
+            x-terraform-optional-computed: true
+          sampleRate:
+            type: number
+            x-terraform-optional-computed: true
+          timezone:
+            type: string
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchQueryValues:
+        type: object
+        properties:
+          type:
+            type: string
+            x-terraform-optional-computed: true
+          values:
+            type: array
+            items:
+              type: string
+            x-terraform-optional-computed: true
+      SearchQueryMetric:
+        type: object
+        properties:
+          earliest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          latest:
+            $ref: "#/components/schemas/SearchDashboardRelativeTime"
+            x-terraform-optional-computed: true
+          queries:
+            type: array
+            items:
+              $ref: "#/components/schemas/PanelQueryDefinition"
+            x-terraform-optional-computed: true
+          type:
+            type: string
+            x-terraform-optional-computed: true
+      SearchDashboardRelativeTime:
+        type: object
+        properties:
+          str:
+            type: string
+            x-terraform-optional-computed: true
+          number:
+            type: number
+            x-terraform-optional-computed: true
+      SearchDashboardSchedule:
+        type: object
+        properties:
+          cronSchedule:
+            type: string
+          enabled:
+            type: boolean
+          keepLastN:
+            type: number
+          notifications:
+            type: object
+            properties:
+              disabled:
+                type: boolean
+                x-terraform-optional-computed: true
+              items:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+            x-terraform-optional-computed: true
+          tz:
+            type: string
+        required:
+          - cronSchedule
+          - enabled
+          - keepLastN
+          - notifications
+          - tz
+      DashboardGroup:
+        type: object
+        properties:
+          action:
+            $ref: "#/components/schemas/DashboardGroupAction"
+            x-terraform-optional-computed: true
+          collapsed:
+            type: boolean
+            x-terraform-optional-computed: true
+          inputId:
+            type: string
+            x-terraform-optional-computed: true
+          title:
+            type: string
+            x-terraform-optional-computed: true
+      DashboardGroupAction:
+        type: object
+        properties:
+          label:
+            type: string
+            x-terraform-optional-computed: true
+          params:
+            type: object
+            additionalProperties:
+              type: string
+            x-terraform-optional-computed: true
+          target:
+            type: string
+            x-terraform-optional-computed: true
+      SavedQueryScheduleNotifications:
+        type: object
+        properties:
+          disabled:
+            type: boolean
+            x-terraform-optional-computed: true
 
   - target: "$.paths./m/{groupId}/search/local_search/engines.post"
     update:
@@ -975,6 +2232,222 @@ actions:
                 type: string
               description: Tags associated with the dataset.
               x-terraform-optional-computed: true
+
+  - target: "$.paths./m/{groupId}/search/datasets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.get"
+    update:
+      x-terraform-read: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.patch"
+    update:
+      x-terraform-update: SearchDataset
+  - target: "$.paths./m/{groupId}/search/datasets/{id}.delete"
+    update:
+      x-terraform-delete: SearchDataset
+  - target: "$.components.schemas.Dataset"
+    update:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the Dataset.
+        description:
+          type: string
+          description: Brief description of the Dataset.
+        provider:
+          type: string
+          description: Identifier for the Dataset Provider that the Dataset uses.
+          x-terraform-name: provider_id
+        type:
+          type: string
+          description: Dataset provider type.
+  - target: "$.components.schemas.DatasetMetadata.properties.earliest"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.enableAcceleration"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.fieldList"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.scanMode"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetMetadata.properties.latestRunInfo"
+    update:
+      x-terraform-optional-computed: true
+  - target: "$.components.schemas.DatasetAmazonSecurityLake"
+    update:
+      x-terraform-name: aws_security_lake_dataset
+  - target: "$.components.schemas.DatasetApiAws"
+    update:
+      x-terraform-name: api_aws_dataset
+  - target: "$.components.schemas.DatasetApiAzure"
+    update:
+      x-terraform-name: api_azure_dataset
+  - target: "$.components.schemas.DatasetApiAzureDataExplorer"
+    update:
+      x-terraform-name: api_azure_data_explorer_dataset
+  - target: "$.components.schemas.DatasetApiElasticsearch"
+    update:
+      x-terraform-name: api_elastic_search_dataset
+  - target: "$.components.schemas.DatasetApiGcp"
+    update:
+      x-terraform-name: api_gcp_dataset
+  - target: "$.components.schemas.DatasetApiGoogleWorkspace"
+    update:
+      x-terraform-name: api_google_workspace_dataset
+  - target: "$.components.schemas.DatasetApiHttp"
+    update:
+      x-terraform-name: apihttp_dataset
+  - target: "$.components.schemas.DatasetApiMsgraph"
+    update:
+      x-terraform-name: api_ms_graph_dataset
+  - target: "$.components.schemas.DatasetApiOkta"
+    update:
+      x-terraform-name: api_okta_dataset
+  - target: "$.components.schemas.DatasetApiOpensearch"
+    update:
+      x-terraform-name: api_open_search_dataset
+  - target: "$.components.schemas.DatasetApiTailscale"
+    update:
+      x-terraform-name: api_tailscale_dataset
+  - target: "$.components.schemas.DatasetApiZoom"
+    update:
+      x-terraform-name: api_zoom_dataset
+  - target: "$.components.schemas.DatasetAzureBlob"
+    update:
+      x-terraform-name: azure_blob_dataset
+  - target: "$.components.schemas.DatasetClickhouse"
+    update:
+      x-terraform-name: click_house_dataset
+  - target: "$.components.schemas.DatasetCriblEdge"
+    update:
+      x-terraform-name: edge_dataset
+  - target: "$.components.schemas.DatasetCriblLake"
+    update:
+      x-terraform-name: cribl_lake_dataset
+  - target: "$.components.schemas.DatasetCriblLeader"
+    update:
+      x-terraform-name: cribl_leader_dataset
+  - target: "$.components.schemas.DatasetCriblLocal"
+    update:
+      x-terraform-name: cribl_local_dataset
+  - target: "$.components.schemas.DatasetCriblMeta"
+    update:
+      x-terraform-name: meta_dataset
+  - target: "$.components.schemas.DatasetCriblSearch"
+    update:
+      x-terraform-name: cribl_search_dataset
+  - target: "$.components.schemas.DatasetGcs"
+    update:
+      x-terraform-name: gcs_dataset
+  - target: "$.components.schemas.DatasetPrometheus"
+    update:
+      x-terraform-name: prometheus_dataset
+  - target: "$.components.schemas.DatasetS3"
+    update:
+      x-terraform-name: s3_dataset
+  - target: "$.components.schemas.DatasetS3.properties"
+    update:
+      autoDetectRegion:
+        type: boolean
+        description: Whether to automatically detect the region.
+        x-terraform-optional-computed: true
+      bucket:
+        type: string
+        description: S3 bucket name.
+        x-terraform-optional-computed: true
+      extraPaths:
+        type: array
+        description: Additional bucket paths that are included in this Dataset.
+        x-terraform-optional-computed: true
+        items:
+          type: object
+          properties:
+            autoDetectRegion:
+              type: boolean
+              description: Whether to automatically detect the region.
+              x-terraform-optional-computed: true
+            bucket:
+              type: string
+              description: S3 bucket name.
+              x-terraform-optional-computed: true
+            filter:
+              type: string
+              description: Filter expression evaluated against each object path under the bucket.
+              x-terraform-optional-computed: true
+            path:
+              type: string
+              description: Templated path under which to look for data.
+              x-terraform-optional-computed: true
+            region:
+              type: string
+              description: AWS region where the bucket is located.
+              x-terraform-optional-computed: true
+      path:
+        type: string
+        description: Templated path under which to look for data.
+        x-terraform-optional-computed: true
+      region:
+        type: string
+        description: AWS region where the bucket is located.
+        x-terraform-optional-computed: true
+      skipEventTimeFilter:
+        type: boolean
+        description: Whether to skip event time filtering.
+        x-terraform-optional-computed: true
+      storageClasses:
+        type: array
+        description: Storage classes to include in the search.
+        x-terraform-optional-computed: true
+        items:
+          type: string
+  - target: "$.components.schemas.DatasetSnowflake"
+    update:
+      x-terraform-name: snowflake_dataset
+
+  - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatasetRuleset
+      x-terraform-update: SearchDatasetRuleset
+      x-terraform-delete: SearchDatasetRuleset
+      x-terraform-delete-hook: deleteSearchDatasetRuleset
+  - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets/{id}.get"
+    update:
+      x-terraform-read: SearchDatasetRuleset
+  - target: "$.components.schemas.DatasetRuleset.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatasetRuleset.properties.rules"
+    update:
+      x-terraform-suppress-diff: explicit
+
+  - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets/{id}.patch"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatatypeRuleset
+      x-terraform-update: SearchDatatypeRuleset
+      x-terraform-delete: SearchDatatypeRuleset
+      x-terraform-delete-hook: deleteSearchDatatypeRuleset
+  - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets/{id}.get"
+    update:
+      x-terraform-read: SearchDatatypeRuleset
+  - target: "$.components.schemas.DatatypeRuleset.properties.id"
+    update:
+      const: default
+      default: default
+      x-terraform-fixed-value: default
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.DatatypeRuleset.properties.rules"
+    update:
+      x-terraform-suppress-diff: explicit
+
   - target: "$.paths./m/{groupId}/search/macros.post"
     update:
       x-terraform-resource: true
@@ -1219,6 +2692,47 @@ actions:
     update:
       x-terraform-optional-computed: true
   - target: "$.components.schemas.LocalSearchSource.properties.status"
+    update:
+      x-terraform-ignore: true
+
+  - target: "$.paths./m/{groupId}/system/lookups.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.get"
+    update:
+      x-terraform-read: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.patch"
+    update:
+      x-terraform-update: LookupFile
+  - target: "$.paths./m/{groupId}/system/lookups/{id}.delete"
+    update:
+      x-terraform-delete: LookupFile
+  - target: "$.components.examples.CreateLookupFileExamplesCSVLookup.value"
+    update:
+      content: "ip,reputation\n10.0.0.1,internal"
+      mode: memory
+      tags: geo,reference
+  - target: "$.components.schemas.LookupFile.properties"
+    update:
+      content:
+        type: string
+        description: File content.
+        x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.id"
+    update:
+      x-terraform-prefer-state: true
+      x-terraform-suppress-diff: explicit
+  - target: "$.components.schemas.LookupFile.properties.description"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.tags"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.version"
+    update:
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.LookupFile.properties.size"
     update:
       x-terraform-ignore: true
 

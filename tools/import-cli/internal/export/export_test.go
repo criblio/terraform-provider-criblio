@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
@@ -176,7 +175,7 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 	})
 }
 
-func TestAddOneOfBlockFromFirstItem_inputUnionStruct(t *testing.T) {
+func TestAddOneOfBlockFromFirstItem_generatedSourceInputBlock(t *testing.T) {
 	cfg := &registry.OneOfConfig{
 		ReadOnlyAttr:        "items",
 		DiscriminatorField:  "type",
@@ -185,13 +184,11 @@ func TestAddOneOfBlockFromFirstItem_inputUnionStruct(t *testing.T) {
 		SupportedBlockNames: []string{"input_cribl_http"},
 	}
 	model := &provider.SourceResourceModel{
-		Items: []ptypes.InputUnion1{
-			{InputCriblHTTP: &ptypes.InputCriblHTTP{
-				Type: types.StringValue("cribl_http"),
-				ID:   types.StringValue("in_test"),
-				Host: types.StringValue("0.0.0.0"),
-				Port: types.Float64Value(10080),
-			}},
+		InputCriblHttp: &provider.InputCriblHttpModel{
+			Type: types.StringValue("cribl_http"),
+			ID:   types.StringValue("in_test"),
+			Host: types.StringValue("0.0.0.0"),
+			Port: types.Float64Value(10080),
 		},
 	}
 	attrs := make(map[string]hcl.Value)
@@ -283,8 +280,17 @@ func TestSkipResourceByID(t *testing.T) {
 	t.Run("skip criblio_source in default_search group", func(t *testing.T) {
 		assert.True(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default_search", "id": "in_open_telemetry"}))
 	})
+	t.Run("skip criblio_routes in default_search group", func(t *testing.T) {
+		assert.True(t, skipResourceByID("criblio_routes", map[string]string{"group_id": "default_search", "id": "default_search"}))
+	})
+	t.Run("skip criblio_routes in search group", func(t *testing.T) {
+		assert.True(t, skipResourceByID("criblio_routes", map[string]string{"group_id": "search", "id": "search"}))
+	})
 	t.Run("not skip criblio_source in other groups when same id", func(t *testing.T) {
 		assert.False(t, skipResourceByID("criblio_source", map[string]string{"group_id": "default", "id": "in_open_telemetry"}))
+	})
+	t.Run("not skip criblio_routes in worker group", func(t *testing.T) {
+		assert.False(t, skipResourceByID("criblio_routes", map[string]string{"group_id": "default", "id": "default"}))
 	})
 }
 

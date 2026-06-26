@@ -86,6 +86,9 @@ func runWithConfig(config mergeConfig) error {
 	if err := prefixGroupScopedPaths(spec); err != nil {
 		return err
 	}
+	if err := applySchemaImportsFromOverlay(spec, config.OverlayPath); err != nil {
+		return err
+	}
 	if err := applyOverlayFile(spec, config.OverlayPath); err != nil {
 		return err
 	}
@@ -113,6 +116,122 @@ func runWithConfig(config mergeConfig) error {
 		return err
 	}
 	return nil
+}
+
+func applySchemaImportsFromOverlay(spec *yaml.Node, overlayPath string) error {
+	overlay, err := readYAML(overlayPath)
+	if err != nil {
+		return fmt.Errorf("read overlay: %v", err)
+	}
+	imports, ok := mappingValue(documentMapping(overlay), "schema_imports")
+	if !ok {
+		return nil
+	}
+	if imports.Kind != yaml.SequenceNode {
+		return fmt.Errorf("schema_imports must be a sequence")
+	}
+
+	targetSchemas, ok := lookupComponentsSchemas(documentMapping(spec))
+	if !ok {
+		return fmt.Errorf("target components schemas mapping not found")
+	}
+	for index, item := range imports.Content {
+		sourcePath, schemaNames, err := parseSchemaImport(item)
+		if err != nil {
+			return fmt.Errorf("schema_imports %d: %v", index, err)
+		}
+		sourceSpec, err := readYAML(sourcePath)
+		if err != nil {
+			return fmt.Errorf("schema_imports %d read source: %v", index, err)
+		}
+		sourceSchemas, ok := lookupComponentsSchemas(documentMapping(sourceSpec))
+		if !ok {
+			return fmt.Errorf("schema_imports %d source components schemas mapping not found", index)
+		}
+		seen := map[string]bool{}
+		for _, schemaName := range schemaNames {
+			if err := importSchemaRecursive(targetSchemas, sourceSchemas, schemaName, seen); err != nil {
+				return fmt.Errorf("schema_imports %d: %v", index, err)
+			}
+		}
+	}
+	return nil
+}
+
+func parseSchemaImport(item *yaml.Node) (string, []string, error) {
+	if item.Kind != yaml.MappingNode {
+		return "", nil, fmt.Errorf("entry must be a mapping")
+	}
+	source, ok := mappingValue(item, "source")
+	if !ok || source.Kind != yaml.ScalarNode || source.Value == "" {
+		return "", nil, fmt.Errorf("source scalar is required")
+	}
+	schemas, ok := mappingValue(item, "schemas")
+	if !ok || schemas.Kind != yaml.SequenceNode {
+		return "", nil, fmt.Errorf("schemas sequence is required")
+	}
+	names := make([]string, 0, len(schemas.Content))
+	for _, schema := range schemas.Content {
+		if schema.Kind != yaml.ScalarNode || schema.Value == "" {
+			return "", nil, fmt.Errorf("schema names must be non-empty scalars")
+		}
+		names = append(names, schema.Value)
+	}
+	return source.Value, names, nil
+}
+
+func importSchemaRecursive(targetSchemas, sourceSchemas *yaml.Node, schemaName string, seen map[string]bool) error {
+	if seen[schemaName] {
+		return nil
+	}
+	seen[schemaName] = true
+
+	sourceSchema, ok := mappingValue(sourceSchemas, schemaName)
+	if !ok {
+		return fmt.Errorf("source schema %q not found", schemaName)
+	}
+	if existing, ok := mappingValue(targetSchemas, schemaName); ok {
+		if !nodesEqual(existing, sourceSchema) {
+			return fmt.Errorf("target schema %q already exists with different content", schemaName)
+		}
+	} else {
+		targetSchemas.Content = append(targetSchemas.Content, scalar(schemaName), cloneNode(sourceSchema))
+	}
+
+	for _, refName := range schemaRefs(sourceSchema) {
+		if _, ok := mappingValue(sourceSchemas, refName); !ok {
+			continue
+		}
+		if err := importSchemaRecursive(targetSchemas, sourceSchemas, refName, seen); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func schemaRefs(node *yaml.Node) []string {
+	if node == nil {
+		return nil
+	}
+	var refs []string
+	if node.Kind == yaml.MappingNode {
+		for index := 0; index < len(node.Content); index += 2 {
+			key := node.Content[index]
+			value := node.Content[index+1]
+			if key.Value == "$ref" && value.Kind == yaml.ScalarNode {
+				if name := strings.TrimPrefix(value.Value, "#/components/schemas/"); name != value.Value {
+					refs = append(refs, name)
+				}
+				continue
+			}
+			refs = append(refs, schemaRefs(value)...)
+		}
+		return refs
+	}
+	for _, child := range node.Content {
+		refs = append(refs, schemaRefs(child)...)
+	}
+	return refs
 }
 
 func mergeManagementSpec(spec *yaml.Node, mgmtInputPath, mgmtOverlayPath string) error {

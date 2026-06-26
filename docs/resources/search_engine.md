@@ -38,7 +38,6 @@ resource "criblio_search_engine" "my_search_engine" {
 - `datasets` (List of String) The <code>id</code> values for Datasets that are linked to the lakehouse engine.
 - `deletion_started_at` (Integer) Timestamp (in Unix time) when deletion was initiated for the lakehouse engine (if applicable), in milliseconds.
 - `effective_status` (String) Operational status of the lakehouse engine, accounting for both the engine and its underlying Worker Group. If the engine is ready but the Worker Group is not, reflects the Worker Group status. If the engine is not ready, reflects the engine status regardless of the Worker Group status.
-- `engine_type` (String) Type of engine. For lakehouse engines, always <code>local</code>.
 - `has_main` (Boolean) If <code>true</code>, the lakehouse engine currently owns the main Dataset.
 - `is_compute_deprovisioned` (Boolean) If <code>true</code>, compute for the lakehouse engine has been deprovisioned after termination.
 - `is_storage_deprovisioned` (Boolean) If <code>true</code>, the storage backing the lakehouse engine has been deprovisioned and fully cleaned up after termination.

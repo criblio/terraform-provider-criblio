@@ -74,7 +74,6 @@ Optional:
 - `disabled` (Boolean) Disable this breaker rule (enabled by default)
 - `parser_enabled` (Boolean)
 - `should_use_data_raw` (Boolean) Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.
-- `__template_timestamp_timezone` (String) Binds 'timestampTimezone' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'timestampTimezone' at runtime.
 - `delimiter` (String)
 - `delimiter_regex` (String)
 - `escape_char` (String)

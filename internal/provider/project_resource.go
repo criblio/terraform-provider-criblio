@@ -42,11 +42,44 @@ func (r *ProjectResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Project Resource",
 		Attributes: map[string]schema.Attribute{
-			"consumers": schema.MapAttribute{
-				Required:    false,
-				Optional:    true,
-				Computed:    false,
-				ElementType: types.StringType,
+			"consumers": schema.MapNestedAttribute{
+				Required: false,
+				Optional: true,
+				Computed: false,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"connections": schema.ListNestedAttribute{
+							Required: false,
+							Optional: true,
+							Computed: false,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"output": schema.StringAttribute{
+										Required: true,
+										Optional: false,
+										Computed: false,
+									},
+									"pipeline": schema.StringAttribute{
+										Required: false,
+										Optional: true,
+										Computed: false,
+									},
+								},
+							},
+						},
+						"disabled": schema.BoolAttribute{
+							Required:    false,
+							Optional:    true,
+							Computed:    false,
+							Description: `It should be removed as a consumer is present or absent.`,
+						},
+						"type": schema.StringAttribute{
+							Required: false,
+							Optional: true,
+							Computed: false,
+						},
+					},
+				},
 			},
 			"description": schema.StringAttribute{
 				Required: false,
@@ -222,11 +255,9 @@ func applyProjectAPIToState(api *ProjectModel, state *ProjectModel, preserveInpu
 		}
 	}
 	if state.Consumers.IsNull() || state.Consumers.IsUnknown() {
-		state.Consumers = types.MapNull(types.StringType)
-	} else if elementType := state.Consumers.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
-		if len(state.Consumers.Elements()) == 0 {
-			state.Consumers = types.MapNull(types.StringType)
-		}
+		state.Consumers = types.MapNull(types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()})
+	} else if len(state.Consumers.Elements()) == 0 {
+		state.Consumers = types.MapValueMust(types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()}, nil)
 	}
 	if !preserveInputs || (fillMissingInputs && (state.Description.IsNull() || state.Description.IsUnknown())) {
 		if !api.Description.IsNull() && !api.Description.IsUnknown() {

@@ -1,34 +1,77 @@
 resource "criblio_pack_pipeline" "my_packpipeline" {
+  group_id = "default"
+  id       = "my_id"
+  pack     = criblio_pack.pipeline_pack.id
   conf = {
-    async_func_timeout = 5000
-    description        = "Main pipeline for app logs"
+    async_func_timeout = 9066
+    description        = "my_description"
     functions = [
       {
-        conf = {
-          key = jsonencode("value")
-        }
-        description = "Parse and enrich fields"
-        disabled    = false
-        filter      = "_source == \"app\""
-        final       = false
-        group_id    = "default"
-        id          = "eval"
-      }
+        id     = "serde"
+        filter = "true"
+        conf = jsonencode({
+          mode      = "extract"
+          type      = "json"
+          src_field = "_raw"
+        })
+      },
+      {
+        id     = "eval"
+        filter = "true"
+        conf = jsonencode({
+          add = [
+            {
+              disabled = false
+              name     = "_value"
+              value    = "1"
+            }
+          ]
+          remove = [
+            "host",
+            "_raw",
+            "source",
+            "cribl_breaker",
+          ]
+        })
+      },
+      {
+        id     = "publish_metrics"
+        filter = "true"
+        conf = jsonencode({
+          overwrite = false
+          dimensions = [
+            "!_*",
+            "*",
+          ],
+          removeDimensions = ["cribl_pipe"]
+          fields = [
+            {
+              metricType   = "gauge"
+              inFieldName  = "_value"
+              outFieldExpr = "saas_env"
+            }
+          ]
+        })
+      },
     ]
     groups = {
-      key = {
-        description = "...my_description..."
-        disabled    = true
-        name        = "...my_name..."
+      default = {
+        name = "default"
       }
     }
-    output = "OutputSplunk"
     streamtags = [
-      "prod",
-      "app",
+      "tags"
     ]
   }
-  group_id = "myExistingGroupId"
-  id       = "main"
-  pack     = "myExistingPackId"
 }
+
+resource "criblio_pack" "pipeline_pack" {
+  id           = "pack-with-pipeline"
+  group_id     = "default"
+  description  = "Pack with pipeline"
+  disabled     = true
+  display_name = "Pack with pipeline"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
+}
+

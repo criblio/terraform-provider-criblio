@@ -68,8 +68,7 @@ func TestConvertFromResponseBody_pipeline(t *testing.T) {
 	body := &operations.GetPipelineByIDResponseBody{Items: nil}
 	_, err := ConvertFromResponseBody(ctx, e, body)
 	require.Error(t, err)
-	assert.Contains(t, err.Error(), "criblio_pipeline")
-	assert.Contains(t, err.Error(), "Unexpected response from API")
+	assert.Contains(t, err.Error(), "response body has no items")
 }
 
 func TestConvertFromResponseBody_unknownModelType(t *testing.T) {

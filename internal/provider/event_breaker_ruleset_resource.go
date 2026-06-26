@@ -205,12 +205,6 @@ func (r *EventBreakerRulesetResource) Schema(_ context.Context, _ resource.Schem
 							Computed:    true,
 							Description: `Enable to set an internal field on events indicating that the field in the data called _raw should be used. This can be useful for post processors that want to use that field for event._raw, instead of replacing it with the actual raw event.`,
 						},
-						"__template_timestamp_timezone": schema.StringAttribute{
-							Required:    false,
-							Optional:    true,
-							Computed:    false,
-							Description: `Binds 'timestampTimezone' to a variable for dynamic value resolution. Set to variable ID (pack-scoped) or 'cribl.'/'edge.' prefixed ID (group-scoped). Variable value overrides 'timestampTimezone' at runtime.`,
-						},
 						"delimiter": schema.StringAttribute{
 							Required: false,
 							Optional: true,

@@ -14,18 +14,13 @@ CustomBanner Resource
 
 ```terraform
 resource "criblio_custom_banner" "my_custombanner" {
-  created = 1759154100
-  custom_themes = [
-    "themes",
-  ]
-  enabled           = true
-  id                = "myUniqueBannerMessageId"
-  invert_font_color = false
-  link              = "https://thisisarealwebsite.com"
-  link_display      = "This flavor text redirects to link"
-  message           = "This is the banner message to be displayed"
-  theme             = "purple"
-  type              = "custom"
+  enabled = true
+  message = "Scheduled maintenance window: Saturday 2am-4am UTC"
+  theme   = "purple"
+  type    = "custom"
+
+  link         = "https://status.example.com"
+  link_display = "View status page"
 }
 ```
 
@@ -67,3 +62,22 @@ Read-Only:
 - `message` (String) Enter a message to display to all your Organization's users, across all Cribl products. Limited to one line and 100 characters; will be truncated as needed.
 - `theme` (String)
 - `type` (String)
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = criblio_custom_banner.my_custombanner
+  id = "custom-banner"
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import criblio_custom_banner.my_custombanner custom-banner
+```

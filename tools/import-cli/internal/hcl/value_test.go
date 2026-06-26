@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
@@ -73,7 +72,7 @@ func TestModelToValue_pipeline_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{
 		GroupID: types.StringValue("default"),
 		ID:      types.StringValue("pipe-1"),
-		Conf:    ptypes.PipelineConf{}, // nested object
+		Conf:    emptyPipelineConf(),
 	}
 	out, err := ModelToValue(model, nil)
 	require.NoError(t, err)
@@ -430,7 +429,7 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	model := &provider.PipelineResourceModel{
 		GroupID: types.StringValue("default"),
 		ID:      types.StringValue("pipe-1"),
-		Conf:    ptypes.PipelineConf{}, // has map[string]PipelineGroups and other nested fields
+		Conf:    emptyPipelineConf(),
 	}
 	out, err := ModelToValue(model, nil)
 	require.NoError(t, err)
@@ -443,6 +442,17 @@ func TestModelToValue_complex_nested(t *testing.T) {
 	expr := conf.ToHCLExpr()
 	assert.True(t, len(expr) > 0)
 	assert.Contains(t, expr, "{")
+}
+
+func emptyPipelineConf() types.Object {
+	return types.ObjectValueMust(provider.PipelineConfAttrTypes(), map[string]attr.Value{
+		"async_func_timeout": types.Int64Null(),
+		"output":             types.StringNull(),
+		"description":        types.StringNull(),
+		"streamtags":         types.ListNull(types.StringType),
+		"functions":          types.ListNull(types.ObjectType{AttrTypes: provider.PipelineConfFunctionsAttrTypes()}),
+		"groups":             types.MapNull(types.ObjectType{AttrTypes: provider.PipelineConfGroupsAttrTypes()}),
+	})
 }
 
 func TestReplaceSecretValuesWithVariableRefs_masks_authorization_header(t *testing.T) {

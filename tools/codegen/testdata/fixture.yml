@@ -74,6 +74,7 @@ paths:
     delete:
       operationId: deleteCertificateByID
       x-terraform-delete: certificate
+      x-terraform-delete-hook: deleteCertificateSoft
       responses:
         "200":
           content:
@@ -339,6 +340,8 @@ components:
           type: string
           x-terraform-sensitive: true
           x-terraform-prefer-state: true
+        __template_accountKey:
+          type: string
         container:
           type: string
     OutputElastic:

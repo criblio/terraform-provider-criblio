@@ -18,6 +18,9 @@ func TestParseCertificateResource(t *testing.T) {
 	if certificate.Read.Path != "/m/{groupId}/system/certificates/{id}" {
 		t.Fatalf("read path = %q", certificate.Read.Path)
 	}
+	if certificate.Delete.DeleteHook != "deleteCertificateSoft" {
+		t.Fatalf("delete hook = %q", certificate.Delete.DeleteHook)
+	}
 	if len(certificate.Create.Examples) != 1 {
 		t.Fatalf("create example count = %d", len(certificate.Create.Examples))
 	}
@@ -100,6 +103,9 @@ func TestParseOneOfVariants(t *testing.T) {
 	if accountKey.ApplyStrategy != "stringFromAPIOrPrior" {
 		t.Fatalf("account_key strategy = %q", accountKey.ApplyStrategy)
 	}
+	if hasField(azure.Fields, "__template_account_key") {
+		t.Fatalf("__template_* fields should not be generated")
+	}
 }
 
 func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
@@ -123,6 +129,18 @@ func TestParseMappingRulesetBackwardCompatibleDefaults(t *testing.T) {
 	final := fieldByTFName(t, functions.Fields, "final")
 	if final.Required || !final.Optional || final.Computed {
 		t.Fatalf("mapping function final flags = required:%v optional:%v computed:%v", final.Required, final.Optional, final.Computed)
+	}
+	if final.FixedValue != "" {
+		t.Fatalf("mapping function final fixed value = %q", final.FixedValue)
+	}
+	functionConf := fieldByTFName(t, functions.Fields, "conf")
+	add := fieldByTFName(t, functionConf.Fields, "add")
+	name := fieldByTFName(t, add.Fields, "name")
+	if name.Required || !name.Optional || name.Computed {
+		t.Fatalf("mapping add name flags = required:%v optional:%v computed:%v", name.Required, name.Optional, name.Computed)
+	}
+	if name.FixedValue != "" {
+		t.Fatalf("mapping add name fixed value = %q", name.FixedValue)
 	}
 }
 
@@ -170,6 +188,184 @@ func TestNotificationHidesGroupIDForBackwardCompatibility(t *testing.T) {
 
 	if hasField(resource.Fields, "group_id") {
 		t.Fatalf("notification group_id should be hidden from Terraform schema")
+	}
+}
+
+func TestParseFixedSingletonIdentity(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /m/{groupId}/routes/{id}:
+    patch:
+      x-terraform-resource: true
+      x-terraform-resource-name: Routes
+      x-terraform-read-after-write: true
+      x-terraform-preserve-inputs-after-write: true
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Routes"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Routes"
+components:
+  schemas:
+    Routes:
+      type: object
+      required:
+        - id
+        - routes
+      properties:
+        id:
+          type: string
+          const: default
+          x-terraform-fixed-value: default
+        routes:
+          type: array
+          items:
+            type: string
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	routes := resourceByName(t, resources, "Routes")
+	id := fieldByTFName(t, routes.Fields, "id")
+	if id.FixedValue != "default" {
+		t.Fatalf("id fixed value = %q", id.FixedValue)
+	}
+	if id.Required || !id.Optional || !id.Computed || !id.PathParam || !id.ForceNew {
+		t.Fatalf("id flags = required:%v optional:%v computed:%v path:%v force:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.ForceNew)
+	}
+	if !routes.Create.PreserveInputsAfterWrite {
+		t.Fatalf("routes preserve inputs after write = false")
+	}
+}
+
+func TestParseSearchDatasetCompatibility(t *testing.T) {
+	resources, err := Parse([]byte(`
+openapi: 3.1.0
+paths:
+  /m/default_search/search/datasets:
+    post:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDataset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenericDataset"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericDataset"
+  /m/default_search/search/datasets/{id}:
+    get:
+      x-terraform-read: SearchDataset
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericDataset"
+components:
+  schemas:
+    GenericDataset:
+      type: object
+      required:
+        - id
+        - provider
+        - type
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+          x-terraform-name: provider_id
+        type:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/ApiHttpDataset"
+    ApiHttpDataset:
+      x-terraform-name: apihttp_dataset
+      allOf:
+        - $ref: "#/components/schemas/GenericDatasetBase"
+        - type: object
+          required:
+            - enabledEndpoints
+          properties:
+            type:
+              type: string
+              const: api_http
+            enabledEndpoints:
+              type: array
+              items:
+                type: string
+    GenericDatasetBase:
+      type: object
+      required:
+        - id
+        - provider
+        - type
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        provider:
+          type: string
+          x-terraform-name: provider_id
+        type:
+          type: string
+`))
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	searchDataset := resourceByName(t, resources, "SearchDataset")
+	id := fieldByTFName(t, searchDataset.Fields, "id")
+	if id.Required || id.Optional || !id.Computed || !id.PathParam || id.UseStateForUnknown {
+		t.Fatalf("search dataset id flags = required:%v optional:%v computed:%v path:%v use_state:%v", id.Required, id.Optional, id.Computed, id.PathParam, id.UseStateForUnknown)
+	}
+	providerID := fieldByTFName(t, searchDataset.Fields, "provider_id")
+	if providerID.Required || providerID.Optional || !providerID.Computed || providerID.UseStateForUnknown {
+		t.Fatalf("search dataset provider_id flags = required:%v optional:%v computed:%v use_state:%v", providerID.Required, providerID.Optional, providerID.Computed, providerID.UseStateForUnknown)
+	}
+	variant := variantByName(t, searchDataset.OneOfVariants, "ApiHttpDataset")
+	if variant.TerraformName != "apihttp_dataset" {
+		t.Fatalf("variant TerraformName = %q", variant.TerraformName)
+	}
+	if variant.DiscriminatorValue != "api_http" {
+		t.Fatalf("variant DiscriminatorValue = %q", variant.DiscriminatorValue)
+	}
+	enabledEndpoints := fieldByTFName(t, variant.Fields, "enabled_endpoints")
+	if enabledEndpoints.Required || !enabledEndpoints.Optional || !enabledEndpoints.Computed {
+		t.Fatalf("variant enabled_endpoints flags = required:%v optional:%v computed:%v", enabledEndpoints.Required, enabledEndpoints.Optional, enabledEndpoints.Computed)
 	}
 }
 
@@ -448,7 +644,7 @@ components:
 
 	packages := fieldByTFName(t, settings.Fields, "packages")
 	if packages.Type != "array" || packages.ElementType != "object" || fieldByTFName(t, packages.Fields, "url").Type != "string" {
-		t.Fatalf("packages should resolve array item allOf object fields")
+		t.Fatalf("packages should resolve array item allOf object fields, got type=%q elem=%q fields=%#v", packages.Type, packages.ElementType, packages.Fields)
 	}
 }
 

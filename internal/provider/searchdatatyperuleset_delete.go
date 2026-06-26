@@ -3,103 +3,94 @@ package provider
 import (
 	"context"
 	"fmt"
+	"net/url"
 
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 )
 
 // deleteSearchDatatypeRuleset removes only rules whose ids appear in Terraform state,
 // then PATCHes the rest. Product-managed rules (e.g. default auto-datatype) stay on the server.
-func deleteSearchDatatypeRuleset(ctx context.Context, r *SearchDatatypeRulesetResource, data *SearchDatatypeRulesetResourceModel, resp *resource.DeleteResponse) {
-	managed := make(map[string]struct{})
-	for _, rule := range data.Rules {
-		id := rule.ID.ValueString()
-		if id != "" {
-			managed[id] = struct{}{}
-		}
+func deleteSearchDatatypeRuleset(ctx context.Context, client *restclient.Client, model SearchDatatypeRulesetModel) error {
+	managed, err := searchDatatypeRuleIDs(model.Rules)
+	if err != nil {
+		return err
 	}
 	if len(managed) == 0 {
-		return
+		return nil
 	}
 
-	wantRulesetID := shared.DatatypeRulesetID(data.ID.ValueString())
-	getRes, err := r.client.Search.GetDatatypeRuleByID(ctx)
+	rulesetID := searchDatatypeRulesetID(model)
+	path := fmt.Sprintf("/m/default_search/search/local_search/datatype-rulesets/%s", url.PathEscape(rulesetID))
+	current, err := restclient.Get[SearchDatatypeRulesetModel](ctx, client, path)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if getRes != nil && getRes.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(getRes.RawResponse))
+		if restclient.IsNotFound(err) {
+			return nil
 		}
-		return
-	}
-	if getRes == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", getRes))
-		return
-	}
-	if getRes.StatusCode == 404 {
-		return
-	}
-	if getRes.StatusCode != 200 {
-		resp.Diagnostics.AddError(
-			fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", getRes.StatusCode),
-			debugResponse(getRes.RawResponse),
-		)
-		return
-	}
-	if getRes.CountedDatatypeRuleset == nil {
-		resp.Diagnostics.AddError("unexpected response from API", "missing counted datatype ruleset body")
-		return
-	}
-
-	var current *shared.DatatypeRuleset
-	for i := range getRes.CountedDatatypeRuleset.Items {
-		item := &getRes.CountedDatatypeRuleset.Items[i]
-		if item.ID == wantRulesetID {
-			current = item
-			break
-		}
-	}
-	if current == nil && len(getRes.CountedDatatypeRuleset.Items) == 1 {
-		current = &getRes.CountedDatatypeRuleset.Items[0]
+		return err
 	}
 	if current == nil {
-		resp.Diagnostics.AddError(
-			"unexpected response from API",
-			fmt.Sprintf("could not find datatype ruleset with id %q in GET response", wantRulesetID),
-		)
-		return
+		return nil
 	}
 
-	kept := make([]shared.DatatypeRule, 0, len(current.Rules))
-	for _, rule := range current.Rules {
-		if _, remove := managed[rule.ID]; remove {
+	currentRules, err := searchDatatypeRules(current.Rules)
+	if err != nil {
+		return err
+	}
+	kept := make([]any, 0, len(currentRules))
+	for _, rule := range currentRules {
+		id, _ := rule["id"].(string)
+		if _, remove := managed[id]; remove {
 			continue
 		}
 		kept = append(kept, rule)
 	}
 
-	patch := shared.DatatypeRuleset{
-		ID:    wantRulesetID,
-		Rules: kept,
+	patch := map[string]any{
+		"id":    rulesetID,
+		"rules": kept,
 	}
-	res, err := r.client.Search.UpdateDatatypeRuleByID(ctx, patch)
+	if err := restclient.PatchNoResponse(ctx, client, path, patch); err != nil && !restclient.IsNotFound(err) {
+		return err
+	}
+	return nil
+}
+
+func searchDatatypeRulesetID(model SearchDatatypeRulesetModel) string {
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		return model.ID.ValueString()
+	}
+	return "default"
+}
+
+func searchDatatypeRuleIDs(value attr.Value) (map[string]struct{}, error) {
+	rules, err := searchDatatypeRules(value)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		return nil, err
+	}
+	managed := make(map[string]struct{}, len(rules))
+	for _, rule := range rules {
+		id, _ := rule["id"].(string)
+		if id != "" {
+			managed[id] = struct{}{}
 		}
-		return
 	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
+	return managed, nil
+}
+
+func searchDatatypeRules(value attr.Value) ([]map[string]any, error) {
+	raw, err := SearchDatatypeRulesetTerraformValueToJSON(value)
+	if err != nil {
+		return nil, fmt.Errorf("convert datatype rules to API value: %v", err)
 	}
-	switch res.StatusCode {
-	case 200, 404:
-		return
-	default:
-		resp.Diagnostics.AddError(
-			fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode),
-			debugResponse(res.RawResponse),
-		)
+	items, _ := raw.([]any)
+	rules := make([]map[string]any, 0, len(items))
+	for _, item := range items {
+		rule, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		rules = append(rules, rule)
 	}
+	return rules, nil
 }

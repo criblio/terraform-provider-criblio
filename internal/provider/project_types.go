@@ -44,12 +44,49 @@ type ProjectDataSourceModel struct {
 }
 
 type ProjectAPIModel struct {
-	Consumers     map[string]string `json:"consumers,omitempty"`
-	Description   *string           `json:"description,omitempty"`
-	Destinations  []string          `json:"destinations,omitempty"`
-	GroupID       *string           `json:"groupId,omitempty"`
-	ID            *string           `json:"id,omitempty"`
-	Subscriptions []string          `json:"subscriptions,omitempty"`
+	Consumers     any      `json:"consumers,omitempty"`
+	Description   *string  `json:"description,omitempty"`
+	Destinations  []string `json:"destinations,omitempty"`
+	GroupID       *string  `json:"groupId,omitempty"`
+	ID            *string  `json:"id,omitempty"`
+	Subscriptions []string `json:"subscriptions,omitempty"`
+}
+
+type ProjectConsumersModel struct {
+	Connections types.List   `tfsdk:"connections" json:"connections,omitempty"`
+	Disabled    types.Bool   `tfsdk:"disabled" json:"disabled,omitempty"`
+	Type        types.String `tfsdk:"type" json:"type,omitempty"`
+}
+
+type ProjectConsumersAPIModel struct {
+	Connections any     `json:"connections,omitempty"`
+	Disabled    *bool   `json:"disabled,omitempty"`
+	Type        *string `json:"type,omitempty"`
+}
+
+func ProjectConsumersAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"connections": types.ListType{ElemType: types.ObjectType{AttrTypes: ProjectConsumersConnectionsAttrTypes()}},
+		"disabled":    types.BoolType,
+		"type":        types.StringType,
+	}
+}
+
+type ProjectConsumersConnectionsModel struct {
+	Output   types.String `tfsdk:"output" json:"output,omitempty"`
+	Pipeline types.String `tfsdk:"pipeline" json:"pipeline,omitempty"`
+}
+
+type ProjectConsumersConnectionsAPIModel struct {
+	Output   *string `json:"output,omitempty"`
+	Pipeline *string `json:"pipeline,omitempty"`
+}
+
+func ProjectConsumersConnectionsAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"output":   types.StringType,
+		"pipeline": types.StringType,
+	}
 }
 
 func ProjectTerraformValueToJSON(value attr.Value) (any, error) {
@@ -307,13 +344,13 @@ func (m *ProjectModel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if input.Consumers != nil {
-		value, diags := types.MapValueFrom(context.Background(), types.StringType, input.Consumers)
-		if diags.HasError() {
-			return fmt.Errorf("convert consumers from API value: %v", diags)
+		value, err := ProjectAPIValueToTerraformValue(input.Consumers, types.MapType{ElemType: types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()}})
+		if err != nil {
+			return fmt.Errorf("convert consumers from API value: %v", err)
 		}
-		m.Consumers = value
+		m.Consumers = value.(types.Map)
 	} else {
-		m.Consumers = types.MapNull(types.StringType)
+		m.Consumers = types.MapNull(types.ObjectType{AttrTypes: ProjectConsumersAttrTypes()})
 	}
 	if input.Description != nil {
 		m.Description = types.StringValue(*input.Description)

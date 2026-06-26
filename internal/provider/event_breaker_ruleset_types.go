@@ -57,76 +57,73 @@ type EventBreakerRulesetAPIModel struct {
 }
 
 type EventBreakerRulesetRulesModel struct {
-	Name                      types.String  `tfsdk:"name" json:"name,omitempty"`
-	Condition                 types.String  `tfsdk:"condition" json:"condition,omitempty"`
-	Type                      types.String  `tfsdk:"type" json:"type,omitempty"`
-	TimestampAnchorRegex      types.String  `tfsdk:"timestamp_anchor_regex" json:"timestampAnchorRegex,omitempty"`
-	Timestamp                 types.Object  `tfsdk:"timestamp" json:"timestamp,omitempty"`
-	TimestampTimezone         types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
-	TimestampEarliest         types.String  `tfsdk:"timestamp_earliest" json:"timestampEarliest,omitempty"`
-	TimestampLatest           types.String  `tfsdk:"timestamp_latest" json:"timestampLatest,omitempty"`
-	MaxEventBytes             types.Float64 `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
-	Fields                    types.List    `tfsdk:"fields" json:"fields,omitempty"`
-	Disabled                  types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
-	ParserEnabled             types.Bool    `tfsdk:"parser_enabled" json:"parserEnabled,omitempty"`
-	ShouldUseDataRaw          types.Bool    `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
-	TemplateTimestampTimezone types.String  `tfsdk:"__template_timestamp_timezone" json:"__template_timestampTimezone,omitempty"`
-	Delimiter                 types.String  `tfsdk:"delimiter" json:"delimiter,omitempty"`
-	DelimiterRegex            types.String  `tfsdk:"delimiter_regex" json:"delimiterRegex,omitempty"`
-	EscapeChar                types.String  `tfsdk:"escape_char" json:"escapeChar,omitempty"`
-	EventBreakerRegex         types.String  `tfsdk:"event_breaker_regex" json:"eventBreakerRegex,omitempty"`
-	FieldsLineRegex           types.String  `tfsdk:"fields_line_regex" json:"fieldsLineRegex,omitempty"`
-	HeaderLineRegex           types.String  `tfsdk:"header_line_regex" json:"headerLineRegex,omitempty"`
-	QuoteChar                 types.String  `tfsdk:"quote_char" json:"quoteChar,omitempty"`
+	Name                 types.String  `tfsdk:"name" json:"name,omitempty"`
+	Condition            types.String  `tfsdk:"condition" json:"condition,omitempty"`
+	Type                 types.String  `tfsdk:"type" json:"type,omitempty"`
+	TimestampAnchorRegex types.String  `tfsdk:"timestamp_anchor_regex" json:"timestampAnchorRegex,omitempty"`
+	Timestamp            types.Object  `tfsdk:"timestamp" json:"timestamp,omitempty"`
+	TimestampTimezone    types.String  `tfsdk:"timestamp_timezone" json:"timestampTimezone,omitempty"`
+	TimestampEarliest    types.String  `tfsdk:"timestamp_earliest" json:"timestampEarliest,omitempty"`
+	TimestampLatest      types.String  `tfsdk:"timestamp_latest" json:"timestampLatest,omitempty"`
+	MaxEventBytes        types.Float64 `tfsdk:"max_event_bytes" json:"maxEventBytes,omitempty"`
+	Fields               types.List    `tfsdk:"fields" json:"fields,omitempty"`
+	Disabled             types.Bool    `tfsdk:"disabled" json:"disabled,omitempty"`
+	ParserEnabled        types.Bool    `tfsdk:"parser_enabled" json:"parserEnabled,omitempty"`
+	ShouldUseDataRaw     types.Bool    `tfsdk:"should_use_data_raw" json:"shouldUseDataRaw,omitempty"`
+	Delimiter            types.String  `tfsdk:"delimiter" json:"delimiter,omitempty"`
+	DelimiterRegex       types.String  `tfsdk:"delimiter_regex" json:"delimiterRegex,omitempty"`
+	EscapeChar           types.String  `tfsdk:"escape_char" json:"escapeChar,omitempty"`
+	EventBreakerRegex    types.String  `tfsdk:"event_breaker_regex" json:"eventBreakerRegex,omitempty"`
+	FieldsLineRegex      types.String  `tfsdk:"fields_line_regex" json:"fieldsLineRegex,omitempty"`
+	HeaderLineRegex      types.String  `tfsdk:"header_line_regex" json:"headerLineRegex,omitempty"`
+	QuoteChar            types.String  `tfsdk:"quote_char" json:"quoteChar,omitempty"`
 }
 
 type EventBreakerRulesetRulesAPIModel struct {
-	Name                      *string  `json:"name,omitempty"`
-	Condition                 *string  `json:"condition,omitempty"`
-	Type                      *string  `json:"type,omitempty"`
-	TimestampAnchorRegex      *string  `json:"timestampAnchorRegex,omitempty"`
-	Timestamp                 any      `json:"timestamp,omitempty"`
-	TimestampTimezone         *string  `json:"timestampTimezone,omitempty"`
-	TimestampEarliest         *string  `json:"timestampEarliest,omitempty"`
-	TimestampLatest           *string  `json:"timestampLatest,omitempty"`
-	MaxEventBytes             *float64 `json:"maxEventBytes,omitempty"`
-	Fields                    any      `json:"fields,omitempty"`
-	Disabled                  *bool    `json:"disabled,omitempty"`
-	ParserEnabled             *bool    `json:"parserEnabled,omitempty"`
-	ShouldUseDataRaw          *bool    `json:"shouldUseDataRaw,omitempty"`
-	TemplateTimestampTimezone *string  `json:"__template_timestampTimezone,omitempty"`
-	Delimiter                 *string  `json:"delimiter,omitempty"`
-	DelimiterRegex            *string  `json:"delimiterRegex,omitempty"`
-	EscapeChar                *string  `json:"escapeChar,omitempty"`
-	EventBreakerRegex         *string  `json:"eventBreakerRegex,omitempty"`
-	FieldsLineRegex           *string  `json:"fieldsLineRegex,omitempty"`
-	HeaderLineRegex           *string  `json:"headerLineRegex,omitempty"`
-	QuoteChar                 *string  `json:"quoteChar,omitempty"`
+	Name                 *string  `json:"name,omitempty"`
+	Condition            *string  `json:"condition,omitempty"`
+	Type                 *string  `json:"type,omitempty"`
+	TimestampAnchorRegex *string  `json:"timestampAnchorRegex,omitempty"`
+	Timestamp            any      `json:"timestamp,omitempty"`
+	TimestampTimezone    *string  `json:"timestampTimezone,omitempty"`
+	TimestampEarliest    *string  `json:"timestampEarliest,omitempty"`
+	TimestampLatest      *string  `json:"timestampLatest,omitempty"`
+	MaxEventBytes        *float64 `json:"maxEventBytes,omitempty"`
+	Fields               any      `json:"fields,omitempty"`
+	Disabled             *bool    `json:"disabled,omitempty"`
+	ParserEnabled        *bool    `json:"parserEnabled,omitempty"`
+	ShouldUseDataRaw     *bool    `json:"shouldUseDataRaw,omitempty"`
+	Delimiter            *string  `json:"delimiter,omitempty"`
+	DelimiterRegex       *string  `json:"delimiterRegex,omitempty"`
+	EscapeChar           *string  `json:"escapeChar,omitempty"`
+	EventBreakerRegex    *string  `json:"eventBreakerRegex,omitempty"`
+	FieldsLineRegex      *string  `json:"fieldsLineRegex,omitempty"`
+	HeaderLineRegex      *string  `json:"headerLineRegex,omitempty"`
+	QuoteChar            *string  `json:"quoteChar,omitempty"`
 }
 
 func EventBreakerRulesetRulesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-		"name":                          types.StringType,
-		"condition":                     types.StringType,
-		"type":                          types.StringType,
-		"timestamp_anchor_regex":        types.StringType,
-		"timestamp":                     types.ObjectType{AttrTypes: EventBreakerRulesetRulesTimestampAttrTypes()},
-		"timestamp_timezone":            types.StringType,
-		"timestamp_earliest":            types.StringType,
-		"timestamp_latest":              types.StringType,
-		"max_event_bytes":               types.Float64Type,
-		"fields":                        types.ListType{ElemType: types.ObjectType{AttrTypes: EventBreakerRulesetRulesFieldsAttrTypes()}},
-		"disabled":                      types.BoolType,
-		"parser_enabled":                types.BoolType,
-		"should_use_data_raw":           types.BoolType,
-		"__template_timestamp_timezone": types.StringType,
-		"delimiter":                     types.StringType,
-		"delimiter_regex":               types.StringType,
-		"escape_char":                   types.StringType,
-		"event_breaker_regex":           types.StringType,
-		"fields_line_regex":             types.StringType,
-		"header_line_regex":             types.StringType,
-		"quote_char":                    types.StringType,
+		"name":                   types.StringType,
+		"condition":              types.StringType,
+		"type":                   types.StringType,
+		"timestamp_anchor_regex": types.StringType,
+		"timestamp":              types.ObjectType{AttrTypes: EventBreakerRulesetRulesTimestampAttrTypes()},
+		"timestamp_timezone":     types.StringType,
+		"timestamp_earliest":     types.StringType,
+		"timestamp_latest":       types.StringType,
+		"max_event_bytes":        types.Float64Type,
+		"fields":                 types.ListType{ElemType: types.ObjectType{AttrTypes: EventBreakerRulesetRulesFieldsAttrTypes()}},
+		"disabled":               types.BoolType,
+		"parser_enabled":         types.BoolType,
+		"should_use_data_raw":    types.BoolType,
+		"delimiter":              types.StringType,
+		"delimiter_regex":        types.StringType,
+		"escape_char":            types.StringType,
+		"event_breaker_regex":    types.StringType,
+		"fields_line_regex":      types.StringType,
+		"header_line_regex":      types.StringType,
+		"quote_char":             types.StringType,
 	}
 }
 

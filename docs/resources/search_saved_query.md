@@ -172,7 +172,7 @@ Optional:
 
 - `area_style` (Attributes) Area fill style options for area charts. (see [below for nested schema](#nestedatt--chart_config--series--area_style))
 - `color` (String) CSS color value for the series.
-- `data` (String) Array of data points for the series.
+- `data` (List of String) Array of data points for the series.
 - `map` (String) Map identifier for geo-chart series.
 - `type` (String) Chart type override for the individual series.
 - `y_axis_field` (String) Field name from the data to use for the Y-axis values.

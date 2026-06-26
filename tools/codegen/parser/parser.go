@@ -166,6 +166,12 @@ func operationDef(method, path string, operation, examples *yaml.Node) Operation
 		QueryParams:    queryParams(operation),
 		Examples:       requestExamples(operation, examples),
 		ReadAfterWrite: boolAnnotation(operation, "x-terraform-read-after-write"),
+		PreserveInputsAfterWrite: boolAnnotation(
+			operation,
+			"x-terraform-preserve-inputs-after-write",
+		),
+		ResetBody:  resetBody(operation),
+		DeleteHook: scalarValue(operation, "x-terraform-delete-hook"),
 	}
 }
 
@@ -224,8 +230,8 @@ func populateFields(resource *ResourceDef, schemas *yaml.Node) error {
 		return fields[i].TerraformName < fields[j].TerraformName
 	})
 	resource.Fields = fields
-	applyResourceCompatibility(resource)
 	resource.OneOfVariants = variants
+	applyResourceCompatibility(resource)
 	return nil
 }
 
@@ -261,6 +267,55 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	if resource.StructName == "Destination" || resource.StructName == "PackDestination" {
+		keepRoot := map[string]bool{
+			"environment": true,
+			"group_id":    true,
+			"id":          true,
+			"pack":        true,
+			"pipeline":    true,
+			"type":        true,
+		}
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if !keepRoot[field.TerraformName] {
+				continue
+			}
+			if field.TerraformName == "environment" || field.TerraformName == "pipeline" || field.TerraformName == "type" {
+				field.Required = false
+				field.Optional = false
+				field.Computed = true
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+		for index := range resource.OneOfVariants {
+			makeFieldsOptionalComputed(resource.OneOfVariants[index].Fields)
+			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+		}
+	}
+	if resource.StructName == "Source" || resource.StructName == "PackSource" {
+		keepRoot := map[string]bool{
+			"group_id": true,
+			"id":       true,
+			"pack":     true,
+		}
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if keepRoot[field.TerraformName] {
+				fields = append(fields, field)
+			}
+		}
+		resource.Fields = fields
+	}
+	if resource.StructName == "Collector" {
+		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
+	}
+	if resource.StructName == "SearchDataset" {
+		makeSearchDatasetHoistedFieldsComputed(resource.Fields)
+		renameSearchDatasetProviderFields(resource.OneOfVariants)
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+	}
 	if resource.StructName != "MappingRuleset" {
 		return
 	}
@@ -277,6 +332,105 @@ func applyResourceCompatibility(resource *ResourceDef) {
 	}
 }
 
+func markDestinationSensitiveFields(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		if destinationSensitiveField(*field) {
+			field.Sensitive = true
+			field.PreferState = true
+			field.ApplyStrategy = "stringFromAPIOrPrior"
+		}
+		if len(field.Fields) > 0 {
+			markDestinationSensitiveFields(field.Fields)
+		}
+	}
+}
+
+func destinationSensitiveField(field FieldDef) bool {
+	if field.Type != "string" || strings.HasPrefix(field.TerraformName, "__template_") {
+		return false
+	}
+	name := field.TerraformName
+	switch {
+	case name == "password", strings.HasSuffix(name, "_password"):
+		return true
+	case name == "token", name == "auth_token", name == "api_key":
+		return true
+	case name == "secret", name == "client_secret", name == "aws_secret_key", name == "account_key":
+		return true
+	case strings.Contains(name, "private_key") || strings.Contains(name, "passphrase"):
+		return true
+	default:
+		return false
+	}
+}
+
+func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		switch field.TerraformName {
+		case "id", "description", "provider_id", "type":
+			field.Required = false
+			field.Optional = false
+			field.Computed = true
+		}
+	}
+}
+
+func renameSearchDatasetProviderFields(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		renameProviderField(variants[variantIndex].Fields)
+	}
+}
+
+func renameProviderField(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		if field.APIName == "provider" {
+			field.TerraformName = "provider_id"
+			field.GoName = "ProviderID"
+		}
+		renameProviderField(field.Fields)
+	}
+}
+
+func makeCollectorVariantsOptionalComputed(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		makeFieldsOptionalComputed(variants[variantIndex].Fields)
+		addCollectorPlanModifierHooks(variants[variantIndex].Fields)
+	}
+}
+
+func makeFieldsOptionalComputedFromValues(variants []OneOfVariantDef) {
+	for variantIndex := range variants {
+		makeFieldsOptionalComputed(variants[variantIndex].Fields)
+	}
+}
+
+func makeFieldsOptionalComputed(fields []FieldDef) {
+	for fieldIndex := range fields {
+		field := &fields[fieldIndex]
+		field.Required = false
+		field.Optional = true
+		field.Computed = true
+		field.OptionalComputed = true
+		makeFieldsOptionalComputed(field.Fields)
+	}
+}
+
+func addCollectorPlanModifierHooks(fields []FieldDef) {
+	for fieldIndex := range fields {
+		field := &fields[fieldIndex]
+		switch field.TerraformName {
+		case "conf", "input", "schedule":
+			if field.Type == "object" {
+				field.PlanModifierHook = "collectorPreferConfigOrStatePlanModifiers"
+			}
+		}
+		addCollectorPlanModifierHooks(field.Fields)
+	}
+}
+
 func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
 	for index := range field.Fields {
 		nested := &field.Fields[index]
@@ -287,6 +441,10 @@ func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
 					functionField.Required = false
 					functionField.Optional = true
 					functionField.Computed = false
+					functionField.FixedValue = ""
+				}
+				if functionField.TerraformName == "conf" {
+					makeMappingRulesetAddNameOptional(functionField)
 				}
 			}
 			return
@@ -294,89 +452,151 @@ func makeMappingRulesetFunctionDefaultsOptional(field *FieldDef) {
 	}
 }
 
-func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, updateFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {
-	required := requiredSet(schema)
-	properties, ok := mappingValue(schema, "properties")
-	if !ok || properties.Kind != yaml.MappingNode {
-		return nil, nil, nil
-	}
-
-	var fields []FieldDef
-	var variants []OneOfVariantDef
-	for index := 0; index < len(properties.Content); index += 2 {
-		apiName := properties.Content[index].Value
-		property := properties.Content[index+1]
-		if boolAnnotation(property, "x-terraform-ignore") {
+func makeMappingRulesetAddNameOptional(field *FieldDef) {
+	for index := range field.Fields {
+		nested := &field.Fields[index]
+		if nested.TerraformName != "add" {
 			continue
 		}
-
-		if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
-			for _, variantRef := range oneOf.Content {
-				schemaName := schemaRefName(variantRef)
-				variantSchema, ok := mappingValue(schemas, schemaName)
-				if !ok {
-					return nil, nil, fmt.Errorf("oneOf schema %q not found", schemaName)
-				}
-				variantFields, _, err := parseSchemaFields(schemaName, variantSchema, schemas, schemaPropertySet(variantSchema), schemaPropertySet(variantSchema), schemaPropertySet(variantSchema))
-				if err != nil {
-					return nil, nil, err
-				}
-				variants = append(variants, OneOfVariantDef{
-					APIName:       schemaName,
-					TerraformName: snake(schemaName),
-					GoName:        exportName(schemaName),
-					ModelName:     exportName(schemaName) + "Model",
-					SchemaName:    schemaName,
-					Fields:        variantFields,
-				})
+		for nestedIndex := range nested.Fields {
+			addField := &nested.Fields[nestedIndex]
+			if addField.TerraformName != "name" {
+				continue
 			}
-			continue
+			addField.Required = false
+			addField.Optional = true
+			addField.Computed = false
+			addField.FixedValue = ""
 		}
+	}
+}
 
-		field, err := fieldDef(modelName, apiName, property, schemas)
+func parseSchemaFields(modelName string, schema, schemas *yaml.Node, postFields, updateFields, getFields map[string]bool) ([]FieldDef, []OneOfVariantDef, error) {
+	if _, ok := mappingValue(schema, "allOf"); ok {
+		resolved, ok, err := objectSchema(schema, schemas)
 		if err != nil {
 			return nil, nil, err
 		}
-		field.RequestField = postFields[apiName]
-		field.UpdateField = updateFields[apiName]
-		field.Required = required[apiName]
-		field.Optional = !field.Required
-		if boolAnnotation(property, "readOnly") || boolAnnotation(property, "x-terraform-computed") || (getFields[apiName] && !postFields[apiName]) {
-			field.Computed = true
-			field.Required = false
-			field.Optional = false
+		if ok {
+			schema = resolved
 		}
-		if boolAnnotation(property, "x-terraform-optional-computed") {
-			field.Computed = true
-			field.Required = false
-			field.Optional = true
-			field.OptionalComputed = true
+	}
+	required := requiredSet(schema)
+	properties, ok := mappingValue(schema, "properties")
+
+	var fields []FieldDef
+	var variants []OneOfVariantDef
+	if ok && properties.Kind == yaml.MappingNode {
+		for index := 0; index < len(properties.Content); index += 2 {
+			apiName := properties.Content[index].Value
+			property := properties.Content[index+1]
+			if ignoredAPIProperty(apiName, property) {
+				continue
+			}
+
+			if oneOf, ok := mappingValue(property, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
+				parsed, err := parseOneOfVariants(oneOf, schemas)
+				if err != nil {
+					return nil, nil, err
+				}
+				variants = append(variants, parsed...)
+				continue
+			}
+
+			field, err := fieldDef(modelName, apiName, property, schemas)
+			if err != nil {
+				return nil, nil, err
+			}
+			applyFieldAnnotations(&field, property, required[apiName], postFields[apiName], updateFields[apiName], getFields[apiName])
+			fields = append(fields, field)
 		}
-		if boolAnnotation(property, "writeOnly") {
-			field.Sensitive = true
-			field.PreferState = true
-			field.ApplyStrategy = "stringFromAPIOrPrior"
+	}
+	if oneOf, ok := mappingValue(schema, "oneOf"); ok && oneOf.Kind == yaml.SequenceNode {
+		parsed, err := parseOneOfVariants(oneOf, schemas)
+		if err != nil {
+			return nil, nil, err
 		}
-		if boolAnnotation(property, "x-terraform-sensitive") {
-			field.Sensitive = true
-		}
-		if boolAnnotation(property, "x-terraform-prefer-state") {
-			field.PreferState = true
-		}
-		if suppressDiffAnnotation(property) {
-			field.SuppressDiff = true
-		}
-		if boolAnnotation(property, "x-terraform-force-new") {
-			field.ForceNew = true
-		}
-		if field.PreferState && field.Sensitive {
-			field.ApplyStrategy = "stringFromAPIOrPrior"
-		} else if field.PreferState {
-			field.ApplyStrategy = "preferState"
-		}
-		fields = append(fields, field)
+		variants = append(variants, parsed...)
 	}
 	return fields, variants, nil
+}
+
+func parseOneOfVariants(oneOf, schemas *yaml.Node) ([]OneOfVariantDef, error) {
+	var variants []OneOfVariantDef
+	for _, variantRef := range oneOf.Content {
+		schemaName := schemaRefName(variantRef)
+		if schemaName == "" {
+			continue
+		}
+		variantSchema, ok := mappingValue(schemas, schemaName)
+		if !ok {
+			return nil, fmt.Errorf("oneOf schema %q not found", schemaName)
+		}
+		variantFields, _, err := parseSchemaFields(schemaName, variantSchema, schemas, schemaPropertySet(variantSchema), schemaPropertySet(variantSchema), schemaPropertySet(variantSchema))
+		if err != nil {
+			return nil, err
+		}
+		tfName := schemaName
+		if renamed, ok := stringAnnotation(variantSchema, "x-terraform-name"); ok && renamed != "" {
+			tfName = renamed
+		}
+		variants = append(variants, OneOfVariantDef{
+			APIName:            schemaName,
+			TerraformName:      snake(tfName),
+			GoName:             exportName(schemaName),
+			ModelName:          exportName(schemaName) + "Model",
+			SchemaName:         schemaName,
+			DiscriminatorValue: discriminatorValue(variantFields),
+			Fields:             variantFields,
+		})
+	}
+	return variants, nil
+}
+
+func applyFieldAnnotations(field *FieldDef, property *yaml.Node, required, requestField, updateField, getField bool) {
+	field.RequestField = requestField
+	field.UpdateField = updateField
+	field.Required = required
+	field.Optional = !field.Required
+	if boolAnnotation(property, "readOnly") || boolAnnotation(property, "x-terraform-computed") || (getField && !requestField) {
+		field.Computed = true
+		field.Required = false
+		field.Optional = false
+	}
+	if boolAnnotation(property, "x-terraform-optional-computed") {
+		field.Computed = true
+		field.Required = false
+		field.Optional = true
+		field.OptionalComputed = true
+	}
+	if boolAnnotation(property, "writeOnly") {
+		field.Sensitive = true
+		field.PreferState = true
+		field.ApplyStrategy = "stringFromAPIOrPrior"
+	}
+	if boolAnnotation(property, "x-terraform-sensitive") || boolAnnotation(property, "x-speakeasy-param-sensitive") {
+		field.Sensitive = true
+	}
+	if boolAnnotation(property, "x-terraform-prefer-state") || boolAnnotation(property, "x-speakeasy-param-suppress-computed-diff") || scalarValue(property, "x-speakeasy-plan-modifiers") == "PreferState" {
+		field.PreferState = true
+	}
+	if suppressDiffAnnotation(property) {
+		field.SuppressDiff = true
+	}
+	if boolAnnotation(property, "x-terraform-force-new") || boolAnnotation(property, "x-speakeasy-param-force-new") {
+		field.ForceNew = true
+	}
+	if fixedValue := fixedValueAnnotation(property); fixedValue != "" {
+		field.FixedValue = fixedValue
+		field.Required = false
+		field.Optional = true
+		field.Computed = true
+	}
+	if field.PreferState && field.Sensitive {
+		field.ApplyStrategy = "stringFromAPIOrPrior"
+	} else if field.PreferState {
+		field.ApplyStrategy = "preferState"
+	}
 }
 
 func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef, error) {
@@ -384,15 +604,23 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 	if renamed, ok := stringAnnotation(property, "x-terraform-name"); ok && renamed != "" {
 		tfName = renamed
 	}
-	fieldType := schemaType(property)
+	schemaForType := property
+	if schemaName := directSchemaRefName(property); schemaName != "" {
+		resolved, found := mappingValue(schemas, schemaName)
+		if !found {
+			return FieldDef{}, fmt.Errorf("field schema %q not found", schemaName)
+		}
+		schemaForType = resolved
+	}
+	fieldType := schemaType(schemaForType)
 	if objectSchema, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 		return FieldDef{}, err
 	} else if ok && objectSchema != nil {
 		fieldType = "object"
 	}
-	fieldElementType := elementType(property)
+	fieldElementType := elementType(schemaForType)
 	if fieldType == "array" {
-		if items, ok := mappingValue(property, "items"); ok {
+		if items, ok := mappingValue(schemaForType, "items"); ok {
 			if objectSchema, ok, err := objectSchemaForProperty(items, schemas); err != nil {
 				return FieldDef{}, err
 			} else if ok && objectSchema != nil {
@@ -408,11 +636,30 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		ElementType:   fieldElementType,
 		Description:   scalarValue(property, "description"),
 		CustomType:    scalarValue(property, "x-terraform-custom-type"),
-		ReadOnly:      boolAnnotation(property, "readOnly"),
-		WriteOnly:     boolAnnotation(property, "writeOnly"),
+		ElementCustomType: scalarValue(
+			property,
+			"x-terraform-element-custom-type",
+		),
+		PlanModifierHook: scalarValue(property, "x-terraform-plan-modifier-hook"),
+		UseStateForUnknown: boolAnnotation(
+			property,
+			"x-terraform-use-state-for-unknown",
+		),
+		EmitEmpty:    boolAnnotation(property, "x-terraform-emit-empty"),
+		FixedValue:   fixedValueAnnotation(property),
+		ObjectAsJSON: boolAnnotation(property, "x-terraform-object-as-json"),
+		NotNull:      boolAnnotation(property, "x-terraform-not-null"),
+		ValidJSON:    boolAnnotation(property, "x-terraform-valid-json"),
+		PipelineFunctionID: boolAnnotation(
+			property,
+			"x-terraform-pipeline-function-id-validator",
+		),
+		ReadOnly:  boolAnnotation(property, "readOnly"),
+		WriteOnly: boolAnnotation(property, "writeOnly"),
+		Enum:      enumValues(property),
 	}
 	if field.Type == "array" && field.ElementType == "object" {
-		items, ok := mappingValue(property, "items")
+		items, ok := mappingValue(schemaForType, "items")
 		if !ok {
 			return FieldDef{}, fmt.Errorf("%s.%s array field missing items schema", modelName, apiName)
 		}
@@ -438,12 +685,33 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		field.NestedAPIModelName = nestedName + "APIModel"
 		field.NestedAttrTypes = nestedName + "AttrTypes"
 	}
-	if field.Type == "object" {
-		objectSchema := property
+	if field.Type == "object" && !field.ObjectAsJSON {
+		objectSchema := schemaForType
 		if resolved, ok, err := objectSchemaForProperty(property, schemas); err != nil {
 			return FieldDef{}, err
 		} else if ok {
 			objectSchema = resolved
+		}
+		if additional, ok := mappingValue(objectSchema, "additionalProperties"); ok && additional.Kind == yaml.MappingNode {
+			mapSchema := additional
+			if resolved, ok, err := objectSchemaForProperty(additional, schemas); err != nil {
+				return FieldDef{}, err
+			} else if ok {
+				mapSchema = resolved
+			}
+			if properties, ok := mappingValue(mapSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
+				fields, _, err := parseSchemaFields(modelName+exportName(tfName), mapSchema, schemas, schemaPropertySet(mapSchema), schemaPropertySet(mapSchema), schemaPropertySet(mapSchema))
+				if err != nil {
+					return FieldDef{}, err
+				}
+				field.ElementType = "object"
+				field.Fields = fields
+				nestedName := nestedModelPrefix(modelName, tfName)
+				field.NestedModelName = nestedName + "Model"
+				field.NestedAPIModelName = nestedName + "APIModel"
+				field.NestedAttrTypes = nestedName + "AttrTypes"
+				return field, nil
+			}
 		}
 		if properties, ok := mappingValue(objectSchema, "properties"); ok && properties.Kind == yaml.MappingNode {
 			fields, _, err := parseSchemaFields(modelName+exportName(tfName), objectSchema, schemas, schemaPropertySet(objectSchema), schemaPropertySet(objectSchema), schemaPropertySet(objectSchema))
@@ -458,6 +726,48 @@ func fieldDef(modelName, apiName string, property, schemas *yaml.Node) (FieldDef
 		}
 	}
 	return field, nil
+}
+
+func ignoredAPIProperty(apiName string, property *yaml.Node) bool {
+	return strings.HasPrefix(apiName, "__template_") || ignoredAnnotation(property)
+}
+
+func ignoredAnnotation(property *yaml.Node) bool {
+	return boolAnnotation(property, "x-terraform-ignore") || boolAnnotation(property, "x-speakeasy-terraform-ignore")
+}
+
+func enumValues(property *yaml.Node) []string {
+	if value := scalarValue(property, "const"); value != "" {
+		return []string{value}
+	}
+	enum, ok := mappingValue(property, "enum")
+	if !ok || enum.Kind != yaml.SequenceNode {
+		return nil
+	}
+	values := make([]string, 0, len(enum.Content))
+	for _, item := range enum.Content {
+		if item.Kind == yaml.ScalarNode {
+			values = append(values, item.Value)
+		}
+	}
+	return values
+}
+
+func discriminatorValue(fields []FieldDef) string {
+	for _, field := range fields {
+		if field.APIName == "type" && len(field.Enum) == 1 {
+			return field.Enum[0]
+		}
+		if field.APIName != "collector" {
+			continue
+		}
+		for _, nested := range field.Fields {
+			if nested.APIName == "type" && len(nested.Enum) == 1 {
+				return nested.Enum[0]
+			}
+		}
+	}
+	return ""
 }
 
 func nestedModelPrefix(modelName, fieldName string) string {
@@ -534,7 +844,9 @@ func objectSchema(schema, schemas *yaml.Node) (*yaml.Node, bool, error) {
 			continue
 		}
 		if itemProperties, ok := mappingValue(resolved, "properties"); ok && itemProperties.Kind == yaml.MappingNode {
-			properties.Content = append(properties.Content, itemProperties.Content...)
+			for index := 0; index < len(itemProperties.Content); index += 2 {
+				setOrAppendMappingValue(properties, itemProperties.Content[index], itemProperties.Content[index+1])
+			}
 		}
 		if itemRequired, ok := mappingValue(resolved, "required"); ok && itemRequired.Kind == yaml.SequenceNode {
 			for _, name := range itemRequired.Content {
@@ -559,6 +871,16 @@ func objectSchema(schema, schemas *yaml.Node) (*yaml.Node, bool, error) {
 	return merged, true, nil
 }
 
+func setOrAppendMappingValue(node, key, value *yaml.Node) {
+	for index := 0; index < len(node.Content); index += 2 {
+		if node.Content[index].Value == key.Value {
+			node.Content[index+1] = value
+			return
+		}
+	}
+	node.Content = append(node.Content, key, value)
+}
+
 func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
 	existing := map[string]bool{}
 	for _, field := range fields {
@@ -568,9 +890,15 @@ func appendPathParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					fields[index].Required = true
-					fields[index].Optional = false
-					fields[index].Computed = false
+					if fields[index].FixedValue == "" {
+						fields[index].Required = true
+						fields[index].Optional = false
+						fields[index].Computed = false
+					} else {
+						fields[index].Required = false
+						fields[index].Optional = true
+						fields[index].Computed = true
+					}
 					fields[index].ForceNew = true
 					fields[index].PathParam = true
 				}
@@ -614,6 +942,14 @@ func parametersByLocation(operation *yaml.Node, location string) []FieldDef {
 			Required:      true,
 			ForceNew:      true,
 		}
+		if schema, ok := mappingValue(parameter, "schema"); ok {
+			if fixedValue := fixedValueAnnotation(schema); fixedValue != "" {
+				field.FixedValue = fixedValue
+				field.Required = false
+				field.Optional = true
+				field.Computed = true
+			}
+		}
 		if location == "path" {
 			field.PathParam = true
 		} else {
@@ -633,9 +969,15 @@ func appendQueryParams(fields []FieldDef, params []FieldDef) []FieldDef {
 		if existing[param.TerraformName] {
 			for index := range fields {
 				if fields[index].TerraformName == param.TerraformName {
-					fields[index].Required = true
-					fields[index].Optional = false
-					fields[index].Computed = false
+					if fields[index].FixedValue == "" {
+						fields[index].Required = true
+						fields[index].Optional = false
+						fields[index].Computed = false
+					} else {
+						fields[index].Required = false
+						fields[index].Optional = true
+						fields[index].Computed = true
+					}
 					fields[index].ForceNew = true
 					fields[index].QueryParam = true
 				}
@@ -655,6 +997,18 @@ func requestSchema(operation *yaml.Node) *yaml.Node {
 	}
 	schema, _ := mappingValue(mediaType, "schema")
 	return schema
+}
+
+func resetBody(operation *yaml.Node) any {
+	node, ok := mappingValue(operation, "x-terraform-delete-reset-body")
+	if !ok {
+		return nil
+	}
+	var output any
+	if err := node.Decode(&output); err != nil {
+		return nil
+	}
+	return output
 }
 
 func requestExamples(operation, examples *yaml.Node) []ExampleDef {
@@ -778,11 +1132,32 @@ func schemaRefName(node *yaml.Node) string {
 	if node == nil {
 		return ""
 	}
-	if ref, ok := mappingValue(node, "$ref"); ok {
-		return strings.TrimPrefix(ref.Value, "#/components/schemas/")
+	if name := directSchemaRefName(node); name != "" {
+		return name
+	}
+	for _, key := range []string{"allOf", "oneOf"} {
+		items, ok := mappingValue(node, key)
+		if !ok || items.Kind != yaml.SequenceNode {
+			continue
+		}
+		for _, item := range items.Content {
+			if name := schemaRefName(item); name != "" {
+				return name
+			}
+		}
 	}
 	if items, ok := mappingValue(node, "items"); ok {
 		return schemaRefName(items)
+	}
+	return ""
+}
+
+func directSchemaRefName(node *yaml.Node) string {
+	if node == nil {
+		return ""
+	}
+	if ref, ok := mappingValue(node, "$ref"); ok {
+		return strings.TrimPrefix(ref.Value, "#/components/schemas/")
 	}
 	return ""
 }
@@ -881,6 +1256,9 @@ func boolAnnotation(node *yaml.Node, key string) bool {
 }
 
 func suppressDiffAnnotation(node *yaml.Node) bool {
+	if boolAnnotation(node, "x-speakeasy-param-suppress-computed-diff") {
+		return true
+	}
 	value, ok := mappingValue(node, "x-terraform-suppress-diff")
 	if !ok || value.Kind != yaml.ScalarNode {
 		return false
@@ -899,6 +1277,13 @@ func stringAnnotation(node *yaml.Node, key string) (string, bool) {
 		return "", false
 	}
 	return value.Value, true
+}
+
+func fixedValueAnnotation(node *yaml.Node) string {
+	if value := scalarValue(node, "x-terraform-fixed-value"); value != "" {
+		return value
+	}
+	return scalarValue(node, "const")
 }
 
 func snake(value string) string {

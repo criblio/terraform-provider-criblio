@@ -127,6 +127,9 @@ func TestRenderedSnippets(t *testing.T) {
 	assertNotContains(t, resourceContent, "speakeasy_")
 	assertNotContains(t, resourceContent, "internal/sdk")
 
+	clientContent := renderTemplate(t, "client", certificate)
+	assertContains(t, clientContent, "return deleteCertificateSoft(ctx, a.client, model)")
+
 	typesContent := renderTemplate(t, "types", certificate)
 	assertContains(t, typesContent, "Conf jsontypes.Normalized")
 	assertContains(t, typesContent, "InUse types.List")
@@ -153,7 +156,7 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationTypes, "OutputS3 *OutputS3Model")
 
 	destinationResource := renderTemplate(t, "resource", destination)
-	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil && (!preserveInputs || (fillMissingInputs && state.OutputAzureBlob == nil))")
+	assertContains(t, destinationResource, "if api.OutputAzureBlob != nil")
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
 
@@ -179,6 +182,10 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, mappingRulesetTypes, `return "default"`)
 	assertContains(t, mappingRulesetTypes, `function["id"] = "eval"`)
 	assertContains(t, mappingRulesetTypes, `function["final"] = true`)
+	assertContains(t, mappingRulesetTypes, `add["name"] = "groupId"`)
+	mappingRulesetDoc := renderTemplate(t, "doc", mappingRuleset)
+	assertContains(t, mappingRulesetDoc, "- `final` (Boolean)")
+	assertContains(t, mappingRulesetDoc, "- `name` (String)")
 
 	key := resourceByName(t, resources, "Key")
 	keyClient := renderTemplate(t, "client", key)
@@ -200,6 +207,24 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, keyResource, "state.Algorithm = types.StringNull()")
 	keyTypes := renderTemplate(t, "types", key)
 	assertContains(t, keyTypes, `output["algorithm"] = value`)
+
+	jsonString := parser.ResourceDef{
+		StructName: "Schema",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "schema",
+				TerraformName: "schema",
+				GoName:        "Schema",
+				Type:          "string",
+				CustomType:    "jsontypes.NormalizedType{}",
+				RequestField:  true,
+			},
+		},
+	}
+	jsonStringTypes := renderTemplate(t, "types", jsonString)
+	assertContains(t, jsonStringTypes, `value := m.Schema.ValueString()`)
+	assertContains(t, jsonStringTypes, `output["schema"] = value`)
+	assertNotContains(t, jsonStringTypes, `convert schema to API value`)
 
 	noRead := parser.ResourceDef{
 		StructName: "LakehouseDatasetConnection",
@@ -228,6 +253,187 @@ func TestRenderedSnippets(t *testing.T) {
 
 	mappingRulesetResource = renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `state.Conf = types.ObjectNull(MappingRulesetConfAttrTypes())`)
+
+	fixedIdentity := parser.ResourceDef{
+		StructName: "Routes",
+		TypeName:   "criblio_routes",
+		Create: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+		},
+		Delete: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/routes/{id}",
+			ResetBody: map[string]any{
+				"id": "default",
+				"routes": []any{
+					map[string]any{
+						"name":     "Default",
+						"filter":   "true",
+						"pipeline": "main",
+						"final":    true,
+						"disabled": false,
+					},
+				},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "id",
+				TerraformName: "id",
+				GoName:        "ID",
+				Type:          "string",
+				Optional:      true,
+				Computed:      true,
+				ForceNew:      true,
+				PathParam:     true,
+				FixedValue:    "default",
+			},
+		},
+	}
+	fixedResource := renderTemplate(t, "resource", fixedIdentity)
+	assertContains(t, fixedResource, `"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"`)
+	assertContains(t, fixedResource, `"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"`)
+	assertContains(t, fixedResource, `Default: stringdefault.StaticString("default")`)
+	assertContains(t, fixedResource, `stringvalidator.OneOf("default")`)
+	assertContains(t, fixedResource, `state.ID = types.StringValue("default")`)
+	fixedClient := renderTemplate(t, "client", fixedIdentity)
+	assertContains(t, fixedClient, `body := map[string]any{"id": "default", "routes": []any{map[string]any{"disabled": false, "filter": "true", "final": true, "name": "Default", "pipeline": "main"}}}`)
+	assertContains(t, fixedClient, `restclient.Patch[map[string]any, RoutesModel]`)
+	fixedDataSource := renderTemplate(t, "data_source", fixedIdentity)
+	assertContains(t, fixedDataSource, `Optional: true`)
+	assertContains(t, fixedDataSource, `Computed: true`)
+	assertContains(t, fixedDataSource, `model.ID = types.StringValue("default")`)
+	assertNotContains(t, fixedDataSource, `Required: true`)
+
+	packPipeline := parser.ResourceDef{
+		StructName: "PackPipeline",
+		TypeName:   "criblio_pack_pipeline",
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/m/{groupId}/p/{pack}/pipelines",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			},
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/p/{pack}/pipelines/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Update: parser.OperationDef{
+			Method:         "PATCH",
+			Path:           "/m/{groupId}/p/{pack}/pipelines/{id}",
+			ReadAfterWrite: true,
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+	}
+	packPipelineClient := renderTemplate(t, "client", packPipeline)
+	assertContains(t, packPipelineClient, `"errors"`)
+	assertContains(t, packPipelineClient, `if packPipelineAlreadyExists(err) {`)
+	assertContains(t, packPipelineClient, `return a.Update(ctx, model)`)
+	assertContains(t, packPipelineClient, `func packPipelineAlreadyExists(err error) bool`)
+
+	packLookups := parser.ResourceDef{
+		StructName: "PackLookups",
+		TypeName:   "criblio_pack_lookups",
+		Create: parser.OperationDef{
+			Method: "POST",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			},
+		},
+		Read: parser.OperationDef{
+			Method: "GET",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Update: parser.OperationDef{
+			Method: "PATCH",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+		Delete: parser.OperationDef{
+			Method: "DELETE",
+			Path:   "/m/{groupId}/p/{pack}/system/lookups/{id}",
+			PathParams: []parser.FieldDef{
+				{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+				{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+				{APIName: "id", TerraformName: "id", GoName: "ID"},
+			},
+		},
+	}
+	packLookupsClient := renderTemplate(t, "client", packLookups)
+	assertContains(t, packLookupsClient, `"net/url"`)
+	assertContains(t, packLookupsClient, `if err := uploadPackLookupFileContent(ctx, a.client, model, id); err != nil`)
+	assertContains(t, packLookupsClient, `for _, id := range lookupFileAPIIDs(configuredID)`)
+	assertContains(t, packLookupsClient, `return normalizePackLookupsAPIModel(apiModel, configuredID), nil`)
+	assertContains(t, packLookupsClient, `func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client, model PackLookupsModel, id string) error`)
+	assertContains(t, packLookupsClient, `url.QueryEscape(filename)`)
+
+	fixedAPIField := parser.ResourceDef{
+		Name:     "searchengine",
+		FileStem: "search_engine",
+		TypeName: "criblio_search_engine",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "engineType",
+				TerraformName: "engine_type",
+				Type:          "string",
+				Optional:      true,
+				Computed:      true,
+				FixedValue:    "local",
+			},
+			{APIName: "id", TerraformName: "id", Type: "string", Required: true},
+			{APIName: "tierSize", TerraformName: "tier_size", Type: "string", Required: true},
+		},
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "minimal",
+					Value: map[string]any{
+						"engineType": "local",
+						"id":         "engine-01",
+						"tierSize":   "small",
+					},
+				},
+			},
+		},
+	}
+	assertNotContains(t, docSchema(fixedAPIField), "engine_type")
+	fixedAPIFieldExample, ok := upstreamExampleUsage(fixedAPIField)
+	if !ok {
+		t.Fatalf("upstreamExampleUsage returned no example")
+	}
+	assertNotContains(t, fixedAPIFieldExample, "engine_type")
+	assertContains(t, fixedAPIFieldExample, `id = "engine-01"`)
 }
 
 func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
@@ -274,6 +480,95 @@ func TestUpstreamExampleUsagePrefersRichestExample(t *testing.T) {
 	assertContains(t, got, `tags = "errors,prod"`)
 	assertContains(t, got, `group_id = "default_search"`)
 	assertNotContains(t, got, `id = "all_events"`)
+}
+
+func TestUpstreamExampleUsageEscapesTerraformInterpolation(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "destination",
+		FileStem: "destination",
+		TypeName: "criblio_destination",
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "s3",
+					Value: map[string]any{
+						"id":       "out-s3-main",
+						"destPath": "`logs/${C.Time.strftime(_time, '%Y/%m/%d')}`",
+					},
+				},
+			},
+		},
+		Fields: []parser.FieldDef{
+			{APIName: "groupId", TerraformName: "group_id", Type: "string", Required: true, PathParam: true},
+			{APIName: "id", TerraformName: "id", Type: "string", Required: true},
+			{APIName: "destPath", TerraformName: "dest_path", Type: "string", Optional: true},
+		},
+	}
+
+	got, ok := upstreamExampleUsage(resource)
+	if !ok {
+		t.Fatalf("upstreamExampleUsage returned no example")
+	}
+	assertContains(t, got, "dest_path = \"`logs/$${C.Time.strftime(_time, '%Y/%m/%d')}`\"")
+	assertNotContains(t, got, "dest_path = \"`logs/${C.Time.strftime")
+}
+
+func TestPathExprOrdersParamsByPathTemplate(t *testing.T) {
+	resource := parser.ResourceDef{
+		StructName: "PackBreakers",
+		TypeName:   "criblio_pack_breakers",
+	}
+	op := parser.OperationDef{
+		Path: "/m/{groupId}/p/{pack}/lib/breakers/{id}",
+		PathParams: []parser.FieldDef{
+			{APIName: "pack", TerraformName: "pack", GoName: "Pack"},
+			{APIName: "id", TerraformName: "id", GoName: "ID"},
+			{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"},
+		},
+	}
+
+	got := pathExpr(resource, op)
+	assertContains(t, got, `fmt.Sprintf("/m/%s/p/%s/lib/breakers/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), model.ID.ValueString())`)
+}
+
+func TestExampleUsageUsesCuratedSourceExample(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "source",
+		FileStem: "source",
+		TypeName: "criblio_source",
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "InputHttp"},
+		},
+	}
+
+	got := exampleUsage(resource)
+	assertContains(t, got, `resource "criblio_source" "my_http_source"`)
+	assertContains(t, got, `resource "criblio_source" "my_source"`)
+	assertNotContains(t, got, `input_appscope = {`)
+}
+
+func TestExampleUsagePrefersCuratedPackExample(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:     "packroutes",
+		FileStem: "pack_routes",
+		TypeName: "criblio_pack_routes",
+		Create: parser.OperationDef{
+			Examples: []parser.ExampleDef{
+				{
+					Name: "upstream",
+					Value: map[string]any{
+						"groupId": "Cribl",
+						"pack":    "observability-pack",
+					},
+				},
+			},
+		},
+	}
+
+	got := exampleUsage(resource)
+	assertContains(t, got, `resource "criblio_pack" "routes_pack"`)
+	assertContains(t, got, `group_id = "default"`)
+	assertNotContains(t, got, `group_id = "Cribl"`)
 }
 
 func TestGeneratedImportUsesPathParams(t *testing.T) {
@@ -381,6 +676,149 @@ func TestNotificationResourcePathUsesCompatibleGroupFallback(t *testing.T) {
 	assertContains(t, got, `GroupID string `+"`json:\"group_id\"`")
 	assertContains(t, got, `model.Group = types.StringValue(data.Group)`)
 	assertNotContains(t, got, `resource.ImportStatePassthroughID`)
+}
+
+func TestResourceSchemaUsesPlanModifierHook(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "collector",
+		FileStem:   "collector",
+		TypeName:   "criblio_collector",
+		StructName: "Collector",
+		Fields: []parser.FieldDef{
+			{
+				APIName:          "environment",
+				TerraformName:    "environment",
+				GoName:           "Environment",
+				Type:             "string",
+				Optional:         true,
+				Computed:         true,
+				PlanModifierHook: "collectorEnvironmentPlanModifiers",
+			},
+		},
+	}
+
+	content, err := executeTemplate("resource", resource)
+	if err != nil {
+		t.Fatalf("executeTemplate returned error: %v", err)
+	}
+	got := string(content)
+
+	assertContains(t, got, `PlanModifiers: collectorEnvironmentPlanModifiers(),`)
+	assertNotContains(t, got, `PlanModifiers: []planmodifier.String{`)
+}
+
+func TestPrimitiveArrayFieldsPreserveElementTypes(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "array_resource",
+		FileStem:   "array_resource",
+		TypeName:   "criblio_array_resource",
+		StructName: "ArrayResource",
+		Fields: []parser.FieldDef{
+			{APIName: "codes", TerraformName: "codes", GoName: "Codes", Type: "array", ElementType: "integer", Optional: true},
+			{APIName: "ratios", TerraformName: "ratios", GoName: "Ratios", Type: "array", ElementType: "number", Optional: true},
+			{APIName: "flags", TerraformName: "flags", GoName: "Flags", Type: "array", ElementType: "boolean", Optional: true},
+			{APIName: "names", TerraformName: "names", GoName: "Names", Type: "array", ElementType: "string", Optional: true},
+		},
+	}
+
+	resourceContent := renderTemplate(t, "resource", resource)
+	assertContains(t, resourceContent, "ElementType: types.Int64Type,")
+	assertContains(t, resourceContent, "ElementType: types.Float64Type,")
+	assertContains(t, resourceContent, "ElementType: types.BoolType,")
+	assertContains(t, resourceContent, "ElementType: types.StringType,")
+
+	typesContent := renderTemplate(t, "types", resource)
+	assertContains(t, typesContent, "Codes []int64")
+	assertContains(t, typesContent, "Ratios []float64")
+	assertContains(t, typesContent, "Flags []bool")
+	assertContains(t, typesContent, "Names []string")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.Int64Type, input.Codes)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.Float64Type, input.Ratios)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.BoolType, input.Flags)")
+	assertContains(t, typesContent, "types.ListValueFrom(context.Background(), types.StringType, input.Names)")
+}
+
+func TestObjectAsJSONAndMapNestedFields(t *testing.T) {
+	resource := parser.ResourceDef{
+		Name:       "pipeline",
+		FileStem:   "pipeline",
+		TypeName:   "criblio_pipeline",
+		StructName: "Pipeline",
+		Fields: []parser.FieldDef{
+			{
+				APIName:       "functions",
+				TerraformName: "functions",
+				GoName:        "Functions",
+				Type:          "array",
+				ElementType:   "object",
+				Fields: []parser.FieldDef{
+					{
+						APIName:          "conf",
+						TerraformName:    "conf",
+						GoName:           "Conf",
+						Type:             "object",
+						CustomType:       "jsontypes.NormalizedType{}",
+						ObjectAsJSON:     true,
+						PlanModifierHook: "pipelineConfPlanModifiers",
+						NotNull:          true,
+						ValidJSON:        true,
+						Description:      "Function configuration as JSON.",
+					},
+					{
+						APIName:            "id",
+						TerraformName:      "id",
+						GoName:             "ID",
+						Type:               "string",
+						NotNull:            true,
+						PipelineFunctionID: true,
+						Description:        "Function ID.",
+					},
+				},
+				NestedAttrTypes: "PipelineFunctionsAttrTypes",
+			},
+			{
+				APIName:       "groups",
+				TerraformName: "groups",
+				GoName:        "Groups",
+				Type:          "object",
+				ElementType:   "object",
+				Fields: []parser.FieldDef{
+					{APIName: "name", TerraformName: "name", GoName: "Name", Type: "string", NotNull: true, Description: "Group name"},
+				},
+				NestedAttrTypes: "PipelineGroupsAttrTypes",
+			},
+		},
+	}
+
+	resourceContent := renderTemplate(t, "resource", resource)
+	assertContains(t, resourceContent, `"conf": schema.StringAttribute{`)
+	assertContains(t, resourceContent, `CustomType: jsontypes.NormalizedType{},`)
+	assertContains(t, resourceContent, `PlanModifiers: pipelineConfPlanModifiers(),`)
+	assertContains(t, resourceContent, `Validators: []validator.String{`)
+	assertContains(t, resourceContent, `custom_stringvalidators.NotNull(),`)
+	assertContains(t, resourceContent, `custom_validators.IsValidJSON(),`)
+	assertContains(t, resourceContent, `custom_stringvalidators.IsCriblPipelineFunctionIDWithRestClient(&r.client),`)
+	assertContains(t, resourceContent, `"groups": schema.MapNestedAttribute{`)
+	assertContains(t, resourceContent, `state.Groups = types.MapNull(types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()})`)
+	assertNotContains(t, resourceContent, `state.Groups = types.MapNull(types.StringType)`)
+	assertContains(t, resourceContent, `PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: PipelineConfAttrTypes()})`)
+	assertNotContains(t, resourceContent, `ElementType:   types.StringType,`)
+
+	docsContent := renderTemplate(t, "doc", resource)
+	assertContains(t, docsContent, "`conf` (String)")
+	assertContains(t, docsContent, "`id` (String) Function ID. Not Null")
+	assertContains(t, docsContent, "`groups` (Attributes Map)")
+	assertContains(t, docsContent, "`name` (String) Group name Not Null")
+
+	typesContent := renderTemplate(t, "types", resource)
+	assertContains(t, typesContent, `Conf jsontypes.Normalized`)
+	assertContains(t, typesContent, `Conf any `+"`json:\"conf,omitempty\"`")
+	assertContains(t, typesContent, `types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()}}`)
+	assertContains(t, typesContent, `value, err = PipelineObjectJSONFromTerraformValue(attribute)`)
+	assertContains(t, typesContent, `if typ.Equal(jsontypes.NormalizedType{}) {`)
+	assertContains(t, typesContent, `return jsontypes.NewNormalizedValue(string(raw)), nil`)
+	assertContains(t, typesContent, `func PipelineValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error)`)
+	assertContains(t, typesContent, `types.MapType{ElemType: types.ObjectType{AttrTypes: PipelineGroupsAttrTypes()}}`)
 }
 
 func TestRestWriteCall(t *testing.T) {

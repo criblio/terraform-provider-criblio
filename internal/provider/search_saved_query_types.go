@@ -368,7 +368,7 @@ func SearchSavedQueryChartConfigOnClickActionAttrTypes() map[string]attr.Type {
 type SearchSavedQueryChartConfigSeriesModel struct {
 	AreaStyle  types.Object `tfsdk:"area_style" json:"areaStyle,omitempty"`
 	Color      types.String `tfsdk:"color" json:"color,omitempty"`
-	Data       types.String `tfsdk:"data" json:"data,omitempty"`
+	Data       types.List   `tfsdk:"data" json:"data,omitempty"`
 	Map        types.String `tfsdk:"map" json:"map,omitempty"`
 	Name       types.String `tfsdk:"name" json:"name,omitempty"`
 	Type       types.String `tfsdk:"type" json:"type,omitempty"`
@@ -376,20 +376,20 @@ type SearchSavedQueryChartConfigSeriesModel struct {
 }
 
 type SearchSavedQueryChartConfigSeriesAPIModel struct {
-	AreaStyle  any     `json:"areaStyle,omitempty"`
-	Color      *string `json:"color,omitempty"`
-	Data       *string `json:"data,omitempty"`
-	Map        *string `json:"map,omitempty"`
-	Name       *string `json:"name,omitempty"`
-	Type       *string `json:"type,omitempty"`
-	YAxisField *string `json:"yAxisField,omitempty"`
+	AreaStyle  any      `json:"areaStyle,omitempty"`
+	Color      *string  `json:"color,omitempty"`
+	Data       []string `json:"data,omitempty"`
+	Map        *string  `json:"map,omitempty"`
+	Name       *string  `json:"name,omitempty"`
+	Type       *string  `json:"type,omitempty"`
+	YAxisField *string  `json:"yAxisField,omitempty"`
 }
 
 func SearchSavedQueryChartConfigSeriesAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
 		"area_style":   types.ObjectType{AttrTypes: SearchSavedQueryChartConfigSeriesAreaStyleAttrTypes()},
 		"color":        types.StringType,
-		"data":         types.StringType,
+		"data":         types.ListType{ElemType: types.StringType},
 		"map":          types.StringType,
 		"name":         types.StringType,
 		"type":         types.StringType,

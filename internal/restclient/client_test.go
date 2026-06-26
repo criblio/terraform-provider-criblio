@@ -84,6 +84,20 @@ func TestMethods(t *testing.T) {
 			assertJSONBody(t, r, "from-patch")
 			writeJSON(t, w, testItem{ID: "cert-1", Name: "from-patch"})
 		case http.MethodPut:
+			if r.URL.Path == "/api/v1/system/files" {
+				if r.Header.Get("Content-Type") != "text/csv" {
+					t.Errorf("raw upload content type = %q, expected text/csv", r.Header.Get("Content-Type"))
+				}
+				content, err := io.ReadAll(r.Body)
+				if err != nil {
+					t.Errorf("failed to read raw upload body: %v", err)
+				}
+				if string(content) != "raw-a,raw-b\n" {
+					t.Errorf("raw upload content = %q, expected raw-a,raw-b\\n", string(content))
+				}
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
 			if r.URL.Path != "/api/v1/system/certificates/cert-1" {
 				t.Errorf("PUT path = %q", r.URL.Path)
 			}
@@ -151,6 +165,10 @@ func TestMethods(t *testing.T) {
 
 	if err := Upload(context.Background(), client, "/system/files", "lookup.csv", []byte("a,b\n")); err != nil {
 		t.Fatalf("Upload returned error: %v", err)
+	}
+
+	if err := PutRawNoResponse(context.Background(), client, "/system/files", "text/csv", []byte("raw-a,raw-b\n")); err != nil {
+		t.Fatalf("PutRawNoResponse returned error: %v", err)
 	}
 }
 

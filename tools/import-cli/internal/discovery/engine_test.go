@@ -145,6 +145,13 @@ func mustBuildRegistry(t *testing.T, ctx context.Context) *registry.Registry {
 	return reg
 }
 
+func TestSkipGroupScopedSingleton(t *testing.T) {
+	assert.True(t, skipGroupScopedSingleton("criblio_routes", "default_search"))
+	assert.True(t, skipGroupScopedSingleton("criblio_routes", "search"))
+	assert.False(t, skipGroupScopedSingleton("criblio_routes", "default"))
+	assert.False(t, skipGroupScopedSingleton("criblio_group_system_settings", "default_search"))
+}
+
 // TestIdentifiersFromItems_skipsLibCribl verifies that list items with lib="cribl" (built-in)
 // are filtered out and not returned in the identifier maps.
 func TestIdentifiersFromItems_skipsLibCribl(t *testing.T) {

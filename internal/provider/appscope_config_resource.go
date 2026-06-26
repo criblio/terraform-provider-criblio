@@ -10,11 +10,14 @@ import (
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -302,9 +305,13 @@ func (r *AppscopeConfigResource) Schema(_ context.Context, _ resource.SchemaRequ
 													},
 												},
 												"type": schema.StringAttribute{
-													Required: true,
-													Optional: false,
-													Computed: false,
+													Required: false,
+													Optional: true,
+													Computed: true,
+													Default:  stringdefault.StaticString("ndjson"),
+													Validators: []validator.String{
+														stringvalidator.OneOf("ndjson"),
+													},
 												},
 												"watch": schema.ListNestedAttribute{
 													Required: true,
@@ -730,9 +737,13 @@ func (r *AppscopeConfigResource) Schema(_ context.Context, _ resource.SchemaRequ
 								},
 							},
 							"type": schema.StringAttribute{
-								Required: true,
-								Optional: false,
-								Computed: false,
+								Required: false,
+								Optional: true,
+								Computed: true,
+								Default:  stringdefault.StaticString("ndjson"),
+								Validators: []validator.String{
+									stringvalidator.OneOf("ndjson"),
+								},
 							},
 							"watch": schema.ListNestedAttribute{
 								Required: true,

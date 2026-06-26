@@ -298,9 +298,10 @@ func (d *SearchSavedQueryDataSource) Schema(_ context.Context, _ datasource.Sche
 									Computed:    true,
 									Description: `CSS color value for the series.`,
 								},
-								"data": schema.StringAttribute{
+								"data": schema.ListAttribute{
 									Computed:    true,
 									Description: `Array of data points for the series.`,
+									ElementType: types.StringType,
 								},
 								"map": schema.StringAttribute{
 									Computed:    true,

@@ -1,16 +1,21 @@
+
 resource "criblio_pack_vars" "my_packvars" {
-  args = [
-    {
-      name = "val"
-      type = "number"
-    }
-  ]
-  description = "This is a test var."
-  group_id    = "Cribl"
-  id          = "test_var"
+  description = "my_description"
+  group_id    = "default"
+  id          = "my_id"
   lib         = "custom"
-  pack        = "example-pack"
-  tags        = "test"
-  type        = "number"
-  value       = 100
+  pack        = criblio_pack.vars_pack.id
+  tags        = "my_tags"
+  type        = "object"
+  value       = "my_value"
+}
+
+resource "criblio_pack" "vars_pack" {
+  id           = "pack-with-vars"
+  group_id     = "default"
+  description  = "Pack from source"
+  disabled     = true
+  display_name = "Pack from source"
+  source       = "file:/opt/cribl_data/failover/groups/default/default/HelloPacks"
+  version      = "1.0.0"
 }

@@ -41,8 +41,28 @@ resource "criblio_project" "my_project" {
 
 ### Optional
 
-- `consumers` (Map of String)
+- `consumers` (Attributes Map) (see [below for nested schema](#nestedatt--consumers))
 - `description` (String)
+
+<a id="nestedatt--consumers"></a>
+### Nested Schema for `consumers`
+
+Optional:
+
+- `connections` (Attributes List) (see [below for nested schema](#nestedatt--consumers--connections))
+- `disabled` (Boolean) It should be removed as a consumer is present or absent.
+- `type` (String)
+
+<a id="nestedatt--consumers--connections"></a>
+### Nested Schema for `consumers.connections`
+
+Required:
+
+- `output` (String)
+
+Optional:
+
+- `pipeline` (String)
 
 ## Import
 

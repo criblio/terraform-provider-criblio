@@ -25,15 +25,18 @@ type ResourceDef struct {
 
 // OperationDef describes one annotated OpenAPI operation.
 type OperationDef struct {
-	Method         string
-	Path           string
-	OperationID    string
-	RequestSchema  string
-	ResponseSchema string
-	PathParams     []FieldDef
-	QueryParams    []FieldDef
-	Examples       []ExampleDef
-	ReadAfterWrite bool
+	Method                   string
+	Path                     string
+	OperationID              string
+	RequestSchema            string
+	ResponseSchema           string
+	PathParams               []FieldDef
+	QueryParams              []FieldDef
+	Examples                 []ExampleDef
+	ReadAfterWrite           bool
+	PreserveInputsAfterWrite bool
+	ResetBody                any
+	DeleteHook               string
 }
 
 // ExampleDef describes a request-body example attached to an OpenAPI operation.
@@ -64,6 +67,7 @@ type FieldDef struct {
 	ForceNew           bool
 	Ignored            bool
 	CustomType         string
+	ElementCustomType  string
 	ReadOnly           bool
 	WriteOnly          bool
 	PathParam          bool
@@ -71,17 +75,27 @@ type FieldDef struct {
 	RequestField       bool
 	UpdateField        bool
 	ApplyStrategy      string
+	PlanModifierHook   string
+	UseStateForUnknown bool
+	EmitEmpty          bool
+	FixedValue         string
+	Enum               []string
 	Fields             []FieldDef
+	ObjectAsJSON       bool
+	NotNull            bool
+	ValidJSON          bool
+	PipelineFunctionID bool
 }
 
 // OneOfVariantDef describes one flattened oneOf variant model.
 type OneOfVariantDef struct {
-	APIName       string
-	TerraformName string
-	GoName        string
-	ModelName     string
-	SchemaName    string
-	Fields        []FieldDef
+	APIName            string
+	TerraformName      string
+	GoName             string
+	ModelName          string
+	SchemaName         string
+	DiscriminatorValue string
+	Fields             []FieldDef
 }
 
 // OutputFile describes a generated file decision.

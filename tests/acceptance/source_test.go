@@ -2,10 +2,11 @@ package tests
 
 import (
 	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -18,7 +19,7 @@ func TestSource(t *testing.T) {
 			ProtoV6ProviderFactories: providerFactory,
 			Steps: []resource.TestStep{
 				{
-					ConfigDirectory: config.TestNameDirectory(),
+					Config: sourceExampleConfig(t),
 					Check: resource.ComposeAggregateTestCheckFunc(
 						// HTTP source
 						resource.TestCheckResourceAttr("criblio_source.my_http_source", "id", "http-listener"),
@@ -50,9 +51,34 @@ func TestSource(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_source.my_wiz_webhook_source", "input_wiz_webhook.host", "0.0.0.0"),
 						resource.TestCheckResourceAttr("criblio_source.my_wiz_webhook_source", "input_wiz_webhook.port", "10092"),
 						resource.TestCheckResourceAttr("criblio_source.my_wiz_webhook_source", "input_wiz_webhook.pipeline", "default"),
+						// Cribl HTTP source
+						resource.TestCheckResourceAttr("criblio_source.my_source", "id", "cribl-http-listener"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.id", "cribl-http-listener"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.type", "cribl_http"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.description", "Cribl HTTP-compatible ingestion endpoint"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.disabled", "false"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.host", "0.0.0.0"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.port", "10050"),
+						resource.TestCheckResourceAttr("criblio_source.my_source", "input_cribl_http.pipeline", "default"),
 					),
 				},
 			},
 		})
 	})
+}
+
+func sourceExampleConfig(t *testing.T) string {
+	t.Helper()
+
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("failed to locate source test file")
+	}
+	root := filepath.Clean(filepath.Join(filepath.Dir(filename), "..", ".."))
+	content, err := os.ReadFile(filepath.Join(root, "examples", "source", "main.tf"))
+	if err != nil {
+		t.Fatalf("failed to read examples/source/main.tf: %v", err)
+	}
+	return string(content)
 }

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/hcl"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
@@ -23,9 +22,11 @@ import (
 func addOneOfBlockFromFirstItem(model interface{}, attrs map[string]hcl.Value, oneOf *registry.OneOfConfig) error {
 	itemMap := firstItemMapFromModel(model, oneOf.ReadOnlyAttr)
 	if len(itemMap) == 0 {
-		// Source and pack_source use []InputUnion1 (struct slices); firstItemMapFromModel only handles
-		// []map[string]jsontypes.Normalized. Build the input_* block from the non-nil union branch.
-		return addOneOfFromInputUnionStruct(model, attrs, oneOf)
+		switch model.(type) {
+		case *provider.SourceResourceModel, *provider.SourceModel, *provider.PackSourceResourceModel, *provider.PackSourceModel:
+			return addOneOfFromGeneratedInputBlocks(model, attrs, oneOf)
+		}
+		return nil
 	}
 	raw := itemMap[oneOf.DiscriminatorField]
 	var discStr string
@@ -121,33 +122,30 @@ func resolveNestedDiscriminator(itemMap map[string]string, path string) string {
 	return string(inner)
 }
 
-// addOneOfFromInputUnionStruct emits input_<type> from Items[0] when the model uses InputUnion1 structs
-// (criblio_source, criblio_pack_source). The map-based path in firstItemMapFromModel does not apply.
-func addOneOfFromInputUnionStruct(model interface{}, attrs map[string]hcl.Value, oneOf *registry.OneOfConfig) error {
+// addOneOfFromGeneratedInputBlocks emits input_<type> from generated source models,
+// which expose the active oneOf branch directly as a non-nil Input* pointer.
+func addOneOfFromGeneratedInputBlocks(model interface{}, attrs map[string]hcl.Value, oneOf *registry.OneOfConfig) error {
 	if oneOf == nil {
 		return nil
 	}
-	var items []ptypes.InputUnion1
-	switch m := model.(type) {
-	case *provider.SourceResourceModel:
-		items = m.Items
-	case *provider.PackSourceResourceModel:
-		items = m.Items
-	default:
+	value := reflect.ValueOf(model)
+	if value.Kind() != reflect.Pointer || value.IsNil() {
 		return nil
 	}
-	if len(items) == 0 {
+	elem := value.Elem()
+	if elem.Kind() != reflect.Struct {
 		return nil
 	}
-	u := items[0]
-	val := reflect.ValueOf(u)
-	for i := 0; i < val.NumField(); i++ {
-		f := val.Field(i)
-		if f.Kind() != reflect.Ptr || f.IsNil() {
+	for i := 0; i < elem.NumField(); i++ {
+		fieldInfo := elem.Type().Field(i)
+		if !strings.HasPrefix(fieldInfo.Name, "Input") {
 			continue
 		}
-		innerPtr := f.Interface()
-		blockMap, err := hcl.ModelToValue(innerPtr, nil)
+		field := elem.Field(i)
+		if field.Kind() != reflect.Pointer || field.IsNil() {
+			continue
+		}
+		blockMap, err := hcl.ModelToValue(field.Interface(), nil)
 		if err != nil {
 			return err
 		}
@@ -160,7 +158,7 @@ func addOneOfFromInputUnionStruct(model interface{}, attrs map[string]hcl.Value,
 		}
 		raw := itemMap[oneOf.DiscriminatorField]
 		if raw == "" {
-			return fmt.Errorf("input union branch missing discriminator %q", oneOf.DiscriminatorField)
+			return fmt.Errorf("generated input branch missing discriminator %q", oneOf.DiscriminatorField)
 		}
 		var discStr string
 		if err := json.Unmarshal([]byte(raw), &discStr); err != nil {

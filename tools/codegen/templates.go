@@ -86,6 +86,18 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return typed.ValueInt64(), nil
 	case types.Float64:
 		return typed.ValueFloat64(), nil
+{{- if hasJSONNormalized . }}
+	case jsontypes.Normalized:
+		raw := typed.ValueString()
+		if raw == "" {
+			return map[string]any{}, nil
+		}
+		var output any
+		if err := json.Unmarshal([]byte(raw), &output); err != nil {
+			return nil, err
+		}
+		return output, nil
+{{- end }}
 	case types.String:
 		return typed.ValueString(), nil
 	case types.List:
@@ -112,9 +124,27 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		}
 		return output, nil
 	case types.Object:
+{{- if eq .StructName "SearchDashboard" }}
+		if value, ok, err := SearchDashboardFlattenWrapperObject(typed); ok || err != nil {
+			return value, err
+		}
+{{- end }}
 		output := make(map[string]any, len(typed.Attributes()))
+{{- if hasObjectAsJSON . }}
+		attributeTypes := typed.AttributeTypes(context.Background())
+{{- end }}
 		for key, attribute := range typed.Attributes() {
+{{- if hasObjectAsJSON . }}
+			var value any
+			var err error
+			if attributeType, ok := attributeTypes[key]; ok && attributeType.Equal(jsontypes.NormalizedType{}) {
+				value, err = {{ .StructName }}ObjectJSONFromTerraformValue(attribute)
+			} else {
+				value, err = {{ .StructName }}TerraformValueToJSON(attribute)
+			}
+{{- else }}
 			value, err := {{ .StructName }}TerraformValueToJSON(attribute)
+{{- end }}
 			if err != nil {
 				return nil, err
 			}
@@ -130,6 +160,137 @@ func {{ .StructName }}TerraformValueToJSON(value attr.Value) (any, error) {
 		return nil, fmt.Errorf("unsupported Terraform value %T", value)
 	}
 }
+
+{{- if hasObjectAsJSON . }}
+func {{ .StructName }}ObjectJSONFromTerraformValue(value attr.Value) (any, error) {
+	if value.IsNull() || value.IsUnknown() {
+		return nil, nil
+	}
+	typed, ok := value.(interface{ ValueString() string })
+	if !ok {
+		return nil, fmt.Errorf("expected normalized JSON string, got %T", value)
+	}
+	raw := typed.ValueString()
+	if raw == "" {
+		return map[string]any{}, nil
+	}
+	var output any
+	if err := json.Unmarshal([]byte(raw), &output); err != nil {
+		return nil, err
+	}
+	return output, nil
+}
+{{- end }}
+
+{{- if eq .StructName "SearchDashboard" }}
+func SearchDashboardFlattenWrapperObject(value types.Object) (any, bool, error) {
+	attributes := value.Attributes()
+	activeKey := ""
+	var activeValue attr.Value
+	for key, attribute := range attributes {
+		if attribute.IsNull() || attribute.IsUnknown() {
+			continue
+		}
+		if !SearchDashboardWrapperKey(key) {
+			return nil, false, nil
+		}
+		if activeKey != "" {
+			return nil, false, nil
+		}
+		activeKey = key
+		activeValue = attribute
+	}
+	if activeKey == "" {
+		return nil, false, nil
+	}
+	flattened, err := SearchDashboardTerraformValueToJSON(activeValue)
+	return flattened, true, err
+}
+
+func SearchDashboardWrapperKey(key string) bool {
+	switch key {
+	case "dashboard_element_visualization", "dashboard_element_input", "dashboard_element",
+		"search_query_saved", "search_query_inline", "search_query_values", "search_query_metric",
+		"str", "number":
+		return true
+	default:
+		return false
+	}
+}
+
+func SearchDashboardAPIValueToWrapperObject(value any, typ types.ObjectType) (attr.Value, bool, error) {
+	attrTypes := typ.AttrTypes
+	key, ok := SearchDashboardWrapperObjectKey(value, attrTypes)
+	if !ok {
+		return nil, false, nil
+	}
+	output := make(map[string]attr.Value, len(attrTypes))
+	for name, attrType := range attrTypes {
+		if name != key {
+			empty, err := SearchDashboardTerraformNullValue(attrType)
+			if err != nil {
+				return nil, true, err
+			}
+			output[name] = empty
+			continue
+		}
+		wrapped, err := SearchDashboardAPIValueToTerraformValue(value, attrType)
+		if err != nil {
+			return nil, true, err
+		}
+		output[name] = wrapped
+	}
+	result, diags := types.ObjectValue(attrTypes, output)
+	if diags.HasError() {
+		return nil, true, fmt.Errorf("%v", diags)
+	}
+	return result, true, nil
+}
+
+func SearchDashboardWrapperObjectKey(value any, attrTypes map[string]attr.Type) (string, bool) {
+	if _, ok := attrTypes["dashboard_element_visualization"]; ok {
+		item, _ := value.(map[string]any)
+		typ, _ := item["type"].(string)
+		variant, _ := item["variant"].(string)
+		switch {
+		case strings.HasPrefix(typ, "input."):
+			return "dashboard_element_input", true
+		case strings.HasPrefix(typ, "markdown.") || variant == "markdown":
+			return "dashboard_element", true
+		default:
+			return "dashboard_element_visualization", true
+		}
+	}
+	if _, ok := attrTypes["search_query_inline"]; ok {
+		item, _ := value.(map[string]any)
+		typ, _ := item["type"].(string)
+		switch typ {
+		case "saved":
+			return "search_query_saved", true
+		case "inline":
+			return "search_query_inline", true
+		case "values":
+			return "search_query_values", true
+		case "metric":
+			return "search_query_metric", true
+		default:
+			return "", false
+		}
+	}
+	if _, ok := attrTypes["str"]; ok {
+		switch value.(type) {
+		case string:
+			return "str", true
+		case float64:
+			return "number", true
+		default:
+			return "", false
+		}
+	}
+	return "", false
+}
+
+{{- end }}
 
 {{- if eq .StructName "MappingRuleset" }}
 
@@ -159,6 +320,24 @@ func mappingRulesetConfWithDefaults(value any) any {
 		}
 		if _, ok := function["final"]; !ok {
 			function["final"] = true
+		}
+		confValue, ok := function["conf"].(map[string]any)
+		if ok {
+			addItems, ok := confValue["add"].([]any)
+			if ok {
+				for addIndex, addItem := range addItems {
+					add, ok := addItem.(map[string]any)
+					if !ok {
+						continue
+					}
+					if name, ok := add["name"].(string); !ok || name == "" {
+						add["name"] = "groupId"
+					}
+					addItems[addIndex] = add
+				}
+				confValue["add"] = addItems
+				function["conf"] = confValue
+			}
 		}
 		functions[index] = function
 	}
@@ -222,6 +401,18 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		}
 		return types.StringValue(typed), nil
 	}
+{{- if hasJSONNormalized . }}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		if typed, ok := value.(string); ok {
+			return jsontypes.NewNormalizedValue(typed), nil
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			return nil, err
+		}
+		return jsontypes.NewNormalizedValue(string(raw)), nil
+	}
+{{- end }}
 	switch typed := typ.(type) {
 	case types.ListType:
 		input, ok := value.([]any)
@@ -260,6 +451,11 @@ func {{ .StructName }}APIValueToTerraformValue(value any, typ attr.Type) (attr.V
 		}
 		return value, nil
 	case types.ObjectType:
+{{- if eq .StructName "SearchDashboard" }}
+		if value, ok, err := SearchDashboardAPIValueToWrapperObject(value, typed); ok || err != nil {
+			return value, err
+		}
+{{- end }}
 		input, ok := value.(map[string]any)
 		if !ok {
 			return nil, fmt.Errorf("expected object, got %T", value)
@@ -308,6 +504,11 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	if typ.Equal(types.StringType) {
 		return types.StringNull(), nil
 	}
+{{- if hasJSONNormalized . }}
+	if typ.Equal(jsontypes.NormalizedType{}) {
+		return jsontypes.NewNormalizedNull(), nil
+	}
+{{- end }}
 	switch typed := typ.(type) {
 	case types.ListType:
 		return types.ListNull(typed.ElemType), nil
@@ -320,21 +521,125 @@ func {{ .StructName }}TerraformNullValue(typ attr.Type) (attr.Value, error) {
 	}
 }
 
+{{ if or (eq .StructName "Pipeline") (eq .StructName "SearchDashboard") }}
+func {{ .StructName }}ValueWithKnownNulls(value attr.Value, typ attr.Type) (attr.Value, error) {
+	if value.IsUnknown() {
+		return {{ .StructName }}TerraformNullValue(typ)
+	}
+	if value.IsNull() {
+		return value, nil
+	}
+	switch typed := typ.(type) {
+	case types.ListType:
+		list, ok := value.(types.List)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %T", value)
+		}
+		elements := make([]attr.Value, 0, len(list.Elements()))
+		for _, element := range list.Elements() {
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(element, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			elements = append(elements, normalized)
+		}
+		output, diags := types.ListValue(typed.ElemType, elements)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	case types.MapType:
+		valueMap, ok := value.(types.Map)
+		if !ok {
+			return nil, fmt.Errorf("expected map, got %T", value)
+		}
+		elements := make(map[string]attr.Value, len(valueMap.Elements()))
+		for key, element := range valueMap.Elements() {
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(element, typed.ElemType)
+			if err != nil {
+				return nil, err
+			}
+			elements[key] = normalized
+		}
+		output, diags := types.MapValue(typed.ElemType, elements)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	case types.ObjectType:
+		object, ok := value.(types.Object)
+		if !ok {
+			return nil, fmt.Errorf("expected object, got %T", value)
+		}
+		attributes := make(map[string]attr.Value, len(typed.AttrTypes))
+		for key, attrType := range typed.AttrTypes {
+			attribute, ok := object.Attributes()[key]
+			if !ok || attribute.IsUnknown() {
+				normalized, err := {{ .StructName }}TerraformNullValue(attrType)
+				if err != nil {
+					return nil, err
+				}
+				attributes[key] = normalized
+				continue
+			}
+			normalized, err := {{ .StructName }}ValueWithKnownNulls(attribute, attrType)
+			if err != nil {
+				return nil, err
+			}
+			attributes[key] = normalized
+		}
+		output, diags := types.ObjectValue(typed.AttrTypes, attributes)
+		if diags.HasError() {
+			return nil, fmt.Errorf("%v", diags)
+		}
+		return output, nil
+	default:
+		return value, nil
+	}
+}
+
+{{ end }}
 func (m {{ .StructName }}Model) MarshalJSON() ([]byte, error) {
 	output := map[string]any{}
 {{- range .Fields }}
 {{- if and .RequestField (or (not .Computed) .OptionalComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else if normalizedString . }}
+		value := m.{{ .GoName }}.ValueString()
+{{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
+{{- if not (normalizedString .) }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
+{{- end }}
 {{- if and (eq $.StructName "MappingRuleset") (eq .TerraformName "conf") }}
 		value = mappingRulesetConfWithDefaults(value)
 {{- end }}
 		output["{{ .APIName }}"] = value
 	}
+{{- if .EmitEmpty }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+	}
 {{- end }}
+{{- else if .EmitEmpty }}
+	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+{{- end }}
+{{- end }}
+{{- range .OneOfVariants }}
+	if m.{{ .GoName }} != nil {
+		value, err := m.{{ .GoName }}.terraformPayload()
+		if err != nil {
+			return nil, err
+		}
+		for key, item := range value {
+			output[key] = item
+		}
+	}
 {{- end }}
 {{- if eq .StructName "MappingRuleset" }}
 	output["id"] = mappingRulesetID(m)
@@ -348,12 +653,27 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 {{- range .Fields }}
 {{- if and .UpdateField (or (not .Computed) .OptionalComputed) }}
 	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else if normalizedString . }}
+		value := m.{{ .GoName }}.ValueString()
+{{- else }}
 		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
+{{- if not (normalizedString .) }}
 		if err != nil {
 			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
 		}
+{{- end }}
 		output["{{ .APIName }}"] = value
 	}
+{{- if .EmitEmpty }}
+	if _, ok := output["{{ .APIName }}"]; !ok {
+		output["{{ .APIName }}"] = {{ emptyJSONValue . }}
+	}
+{{- end }}
+{{- else if .EmitEmpty }}
+	output["{{ .APIName }}"] = {{ emptyJSONValue . }}
 {{- end }}
 {{- end }}
 	return output, nil
@@ -361,12 +681,28 @@ func (m {{ .StructName }}Model) updateBody() (map[string]any, error) {
 {{- end }}
 
 func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
+{{- if .OneOfVariants }}
+	var raw map[string]any
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+{{- end }}
 	var input {{ .StructName }}APIModel
 	if err := json.Unmarshal(data, &input); err != nil {
 		return err
 	}
 {{- range .Fields }}
-{{- if nestedObjectList . }}
+{{- if objectAsJSON . }}
+	if input.{{ .GoName }} != nil {
+		raw, err := json.Marshal(input.{{ .GoName }})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = jsontypes.NewNormalizedValue(string(raw))
+	} else {
+		m.{{ .GoName }} = jsontypes.NewNormalizedNull()
+	}
+{{- else if nestedObjectList . }}
 	if input.{{ .GoName }} != nil {
 		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.ListType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
 		if err != nil {
@@ -375,6 +711,16 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		m.{{ .GoName }} = value.(types.List)
 	} else {
 		m.{{ .GoName }} = types.ListNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	}
+{{- else if nestedObjectMap . }}
+	if input.{{ .GoName }} != nil {
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.MapType{ElemType: types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.(types.Map)
+	} else {
+		m.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
 	}
 {{- else if nestedObject . }}
 	if input.{{ .GoName }} != nil {
@@ -388,23 +734,31 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 	}
 {{- else if eq .Type "array" }}
 	if input.{{ .GoName }} != nil {
-		value, diags := types.ListValueFrom(context.Background(), types.StringType, input.{{ .GoName }})
+		value, diags := types.ListValueFrom(context.Background(), {{ listElementAttrType . }}, input.{{ .GoName }})
 		if diags.HasError() {
 			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
 		}
 		m.{{ .GoName }} = value
 	} else {
-		m.{{ .GoName }} = types.ListNull(types.StringType)
+		m.{{ .GoName }} = types.ListNull({{ listElementAttrType . }})
 	}
 {{- else if eq .Type "object" }}
 	if input.{{ .GoName }} != nil {
+{{- if .ElementCustomType }}
+		value, err := {{ $.StructName }}APIValueToTerraformValue(input.{{ .GoName }}, types.MapType{ElemType: {{ listElementAttrType . }}})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.(types.Map)
+{{- else }}
 		value, diags := types.MapValueFrom(context.Background(), types.StringType, input.{{ .GoName }})
 		if diags.HasError() {
 			return fmt.Errorf("convert {{ .APIName }} from API value: %v", diags)
 		}
 		m.{{ .GoName }} = value
+{{- end }}
 	} else {
-		m.{{ .GoName }} = types.MapNull(types.StringType)
+		m.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 	}
 {{- else if eq .Type "boolean" }}
 	if input.{{ .GoName }} != nil {
@@ -443,15 +797,85 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 		m.KeyID = m.ID
 	}
 {{- end }}
+{{- if .OneOfVariants }}
+	switch {{ .StructName }}OneOfDiscriminator(raw) {
+{{- range .OneOfVariants }}
+{{- if .DiscriminatorValue }}
+	case "{{ .DiscriminatorValue }}":
+		m.{{ .GoName }} = &{{ .ModelName }}{}
+		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
+			return err
+		}
+{{- end }}
+{{- end }}
+	}
+{{- end }}
 	return nil
 }
+{{- if not (or (eq .StructName "PackDestination") (eq .StructName "PackSource")) }}
 {{ range .OneOfVariants }}
 type {{ .ModelName }} struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
 }
+
+func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
+	output := map[string]any{}
+{{- range .Fields }}
+	if !m.{{ .GoName }}.IsNull() && !m.{{ .GoName }}.IsUnknown() {
+{{- if objectAsJSON . }}
+		value, err := {{ $.StructName }}ObjectJSONFromTerraformValue(m.{{ .GoName }})
+{{- else }}
+		value, err := {{ $.StructName }}TerraformValueToJSON(m.{{ .GoName }})
+{{- end }}
+		if err != nil {
+			return nil, fmt.Errorf("convert {{ .TerraformName }} to API value: %v", err)
+		}
+		output["{{ .APIName }}"] = value
+	}
+{{- end }}
+	return output, nil
+}
+
+func (m *{{ .ModelName }}) unmarshalPayload(input map[string]any) error {
+{{- range .Fields }}
+	if item, ok := input["{{ .APIName }}"]; ok {
+{{- if objectAsJSON . }}
+		raw, err := json.Marshal(item)
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = jsontypes.NewNormalizedValue(string(raw))
+{{- else }}
+		value, err := {{ $.StructName }}APIValueToTerraformValue(item, {{ attrType . }})
+		if err != nil {
+			return fmt.Errorf("convert {{ .APIName }} from API value: %v", err)
+		}
+		m.{{ .GoName }} = value.({{ goType . }})
+{{- end }}
+	} else {
+		m.{{ .GoName }} = {{ nullValue . }}
+	}
+{{- end }}
+	return nil
+}
 {{ end }}
+{{- end }}
+{{- if .OneOfVariants }}
+
+func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
+	if collector, ok := input["collector"].(map[string]any); ok {
+		if value, ok := collector["type"].(string); ok {
+			return value
+		}
+	}
+	if value, ok := input["type"].(string); ok {
+		return value
+	}
+	return ""
+}
+{{- end }}
 `
 
 const clientTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
@@ -459,15 +883,21 @@ package provider
 
 import (
 	"context"
+{{- if eq .StructName "PackPipeline" }}
+	"errors"
+{{- end }}
 {{- if needsClientFmt . }}
 	"fmt"
 {{- end }}
-{{- if resourceHasQueryParams . }}
+{{- if or (resourceHasQueryParams .) (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"net/url"
+{{- end }}
+{{- if or (eq .StructName "LookupFile") (eq .StructName "PackPipeline") }}
+	"strings"
 {{- end }}
 
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-{{- if eq .StructName "Key" }}
+{{- if or (eq .StructName "Key") (eq .StructName "LookupFile") (eq .StructName "PackLookups") }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 {{- end }}
 )
@@ -480,6 +910,28 @@ func new{{ .StructName }}API(client *restclient.Client) {{ .StructName }}API {
 	return {{ .StructName }}API{client: client}
 }
 
+{{- if eq .StructName "SearchDataset" }}
+func searchDatasetID(model SearchDatasetModel) string {
+	if !model.ID.IsNull() && !model.ID.IsUnknown() && model.ID.ValueString() != "" {
+		return model.ID.ValueString()
+	}
+{{- range .OneOfVariants }}
+	{{- $variant := . }}
+	if model.{{ .GoName }} != nil {
+	{{- range .Fields }}
+		{{- if eq .TerraformName "id" }}
+		if !model.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !model.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() && model.{{ $variant.GoName }}.{{ .GoName }}.ValueString() != "" {
+			return model.{{ $variant.GoName }}.{{ .GoName }}.ValueString()
+		}
+		{{- end }}
+	{{- end }}
+	}
+{{- end }}
+	return ""
+}
+
+{{- end }}
+
 func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }}Model) (*{{ .StructName }}Model, error) {
 {{- if .Action }}
 	_, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, any](ctx, a.client, {{ pathExpr . .Create }}, model)
@@ -491,6 +943,29 @@ func (a {{ .StructName }}API) Create(ctx context.Context, model {{ .StructName }
 	id := model.ID.ValueString()
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
+{{- else if eq .StructName "LookupFile" }}
+	id := model.ID.ValueString()
+	if err := uploadLookupFileContent(ctx, a.client, model, id); err != nil {
+		return nil, err
+	}
+	apiModel, err := restclient.Post[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups", model.GroupID.ValueString()), model)
+	return normalizeLookupFileAPIModel(apiModel, id), err
+{{- else if eq .StructName "PackLookups" }}
+	id := model.ID.ValueString()
+	if err := uploadPackLookupFileContent(ctx, a.client, model, id); err != nil {
+		return nil, err
+	}
+	apiModel, err := restclient.Post[PackLookupsModel, PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())), model)
+	return normalizePackLookupsAPIModel(apiModel, id), err
+{{- else if eq .StructName "PackPipeline" }}
+	apiModel, err := restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
+	if err != nil {
+		if packPipelineAlreadyExists(err) {
+			return a.Update(ctx, model)
+		}
+		return nil, err
+	}
+	return apiModel, nil
 {{- else }}
 	return restclient.{{ restWriteCall .Create }}[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Create }}, model)
 {{- end }}
@@ -512,6 +987,34 @@ func (a {{ .StructName }}API) Read(ctx context.Context, model {{ .StructName }}M
 		}
 	}
 	return nil, &restclient.NotFoundError{Path: fmt.Sprintf("/m/%s/system/keys/%s", model.GroupID.ValueString(), id)}
+{{- else if eq .StructName "LookupFile" }}
+	configuredID := model.ID.ValueString()
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		apiModel, err := restclient.Get[LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
+		if err == nil {
+			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
+{{- else if eq .StructName "PackLookups" }}
+	configuredID := model.ID.ValueString()
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		apiModel, err := restclient.Get[PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		if err == nil {
+			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
 {{- else }}
 	return restclient.Get[{{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Read }})
 {{- end }}
@@ -532,6 +1035,48 @@ func (a {{ .StructName }}API) Update(ctx context.Context, model {{ .StructName }
 	}
 	apiModel, err := restclient.Post[{{ .StructName }}Model, {{ .StructName }}Model](ctx, a.client, fmt.Sprintf("/m/%s/system/keys?id=%s", model.GroupID.ValueString(), url.QueryEscape(id)), model)
 	return normalizeKeyAPIModel(apiModel, id), err
+{{- else if eq .StructName "LookupFile" }}
+	configuredID := model.ID.ValueString()
+	if err := uploadLookupFileContent(ctx, a.client, model, configuredID); err != nil {
+		return nil, err
+	}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		requestModel := model
+		if id != configuredID {
+			requestModel.ID = types.StringValue(id)
+		}
+		apiModel, err := restclient.Patch[LookupFileModel, LookupFileModel](ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id), requestModel)
+		if err == nil {
+			return normalizeLookupFileAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
+{{- else if eq .StructName "PackLookups" }}
+	configuredID := model.ID.ValueString()
+	if err := uploadPackLookupFileContent(ctx, a.client, model, configuredID); err != nil {
+		return nil, err
+	}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(configuredID) {
+		requestModel := model
+		if id != configuredID {
+			requestModel.ID = types.StringValue(id)
+		}
+		apiModel, err := restclient.Patch[PackLookupsModel, PackLookupsModel](ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id), requestModel)
+		if err == nil {
+			return normalizePackLookupsAPIModel(apiModel, configuredID), nil
+		}
+		if !restclient.IsNotFound(err) {
+			return nil, err
+		}
+		lastErr = err
+	}
+	return nil, lastErr
 {{- else }}
 {{- if .Update.ReadAfterWrite }}
 	body, err := model.updateBody()
@@ -574,9 +1119,43 @@ func (a {{ .StructName }}API) Delete(ctx context.Context, model {{ .StructName }
 	// The keys API does not support deleting key metadata. Preserve the
 	// legacy provider behavior by allowing Terraform to remove only its state.
 	return nil
+{{- else if eq .StructName "LookupFile" }}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(model.ID.ValueString()) {
+		err := restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/system/lookups/%s", model.GroupID.ValueString(), id))
+		if err == nil {
+			return nil
+		}
+		if !restclient.IsNotFound(err) {
+			return err
+		}
+		lastErr = err
+	}
+	return lastErr
+{{- else if eq .StructName "PackLookups" }}
+	var lastErr error
+	for _, id := range lookupFileAPIIDs(model.ID.ValueString()) {
+		err := restclient.Delete(ctx, a.client, fmt.Sprintf("/m/%s/p/%s/system/lookups/%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString()), id))
+		if err == nil {
+			return nil
+		}
+		if !restclient.IsNotFound(err) {
+			return err
+		}
+		lastErr = err
+	}
+	return lastErr
 {{- else if eq .StructName "GroupSystemSettings" }}
 	// Group system settings are singleton configuration. There is no delete
 	// endpoint; destroy removes Terraform state without resetting the group.
+	return nil
+{{- else if .Delete.ResetBody }}
+	body := {{ goValueLiteral .Delete.ResetBody }}
+	_, err := restclient.{{ restWriteCall .Delete }}[map[string]any, {{ .StructName }}Model](ctx, a.client, {{ pathExpr . .Delete }}, body)
+	return err
+{{- else if .Delete.DeleteHook }}
+	return {{ .Delete.DeleteHook }}(ctx, a.client, model)
+{{- else if not .Delete.Path }}
 	return nil
 {{- else }}
 	return restclient.Delete(ctx, a.client, {{ pathExpr . .Delete }})
@@ -613,6 +1192,81 @@ func normalizeKeyAPIModel(model *KeyModel, terraformID string) *KeyModel {
 		model.ID = types.StringValue(terraformID)
 	}
 	return model
+}
+{{- end }}
+{{- if eq .StructName "LookupFile" }}
+
+func lookupFileAPIIDs(id string) []string {
+	if id == "" || lookupFileIDHasKnownExtension(id) {
+		return []string{id}
+	}
+	return []string{id, id + ".csv"}
+}
+
+func lookupFileIDHasKnownExtension(id string) bool {
+	lower := strings.ToLower(id)
+	return strings.HasSuffix(lower, ".csv") ||
+		strings.HasSuffix(lower, ".gz") ||
+		strings.HasSuffix(lower, ".csv.gz") ||
+		strings.HasSuffix(lower, ".mmdb")
+}
+
+func lookupFileUploadFilename(id string) string {
+	if lookupFileIDHasKnownExtension(id) {
+		return id
+	}
+	return id + ".csv"
+}
+
+func uploadLookupFileContent(ctx context.Context, client *restclient.Client, model LookupFileModel, id string) error {
+	if model.Content.IsNull() || model.Content.IsUnknown() {
+		return nil
+	}
+	filename := lookupFileUploadFilename(id)
+	path := fmt.Sprintf("/m/%s/system/lookups?filename=%s", model.GroupID.ValueString(), url.QueryEscape(filename))
+	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func normalizeLookupFileAPIModel(model *LookupFileModel, terraformID string) *LookupFileModel {
+	if model == nil {
+		return nil
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
+}
+{{- end }}
+{{- if eq .StructName "PackLookups" }}
+
+func uploadPackLookupFileContent(ctx context.Context, client *restclient.Client, model PackLookupsModel, id string) error {
+	if model.Content.IsNull() || model.Content.IsUnknown() {
+		return nil
+	}
+	filename := lookupFileUploadFilename(id)
+	path := fmt.Sprintf("/m/%s/p/%s/system/lookups?filename=%s", model.GroupID.ValueString(), resolvePackIDForRestAPI(ctx, client, model.GroupID.ValueString(), model.Pack.ValueString()), url.QueryEscape(filename))
+	return restclient.PutRawNoResponse(ctx, client, path, "text/csv", []byte(model.Content.ValueString()))
+}
+
+func normalizePackLookupsAPIModel(model *PackLookupsModel, terraformID string) *PackLookupsModel {
+	if model == nil {
+		return nil
+	}
+	if terraformID != "" {
+		model.ID = types.StringValue(terraformID)
+	}
+	return model
+}
+{{- end }}
+{{- if eq .StructName "PackPipeline" }}
+
+func packPipelineAlreadyExists(err error) bool {
+	var httpErr *restclient.HTTPError
+	if !errors.As(err, &httpErr) {
+		return false
+	}
+	return strings.Contains(httpErr.Body, "pipeline already exists") ||
+		strings.Contains(httpErr.Body, "already exists")
 }
 {{- end }}
 `
@@ -652,7 +1306,19 @@ import (
 {{- if needsCustomPlanModifier . "string" }}
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 {{- end }}
+{{- if needsCustomJSONValidator . }}
+	custom_validators "github.com/criblio/terraform-provider-criblio/internal/validators"
+{{- end }}
+{{- if needsCustomStringValidator . }}
+	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+{{- if needsStringValidator . }}
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+{{- end }}
+{{- if needsResourceAttr . }}
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+{{- end }}
 {{- if not .Action }}
 	"github.com/hashicorp/terraform-plugin-framework/path"
 {{- end }}
@@ -682,6 +1348,12 @@ import (
 {{- if needsFrameworkPlanModifier . "string" }}
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 {{- end }}
+{{- if needsStringDefault . }}
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+{{- end }}
+{{- if needsValidator . }}
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+{{- end }}
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -710,6 +1382,7 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 		MarkdownDescription: "{{ .StructName }} Resource",
 		Attributes: map[string]schema.Attribute{
 {{ schemaAttributes .Fields "\t\t\t" -}}
+{{ oneOfSchemaAttributes .OneOfVariants "\t\t\t" -}}
 		},
 	}
 }
@@ -737,9 +1410,25 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	_, err := r.api.Create(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+	_, err := r.api.Create(ctx, requestModel)
+{{- else }}
 	_, err := r.api.Create(ctx, model)
+{{- end }}
+{{- else }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
+{{- end }}
 {{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -751,7 +1440,11 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if .Create.PreserveInputsAfterWrite }}
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
@@ -776,7 +1469,17 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if eq .StructName "Source" }}
+	priorPlainAuth := snapshotSourcePlainAuthTokensPriorRead(&model)
+{{- else if eq .StructName "PackSource" }}
+	priorPlainAuth := snapshotPackSourcePlainAuthTokensPriorRead(&model)
+{{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+{{- if eq .StructName "Source" }}
+	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+{{- else if eq .StructName "PackSource" }}
+	restorePackSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
 }
@@ -790,13 +1493,25 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
+{{- else if eq .StructName "PackSource" }}
+	requestModel := packSourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
+{{- else }}
 	apiModel, err := r.api.Update(ctx, model)
+{{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
 {{- if .Update.ReadAfterWrite }}
+{{- if .Update.PreserveInputsAfterWrite }}
+	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
 {{- end }}
@@ -846,6 +1561,33 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 			return
 		}
 		apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
+		return
+	}
+{{- end }}
+{{- with singletonLegacyImportField . }}
+	trimmedID := bytes.TrimSpace([]byte(req.ID))
+	if len(trimmedID) == 0 {
+		resp.Diagnostics.AddError("Invalid ID", "The import ID must not be empty.")
+		return
+	}
+	if trimmedID[0] != '{' {
+		var model {{ $.StructName }}Model
+{{- range pathParamFields $ }}
+{{- if .FixedValue }}
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), {{ printf "%q" .FixedValue }})...)
+{{- else }}
+		model.{{ .GoName }} = types.StringValue(req.ID)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{ .TerraformName }}"), req.ID)...)
+{{- end }}
+{{- end }}
+		apiModel, err := r.api.Read(ctx, model)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			return
+		}
+		apply{{ $.StructName }}APIToState(apiModel, &model, false, false)
 		resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 		return
 	}
@@ -915,6 +1657,11 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		return
 	}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- if eq .StructName "Source" }}
+	normalizeSourceRootInputEmptyLists(&model)
+{{- else if eq .StructName "PackSource" }}
+	normalizePackSourceRootInputEmptyLists(&model)
+{{- end }}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
@@ -965,6 +1712,13 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 			state.{{ .GoName }} = {{ zeroValue . }}
 		}
 	{{- end }}
+{{- else if nestedObjectMap . }}
+		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
+			state.{{ .GoName }} = api.{{ .GoName }}
+		}{{- if and .Computed (not .Optional) }} else if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+			state.{{ .GoName }} = {{ zeroValue . }}
+		}
+	{{- end }}
 {{- else if eq .Type "object" }}
 		if !api.{{ .GoName }}.IsNull() && !api.{{ .GoName }}.IsUnknown() {
 			state.{{ .GoName }} = api.{{ .GoName }}
@@ -989,6 +1743,9 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		state.{{ .GoName }} = {{ nullValue . }}
 	}
 {{- end }}
+{{- if and .FixedValue (eq .Type "string") }}
+	state.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+{{- end }}
 {{- if not .Computed }}
 	}
 {{- end }}
@@ -1002,31 +1759,92 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 	if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil {
 		state.{{ .GoName }} = {{ nullValue . }}
 	}
+{{- else if nestedObjectMap . }}
+	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
+		state.{{ .GoName }} = types.MapNull(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()})
+	} else if len(state.{{ .GoName }}.Elements()) == 0 {
+		state.{{ .GoName }} = types.MapValueMust(types.ObjectType{AttrTypes: {{ .NestedAttrTypes }}()}, nil)
+	}
 {{- else if nestedObject . }}
 	if len(state.{{ .GoName }}.AttributeTypes(context.Background())) == 0 {
 		state.{{ .GoName }} = types.ObjectNull({{ .NestedAttrTypes }}())
 	}
 {{- else if eq .Type "object" }}
 	if state.{{ .GoName }}.IsNull() || state.{{ .GoName }}.IsUnknown() {
-		state.{{ .GoName }} = types.MapNull(types.StringType)
-	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal(types.StringType) {
+		state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
+	} else if elementType := state.{{ .GoName }}.ElementType(context.Background()); elementType == nil || !elementType.Equal({{ listElementAttrType . }}) {
 		if len(state.{{ .GoName }}.Elements()) == 0 {
-			state.{{ .GoName }} = types.MapNull(types.StringType)
+			state.{{ .GoName }} = types.MapNull({{ listElementAttrType . }})
 		}
 	}
 {{- end }}
 {{- end }}
+{{- if or (eq .StructName "Pipeline") (eq .StructName "PackPipeline") }}
+	if !state.Conf.IsNull() {
+		if normalized, err := PipelineValueWithKnownNulls(state.Conf, types.ObjectType{AttrTypes: {{ .StructName }}ConfAttrTypes()}); err == nil {
+			state.Conf = normalized.(types.Object)
+		}
+	}
+{{- else if eq .StructName "SearchDashboard" }}
+	if !state.Elements.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Elements, types.ListType{ElemType: types.ObjectType{AttrTypes: SearchDashboardElementsAttrTypes()}}); err == nil {
+			state.Elements = normalized.(types.List)
+		}
+	}
+	if !state.Groups.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Groups, types.MapType{ElemType: types.ObjectType{AttrTypes: SearchDashboardGroupsAttrTypes()}}); err == nil {
+			state.Groups = normalized.(types.Map)
+		}
+	}
+	if !state.Schedule.IsNull() {
+		if normalized, err := SearchDashboardValueWithKnownNulls(state.Schedule, types.ObjectType{AttrTypes: SearchDashboardScheduleAttrTypes()}); err == nil {
+			state.Schedule = normalized.(types.Object)
+		}
+	}
+{{- else if or (eq .StructName "Routes") (eq .StructName "PackRoutes") }}
+	if !api.Routes.IsNull() && !api.Routes.IsUnknown() && !state.Routes.IsNull() && !state.Routes.IsUnknown() {
+		state.Routes = routesListWithKnownAPIValues(api.Routes, state.Routes)
+	}
+{{- end }}
 {{- range .OneOfVariants }}
 	{{- $variant := . }}
-	if api.{{ .GoName }} != nil && (!preserveInputs || (fillMissingInputs && state.{{ .GoName }} == nil)) {
-		state.{{ .GoName }} = &{{ .ModelName }}{}
+	if api.{{ .GoName }} != nil {
+		if state.{{ .GoName }} == nil {
+			state.{{ .GoName }} = &{{ .ModelName }}{}
+		}
 {{- range .Fields }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
+{{- if not .Computed }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+{{- end }}
+{{- end }}
 		if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = stringFromAPIOrPrior(api.{{ $variant.GoName }}.{{ .GoName }}.ValueString(), state.{{ $variant.GoName }}.{{ .GoName }})
+		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 		}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
+{{- if not .Computed }}
+		}
+{{- end }}
+{{- end }}
 {{- else }}
-		state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
+{{- if not .Computed }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+{{- end }}
+{{- end }}
+		if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
+		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
+			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
+		}
+{{- if or (eq $.StructName "Source") (eq $.StructName "PackSource") }}
+{{- if not .Computed }}
+		}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 	}
@@ -1036,6 +1854,54 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 func {{ .Name }}Debug(value any) string {
 	return fmt.Sprintf("%v", value)
 }
+
+{{- if eq .StructName "Routes" }}
+func routesListWithKnownAPIValues(apiRoutes types.List, stateRoutes types.List) types.List {
+	elements := stateRoutes.Elements()
+	apiElements := apiRoutes.Elements()
+	for index := range elements {
+		if index >= len(apiElements) {
+			break
+		}
+		stateObject, ok := elements[index].(types.Object)
+		if !ok || stateObject.IsNull() || stateObject.IsUnknown() {
+			continue
+		}
+		apiObject, ok := apiElements[index].(types.Object)
+		if !ok || apiObject.IsNull() || apiObject.IsUnknown() {
+			continue
+		}
+		attributes := stateObject.Attributes()
+		apiAttributes := apiObject.Attributes()
+		changed := false
+		for name, stateAttribute := range attributes {
+			if !stateAttribute.IsUnknown() {
+				continue
+			}
+			apiAttribute, ok := apiAttributes[name]
+			if !ok || apiAttribute.IsUnknown() {
+				continue
+			}
+			attributes[name] = apiAttribute
+			changed = true
+		}
+		if !changed {
+			continue
+		}
+		merged, diags := types.ObjectValue(stateObject.AttributeTypes(context.Background()), attributes)
+		if diags.HasError() {
+			continue
+		}
+		elements[index] = merged
+	}
+	value, diags := types.ListValue(stateRoutes.ElementType(context.Background()), elements)
+	if diags.HasError() {
+		return stateRoutes
+	}
+	return value
+}
+
+{{- end }}
 `
 
 const dataSourceTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
@@ -1076,6 +1942,7 @@ func (d *{{ .StructName }}DataSource) Schema(_ context.Context, _ datasource.Sch
 		MarkdownDescription: "{{ .StructName }} Data Source",
 		Attributes: map[string]schema.Attribute{
 {{ dataSourceAttributes .Fields "\t\t\t" }}
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t" }}
 		},
 	}
 }
@@ -1102,6 +1969,13 @@ func (d *{{ .StructName }}DataSource) Read(ctx context.Context, req datasource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- range .Fields }}
+{{- if and .FixedValue (eq .Type "string") }}
+	if model.{{ .GoName }}.IsNull() || model.{{ .GoName }}.IsUnknown() || model.{{ .GoName }}.ValueString() == "" {
+		model.{{ .GoName }} = types.StringValue({{ printf "%q" .FixedValue }})
+	}
+{{- end }}
+{{- end }}
 	apiModel, err := d.api.Read(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -1605,6 +2479,314 @@ const schemaUpdatedConfig = ` + "`" + `resource "criblio_schema" "my_schema" {
 EOT
 }
 ` + "`" + `
+{{- else if eq .StructName "Collector" }}
+import (
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestCollector(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	t.Run("plan-diff", func(t *testing.T) {
+		suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+		splunkID := "splunk-demo-collector-" + suffix
+		restID := "rest-api-demo-collector-" + suffix
+		config := collectorConfig(t, suffix)
+
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories: providerFactory,
+			Steps: []resource.TestStep{
+				{
+					Config: config,
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "id", splunkID),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.environment", "demo"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.type", "splunk"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.conf.authentication", "token"),
+						resource.TestCheckResourceAttr("criblio_collector.splunk_access_log_collector", "input_collector_splunk.collector.conf.disable_time_filter", "false"),
+						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "id", restID),
+						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
+						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
+						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
+					),
+				},
+				{
+					Config:   config,
+					PlanOnly: true,
+				},
+			},
+		})
+	})
+}
+
+func collectorConfig(t *testing.T, suffix string) string {
+	t.Helper()
+
+	content, err := os.ReadFile(filepath.Join("testdata", "TestCollector", "plan-diff", "main.tf"))
+	if err != nil {
+		t.Fatalf("read collector test config: %v", err)
+	}
+	config := string(content)
+	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
+	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
+	return config
+}
+{{- else if eq .StructName "Pipeline" }}
+import (
+	"fmt"
+	"os"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestPipeline(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		time.Sleep(1 * time.Second)
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	resourceName := "criblio_pipeline.my_pipeline"
+	pipelineID := "pipeline-" + suffix
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: pipelineConfig(pipelineID, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "id", pipelineID),
+						resource.TestCheckResourceAttr(resourceName, "conf.description", "created"),
+						resource.TestCheckResourceAttr(resourceName, "conf.output", "default"),
+						resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
+						resource.TestCheckResourceAttr(resourceName, "conf.functions.0.id", "code"),
+					),
+				},
+				{
+					Config: pipelineConfig(pipelineID, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "conf.description", "updated"),
+					),
+				},
+				{
+					Config:   pipelineConfig(pipelineID, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:            resourceName,
+					ImportState:             true,
+					ImportStateId:           fmt.Sprintf(` + "`" + `{"group_id":"default","id":%q}` + "`" + `, pipelineID),
+					ImportStateVerify:       true,
+					ImportStateVerifyIgnore: []string{"conf.functions.0.conf"},
+				},
+			},
+		})
+	})
+}
+
+func pipelineConfig(id, description string) string {
+	return fmt.Sprintf(` + "`" + `resource "criblio_pipeline" "my_pipeline" {
+  group_id = "default"
+  id       = %[1]q
+  conf = {
+    async_func_timeout = 60
+    description        = %[2]q
+    output             = "default"
+    streamtags         = []
+    functions = [
+      {
+        id       = "code"
+        filter   = "true"
+        disabled = false
+        final    = true
+        conf = jsonencode({
+          code = <<-EOC
+            __e.pipeline_test = true
+          EOC
+        })
+      }
+    ]
+  }
+}
+` + "`" + `, id, description)
+}
+{{- else if eq .StructName "SearchDashboard" }}
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestSearchDashboard(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping resource for On-Prem deployments as it is not supported")
+	}
+
+	suffix := acctest.RandStringFromCharSet(6, acctest.CharSetAlphaNum)
+	dashboardID := "test_search_dashboard_" + suffix
+	resourceName := "criblio_search_dashboard.my_searchdashboard"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: searchDashboardConfig(t, dashboardID, "created"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "id", dashboardID),
+						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard created"),
+						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard created"),
+						resource.TestCheckResourceAttr(resourceName, "elements.#", "8"),
+						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.type", "counter.single"),
+						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.search.search_query_inline.query", "dataset=\"$vt_dummy\" event<42 | count"),
+					),
+				},
+				{
+					Config: searchDashboardConfig(t, dashboardID, "updated"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "name", "Test Search Dashboard updated"),
+						resource.TestCheckResourceAttr(resourceName, "description", "Test Search Dashboard updated"),
+					),
+				},
+				{
+					Config:   searchDashboardConfig(t, dashboardID, "updated"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     dashboardID,
+					ImportStateVerify: true,
+					ImportStateVerifyIgnore: searchDashboardImportStateVerifyIgnore(),
+				},
+			},
+		})
+	})
+}
+
+func searchDashboardImportStateVerifyIgnore() []string {
+	ignore := make([]string, 0, 8)
+	for i := range 8 {
+		ignore = append(ignore, fmt.Sprintf("elements.%d.dashboard_element_visualization.config.json", i))
+	}
+	return ignore
+}
+
+func searchDashboardConfig(t *testing.T, id, description string) string {
+	t.Helper()
+
+	path := filepath.Join("..", "..", "examples", "search-dashboard", "main.tf")
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read search dashboard example: %v", err)
+	}
+
+	config := string(content)
+	if idx := strings.Index(config, "\nresource \"criblio_search_dashboard\" \"search_dashboard_default_search_"); idx >= 0 {
+		config = config[:idx]
+	}
+
+	replacements := map[string]string{
+		` + "`" + `id          = "sample_test_dashboard"` + "`" + `:                    fmt.Sprintf("id          = %q", id),
+		` + "`" + `name        = "Sample Test Dashboard"` + "`" + `:                   fmt.Sprintf("name        = %q", "Test Search Dashboard "+description),
+		` + "`" + `description = "A sample dashboard with several panels"` + "`" + `: fmt.Sprintf("description = %q", "Test Search Dashboard "+description),
+	}
+	for old, replacement := range replacements {
+		if !strings.Contains(config, old) {
+			t.Fatalf("search dashboard example is missing %q", old)
+		}
+		config = strings.Replace(config, old, replacement, 1)
+	}
+
+	return config
+}
+{{- else if eq .StructName "Routes" }}
+import (
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func TestRoutes(t *testing.T) {
+	resourceName := "criblio_routes.my_routes"
+
+	t.Run("plan-diff", func(t *testing.T) {
+		resource.Test(t, resource.TestCase{
+			ProtoV6ProviderFactories:  providerFactory,
+			PreventPostDestroyRefresh: true,
+			Steps: []resource.TestStep{
+				{
+					Config: routesConfig("my_route_1", "my_route_2"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "id", "default"),
+						resource.TestCheckResourceAttr(resourceName, "routes.#", "2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.0.name", "my_route_1"),
+						resource.TestCheckResourceAttr(resourceName, "routes.0.pipeline", "main"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.pipeline", "main"),
+					),
+				},
+				{
+					Config: routesConfig("my_route_2", "my_route_1"),
+					Check: resource.ComposeAggregateTestCheckFunc(
+						resource.TestCheckResourceAttr(resourceName, "routes.0.name", "my_route_2"),
+						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_1"),
+					),
+				},
+				{
+					Config:   routesConfig("my_route_2", "my_route_1"),
+					PlanOnly: true,
+				},
+				{
+					ResourceName:      resourceName,
+					ImportState:       true,
+					ImportStateId:     "default",
+					ImportStateVerify: true,
+				},
+			},
+		})
+	})
+}
+
+func routesConfig(first, second string) string {
+	return ` + "`" + `resource "criblio_routes" "my_routes" {
+  group_id = "default"
+
+  routes = [
+    {
+      name     = "` + "`" + ` + first + ` + "`" + `"
+      pipeline = "main"
+    },
+    {
+      name     = "` + "`" + ` + second + ` + "`" + `"
+      pipeline = "main"
+    }
+  ]
+}
+` + "`" + `
+}
 {{- else }}
 import "testing"
 

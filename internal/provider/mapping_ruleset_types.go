@@ -204,6 +204,24 @@ func mappingRulesetConfWithDefaults(value any) any {
 		if _, ok := function["final"]; !ok {
 			function["final"] = true
 		}
+		confValue, ok := function["conf"].(map[string]any)
+		if ok {
+			addItems, ok := confValue["add"].([]any)
+			if ok {
+				for addIndex, addItem := range addItems {
+					add, ok := addItem.(map[string]any)
+					if !ok {
+						continue
+					}
+					if name, ok := add["name"].(string); !ok || name == "" {
+						add["name"] = "groupId"
+					}
+					addItems[addIndex] = add
+				}
+				confValue["add"] = addItems
+				function["conf"] = confValue
+			}
+		}
 		functions[index] = function
 	}
 	conf["functions"] = functions

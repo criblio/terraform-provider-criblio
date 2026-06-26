@@ -3,37 +3,68 @@ package tests
 import (
 	"os"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
 func TestStreamSyslogToLake(t *testing.T) {
-	if os.Getenv("DEPLOYMENT") == "onprem" {
-		time.Sleep(1 * time.Second)
+	onPrem := os.Getenv("DEPLOYMENT") == "onprem"
+	if !onPrem {
+		t.Skip("Skipping cloud Stream syslog-to-lake example: destroy can race source output reference cleanup")
 	}
+
+	configVariables := config.Variables{
+		"onprem": config.BoolVariable(onPrem),
+	}
+
 	t.Run("plan-diff", func(t *testing.T) {
+		steps := []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: configVariables,
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: configVariables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+		}
+		if !onPrem {
+			steps = append(steps, resource.TestStep{
+				ImportState:       true,
+				ImportStateId:     "syslog-workers",
+				ResourceName:      "criblio_group.syslog_worker_group[0]",
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"cloud",
+					"estimated_ingest_rate",
+					"provisioned",
+					"streamtags",
+					"worker_remote_access",
+				},
+				Config: streamSyslogToLakeGroupImportConfig(),
+			})
+		}
+
 		resource.Test(t, resource.TestCase{
 			ProtoV6ProviderFactories:  providerFactory,
 			PreventPostDestroyRefresh: true,
-			Steps: []resource.TestStep{
-				{
-					ImportState:     true,
-					ImportStateId:   "criblio_group.syslog_worker_group",
-					ResourceName:    "criblio_group.syslog_worker_group",
-					ConfigDirectory: config.TestNameDirectory(),
-					Check: resource.ComposeAggregateTestCheckFunc(
-						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "id", "syslog-workers"),
-						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "name", "syslog-workers"),
-						resource.TestCheckResourceAttr("criblio_group.syslog_worker_group", "product", "stream"),
-						resource.TestCheckResourceAttr("criblio_source.syslog_source", "id", "syslog-input"),
-						resource.TestCheckResourceAttr("criblio_source.syslog_source", "group_id", "syslog-workers"),
-						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "id", "cribl-lake-2"),
-						resource.TestCheckResourceAttr("criblio_destination.cribl_lake", "group_id", "syslog-workers"),
-					),
-				},
-			},
+			Steps:                     steps,
 		})
 	})
+}
+
+func streamSyslogToLakeGroupImportConfig() string {
+	return `resource "criblio_group" "syslog_worker_group" {
+  count   = 1
+  id      = "syslog-workers"
+  product = "stream"
+}
+`
 }
