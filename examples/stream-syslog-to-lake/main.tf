@@ -32,63 +32,61 @@ resource "criblio_source" "syslog_source" {
   group_id = criblio_group.syslog_worker_group[0].id
 
   input_syslog = {
-    input_syslog_syslog1 = {
-      allow_non_standard_app_name = false
-      connections = [
-        {
-          output   = criblio_destination.cribl_lake[0].id
-          pipeline = "palo_alto_traffic"
-        }
-      ]
-      description           = "Syslog input source"
-      disabled              = false
-      enable_load_balancing = true
-      enable_proxy_header   = false
-      host                  = "0.0.0.0"
-      id                    = "syslog-input"
-      infer_framing         = false
-      keep_fields_list      = []
-      max_active_cxn        = 0
-      max_buffer_size       = 8
-      metadata              = []
-      octet_counting        = false
-      pipeline              = "palo_alto_traffic"
-      pq = {
-        commit_frequency = 5
-        compress         = "none"
-        max_buffer_size  = 50
-        max_file_size    = "1 MB"
-        max_size         = "100 MB"
-        mode             = "smart"
-        path             = "$CRIBL_HOME/state/buffers"
+    allow_non_standard_app_name = false
+    connections = [
+      {
+        output   = criblio_destination.cribl_lake[0].id
+        pipeline = "palo_alto_traffic"
       }
-      pq_enabled                    = true
-      send_to_routes                = false
-      single_msg_udp_packets        = false
-      socket_ending_max_wait        = 6
-      socket_idle_timeout           = 30
-      socket_max_lifespan           = 5
-      streamtags                    = ["syslog", "network"]
-      strictly_infer_octet_counting = true
-      tcp_port                      = 20005
-      timestamp_timezone            = "UTC"
-      tls = {
-        ca_path             = ""
-        cert_path           = ""
-        certificate_name    = ""
-        common_name_regex   = "{}"
-        disabled            = true
-        max_version         = "TLSv1.3"
-        min_version         = "TLSv1.2"
-        passphrase          = ""
-        priv_key_path       = ""
-        reject_unauthorized = true
-        request_cert        = false
-      }
-      type                   = "syslog"
-      udp_port               = 20005
-      udp_socket_rx_buf_size = 262144
+    ]
+    description           = "Syslog input source"
+    disabled              = false
+    enable_load_balancing = true
+    enable_proxy_header   = false
+    host                  = "0.0.0.0"
+    id                    = "syslog-input"
+    infer_framing         = false
+    keep_fields_list      = []
+    max_active_cxn        = 0
+    max_buffer_size       = 8
+    metadata              = []
+    octet_counting        = false
+    pipeline              = "palo_alto_traffic"
+    pq = {
+      commit_frequency = 5
+      compress         = "none"
+      max_buffer_size  = 50
+      max_file_size    = "1 MB"
+      max_size         = "100 MB"
+      mode             = "smart"
+      path             = "$CRIBL_HOME/state/buffers"
     }
+    pq_enabled                    = true
+    send_to_routes                = false
+    single_msg_udp_packets        = false
+    socket_ending_max_wait        = 6
+    socket_idle_timeout           = 30
+    socket_max_lifespan           = 5
+    streamtags                    = ["syslog", "network"]
+    strictly_infer_octet_counting = true
+    tcp_port                      = 20005
+    timestamp_timezone            = "UTC"
+    tls = {
+      ca_path             = ""
+      cert_path           = ""
+      certificate_name    = ""
+      common_name_regex   = "{}"
+      disabled            = true
+      max_version         = "TLSv1.3"
+      min_version         = "TLSv1.2"
+      passphrase          = ""
+      priv_key_path       = ""
+      reject_unauthorized = true
+      request_cert        = false
+    }
+    type                   = "syslog"
+    udp_port               = 20005
+    udp_socket_rx_buf_size = 262144
   }
   depends_on = [criblio_destination.cribl_lake]
 }
@@ -127,6 +125,10 @@ resource "criblio_pack" "syslog_pack" {
 
 # Commit and Deploy Configuration
 data "criblio_config_version" "my_configversion" {
+  //count required for cribl internal testing
+  //count is not required for most customer implementations
+  count = var.onprem == false ? 1 : 0
+
   id         = "syslog-workers"
   depends_on = [criblio_commit.my_commit[0]]
 }
@@ -148,7 +150,7 @@ resource "criblio_deploy" "my_deploy" {
   count = var.onprem == false ? 1 : 0
 
   id      = "syslog-workers"
-  version = data.criblio_config_version.my_configversion.items[0]
+  version = data.criblio_config_version.my_configversion[0].items[0]
 }
 
 # Outputs
