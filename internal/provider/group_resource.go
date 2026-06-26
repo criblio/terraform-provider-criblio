@@ -413,6 +413,10 @@ func groupAPIFromModel(data *GroupResourceModel) groupAPIModel {
 		onPrem := true
 		out.OnPrem = &onPrem
 	}
+	if out.Inherits != nil && strings.TrimSpace(*out.Inherits) != "" {
+		isFleet := true
+		out.IsFleet = &isFleet
+	}
 	return out
 }
 

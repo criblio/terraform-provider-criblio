@@ -47,6 +47,30 @@ func TestGroupAPIFromModelKeepsStreamOnPremValue(t *testing.T) {
 	}
 }
 
+func TestGroupAPIFromModelNormalizesInheritedGroupAsFleetForAPI(t *testing.T) {
+	model := &GroupResourceModel{
+		ID:       types.StringValue("my-edge-subfleet"),
+		Name:     types.StringValue("my-edge-subfleet"),
+		Inherits: types.StringValue("default_fleet"),
+		IsFleet:  types.BoolValue(false),
+		OnPrem:   types.BoolValue(true),
+		Product:  types.StringValue("edge"),
+		Type:     types.StringValue("edge"),
+	}
+
+	apiModel := groupAPIFromModel(model)
+
+	if apiModel.IsFleet == nil {
+		t.Fatal("expected isFleet to be set")
+	}
+	if !*apiModel.IsFleet {
+		t.Fatal("expected inherited group API payload to force isFleet=true")
+	}
+	if model.IsFleet.ValueBool() {
+		t.Fatal("expected Terraform model to preserve configured is_fleet=false")
+	}
+}
+
 func TestPreserveLegacyEdgeOnPremKeepsPriorFalse(t *testing.T) {
 	model := &GroupResourceModel{
 		OnPrem:  types.BoolValue(true),
