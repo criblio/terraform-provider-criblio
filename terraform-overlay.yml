@@ -810,6 +810,24 @@ actions:
     update:
       x-terraform-delete: Destination
 
+  - target: "$.paths./m/{groupId}/system/inputs.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: Source
+  - target: "$.paths./m/{groupId}/system/inputs.get"
+    update:
+      x-terraform-list: Source
+      x-terraform-list-name: Sources
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.get"
+    update:
+      x-terraform-read: Source
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.patch"
+    update:
+      x-terraform-update: Source
+  - target: "$.paths./m/{groupId}/system/inputs/{id}.delete"
+    update:
+      x-terraform-delete: Source
+
   - target: "$.paths./m/{groupId}/system/subscriptions.post"
     update:
       x-terraform-resource: true

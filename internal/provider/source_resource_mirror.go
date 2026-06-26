@@ -1,23 +1,17 @@
-// Mirrors items[0] one-of into top-level input_* fields so state matches config after
-// import/refresh (same idea as pack_resource_sdk RefreshFrom). The GET response only
-// carries items; root input_* were left unset, so Terraform planned perpetual adds.
-
 package provider
 
 import (
 	"context"
 	"reflect"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
-
-	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 )
 
-// priorPlainAuthTokens holds copies of []types.String auth_tokens from state before a GET refresh.
-// The API often omits or redacts tokens; sync copies a shorter list onto root and Terraform then
-// plans spurious adds. We restore the prior slice when the API returned fewer elements.
-type priorPlainAuthTokens struct {
+// priorSourcePlainAuthTokens holds copies of plain string auth_tokens before a GET refresh.
+// Some source APIs omit or truncate these tokens on read; restore keeps prior state when
+// the API returns fewer tokens than Terraform already knows about.
+type priorSourcePlainAuthTokens struct {
 	http          []types.String
 	httpRaw       []types.String
 	firehose      []types.String
@@ -26,173 +20,149 @@ type priorPlainAuthTokens struct {
 	wizWebhook    []types.String
 }
 
-func snapshotPlainAuthTokensPriorRead(r *SourceResourceModel) priorPlainAuthTokens {
-	var p priorPlainAuthTokens
-	if r.InputHTTP != nil {
-		p.http = cloneTypesStringSlice(r.InputHTTP.AuthTokens)
+func snapshotSourcePlainAuthTokensPriorRead(r *SourceModel) priorSourcePlainAuthTokens {
+	var prior priorSourcePlainAuthTokens
+	if r.InputHttp != nil {
+		prior.http = cloneSourceStringValues(sourceStringListValues(r.InputHttp.AuthTokens))
 	}
-	if r.InputHTTPRaw != nil {
-		p.httpRaw = cloneTypesStringSlice(r.InputHTTPRaw.AuthTokens)
+	if r.InputHttpRaw != nil {
+		prior.httpRaw = cloneSourceStringValues(sourceStringListValues(r.InputHttpRaw.AuthTokens))
 	}
 	if r.InputFirehose != nil {
-		p.firehose = cloneTypesStringSlice(r.InputFirehose.AuthTokens)
+		prior.firehose = cloneSourceStringValues(sourceStringListValues(r.InputFirehose.AuthTokens))
 	}
 	if r.InputElastic != nil {
-		p.elastic = cloneTypesStringSlice(r.InputElastic.AuthTokens)
+		prior.elastic = cloneSourceStringValues(sourceStringListValues(r.InputElastic.AuthTokens))
 	}
-	if r.InputCriblLakeHTTP != nil {
-		p.criblLakeHTTP = cloneTypesStringSlice(r.InputCriblLakeHTTP.AuthTokens)
+	if r.InputCriblLakeHttp != nil {
+		prior.criblLakeHTTP = cloneSourceStringValues(sourceStringListValues(r.InputCriblLakeHttp.AuthTokens))
 	}
 	if r.InputWizWebhook != nil {
-		p.wizWebhook = cloneTypesStringSlice(r.InputWizWebhook.AuthTokens)
+		prior.wizWebhook = cloneSourceStringValues(sourceStringListValues(r.InputWizWebhook.AuthTokens))
 	}
-	return p
+	return prior
 }
 
-func restorePlainAuthTokensIfAPIShrank(r *SourceResourceModel, prior priorPlainAuthTokens) {
-	restore := func(dst **tfTypes.InputHTTP, prev []types.String) {
-		if *dst == nil || prev == nil {
+func restoreSourcePlainAuthTokensIfAPIShrank(r *SourceModel, prior priorSourcePlainAuthTokens) {
+	restore := func(dst *types.List, prev []types.String) {
+		if dst == nil || prev == nil {
 			return
 		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
-		}
-	}
-	restoreHTTPRaw := func(dst **tfTypes.InputHTTPRaw, prev []types.String) {
-		if *dst == nil || prev == nil {
-			return
-		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
-		}
-	}
-	restoreFirehose := func(dst **tfTypes.InputFirehose, prev []types.String) {
-		if *dst == nil || prev == nil {
-			return
-		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
-		}
-	}
-	restoreElastic := func(dst **tfTypes.InputElastic, prev []types.String) {
-		if *dst == nil || prev == nil {
-			return
-		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
-		}
-	}
-	restoreCriblLake := func(dst **tfTypes.InputCriblLakeHTTP, prev []types.String) {
-		if *dst == nil || prev == nil {
-			return
-		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
-		}
-	}
-	restoreWiz := func(dst **tfTypes.InputWizWebhook, prev []types.String) {
-		if *dst == nil || prev == nil {
-			return
-		}
-		if len(prev) > len((*dst).AuthTokens) {
-			(*dst).AuthTokens = cloneTypesStringSlice(prev)
+		// Preserve legacy behavior: restore only when len(prior) > len(api_returned).
+		if len(prev) > len(sourceStringListValues(*dst)) {
+			*dst = sourceStringListFromValues(prev)
 		}
 	}
 
-	restore(&r.InputHTTP, prior.http)
-	restoreHTTPRaw(&r.InputHTTPRaw, prior.httpRaw)
-	restoreFirehose(&r.InputFirehose, prior.firehose)
-	restoreElastic(&r.InputElastic, prior.elastic)
-	restoreCriblLake(&r.InputCriblLakeHTTP, prior.criblLakeHTTP)
-	restoreWiz(&r.InputWizWebhook, prior.wizWebhook)
+	if r.InputHttp != nil {
+		restore(&r.InputHttp.AuthTokens, prior.http)
+	}
+	if r.InputHttpRaw != nil {
+		restore(&r.InputHttpRaw.AuthTokens, prior.httpRaw)
+	}
+	if r.InputFirehose != nil {
+		restore(&r.InputFirehose.AuthTokens, prior.firehose)
+	}
+	if r.InputElastic != nil {
+		restore(&r.InputElastic.AuthTokens, prior.elastic)
+	}
+	if r.InputCriblLakeHttp != nil {
+		restore(&r.InputCriblLakeHttp.AuthTokens, prior.criblLakeHTTP)
+	}
+	if r.InputWizWebhook != nil {
+		restore(&r.InputWizWebhook.AuthTokens, prior.wizWebhook)
+	}
 }
 
-func cloneTypesStringSlice(s []types.String) []types.String {
-	if s == nil {
+func sourceStringListValues(list types.List) []types.String {
+	if list.IsNull() || list.IsUnknown() {
 		return nil
 	}
-	out := make([]types.String, len(s))
-	copy(out, s)
+	elements := list.Elements()
+	values := make([]types.String, 0, len(elements))
+	for _, element := range elements {
+		value, ok := element.(types.String)
+		if !ok {
+			return nil
+		}
+		values = append(values, value)
+	}
+	return values
+}
+
+func sourceStringListFromValues(values []types.String) types.List {
+	elements := make([]attr.Value, 0, len(values))
+	for _, value := range values {
+		elements = append(elements, value)
+	}
+	return types.ListValueMust(types.StringType, elements)
+}
+
+func cloneSourceStringValues(values []types.String) []types.String {
+	if values == nil {
+		return nil
+	}
+	out := make([]types.String, len(values))
+	copy(out, values)
 	return out
 }
 
-// sourcePriorStateIsImportSparse is true when state only carries identity (group_id, id) and
-// every other root attribute is null or unknown — e.g. right after terraform import.
-// refreshPlanWithPreserve(..., false) would then wipe API-filled root input_* blocks; callers
-// should pass preserve=true so the first refresh keeps full inputs and matches generated config.
-func sourcePriorStateIsImportSparse(ctx context.Context, st types.Object) bool {
-	tv, err := st.ToTerraformValue(ctx)
-	if err != nil || tv.IsNull() || !tv.IsKnown() || !tv.Type().Is(tftypes.Object{}) {
-		return false
+func sourceRequestModelWithHoistedIdentity(model SourceModel) SourceModel {
+	if model.ID.IsNull() || model.ID.IsUnknown() {
+		return model
 	}
-	var m map[string]tftypes.Value
-	if err := tv.As(&m); err != nil {
-		return false
-	}
-	for k, v := range m {
-		if k == "group_id" || k == "id" {
+	request := model
+	rv := reflect.ValueOf(&request).Elem()
+	for i := 0; i < rv.NumField(); i++ {
+		fieldInfo := rv.Type().Field(i)
+		if !isSourceInputField(fieldInfo.Name) {
 			continue
 		}
-		if v.IsKnown() && !v.IsNull() {
-			return false
+		field := rv.Field(i)
+		if field.Kind() != reflect.Pointer || field.IsNil() {
+			continue
 		}
+		clone := reflect.New(field.Type().Elem())
+		clone.Elem().Set(field.Elem())
+		field.Set(clone)
+		input := field.Elem()
+		idField := input.FieldByName("ID")
+		if !idField.IsValid() || !idField.CanSet() || idField.Type() != reflect.TypeOf(types.String{}) {
+			return request
+		}
+		id := idField.Interface().(types.String)
+		if id.IsNull() || id.IsUnknown() {
+			idField.Set(reflect.ValueOf(model.ID))
+		}
+		return request
 	}
-	return true
+	return request
 }
 
-func (r *SourceResourceModel) syncRootInputFromFirstItem() {
-	if len(r.Items) == 0 {
+// normalizeSourceRootInputEmptyLists converts empty API list values on active source
+// blocks back to null so omitted optional list fields do not drift after refresh.
+func normalizeSourceRootInputEmptyLists(r *SourceModel) {
+	if r == nil {
 		return
 	}
-	u := r.Items[0]
-	uv := reflect.ValueOf(u)
-	ut := uv.Type()
 	rv := reflect.ValueOf(r).Elem()
-
-	for i := 0; i < ut.NumField(); i++ {
-		name := ut.Field(i).Name
-		if name == "InputOpenai" {
+	for i := 0; i < rv.NumField(); i++ {
+		field := rv.Field(i)
+		if field.Kind() != reflect.Pointer || field.IsNil() {
 			continue
 		}
-		src := uv.Field(i)
-		dst := rv.FieldByName(name)
-		if !dst.IsValid() || !dst.CanSet() {
+		if !rv.Type().Field(i).Anonymous && !isSourceInputField(rv.Type().Field(i).Name) {
 			continue
 		}
-		if src.Type().AssignableTo(dst.Type()) {
-			dst.Set(src)
-		}
-	}
-
-	if u.InputOpenai != nil {
-		r.InputOpenai = openai1ToOpenai(u.InputOpenai)
-	} else {
-		r.InputOpenai = nil
-	}
-
-	// Root input_* blocks use Optional list attributes; empty API slices encode as [] on the
-	// shared struct while Terraform treats omitted optional lists as null. Nil out empty
-	// slices on the active root input so plan matches typical HCL (same struct backs items[0]).
-	normalizeRootInputEmptySlices(r)
-}
-
-// normalizeRootInputEmptySlices clears len-0 slices on each non-nil root input_* pointer.
-func normalizeRootInputEmptySlices(r *SourceResourceModel) {
-	rv := reflect.ValueOf(r).Elem()
-	ut := reflect.TypeOf(tfTypes.InputUnion1{})
-	for i := 0; i < ut.NumField(); i++ {
-		name := ut.Field(i).Name
-		dst := rv.FieldByName(name)
-		if !dst.IsValid() || dst.IsNil() || dst.Kind() != reflect.Pointer {
-			continue
-		}
-		normalizeEmptySlicesToNil(dst)
+		normalizeSourceEmptyListsToNull(field)
 	}
 }
 
-// normalizeEmptySlicesToNil sets empty Go slices to nil so optional TF list attrs serialize as null.
-// Recurses into non-empty slices of structs (e.g. input_splunk_hec.auth_tokens[*].allowed_indexes_at_token).
-func normalizeEmptySlicesToNil(v reflect.Value) {
+func isSourceInputField(name string) bool {
+	return len(name) > len("Input") && name[:len("Input")] == "Input"
+}
+
+func normalizeSourceEmptyListsToNull(v reflect.Value) {
 	for v.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return
@@ -202,102 +172,26 @@ func normalizeEmptySlicesToNil(v reflect.Value) {
 	if v.Kind() != reflect.Struct {
 		return
 	}
+	listType := reflect.TypeOf(types.List{})
 	for i := 0; i < v.NumField(); i++ {
-		f := v.Field(i)
-		if !f.CanSet() {
+		field := v.Field(i)
+		if !field.CanSet() {
 			continue
 		}
-		switch f.Kind() {
-		case reflect.Slice:
-			if f.Len() == 0 {
-				f.Set(reflect.Zero(f.Type()))
-				continue
+		if field.Type() == listType {
+			list := field.Interface().(types.List)
+			if !list.IsNull() && !list.IsUnknown() && len(list.Elements()) == 0 {
+				field.Set(reflect.ValueOf(types.ListNull(list.ElementType(context.Background()))))
 			}
-			elemT := f.Type().Elem()
-			switch elemT.Kind() {
-			case reflect.Struct:
-				for j := 0; j < f.Len(); j++ {
-					el := f.Index(j)
-					if el.CanAddr() {
-						normalizeEmptySlicesToNil(el.Addr())
-					}
-				}
-			case reflect.Pointer:
-				if elemT.Elem().Kind() == reflect.Struct {
-					for j := 0; j < f.Len(); j++ {
-						el := f.Index(j)
-						if !el.IsNil() {
-							normalizeEmptySlicesToNil(el)
-						}
-					}
-				}
-			}
+			continue
+		}
+		switch field.Kind() {
 		case reflect.Pointer:
-			if !f.IsNil() {
-				normalizeEmptySlicesToNil(f)
-			}
+			normalizeSourceEmptyListsToNull(field)
 		case reflect.Struct:
-			if f.CanAddr() {
-				normalizeEmptySlicesToNil(f.Addr())
+			if field.CanAddr() {
+				normalizeSourceEmptyListsToNull(field.Addr())
 			}
 		}
-	}
-}
-
-func openai1ToOpenai(p *tfTypes.InputOpenai1) *tfTypes.InputOpenai {
-	if p == nil {
-		return nil
-	}
-	cc := make([]tfTypes.ContentConfig, 0, len(p.ContentConfig))
-	for _, row := range p.ContentConfig {
-		cc = append(cc, inputOpenaiContentConfigToContentConfig(row))
-	}
-	return &tfTypes.InputOpenai{
-		APIKey:               p.APIKey,
-		Connections:          p.Connections,
-		ContentConfig:        cc,
-		Description:          p.Description,
-		Disabled:             p.Disabled,
-		Environment:          p.Environment,
-		ID:                   p.ID,
-		IgnoreGroupJobsLimit: p.IgnoreGroupJobsLimit,
-		KeepAliveTime:        p.KeepAliveTime,
-		MaxMissedKeepAlives:  p.MaxMissedKeepAlives,
-		Metadata:             p.Metadata,
-		OpenaiOrganization:   p.OpenaiOrganization,
-		OpenaiProject:        p.OpenaiProject,
-		Pipeline:             p.Pipeline,
-		Pq:                   p.Pq,
-		PqEnabled:            p.PqEnabled,
-		RequestTimeout:       p.RequestTimeout,
-		RetryRules:           p.RetryRules,
-		SendToRoutes:         p.SendToRoutes,
-		Streamtags:           p.Streamtags,
-		TextSecret:           p.TextSecret,
-		TTL:                  p.TTL,
-		Type:                 p.Type,
-	}
-}
-
-func inputOpenaiContentConfigToContentConfig(in tfTypes.InputOpenaiContentConfig) tfTypes.ContentConfig {
-	return tfTypes.ContentConfig{
-		CronSchedule:                    in.CronSchedule,
-		Disabled:                        in.Disabled,
-		Earliest:                        in.Earliest,
-		EndpointMetadata:                in.EndpointMetadata,
-		JobTimeout:                      in.JobTimeout,
-		Latest:                          in.Latest,
-		LogLevel:                        in.LogLevel,
-		ManageState:                     in.ManageState,
-		MaxPages:                        in.MaxPages,
-		PaginationAttribute:             in.PaginationAttribute,
-		PaginationCurRelationAttribute:  in.PaginationCurRelationAttribute,
-		PaginationLastPageExpr:          in.PaginationLastPageExpr,
-		PaginationNextRelationAttribute: in.PaginationNextRelationAttribute,
-		PaginationType:                  in.PaginationType,
-		RequestParams:                   in.RequestParams,
-		StateMergeExpression:            in.StateMergeExpression,
-		StateTracking:                   in.StateTracking,
-		StateUpdateExpression:           in.StateUpdateExpression,
 	}
 }

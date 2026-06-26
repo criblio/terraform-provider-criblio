@@ -1307,9 +1307,19 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 {{- if .Create.ReadAfterWrite }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	_, err := r.api.Create(ctx, requestModel)
+{{- else }}
 	_, err := r.api.Create(ctx, model)
+{{- end }}
+{{- else }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Create(ctx, requestModel)
 {{- else }}
 	apiModel, err := r.api.Create(ctx, model)
+{{- end }}
 {{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
@@ -1328,6 +1338,9 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if eq .StructName "Source" }}
+	normalizeSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
@@ -1350,7 +1363,14 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
+{{- if eq .StructName "Source" }}
+	priorPlainAuth := snapshotSourcePlainAuthTokensPriorRead(&model)
+{{- end }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, is{{ .StructName }}ImportState(&model))
+{{- if eq .StructName "Source" }}
+	restoreSourcePlainAuthTokensIfAPIShrank(&model, priorPlainAuth)
+	normalizeSourceRootInputEmptyLists(&model)
+{{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
 }
@@ -1364,7 +1384,12 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
+{{- if eq .StructName "Source" }}
+	requestModel := sourceRequestModelWithHoistedIdentity(model)
+	apiModel, err := r.api.Update(ctx, requestModel)
+{{- else }}
 	apiModel, err := r.api.Update(ctx, model)
+{{- end }}
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
@@ -1377,6 +1402,9 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if eq .StructName "Source" }}
+	normalizeSourceRootInputEmptyLists(&model)
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -1520,6 +1548,9 @@ func (r *{{ .StructName }}Resource) ImportState(ctx context.Context, req resourc
 		return
 	}
 	apply{{ .StructName }}APIToState(apiModel, &model, false, false)
+{{- if eq .StructName "Source" }}
+	normalizeSourceRootInputEmptyLists(&model)
+{{- end }}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
@@ -1672,17 +1703,37 @@ func apply{{ .StructName }}APIToState(api *{{ .StructName }}Model, state *{{ .St
 		}
 {{- range .Fields }}
 {{- if eq .ApplyStrategy "stringFromAPIOrPrior" }}
+{{- if eq $.StructName "Source" }}
+{{- if not .Computed }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+{{- end }}
+{{- end }}
 		if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = stringFromAPIOrPrior(api.{{ $variant.GoName }}.{{ .GoName }}.ValueString(), state.{{ $variant.GoName }}.{{ .GoName }})
 		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 		}
+{{- if eq $.StructName "Source" }}
+{{- if not .Computed }}
+		}
+{{- end }}
+{{- end }}
 {{- else }}
+{{- if eq $.StructName "Source" }}
+{{- if not .Computed }}
+		if !preserveInputs || (fillMissingInputs && (state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown())) {
+{{- end }}
+{{- end }}
 		if !api.{{ $variant.GoName }}.{{ .GoName }}.IsNull() && !api.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = api.{{ $variant.GoName }}.{{ .GoName }}
 		} else if state.{{ $variant.GoName }}.{{ .GoName }}.IsNull() || state.{{ $variant.GoName }}.{{ .GoName }}.IsUnknown() {
 			state.{{ $variant.GoName }}.{{ .GoName }} = {{ nullValue . }}
 		}
+{{- if eq $.StructName "Source" }}
+{{- if not .Computed }}
+		}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 	}

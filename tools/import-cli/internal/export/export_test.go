@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
-	ptypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/converter"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/custom"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/discovery"
@@ -176,7 +175,7 @@ func TestAddOneOfBlockFromFirstItem_nestedDiscriminator(t *testing.T) {
 	})
 }
 
-func TestAddOneOfBlockFromFirstItem_inputUnionStruct(t *testing.T) {
+func TestAddOneOfBlockFromFirstItem_generatedSourceInputBlock(t *testing.T) {
 	cfg := &registry.OneOfConfig{
 		ReadOnlyAttr:        "items",
 		DiscriminatorField:  "type",
@@ -185,13 +184,11 @@ func TestAddOneOfBlockFromFirstItem_inputUnionStruct(t *testing.T) {
 		SupportedBlockNames: []string{"input_cribl_http"},
 	}
 	model := &provider.SourceResourceModel{
-		Items: []ptypes.InputUnion1{
-			{InputCriblHTTP: &ptypes.InputCriblHTTP{
-				Type: types.StringValue("cribl_http"),
-				ID:   types.StringValue("in_test"),
-				Host: types.StringValue("0.0.0.0"),
-				Port: types.Float64Value(10080),
-			}},
+		InputCriblHttp: &provider.InputCriblHttpModel{
+			Type: types.StringValue("cribl_http"),
+			ID:   types.StringValue("in_test"),
+			Host: types.StringValue("0.0.0.0"),
+			Port: types.Float64Value(10080),
 		},
 	}
 	attrs := make(map[string]hcl.Value)

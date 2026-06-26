@@ -293,6 +293,19 @@ func applyResourceCompatibility(resource *ResourceDef) {
 			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
 		}
 	}
+	if resource.StructName == "Source" {
+		keepRoot := map[string]bool{
+			"group_id": true,
+			"id":       true,
+		}
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if keepRoot[field.TerraformName] {
+				fields = append(fields, field)
+			}
+		}
+		resource.Fields = fields
+	}
 	if resource.StructName == "Collector" {
 		makeCollectorVariantsOptionalComputed(resource.OneOfVariants)
 	}
