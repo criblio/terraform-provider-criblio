@@ -267,6 +267,22 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		}
 		resource.Fields = fields
 	}
+	if resource.StructName == "NotificationTarget" {
+		fields := resource.Fields[:0]
+		for _, field := range resource.Fields {
+			if field.PathParam && field.TerraformName == "group_id" {
+				continue
+			}
+			if field.TerraformName == "type" {
+				field.Required = false
+				field.Optional = true
+				field.Computed = true
+			}
+			fields = append(fields, field)
+		}
+		resource.Fields = fields
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+	}
 	if resource.StructName == "Destination" || resource.StructName == "PackDestination" {
 		keepRoot := map[string]bool{
 			"environment": true,
@@ -315,6 +331,13 @@ func applyResourceCompatibility(resource *ResourceDef) {
 		makeSearchDatasetHoistedFieldsComputed(resource.Fields)
 		renameSearchDatasetProviderFields(resource.OneOfVariants)
 		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+	}
+	if resource.StructName == "SearchDatasetProvider" {
+		makeSearchDatasetProviderHoistedFieldsComputed(resource.Fields)
+		makeFieldsOptionalComputedFromValues(resource.OneOfVariants)
+		for index := range resource.OneOfVariants {
+			markDestinationSensitiveFields(resource.OneOfVariants[index].Fields)
+		}
 	}
 	if resource.StructName != "MappingRuleset" {
 		return
@@ -370,6 +393,18 @@ func makeSearchDatasetHoistedFieldsComputed(fields []FieldDef) {
 		field := &fields[index]
 		switch field.TerraformName {
 		case "id", "description", "provider_id", "type":
+			field.Required = false
+			field.Optional = false
+			field.Computed = true
+		}
+	}
+}
+
+func makeSearchDatasetProviderHoistedFieldsComputed(fields []FieldDef) {
+	for index := range fields {
+		field := &fields[index]
+		switch field.TerraformName {
+		case "id", "description", "type":
 			field.Required = false
 			field.Optional = false
 			field.Computed = true

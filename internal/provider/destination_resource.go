@@ -76,6 +76,7 @@ func (r *DestinationResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional: false,
 				Computed: true,
 			},
+
 			"output_default": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{

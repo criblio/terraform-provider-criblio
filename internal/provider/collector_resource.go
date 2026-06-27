@@ -89,6 +89,7 @@ func (r *CollectorResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Computed:      true,
 				PlanModifiers: collectorWorkerAffinityPlanModifiers(),
 			},
+
 			"input_collector_splunk": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{

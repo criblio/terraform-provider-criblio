@@ -1795,6 +1795,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 		}
 		return "notificationGroupID(model)"
 	}
+	if resource.StructName == "NotificationTarget" && param.TerraformName == "group_id" {
+		return `"default"`
+	}
 	if param.TerraformName == "pack" {
 		return "resolvePackIDForRestAPI(ctx, a.client, model.GroupID.ValueString(), model.Pack.ValueString())"
 	}

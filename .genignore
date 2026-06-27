@@ -3,8 +3,6 @@ internal/provider/pipeline_resource_sdk.go
 internal/provider/types/pipeline_function_conf.go
 internal/sdk/models/shared/pipelinefunctionconf.go
 internal/sdk/models/shared/genericdataset.go
-internal/provider/searchdatasetprovider_data_source_sdk.go
-internal/provider/searchdatasetprovider_resource_sdk.go
 internal/provider/searchdashboard_resource.go
 internal/provider/searchdashboard_resource_sdk.go
 internal/provider/searchdashboard_data_source.go
@@ -19,6 +17,5 @@ internal/provider/reflect/options.go
 internal/provider/reflect/struct.go
 internal/provider/reflect/into.go
 internal/provider/utils.go
-internal/provider/notificationtarget_resource.go
 internal/provider/mappings_data_source.go
 internal/provider/mappings_data_source_sdk.go

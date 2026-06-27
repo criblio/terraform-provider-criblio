@@ -2,6 +2,18 @@ schema_imports:
   - source: openapi.yml
     schemas:
       - InputCollector
+  - source: openapi.yml
+    on_conflict: keep
+    schemas:
+      - GenericProvider
+  - source: openapi.yml
+    on_conflict: keep
+    schemas:
+      - WebhookTarget
+      - PagerDutyTarget
+      - SlackTarget
+      - SnsTarget
+      - SmtpTarget
 
 actions:
   - target: "$.paths./m/{groupId}/lib/jobs.post"
@@ -2407,6 +2419,176 @@ actions:
   - target: "$.components.schemas.DatasetSnowflake"
     update:
       x-terraform-name: snowflake_dataset
+
+  - target: "$.paths./m/{groupId}/search/dataset-providers.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: SearchDatasetProvider
+  - target: "$.paths./m/{groupId}/search/dataset-providers.post.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.paths./m/{groupId}/search/dataset-providers.post.responses.200.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.get"
+    update:
+      x-terraform-read: SearchDatasetProvider
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.get.responses.200.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.patch"
+    update:
+      x-terraform-update: SearchDatasetProvider
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.patch.requestBody.content.application/json.schema"
+    update:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.patch.responses.200.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.delete"
+    update:
+      x-terraform-delete: SearchDatasetProvider
+  - target: "$.paths./m/{groupId}/search/dataset-providers/{id}.delete.responses.200.content.application/json.schema"
+    replace:
+      $ref: "#/components/schemas/GenericProvider"
+  - target: "$.components.schemas.ApiHttpProvider"
+    update:
+      x-terraform-name: apihttp
+  - target: "$.components.schemas.ApiAwsProvider"
+    update:
+      x-terraform-name: api_aws
+  - target: "$.components.schemas.ApiAzureProvider"
+    update:
+      x-terraform-name: api_azure
+  - target: "$.components.schemas.ApiGcpProvider"
+    update:
+      x-terraform-name: api_gcp
+  - target: "$.components.schemas.ApiGoogleWorkspaceProvider"
+    update:
+      x-terraform-name: api_google_workspace
+  - target: "$.components.schemas.ApiMsGraphProvider"
+    update:
+      x-terraform-name: api_msgraph
+  - target: "$.components.schemas.ApiOktaProvider"
+    update:
+      x-terraform-name: api_okta
+  - target: "$.components.schemas.ApiTailscaleProvider"
+    update:
+      x-terraform-name: api_tailscale
+  - target: "$.components.schemas.ApiZoomProvider"
+    update:
+      x-terraform-name: api_zoom
+  - target: "$.components.schemas.ApiAzureDataExplorerProvider"
+    update:
+      x-terraform-name: api_azure_data_explorer
+  - target: "$.components.schemas.SnowflakeProvider"
+    update:
+      x-terraform-name: snowflake
+  - target: "$.components.schemas.ApiOpenSearchProvider"
+    update:
+      x-terraform-name: api_opensearch
+  - target: "$.components.schemas.ApiElasticSearchProvider"
+    update:
+      x-terraform-name: api_elasticsearch
+  - target: "$.components.schemas.ClickHouseProvider"
+    update:
+      x-terraform-name: clickhouse
+  - target: "$.components.schemas.PrometheusProvider"
+    update:
+      x-terraform-name: prometheus
+  - target: "$.components.schemas.AwsSecurityLakeProvider"
+    update:
+      x-terraform-name: amazon_security_lake
+  - target: "$.components.schemas.S3Provider"
+    update:
+      x-terraform-name: s3
+  - target: "$.components.schemas.CriblLeaderProvider"
+    update:
+      x-terraform-name: cribl_leader
+  - target: "$.components.schemas.CriblSearchProvider"
+    update:
+      x-terraform-name: cribl_search
+  - target: "$.components.schemas.MetaProvider"
+    update:
+      x-terraform-name: cribl_meta
+  - target: "$.components.schemas.EdgeProvider"
+    update:
+      x-terraform-name: cribl_edge
+  - target: "$.components.schemas.AzureBlobProvider"
+    update:
+      x-terraform-name: azure_blob
+  - target: "$.components.schemas.GcsProvider"
+    update:
+      x-terraform-name: gcs
+  - target: "$.components.schemas.GenericProvider.properties.description"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.Provider.properties.description"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+
+  - target: "$.paths./notification-targets.post"
+    update:
+      x-terraform-resource: true
+      x-terraform-resource-name: NotificationTarget
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The id of this notification target instance.
+  - target: "$.paths./notification-targets/{id}.get"
+    update:
+      x-terraform-read: NotificationTarget
+  - target: "$.paths./notification-targets/{id}.patch"
+    update:
+      x-terraform-update: NotificationTarget
+  - target: "$.paths./notification-targets/{id}.delete"
+    update:
+      x-terraform-delete: NotificationTarget
+  - target: "$.components.schemas.NotificationTarget"
+    replace:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: The id of this notification target instance.
+          pattern: ^[a-zA-Z0-9_-]+$
+        type:
+          type: string
+          description: Notification target type, hoisted from the active target block.
+          x-terraform-optional-computed: true
+      oneOf:
+        - $ref: "#/components/schemas/WebhookTarget"
+        - $ref: "#/components/schemas/PagerDutyTarget"
+        - $ref: "#/components/schemas/SlackTarget"
+        - $ref: "#/components/schemas/SnsTarget"
+        - $ref: "#/components/schemas/SmtpTarget"
+  - target: "$.components.schemas.WebhookTarget.properties.systemFields"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.PagerDutyTarget.properties.systemFields"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.SlackTarget.properties.systemFields"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.SnsTarget.properties.systemFields"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
+  - target: "$.components.schemas.SmtpTarget.properties.systemFields"
+    update:
+      x-terraform-suppress-diff: explicit
+      x-terraform-prefer-state: true
 
   - target: "$.paths./m/{groupId}/search/local_search/dataset-rulesets/{id}.patch"
     update:

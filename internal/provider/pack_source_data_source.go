@@ -47,11 +47,11 @@ func (d *PackSourceDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 				Required:    true,
 				Description: `The <code>id</code> of the Pack.`,
 			},
+
 			"items": schema.DynamicAttribute{
 				Computed:    true,
-				Description: `Legacy computed mirror of the API oneOf source payload. Use type-specific input_* blocks for new references.`,
+				Description: "Legacy computed mirror of the API oneOf source payload. Use type-specific input_* blocks for new references.",
 			},
-
 			"input_collection": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{

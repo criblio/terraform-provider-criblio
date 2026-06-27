@@ -69,6 +69,7 @@ func (r *SearchDatasetResource) Schema(_ context.Context, _ resource.SchemaReque
 				Computed:    true,
 				Description: `Dataset provider type.`,
 			},
+
 			"aws_security_lake_dataset": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{

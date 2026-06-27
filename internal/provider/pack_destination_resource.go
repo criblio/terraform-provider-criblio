@@ -85,6 +85,7 @@ func (r *PackDestinationResource) Schema(_ context.Context, _ resource.SchemaReq
 				Optional: false,
 				Computed: true,
 			},
+
 			"output_default": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
