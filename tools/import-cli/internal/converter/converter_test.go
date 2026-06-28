@@ -106,6 +106,40 @@ func TestResourceModelTypes_hasEntriesForSupportedTypes(t *testing.T) {
 	assert.Contains(t, types, "RoutesResourceModel")
 }
 
+func TestGeneratedModelTypes_hasOneOfMigrationEntries(t *testing.T) {
+	types := GeneratedModelTypes()
+	require.NotEmpty(t, types)
+	assert.Contains(t, types, "NotificationTargetResourceModel")
+	assert.Contains(t, types, "SearchDatasetProviderResourceModel")
+}
+
+func TestConvertGeneratedNotificationTargetPopulatesOneOfBlock(t *testing.T) {
+	e := registry.Entry{
+		TypeName:      "criblio_notification_target",
+		ModelTypeName: "NotificationTargetResourceModel",
+		GetMethod:     "GetNotificationTargetByID",
+	}
+	responseBody := struct {
+		Items []map[string]any
+	}{
+		Items: []map[string]any{
+			{
+				"id":   "slack-1",
+				"type": "slack",
+			},
+		},
+	}
+
+	model, err := convertGeneratedModelFromResponseBody(e, reflect.TypeOf((*provider.NotificationTargetResourceModel)(nil)).Elem(), responseBody)
+	require.NoError(t, err)
+
+	target, ok := model.(*provider.NotificationTargetResourceModel)
+	require.True(t, ok)
+	require.NotNil(t, target.SlackTarget)
+	assert.Equal(t, "slack-1", target.SlackTarget.ID.ValueString())
+	assert.True(t, target.SlackTarget.URL.IsNull())
+}
+
 func TestObjectListValue(t *testing.T) {
 	value, err := objectListValue(json.RawMessage(`[{"name":"val","type":"number"}]`))
 	require.NoError(t, err)

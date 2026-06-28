@@ -1335,12 +1335,24 @@ func (r *SearchDatasetProviderResource) Update(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	plannedDescription := model.Description
+	plannedID := model.ID
+	plannedType := model.Type
 	apiModel, err := r.api.Update(ctx, model)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		return
 	}
 	applySearchDatasetProviderAPIToState(apiModel, &model, true, false)
+	if !plannedDescription.IsNull() && !plannedDescription.IsUnknown() {
+		model.Description = plannedDescription
+	}
+	if !plannedID.IsNull() && !plannedID.IsUnknown() {
+		model.ID = plannedID
+	}
+	if !plannedType.IsNull() && !plannedType.IsUnknown() {
+		model.Type = plannedType
+	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 }
 

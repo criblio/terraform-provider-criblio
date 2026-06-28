@@ -821,6 +821,11 @@ func (m *{{ .StructName }}Model) UnmarshalJSON(data []byte) error {
 {{- end }}
 {{- end }}
 	}
+{{- if noDiscriminatorVariants . }}
+	if matched, err := m.unmarshal{{ .StructName }}OneOfByShape(raw); matched || err != nil {
+		return err
+	}
+{{- end }}
 {{- end }}
 	return nil
 }
@@ -830,6 +835,14 @@ type {{ .ModelName }} struct {
 {{- range .Fields }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\" json:\"{{ jsonName . }}\"`" + `
 {{- end }}
+}
+
+func {{ .ModelName }}AttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+{{- range .Fields }}
+		"{{ .TerraformName }}": {{ attrType . }},
+{{- end }}
+	}
 }
 
 func (m {{ .ModelName }}) terraformPayload() (map[string]any, error) {
@@ -887,6 +900,38 @@ func {{ .StructName }}OneOfDiscriminator(input map[string]any) string {
 	}
 	return ""
 }
+{{- if noDiscriminatorVariants . }}
+
+func (m *{{ .StructName }}Model) unmarshal{{ .StructName }}OneOfByShape(raw map[string]any) (bool, error) {
+{{- range noDiscriminatorVariants . }}
+	if {{ $.StructName }}OneOfShapeMatches(raw, {{ goStringSliceLiteral (variantRequiredAPINames .) }}, {{ goStringSliceLiteral (variantAPINames .) }}) {
+		m.{{ .GoName }} = &{{ .ModelName }}{}
+		if err := m.{{ .GoName }}.unmarshalPayload(raw); err != nil {
+			return true, err
+		}
+		return true, nil
+	}
+{{- end }}
+	return false, nil
+}
+
+func {{ .StructName }}OneOfShapeMatches(raw map[string]any, required []string, known []string) bool {
+	for _, name := range required {
+		if _, ok := raw[name]; !ok {
+			return false
+		}
+	}
+	if len(required) > 0 {
+		return true
+	}
+	for _, name := range known {
+		if _, ok := raw[name]; ok {
+			return true
+		}
+	}
+	return false
+}
+{{- end }}
 {{- end }}
 `
 
@@ -1528,6 +1573,14 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "SearchDatasetProvider") }}
+	plannedDescription := model.Description
+	plannedID := model.ID
+	plannedType := model.Type
+{{- if eq .StructName "SearchDataset" }}
+	plannedProviderID := model.ProviderID
+{{- end }}
+{{- end }}
 {{- if .Action }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- else }}
@@ -1552,6 +1605,22 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 {{- end }}
 {{- else }}
 	apply{{ .StructName }}APIToState(apiModel, &model, true, false)
+{{- end }}
+{{- if or (eq .StructName "SearchDataset") (eq .StructName "SearchDatasetProvider") }}
+	if !plannedDescription.IsNull() && !plannedDescription.IsUnknown() {
+		model.Description = plannedDescription
+	}
+	if !plannedID.IsNull() && !plannedID.IsUnknown() {
+		model.ID = plannedID
+	}
+	if !plannedType.IsNull() && !plannedType.IsUnknown() {
+		model.Type = plannedType
+	}
+{{- if eq .StructName "SearchDataset" }}
+	if !plannedProviderID.IsNull() && !plannedProviderID.IsUnknown() {
+		model.ProviderID = plannedProviderID
+	}
+{{- end }}
 {{- end }}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &model)...)
 {{- end }}
@@ -2065,7 +2134,7 @@ type {{ .ListStructName }}DataSource struct {
 	client *restclient.Client
 }
 
-type {{ .ListStructName }}DataSourceModel struct {
+type {{ .ListStructName }}ListDataSourceModel struct {
 {{- range listConfigFields . }}
 	{{ .GoName }} {{ goType . }} ` + "`tfsdk:\"{{ .TerraformName }}\"`" + `
 {{- end }}
@@ -2089,7 +2158,11 @@ func (d *{{ .ListStructName }}DataSource) Schema(_ context.Context, _ datasource
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+{{- if .OneOfVariants }}
+{{ oneOfDataSourceAttributes .OneOfVariants "\t\t\t\t\t\t\t" }}
+{{- else }}
 {{ listDataSourceItemAttributes (listItemFields .) "\t\t\t\t\t\t\t" }}
+{{- end }}
 					},
 				},
 			},
@@ -2113,7 +2186,7 @@ func (d *{{ .ListStructName }}DataSource) Configure(_ context.Context, req datas
 }
 
 func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model {{ .ListStructName }}DataSourceModel
+	var model {{ .ListStructName }}ListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -2136,11 +2209,24 @@ func (d *{{ .ListStructName }}DataSource) Read(ctx context.Context, req datasour
 
 func {{ .ListStructName }}ItemAttrTypes() map[string]attr.Type {
 	return map[string]attr.Type{
-{{- range listItemFields . }}
-		"{{ .TerraformName }}": {{ attrType . }},
+{{- range listItemAttrTypes . }}
+		{{ . }},
 {{- end }}
 	}
 }
+{{- range .OneOfVariants }}
+
+func {{ $.ListStructName }}{{ .GoName }}ObjectValue(item *{{ .ModelName }}) attr.Value {
+	if item == nil {
+		return types.ObjectNull({{ .ModelName }}AttrTypes())
+	}
+	return types.ObjectValueMust({{ .ModelName }}AttrTypes(), map[string]attr.Value{
+{{- range .Fields }}
+		"{{ .TerraformName }}": item.{{ .GoName }},
+{{- end }}
+	})
+}
+{{- end }}
 `
 
 const docTemplate = `---

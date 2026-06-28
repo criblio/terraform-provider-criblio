@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/auth"
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
 )
 
 func TestProviderRestCredentialsUsesDefaultProfile(t *testing.T) {
@@ -18,7 +17,7 @@ workspace = profile-workspace
 cloud_domain = cribl-playground.cloud
 `)
 
-	credentials := providerRestCredentials(&shared.SchemeClientOauth{}, map[string]string{
+	credentials := providerRestCredentials(&providerOAuthConfig{}, map[string]string{
 		"organizationId": "ian",
 		"workspaceId":    "main",
 		"cloudDomain":    "cribl.cloud",
@@ -50,7 +49,7 @@ workspace = profile-workspace
 cloud_domain = cribl-playground.cloud
 `)
 
-	credentials := providerRestCredentials(&shared.SchemeClientOauth{
+	credentials := providerRestCredentials(&providerOAuthConfig{
 		ClientID:     "provider-client",
 		ClientSecret: "provider-secret",
 	}, map[string]string{
@@ -89,7 +88,7 @@ workspace = profile-workspace
 cloud_domain = cribl-playground.cloud
 `)
 
-	credentials := providerRestCredentials(&shared.SchemeClientOauth{}, map[string]string{
+	credentials := providerRestCredentials(&providerOAuthConfig{}, map[string]string{
 		"organizationId": "ian",
 		"workspaceId":    "main",
 		"cloudDomain":    "cribl.cloud",

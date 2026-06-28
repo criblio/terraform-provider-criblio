@@ -453,6 +453,10 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: certificate
+  - target: "$.paths./m/{groupId}/system/certificates.get"
+    update:
+      x-terraform-list: certificate
+      x-terraform-list-name: certificates
   - target: "$.paths./m/{groupId}/system/certificates/{id}.get"
     update:
       x-terraform-read: certificate
@@ -626,6 +630,10 @@ actions:
           schema:
             type: string
           description: The id of this key metadata entity instance.
+  - target: "$.paths./m/{groupId}/system/keys.get"
+    update:
+      x-terraform-list: Key
+      x-terraform-list-name: Keys
   - target: "$.paths./m/{groupId}/system/keys/{id}.get"
     update:
       x-terraform-read: Key
@@ -785,6 +793,8 @@ actions:
   - target: "$.paths./m/{groupId}/system/settings/conf.get"
     update:
       x-terraform-read: GroupSystemSettings
+      x-terraform-list: GroupSystemSettings
+      x-terraform-list-name: GroupSystemSettings
   - target: "$.paths./m/{groupId}/system/settings/conf.patch"
     update:
       x-terraform-update: GroupSystemSettings
@@ -803,6 +813,26 @@ actions:
           required:
             - disableSNIRouting
         - $ref: "#/components/schemas/EmptyObject"
+
+  - target: "$.paths./m/{groupId}/system/instance.get"
+    update:
+      x-terraform-list: InstanceSettings
+      x-terraform-list-name: InstanceSettings
+  - target: "$.components.schemas.InstanceSettings"
+    update:
+      x-terraform-name: instance_settings_schema1
+  - target: "$.components.schemas.BootstrapSettings"
+    update:
+      x-terraform-name: instance_settings_schema2
+  - target: "$.components.schemas.CloudWorkspaceSchema.properties.disableSNIRouting"
+    update:
+      x-terraform-name: disable_sni_routing
+  - target: "$.components.schemas.MasterSchema.properties.disableSNIRouting"
+    update:
+      x-terraform-name: disable_sni_routing
+  - target: "$.components.schemas.FailoverConfigs.properties.missedHBLimit"
+    update:
+      x-terraform-name: missed_hb_limit
 
   - target: "$.paths./m/{groupId}/system/outputs.post"
     update:
@@ -1377,10 +1407,19 @@ actions:
     update:
       x-terraform-suppress-diff: explicit
 
+  - target: "$.paths./m/{groupId}/system/info.get"
+    update:
+      x-terraform-list: SystemInfo
+      x-terraform-list-name: SystemInfo
+
   - target: "$.paths./admin/products/{product}/mappings/{id}.patch"
     update:
       x-terraform-resource: true
       x-terraform-resource-name: MappingRuleset
+  - target: "$.paths./admin/products/{product}/mappings.get"
+    update:
+      x-terraform-list: MappingRuleset
+      x-terraform-list-name: Mappings
   - target: "$.paths./admin/products/{product}/mappings/{id}.get"
     update:
       x-terraform-read: MappingRuleset
@@ -1841,6 +1880,10 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: SearchEngine
+  - target: "$.paths./m/{groupId}/search/local_search/engines.get"
+    update:
+      x-terraform-list: SearchEngine
+      x-terraform-list-name: SearchEngines
   - target: "$.paths./m/{groupId}/search/local_search/engines/{id}.get"
     update:
       x-terraform-read: SearchEngine
@@ -2424,6 +2467,10 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: SearchDatasetProvider
+  - target: "$.paths./m/{groupId}/search/dataset-providers.get"
+    update:
+      x-terraform-list: SearchDatasetProvider
+      x-terraform-list-name: SearchDatasetProviders
   - target: "$.paths./m/{groupId}/search/dataset-providers.post.requestBody.content.application/json.schema"
     update:
       $ref: "#/components/schemas/GenericProvider"
@@ -2540,6 +2587,10 @@ actions:
           schema:
             type: string
           description: The id of this notification target instance.
+  - target: "$.paths./notification-targets.get"
+    update:
+      x-terraform-list: NotificationTarget
+      x-terraform-list-name: NotificationTargets
   - target: "$.paths./notification-targets/{id}.get"
     update:
       x-terraform-read: NotificationTarget
@@ -2617,6 +2668,10 @@ actions:
       x-terraform-update: SearchDatatypeRuleset
       x-terraform-delete: SearchDatatypeRuleset
       x-terraform-delete-hook: deleteSearchDatatypeRuleset
+  - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets.get"
+    update:
+      x-terraform-list: SearchDatatypeRuleset
+      x-terraform-list-name: SearchDatatypeRulesets
   - target: "$.paths./m/{groupId}/search/local_search/datatype-rulesets/{id}.get"
     update:
       x-terraform-read: SearchDatatypeRuleset
@@ -2727,6 +2782,10 @@ actions:
     update:
       x-terraform-resource: true
       x-terraform-resource-name: SearchSource
+  - target: "$.paths./m/{groupId}/search/local_search/sources.get"
+    update:
+      x-terraform-list: SearchSource
+      x-terraform-list-name: SearchSources
   - target: "$.paths./m/{groupId}/search/local_search/sources/{id}.get"
     update:
       x-terraform-read: SearchSource

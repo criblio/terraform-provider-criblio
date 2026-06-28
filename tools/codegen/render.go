@@ -87,15 +87,19 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	prefix := "internal/provider/" + resource.FileStem
 	files := []parser.OutputFile{
 		{Path: prefix + "_types.go", Kind: "types"},
-		{Path: prefix + "_client.go", Kind: "client"},
-		{Path: prefix + "_resource.go", Kind: "resource"},
-		{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
 	}
-	if shouldGenerateAcceptanceTest(resource) {
-		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
-	}
-	if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
-		files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+	if resource.Create.Path != "" {
+		files = append(files,
+			parser.OutputFile{Path: prefix + "_client.go", Kind: "client"},
+			parser.OutputFile{Path: prefix + "_resource.go", Kind: "resource"},
+			parser.OutputFile{Path: "docs/resources/" + resource.FileStem + ".md", Kind: "doc"},
+		)
+		if shouldGenerateAcceptanceTest(resource) {
+			files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_test.go", Kind: "test"})
+		}
+		if resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead {
+			files = slices.Insert(files, 3, parser.OutputFile{Path: prefix + "_data_source.go", Kind: "data_source"})
+		}
 	}
 	if resource.List.Path != "" {
 		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
@@ -173,7 +177,12 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		"listConfigFields":               listConfigFields,
 		"listItemFields":                 listItemFields,
 		"listTypeNameSuffix":             listTypeNameSuffix,
+		"listItemAttrTypes":              listItemAttrTypes,
 		"listItemObjectValue":            listItemObjectValue,
+		"noDiscriminatorVariants":        noDiscriminatorVariants,
+		"variantAPINames":                variantAPINames,
+		"variantRequiredAPINames":        variantRequiredAPINames,
+		"goStringSliceLiteral":           goStringSliceLiteral,
 		"listElementAttrType":            listElementAttrType,
 		"emptyJSONValue":                 emptyJSONValue,
 		"goValueLiteral":                 goValueLiteral,
@@ -1021,7 +1030,10 @@ func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 func listItemFields(resource parser.ResourceDef) []parser.FieldDef {
 	var fields []parser.FieldDef
 	for _, field := range resource.Fields {
-		if field.QueryParam || field.APIName == "groupId" || field.APIName == "organizationId" {
+		if field.QueryParam || field.APIName == "organizationId" || field.APIName == "product" {
+			continue
+		}
+		if field.APIName == "groupId" && resource.StructName != "Key" {
 			continue
 		}
 		fields = append(fields, field)
@@ -1035,8 +1047,61 @@ func listItemObjectValue(resource parser.ResourceDef) string {
 	for _, field := range listItemFields(resource) {
 		fmt.Fprintf(&output, "%q: item.%s, ", field.TerraformName, field.GoName)
 	}
+	for _, variant := range resource.OneOfVariants {
+		fmt.Fprintf(&output, "%q: %s%sObjectValue(item.%s), ", variant.TerraformName, resource.ListStructName, variant.GoName, variant.GoName)
+	}
 	output.WriteString("})")
 	return output.String()
+}
+
+func listItemAttrTypes(resource parser.ResourceDef) []string {
+	var lines []string
+	for _, field := range listItemFields(resource) {
+		lines = append(lines, fmt.Sprintf("%q: %s", field.TerraformName, attrType(field)))
+	}
+	for _, variant := range resource.OneOfVariants {
+		lines = append(lines, fmt.Sprintf("%q: types.ObjectType{AttrTypes: %sAttrTypes()}", variant.TerraformName, variant.ModelName))
+	}
+	return lines
+}
+
+func noDiscriminatorVariants(resource parser.ResourceDef) []parser.OneOfVariantDef {
+	var variants []parser.OneOfVariantDef
+	for _, variant := range resource.OneOfVariants {
+		if variant.DiscriminatorValue == "" {
+			variants = append(variants, variant)
+		}
+	}
+	return variants
+}
+
+func variantRequiredAPINames(variant parser.OneOfVariantDef) []string {
+	var names []string
+	for _, field := range variant.Fields {
+		if field.Required {
+			names = append(names, field.APIName)
+		}
+	}
+	return names
+}
+
+func variantAPINames(variant parser.OneOfVariantDef) []string {
+	names := make([]string, 0, len(variant.Fields))
+	for _, field := range variant.Fields {
+		names = append(names, field.APIName)
+	}
+	return names
+}
+
+func goStringSliceLiteral(values []string) string {
+	if len(values) == 0 {
+		return "nil"
+	}
+	quoted := make([]string, 0, len(values))
+	for _, value := range values {
+		quoted = append(quoted, fmt.Sprintf("%q", value))
+	}
+	return "[]string{" + strings.Join(quoted, ", ") + "}"
 }
 
 func needsPlanModifier(resource parser.ResourceDef) bool {
@@ -1786,6 +1851,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return `"default_search"`
 	}
+	if (resource.StructName == "InstanceSettings" || resource.StructName == "SystemInfo") && param.TerraformName == "group_id" {
+		return `"default"`
+	}
 	if resource.StructName == "SearchDataset" && param.TerraformName == "id" {
 		return "searchDatasetID(model)"
 	}
@@ -1810,6 +1878,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 func fixedPathParamValue(resource parser.ResourceDef, param parser.FieldDef) string {
 	if strings.HasPrefix(resource.TypeName, "criblio_search_") && param.TerraformName == "group_id" {
 		return "default_search"
+	}
+	if (resource.StructName == "InstanceSettings" || resource.StructName == "SystemInfo") && param.TerraformName == "group_id" {
+		return "default"
 	}
 	return ""
 }

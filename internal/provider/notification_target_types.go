@@ -406,6 +406,21 @@ type WebhookTargetModel struct {
 	Password     types.String `tfsdk:"password" json:"password,omitempty"`
 }
 
+func WebhookTargetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"url":           types.StringType,
+		"format":        types.StringType,
+		"method":        types.StringType,
+		"auth_type":     types.StringType,
+		"token":         types.StringType,
+		"username":      types.StringType,
+		"password":      types.StringType,
+	}
+}
+
 func (m WebhookTargetModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -586,6 +601,19 @@ type PagerDutyTargetModel struct {
 	Severity     types.String `tfsdk:"severity" json:"severity,omitempty"`
 }
 
+func PagerDutyTargetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"routing_key":   types.StringType,
+		"group":         types.StringType,
+		"class":         types.StringType,
+		"component":     types.StringType,
+		"severity":      types.StringType,
+	}
+}
+
 func (m PagerDutyTargetModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -730,6 +758,15 @@ type SlackTargetModel struct {
 	URL          types.String `tfsdk:"url" json:"url,omitempty"`
 }
 
+func SlackTargetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"system_fields": types.ListType{ElemType: types.StringType},
+		"url":           types.StringType,
+	}
+}
+
 func (m SlackTargetModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -820,6 +857,27 @@ type SnsTargetModel struct {
 	TopicArn                types.String `tfsdk:"topic_arn" json:"topicArn,omitempty"`
 	TopicType               types.String `tfsdk:"topic_type" json:"topicType,omitempty"`
 	MessageGroupID          types.String `tfsdk:"message_group_id" json:"messageGroupId,omitempty"`
+}
+
+func SnsTargetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"system_fields":             types.ListType{ElemType: types.StringType},
+		"aws_authentication_method": types.StringType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret_key":            types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"allowlist":                 types.ListType{ElemType: types.StringType},
+		"destination_type":          types.StringType,
+		"phone_number":              types.StringType,
+		"topic_arn":                 types.StringType,
+		"topic_type":                types.StringType,
+		"message_group_id":          types.StringType,
+	}
 }
 
 func (m SnsTargetModel) terraformPayload() (map[string]any, error) {
@@ -1098,6 +1156,21 @@ type SmtpTargetModel struct {
 	Password         types.String `tfsdk:"password" json:"password,omitempty"`
 	EncryptionOption types.String `tfsdk:"encryption_option" json:"encryptionOption,omitempty"`
 	TLS              types.Object `tfsdk:"tls" json:"tls,omitempty"`
+}
+
+func SmtpTargetModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                types.StringType,
+		"type":              types.StringType,
+		"system_fields":     types.ListType{ElemType: types.StringType},
+		"host":              types.StringType,
+		"port":              types.Int64Type,
+		"from":              types.StringType,
+		"username":          types.StringType,
+		"password":          types.StringType,
+		"encryption_option": types.StringType,
+		"tls":               types.ObjectType{AttrTypes: SmtpTargetTLSAttrTypes()},
+	}
 }
 
 func (m SmtpTargetModel) terraformPayload() (map[string]any, error) {

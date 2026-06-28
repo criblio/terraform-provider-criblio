@@ -2840,6 +2840,23 @@ type DatasetAmazonSecurityLakeModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAmazonSecurityLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetAmazonSecurityLakeCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetAmazonSecurityLakeMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAmazonSecurityLakeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -3056,6 +3073,25 @@ type DatasetAPIAwsModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIAwsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"regions":                 types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiAwsCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiAwsMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIAwsModel) terraformPayload() (map[string]any, error) {
@@ -3306,6 +3342,25 @@ type DatasetAPIAzureModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIAzureModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"subscription_ids":        types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiAzureCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiAzureMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIAzureModel) terraformPayload() (map[string]any, error) {
@@ -3560,6 +3615,29 @@ type DatasetAPIAzureDataExplorerModel struct {
 	SearchVersion          types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                   types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName               types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIAzureDataExplorerModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                     types.StringType,
+		"cluster":                  types.StringType,
+		"database":                 types.StringType,
+		"location":                 types.StringType,
+		"table":                    types.StringType,
+		"timestamp_field":          types.StringType,
+		"timestamp_field_contents": types.StringType,
+		"breaker_rulesets":         types.ListType{ElemType: types.StringType},
+		"cache_connection_info":    types.ObjectType{AttrTypes: DatasetApiAzureDataExplorerCacheConnectionInfoAttrTypes()},
+		"description":              types.StringType,
+		"exclude_internal_fields":  types.BoolType,
+		"filter":                   types.StringType,
+		"id":                       types.StringType,
+		"metadata":                 types.ObjectType{AttrTypes: DatasetApiAzureDataExplorerMetadataAttrTypes()},
+		"provider_id":              types.StringType,
+		"search_version":           types.StringType,
+		"tags":                     types.StringType,
+		"view_name":                types.StringType,
+	}
 }
 
 func (m DatasetAPIAzureDataExplorerModel) terraformPayload() (map[string]any, error) {
@@ -3876,6 +3954,25 @@ type DatasetAPIElasticsearchModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAPIElasticsearchModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"index":                   types.StringType,
+		"timestamp_field":         types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiElasticsearchCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiElasticsearchMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAPIElasticsearchModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -4125,6 +4222,24 @@ type DatasetAPIGcpModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAPIGcpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"endpoint_configs":        types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetApiGcpEndpointConfigsAttrTypes()}},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiGcpCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiGcpMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAPIGcpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -4356,6 +4471,24 @@ type DatasetAPIGoogleWorkspaceModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIGoogleWorkspaceModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiGoogleWorkspaceCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiGoogleWorkspaceMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIGoogleWorkspaceModel) terraformPayload() (map[string]any, error) {
@@ -4591,6 +4724,24 @@ type DatasetAPIHttpModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAPIHttpModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiHttpCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiHttpMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAPIHttpModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -4822,6 +4973,24 @@ type DatasetAPIMsgraphModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIMsgraphModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiMsgraphCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiMsgraphMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIMsgraphModel) terraformPayload() (map[string]any, error) {
@@ -5057,6 +5226,24 @@ type DatasetAPIOktaModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAPIOktaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiOktaCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiOktaMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAPIOktaModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -5289,6 +5476,25 @@ type DatasetAPIOpensearchModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIOpensearchModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"index":                   types.StringType,
+		"timestamp_field":         types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiOpensearchCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiOpensearchMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIOpensearchModel) terraformPayload() (map[string]any, error) {
@@ -5540,6 +5746,24 @@ type DatasetAPITailscaleModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAPITailscaleModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiTailscaleCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiTailscaleMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAPITailscaleModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -5771,6 +5995,24 @@ type DatasetAPIZoomModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetAPIZoomModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"enabled_endpoints":       types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetApiZoomCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetApiZoomMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetAPIZoomModel) terraformPayload() (map[string]any, error) {
@@ -6005,6 +6247,23 @@ type DatasetAzureBlobModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetAzureBlobModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetAzureBlobCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetAzureBlobMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetAzureBlobModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -6222,6 +6481,26 @@ type DatasetClickhouseModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetClickhouseModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"database":                types.StringType,
+		"table":                   types.StringType,
+		"timestamp_field":         types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetClickhouseCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetClickhouseMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetClickhouseModel) terraformPayload() (map[string]any, error) {
@@ -6491,6 +6770,26 @@ type DatasetCriblEdgeModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetCriblEdgeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"filter":                  types.StringType,
+		"fleets":                  types.ListType{ElemType: types.StringType},
+		"partitioning_scheme":     types.StringType,
+		"path":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblEdgeCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblEdgeMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetCriblEdgeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -6755,6 +7054,23 @@ type DatasetCriblLakeModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetCriblLakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblLakeCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLakeMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetCriblLakeModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -6971,6 +7287,25 @@ type DatasetCriblLeaderModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetCriblLeaderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"extra_paths":             types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetCriblLeaderExtraPathsAttrTypes()}},
+		"filter":                  types.StringType,
+		"path":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblLeaderCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLeaderMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetCriblLeaderModel) terraformPayload() (map[string]any, error) {
@@ -7221,6 +7556,23 @@ type DatasetCriblLocalModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetCriblLocalModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblLocalCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblLocalMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetCriblLocalModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -7436,6 +7788,24 @@ type DatasetCriblMetaModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetCriblMetaModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"datasets":                types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblMetaCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblMetaMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetCriblMetaModel) terraformPayload() (map[string]any, error) {
@@ -7670,6 +8040,23 @@ type DatasetCriblSearchModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetCriblSearchModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetCriblSearchCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetCriblSearchMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetCriblSearchModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -7890,6 +8277,29 @@ type DatasetGcsModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetGcsModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"bucket":                  types.StringType,
+		"extra_paths":             types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetGcsExtraPathsAttrTypes()}},
+		"filter":                  types.StringType,
+		"partitioning_scheme":     types.StringType,
+		"region":                  types.StringType,
+		"skip_event_time_filter":  types.BoolType,
+		"storage_classes":         types.ListType{ElemType: types.StringType},
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetGcsCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetGcsMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetGcsModel) terraformPayload() (map[string]any, error) {
@@ -8207,6 +8617,26 @@ type DatasetPrometheusModel struct {
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
 }
 
+func DatasetPrometheusModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"desired_num_data_points": types.Int64Type,
+		"metric_name_pattern":     types.StringType,
+		"step_mode":               types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetPrometheusCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetPrometheusMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
+}
+
 func (m DatasetPrometheusModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.Type.IsNull() && !m.Type.IsUnknown() {
@@ -8476,6 +8906,30 @@ type DatasetS3Model struct {
 	Region                types.String `tfsdk:"region" json:"region,omitempty"`
 	SkipEventTimeFilter   types.Bool   `tfsdk:"skip_event_time_filter" json:"skipEventTimeFilter,omitempty"`
 	StorageClasses        types.List   `tfsdk:"storage_classes" json:"storageClasses,omitempty"`
+}
+
+func DatasetS3ModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetS3CacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetS3MetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+		"auto_detect_region":      types.BoolType,
+		"bucket":                  types.StringType,
+		"extra_paths":             types.ListType{ElemType: types.ObjectType{AttrTypes: DatasetS3ExtraPathsAttrTypes()}},
+		"path":                    types.StringType,
+		"region":                  types.StringType,
+		"skip_event_time_filter":  types.BoolType,
+		"storage_classes":         types.ListType{ElemType: types.StringType},
+	}
 }
 
 func (m DatasetS3Model) terraformPayload() (map[string]any, error) {
@@ -8810,6 +9264,29 @@ type DatasetSnowflakeModel struct {
 	SearchVersion         types.String `tfsdk:"search_version" json:"searchVersion,omitempty"`
 	Tags                  types.String `tfsdk:"tags" json:"tags,omitempty"`
 	ViewName              types.String `tfsdk:"view_name" json:"viewName,omitempty"`
+}
+
+func DatasetSnowflakeModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"type":                    types.StringType,
+		"database":                types.StringType,
+		"role":                    types.StringType,
+		"schema":                  types.StringType,
+		"table":                   types.StringType,
+		"timestamp_field":         types.StringType,
+		"warehouse":               types.StringType,
+		"breaker_rulesets":        types.ListType{ElemType: types.StringType},
+		"cache_connection_info":   types.ObjectType{AttrTypes: DatasetSnowflakeCacheConnectionInfoAttrTypes()},
+		"description":             types.StringType,
+		"exclude_internal_fields": types.BoolType,
+		"filter":                  types.StringType,
+		"id":                      types.StringType,
+		"metadata":                types.ObjectType{AttrTypes: DatasetSnowflakeMetadataAttrTypes()},
+		"provider_id":             types.StringType,
+		"search_version":          types.StringType,
+		"tags":                    types.StringType,
+		"view_name":               types.StringType,
+	}
 }
 
 func (m DatasetSnowflakeModel) terraformPayload() (map[string]any, error) {

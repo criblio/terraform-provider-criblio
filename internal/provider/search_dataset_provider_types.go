@@ -917,6 +917,16 @@ type APIHttpProviderModel struct {
 	AuthenticationMethod types.String `tfsdk:"authentication_method" json:"authenticationMethod,omitempty"`
 }
 
+func APIHttpProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                    types.StringType,
+		"type":                  types.StringType,
+		"description":           types.StringType,
+		"available_endpoints":   types.ListType{ElemType: types.ObjectType{AttrTypes: ApiHttpProviderAvailableEndpointsAttrTypes()}},
+		"authentication_method": types.StringType,
+	}
+}
+
 func (m APIHttpProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -1013,6 +1023,15 @@ type APIAwsProviderModel struct {
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
 }
 
+func APIAwsProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiAwsProviderAccountConfigsAttrTypes()}},
+	}
+}
+
 func (m APIAwsProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -1091,6 +1110,15 @@ type APIAzureProviderModel struct {
 	Type           types.String `tfsdk:"type" json:"type,omitempty"`
 	Description    types.String `tfsdk:"description" json:"description,omitempty"`
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
+}
+
+func APIAzureProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiAzureProviderAccountConfigsAttrTypes()}},
+	}
 }
 
 func (m APIAzureProviderModel) terraformPayload() (map[string]any, error) {
@@ -1173,6 +1201,15 @@ type APIGcpProviderModel struct {
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
 }
 
+func APIGcpProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiGcpProviderAccountConfigsAttrTypes()}},
+	}
+}
+
 func (m APIGcpProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -1251,6 +1288,15 @@ type APIGoogleWorkspaceProviderModel struct {
 	Type           types.String `tfsdk:"type" json:"type,omitempty"`
 	Description    types.String `tfsdk:"description" json:"description,omitempty"`
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
+}
+
+func APIGoogleWorkspaceProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiGoogleWorkspaceProviderAccountConfigsAttrTypes()}},
+	}
 }
 
 func (m APIGoogleWorkspaceProviderModel) terraformPayload() (map[string]any, error) {
@@ -1333,6 +1379,15 @@ type APIMsGraphProviderModel struct {
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
 }
 
+func APIMsGraphProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiMsGraphProviderAccountConfigsAttrTypes()}},
+	}
+}
+
 func (m APIMsGraphProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -1411,6 +1466,15 @@ type APIOktaProviderModel struct {
 	Type           types.String `tfsdk:"type" json:"type,omitempty"`
 	Description    types.String `tfsdk:"description" json:"description,omitempty"`
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
+}
+
+func APIOktaProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiOktaProviderAccountConfigsAttrTypes()}},
+	}
 }
 
 func (m APIOktaProviderModel) terraformPayload() (map[string]any, error) {
@@ -1493,6 +1557,15 @@ type APITailscaleProviderModel struct {
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
 }
 
+func APITailscaleProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiTailscaleProviderAccountConfigsAttrTypes()}},
+	}
+}
+
 func (m APITailscaleProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -1571,6 +1644,15 @@ type APIZoomProviderModel struct {
 	Type           types.String `tfsdk:"type" json:"type,omitempty"`
 	Description    types.String `tfsdk:"description" json:"description,omitempty"`
 	AccountConfigs types.List   `tfsdk:"account_configs" json:"accountConfigs,omitempty"`
+}
+
+func APIZoomProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"account_configs": types.ListType{ElemType: types.ObjectType{AttrTypes: ApiZoomProviderAccountConfigsAttrTypes()}},
+	}
 }
 
 func (m APIZoomProviderModel) terraformPayload() (map[string]any, error) {
@@ -1653,6 +1735,17 @@ type APIAzureDataExplorerProviderModel struct {
 	TenantID     types.String `tfsdk:"tenant_id" json:"tenantId,omitempty"`
 	ClientID     types.String `tfsdk:"client_id" json:"clientId,omitempty"`
 	ClientSecret types.String `tfsdk:"client_secret" json:"clientSecret,omitempty"`
+}
+
+func APIAzureDataExplorerProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":            types.StringType,
+		"type":          types.StringType,
+		"description":   types.StringType,
+		"tenant_id":     types.StringType,
+		"client_id":     types.StringType,
+		"client_secret": types.StringType,
+	}
 }
 
 func (m APIAzureDataExplorerProviderModel) terraformPayload() (map[string]any, error) {
@@ -1770,6 +1863,20 @@ type SnowflakeProviderModel struct {
 	Passphrase        types.String `tfsdk:"passphrase" json:"passphrase,omitempty"`
 	MaxConcurrency    types.Int64  `tfsdk:"max_concurrency" json:"maxConcurrency,omitempty"`
 	Endpoint          types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
+}
+
+func SnowflakeProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                 types.StringType,
+		"type":               types.StringType,
+		"description":        types.StringType,
+		"account_identifier": types.StringType,
+		"username":           types.StringType,
+		"priv_key":           types.StringType,
+		"passphrase":         types.StringType,
+		"max_concurrency":    types.Int64Type,
+		"endpoint":           types.StringType,
+	}
 }
 
 func (m SnowflakeProviderModel) terraformPayload() (map[string]any, error) {
@@ -1934,6 +2041,17 @@ type ClickHouseProviderModel struct {
 	Endpoint    types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
 }
 
+func ClickHouseProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+		"username":    types.StringType,
+		"password":    types.StringType,
+		"endpoint":    types.StringType,
+	}
+}
+
 func (m ClickHouseProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -2049,6 +2167,20 @@ type PrometheusProviderModel struct {
 	Password       types.String  `tfsdk:"password" json:"password,omitempty"`
 	Token          types.String  `tfsdk:"token" json:"token,omitempty"`
 	MaxConcurrency types.Float64 `tfsdk:"max_concurrency" json:"maxConcurrency,omitempty"`
+}
+
+func PrometheusProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":              types.StringType,
+		"type":            types.StringType,
+		"description":     types.StringType,
+		"endpoint":        types.StringType,
+		"auth_type":       types.StringType,
+		"username":        types.StringType,
+		"password":        types.StringType,
+		"token":           types.StringType,
+		"max_concurrency": types.Float64Type,
+	}
 }
 
 func (m PrometheusProviderModel) terraformPayload() (map[string]any, error) {
@@ -2213,6 +2345,17 @@ type APIOpenSearchProviderModel struct {
 	Endpoint    types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
 }
 
+func APIOpenSearchProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+		"username":    types.StringType,
+		"password":    types.StringType,
+		"endpoint":    types.StringType,
+	}
+}
+
 func (m APIOpenSearchProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -2327,6 +2470,17 @@ type APIElasticSearchProviderModel struct {
 	Endpoint    types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
 }
 
+func APIElasticSearchProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+		"username":    types.StringType,
+		"password":    types.StringType,
+		"endpoint":    types.StringType,
+	}
+}
+
 func (m APIElasticSearchProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -2438,6 +2592,14 @@ type AwsSecurityLakeProviderModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func AwsSecurityLakeProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+	}
+}
+
 func (m AwsSecurityLakeProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -2514,6 +2676,29 @@ type S3ProviderModel struct {
 	BucketPathSuggestion    types.String `tfsdk:"bucket_path_suggestion" json:"bucketPathSuggestion,omitempty"`
 	SessionToken            types.String `tfsdk:"session_token" json:"sessionToken,omitempty"`
 	EnableAbacTagging       types.Bool   `tfsdk:"enable_abac_tagging" json:"enableAbacTagging,omitempty"`
+}
+
+func S3ProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                        types.StringType,
+		"type":                      types.StringType,
+		"description":               types.StringType,
+		"aws_authentication_method": types.StringType,
+		"assume_role_arn":           types.StringType,
+		"assume_role_external_id":   types.StringType,
+		"aws_api_key":               types.StringType,
+		"aws_secret_key":            types.StringType,
+		"bucket":                    types.StringType,
+		"region":                    types.StringType,
+		"endpoint":                  types.StringType,
+		"signature_version":         types.StringType,
+		"reject_unauthorized":       types.BoolType,
+		"reuse_connections":         types.BoolType,
+		"enable_assume_role":        types.BoolType,
+		"bucket_path_suggestion":    types.StringType,
+		"session_token":             types.StringType,
+		"enable_abac_tagging":       types.BoolType,
+	}
 }
 
 func (m S3ProviderModel) terraformPayload() (map[string]any, error) {
@@ -2819,6 +3004,14 @@ type CriblLeaderProviderModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func CriblLeaderProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+	}
+}
+
 func (m CriblLeaderProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -2880,6 +3073,14 @@ type CriblSearchProviderModel struct {
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Type        types.String `tfsdk:"type" json:"type,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
+}
+
+func CriblSearchProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+	}
 }
 
 func (m CriblSearchProviderModel) terraformPayload() (map[string]any, error) {
@@ -2945,6 +3146,14 @@ type MetaProviderModel struct {
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
 }
 
+func MetaProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+	}
+}
+
 func (m MetaProviderModel) terraformPayload() (map[string]any, error) {
 	output := map[string]any{}
 	if !m.ID.IsNull() && !m.ID.IsUnknown() {
@@ -3006,6 +3215,14 @@ type EdgeProviderModel struct {
 	ID          types.String `tfsdk:"id" json:"id,omitempty"`
 	Type        types.String `tfsdk:"type" json:"type,omitempty"`
 	Description types.String `tfsdk:"description" json:"description,omitempty"`
+}
+
+func EdgeProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":          types.StringType,
+		"type":        types.StringType,
+		"description": types.StringType,
+	}
 }
 
 func (m EdgeProviderModel) terraformPayload() (map[string]any, error) {
@@ -3077,6 +3294,22 @@ type AzureBlobProviderModel struct {
 	TenantID             types.String `tfsdk:"tenant_id" json:"tenantId,omitempty"`
 	ClientID             types.String `tfsdk:"client_id" json:"clientId,omitempty"`
 	ClientSecret         types.String `tfsdk:"client_secret" json:"clientSecret,omitempty"`
+}
+
+func AzureBlobProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                    types.StringType,
+		"type":                  types.StringType,
+		"description":           types.StringType,
+		"authentication_method": types.StringType,
+		"location":              types.StringType,
+		"connection_string":     types.StringType,
+		"sas_configs":           types.ListType{ElemType: types.ObjectType{AttrTypes: AzureBlobProviderSasConfigsAttrTypes()}},
+		"storage_account_name":  types.StringType,
+		"tenant_id":             types.StringType,
+		"client_id":             types.StringType,
+		"client_secret":         types.StringType,
+	}
 }
 
 func (m AzureBlobProviderModel) terraformPayload() (map[string]any, error) {
@@ -3270,6 +3503,16 @@ type GcsProviderModel struct {
 	Description               types.String `tfsdk:"description" json:"description,omitempty"`
 	ServiceAccountCredentials types.String `tfsdk:"service_account_credentials" json:"serviceAccountCredentials,omitempty"`
 	Endpoint                  types.String `tfsdk:"endpoint" json:"endpoint,omitempty"`
+}
+
+func GcsProviderModelAttrTypes() map[string]attr.Type {
+	return map[string]attr.Type{
+		"id":                          types.StringType,
+		"type":                        types.StringType,
+		"description":                 types.StringType,
+		"service_account_credentials": types.StringType,
+		"endpoint":                    types.StringType,
+	}
 }
 
 func (m GcsProviderModel) terraformPayload() (map[string]any, error) {

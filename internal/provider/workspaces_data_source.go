@@ -23,7 +23,7 @@ type WorkspacesDataSource struct {
 	client *restclient.Client
 }
 
-type WorkspacesDataSourceModel struct {
+type WorkspacesListDataSourceModel struct {
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Items          types.List   `tfsdk:"items"`
 }
@@ -101,7 +101,7 @@ func (d *WorkspacesDataSource) Configure(_ context.Context, req datasource.Confi
 }
 
 func (d *WorkspacesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var model WorkspacesDataSourceModel
+	var model WorkspacesListDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &model)...)
 	if resp.Diagnostics.HasError() {
 		return

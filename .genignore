@@ -17,5 +17,3 @@ internal/provider/reflect/options.go
 internal/provider/reflect/struct.go
 internal/provider/reflect/into.go
 internal/provider/utils.go
-internal/provider/mappings_data_source.go
-internal/provider/mappings_data_source_sdk.go
