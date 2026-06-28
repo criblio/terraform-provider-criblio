@@ -3,12 +3,16 @@ package converter
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
 	"github.com/criblio/terraform-provider-criblio/internal/provider"
+	"github.com/criblio/terraform-provider-criblio/internal/restclient"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/operations"
 	"github.com/criblio/terraform-provider-criblio/internal/sdk/models/shared"
+	importclient "github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/client"
 	"github.com/criblio/terraform-provider-criblio/tools/import-cli/internal/registry"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
@@ -31,6 +35,37 @@ func TestRefreshFromMethodName(t *testing.T) {
 			assert.Equal(t, tt.want, got)
 		})
 	}
+}
+
+func TestConvertUsesRESTGetPath(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "/api/v1/m/default/pipelines/p1", r.URL.Path)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"items":[{"id":"p1","conf":{}}]}`))
+	}))
+	defer server.Close()
+
+	reg := buildTestRegistry(t)
+	e, ok := reg.ByTypeName("criblio_pipeline")
+	require.True(t, ok)
+	require.NotEmpty(t, e.RESTGetPath)
+
+	client := &importclient.Client{
+		REST: restclient.New(restclient.Config{
+			BaseURL:     server.URL,
+			BearerToken: "mock",
+			HTTPClient:  server.Client(),
+		}),
+	}
+	model, err := Convert(context.Background(), client, e, map[string]string{
+		"GroupID": "default",
+		"ID":      "p1",
+	})
+	require.NoError(t, err)
+	pipeline, ok := model.(*provider.PipelineResourceModel)
+	require.True(t, ok)
+	assert.Equal(t, "p1", pipeline.ID.ValueString())
+	assert.Equal(t, "default", pipeline.GroupID.ValueString())
 }
 
 func TestConvertFromResponseBody_source(t *testing.T) {

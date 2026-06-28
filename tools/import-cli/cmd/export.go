@@ -80,15 +80,15 @@ func NewExportCommand() *cobra.Command {
 			if err := cfg.ValidateRequired(); err != nil {
 				return err
 			}
-			// Suppress SDK DEBUG logs unless --verbose is set.
+			// Suppress API client DEBUG logs unless --verbose is set.
 			if verbose {
 				log.SetOutput(os.Stderr)
 			} else {
 				log.SetOutput(&logFilterWriter{w: os.Stderr, suppressDebug: true})
 			}
-			sdkClient, err := client.NewFromConfig(cfg)
+			apiClient, err := client.NewFromConfig(cfg)
 			if err != nil {
-				return fmt.Errorf("initialize SDK client: %w", err)
+				return fmt.Errorf("initialize API client: %w", err)
 			}
 			// Always print once (not only with --verbose); the SDK does not log User-Agent per request.
 			fmt.Fprintf(c.ErrOrStderr(), "user_agent: %s\n", client.BulkExporterUserAgent())
@@ -104,7 +104,7 @@ func NewExportCommand() *cobra.Command {
 			excludeMerged := append([]string{}, exclude...)
 			excludeMerged = append(excludeMerged, exclusions.NoExportTypes...)
 			fmt.Fprintln(c.ErrOrStderr(), "Discovering resources...")
-			results, err := discovery.Discover(ctx, sdkClient, reg, include, excludeMerged, group, onPrem)
+			results, err := discovery.Discover(ctx, apiClient, reg, include, excludeMerged, group, onPrem)
 			if err != nil {
 				return fmt.Errorf("discovery: %w", err)
 			}
@@ -129,7 +129,7 @@ func NewExportCommand() *cobra.Command {
 				}
 				return nil
 			}
-			// Surface SDK errors with resource context; fail if any discovery failed.
+			// Surface API errors with resource context; fail if any discovery failed.
 			// On-prem: "not supported for on-prem" errors are expected (search, lake, etc.) and are skipped.
 			var firstErr error
 			for _, r := range results {
@@ -150,7 +150,7 @@ func NewExportCommand() *cobra.Command {
 			if firstErr != nil {
 				return fmt.Errorf("discovery failed for one or more resource types: %w", firstErr)
 			}
-			groupIDs, err := discovery.GetGroupIDs(ctx, sdkClient, group, onPrem)
+			groupIDs, err := discovery.GetGroupIDs(ctx, apiClient, group, onPrem)
 			if err != nil {
 				return fmt.Errorf("get group IDs: %w", err)
 			}
@@ -165,7 +165,7 @@ func NewExportCommand() *cobra.Command {
 				fmt.Fprintf(c.ErrOrStderr(), "  "+format+"\n", args...)
 			}
 			includeOverride := export.ParseIncludeDefaultIDs(includeDefaultIDs)
-			exportResult, exportErr := export.ToResourceItems(ctx, sdkClient, reg, results, groupIDs, group, parallel, excludeDefaults, includeOverride, progress)
+			exportResult, exportErr := export.ToResourceItems(ctx, apiClient, reg, results, groupIDs, group, parallel, excludeDefaults, includeOverride, progress)
 			exportResult.DiscoveredTotal = discoveredTotal
 			if exportErr != nil {
 				fmt.Fprintln(c.ErrOrStderr(), "Warning:", exportErr.Error())

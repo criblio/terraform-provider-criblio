@@ -41,6 +41,8 @@ type ResourceMetadata struct {
 	SDKService     string // e.g. "Inputs", "Pipelines"
 	ListMethod     string // e.g. "ListInput"; empty if no working list API
 	GetMethod      string // e.g. "GetInputByID"
+	RESTListPath   string // e.g. "/m/{group_id}/system/inputs"; preferred over SDK ListMethod when set
+	RESTGetPath    string // e.g. "/m/{group_id}/system/inputs/{id}"; preferred over SDK GetMethod when set
 	ImportIDFormat string // e.g. "json:group_id,id", "id"
 	// OneOf configures oneOf-style resources (destination, collector, pack_destination, etc.).
 	OneOf *OneOfConfig

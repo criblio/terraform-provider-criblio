@@ -1,5 +1,5 @@
 // Package config loads Cribl auth and connection settings from flags, environment,
-// and credentials file. Uses internal/sdk/credentials for file/env so SDK and CLI share one implementation.
+// and credentials file.
 package config
 
 import (
@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/criblio/terraform-provider-criblio/internal/sdk/credentials"
+	"github.com/criblio/terraform-provider-criblio/internal/auth"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -40,7 +40,7 @@ const (
 	KeyOnpremPassword  = "onprem_password"
 )
 
-// Env variable names. Must match internal/sdk/internal/hooks (credentials.go, CriblTerraformHook.go)
+// Env variable names. Must match internal/auth credential loading.
 const (
 	EnvOnpremServerURL = "CRIBL_ONPREM_SERVER_URL"
 	EnvBearerToken     = "CRIBL_BEARER_TOKEN"
@@ -54,10 +54,10 @@ const (
 	EnvOnpremPassword  = "CRIBL_ONPREM_PASSWORD"
 )
 
-// LoadCredentialsFile merges credentials from internal/sdk/credentials (env + ~/.cribl/credentials)
-// into the config. Only keys not already set (e.g. by flags) are filled.
+// LoadCredentialsFile merges credentials from env + ~/.cribl/credentials into
+// the config. Only keys not already set (e.g. by flags) are filled.
 func (c *Config) LoadCredentialsFile() error {
-	creds, err := credentials.GetCredentials()
+	creds, err := auth.GetCredentials()
 	if err != nil {
 		return err
 	}

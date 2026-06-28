@@ -137,9 +137,9 @@ var importMetadataOverrides = map[string]ResourceMetadata{
 	"criblio_search_saved_query":           {ListMethod: "ListSavedQuery", ImportIDFormat: "id"},
 	"criblio_pack_destination":             {ListMethod: "ListPackOutput", ImportIDFormat: "json:group_id,id,pack", RefreshFromMethod: "RefreshFromOperationsGetOutputByIDResponseBody"},
 	"criblio_pack_vars":                    {ListMethod: "GetGlobalVariableLibVarsByPack", GetMethod: "GetGlobalVariableLibVarsByPackAndID", ImportIDFormat: "json:group_id,id,pack"},
-	"criblio_source":                       {ImportIDFormat: "json:group_id,id"},
-	"criblio_destination":                  {ImportIDFormat: "json:group_id,id"},
-	"criblio_pipeline":                     {ImportIDFormat: "json:group_id,id"},
+	"criblio_source":                       {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/inputs", RESTGetPath: "/m/{group_id}/system/inputs/{id}"},
+	"criblio_destination":                  {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/system/outputs", RESTGetPath: "/m/{group_id}/system/outputs/{id}"},
+	"criblio_pipeline":                     {ImportIDFormat: "json:group_id,id", RESTListPath: "/m/{group_id}/pipelines", RESTGetPath: "/m/{group_id}/pipelines/{id}"},
 	"criblio_certificate":                  {ImportIDFormat: "json:group_id,id"},
 	"criblio_cribl_lake_dataset":           {ImportIDFormat: "json:lake_id,id"},
 	"criblio_database_connection":          {ImportIDFormat: "json:group_id,id"},
@@ -180,6 +180,12 @@ func ImportMetadata() map[string]ResourceMetadata {
 		}
 		if o.GetMethod != "" {
 			m.GetMethod = o.GetMethod
+		}
+		if o.RESTListPath != "" {
+			m.RESTListPath = o.RESTListPath
+		}
+		if o.RESTGetPath != "" {
+			m.RESTGetPath = o.RESTGetPath
 		}
 		if o.ImportIDFormat != "" {
 			m.ImportIDFormat = o.ImportIDFormat

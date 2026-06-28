@@ -12,7 +12,7 @@ import (
 	custom_stringplanmodifier "github.com/criblio/terraform-provider-criblio/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/criblio/terraform-provider-criblio/internal/provider/types"
 	"github.com/criblio/terraform-provider-criblio/internal/restclient"
-	speakeasy_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
+	custom_stringvalidators "github.com/criblio/terraform-provider-criblio/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -81,7 +81,7 @@ func (r *GroupResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 						Optional:    true,
 						Description: `Not Null`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
+							custom_stringvalidators.NotNull(),
 						},
 					},
 				},
