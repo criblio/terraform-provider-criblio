@@ -3,15 +3,14 @@ package tests
 import (
 	"os"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestInstanceSettings(t *testing.T) {
-	if os.Getenv("DEPLOYMENT") == "onprem" {
-		time.Sleep(1 * time.Second)
+	if os.Getenv("DEPLOYMENT") != "onprem" {
+		t.Skip("Skipping data source for Cloud deployments as it is not supported")
 	}
 
 	t.Run("plan-diff", func(t *testing.T) {

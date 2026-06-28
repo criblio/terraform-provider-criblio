@@ -31,6 +31,9 @@ func TestNotificationTarget(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "sns_target.id", id),
 						resource.TestCheckResourceAttr(resourceName, "sns_target.type", "sns"),
 						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-created"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_notification_target.by_id", "id", "criblio_notification_target.my_notificationtarget", "id"),
+						testCheckListDataSourceHasItems("data.criblio_notification_targets.all"),
 					),
 				},
 				{
@@ -76,6 +79,16 @@ resource "criblio_notification_target" "my_notificationtarget" {
       "cribl_host",
     ]
   }
+}
+
+
+data "criblio_notification_target" "by_id" {
+  id = criblio_notification_target.my_notificationtarget.id
+  depends_on = [criblio_notification_target.my_notificationtarget]
+}
+
+data "criblio_notification_targets" "all" {
+  depends_on = [criblio_notification_target.my_notificationtarget]
 }
 `, id, suffix)
 }

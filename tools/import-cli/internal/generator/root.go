@@ -208,9 +208,17 @@ func rootTfvarsExampleTF(moduleInfos []RootModuleInfo) []byte {
 	buf.WriteString("# Example values for secret variables. Copy to terraform.tfvars and replace with real values.\n")
 	buf.WriteString("# terraform.tfvars is gitignored by default; do not commit secrets.\n\n")
 	for _, n := range names {
-		fmt.Fprintf(&buf, "%s = \"\"\n", n)
+		fmt.Fprintf(&buf, "%s = %q\n", n, tfvarsExampleValue(n))
 	}
 	return buf.Bytes()
+}
+
+func tfvarsExampleValue(name string) string {
+	lower := strings.ToLower(name)
+	if strings.Contains(lower, "url") {
+		return "https://example.com"
+	}
+	return ""
 }
 
 func collectRootVariableNames(moduleInfos []RootModuleInfo) []string {

@@ -35,6 +35,13 @@ func TestSearchDatasetProvider(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.id", elasticID),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "id", s3ID),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "s3.id", s3ID),
+
+						resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.api_http", "id", "criblio_search_dataset_provider.my_searchdatasetprovider", "id"),
+						testCheckListDataSourceHasItems("data.criblio_search_dataset_providers.all"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.elastic", "id", "criblio_search_dataset_provider.my_elastic_provider", "id"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.s3", "id", "criblio_search_dataset_provider.my_s3_provider", "id"),
 					),
 				},
 				{
@@ -54,6 +61,9 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportState:       true,
 					ImportStateId:     apiHTTPID,
 					ImportStateVerify: true,
+					ImportStateVerifyIgnore: []string{
+						"description",
+					},
 				},
 			},
 		})
@@ -117,6 +127,31 @@ resource "criblio_search_dataset_provider" "my_s3_provider" {
     signature_version         = "v4"
     type                      = "s3"
   }
+}
+
+
+data "criblio_search_dataset_provider" "api_http" {
+  group_id = "default_search"
+  id = criblio_search_dataset_provider.my_searchdatasetprovider.id
+  depends_on = [criblio_search_dataset_provider.my_searchdatasetprovider]
+}
+
+data "criblio_search_dataset_providers" "all" {
+  depends_on = [criblio_search_dataset_provider.my_searchdatasetprovider]
+}
+
+
+data "criblio_search_dataset_provider" "elastic" {
+  group_id = "default_search"
+  id = criblio_search_dataset_provider.my_elastic_provider.id
+  depends_on = [criblio_search_dataset_provider.my_elastic_provider]
+}
+
+
+data "criblio_search_dataset_provider" "s3" {
+  group_id = "default_search"
+  id = criblio_search_dataset_provider.my_s3_provider.id
+  depends_on = [criblio_search_dataset_provider.my_s3_provider]
 }
 `, apiHTTPID, elasticID, s3ID, descriptionSuffix)
 }

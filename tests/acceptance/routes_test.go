@@ -26,6 +26,9 @@ func TestRoutes(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "routes.0.pipeline", "main"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_2"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.pipeline", "main"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_routes.by_id", "group_id", "criblio_routes.my_routes", "group_id"),
+						resource.TestCheckResourceAttrPair("data.criblio_routes.by_id", "id", "criblio_routes.my_routes", "id"),
 					),
 				},
 				{
@@ -64,6 +67,13 @@ func routesConfig(first, second string) string {
       pipeline = "main"
     }
   ]
+}
+
+
+data "criblio_routes" "by_id" {
+  group_id = criblio_routes.my_routes.group_id
+  id = criblio_routes.my_routes.id
+  depends_on = [criblio_routes.my_routes]
 }
 `
 }

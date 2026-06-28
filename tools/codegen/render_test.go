@@ -33,6 +33,9 @@ func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/certificate_test.go")); err != nil {
 		t.Fatalf("acceptance test output missing: %v", err)
 	}
+	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/certificate_data_source_test.go")); err != nil {
+		t.Fatalf("data source acceptance test output missing: %v", err)
+	}
 	if hasSkipped(files, filepath.Join(dir, "tests/acceptance/certificate_test.go")) {
 		t.Fatalf("acceptance test output should not be skipped by the ignore fixture")
 	}
@@ -57,6 +60,13 @@ func TestRendererSkipsCustomAcceptanceTests(t *testing.T) {
 
 	if !hasSkipped(files, path) {
 		t.Fatalf("custom acceptance test output was not skipped")
+	}
+	dataSourcePath := filepath.Join(dir, "tests/acceptance/certificate_data_source_test.go")
+	if hasSkipped(files, dataSourcePath) {
+		t.Fatalf("data source acceptance test should still be generated")
+	}
+	if _, err := os.Stat(dataSourcePath); err != nil {
+		t.Fatalf("data source acceptance test output missing: %v", err)
 	}
 	got, err := os.ReadFile(path)
 	if err != nil {
@@ -97,6 +107,42 @@ func TestRendererOverwritesGeneratedAcceptanceTests(t *testing.T) {
 	if string(got) == string(content) {
 		t.Fatalf("generated acceptance test was not overwritten")
 	}
+}
+
+func TestRendererGeneratesStandaloneListDataSourceAcceptanceTests(t *testing.T) {
+	dir := t.TempDir()
+	resource := parser.ResourceDef{
+		Name:           "SystemInfo",
+		FileStem:       "system_info",
+		StructName:     "SystemInfo",
+		ListFileStem:   "system_info",
+		ListStructName: "SystemInfo",
+		ListTypeName:   "criblio_system_info",
+		List: parser.OperationDef{
+			Path:       "/m/{groupId}/system/info",
+			PathParams: []parser.FieldDef{{TerraformName: "group_id", GoName: "GroupID", PathParam: true}},
+		},
+	}
+
+	files, err := newRenderer(dir, ignoreSet{}).render([]parser.ResourceDef{resource})
+	if err != nil {
+		t.Fatalf("render returned error: %v", err)
+	}
+
+	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/system_info_data_source_test.go")); err != nil {
+		t.Fatalf("standalone data source acceptance test output missing: %v", err)
+	}
+	if hasSkipped(files, filepath.Join(dir, "tests/acceptance/system_info_data_source_test.go")) {
+		t.Fatalf("standalone data source acceptance test should not be skipped")
+	}
+	content, err := os.ReadFile(filepath.Join(dir, "tests/acceptance/system_info_data_source_test.go"))
+	if err != nil {
+		t.Fatalf("read standalone data source acceptance test: %v", err)
+	}
+	assertContains(t, string(content), `data "criblio_system_info" "all"`)
+	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_system_info.all")`)
+	assertNotContains(t, string(content), `resource "`)
+	assertNotContains(t, string(content), `depends_on`)
 }
 
 func TestRenderedSnippets(t *testing.T) {
@@ -193,6 +239,34 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
 	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
 	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
+
+	searchDatasetProviderTest = renderTemplate(t, "test", parser.ResourceDef{
+		StructName:   "SearchDatasetProvider",
+		TypeName:     "criblio_search_dataset_provider",
+		ListTypeName: "criblio_search_dataset_providers",
+		Create: parser.OperationDef{
+			Path: "/m/{groupId}/search/dataset-providers",
+		},
+		Read: parser.OperationDef{
+			Path: "/m/{groupId}/search/dataset-providers/{id}",
+			PathParams: []parser.FieldDef{
+				{TerraformName: "group_id", GoName: "GroupID", PathParam: true},
+				{TerraformName: "id", GoName: "ID", PathParam: true},
+			},
+		},
+		List: parser.OperationDef{
+			Path:       "/m/{groupId}/search/dataset-providers",
+			PathParams: []parser.FieldDef{{TerraformName: "group_id", GoName: "GroupID", PathParam: true}},
+		},
+		Fields: []parser.FieldDef{
+			{TerraformName: "group_id", GoName: "GroupID", PathParam: true},
+			{TerraformName: "id", GoName: "ID", PathParam: true},
+		},
+	})
+	assertContains(t, searchDatasetProviderTest, `data "criblio_search_dataset_provider" "api_http"`)
+	assertContains(t, searchDatasetProviderTest, `data "criblio_search_dataset_providers" "all"`)
+	assertContains(t, searchDatasetProviderTest, `resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.api_http", "id", "criblio_search_dataset_provider.my_searchdatasetprovider", "id")`)
+	assertContains(t, searchDatasetProviderTest, `testCheckListDataSourceHasItems("data.criblio_search_dataset_providers.all")`)
 
 	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
 	mappingRulesetResource := renderTemplate(t, "resource", mappingRuleset)

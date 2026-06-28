@@ -2279,7 +2279,9 @@ package tests
 
 {{- if eq .Name "certificate" }}
 import (
+{{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"
+{{- end }}
 	"testing"
 	"time"
 
@@ -2368,6 +2370,7 @@ func TestGlobalVar(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "description", "test updated"),
 						resource.TestCheckResourceAttr(resourceName, "value", "200"),
 						resource.TestCheckResourceAttr(resourceName, "args.#", "1"),
+{{ acceptanceDataSourceChecks . "criblio_global_var.my_globalvar" "by_id" true }}
 					),
 				},
 				{
@@ -2400,10 +2403,13 @@ const globalVarUpdatedConfig = ` + "`" + `resource "criblio_global_var" "my_glob
   type        = "number"
   value       = "200"
 }
+{{ acceptanceDataSources . "criblio_global_var.my_globalvar" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Grok" }}
 import (
+{{- if acceptanceDataSourceSkipsOnPrem . }}
 	"os"
+{{- end }}
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -2426,6 +2432,7 @@ func TestGrok(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "group_id", "default"),
 						resource.TestCheckResourceAttr(resourceName, "id", "test_grok"),
+{{ acceptanceDataSourceChecks . "criblio_grok.my_grok" "by_id" true }}
 					),
 				},
 				{
@@ -2457,6 +2464,7 @@ const grokUpdatedConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
 UPDATEDWORD [a-zA-Z]+
 EOT
 }
+{{ acceptanceDataSources . "criblio_grok.my_grok" "by_id" true }}
 ` + "`" + `
 
 const grokConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
@@ -2466,6 +2474,7 @@ const grokConfig = ` + "`" + `resource "criblio_grok" "my_grok" {
 TESTWORD [a-zA-Z]+
 EOT
 }
+{{ acceptanceDataSources . "criblio_grok.my_grok" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Regex" }}
 import (
@@ -2504,6 +2513,7 @@ func TestRegex(t *testing.T) {
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "test_regex_updated"),
 						resource.TestCheckResourceAttr(resourceName, "sample_data", "10.0.0.1"),
+{{ acceptanceDataSourceChecks . "criblio_regex.my_regex" "by_id" true }}
 					),
 				},
 				{
@@ -2530,6 +2540,7 @@ const regexUpdatedConfig = ` + "`" + `resource "criblio_regex" "my_regex" {
   sample_data = "10.0.0.1"
   tags        = "test"
 }
+{{ acceptanceDataSources . "criblio_regex.my_regex" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Schema" }}
 import (
@@ -2564,6 +2575,7 @@ func TestSchema(t *testing.T) {
 					Config: schemaUpdatedConfig,
 					Check: resource.ComposeAggregateTestCheckFunc(
 						resource.TestCheckResourceAttr(resourceName, "description", "test schema updated"),
+{{ acceptanceDataSourceChecks . "criblio_schema.my_schema" "by_id" true }}
 					),
 				},
 				{
@@ -2611,6 +2623,7 @@ const schemaUpdatedConfig = ` + "`" + `resource "criblio_schema" "my_schema" {
 }
 EOT
 }
+{{ acceptanceDataSources . "criblio_schema.my_schema" "by_id" true }}
 ` + "`" + `
 {{- else if eq .StructName "Collector" }}
 import (
@@ -2651,6 +2664,8 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
+{{ acceptanceDataSourceChecks . "criblio_collector.splunk_access_log_collector" "splunk" true }}
+{{ acceptanceDataSourceChecks . "criblio_collector.rest_api_collector" "rest" false }}
 					),
 				},
 				{
@@ -2672,6 +2687,8 @@ func collectorConfig(t *testing.T, suffix string) string {
 	config := string(content)
 	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
 	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
+	config += ` + "`" + `{{ acceptanceDataSources . "criblio_collector.splunk_access_log_collector" "splunk" true }}
+{{ acceptanceDataSources . "criblio_collector.rest_api_collector" "rest" false }}` + "`" + `
 	return config
 }
 {{- else if eq .StructName "Pipeline" }}
@@ -2708,6 +2725,7 @@ func TestPipeline(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "conf.output", "default"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.0.id", "code"),
+{{ acceptanceDataSourceChecks . "criblio_pipeline.my_pipeline" "by_id" true }}
 					),
 				},
 				{
@@ -2756,6 +2774,7 @@ func pipelineConfig(id, description string) string {
     ]
   }
 }
+{{ acceptanceDataSources . "criblio_pipeline.my_pipeline" "by_id" true }}
 ` + "`" + `, id, description)
 }
 {{- else if eq .StructName "SearchDashboard" }}
@@ -2793,6 +2812,7 @@ func TestSearchDashboard(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "elements.#", "8"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.type", "counter.single"),
 						resource.TestCheckResourceAttr(resourceName, "elements.0.dashboard_element_visualization.search.search_query_inline.query", "dataset=\"$vt_dummy\" event<42 | count"),
+{{ acceptanceDataSourceChecks . "criblio_search_dashboard.my_searchdashboard" "by_id" true }}
 					),
 				},
 				{
@@ -2852,7 +2872,7 @@ func searchDashboardConfig(t *testing.T, id, description string) string {
 		config = strings.Replace(config, old, replacement, 1)
 	}
 
-	return config
+	return config + ` + "`" + `{{ acceptanceDataSources . "criblio_search_dashboard.my_searchdashboard" "by_id" true }}` + "`" + `
 }
 {{- else if eq .StructName "NotificationTarget" }}
 import (
@@ -2884,6 +2904,7 @@ func TestNotificationTarget(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "sns_target.id", id),
 						resource.TestCheckResourceAttr(resourceName, "sns_target.type", "sns"),
 						resource.TestCheckResourceAttr(resourceName, "sns_target.message_group_id", "cribl-notifications-created"),
+{{ acceptanceDataSourceChecks . "criblio_notification_target.my_notificationtarget" "by_id" true }}
 					),
 				},
 				{
@@ -2930,6 +2951,7 @@ resource "criblio_notification_target" "my_notificationtarget" {
     ]
   }
 }
+{{ acceptanceDataSources . "criblio_notification_target.my_notificationtarget" "by_id" true }}
 ` + "`" + `, id, suffix)
 }
 
@@ -2974,6 +2996,9 @@ func TestSearchDatasetProvider(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_elastic_provider", "api_elasticsearch.id", elasticID),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "id", s3ID),
 						resource.TestCheckResourceAttr("criblio_search_dataset_provider.my_s3_provider", "s3.id", s3ID),
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_searchdatasetprovider" "api_http" true }}
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_elastic_provider" "elastic" false }}
+{{ acceptanceDataSourceChecks . "criblio_search_dataset_provider.my_s3_provider" "s3" false }}
 					),
 				},
 				{
@@ -2993,6 +3018,9 @@ func TestSearchDatasetProvider(t *testing.T) {
 					ImportState:       true,
 					ImportStateId:     apiHTTPID,
 					ImportStateVerify: true,
+					ImportStateVerifyIgnore: []string{
+						"description",
+					},
 				},
 			},
 		})
@@ -3057,6 +3085,9 @@ resource "criblio_search_dataset_provider" "my_s3_provider" {
     type                      = "s3"
   }
 }
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_searchdatasetprovider" "api_http" true }}
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_elastic_provider" "elastic" false }}
+{{ acceptanceDataSources . "criblio_search_dataset_provider.my_s3_provider" "s3" false }}
 ` + "`" + `, apiHTTPID, elasticID, s3ID, descriptionSuffix)
 }
 {{- else if eq .StructName "Routes" }}
@@ -3084,6 +3115,7 @@ func TestRoutes(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "routes.0.pipeline", "main"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.name", "my_route_2"),
 						resource.TestCheckResourceAttr(resourceName, "routes.1.pipeline", "main"),
+{{ acceptanceDataSourceChecks . "criblio_routes.my_routes" "by_id" false }}
 					),
 				},
 				{
@@ -3123,6 +3155,7 @@ func routesConfig(first, second string) string {
     }
   ]
 }
+{{ acceptanceDataSources . "criblio_routes.my_routes" "by_id" false }}
 ` + "`" + `
 }
 {{- else }}
@@ -3134,6 +3167,45 @@ func TestAcc{{ .StructName }}Scaffold(t *testing.T) {
 {{- end }}
 `
 
+const dataSourceTestTemplate = `// Code generated by tools/codegen. DO NOT EDIT.
+
+package tests
+
+import (
+{{- if or (acceptanceDataSourceSkipsCloud .) (acceptanceDataSourceSkipsOnPrem .) }}
+	"os"
+{{- end }}
+	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+)
+
+func Test{{ .StructName }}DataSources(t *testing.T) {
+{{- if acceptanceDataSourceSkipsCloud . }}
+	if os.Getenv("DEPLOYMENT") != "onprem" {
+		t.Skip("Skipping data source acceptance test for Cloud deployments as it is not supported")
+	}
+{{- end }}
+{{- if acceptanceDataSourceSkipsOnPrem . }}
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
+	}
+{{- end }}
+
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories:  providerFactory,
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: {{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
+				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . (acceptancePrimaryResourceAddress .) "by_id" true }}
+				),
+			},
+		},
+	})
+}
+`
+
 var templateBodies = map[string]string{
 	"types":            typesTemplate,
 	"client":           clientTemplate,
@@ -3142,4 +3214,5 @@ var templateBodies = map[string]string{
 	"list_data_source": listDataSourceTemplate,
 	"doc":              docTemplate,
 	"test":             testTemplate,
+	"data_source_test": dataSourceTestTemplate,
 }

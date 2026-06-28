@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"sort"
 	"strconv"
@@ -104,11 +105,36 @@ func outputFiles(resource parser.ResourceDef) []parser.OutputFile {
 	if resource.List.Path != "" {
 		files = append(files, parser.OutputFile{Path: "internal/provider/" + resource.ListFileStem + "_data_source.go", Kind: "list_data_source"})
 	}
+	if shouldGenerateDataSourceAcceptanceTest(resource) {
+		files = append(files, parser.OutputFile{Path: "tests/acceptance/" + resource.FileStem + "_data_source_test.go", Kind: "data_source_test"})
+	}
 	return files
 }
 
 func shouldGenerateAcceptanceTest(resource parser.ResourceDef) bool {
 	return !resource.Action && !strings.HasPrefix(resource.Create.Path, "/v1/organizations/")
+}
+
+func shouldGenerateDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
+	if resource.Action || strings.HasPrefix(resource.Read.Path, "/v1/organizations/") || strings.HasPrefix(resource.List.Path, "/v1/organizations/") {
+		return false
+	}
+	if acceptancePrimaryResourceAddress(resource) != "" {
+		return hasGeneratedReadDataSource(resource) || hasGeneratedListDataSource(resource)
+	}
+	return canGenerateStandaloneListDataSourceAcceptanceTest(resource)
+}
+
+func canGenerateStandaloneListDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
+	if !hasGeneratedListDataSource(resource) {
+		return false
+	}
+	for _, field := range listConfigFields(resource) {
+		if acceptanceDataSourceFieldValue(resource, "", field) == "" {
+			return false
+		}
+	}
+	return true
 }
 
 func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
@@ -117,75 +143,82 @@ func executeTemplate(kind string, resource parser.ResourceDef) ([]byte, error) {
 		return nil, fmt.Errorf("template %q not found", kind)
 	}
 	tmpl, err := template.New(kind).Funcs(template.FuncMap{
-		"goType":                         goType,
-		"schemaAttribute":                schemaAttribute,
-		"schemaTypeName":                 schemaTypeName,
-		"schemaSections":                 schemaSections,
-		"zeroValue":                      zeroValue,
-		"nullValue":                      nullValue,
-		"pathExpr":                       pathExpr,
-		"jsonName":                       jsonName,
-		"apiType":                        apiType,
-		"legacyGoType":                   legacyGoType,
-		"resourceType":                   resourceType,
-		"typeNameSuffix":                 typeNameSuffix,
-		"exampleUsage":                   exampleUsage,
-		"importBlock":                    importBlock,
-		"importCommand":                  importCommand,
-		"importPassthroughAttribute":     importPassthroughAttribute,
-		"singletonLegacyImportField":     singletonLegacyImportField,
-		"docSchema":                      docSchema,
-		"joinDocFields":                  joinDocFields,
-		"needsFmt":                       needsFmt,
-		"needsClientFmt":                 needsClientFmt,
-		"needsAttr":                      needsAttr,
-		"needsResourceAttr":              needsResourceAttr,
-		"needsNestedObject":              needsNestedObject,
-		"needsPlanModifier":              needsPlanModifier,
-		"hasJSONNormalized":              hasJSONNormalized,
-		"needsFrameworkPlanModifier":     needsFrameworkPlanModifier,
-		"needsStringDefault":             needsStringDefault,
-		"needsCustomPlanModifier":        needsCustomPlanModifier,
-		"needsValidator":                 needsValidator,
-		"needsStringValidator":           needsStringValidator,
-		"needsCustomStringValidator":     needsCustomStringValidator,
-		"needsCustomJSONValidator":       needsCustomJSONValidator,
-		"planModifierType":               planModifierType,
-		"planModifierCalls":              planModifierCalls,
-		"stringValidatorCalls":           stringValidatorCalls,
-		"nestedObjectPlanModifierCalls":  nestedObjectPlanModifierCalls,
-		"schemaAttributes":               schemaAttributes,
-		"oneOfSchemaAttributes":          oneOfSchemaAttributes,
-		"dataSourceAttributes":           dataSourceAttributes,
-		"oneOfDataSourceAttributes":      oneOfDataSourceAttributes,
-		"listDataSourceConfigAttributes": listDataSourceConfigAttributes,
-		"listDataSourceItemAttributes":   listDataSourceItemAttributes,
-		"importSentinelFields":           importSentinelFields,
-		"pathParamFields":                pathParamFields,
-		"jsonImport":                     jsonImport,
-		"nestedObjectList":               nestedObjectList,
-		"nestedObjectMap":                nestedObjectMap,
-		"nestedObject":                   nestedObject,
-		"objectAsJSON":                   objectAsJSON,
-		"normalizedString":               normalizedString,
-		"hasObjectAsJSON":                hasObjectAsJSON,
-		"nestedObjectFields":             nestedObjectFields,
-		"attrType":                       attrType,
-		"restWriteCall":                  restWriteCall,
-		"resourceHasQueryParams":         resourceHasQueryParams,
-		"listHasQueryParams":             listHasQueryParams,
-		"listConfigFields":               listConfigFields,
-		"listItemFields":                 listItemFields,
-		"listTypeNameSuffix":             listTypeNameSuffix,
-		"listItemAttrTypes":              listItemAttrTypes,
-		"listItemObjectValue":            listItemObjectValue,
-		"noDiscriminatorVariants":        noDiscriminatorVariants,
-		"variantAPINames":                variantAPINames,
-		"variantRequiredAPINames":        variantRequiredAPINames,
-		"goStringSliceLiteral":           goStringSliceLiteral,
-		"listElementAttrType":            listElementAttrType,
-		"emptyJSONValue":                 emptyJSONValue,
-		"goValueLiteral":                 goValueLiteral,
+		"goType":                           goType,
+		"schemaAttribute":                  schemaAttribute,
+		"schemaTypeName":                   schemaTypeName,
+		"schemaSections":                   schemaSections,
+		"zeroValue":                        zeroValue,
+		"nullValue":                        nullValue,
+		"pathExpr":                         pathExpr,
+		"jsonName":                         jsonName,
+		"apiType":                          apiType,
+		"legacyGoType":                     legacyGoType,
+		"resourceType":                     resourceType,
+		"typeNameSuffix":                   typeNameSuffix,
+		"exampleUsage":                     exampleUsage,
+		"importBlock":                      importBlock,
+		"importCommand":                    importCommand,
+		"importPassthroughAttribute":       importPassthroughAttribute,
+		"singletonLegacyImportField":       singletonLegacyImportField,
+		"docSchema":                        docSchema,
+		"joinDocFields":                    joinDocFields,
+		"needsFmt":                         needsFmt,
+		"needsClientFmt":                   needsClientFmt,
+		"needsAttr":                        needsAttr,
+		"needsResourceAttr":                needsResourceAttr,
+		"needsNestedObject":                needsNestedObject,
+		"needsPlanModifier":                needsPlanModifier,
+		"hasJSONNormalized":                hasJSONNormalized,
+		"needsFrameworkPlanModifier":       needsFrameworkPlanModifier,
+		"needsStringDefault":               needsStringDefault,
+		"needsCustomPlanModifier":          needsCustomPlanModifier,
+		"needsValidator":                   needsValidator,
+		"needsStringValidator":             needsStringValidator,
+		"needsCustomStringValidator":       needsCustomStringValidator,
+		"needsCustomJSONValidator":         needsCustomJSONValidator,
+		"planModifierType":                 planModifierType,
+		"planModifierCalls":                planModifierCalls,
+		"stringValidatorCalls":             stringValidatorCalls,
+		"nestedObjectPlanModifierCalls":    nestedObjectPlanModifierCalls,
+		"schemaAttributes":                 schemaAttributes,
+		"oneOfSchemaAttributes":            oneOfSchemaAttributes,
+		"dataSourceAttributes":             dataSourceAttributes,
+		"oneOfDataSourceAttributes":        oneOfDataSourceAttributes,
+		"listDataSourceConfigAttributes":   listDataSourceConfigAttributes,
+		"listDataSourceItemAttributes":     listDataSourceItemAttributes,
+		"importSentinelFields":             importSentinelFields,
+		"pathParamFields":                  pathParamFields,
+		"jsonImport":                       jsonImport,
+		"nestedObjectList":                 nestedObjectList,
+		"nestedObjectMap":                  nestedObjectMap,
+		"nestedObject":                     nestedObject,
+		"objectAsJSON":                     objectAsJSON,
+		"normalizedString":                 normalizedString,
+		"hasObjectAsJSON":                  hasObjectAsJSON,
+		"nestedObjectFields":               nestedObjectFields,
+		"attrType":                         attrType,
+		"restWriteCall":                    restWriteCall,
+		"resourceHasQueryParams":           resourceHasQueryParams,
+		"listHasQueryParams":               listHasQueryParams,
+		"listConfigFields":                 listConfigFields,
+		"listItemFields":                   listItemFields,
+		"listTypeNameSuffix":               listTypeNameSuffix,
+		"listItemAttrTypes":                listItemAttrTypes,
+		"listItemObjectValue":              listItemObjectValue,
+		"acceptanceDataSources":            acceptanceDataSources,
+		"acceptanceDataSourceChecks":       acceptanceDataSourceChecks,
+		"acceptanceDataSourceTestConfig":   acceptanceDataSourceTestConfig,
+		"acceptancePrimaryResourceAddress": acceptancePrimaryResourceAddress,
+		"acceptanceDataSourceSkipsCloud":   acceptanceDataSourceSkipsCloud,
+		"acceptanceDataSourceSkipsOnPrem":  acceptanceDataSourceSkipsOnPrem,
+		"noDiscriminatorVariants":          noDiscriminatorVariants,
+		"variantAPINames":                  variantAPINames,
+		"variantRequiredAPINames":          variantRequiredAPINames,
+		"goStringSliceLiteral":             goStringSliceLiteral,
+		"goStringLiteral":                  goStringLiteral,
+		"listElementAttrType":              listElementAttrType,
+		"emptyJSONValue":                   emptyJSONValue,
+		"goValueLiteral":                   goValueLiteral,
 	}).Parse(body)
 	if err != nil {
 		return nil, fmt.Errorf("parse template %q: %v", kind, err)
@@ -1025,6 +1058,105 @@ func listConfigFields(resource parser.ResourceDef) []parser.FieldDef {
 		fields = append(fields, field)
 	}
 	return fields
+}
+
+func hasGeneratedReadDataSource(resource parser.ResourceDef) bool {
+	return resource.Create.Path != "" && resource.StructName != "GroupSystemSettings" && !resource.Action && !resource.NoRead
+}
+
+func hasGeneratedListDataSource(resource parser.ResourceDef) bool {
+	return resource.List.Path != ""
+}
+
+func acceptanceDataSources(resource parser.ResourceDef, resourceAddress, label string, includeList bool) string {
+	var output strings.Builder
+	if resourceAddress != "" && hasGeneratedReadDataSource(resource) {
+		fmt.Fprintf(&output, "\n\ndata %q %q {\n", resource.TypeName, label)
+		for _, field := range resource.Read.PathParams {
+			if field.FixedValue != "" {
+				continue
+			}
+			fmt.Fprintf(&output, "  %s = %s\n", field.TerraformName, acceptanceDataSourceFieldValue(resource, resourceAddress, field))
+		}
+		fmt.Fprintf(&output, "  depends_on = [%s]\n", resourceAddress)
+		output.WriteString("}")
+	}
+	if includeList && hasGeneratedListDataSource(resource) {
+		fmt.Fprintf(&output, "\n\ndata %q %q {\n", resource.ListTypeName, "all")
+		for _, field := range listConfigFields(resource) {
+			fmt.Fprintf(&output, "  %s = %s\n", field.TerraformName, acceptanceDataSourceFieldValue(resource, resourceAddress, field))
+		}
+		if resourceAddress != "" {
+			fmt.Fprintf(&output, "  depends_on = [%s]\n", resourceAddress)
+		}
+		output.WriteString("}")
+	}
+	return output.String()
+}
+
+func acceptanceDataSourceTestConfig(resource parser.ResourceDef) string {
+	resourceAddress := acceptancePrimaryResourceAddress(resource)
+	if resourceAddress == "" {
+		return strings.TrimSpace(acceptanceDataSources(resource, "", "by_id", true))
+	}
+	return strings.TrimSpace(exampleUsage(resource)) + acceptanceDataSources(resource, resourceAddress, "by_id", true)
+}
+
+func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
+	if resource.Create.Path == "" {
+		return ""
+	}
+	config := exampleUsage(resource)
+	re := regexp.MustCompile(`(?m)resource\s+"` + regexp.QuoteMeta(resource.TypeName) + `"\s+"([^"]+)"`)
+	match := re.FindStringSubmatch(config)
+	if len(match) != 2 {
+		return ""
+	}
+	return resource.TypeName + "." + match[1]
+}
+
+func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
+	return strings.HasPrefix(resource.TypeName, "criblio_search_")
+}
+
+func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {
+	return resource.StructName == "InstanceSettings"
+}
+
+func acceptanceDataSourceChecks(resource parser.ResourceDef, resourceAddress, label string, includeList bool) string {
+	var output strings.Builder
+	if hasGeneratedReadDataSource(resource) {
+		dataAddress := fmt.Sprintf("data.%s.%s", resource.TypeName, label)
+		for _, field := range resource.Read.PathParams {
+			if field.FixedValue != "" || !resourceHasTopLevelField(resource, field.TerraformName) {
+				continue
+			}
+			fmt.Fprintf(&output, "\n\t\t\t\t\t\tresource.TestCheckResourceAttrPair(%q, %q, %q, %q),", dataAddress, field.TerraformName, resourceAddress, field.TerraformName)
+		}
+		if output.Len() == 0 && resourceHasTopLevelField(resource, "id") {
+			fmt.Fprintf(&output, "\n\t\t\t\t\t\tresource.TestCheckResourceAttrSet(%q, %q),", dataAddress, "id")
+		}
+	}
+	if includeList && hasGeneratedListDataSource(resource) {
+		fmt.Fprintf(&output, "\n\t\t\t\t\t\ttestCheckListDataSourceHasItems(%q),", fmt.Sprintf("data.%s.%s", resource.ListTypeName, "all"))
+	}
+	return output.String()
+}
+
+func acceptanceDataSourceFieldValue(resource parser.ResourceDef, resourceAddress string, field parser.FieldDef) string {
+	if resourceAddress != "" && resourceHasTopLevelField(resource, field.TerraformName) {
+		return resourceAddress + "." + field.TerraformName
+	}
+	return fmt.Sprintf("%q", exampleValue(resource, field))
+}
+
+func resourceHasTopLevelField(resource parser.ResourceDef, terraformName string) bool {
+	for _, field := range resource.Fields {
+		if field.TerraformName == terraformName {
+			return true
+		}
+	}
+	return false
 }
 
 func listItemFields(resource parser.ResourceDef) []parser.FieldDef {

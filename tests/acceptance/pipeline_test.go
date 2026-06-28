@@ -35,6 +35,10 @@ func TestPipeline(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "conf.output", "default"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.#", "1"),
 						resource.TestCheckResourceAttr(resourceName, "conf.functions.0.id", "code"),
+
+						resource.TestCheckResourceAttrPair("data.criblio_pipeline.by_id", "group_id", "criblio_pipeline.my_pipeline", "group_id"),
+						resource.TestCheckResourceAttrPair("data.criblio_pipeline.by_id", "id", "criblio_pipeline.my_pipeline", "id"),
+						testCheckListDataSourceHasItems("data.criblio_pipelines.all"),
 					),
 				},
 				{
@@ -82,6 +86,18 @@ func pipelineConfig(id, description string) string {
       }
     ]
   }
+}
+
+
+data "criblio_pipeline" "by_id" {
+  group_id = criblio_pipeline.my_pipeline.group_id
+  id = criblio_pipeline.my_pipeline.id
+  depends_on = [criblio_pipeline.my_pipeline]
+}
+
+data "criblio_pipelines" "all" {
+  group_id = criblio_pipeline.my_pipeline.group_id
+  depends_on = [criblio_pipeline.my_pipeline]
 }
 `, id, description)
 }
