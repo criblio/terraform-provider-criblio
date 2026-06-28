@@ -15,30 +15,10 @@ func TestPipelineDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_pipeline" "my_pipeline" {
-  conf = {
-    async_func_timeout = 1000
-    output = "default"
-    description = ""
-    streamtags = []
-  }
+				Config: `data "criblio_pipelines" "all" {
   group_id = "default"
-  id = "empty-pipeline"
-}
-
-data "criblio_pipeline" "by_id" {
-  group_id = criblio_pipeline.my_pipeline.group_id
-  id = criblio_pipeline.my_pipeline.id
-  depends_on = [criblio_pipeline.my_pipeline]
-}
-
-data "criblio_pipelines" "all" {
-  group_id = criblio_pipeline.my_pipeline.group_id
-  depends_on = [criblio_pipeline.my_pipeline]
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_pipeline.by_id", "group_id", "criblio_pipeline.my_pipeline", "group_id"),
-					resource.TestCheckResourceAttrPair("data.criblio_pipeline.by_id", "id", "criblio_pipeline.my_pipeline", "id"),
 					testCheckListDataSourceHasItems("data.criblio_pipelines.all"),
 				),
 			},

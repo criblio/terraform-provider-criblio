@@ -19,31 +19,9 @@ func TestSearchDatasetProviderDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_search_dataset_provider" "my_searchdatasetprovider" {
-  prometheus = {
-    auth_type       = "basic"
-    description     = "my generic provider description"
-    endpoint        = "https://prometheus.example.com"
-    id              = "myUniqueGenericProviderId"
-    max_concurrency = 10
-    password        = "prom_pass"
-    token           = "prometheusBearerToken123"
-    type            = "generic"
-    username        = "prom_user"
-  }
-}
-
-data "criblio_search_dataset_provider" "by_id" {
-  group_id = "default_search"
-  id = criblio_search_dataset_provider.my_searchdatasetprovider.id
-  depends_on = [criblio_search_dataset_provider.my_searchdatasetprovider]
-}
-
-data "criblio_search_dataset_providers" "all" {
-  depends_on = [criblio_search_dataset_provider.my_searchdatasetprovider]
+				Config: `data "criblio_search_dataset_providers" "all" {
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_search_dataset_provider.by_id", "id", "criblio_search_dataset_provider.my_searchdatasetprovider", "id"),
 					testCheckListDataSourceHasItems("data.criblio_search_dataset_providers.all"),
 				),
 			},

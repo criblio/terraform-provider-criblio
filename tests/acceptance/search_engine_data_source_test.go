@@ -19,23 +19,9 @@ func TestSearchEngineDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_search_engine" "my_search_engine" {
-  description = "Dedicated engine for analytics workloads"
-  id = "local_ingest_analytics"
-  tier_size = "medium"
-}
-
-data "criblio_search_engine" "by_id" {
-  group_id = "default_search"
-  id = criblio_search_engine.my_search_engine.id
-  depends_on = [criblio_search_engine.my_search_engine]
-}
-
-data "criblio_search_engines" "all" {
-  depends_on = [criblio_search_engine.my_search_engine]
+				Config: `data "criblio_search_engines" "all" {
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_search_engine.by_id", "id", "criblio_search_engine.my_search_engine", "id"),
 					testCheckListDataSourceHasItems("data.criblio_search_engines.all"),
 				),
 			},

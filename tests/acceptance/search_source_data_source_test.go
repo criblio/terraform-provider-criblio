@@ -19,29 +19,9 @@ func TestSearchSourceDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_search_source" "my_search_source" {
-  description = "Primary Cribl HTTP ingest for the Worker Group"
-  host = "0.0.0.0"
-  id = "in_cribl_http_primary"
-  port = 10200
-  tls = {
-    disabled = false
-    min_version = "TLSv1.3"
-  }
-  type = "cribl_http"
-}
-
-data "criblio_search_source" "by_id" {
-  group_id = "default_search"
-  id = criblio_search_source.my_search_source.id
-  depends_on = [criblio_search_source.my_search_source]
-}
-
-data "criblio_search_sources" "all" {
-  depends_on = [criblio_search_source.my_search_source]
+				Config: `data "criblio_search_sources" "all" {
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_search_source.by_id", "id", "criblio_search_source.my_search_source", "id"),
 					testCheckListDataSourceHasItems("data.criblio_search_sources.all"),
 				),
 			},

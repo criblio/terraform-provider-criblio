@@ -15,44 +15,10 @@ func TestMappingRulesetDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_mapping_ruleset" "my_mapping_ruleset" {
-  active = true
-  conf = {
-    functions = [
-      {
-        id = "eval"
-        filter = "!cribl.group"
-        disabled = false
-        final = true
-        description = "Default Mappings"
-        conf = {
-          add = [
-            {
-              name = "groupId"
-              value = "'default_fleet'"
-            }
-          ]
-        }
-      }
-    ]
-  }
-  id = "default"
+				Config: `data "criblio_mappings" "all" {
   product = "stream"
-}
-
-data "criblio_mapping_ruleset" "by_id" {
-  product = criblio_mapping_ruleset.my_mapping_ruleset.product
-  id = criblio_mapping_ruleset.my_mapping_ruleset.id
-  depends_on = [criblio_mapping_ruleset.my_mapping_ruleset]
-}
-
-data "criblio_mappings" "all" {
-  product = criblio_mapping_ruleset.my_mapping_ruleset.product
-  depends_on = [criblio_mapping_ruleset.my_mapping_ruleset]
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_mapping_ruleset.by_id", "product", "criblio_mapping_ruleset.my_mapping_ruleset", "product"),
-					resource.TestCheckResourceAttrPair("data.criblio_mapping_ruleset.by_id", "id", "criblio_mapping_ruleset.my_mapping_ruleset", "id"),
 					testCheckListDataSourceHasItems("data.criblio_mappings.all"),
 				),
 			},

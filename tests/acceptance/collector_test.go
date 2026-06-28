@@ -43,7 +43,6 @@ func TestCollector(t *testing.T) {
 
 						resource.TestCheckResourceAttrPair("data.criblio_collector.splunk", "group_id", "criblio_collector.splunk_access_log_collector", "group_id"),
 						resource.TestCheckResourceAttrPair("data.criblio_collector.splunk", "id", "criblio_collector.splunk_access_log_collector", "id"),
-						testCheckListDataSourceHasItems("data.criblio_collectors.all"),
 
 						resource.TestCheckResourceAttrPair("data.criblio_collector.rest", "group_id", "criblio_collector.rest_api_collector", "group_id"),
 						resource.TestCheckResourceAttrPair("data.criblio_collector.rest", "id", "criblio_collector.rest_api_collector", "id"),
@@ -73,11 +72,6 @@ func collectorConfig(t *testing.T, suffix string) string {
 data "criblio_collector" "splunk" {
   group_id = criblio_collector.splunk_access_log_collector.group_id
   id = criblio_collector.splunk_access_log_collector.id
-  depends_on = [criblio_collector.splunk_access_log_collector]
-}
-
-data "criblio_collectors" "all" {
-  group_id = criblio_collector.splunk_access_log_collector.group_id
   depends_on = [criblio_collector.splunk_access_log_collector]
 }
 

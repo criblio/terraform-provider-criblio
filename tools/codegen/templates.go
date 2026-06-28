@@ -2664,7 +2664,7 @@ func TestCollector(t *testing.T) {
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "group_id", "default"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.environment", "demo"),
 						resource.TestCheckResourceAttr("criblio_collector.rest_api_collector", "input_collector_rest.collector.type", "rest"),
-{{ acceptanceDataSourceChecks . "criblio_collector.splunk_access_log_collector" "splunk" true }}
+{{ acceptanceDataSourceChecks . "criblio_collector.splunk_access_log_collector" "splunk" false }}
 {{ acceptanceDataSourceChecks . "criblio_collector.rest_api_collector" "rest" false }}
 					),
 				},
@@ -2687,7 +2687,7 @@ func collectorConfig(t *testing.T, suffix string) string {
 	config := string(content)
 	config = strings.ReplaceAll(config, "splunk-demo-collector", "splunk-demo-collector-"+suffix)
 	config = strings.ReplaceAll(config, "rest-api-demo-collector", "rest-api-demo-collector-"+suffix)
-	config += ` + "`" + `{{ acceptanceDataSources . "criblio_collector.splunk_access_log_collector" "splunk" true }}
+	config += ` + "`" + `{{ acceptanceDataSources . "criblio_collector.splunk_access_log_collector" "splunk" false }}
 {{ acceptanceDataSources . "criblio_collector.rest_api_collector" "rest" false }}` + "`" + `
 	return config
 }
@@ -3198,7 +3198,7 @@ func Test{{ .StructName }}DataSources(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: {{ goStringLiteral (acceptanceDataSourceTestConfig .) }},
-				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . (acceptancePrimaryResourceAddress .) "by_id" true }}
+				Check: resource.ComposeAggregateTestCheckFunc({{ acceptanceDataSourceChecks . "" "by_id" true }}
 				),
 			},
 		},

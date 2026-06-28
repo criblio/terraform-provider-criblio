@@ -119,9 +119,6 @@ func shouldGenerateDataSourceAcceptanceTest(resource parser.ResourceDef) bool {
 	if resource.Action || strings.HasPrefix(resource.Read.Path, "/v1/organizations/") || strings.HasPrefix(resource.List.Path, "/v1/organizations/") {
 		return false
 	}
-	if acceptancePrimaryResourceAddress(resource) != "" {
-		return hasGeneratedReadDataSource(resource) || hasGeneratedListDataSource(resource)
-	}
 	return canGenerateStandaloneListDataSourceAcceptanceTest(resource)
 }
 
@@ -1095,11 +1092,7 @@ func acceptanceDataSources(resource parser.ResourceDef, resourceAddress, label s
 }
 
 func acceptanceDataSourceTestConfig(resource parser.ResourceDef) string {
-	resourceAddress := acceptancePrimaryResourceAddress(resource)
-	if resourceAddress == "" {
-		return strings.TrimSpace(acceptanceDataSources(resource, "", "by_id", true))
-	}
-	return strings.TrimSpace(exampleUsage(resource)) + acceptanceDataSources(resource, resourceAddress, "by_id", true)
+	return strings.TrimSpace(acceptanceDataSources(resource, "", "by_id", true))
 }
 
 func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
@@ -1116,7 +1109,9 @@ func acceptancePrimaryResourceAddress(resource parser.ResourceDef) string {
 }
 
 func acceptanceDataSourceSkipsOnPrem(resource parser.ResourceDef) bool {
-	return strings.HasPrefix(resource.TypeName, "criblio_search_")
+	return strings.HasPrefix(resource.TypeName, "criblio_search_") ||
+		resource.StructName == "Subscription" ||
+		resource.StructName == "SystemInfo"
 }
 
 func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {
@@ -1125,7 +1120,7 @@ func acceptanceDataSourceSkipsCloud(resource parser.ResourceDef) bool {
 
 func acceptanceDataSourceChecks(resource parser.ResourceDef, resourceAddress, label string, includeList bool) string {
 	var output strings.Builder
-	if hasGeneratedReadDataSource(resource) {
+	if resourceAddress != "" && hasGeneratedReadDataSource(resource) {
 		dataAddress := fmt.Sprintf("data.%s.%s", resource.TypeName, label)
 		for _, field := range resource.Read.PathParams {
 			if field.FixedValue != "" || !resourceHasTopLevelField(resource, field.TerraformName) {

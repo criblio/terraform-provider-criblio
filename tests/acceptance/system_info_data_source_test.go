@@ -3,12 +3,16 @@
 package tests
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestSystemInfoDataSources(t *testing.T) {
+	if os.Getenv("DEPLOYMENT") == "onprem" {
+		t.Skip("Skipping data source acceptance test for On-Prem deployments as it is not supported")
+	}
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories:  providerFactory,

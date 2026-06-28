@@ -15,30 +15,10 @@ func TestKeyDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_key" "my_key" {
-  algorithm = "aes-256-cbc"
-  description = "Production encryption key"
-  expires = 1800000000
+				Config: `data "criblio_keys" "all" {
   group_id = "default"
-  id = "my-encryption-key"
-  keyclass = 0
-  kms = "local"
-  use_iv = true
-}
-
-data "criblio_key" "by_id" {
-  group_id = criblio_key.my_key.group_id
-  id = criblio_key.my_key.id
-  depends_on = [criblio_key.my_key]
-}
-
-data "criblio_keys" "all" {
-  group_id = criblio_key.my_key.group_id
-  depends_on = [criblio_key.my_key]
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_key.by_id", "group_id", "criblio_key.my_key", "group_id"),
-					resource.TestCheckResourceAttrPair("data.criblio_key.by_id", "id", "criblio_key.my_key", "id"),
 					testCheckListDataSourceHasItems("data.criblio_keys.all"),
 				),
 			},

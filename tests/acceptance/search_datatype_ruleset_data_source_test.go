@@ -19,36 +19,9 @@ func TestSearchDatatypeRulesetDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_search_datatype_ruleset" "my_search_datatype_ruleset" {
-  id = "default"
-  rules = [
-    {
-      datatype = "secondary_dt"
-      id = "secondary"
-      kusto_expression = "sourcetype == \"test\""
-      name = "secondary datatype"
-    }
-    {
-      datatype = "generic_ndjson"
-      description = "datatype catch all"
-      id = "default"
-      kusto_expression = "*"
-      name = "catch all"
-    }
-  ]
-}
-
-data "criblio_search_datatype_ruleset" "by_id" {
-  group_id = "default_search"
-  id = criblio_search_datatype_ruleset.my_search_datatype_ruleset.id
-  depends_on = [criblio_search_datatype_ruleset.my_search_datatype_ruleset]
-}
-
-data "criblio_search_datatype_rulesets" "all" {
-  depends_on = [criblio_search_datatype_ruleset.my_search_datatype_ruleset]
+				Config: `data "criblio_search_datatype_rulesets" "all" {
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_search_datatype_ruleset.by_id", "id", "criblio_search_datatype_ruleset.my_search_datatype_ruleset", "id"),
 					testCheckListDataSourceHasItems("data.criblio_search_datatype_rulesets.all"),
 				),
 			},

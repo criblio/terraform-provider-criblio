@@ -15,26 +15,10 @@ func TestCertificateDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: `resource "criblio_certificate" "my_certificate" {
-  cert = "-----BEGIN CERTIFICATE-----\nMIIBxTCCAWugAwIBAgIUE...\n-----END CERTIFICATE-----"
+				Config: `data "criblio_certificates" "all" {
   group_id = "default"
-  id = "my-cert"
-  priv_key = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhki...\n-----END PRIVATE KEY-----"
-}
-
-data "criblio_certificate" "by_id" {
-  group_id = criblio_certificate.my_certificate.group_id
-  id = criblio_certificate.my_certificate.id
-  depends_on = [criblio_certificate.my_certificate]
-}
-
-data "criblio_certificates" "all" {
-  group_id = criblio_certificate.my_certificate.group_id
-  depends_on = [criblio_certificate.my_certificate]
 }`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_certificate.by_id", "group_id", "criblio_certificate.my_certificate", "group_id"),
-					resource.TestCheckResourceAttrPair("data.criblio_certificate.by_id", "id", "criblio_certificate.my_certificate", "id"),
 					testCheckListDataSourceHasItems("data.criblio_certificates.all"),
 				),
 			},

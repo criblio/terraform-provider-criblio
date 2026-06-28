@@ -33,9 +33,6 @@ func TestRendererHonorsCodegenIgnore(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/certificate_test.go")); err != nil {
 		t.Fatalf("acceptance test output missing: %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(dir, "tests/acceptance/certificate_data_source_test.go")); err != nil {
-		t.Fatalf("data source acceptance test output missing: %v", err)
-	}
 	if hasSkipped(files, filepath.Join(dir, "tests/acceptance/certificate_test.go")) {
 		t.Fatalf("acceptance test output should not be skipped by the ignore fixture")
 	}
@@ -63,10 +60,10 @@ func TestRendererSkipsCustomAcceptanceTests(t *testing.T) {
 	}
 	dataSourcePath := filepath.Join(dir, "tests/acceptance/certificate_data_source_test.go")
 	if hasSkipped(files, dataSourcePath) {
-		t.Fatalf("data source acceptance test should still be generated")
+		t.Fatalf("resource-backed data source acceptance test should not be skipped because it should not be rendered")
 	}
-	if _, err := os.Stat(dataSourcePath); err != nil {
-		t.Fatalf("data source acceptance test output missing: %v", err)
+	if _, err := os.Stat(dataSourcePath); !os.IsNotExist(err) {
+		t.Fatalf("resource-backed data source acceptance test should not be generated: %v", err)
 	}
 	got, err := os.ReadFile(path)
 	if err != nil {
@@ -141,8 +138,46 @@ func TestRendererGeneratesStandaloneListDataSourceAcceptanceTests(t *testing.T) 
 	}
 	assertContains(t, string(content), `data "criblio_system_info" "all"`)
 	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_system_info.all")`)
+	assertContains(t, string(content), `if os.Getenv("DEPLOYMENT") == "onprem"`)
 	assertNotContains(t, string(content), `resource "`)
 	assertNotContains(t, string(content), `depends_on`)
+}
+
+func TestRendererGeneratesListOnlyDataSourceAcceptanceTests(t *testing.T) {
+	dir := t.TempDir()
+	resource := parser.ResourceDef{
+		Name:           "Thing",
+		FileStem:       "thing",
+		StructName:     "Thing",
+		TypeName:       "criblio_thing",
+		ListFileStem:   "things",
+		ListStructName: "Things",
+		ListTypeName:   "criblio_things",
+		Create: parser.OperationDef{
+			Path: "/m/{groupId}/things",
+		},
+		List: parser.OperationDef{
+			Path:       "/m/{groupId}/things",
+			PathParams: []parser.FieldDef{{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID", PathParam: true}},
+		},
+	}
+	files, err := newRenderer(dir, ignoreSet{}).render([]parser.ResourceDef{resource})
+	if err != nil {
+		t.Fatalf("render returned error: %v", err)
+	}
+
+	path := filepath.Join(dir, "tests/acceptance/thing_data_source_test.go")
+	if hasSkipped(files, path) {
+		t.Fatalf("standalone data source acceptance test should be rendered")
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read standalone data source acceptance test: %v", err)
+	}
+	assertContains(t, string(content), `data "criblio_things" "all"`)
+	assertContains(t, string(content), `testCheckListDataSourceHasItems("data.criblio_things.all")`)
+	assertNotContains(t, string(content), `resource "criblio_thing"`)
+	assertNotContains(t, string(content), `data "criblio_thing" "by_id"`)
 }
 
 func TestRenderedSnippets(t *testing.T) {

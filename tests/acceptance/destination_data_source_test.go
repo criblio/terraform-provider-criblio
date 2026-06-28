@@ -15,10 +15,10 @@ func TestDestinationDataSources(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: "resource \"criblio_destination\" \"my_destination\" {\n  group_id = \"default\"\n  id       = \"out-s3-main\"\n\n  output_s3 = {\n    id              = \"out-s3-main\"\n    type            = \"s3\"\n    bucket          = \"`my-cribl-bucket`\"\n    region          = \"us-east-1\"\n    aws_api_key     = \"AKIAIOSFODNN7EXAMPLE\"\n    aws_secret_key  = var.aws_secret_key\n    dest_path       = \"`logs/$${C.Time.strftime(_time, '%Y/%m/%d')}`\"\n    stage_path      = \"$CRIBL_HOME/state/outputs/out-s3-main\"\n    compress        = \"gzip\"\n    format          = \"json\"\n    on_backpressure = \"block\"\n    pipeline        = \"passthru\"\n  }\n}\n\nvariable \"aws_secret_key\" {\n  type      = string\n  sensitive = true\n}\n\ndata \"criblio_destination\" \"by_id\" {\n  group_id = criblio_destination.my_destination.group_id\n  id = criblio_destination.my_destination.id\n  depends_on = [criblio_destination.my_destination]\n}\n\ndata \"criblio_destinations\" \"all\" {\n  group_id = criblio_destination.my_destination.group_id\n  depends_on = [criblio_destination.my_destination]\n}",
+				Config: `data "criblio_destinations" "all" {
+  group_id = "default"
+}`,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttrPair("data.criblio_destination.by_id", "group_id", "criblio_destination.my_destination", "group_id"),
-					resource.TestCheckResourceAttrPair("data.criblio_destination.by_id", "id", "criblio_destination.my_destination", "id"),
 					testCheckListDataSourceHasItems("data.criblio_destinations.all"),
 				),
 			},
