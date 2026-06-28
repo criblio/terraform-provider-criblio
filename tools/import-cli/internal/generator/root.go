@@ -215,6 +215,9 @@ func rootTfvarsExampleTF(moduleInfos []RootModuleInfo) []byte {
 
 func tfvarsExampleValue(name string) string {
 	lower := strings.ToLower(name)
+	if strings.Contains(lower, "slack") && strings.Contains(lower, "url") {
+		return "https://hooks.slack.com/"
+	}
 	if strings.Contains(lower, "url") {
 		return "https://example.com"
 	}

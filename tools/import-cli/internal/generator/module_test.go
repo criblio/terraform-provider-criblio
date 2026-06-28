@@ -349,7 +349,7 @@ func TestWriteRootFiles_creates_tfvars_example_when_variables_present(t *testing
 	require.FileExists(t, tfvarsExamplePath)
 	tfvarsBytes, _ := os.ReadFile(tfvarsExamplePath)
 	tfvarsStr := string(tfvarsBytes)
-	assert.Contains(t, tfvarsStr, `notification_target_slack_1_slack_target_url = "https://example.com"`)
+	assert.Contains(t, tfvarsStr, `notification_target_slack_1_slack_target_url = "https://hooks.slack.com/"`)
 	assert.Contains(t, tfvarsStr, `secret_xxx_value = ""`)
 	assert.Contains(t, tfvarsStr, `source_default_in_splunk_hec_token = ""`)
 	assert.Contains(t, tfvarsStr, "Copy to terraform.tfvars")
