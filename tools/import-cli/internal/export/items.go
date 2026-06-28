@@ -115,6 +115,7 @@ func convertOneResource(ctx context.Context, client *sdk.CriblIo, r discovery.Re
 		return nil, fmt.Sprintf("%s %v: import ID: %s", r.TypeName, idMap, sanitizeConvertError(idErr))
 	}
 	name := generator.StableResourceNameFromMap(e.TypeName, idMap)
+	ensureNotificationTargetSecretPlaceholders(r.TypeName, attrs, name)
 	_ = hcl.ReplaceSecretValuesWithVariableRefs(attrs, name)
 	if r.TypeName == "criblio_secret" {
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}
@@ -241,6 +242,7 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 		}
 	}
 	name := generator.StableResourceNameFromMap(e.TypeName, nameMap)
+	ensureNotificationTargetSecretPlaceholders(typeName, attrs, name)
 	_ = hcl.ReplaceSecretValuesWithVariableRefs(attrs, name)
 	if typeName == "criblio_secret" {
 		attrs["value"] = hcl.Value{Kind: hcl.KindVariableRef, VarName: hcl.SecretValueVariableName(name)}
@@ -258,6 +260,21 @@ func appendResourceItemFromModel(out *ExportResult, typeName string, e registry.
 	}
 	out.Items = append(out.Items, it)
 	return nil
+}
+
+func ensureNotificationTargetSecretPlaceholders(typeName string, attrs map[string]hcl.Value, resourceName string) {
+	if typeName != "criblio_notification_target" {
+		return
+	}
+	block, ok := attrs["slack_target"]
+	if !ok || block.Kind != hcl.KindMap || block.Map == nil {
+		return
+	}
+	block.Map["url"] = hcl.Value{
+		Kind:    hcl.KindVariableRef,
+		VarName: hcl.SensitiveVariableName(resourceName, "slack_target_url"),
+	}
+	attrs["slack_target"] = block
 }
 
 func importIDMapForType(typeName string, idMap map[string]string) map[string]string {

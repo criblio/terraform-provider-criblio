@@ -25,10 +25,3 @@ func stringFromAPIOrPrior(api string, prior types.String) types.String {
 	}
 	return types.StringValue(api)
 }
-
-func stringPointerFromAPIOrPrior(api *string, prior types.String) types.String {
-	if api == nil {
-		return types.StringNull()
-	}
-	return stringFromAPIOrPrior(*api, prior)
-}

@@ -493,6 +493,12 @@ func CertificatePrivKeyVariableName(resourceName string) string {
 	return sanitizeVarName(resourceName, "priv_key")
 }
 
+// SensitiveVariableName returns a Terraform variable name for a sensitive
+// attribute path on an imported resource.
+func SensitiveVariableName(resourceName, path string) string {
+	return sanitizeVarName(resourceName, path)
+}
+
 // sanitizeVarName returns a Terraform-valid variable name from a resource name and path.
 func sanitizeVarName(resourceName, path string) string {
 	combined := resourceName

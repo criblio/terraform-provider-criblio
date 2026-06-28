@@ -816,7 +816,7 @@ func needsFmt(resource parser.ResourceDef) bool {
 }
 
 func needsClientFmt(resource parser.ResourceDef) bool {
-	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" {
+	if resource.StructName == "Key" || resource.StructName == "MappingRuleset" || resource.StructName == "SearchDataset" || resource.StructName == "SearchDatasetProvider" {
 		return true
 	}
 	for _, op := range []parser.OperationDef{resource.Create, resource.Read, resource.Update, resource.Delete} {
@@ -1788,6 +1788,9 @@ func pathParamExpr(resource parser.ResourceDef, op parser.OperationDef, param pa
 	}
 	if resource.StructName == "SearchDataset" && param.TerraformName == "id" {
 		return "searchDatasetID(model)"
+	}
+	if resource.StructName == "SearchDatasetProvider" && param.TerraformName == "id" {
+		return "searchDatasetProviderID(model)"
 	}
 	if resource.StructName == "Notification" && param.TerraformName == "group_id" {
 		if resource.List.OperationID != "" && op.OperationID == resource.List.OperationID {

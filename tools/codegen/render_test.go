@@ -160,6 +160,40 @@ func TestRenderedSnippets(t *testing.T) {
 	assertContains(t, destinationResource, "state.OutputAzureBlob = &OutputAzureBlobModel{}")
 	assertContains(t, destinationResource, "stringFromAPIOrPrior(api.OutputAzureBlob.AccountKey.ValueString(), state.OutputAzureBlob.AccountKey)")
 
+	searchDatasetProvider := parser.ResourceDef{
+		StructName: "SearchDatasetProvider",
+		Read: parser.OperationDef{
+			Path:       "/m/{groupId}/search/dataset-providers/{id}",
+			PathParams: []parser.FieldDef{{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"}, {APIName: "id", TerraformName: "id", GoName: "ID"}},
+		},
+		Update: parser.OperationDef{
+			Path:       "/m/{groupId}/search/dataset-providers/{id}",
+			PathParams: []parser.FieldDef{{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"}, {APIName: "id", TerraformName: "id", GoName: "ID"}},
+		},
+		Delete: parser.OperationDef{
+			Path:       "/m/{groupId}/search/dataset-providers/{id}",
+			PathParams: []parser.FieldDef{{APIName: "groupId", TerraformName: "group_id", GoName: "GroupID"}, {APIName: "id", TerraformName: "id", GoName: "ID"}},
+		},
+		OneOfVariants: []parser.OneOfVariantDef{
+			{GoName: "S3Provider", Fields: []parser.FieldDef{{TerraformName: "id", GoName: "ID"}}},
+		},
+	}
+	searchDatasetProviderClient := renderTemplate(t, "client", searchDatasetProvider)
+	assertContains(t, searchDatasetProviderClient, "func searchDatasetProviderID(model SearchDatasetProviderModel) string")
+	assertContains(t, searchDatasetProviderClient, "searchDatasetProviderID(model)")
+
+	notificationTargetTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "NotificationTarget"})
+	assertContains(t, notificationTargetTest, "func TestNotificationTarget(t *testing.T)")
+	assertContains(t, notificationTargetTest, "notificationTargetConfig(id, \"created\")")
+	assertContains(t, notificationTargetTest, "ImportStateVerifyIgnore: notificationTargetImportStateVerifyIgnore()")
+	assertNotContains(t, notificationTargetTest, "Generated acceptance scaffold")
+
+	searchDatasetProviderTest := renderTemplate(t, "test", parser.ResourceDef{StructName: "SearchDatasetProvider"})
+	assertContains(t, searchDatasetProviderTest, "func TestSearchDatasetProvider(t *testing.T)")
+	assertContains(t, searchDatasetProviderTest, "searchDatasetProviderConfig(apiHTTPID, elasticID, s3ID, \"created\")")
+	assertContains(t, searchDatasetProviderTest, "api_elasticsearch")
+	assertNotContains(t, searchDatasetProviderTest, "Generated acceptance scaffold")
+
 	mappingRuleset := resourceByName(t, resources, "mapping_ruleset")
 	mappingRulesetResource := renderTemplate(t, "resource", mappingRuleset)
 	assertContains(t, mappingRulesetResource, `"conf": schema.SingleNestedAttribute{`)
